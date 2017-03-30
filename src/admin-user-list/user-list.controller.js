@@ -52,7 +52,9 @@
          * Opens user form modal allowing for user creation/edition.
          */
 		function openUserFormModal(user) {
-			(new UserFormModal(user)).then($state.reload);
+			(new UserFormModal(user)).then(function() {
+				$state.reload();
+			});
 		}
 
         /**
