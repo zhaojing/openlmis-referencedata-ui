@@ -62,7 +62,7 @@
          * @name get
          *
          * @description
-         * Gets user by id.
+         * Gets user by id and stores it in the local storage.
          *
          * @param  {String}  id the user UUID
          * @return {Promise}    the user info
