@@ -21,10 +21,12 @@
         .controller('UserPasswordModalController', controller);
 
     controller.$inject = [
-        'user', 'modalDeferred', 'authUserService', 'loadingModalService'
+        'user', 'modalDeferred', 'authUserService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller(user, modalDeferred, authUserService, loadingModalService) {
+    function controller(user, modalDeferred, authUserService, loadingModalService,
+                        notificationService) {
+
         var vm = this;
 
         vm.$onInit = onInit;
@@ -35,11 +37,14 @@
         }
 
         function createPassword() {
-            loadingModalService.open(true);
+            var loadingPromise = loadingModalService.open(true);
 
-            return authUserService.resetPassword(user.username, user.newPassword)
-                .then(modalDeferred.resolve)
-                .finally(loadingModalService.close);
+            return authUserService.resetPassword(user.username, user.newPassword).then(function() {
+                loadingPromise.then(function() {
+                    notificationService.success('msg.passwordCreatedSuccessfully');
+                });
+                modalDeferred.resolve();
+            }).finally(loadingModalService.close);
         }
 
     }

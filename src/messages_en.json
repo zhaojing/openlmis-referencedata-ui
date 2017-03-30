@@ -1,3 +1,4 @@
 {
-    "label.createPassword": "Create password"
+    "label.createPassword": "Create password",
+    "msg.passwordCreatedSuccessfully": "Password created successfully"
 }
