@@ -16,7 +16,7 @@
 describe('facilityFactory', function() {
 
     var $rootScope, $q, facility1, facility2, userPrograms, programService, facilityService,
-        authorizationService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
+        authorizationService, referencedataUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
 
     beforeEach(function() {
         module('referencedata-facility', function($provide){
@@ -33,7 +33,7 @@ describe('facilityFactory', function() {
                 return facilityService;
             });
 
-            authorizationService = jasmine.createSpyObj('authorizationService', ['getDetailedUser', 'getRightByName', 'isAuthenticated']);
+            authorizationService = jasmine.createSpyObj('authorizationService', ['getUser', 'getRightByName', 'isAuthenticated']);
             authorizationService.isAuthenticated.andReturn(true);
             $provide.factory('authorizationService', function() {
                 return authorizationService;
@@ -160,16 +160,22 @@ describe('facilityFactory', function() {
 
     describe('getUserHomeFacility', function() {
 
-        beforeEach(function() {
-            authorizationService.getDetailedUser.andCallFake(function() {
+        beforeEach(inject(function(_referencedataUserService_) {
+            referencedataUserService = _referencedataUserService_;
+            spyOn(referencedataUserService, 'get');
+            referencedataUserService.get.andCallFake(function() {
                 return $q.when(true);
             });
-        });
+
+            authorizationService.getUser.andReturn({
+                user_id: '1234'
+            });
+        }));
 
         it('should fetch home facility for the current user', function() {
             facilityFactory.getUserHomeFacility();
 
-            expect(authorizationService.getDetailedUser).toHaveBeenCalled();
+            expect(referencedataUserService.get).toHaveBeenCalled();
         });
     });
 
