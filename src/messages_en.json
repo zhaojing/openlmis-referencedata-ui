@@ -1,4 +1,7 @@
 {
     "label.createPassword": "Create password",
-    "msg.passwordCreatedSuccessfully": "Password created successfully"
+    "msg.passwordCreatedSuccessfully": "Password created successfully",
+    "label.user.firstName": "First name",
+    "label.user.lastName": "Last name",
+    "label.user.email": "Email"
 }
