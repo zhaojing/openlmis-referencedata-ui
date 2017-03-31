@@ -18,17 +18,15 @@
     'use strict';
 
     /**
-     * @module admin-user-list
+     * @module admin-role-list
      *
      * @description
-     * Provides base admin-user state and controller for retrieving list of users from the OpenLMIS server.
+     * Provides base admin-role state and controller for retrieving list of roles from the OpenLMIS server.
      */
-    angular.module('admin-user-list', [
-        'admin-user-form-modal',
-        'openlmis-modal',
+    angular.module('admin-role-list', [
         'openlmis-pagination',
         'openlmis-rights',
-        'referencedata-user',
+        'referencedata-role',
         'ui.router'
     ]);
 

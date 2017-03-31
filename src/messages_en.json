@@ -1,7 +1,11 @@
 {
+    "button.createRole": "Create role",
     "label.createPassword": "Create password",
     "msg.passwordSetSuccessfully": "Password set successfully",
     "label.user.firstName": "First name",
     "label.user.lastName": "Last name",
-    "label.user.email": "Email"
+    "label.user.email": "Email",
+    "label.roles": "Roles",
+    "label.role": "Role",
+    "label.description": "Description"
 }

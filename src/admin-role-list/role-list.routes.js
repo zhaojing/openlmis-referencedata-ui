@@ -13,23 +13,32 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
+
 (function() {
 
     'use strict';
 
-    /**
-     * @module admin-user-list
-     *
-     * @description
-     * Provides base admin-user state and controller for retrieving list of users from the OpenLMIS server.
-     */
-    angular.module('admin-user-list', [
-        'admin-user-form-modal',
-        'openlmis-modal',
-        'openlmis-pagination',
-        'openlmis-rights',
-        'referencedata-user',
-        'ui.router'
-    ]);
+    angular.module('admin-role-list').config(routes);
 
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+
+        $stateProvider.state('administration.roles', {
+            showInNavigation: true,
+            label: 'label.roles',
+            url: '/roles',
+            controller: 'RoleListController',
+            templateUrl: 'admin-role-list/role-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            resolve: {
+                roles: function(paginationService, referencedataRoleService, $stateParams) {
+                    return  paginationService.registerList(undefined, $stateParams, function() {
+                        return referencedataRoleService.getAll();
+                    });
+                }
+            }
+        });
+    }
 })();

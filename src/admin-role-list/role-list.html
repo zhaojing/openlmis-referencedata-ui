@@ -1,0 +1,28 @@
+<div class="page">
+    <h2>{{'label.roles' | message}}</h2>
+    <section class="openlmis-table-container">
+        <button ng-click="" class="primary">{{'button.createRole' | message}}</button>
+        <table>
+            <thead>
+            <tr>
+                <th>{{'label.role' | message}}</th>
+                <th>{{'label.description' | message}}</th>
+                <th>{{'label.actions' | message}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="role in vm.rolesPage">
+                <td>{{role.name}}</td>
+                <td>{{role.description}}</td>
+                <td>
+                    <a ng-click="">{{'link.edit' | message}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <openlmis-pagination
+            list="vm.roles"
+            paged-list="vm.rolesPage">
+        <openlmis-pagination/>
+    </section>
+</div>
