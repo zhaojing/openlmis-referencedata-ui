@@ -41,7 +41,7 @@
 
             return authUserService.resetPassword(user.username, user.newPassword).then(function() {
                 loadingPromise.then(function() {
-                    notificationService.success('msg.passwordCreatedSuccessfully');
+                    notificationService.success('msg.passwordSetSuccessfully');
                 });
                 modalDeferred.resolve();
             }).finally(loadingModalService.close);

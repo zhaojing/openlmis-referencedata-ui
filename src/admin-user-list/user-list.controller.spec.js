@@ -15,13 +15,15 @@
 
 describe('UserListController', function () {
 
-    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, UserFormModalMock;
+    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, UserFormModalMock,
+        UserPasswordModalMock;
 
     beforeEach(function() {
         module('admin-user-list', function($provide) {
 
             confirmSpy = jasmine.createSpyObj('confirmService', ['confirm']);
             UserFormModalMock = jasmine.createSpy('UserFormModal');
+            UserPasswordModalMock = jasmine.createSpy('UserPasswordModalMock');
 
             $provide.service('confirmService', function() {
                 return confirmSpy;
@@ -30,6 +32,10 @@ describe('UserListController', function () {
 
             $provide.service('UserFormModal', function() {
                 return UserFormModalMock;
+            });
+
+            $provide.service('UserPasswordModal', function() {
+                return UserPasswordModalMock;
             });
         });
 
@@ -57,6 +63,8 @@ describe('UserListController', function () {
                 users: usersList
             });
         });
+
+        spyOn($state, 'reload').andReturn();
     });
 
     describe('init', function() {
@@ -94,8 +102,6 @@ describe('UserListController', function () {
                 email: "johndoe1@gmail.com",
                 loginRestricted: false
             };
-
-            spyOn($state, 'reload').andReturn();
         });
 
         it('should open User Form Modal', function() {
@@ -124,17 +130,34 @@ describe('UserListController', function () {
 
     describe('resetUserPassword', function() {
 
+        var modalDeferred, username;
+
         beforeEach(function() {
-            confirmSpy.confirm.andReturn($q.when(true));
+            username = 'username';
+            modalDeferred = $q.defer();
+            UserPasswordModalMock.andReturn(modalDeferred.promise);
         });
 
-        it('should expose resetUserPassword method', function() {
-            expect(angular.isFunction(vm.resetUserPassword)).toBe(true);
+        it('should open user password modal', function() {
+            vm.resetUserPassword(username);
+
+            expect(UserPasswordModalMock).toHaveBeenCalledWith(username);
         });
 
-        it('should call confirmService', function() {
-            vm.resetUserPassword(1);
-            expect(confirmSpy.confirm).toHaveBeenCalledWith('msg.question.confirmation.resetPassword');
+        it('should reload state after password change was successful', function() {
+            vm.resetUserPassword(username);
+            modalDeferred.resolve();
+            $rootScope.$apply();
+
+            expect($state.reload).toHaveBeenCalled();
+        });
+
+        it('should not reload state if password change was unsuccessful', function() {
+            vm.resetUserPassword(username);
+            modalDeferred.reject();
+            $rootScope.$apply();
+
+            expect($state.reload).not.toHaveBeenCalled();
         });
     });
 

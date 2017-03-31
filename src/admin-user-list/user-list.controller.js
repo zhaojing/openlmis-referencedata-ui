@@ -28,9 +28,12 @@
 		.module('admin-user-list')
 		.controller('UserListController', controller);
 
-	controller.$inject = ['$state', '$stateParams', 'users', 'confirmService', 'UserFormModal'];
+	controller.$inject = [
+		'$state', '$stateParams', 'users', 'confirmService', 'UserFormModal', 'UserPasswordModal'
+	];
 
-	function controller($state, $stateParams, users, confirmService, UserFormModal) {
+	function controller($state, $stateParams, users, confirmService, UserFormModal,
+						UserPasswordModal) {
 
 		var vm = this;
 
@@ -63,14 +66,14 @@
          * @name editUser
          *
          * @description
-         * Redirects to edit user page.
+         * Opens a modal for entering new user password.
          *
-         * @param {String} userId the user UUID
+         * @param {String} username	the username of the user
          */
-		function resetUserPassword(userId) {
-            confirmService.confirm('msg.question.confirmation.resetPassword').then(function() {
-
-            });
+		function resetUserPassword(username) {
+            (new UserPasswordModal(username)).then(function() {
+				$state.reload();
+			});
 		}
 
 		function search() {
