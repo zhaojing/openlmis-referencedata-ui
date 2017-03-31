@@ -67,25 +67,27 @@
         function createUser() {
             var loadingPromise = loadingModalService.open(true);
             return referencedataUserService.createUser(vm.user).then(function(user) {
-                authUserService.saveUser({
-                    email: user.email,
-                    enabled: true,
-                    referenceDataUserId: user.id,
-                    role: 'USER',
-                    username: user.username
-                }).then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success(vm.notification);
-                    });
 
-                    if (vm.updateMode) {
-                        modalDeferred.resolve(user);
-                    } else {
-                        (new UserPasswordModal(user.username)).finally(function() {
+                if (vm.updateMode) {
+                    modalDeferred.resolve(user);
+                } else {
+                    authUserService.saveUser({
+                        email: user.email,
+                        enabled: true,
+                        referenceDataUserId: user.id,
+                        role: 'USER',
+                        username: user.username
+                    }).then(function () {
+                        loadingPromise.then(function () {
+                            notificationService.success(vm.notification);
+                        });
+
+                        (new UserPasswordModal(user.username)).finally(function () {
                             modalDeferred.resolve(user);
                         });
-                    }
-                }, loadingModalService.close);
+
+                    }, loadingModalService.close);
+            }
             }).finally(loadingModalService.close);
         }
 
