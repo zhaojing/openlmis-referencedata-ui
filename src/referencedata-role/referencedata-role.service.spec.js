@@ -62,5 +62,6 @@ describe('referencedataRoleService', function() {
 
     afterEach(function() {
         $httpBackend.verifyNoOutstandingRequest();
+        $httpBackend.verifyNoOutstandingExpectation();
     });
 });
