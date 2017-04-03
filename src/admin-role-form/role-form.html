@@ -1,0 +1,15 @@
+<div class="page">
+    <h2>{{'label.createUpdateRole' | message}}</h2>
+    <form>
+        <label>
+            <span>{{'label.type'}}</span>
+            <span>{{vm.role.type}}</span>
+        </label>
+        <label>{{'label.name'}}</label>
+        <input ng-model="vm.role.name" required/>
+        <label>{{'label.description'}}</label>
+        <textarea ng-model="vm.role.description" required></textarea>
+        <input type="submit"
+            value="{{(vm.role.id ? 'button.updateRole' : 'button.createRole') | message}}"/>
+    </form>
+</div>
