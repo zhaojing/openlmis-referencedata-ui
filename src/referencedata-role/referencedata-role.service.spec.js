@@ -18,8 +18,7 @@ describe('referencedataRoleService', function() {
     var $rootScope, $httpBackend, openlmisUrlFactory, roles, referencedataRoleService;
 
     beforeEach(function() {
-        module('referencedata-role', function() {
-        });
+        module('referencedata-role');
 
         inject(function($injector) {
             $httpBackend = $injector.get('$httpBackend');
@@ -59,5 +58,9 @@ describe('referencedataRoleService', function() {
 
             expect(angular.toJson(data)).toEqual(angular.toJson(roles));
         });
+    });
+
+    afterEach(function() {
+        $httpBackend.verifyNoOutstandingRequest();
     });
 });
