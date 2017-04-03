@@ -18,7 +18,7 @@ describe('RoleListController', function () {
     var vm, $controller, rolesList;
 
     beforeEach(function() {
-        module('admin-role-list', function($provide) {
+        module('admin-role-list', function() {
         });
 
         inject(function($injector) {

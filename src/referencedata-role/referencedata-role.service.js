@@ -30,9 +30,10 @@
         .service('referencedataRoleService', service);
 
     service.$inject = [
-        '$q', 'openlmisUrlFactory', '$resource'];
+        'openlmisUrlFactory', '$resource'
+    ];
 
-    function service($q, openlmisUrlFactory, $resource) {
+    function service(openlmisUrlFactory, $resource) {
         var resource = $resource(openlmisUrlFactory('/api/roles'), {}, {
                 getAll: {
                     method: 'GET',
@@ -41,7 +42,6 @@
             });
 
         this.getAll = getAll;
-
 
         /**
          * @ngdoc method
