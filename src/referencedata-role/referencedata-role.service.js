@@ -34,14 +34,16 @@
     ];
 
     function service(openlmisUrlFactory, $resource) {
-        var resource = $resource(openlmisUrlFactory('/api/roles'), {}, {
-                getAll: {
-                    method: 'GET',
-                    isArray: true
-                }
-            });
+        var resource = $resource(openlmisUrlFactory('/api/roles/:id'), {}, {});
 
+        this.get = get;
         this.getAll = getAll;
+
+        function get(id) {
+            return resource.get({
+                id: id
+            }).$promise;
+        }
 
         /**
          * @ngdoc method
@@ -54,7 +56,7 @@
          * @return {Promise} the array of all roles
          */
         function getAll() {
-            return resource.getAll().$promise;
+            return resource.query().$promise;
         }
     }
 })();

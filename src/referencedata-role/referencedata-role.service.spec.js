@@ -60,6 +60,50 @@ describe('referencedataRoleService', function() {
         });
     });
 
+    describe('get', function() {
+
+        var data, roleId, role;
+
+        beforeEach(function() {
+            roleId = 'some-role-id';
+
+            role = {
+                id: roleId,
+                name: 'Some role'
+            };
+
+            $httpBackend.when('GET', openlmisUrlFactory('/api/roles/' + roleId)).respond(200, role);
+        });
+
+        it('should return promise', function() {
+            var result = referencedataRoleService.get(roleId);
+            $httpBackend.flush();
+
+            expect(result.then).not.toBeUndefined();
+        });
+
+        it('should resolve to role', function() {
+            var result;
+
+            referencedataRoleService.get(roleId).then(function(data) {
+                result = data;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result).not.toBeUndefined();
+            expect(result.id).toBe(roleId);
+        });
+
+        it('should make a proper request', function() {
+            $httpBackend.expect('GET', openlmisUrlFactory('/api/roles/' + roleId));
+
+            referencedataRoleService.get(roleId);
+            $httpBackend.flush();
+        });
+
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingRequest();
         $httpBackend.verifyNoOutstandingExpectation();
