@@ -66,6 +66,11 @@
          */
         function createUser() {
             var loadingPromise = loadingModalService.open(true);
+
+            if (user.email === "") {
+              user.email = null;
+            }
+
             return referencedataUserService.createUser(vm.user).then(function(user) {
 
                 if (vm.updateMode) {
