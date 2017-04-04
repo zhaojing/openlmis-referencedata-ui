@@ -27,7 +27,7 @@
         $stateProvider.state('administration.roles', {
             showInNavigation: true,
             label: 'label.roles',
-            url: '/roles',
+            url: '/roles?page&size',
             controller: 'RoleListController',
             templateUrl: 'admin-role-list/role-list.html',
             controllerAs: 'vm',
