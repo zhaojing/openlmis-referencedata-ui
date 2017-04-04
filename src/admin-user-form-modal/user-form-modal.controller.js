@@ -72,7 +72,6 @@
                     modalDeferred.resolve(user);
                 } else {
                     authUserService.saveUser({
-                        email: user.email,
                         enabled: true,
                         referenceDataUserId: user.id,
                         role: 'USER',
