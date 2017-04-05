@@ -34,10 +34,16 @@
     ];
 
     function service(openlmisUrlFactory, $resource) {
-        var resource = $resource(openlmisUrlFactory('/api/roles/:id'), {}, {});
+        var resource = $resource(openlmisUrlFactory('/api/roles/:id'), {}, {
+            update: {
+                method: 'PUT'
+            }
+        });
 
         this.get = get;
         this.getAll = getAll;
+        this.create = create;
+        this.update = update;
 
         function get(id) {
             return resource.get({
@@ -57,6 +63,38 @@
          */
         function getAll() {
             return resource.query().$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-role.referencedataRoleService
+         * @name create
+         *
+         * @description
+         * Creates the given role on the OpenLMIS server.
+         *
+         * @param   {Object}    role    the role to be created
+         * @return  {Object}            the created role
+         */
+        function create(role) {
+            return resource.save(role).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-role.referencedataRoleService
+         * @name update
+         *
+         * @description
+         * Updates the given role on the OpenLMIS server.
+         *
+         * @param   {Object}    role    the role to be updated
+         * @return  {Object}            the updates role
+         */
+        function update(role) {
+            return resource.update({
+                id: role.id
+            }, role).$promise;
         }
     }
 })();

@@ -1,7 +1,7 @@
 <div class="page">
     <h2>{{'label.roles' | message}}</h2>
     <section class="openlmis-table-container">
-        <button ng-click="" class="primary">{{'button.createRole' | message}}</button>
+        <a class="button primary" ui-sref=".createUpdate">{{'button.createRole' | message}}</a>
         <table>
             <thead>
             <tr>
@@ -15,7 +15,7 @@
                 <td>{{role.name}}</td>
                 <td>{{role.description}}</td>
                 <td>
-                    <a ng-click="">{{'link.edit' | message}}</a>
+                    <a ui-sref=".createUpdate({roleId: role.id})">{{'link.edit' | message}}</a>
                 </td>
             </tr>
             </tbody>

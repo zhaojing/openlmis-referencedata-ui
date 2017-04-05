@@ -1,0 +1,23 @@
+<div class="page">
+    <h2>{{(vm.role.id ? 'label.updateRole' : 'label.createRole') | message}}</h2>
+    <form ng-submit="vm.saveRole()">
+        <label>
+            <span>{{'label.type' | message}}</span>
+            <span>{{vm.getLabel(vm.type)}}</span>
+        </label>
+        <label>{{'label.name' | message}}</label>
+        <input class="form-control" ng-model="vm.role.name" required/>
+        <label>{{'label.description' | message}}</label>
+        <textarea ng-model="vm.role.description" required></textarea>
+        <fieldset class="form-group">
+    		<legend>Rights</legend>
+            <label ng-repeat="right in vm.rights">
+               <input type="checkbox" ng-model="right.checked" ng-required="vm.isNoneSelected()"/>
+               {{vm.getLabel(right.name)}}
+            </label>
+    	</fieldset>
+        <button ui-sref="^">{{'button.cancel' | message}}</button>
+        <input type="submit"
+            value="{{(vm.role.id ? 'label.updateRole' : 'label.createRole') | message}}"/>
+    </form>
+</div>
