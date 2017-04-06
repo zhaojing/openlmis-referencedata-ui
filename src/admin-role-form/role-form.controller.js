@@ -54,6 +54,28 @@
         vm.role = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-role-form.controller:RoleFormController
+         * @type {String}
+         * @name type
+         *
+         * @description
+         * The type of the role that is being created/modified.
+         */
+        vm.type = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-role-form.controller:RoleFormController
+         * @type {List}
+         * @name rights
+         *
+         * @description
+         * The list of rights available for this role type,
+         */
+        vm.rights = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-role-form.controller:RoleFormController
          * @name $onInit
