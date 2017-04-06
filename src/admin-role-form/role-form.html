@@ -1,13 +1,13 @@
 <div class="page">
-    <h2>{{(vm.role.id ? 'label.updateRole' : 'label.createRole') | message}}</h2>
+    <h2>{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</h2>
     <form ng-submit="vm.saveRole()">
         <label>
-            <span>{{'label.type' | message}}</span>
+            <span>{{'adminRoleForm.type' | message}}</span>
             <span>{{vm.getLabel(vm.type)}}</span>
         </label>
-        <label>{{'label.name' | message}}</label>
+        <label>{{'adminRoleForm.name' | message}}</label>
         <input class="form-control" ng-model="vm.role.name" required/>
-        <label>{{'label.description' | message}}</label>
+        <label>{{'adminRoleForm.description' | message}}</label>
         <textarea ng-model="vm.role.description" required></textarea>
         <fieldset class="form-group">
     		<legend>Rights</legend>
@@ -18,6 +18,6 @@
     	</fieldset>
         <button ui-sref="^">{{'button.cancel' | message}}</button>
         <input type="submit"
-            value="{{(vm.role.id ? 'label.updateRole' : 'label.createRole') | message}}"/>
+            value="{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}"/>
     </form>
 </div>

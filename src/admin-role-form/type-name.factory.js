@@ -48,7 +48,7 @@
          * @return  {String}            the localized label
          */
         function getLabel(type) {
-            return messageService.get('label.' + toCamelCase(type));
+            return messageService.get('adminRoleForm.' + toCamelCase(type) + '.label');
         }
 
         /**
@@ -63,7 +63,7 @@
          * @return  {String}            the localized description
          */
         function getDescription(type) {
-            return messageService.get('msg.' + toCamelCase(type) + 'Description');
+            return messageService.get('adminRoleForm.' + toCamelCase(type) + '.description');
         }
 
         function toCamelCase(string) {

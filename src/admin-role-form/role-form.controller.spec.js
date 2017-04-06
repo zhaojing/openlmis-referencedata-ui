@@ -117,7 +117,7 @@ describe('RoleFormController', function() {
             deferred.resolve();
             $rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('msg.roleCreatedSuccessfully');
+            expect(notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleCreatedSuccessfully');
         });
 
         it('should close loading modal if creation was unsuccessful', function() {
@@ -146,7 +146,7 @@ describe('RoleFormController', function() {
             $rootScope.$apply();
             $rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('msg.roleUpdatedSuccessfully');
+            expect(notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleUpdatedSuccessfully');
         });
 
         it('should redirect to role list after success', function() {

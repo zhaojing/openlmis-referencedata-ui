@@ -86,14 +86,14 @@
             if (vm.role.id) {
                 return referencedataRoleService.update(vm.role).then(function() {
                     loadingPromise.then(function() {
-                        notificationService.success('msg.roleUpdatedSuccessfully');
+                        notificationService.success('adminRoleForm.roleUpdatedSuccessfully');
                     });
                     goToRoleList();
                 }, loadingModalService.close);
             } else {
                 return referencedataRoleService.create(vm.role).then(function() {
                     loadingPromise.then(function() {
-                        notificationService.success('msg.roleCreatedSuccessfully');
+                        notificationService.success('adminRoleForm.roleCreatedSuccessfully');
                     });
                     goToRoleList();
                 }, loadingModalService.close);
