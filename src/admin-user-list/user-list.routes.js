@@ -24,7 +24,7 @@
 
 	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('administration.users', {
+		$stateProvider.state('openlmis.administration.users', {
 			showInNavigation: true,
 			label: 'label.users',
 			url: '/users?firstName&lastName&email&page&size',

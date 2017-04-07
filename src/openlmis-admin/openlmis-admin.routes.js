@@ -24,7 +24,7 @@
 
 	function routes($stateProvider) {
 
-		$stateProvider.state('administration', {
+		$stateProvider.state('openlmis.administration', {
             abstract: true,
             showInNavigation: true,
             priority: 0,
@@ -33,7 +33,7 @@
             template: '<div ui-view></div>'
         });
 
-		$stateProvider.state('administration.configure', {
+		$stateProvider.state('openlmis.administration.configure', {
             abstract: true,
             showInNavigation: true,
             label: 'template.configure',

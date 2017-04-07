@@ -162,7 +162,7 @@ describe('RoleFormController', function() {
             deferred.resolve();
             $rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect($state.go).toHaveBeenCalledWith('openlmis.^', {}, {
                 reload: true
             });
         });

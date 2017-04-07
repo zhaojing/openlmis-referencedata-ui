@@ -39,7 +39,7 @@ describe('TypeFormController', function() {
     it('selectType should redirect to the role creation screen', function() {
         vm.selectType(types[1]);
 
-        expect($state.go).toHaveBeenCalledWith('administration.roles.createUpdate', {
+        expect($state.go).toHaveBeenCalledWith('openlmis.administration.roles.createUpdate', {
             type: types[1]
         });
     });

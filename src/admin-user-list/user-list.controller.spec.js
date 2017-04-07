@@ -172,7 +172,7 @@ describe('UserListController', function () {
 
             vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('administration.users', {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: vm.lastName,
                 firstName: undefined,
                 email: undefined
@@ -184,7 +184,7 @@ describe('UserListController', function () {
 
             vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('administration.users', {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: undefined,
                 firstName: vm.firstName,
                 email: undefined
@@ -196,7 +196,7 @@ describe('UserListController', function () {
 
             vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('administration.users', {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: undefined,
                 firstName: undefined,
                 email: vm.email,

@@ -22,7 +22,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('administration.roles.selectType', {
+        $stateProvider.state('openlmis.administration.roles.selectType', {
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
                 types: function($filter, referencedataRightService, $q) {
