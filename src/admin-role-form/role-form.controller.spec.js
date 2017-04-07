@@ -67,7 +67,8 @@ describe('RoleFormController', function() {
 
     describe('saveRole', function() {
 
-        var $q, $rootScope, $state, deferred, loadingModalService, notificationService;
+        var $q, $rootScope, $state, deferred, loadingModalService, notificationService,
+            confirmService, confirmDeferred;
 
         beforeEach(function() {
             inject(function($injector) {
@@ -76,12 +77,15 @@ describe('RoleFormController', function() {
                 $state = $injector.get('$state');
                 loadingModalService = $injector.get('loadingModalService');
                 notificationService = $injector.get('notificationService');
+                confirmService = $injector.get('confirmService');
             });
 
             deferred = $q.defer();
+            confirmDeferred = $q.defer();
 
             spyOn(referencedataRoleService, 'update').andReturn(deferred.promise);
             spyOn(referencedataRoleService, 'create').andReturn(deferred.promise);
+            spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
             spyOn(loadingModalService, 'open').andReturn($q.when());
             spyOn(notificationService, 'success');
             spyOn(loadingModalService, 'close');
@@ -94,6 +98,8 @@ describe('RoleFormController', function() {
             role.id = 'some-id';
 
             vm.saveRole();
+            confirmDeferred.resolve();
+            $rootScope.$apply();
 
             expect(referencedataRoleService.update).toHaveBeenCalledWith(role);
             expect(referencedataRoleService.create).not.toHaveBeenCalled();
@@ -132,6 +138,7 @@ describe('RoleFormController', function() {
             role.id = 'some-id';
 
             vm.saveRole();
+            confirmDeferred.resolve();
             deferred.reject();
             $rootScope.$apply();
 
@@ -142,8 +149,8 @@ describe('RoleFormController', function() {
             role.id = 'some-id';
 
             vm.saveRole();
+            confirmDeferred.resolve();
             deferred.resolve();
-            $rootScope.$apply();
             $rootScope.$apply();
 
             expect(notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleUpdatedSuccessfully');
@@ -151,12 +158,33 @@ describe('RoleFormController', function() {
 
         it('should redirect to role list after success', function() {
             vm.saveRole();
+            confirmDeferred.resolve();
             deferred.resolve();
             $rootScope.$apply();
 
             expect($state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
+        });
+
+        it('should prompt for confirmation if updating', function() {
+            role.id = 'some-id';
+
+            vm.saveRole();
+
+            expect(confirmService.confirm).toHaveBeenCalledWith('adminRoleForm.confirm');
+        });
+
+        it('should not update if confirmation was not successful', function() {
+            role.id = 'some-id';
+
+            vm.saveRole();
+
+            confirmDeferred.reject();
+            $rootScope.$apply();
+
+            expect(referencedataRoleService.create).not.toHaveBeenCalled();
+            expect(referencedataRoleService.update).not.toHaveBeenCalled();
         });
 
     });

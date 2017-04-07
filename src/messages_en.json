@@ -8,6 +8,7 @@
     "label.usersManage": "Manage users",
 
     "adminRoleForm.createRole": "Create role",
+    "adminRoleForm.confirm": "Are you sure?",
     "adminRoleForm.description": "Description",
     "adminRoleForm.facilitiesManage.label": "Manage facilities",
     "adminRoleForm.facilityApprovedOrderablesManage.label": "Manage facility approved orderables",

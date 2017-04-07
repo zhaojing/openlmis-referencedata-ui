@@ -33,9 +33,13 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
-                roles: function(paginationService, referencedataRoleService, $stateParams) {
+                roles: function($q, paginationService, referencedataRoleService, $stateParams, $filter) {
                     return  paginationService.registerList(undefined, $stateParams, function() {
-                        return referencedataRoleService.getAll();
+                        var deferred = $q.defer();
+                        referencedataRoleService.getAll().then(function(roles) {
+                            deferred.resolve($filter('orderBy')(roles, 'name'));
+                        }, deferred.reject);
+                        return deferred.promise;
                     });
                 }
             }

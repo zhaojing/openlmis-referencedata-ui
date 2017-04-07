@@ -28,12 +28,12 @@
         .controller('RoleFormController', controller);
 
     controller.$inject = [
-        '$filter', '$state', 'role', 'type', 'rights', 'referencedataRoleService',
-        'typeNameFactory', 'loadingModalService', 'notificationService'
+        '$q', '$filter', '$state', 'role', 'type', 'rights', 'referencedataRoleService',
+        'typeNameFactory', 'loadingModalService', 'notificationService', 'confirmService'
     ];
 
-    function controller($filter, $state, role, type, rights, referencedataRoleService,
-        typeNameFactory, loadingModalService, notificationService) {
+    function controller($q, $filter, $state, role, type, rights, referencedataRoleService,
+        typeNameFactory, loadingModalService, notificationService, confirmService) {
 
         var vm = this;
 
@@ -100,26 +100,8 @@
          * @return  {Promise}   the promise resolving to saved role
          */
         function saveRole() {
-            var promise,
-                loadingPromise = loadingModalService.open();
-
             vm.role.rights = getSelectedRights();
-
-            if (vm.role.id) {
-                return referencedataRoleService.update(vm.role).then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success('adminRoleForm.roleUpdatedSuccessfully');
-                    });
-                    goToRoleList();
-                }, loadingModalService.close);
-            } else {
-                return referencedataRoleService.create(vm.role).then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success('adminRoleForm.roleCreatedSuccessfully');
-                    });
-                    goToRoleList();
-                }, loadingModalService.close);
-            }
+            return vm.role.id ? updateRole() : createRole();
         }
 
         /**
@@ -140,6 +122,38 @@
             return $filter('filter')(vm.rights, {
                 checked: true
             });
+        }
+
+        function updateRole() {
+            var deferred = $q.defer();
+
+            confirmService.confirm('adminRoleForm.confirm').then(function() {
+                var loadingPromise = loadingModalService.open();
+
+                referencedataRoleService.update(vm.role).then(function(role) {
+                    loadingPromise.then(function() {
+                        notificationService.success('adminRoleForm.roleUpdatedSuccessfully');
+                    });
+                    deferred.resolve(role);
+                    goToRoleList();
+                }, function(error) {
+                    loadingModalService.close();
+                    deferred.reject(error);
+                });
+            }, deferred.reject);
+
+            return deferred.promise;
+        }
+
+        function createRole() {
+            var loadingPromise = loadingModalService.open();
+
+            return referencedataRoleService.create(vm.role).then(function(role) {
+                loadingPromise.then(function() {
+                    notificationService.success('adminRoleForm.roleCreatedSuccessfully');
+                });
+                goToRoleList();
+            }, loadingModalService.close);
         }
 
         function goToRoleList() {
