@@ -83,7 +83,7 @@
 			stateParams.firstName = vm.firstName;
 			stateParams.email = vm.email;
 
-			$state.go('openlmis.administration.users', stateParams, {
+			$state.go('administration.users', stateParams, {
 				reload: true
 			});
 		}

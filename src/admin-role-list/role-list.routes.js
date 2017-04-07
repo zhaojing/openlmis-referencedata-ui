@@ -24,7 +24,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.roles', {
+        $stateProvider.state('administration.roles', {
             showInNavigation: true,
             label: 'adminRoleList.roles',
             url: '/roles?page&size',

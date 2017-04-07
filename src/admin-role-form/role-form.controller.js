@@ -157,7 +157,7 @@
         }
 
         function goToRoleList() {
-            $state.go('openlmis.^', {}, {
+            $state.go('^', {}, {
                 reload: true
             });
         }

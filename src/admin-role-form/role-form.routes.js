@@ -22,7 +22,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.roles.createUpdate', {
+        $stateProvider.state('administration.roles.createUpdate', {
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
                 role: function($stateParams, referencedataRoleService) {

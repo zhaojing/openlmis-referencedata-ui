@@ -25,7 +25,7 @@
 
     function routes($stateProvider) {
 
-        $stateProvider.state('openlmis.profile', {
+        $stateProvider.state('profile', {
             url: '/profile',
             templateUrl: 'openlmis-user/profile.html',
             controller: 'UserProfileController',
