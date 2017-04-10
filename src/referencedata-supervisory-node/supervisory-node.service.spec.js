@@ -56,11 +56,7 @@ describe('supervisoryNodeService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(data.length).toEqual(supervisoryNodes.length);
-            expect(data[0].id).toEqual(supervisoryNodes[0].id);
-            expect(data[0].code).toEqual(supervisoryNodes[0].code);
-            expect(data[1].id).toEqual(supervisoryNodes[1].id);
-            expect(data[1].code).toEqual(supervisoryNodes[1].code);
+            expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
         });
     });
 
@@ -86,8 +82,7 @@ describe('supervisoryNodeService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(result).not.toBeUndefined();
-            expect(result.id).toBe(supervisoryNodes[0].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(supervisoryNodes[0]));
         });
 
         it('should make a proper request', function() {

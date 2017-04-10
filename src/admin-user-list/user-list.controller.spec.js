@@ -60,25 +60,6 @@ describe('UserListController', function () {
         spyOn($state, 'go').andReturn();
     });
 
-    describe('init', function() {
-
-        beforeEach(function() {
-            $controllerMock = jasmine.createSpy('$controller').andCallFake(function() {
-                vm.stateParams = {};
-            });
-
-            vm = $controller('UserListController', {
-                users: usersList,
-                $controller: $controllerMock
-            });
-
-        });
-
-        it('should expose go to user form method', function() {
-            expect(angular.isFunction(vm.goToUserForm)).toBe(true);
-        });
-    });
-
     describe('resetUserPassword', function() {
 
         var modalDeferred, username;
@@ -109,25 +90,6 @@ describe('UserListController', function () {
             $rootScope.$apply();
 
             expect($state.reload).not.toHaveBeenCalled();
-        });
-    });
-
-    describe('goToUserForm', function() {
-
-        it('should redirect to user edit', function() {
-            var userId = 'user-id';
-
-            vm.goToUserForm(userId);
-            expect($state.go).toHaveBeenCalledWith('administration.users.form', {
-				id: userId
-			});
-        });
-
-        it('should redirect to create edit', function() {
-            vm.goToUserForm();
-            expect($state.go).toHaveBeenCalledWith('administration.users.form', {
-				id: undefined
-			});
         });
     });
 

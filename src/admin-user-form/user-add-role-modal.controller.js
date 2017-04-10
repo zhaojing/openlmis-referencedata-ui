@@ -30,18 +30,17 @@
 
     controller.$inject = [
         'user', 'supervisoryNodes', 'programs', 'warehouses', 'roles',
-        'modalDeferred', '$filter', 'ROLE_TYPES'
+        'modalDeferred', '$filter', 'ROLE_TYPES', '$q', 'messageService', 'newRoleAssignment'
     ];
 
     function controller(user, supervisoryNodes, programs, warehouses, roles,
-                        modalDeferred, $filter, ROLE_TYPES) {
+                        modalDeferred, $filter, ROLE_TYPES, $q, messageService, newRoleAssignment) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.addRole = addRole;
         vm.loadRoles = loadRoles;
-        vm.isNewRoleInvalid = isNewRoleInvalid;
         vm.isSupervisionType = isSupervisionType;
         vm.isFulfillmentType = isFulfillmentType;
 
@@ -114,57 +113,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-form.controller:UserAddRoleModalController
-         * @name supervisoryNodes
+         * @name newRoleAssignment
          * @type {Object}
          *
          * @description
-         * Selected supervisory node code.
+         * Contains all selected properties of new role assignment.
          */
-        vm.supervisoryNode = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserAddRoleModalController
-         * @name programs
-         * @type {String}
-         *
-         * @description
-         * Selected program code.
-         */
-        vm.program = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserAddRoleModalController
-         * @name warehouses
-         * @type {String}
-         *
-         * @description
-         * Selected warehouse code.
-         */
-        vm.warehouse = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserAddRoleModalController
-         * @name roles
-         * @type {Object}
-         *
-         * @description
-         * Selected role.
-         */
-        vm.role = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserAddRoleModalController
-         * @name type
-         * @type {String}
-         *
-         * @description
-         * Selected role type.
-         */
-        vm.type = undefined;
+        vm.newRoleAssignment = undefined;
 
         /**
          * @ngdoc property
@@ -187,16 +142,14 @@
          */
         function onInit() {
             vm.roles = roles;
-            angular.forEach(vm.roles, function(role) {
-                role.$type = role.rights[0].type;
-            });
             vm.user = user;
             vm.supervisoryNodes = supervisoryNodes;
             vm.programs = programs;
             vm.warehouses = warehouses;
+            vm.newRoleAssignment = newRoleAssignment;
             vm.types = ROLE_TYPES;
-            vm.type = ROLE_TYPES.SUPERVISION;
-            loadRoles();
+            if(!newRoleAssignment.type) vm.newRoleAssignment.type = ROLE_TYPES.SUPERVISION;
+            loadRoles(true);
         }
 
         /**
@@ -205,76 +158,13 @@
          * @name loadRoles
          *
          * @description
-         * Filters roles with given role type.
+         * Filters roles with the given role type.
          */
-        function loadRoles() {
-            vm.role = undefined;
+        function loadRoles(shouldNotClear) {
+            if(!shouldNotClear) vm.newRoleAssignment.role = undefined;
             vm.filteredRoles = $filter('filter')(vm.roles, {
-                $type: vm.type
+                $type: vm.newRoleAssignment.type
             }, true);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserAddRoleModalController
-         * @name addRole
-         *
-         * @description
-         * Adds new role to user.
-         *
-         * @return {Promise} the user with new role
-         */
-        function addRole() {
-            if(!isNewRoleInvalid()) {
-                var roleAssignment = {
-                    roleId: vm.role.id
-                }
-                if(isSupervisionType()) {
-                    roleAssignment.supervisoryNodeCode = vm.supervisoryNode;
-                    roleAssignment.programCode = vm.program;
-                } else if(isFulfillmentType()) {
-                    roleAssignment.warehouseCode = vm.warehouse;
-                }
-                vm.user.roleAssignments.push(roleAssignment);
-                modalDeferred.resolve(vm.user);
-            }
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserAddRoleModalController
-         * @name isNewRoleInvalid
-         *
-         * @description
-         * Checks if currently selected values are already assigned as role to user
-         * or if some fields are missing.
-         *
-         * @return {String} error message if new role is invalid, undefined otherwise
-         */
-        function isNewRoleInvalid() {
-            if(roleAlreadyAssigned()) return 'adminUserForm.roleAlreadyAssigned';
-            if(isSupervisionType() && !(vm.supervisoryNode || vm.program)) return 'adminUserForm.supervisionInvalid';
-            else if(isFulfillmentType() && !vm.warehouse) return 'adminUserForm.fulfillmentInvalid';
-            return undefined;
-        }
-
-        function roleAlreadyAssigned() {
-            if(!vm.role) return false;
-            var alreadyExist = false;
-            angular.forEach(vm.user.roleAssignments, function(role) {
-                var isEqual = vm.role.id === role.roleId;
-                if(isSupervisionType()) {
-                    isEqual = isEqual &&
-                        vm.supervisoryNode === role.supervisoryNodeCode &&
-                        vm.program === role.programCode;
-                }
-                else if(isFulfillmentType()) {
-                    isEqual = isEqual &&
-                        vm.warehouse === role.warehouseCode;
-                }
-                alreadyExist = alreadyExist || isEqual;
-            });
-            return alreadyExist;
         }
 
         /**
@@ -288,7 +178,7 @@
          * @return {Boolean} true if selects should be displayed, false otherwise
          */
         function isSupervisionType() {
-            return vm.type === ROLE_TYPES.SUPERVISION;
+            return vm.newRoleAssignment.type === ROLE_TYPES.SUPERVISION;
         }
 
         /**
@@ -302,7 +192,71 @@
          * @return {Boolean} true if select should be displayed, false otherwise
          */
         function isFulfillmentType() {
-            return vm.type === ROLE_TYPES.ORDER_FULFILLMENT;
+            return vm.newRoleAssignment.type === ROLE_TYPES.ORDER_FULFILLMENT;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserAddRoleModalController
+         * @name addRole
+         *
+         * @description
+         * Creates new role assignment for user.
+         *
+         * @return {Promise} the new created role assignment
+         */
+        function addRole() {
+            var deferred = $q.defer(),
+                invalidMessage = isNewRoleInvalid();
+
+            if(!invalidMessage) {
+                var roleAssignment = {
+                    roleId: vm.newRoleAssignment.role.id
+                }
+                if(isSupervisionType()) {
+                    roleAssignment.supervisoryNodeCode = vm.newRoleAssignment.supervisoryNode;
+                    roleAssignment.programCode = vm.newRoleAssignment.program;
+                } else if(isFulfillmentType()) {
+                    roleAssignment.warehouseCode = vm.newRoleAssignment.warehouse;
+                }
+                deferred.resolve();
+                modalDeferred.resolve(roleAssignment);
+            } else {
+                deferred.reject({
+                    data: {
+                        message: messageService.get(invalidMessage),
+                        messageKey: invalidMessage
+                    }
+                });
+            }
+
+            return deferred.promise;
+        }
+
+        function isNewRoleInvalid() {
+            if(roleAlreadyAssigned()) return 'adminUserForm.roleAlreadyAssigned';
+            if(isSupervisionType() && !(vm.newRoleAssignment.supervisoryNode || vm.newRoleAssignment.program)) return 'adminUserForm.supervisionInvalid';
+            else if(isFulfillmentType() && !vm.newRoleAssignment.warehouse) return 'adminUserForm.fulfillmentInvalid';
+            return undefined;
+        }
+
+        function roleAlreadyAssigned() {
+            if(!vm.role) return false;
+            var alreadyExist = false;
+            angular.forEach(vm.user.roleAssignments, function(role) {
+                var isEqual = vm.newRoleAssignment.role.id === role.roleId;
+                if(isSupervisionType()) {
+                    isEqual = isEqual &&
+                        vm.newRoleAssignment.supervisoryNode === role.supervisoryNodeCode &&
+                        vm.newRoleAssignment.program === role.programCode;
+                }
+                else if(isFulfillmentType()) {
+                    isEqual = isEqual &&
+                        vm.newRoleAssignment.warehouse === role.warehouseCode;
+                }
+                alreadyExist = alreadyExist || isEqual;
+            });
+            return alreadyExist;
         }
     }
 })();

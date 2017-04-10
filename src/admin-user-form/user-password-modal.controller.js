@@ -75,7 +75,7 @@
         function createPassword() {
             var loadingPromise = loadingModalService.open(true);
 
-            return authUserService.resetPassword(user.username, user.newPassword).then(function() {
+            return authUserService.resetPassword(vm.user.username, vm.user.newPassword).then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminUserForm.passwordSetSuccessfully');
                 });

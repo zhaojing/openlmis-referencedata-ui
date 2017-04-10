@@ -47,7 +47,8 @@
                 },
                 createUser: {
                     url: openlmisUrlFactory('/api/users'),
-                    method: 'PUT'
+                    method: 'PUT',
+                    transformRequest: transformRequest
                 }
             });
 
@@ -130,6 +131,13 @@
          */
         function createUser(user) {
             return resource.createUser(undefined, user).$promise;
+        }
+
+        function transformRequest(user) {
+            if (user.email === '') {
+                user.email = null;
+            }
+            return angular.toJson(user);
         }
     }
 })();

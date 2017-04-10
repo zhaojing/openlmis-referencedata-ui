@@ -28,6 +28,16 @@
         return UserAddRoleModal;
 
         function UserAddRoleModal(user, supervisoryNodes, programs, warehouses, roles) {
+            var persistent = {
+                    user: user,
+                    newRoleAssignment: {
+                        role: undefined,
+                        warehouse: undefined,
+                        program: undefined,
+                        supervisoryNode: undefined,
+                        type: undefined
+                    }
+                };
 
             return openlmisModalService.createDialog({
                 controller: 'UserAddRoleModalController',
@@ -36,7 +46,7 @@
                 show: true,
                 resolve: {
                     user: function() {
-                        return user
+                        return persistent.user;
                     },
                     supervisoryNodes: function() {
                         return supervisoryNodes;
@@ -49,9 +59,14 @@
                     },
                     roles: function() {
                         return roles;
+                    },
+                    newRoleAssignment: function() {
+                        return persistent.newRoleAssignment;
                     }
                 }
-            }).promise;
+            }).promise.finally(function() {
+                persistent = undefined;
+            });
         }
     }
 })();

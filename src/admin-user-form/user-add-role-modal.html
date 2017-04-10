@@ -15,44 +15,42 @@
                         </label>
                         <fieldset>
                             <label for="type">{{'adminUserForm.type' | message}}</label>
-                            <select id="type" ng-model="vm.type"
+                            <select id="type" ng-model="vm.newRoleAssignment.type"
                                     ng-options="type for type in vm.types"
                                     ng-change="vm.loadRoles()"
                                     laceholder="{{'adminUserForm.type' | message}}" required>
                             </select>
                             <label for="role">{{'adminUserForm.role' | message}}</label>
-                            <select id="role" ng-model="vm.role"
+                            <select id="role" ng-model="vm.newRoleAssignment.role"
                                     ng-options="role.name for role in vm.filteredRoles"
                                     placeholder="{{'adminUserForm.role' | message}}" required>
                             </select>
-                            <p ng-if="vm.role">{{vm.role.description}}</p>
+                            <p ng-if="vm.role">{{vm.newRoleAssignment.role.description}}</p>
                         </fieldset>
                         <fieldset ng-if="vm.isSupervisionType()">
                             <label for="program">{{'adminUserForm.program' | message}}</label>
-                            <select id="program" ng-model="vm.program"
+                            <select id="program" ng-model="vm.newRoleAssignment.program"
                                     ng-options="program.code as program.name for program in vm.programs"
                                     placeholder="{{'adminUserForm.program' | message}}">
                             </select>
                             <label for="supervisoryNode">{{'adminUserForm.supervisoryNode' | message}}</label>
-                            <select id="supervisoryNode" ng-model="vm.supervisoryNode"
+                            <select id="supervisoryNode" ng-model="vm.newRoleAssignment.supervisoryNode"
                                     ng-options="supervisoryNode.code as supervisoryNode.name for supervisoryNode in vm.supervisoryNodes"
                                     placeholder="{{'adminUserForm.supervisoryNode' | message}}">
                             </select>
                         </fieldset>
                         <fieldset ng-if="vm.isFulfillmentType()">
                             <label for="warehouse">{{'adminUserForm.warehouse' | message}}</label>
-                            <select id="warehouse" ng-model="vm.warehouseCode"
+                            <select id="warehouse" ng-model="vm.newRoleAssignment.warehouseCode"
                                     ng-options="warehouse.code as warehouse.name for warehouse in vm.warehouses"
                                     placeholder="{{'adminUserForm.warehouse' | message}}">
                             </select>
                         </fieldset>
-                        <span ng-if="vm.isNewRoleInvalid()" class="error">{{vm.isNewRoleInvalid() | message}}</span>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button ng-click="$hide()">{{'adminUserForm.cancel' | message}}</button>
-                    <input form="addRoleForm" type="submit" ng-disabled="vm.isNewRoleInvalid()"
-                        value="{{'adminUserForm.addRole'| message}}"/>
+                    <input form="addRoleForm" type="submit" value="{{'adminUserForm.addRole'| message}}"/>
                 </div>
         </div>
     </div>

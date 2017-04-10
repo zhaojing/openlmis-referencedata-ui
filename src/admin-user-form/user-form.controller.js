@@ -135,61 +135,14 @@
         function onInit() {
             vm.updateMode = !!user;
             vm.user = user ? user : {
-                roleAssignments: []
+                roleAssignments: [],
+                loginRestricted: false
             };
             vm.roles = roles;
             vm.supervisoryNodes = supervisoryNodes;
             vm.warehouses = warehouses;
             vm.programs = programs;
             vm.notification = 'adminUserForm.user' + (vm.updateMode ? 'Updated' : 'Created') + 'Successfully';
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name createUser
-         *
-         * @description
-         * Creates or updates the user.
-         *
-         * @return {Promise} the promise resolving to th created/updated user
-         */
-        function createUser() {
-            var loadingPromise = loadingModalService.open(true);
-
-            if (vm.user.email === '') {
-                vm.user.email = null;
-            }
-
-            return referencedataUserService.createUser(vm.user).then(function(savedUser) {
-                if(vm.updateMode) {
-                    loadingPromise.then(function () {
-                        notificationService.success(vm.notification);
-                    });
-                    goToUserList();
-                } else {
-                    authUserService.saveUser({
-                        enabled: true,
-                        referenceDataUserId: savedUser.id,
-                        role: 'USER',
-                        username: savedUser.username
-                    }).then(function() {
-                        loadingPromise.then(function () {
-                            notificationService.success(vm.notification);
-                        });
-                        (new UserPasswordModal(savedUser.username)).finally(function () {
-                            goToUserList();
-                        });
-                    }, loadingModalService.close);
-                }
-            })
-            .finally(loadingModalService.close);
-        }
-
-        function goToUserList() {
-            $state.go('^', {}, {
-                reload: true
-            });
         }
 
         /**
@@ -223,27 +176,31 @@
          */
         function getProgramName(programCode) {
             if(!programCode) return undefined;
-            return $filter('filter')(vm.programs, {
+            var filtered = $filter('filter')(vm.programs, {
                 code: programCode
-            }, true)[0].name;
+            }, true);
+            if(!filtered || filtered.length < 1) return undefined;
+            return filtered[0].name;
         }
 
         /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserFormController
-         * @name getProgramName
+         * @name getWarehouseName
          *
          * @description
-         * Returns name of the program.
+         * Returns name of the warehouse.
          *
-         * @param  {String} programCode the program code
-         * @return {String}             the program name
+         * @param  {String} warehouseCode the warehouse code
+         * @return {String}               the warehouse name
          */
         function getWarehouseName(warehouseCode) {
             if(!warehouseCode) return undefined;
-            return $filter('filter')(vm.warehouses, {
+            var filtered = $filter('filter')(vm.warehouses, {
                 code: warehouseCode
-            }, true)[0].name;
+            }, true);
+            if(!filtered || filtered.length < 1) return undefined;
+            return filtered[0].name;
         }
 
         /**
@@ -259,9 +216,11 @@
          */
         function getRoleName(roleId) {
             if(!roleId) return undefined;
-            return $filter('filter')(vm.roles, {
+            var filtered = $filter('filter')(vm.roles, {
                 id: roleId
-            }, true)[0].name;
+            }, true);
+            if(!filtered || filtered.length < 1) return undefined;
+            return filtered[0].name;
         }
 
         /**
@@ -270,11 +229,11 @@
          * @name addRole
          *
          * @description
-         * Adds role to user object.
+         * Adds new role assignment to user object.
          */
         function addRole() {
-            (new UserAddRoleModal(vm.user, vm.supervisoryNodes, vm.programs, vm.warehouses, vm.roles)).then(function(updatedUser) {
-				vm.user = updatedUser;
+            (new UserAddRoleModal(vm.user, vm.supervisoryNodes, vm.programs, vm.warehouses, vm.roles)).then(function(newRole) {
+				vm.user.roleAssignments.push(newRole);
 			});
         }
 
@@ -290,6 +249,50 @@
             var index = vm.user.roleAssignments.indexOf(roleAssignment);
             if(index < 0) return;
             vm.user.roleAssignments.splice(index, 1);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserFormController
+         * @name createUser
+         *
+         * @description
+         * Creates or updates the user.
+         *
+         * @return {Promise} the promise resolving to th created/updated user
+         */
+        function createUser() {
+            var loadingPromise = loadingModalService.open(true);
+
+            return referencedataUserService.createUser(vm.user).then(function(savedUser) {
+                if(vm.updateMode) {
+                    loadingPromise.then(function () {
+                        notificationService.success(vm.notification);
+                    });
+                    goToUserList();
+                } else {
+                    authUserService.saveUser({
+                        enabled: true,
+                        referenceDataUserId: savedUser.id,
+                        role: 'USER',
+                        username: savedUser.username
+                    }).then(function() {
+                        loadingPromise.then(function () {
+                            notificationService.success(vm.notification);
+                        });
+                        (new UserPasswordModal(savedUser.username)).finally(function () {
+                            goToUserList();
+                        });
+                    }, loadingModalService.close);
+                }
+            })
+            .finally(loadingModalService.close);
+        }
+
+        function goToUserList() {
+            $state.go('^', {}, {
+                reload: true
+            });
         }
     }
 })();

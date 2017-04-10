@@ -32,8 +32,8 @@
                     if($stateParams.id) return referencedataUserService.get($stateParams.id);
                     return undefined;
 				},
-				roles: function(referencedataRoleService) {
-					return referencedataRoleService.getAll();
+				roles: function(referencedataRoleFactory) {
+					return referencedataRoleFactory.getAllWithType();
 				},
 				programs: function(programService) {
 					return programService.getAll();

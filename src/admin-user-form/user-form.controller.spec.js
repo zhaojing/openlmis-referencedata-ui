@@ -205,14 +205,18 @@ describe('UserFormController', function() {
 
             expect(vm.updateMode).toBe(false);
             expect(vm.user.roleAssignments).toEqual([]);
+            expect(vm.user.loginRestricted).toBe(false);
             expect(vm.notification).toBe('adminUserForm.userCreatedSuccessfully');
         });
     });
 
-    describe('create user', function() {
+    describe('update user', function() {
+
+        var deferred;
 
         beforeEach(function() {
-            referencedataUserService.createUser.andReturn($q.when(true));
+            deferred = $q.defer();
+            referencedataUserService.createUser.andReturn(deferred.promise);
         });
 
         it('should open loading modal', function() {
@@ -233,22 +237,16 @@ describe('UserFormController', function() {
             expect(referencedataUserService.createUser).toHaveBeenCalledWith(user);
         });
 
-        it('should change email if it is empty string', function() {
-            vm.user.email = '';
-            user.email = undefined;
-
-            vm.createUser();
-            expect(referencedataUserService.createUser).toHaveBeenCalledWith(user);
-        });
-
-        it('should change email if it is empty string', function() {
+        it('should show notification', function() {
+            deferred.resolve();
             vm.createUser();
             $rootScope.$apply();
 
             expect(notificationService.success).toHaveBeenCalledWith(vm.notification);
         });
 
-        it('should change email if it is empty string', function() {
+        it('should redirect to parent state', function() {
+            deferred.resolve();
             vm.createUser();
             $rootScope.$apply();
 
@@ -258,16 +256,24 @@ describe('UserFormController', function() {
         });
 
         it('should close loading modal', function() {
+            deferred.resolve();
             vm.createUser();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should not show notification if request fails', function() {
+            deferred.reject();
+            vm.createUser();
+            $rootScope.$apply();
+            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(notificationService.success).not.toHaveBeenCalled();
         });
     });
 
     describe('create user', function() {
 
         beforeEach(function() {
-
             referencedataUserService.createUser.andReturn($q.when(user));
             authUserService.saveUser.andReturn($q.when(user));
             UserPasswordModal.andReturn($q.when(user));
@@ -399,10 +405,10 @@ describe('UserFormController', function() {
 
     describe('addRole', function() {
 
-        var newUser = 'updatedUser';
+        var newRole = 'newRole';
 
         beforeEach(function() {
-            UserAddRoleModal.andReturn($q.when(newUser));
+            UserAddRoleModal.andReturn($q.when(newRole));
             vm.addRole();
             $rootScope.$apply();
         });
@@ -411,8 +417,9 @@ describe('UserFormController', function() {
             expect(UserAddRoleModal).toHaveBeenCalledWith(user, supervisoryNodes, programs, warehouses, roles);
         });
 
-        it('should set updated user', function() {
-            expect(vm.user).toEqual(newUser);
+        it('should add new role assignment to user', function() {
+            expect(vm.user.roleAssignments.length).toEqual(3);
+            expect(vm.user.roleAssignments[2]).toEqual(newRole);
         });
     });
 });

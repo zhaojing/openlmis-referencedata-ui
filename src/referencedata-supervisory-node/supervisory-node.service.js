@@ -42,7 +42,7 @@
          * @name get
          *
          * @description
-         * Gets supervisory node by id.
+         * Gets supervisory node by UUID.
          *
          * @param  {String}  id the supervisory node UUID
          * @return {Promise}    the supervisory node object

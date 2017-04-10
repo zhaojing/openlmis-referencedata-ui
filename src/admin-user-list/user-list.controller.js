@@ -41,25 +41,8 @@
 		vm.lastName = $stateParams.lastName;
 		vm.email = $stateParams.email;
 
-		vm.goToUserForm = goToUserForm;
         vm.resetUserPassword = resetUserPassword;
 		vm.search = search;
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-list.controller:UsersListController
-         * @name goToUserForm
-         *
-         * @description
-         * Redirects user to edit/create user screen.
-         *
-         * @param {String} userId (optional) the user UUID
-         */
-		function goToUserForm(userId) {
-			$state.go('administration.users.form', {
-				id: userId
-			});
-		}
 
         /**
          * @ngdoc method
