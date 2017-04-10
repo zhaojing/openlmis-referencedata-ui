@@ -29,11 +29,10 @@
 		.controller('UserListController', controller);
 
 	controller.$inject = [
-		'$state', '$stateParams', 'users', 'confirmService', 'UserFormModal', 'UserPasswordModal'
+		'$state', '$stateParams', 'users', 'confirmService', 'UserPasswordModal'
 	];
 
-	function controller($state, $stateParams, users, confirmService, UserFormModal,
-						UserPasswordModal) {
+	function controller($state, $stateParams, users, confirmService, UserPasswordModal) {
 
 		var vm = this;
 
@@ -42,21 +41,23 @@
 		vm.lastName = $stateParams.lastName;
 		vm.email = $stateParams.email;
 
-		vm.openUserFormModal = openUserFormModal;
+		vm.goToUserForm = goToUserForm;
         vm.resetUserPassword = resetUserPassword;
 		vm.search = search;
 
         /**
          * @ngdoc method
          * @methodOf admin-user-list.controller:UsersListController
-         * @name openUserFormModal
+         * @name goToUserForm
          *
          * @description
-         * Opens user form modal allowing for user creation/edition.
+         * Redirects user to edit/create user screen.
+         *
+         * @param {String} userId (optional) the user UUID
          */
-		function openUserFormModal(user) {
-			(new UserFormModal(user)).then(function() {
-				$state.reload();
+		function goToUserForm(userId) {
+			$state.go('administration.users.form', {
+				id: userId
 			});
 		}
 
@@ -76,6 +77,16 @@
 			});
 		}
 
+		/**
+         * @ngdoc method
+         * @methodOf admin-user-list.controller:UsersListController
+         * @name search
+         *
+         * @description
+         * Reloads page with new search parameters.
+         *
+         * @param {String} username	the username of the user
+         */
 		function search() {
 			var stateParams = angular.copy($stateParams);
 

@@ -1,0 +1,63 @@
+<div class="page">
+    <h2>{{'adminUserForm.addEditUser' | message}}</h2>
+    <section class="openlmis-table-container">
+        <button ng-click="vm.addRole()" class="primary">{{'adminUserForm.addRole' | message}}</button>
+        <form id="newUserForm"class="user-form" ng-submit="vm.createUser()">
+            <label for="username">{{'adminUserForm.username' | message}}</label>
+            <input id="username" ng-model="vm.user.username" type="text" required/>
+            <label for="email">{{'adminUserForm.email' | message}}</label>
+            <input id="email" ng-model="vm.user.email" type="text" />
+            <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
+            <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
+            <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
+            <input id="lastName" ng-model="vm.user.lastName" type="text" required/>
+            <fieldset class="form-group">
+                <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
+                <label class="radio">
+                    <input type="radio" ng-model="vm.user.loginRestricted"
+                        ng-value="true" required/>
+                    {{'adminUserForm.yes' | message}}
+                </label>
+                <label class="radio">
+                    <input type="radio" ng-model="vm.user.loginRestricted"
+                        ng-value="false" required/>
+                    {{'adminUserForm.no' | message}}
+                </label>
+            </fieldset>
+            <label>
+                <span>{{'adminUserForm.verified' | message}}</span>
+                <span ng-if="vm.user.verified">{{'adminUserForm.yes' | message}}</span>
+                <span ng-if="!vm.user.verified">{{'adminUserForm.no' | message}}</span>
+            </label>
+            <input form="newUserForm" type="submit"
+                value="{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}"/>
+        </form>
+        <table>
+            <caption ng-if="!vm.user.roleAssignments || vm.user.roleAssignments.length === 0">
+                {{'adminUserForm.noRolesAssigned' | message}}
+            </caption>
+            <thead>
+                <tr>
+                    <th>{{'adminUserForm.role' | message}}</th>
+                    <th>{{'adminUserForm.program' | message}}</th>
+                    <th>{{'adminUserForm.supervisoryNode' | message}}</th>
+                    <th>{{'adminUserForm.warehouse' | message}}</th>
+                    <th>{{'adminUserForm.actions' | message}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="roleAssignment in vm.user.roleAssignments">
+                    <td>{{vm.getRoleName(roleAssignment.roleId)}}</td>
+                    <td>{{vm.getProgramName(roleAssignment.programCode)}}</td>
+                    <td>{{vm.getSupervisoryNodeName(roleAssignment.supervisoryNodeCode)}}</td>
+                    <td>{{vm.getWarehouseName(roleAssignment.warehouseCode)}}</td>
+                    <td>
+                        <button class="danger" ng-click="vm.removeRole(roleAssignment)">
+                            {{'adminUserForm.removeRole' | message}}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

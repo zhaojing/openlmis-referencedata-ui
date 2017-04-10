@@ -12,19 +12,18 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
     angular
-        .module('admin-user-form-modal')
+        .module('admin-user-form')
         .factory('UserPasswordModal', userPasswordModalFactory);
 
-    userPasswordModalFactory.$inject = [
-        '$rootScope', 'openlmisModalService'
-    ];
+    userPasswordModalFactory.$inject = ['openlmisModalService'];
 
-    function userPasswordModalFactory($rootScope, openlmisModalService) {
+    function userPasswordModalFactory(openlmisModalService) {
 
         return UserPasswordModal;
 
@@ -39,7 +38,7 @@
             return openlmisModalService.createDialog({
                 controller: 'UserPasswordModalController',
                 controllerAs: 'vm',
-                templateUrl: 'admin-user-form-modal/user-password-modal.html',
+                templateUrl: 'admin-user-form/user-password-modal.html',
                 show: true,
                 resolve: {
                     user: function() {

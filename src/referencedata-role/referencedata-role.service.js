@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 (function(){
 
     'use strict';
@@ -29,9 +28,7 @@
         .module('referencedata-role')
         .service('referencedataRoleService', service);
 
-    service.$inject = [
-        'openlmisUrlFactory', '$resource'
-    ];
+    service.$inject = ['openlmisUrlFactory', '$resource'];
 
     function service(openlmisUrlFactory, $resource) {
         var resource = $resource(openlmisUrlFactory('/api/roles/:id'), {}, {
@@ -45,6 +42,17 @@
         this.create = create;
         this.update = update;
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-role.referencedataRoleService
+         * @name get
+         *
+         * @description
+         * Gets role by id.
+         *
+         * @param  {String}  id the role UUID
+         * @return {Promise}    the role object
+         */
         function get(id) {
             return resource.get({
                 id: id

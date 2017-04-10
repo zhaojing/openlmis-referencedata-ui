@@ -18,14 +18,13 @@
     'use strict';
 
     /**
-     * @module referencedata
+     * @module referencedata-supervisory-node
      *
      * @description
-     * Provides URL factory for communicating with the referencedata service.
+     * Provides roles information from server.
      */
-    angular.module('referencedata', [
-        'admin-user-list',
-        'admin-user-form',
+    angular.module('referencedata-supervisory-node', [
+        'ngResource',
         'openlmis-urls'
     ]);
 

@@ -24,7 +24,7 @@
      * Provides base admin-user state and controller for retrieving list of users from the OpenLMIS server.
      */
     angular.module('admin-user-list', [
-        'admin-user-form-modal',
+        'admin-user-form',
         'openlmis-modal',
         'openlmis-pagination',
         'openlmis-rights',

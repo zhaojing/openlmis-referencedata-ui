@@ -18,15 +18,23 @@
     'use strict';
 
     /**
-     * @module referencedata
+     * @ngdoc object
+     * @name admin-user-form.ROLE_TYPE
      *
      * @description
-     * Provides URL factory for communicating with the referencedata service.
+     * This is constant for role types.
      */
-    angular.module('referencedata', [
-        'admin-user-list',
-        'admin-user-form',
-        'openlmis-urls'
-    ]);
+    angular
+        .module('admin-user-form')
+        .constant('ROLE_TYPES', types());
+
+    function types() {
+        return {
+            ORDER_FULFILLMENT: 'ORDER_FULFILLMENT',
+            SUPERVISION: 'SUPERVISION',
+            GENERAL_ADMIN: 'GENERAL_ADMIN',
+            REPORTS: 'REPORTS'
+        };
+    }
 
 })();

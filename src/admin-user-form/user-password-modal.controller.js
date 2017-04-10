@@ -12,41 +12,75 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
+    /**
+     * @ngdoc controller
+     * @name admin-user-form.controller:UserPasswordModalController
+     *
+     * @description
+     * Manages user password modal.
+     */
     angular
-        .module('admin-user-form-modal')
+        .module('admin-user-form')
         .controller('UserPasswordModalController', controller);
 
     controller.$inject = [
         'user', 'modalDeferred', 'authUserService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller(user, modalDeferred, authUserService, loadingModalService,
-                        notificationService) {
+    function controller(user, modalDeferred, authUserService, loadingModalService, notificationService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.createPassword = createPassword;
 
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserPasswordModalController
+         * @name user
+         * @type {Object}
+         *
+         * @description
+         * User object with username, which will be updated with new password.
+         */
+        vm.user = undefined;
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserPasswordModalController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method of the UserPasswordModalController.
+         */
         function onInit() {
             vm.user = user;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserPasswordModalController
+         * @name createPassword
+         *
+         * @description
+         * Saves password for given user in auth service.
+         *
+         * @return {Promise} resolves after password saves successfully on the server.
+         */
         function createPassword() {
             var loadingPromise = loadingModalService.open(true);
 
             return authUserService.resetPassword(user.username, user.newPassword).then(function() {
                 loadingPromise.then(function() {
-                    notificationService.success('msg.passwordSetSuccessfully');
+                    notificationService.success('adminUserForm.passwordSetSuccessfully');
                 });
                 modalDeferred.resolve();
             }).finally(loadingModalService.close);
         }
-
     }
-
 })();

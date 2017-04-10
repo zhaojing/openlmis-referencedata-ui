@@ -15,23 +15,15 @@
 
 describe('UserListController', function () {
 
-    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, UserFormModalMock,
-        UserPasswordModalMock;
+    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, UserPasswordModalMock;
 
     beforeEach(function() {
         module('admin-user-list', function($provide) {
-
             confirmSpy = jasmine.createSpyObj('confirmService', ['confirm']);
-            UserFormModalMock = jasmine.createSpy('UserFormModal');
             UserPasswordModalMock = jasmine.createSpy('UserPasswordModalMock');
 
             $provide.service('confirmService', function() {
                 return confirmSpy;
-            });
-
-
-            $provide.service('UserFormModal', function() {
-                return UserFormModalMock;
             });
 
             $provide.service('UserPasswordModal', function() {
@@ -65,6 +57,7 @@ describe('UserListController', function () {
         });
 
         spyOn($state, 'reload').andReturn();
+        spyOn($state, 'go').andReturn();
     });
 
     describe('init', function() {
@@ -81,51 +74,9 @@ describe('UserListController', function () {
 
         });
 
-        it('should expose openUserFormModal method', function() {
-            expect(angular.isFunction(vm.openUserFormModal)).toBe(true);
+        it('should expose go to user form method', function() {
+            expect(angular.isFunction(vm.goToUserForm)).toBe(true);
         });
-
-    });
-
-    describe('openUserFormModal', function() {
-
-        var formDeferred, user;
-
-        beforeEach(function() {
-            formDeferred = $q.defer();
-            UserFormModalMock.andReturn(formDeferred.promise);
-
-            user = {
-                username: "johndoe1",
-                firstName: "John",
-                lastName: "Doe",
-                email: "johndoe1@gmail.com",
-                loginRestricted: false
-            };
-        });
-
-        it('should open User Form Modal', function() {
-            vm.openUserFormModal(user);
-
-            expect(UserFormModalMock).toHaveBeenCalledWith(user);
-        });
-
-        it('should reload page if user creation/edition succeeded', function() {
-            vm.openUserFormModal(user);
-            formDeferred.resolve();
-            $rootScope.$apply();
-
-            expect($state.reload).toHaveBeenCalled();
-        });
-
-        it('should not reload page if modal was dismissed', function() {
-            vm.openUserFormModal(user);
-            formDeferred.reject();
-            $rootScope.$apply();
-
-            expect($state.reload).not.toHaveBeenCalled();
-        });
-
     });
 
     describe('resetUserPassword', function() {
@@ -161,11 +112,26 @@ describe('UserListController', function () {
         });
     });
 
-    describe('search', function() {
+    describe('goToUserForm', function() {
 
-        beforeEach(function() {
-            spyOn($state, 'go').andReturn();
+        it('should redirect to user edit', function() {
+            var userId = 'user-id';
+
+            vm.goToUserForm(userId);
+            expect($state.go).toHaveBeenCalledWith('administration.users.form', {
+				id: userId
+			});
         });
+
+        it('should redirect to create edit', function() {
+            vm.goToUserForm();
+            expect($state.go).toHaveBeenCalledWith('administration.users.form', {
+				id: undefined
+			});
+        });
+    });
+
+    describe('search', function() {
 
         it('should set lastName param', function() {
             vm.lastName = 'lastName';
