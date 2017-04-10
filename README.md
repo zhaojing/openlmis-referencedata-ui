@@ -67,7 +67,7 @@ the UI module.
 
 ```shell
 > docker-compose pull
-> docker-compose run ./build.sh referencedata-ui
+> docker-compose run --entrypoint ./build.sh referencedata-ui
 > docker-compose build image
 ```
 
