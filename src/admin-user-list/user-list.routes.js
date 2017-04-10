@@ -26,7 +26,7 @@
 
 		$stateProvider.state('administration.users', {
 			showInNavigation: true,
-			label: 'label.users',
+			label: 'adminUserList.users.label',
 			url: '/users?firstName&lastName&email&page&size',
 			controller: 'UserListController',
 			templateUrl: 'admin-user-list/user-list.html',

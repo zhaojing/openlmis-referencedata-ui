@@ -1,32 +1,32 @@
 <div class="page">
-    <h2>{{'label.users' | message}}</h2>
+    <h2>{{'adminUserList.users.label' | message}}</h2>
     <section class="openlmis-table-container">
-        <button ng-click="vm.goToUserForm()" class="primary">{{'button.addUser' | message}}</button>
+        <button ng-click="vm.goToUserForm()" class="primary">{{'adminUserList.addUser' | message}}</button>
         <form ng-submit="vm.search()">
             <fieldset class="form-group">
-                <label for="firstName">{{'label.firstName' | message}}</label>
+                <adminUserList for="firstName">{{'adminUserList.firstName' | message}}</adminUserList>
                 <input type="text" id="firstName" ng-model="vm.firstName"/>
             </fieldset>
             <fieldset class="form-group">
-                <label for="lastName">{{'label.lastName' | message}}</label>
+                <adminUserList for="lastName">{{'adminUserList.lastName' | message}}</adminUserList>
                 <input type="text" id="lastName" ng-model="vm.lastName"/>
             </fieldset>
             <fieldset class="form-group">
-                <label for="email">{{'label.email' | message}}</label>
+                <adminUserList for="email">{{'adminUserList.email' | message}}</adminUserList>
                 <input type="text" id="email" ng-model="vm.email"/>
             </fieldset>
-            <input type="submit" value="{{'button.search'|message}}"/>
+            <input type="submit" value="{{'adminUserList.search'|message}}"/>
         </form>
         <table>
             <caption ng-if="!vm.users || vm.users.length === 0">
-                {{'error.noMatchesForUser' | message}}
+                {{'adminUserList.users.error' | message}}
             </caption>
             <thead>
                 <tr>
-                    <th>{{'label.name' | message}}</th>
-                    <th>{{'label.username' | message}}</th>
-                    <th>{{'label.email' | message}}</th>
-                    <th>{{'label.actions' | message}}</th>
+                    <th>{{'adminUserList.name' | message}}</th>
+                    <th>{{'adminUserList.username' | message}}</th>
+                    <th>{{'adminUserList.email' | message}}</th>
+                    <th>{{'adminUserList.actions' | message}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,8 +35,8 @@
                     <td>{{user.username}}</td>
                     <td>{{user.email}}</td>
                     <td>
-                        <a ng-click="vm.goToUserForm(user.id)">{{'link.edit' | message}}</a>
-                        <a ng-click="vm.resetUserPassword(user.username)">{{'link.resetPassword' | message}}</a>
+                        <a ng-click="vm.goToUserForm(user.id)">{{'adminUserList.edit' | message}}</a>
+                        <a ng-click="vm.resetUserPassword(user.username)">{{'adminUserList.resetPassword' | message}}</a>
                     </td>
                 </tr>
             </tbody>

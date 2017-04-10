@@ -1,0 +1,14 @@
+{
+    "adminUserList.users.label": "Users",
+    "adminUserList.firstName": "First name",
+    "adminUserList.lastName": "Last name",
+    "adminUserList.email": "Email",
+    "adminUserList.addUser": "Add user",
+    "adminUserList.edit": "Edit",
+    "adminUserList.resetPassword": "Reset password",
+    "adminUserList.search": "Search",
+    "adminUserList.actions": "Actions",
+    "adminUserList.users.error": "There are no matches for user.",
+    "adminUserList.name": "Name",
+    "adminUserList.username": "Username"
+}
