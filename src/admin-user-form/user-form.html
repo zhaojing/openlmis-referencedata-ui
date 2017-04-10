@@ -45,8 +45,8 @@
                     <th>{{'adminUserForm.actions' | message}}</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="roleAssignment in vm.user.roleAssignments">
+            <tbody tbody-title="{{type}}" ng-repeat="(type, roleAssignments) in vm.user.roleAssignments | groupBy:'$type'">
+                <tr ng-repeat="roleAssignment in roleAssignments">
                     <td>{{vm.getRoleName(roleAssignment.roleId)}}</td>
                     <td>{{vm.getProgramName(roleAssignment.programCode)}}</td>
                     <td>{{vm.getSupervisoryNodeName(roleAssignment.supervisoryNodeCode)}}</td>

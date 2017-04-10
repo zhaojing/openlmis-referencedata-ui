@@ -13,54 +13,48 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+(function() {
 
     'use strict';
 
     /**
      * @ngdoc service
-     * @name referencedata-role.referencedataRoleFactory
+     * @name admin-user-form.userRoleAssignmentFactory
      *
      * @description
      * Allows the user to retrieve roles with additional info.
      */
     angular
-        .module('referencedata-role')
-        .factory('referencedataRoleFactory', factory);
+        .module('admin-user-form')
+        .factory('userRoleAssignmentFactory', factory);
 
-    factory.$inject = ['$q', 'referencedataRoleService'];
+    factory.$inject = ['$filter'];
 
-    function factory($q, referencedataRoleService) {
+    function factory($filter) {
 
         return {
-            getAllWithType: getAllWithType
+            addTypeToRoleAssignments: addTypeToRoleAssignments
         };
-
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-role.referencedataRoleFactory
-         * @name getAllWithType
+         * @methodOf admin-user-form.userRoleAssignmentFactory
+         * @name addTypeToRoleAssignments
          *
          * @description
-         * Retrieves all roles and assigns type attribute to each of them.
+         * Adds role type property to user role assignments based on given roles.
          *
-         * @return {Promise} array of roles with $type property
+         * @param {Array} roleAssignments array of role assignments
+         * @param {Array} roles           array of roles
          */
-        function getAllWithType() {
-            var deferred = $q.defer();
-
-            referencedataRoleService.getAll().then(function(roles) {
-                angular.forEach(roles, function(role) {
-                    role.$type = role.rights[0].type;
-                });
-                deferred.resolve(roles);
-            }, function() {
-                deferred.reject();
+        function addTypeToRoleAssignments(roleAssignments, roles) {
+            angular.forEach(roleAssignments, function(roleAssignment) {
+                var filteredRoles = $filter('filter')(roles, {
+                    id: roleAssignment.roleId
+                }, true);
+                if(filteredRoles.length > 0) roleAssignment.$type = filteredRoles[0].rights[0].type;
+                else roleAssignment.$type = '';
             });
-
-            return deferred.promise;
         }
     }
-
 })();

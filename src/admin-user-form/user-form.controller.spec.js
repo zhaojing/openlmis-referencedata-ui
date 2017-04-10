@@ -25,6 +25,11 @@ describe('UserFormController', function() {
                 return referencedataUserService;
             });
 
+            userRoleAssignmentFactory = jasmine.createSpyObj('userRoleAssignmentFactory', ['addTypeToRoleAssignments']);
+            $provide.service('userRoleAssignmentFactory', function() {
+                return userRoleAssignmentFactory;
+            });
+
             authUserService = jasmine.createSpyObj('authUserService', ['saveUser']);
             $provide.service('authUserService', function() {
                 return authUserService;
@@ -409,12 +414,17 @@ describe('UserFormController', function() {
 
         beforeEach(function() {
             UserAddRoleModal.andReturn($q.when(newRole));
+            userRoleAssignmentFactory.addTypeToRoleAssignments.andReturn(newRole);
             vm.addRole();
             $rootScope.$apply();
         });
 
         it('should call UserAddRoleModal', function() {
             expect(UserAddRoleModal).toHaveBeenCalledWith(user, supervisoryNodes, programs, warehouses, roles);
+        });
+
+        it('should call userRoleAssignmentFactory', function() {
+            expect(userRoleAssignmentFactory.addTypeToRoleAssignments).toHaveBeenCalledWith([newRole], roles);
         });
 
         it('should add new role assignment to user', function() {

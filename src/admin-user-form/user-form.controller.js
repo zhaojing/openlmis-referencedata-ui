@@ -29,11 +29,11 @@
         .controller('UserFormController', controller);
 
         controller.$inject = [
-            'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService',
+            'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService', 'userRoleAssignmentFactory',
             'loadingModalService', '$state', 'notificationService', 'UserPasswordModal', 'authUserService', 'UserAddRoleModal'
         ];
 
-        function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService,
+        function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService, userRoleAssignmentFactory,
                             loadingModalService, $state, notificationService, UserPasswordModal, authUserService, UserAddRoleModal) {
 
         var vm = this;
@@ -233,6 +233,7 @@
          */
         function addRole() {
             (new UserAddRoleModal(vm.user, vm.supervisoryNodes, vm.programs, vm.warehouses, vm.roles)).then(function(newRole) {
+                userRoleAssignmentFactory.addTypeToRoleAssignments([newRole], vm.roles);
 				vm.user.roleAssignments.push(newRole);
 			});
         }

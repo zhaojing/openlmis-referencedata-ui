@@ -28,10 +28,6 @@
 			url: '/users/form/:id',
 			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
 			resolve: {
-				user: function(referencedataUserService, $stateParams) {
-                    if($stateParams.id) return referencedataUserService.get($stateParams.id);
-                    return undefined;
-				},
 				roles: function(referencedataRoleFactory) {
 					return referencedataRoleFactory.getAllWithType();
 				},
@@ -43,6 +39,19 @@
 				},
 				warehouses: function(facilityService) {
 					return facilityService.getAll();
+				},
+				user: function($q, referencedataUserService, userRoleAssignmentFactory, $stateParams, roles) {
+                    if($stateParams.id) {
+						var deferred = $q.defer();
+						referencedataUserService.get($stateParams.id).then(function(user) {
+							userRoleAssignmentFactory.addTypeToRoleAssignments(user.roleAssignments, roles);
+							deferred.resolve(user);
+						}, function() {
+							deferred.reject();
+						});
+						return deferred.promise;
+					}
+                    return undefined;
 				}
 			},
 			views: {
