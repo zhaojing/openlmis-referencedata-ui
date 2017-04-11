@@ -35,7 +35,7 @@ describe('supervisoryNodeService', function() {
             {
                 id: '2',
                 code: 'SN2'
-            },
+            }
         ];
     });
 

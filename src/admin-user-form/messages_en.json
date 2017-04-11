@@ -28,5 +28,6 @@
     "adminUserForm.passwordSetSuccessfully": "User password has been set successfully!",
     "adminUserForm.cancel": "Cancel",
     "adminUserForm.createPassword": "Create password",
-    "adminUserForm.password": "Password"
+    "adminUserForm.password": "Password",
+    "adminUserForm.requiredSupervisionField": "Required supervision filed"
 }

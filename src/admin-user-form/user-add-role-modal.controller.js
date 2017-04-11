@@ -133,6 +133,28 @@
         vm.filteredRoles = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserAddRoleModalController
+         * @name supervisionFields
+         * @type {Array}
+         *
+         * @description
+         * List of fields for supervision role.
+         */
+        vm.supervisionFields = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserAddRoleModalController
+         * @name requiredSupervisionField
+         * @type {Array}
+         *
+         * @description
+         * Indicates which field will be required for supervision role.
+         */
+        vm.requiredSupervisionField = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserAddRoleModalController
          * @name $onInit
@@ -148,8 +170,16 @@
             vm.warehouses = warehouses;
             vm.newRoleAssignment = newRoleAssignment;
             vm.types = ROLE_TYPES;
-            if(!newRoleAssignment.type) vm.newRoleAssignment.type = ROLE_TYPES.SUPERVISION;
-            loadRoles(true);
+            vm.supervisionFields = [
+                {
+                    value: 'supervisoryNode',
+                    message: messageService.get('adminUserForm.supervisoryNode')
+                },
+                {
+                    value: 'program',
+                    message: messageService.get('adminUserForm.program')
+                }
+            ];
         }
 
         /**
@@ -212,7 +242,7 @@
             if(!invalidMessage) {
                 var roleAssignment = {
                     roleId: vm.newRoleAssignment.role.id
-                }
+                };
                 if(isSupervisionType()) {
                     roleAssignment.supervisoryNodeCode = vm.newRoleAssignment.supervisoryNode;
                     roleAssignment.programCode = vm.newRoleAssignment.program;
@@ -241,7 +271,7 @@
         }
 
         function roleAlreadyAssigned() {
-            if(!vm.role) return false;
+            if(!vm.newRoleAssignment.role) return false;
             var alreadyExist = false;
             angular.forEach(vm.user.roleAssignments, function(role) {
                 var isEqual = vm.newRoleAssignment.role.id === role.roleId;

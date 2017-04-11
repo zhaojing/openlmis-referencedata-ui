@@ -34,8 +34,8 @@
 				programs: function(programService) {
 					return programService.getAll();
 				},
-				supervisoryNodes: function(supervisoryNodeService) {
-					return supervisoryNodeService.getAll();
+				supervisoryNodes: function(supervisoryNodeFactory) {
+					return supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay();
 				},
 				warehouses: function(facilityService) {
 					return facilityService.getAll();

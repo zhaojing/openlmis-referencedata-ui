@@ -160,7 +160,7 @@
             if(!supervisoryNodeCode) return undefined;
             return $filter('filter')(vm.supervisoryNodes, {
                 code: supervisoryNodeCode
-            }, true)[0].name;
+            }, true)[0].$display;
         }
 
         /**
@@ -232,10 +232,23 @@
          * Adds new role assignment to user object.
          */
         function addRole() {
-            (new UserAddRoleModal(vm.user, vm.supervisoryNodes, vm.programs, vm.warehouses, vm.roles)).then(function(newRole) {
+            (new UserAddRoleModal(vm.user, getUnusedSupervisoryNodes(), vm.programs, vm.warehouses, vm.roles)).then(function(newRole) {
                 userRoleAssignmentFactory.addTypeToRoleAssignments([newRole], vm.roles);
 				vm.user.roleAssignments.push(newRole);
 			});
+        }
+
+        function getUnusedSupervisoryNodes() {
+            var nodes = [];
+
+            angular.forEach(vm.supervisoryNodes , function(node) {
+                var filtered = $filter('filter')(vm.user.roleAssignments, {
+                    supervisoryNodeCode: node.code
+                });
+                if(filtered.length < 1) nodes.push(node);
+            });
+
+            return nodes;
         }
 
         /**

@@ -93,12 +93,12 @@ describe('UserFormController', function() {
         supervisoryNodes = [
             {
                 id: 'supervisory-node-id-1',
-                name: 'supervisory-node-1',
+                $display: 'supervisory-node-1',
                 code: 'SN-1'
             },
             {
                 id: 'supervisory-node-id-2',
-                name: 'supervisory-node-2',
+                $display: 'supervisory-node-2',
                 code: 'SN-2'
             }
         ];
@@ -353,7 +353,7 @@ describe('UserFormController', function() {
     describe('getSupervisoryNodeName', function() {
 
         it('should get proper name', function() {
-            expect(vm.getSupervisoryNodeName(supervisoryNodes[0].code)).toBe(supervisoryNodes[0].name);
+            expect(vm.getSupervisoryNodeName(supervisoryNodes[0].code)).toBe(supervisoryNodes[0].$display);
         });
 
         it('should return undefined if there is no code passed to method', function() {
@@ -420,7 +420,7 @@ describe('UserFormController', function() {
         });
 
         it('should call UserAddRoleModal', function() {
-            expect(UserAddRoleModal).toHaveBeenCalledWith(user, supervisoryNodes, programs, warehouses, roles);
+            expect(UserAddRoleModal).toHaveBeenCalledWith(user, [supervisoryNodes[1]], programs, warehouses, roles);
         });
 
         it('should call userRoleAssignmentFactory', function() {

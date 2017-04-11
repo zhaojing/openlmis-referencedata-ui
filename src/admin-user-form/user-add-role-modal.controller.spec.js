@@ -182,16 +182,6 @@ describe('UserAddRoleModalController', function() {
         it('should set role types', function() {
             expect(vm.types).toEqual(ROLE_TYPES);
         });
-
-        it('should set default type', function() {
-            expect(vm.newRoleAssignment.type).toEqual(ROLE_TYPES.SUPERVISION);
-        });
-
-        it('should filter roles', function() {
-            expect(vm.filteredRoles.length).toBe(2);
-            expect(vm.filteredRoles[0].name).toEqual(roles[0].name);
-            expect(vm.filteredRoles[1].name).toEqual(roles[1].name);
-        });
     });
 
     describe('loadRoles', function() {
@@ -229,41 +219,11 @@ describe('UserAddRoleModalController', function() {
             expect(vm.newRoleAssignment.role).toBe(undefined);
         });
     });
-
-    /*describe('isNewRoleInvalid', function() {
-
-        it('should return error message when right was already assigned', function() {
-            vm.role = roles[1];
-            vm.supervisoryNode = supervisoryNodes[0].code;
-            vm.program = programs[0].code;
-
-            expect(vm.isNewRoleInvalid()).toEqual('adminUserForm.roleAlreadyAssigned');
-        });
-
-        it('should return error message when there is no supervisory node and program for supervision role', function() {
-            vm.role = roles[0];
-
-            expect(vm.isNewRoleInvalid()).toEqual('adminUserForm.supervisionInvalid');
-        });
-
-        it('should return error message there is no warehouse for fulfillment role', function() {
-            vm.type = ROLE_TYPES.ORDER_FULFILLMENT;
-            vm.role = roles[3];
-
-            expect(vm.isNewRoleInvalid()).toEqual('adminUserForm.fulfillmentInvalid');
-        });
-
-        it('should return undefined when new role is valid', function() {
-            vm.role = roles[0];
-            vm.supervisoryNode = supervisoryNodes[0].code;
-
-            expect(vm.isNewRoleInvalid()).toEqual(undefined);
-        });
-    });*/
 
     describe('isFulfillmentType', function() {
 
         it('should return false if role type is not set to fulfillment', function() {
+            vm.newRoleAssignment.type = ROLE_TYPES.SUPERVISION;
             expect(vm.isFulfillmentType()).toBe(false);
         });
 
@@ -281,15 +241,18 @@ describe('UserAddRoleModalController', function() {
         });
 
         it('should return true if role type is set to supervision', function() {
+            vm.newRoleAssignment.type = ROLE_TYPES.SUPERVISION;
             expect(vm.isSupervisionType()).toBe(true);
         });
     });
 
     describe('addRole', function() {
 
-        it('should push fulfillment role', function() {
+        it('should push supervision role', function() {
             var newRole;
 
+            vm.newRoleAssignment.type = ROLE_TYPES.SUPERVISION;
+            vm.loadRoles();
             vm.newRoleAssignment.role = roles[1];
             vm.newRoleAssignment.supervisoryNode = supervisoryNodes[0].code;
             modalDeferred.promise.then(function(roleAssignment) {
@@ -305,10 +268,11 @@ describe('UserAddRoleModalController', function() {
             });
         });
 
-        it('should push supervision role', function() {
+        it('should push fulfillment role', function() {
             var newRole;
 
             vm.newRoleAssignment.type = ROLE_TYPES.ORDER_FULFILLMENT;
+            vm.loadRoles();
             vm.newRoleAssignment.role = roles[3];
             vm.newRoleAssignment.warehouse = warehouses[1].code;
             modalDeferred.promise.then(function(roleAssignment) {
