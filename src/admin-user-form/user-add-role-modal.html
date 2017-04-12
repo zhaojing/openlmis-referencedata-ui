@@ -1,4 +1,4 @@
-<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal add-role" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
@@ -25,35 +25,23 @@
                             </select>
                             <p ng-if="vm.newRoleAssignment.role">{{vm.newRoleAssignment.role.description}}</p>
                         </fieldset>
+                        <fieldset class="required" ng-if="vm.isSupervisionType()">
+                            <div>
+                                <select id="required" ng-model="vm.requiredField" ng-change="vm.clearSupervisionFields()"
+                                    ng-init="vm.requiredField = vm.supervisionFields[0]" required
+                                    ng-options="requiredField as requiredField.required.message for requiredField in vm.supervisionFields">
+                                </select>
+                            </div>
+                            <div>
+                                <select id="required" ng-model="vm.newRoleAssignment[vm.requiredField.required.value]"
+                                        ng-options="required.code as required[vm.requiredField.required.display] for required in vm[vm.requiredField.required.list]" required>
+                                </select>
+                            </div>
+                        </fieldset>
                         <fieldset ng-if="vm.isSupervisionType()">
-                            <label for="requiredField">{{'adminUserForm.requiredSupervisionField' | message}}</label>
-                            <select id="requiredField" ng-model="vm.requiredSupervisionField"
-                                ng-init="vm.requiredSupervisionField = vm.supervisionFields[0].value" required
-                                ng-options="requiredField.value as requiredField.message for requiredField in vm.supervisionFields">
-                            </select>
-                        </fieldset>
-                        <fieldset ng-if="vm.isSupervisionType() && vm.requiredSupervisionField === 'program'">
-                            <label for="program">{{'adminUserForm.program' | message}}</label>
-                            <select id="program" ng-model="vm.newRoleAssignment.program"
-                                    ng-options="program.code as program.name for program in vm.programs" required>
-                            </select>
-                            <label ng-if="vm.newRoleAssignment.program"
-                                    for="supervisoryNode">{{'adminUserForm.supervisoryNode' | message}}</label>
-                            <select ng-if="vm.newRoleAssignment.program"
-                                    id="supervisoryNode" ng-model="vm.newRoleAssignment.supervisoryNode"
-                                    ng-options="supervisoryNode.code as supervisoryNode.$display for supervisoryNode in vm.supervisoryNodes">
-                            </select>
-                        </fieldset>
-                        <fieldset ng-if="vm.isSupervisionType() && vm.requiredSupervisionField === 'supervisoryNode'">
-                            <label for="supervisoryNode">{{'adminUserForm.supervisoryNode' | message}}</label>
-                            <select id="supervisoryNode" ng-model="vm.newRoleAssignment.supervisoryNode" required
-                                    ng-options="supervisoryNode.code as supervisoryNode.$display for supervisoryNode in vm.supervisoryNodes">
-                            </select>
-                            <label ng-if="vm.newRoleAssignment.supervisoryNode"
-                                    for="program">{{'adminUserForm.program' | message}}</label>
-                            <select ng-if="vm.newRoleAssignment.supervisoryNode"
-                                    id="program" ng-model="vm.newRoleAssignment.program"
-                                    ng-options="program.code as program.name for program in vm.programs">
+                            <label for="optional">{{vm.requiredField.optional.message}}</label>
+                            <select id="optional" ng-model="vm.newRoleAssignment[vm.requiredField.optional.value]"
+                                    ng-options="optional.code as optional[vm.requiredField.optional.display] for optional in vm[vm.requiredField.optional.list]">
                             </select>
                         </fieldset>
                         <fieldset ng-if="vm.isFulfillmentType()">

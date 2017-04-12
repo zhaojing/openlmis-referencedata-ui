@@ -36,13 +36,26 @@
     function controller(user, supervisoryNodes, programs, warehouses, roles,
                         modalDeferred, $filter, ROLE_TYPES, $q, messageService, newRoleAssignment) {
 
-        var vm = this;
+        var vm = this,
+            supervisoryNodeParameters = {
+                value: 'supervisoryNode',
+                list: 'supervisoryNodes',
+                display: '$display',
+                message: messageService.get('adminUserForm.supervisoryNode')
+            },
+            programParameters = {
+                value: 'program',
+                list: 'programs',
+                display: 'name',
+                message: messageService.get('adminUserForm.program')
+            };
 
         vm.$onInit = onInit;
         vm.addRole = addRole;
         vm.loadRoles = loadRoles;
         vm.isSupervisionType = isSupervisionType;
         vm.isFulfillmentType = isFulfillmentType;
+        vm.clearSupervisionFields = clearSupervisionFields;
 
         /**
          * @ngdoc property
@@ -146,13 +159,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-form.controller:UserAddRoleModalController
-         * @name requiredSupervisionField
+         * @name requiredField
          * @type {Array}
          *
          * @description
          * Indicates which field will be required for supervision role.
          */
-        vm.requiredSupervisionField = undefined;
+        vm.requiredField = undefined;
 
         /**
          * @ngdoc method
@@ -172,14 +185,27 @@
             vm.types = ROLE_TYPES;
             vm.supervisionFields = [
                 {
-                    value: 'supervisoryNode',
-                    message: messageService.get('adminUserForm.supervisoryNode')
+                    required: supervisoryNodeParameters,
+                    optional: programParameters
                 },
                 {
-                    value: 'program',
-                    message: messageService.get('adminUserForm.program')
+                    required: programParameters,
+                    optional: supervisoryNodeParameters
                 }
             ];
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserAddRoleModalController
+         * @name clearSupervisionFields
+         *
+         * @description
+         * Clears supervision fields selections.
+         */
+        function clearSupervisionFields() {
+            vm.newRoleAssignment.supervisoryNode = undefined;
+            vm.newRoleAssignment.program = undefined;
         }
 
         /**

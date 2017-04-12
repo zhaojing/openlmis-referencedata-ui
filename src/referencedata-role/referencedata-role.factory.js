@@ -55,9 +55,7 @@
                     role.$type = role.rights[0].type;
                 });
                 deferred.resolve(roles);
-            }, function() {
-                deferred.reject();
-            });
+            }, deferred.reject);
 
             return deferred.promise;
         }

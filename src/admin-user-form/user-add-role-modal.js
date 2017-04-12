@@ -44,6 +44,7 @@
                 controllerAs: 'vm',
                 templateUrl: 'admin-user-form/user-add-role-modal.html',
                 show: true,
+                backdrop: 'static',
                 resolve: {
                     user: function() {
                         return persistent.user;

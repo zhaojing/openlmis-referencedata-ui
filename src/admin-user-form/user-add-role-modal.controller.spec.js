@@ -287,4 +287,17 @@ describe('UserAddRoleModalController', function() {
             });
         });
     });
+
+    describe('clearSupervisionFields', function() {
+
+        it('should clear fields', function() {
+            vm.newRoleAssignment.supervisoryNode = 'SN';
+            vm.newRoleAssignment.program = 'PR';
+
+            vm.clearSupervisionFields();
+
+            expect(vm.newRoleAssignment.supervisoryNode).toBe(undefined);
+            expect(vm.newRoleAssignment.program).toBe(undefined);
+        });
+    });
 });

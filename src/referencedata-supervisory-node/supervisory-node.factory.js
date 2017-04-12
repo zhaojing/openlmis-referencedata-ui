@@ -54,9 +54,7 @@
                     node.$display = node.name + ' (' + node.facility.name + ')';
                 });
                 deferred.resolve(supervisoryNodes);
-            }, function() {
-                deferred.reject();
-            });
+            }, deferred.reject);
 
             return deferred.promise;
         }
