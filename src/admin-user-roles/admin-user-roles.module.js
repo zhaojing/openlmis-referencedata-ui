@@ -18,35 +18,19 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name admin-user-form.ROLE_TYPE
+     * @module admin-user-roles
      *
      * @description
-     * This is constant for role types.
+     * Provides add/remove user roles screen.
      */
-    angular
-        .module('admin-user-form')
-        .constant('ROLE_TYPES', types());
-
-    function types() {
-        return [
-            {
-                name: 'SUPERVISION',
-                displayName: 'referencedataRoles.supervision'
-            },
-            {
-                name: 'ORDER_FULFILLMENT',
-                displayName: 'referencedataRoles.fulfillment'
-            },
-            {
-                name: 'REPORTS',
-                displayName: 'referencedataRoles.reports'
-            },
-            {
-                name: 'GENERAL_ADMIN',
-                displayName: 'referencedataRoles.admin'
-            }
-        ];
-    }
+    angular.module('admin-user-roles', [
+        'mgcrea.ngStrap.tab',
+        'openlmis-rights',
+        'referencedata-program',
+        'referencedata-role',
+        'referencedata-supervisory-node',
+        'referencedata-user',
+        'ui.router'
+    ]);
 
 })();

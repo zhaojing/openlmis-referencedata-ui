@@ -1,7 +1,6 @@
 <div class="page">
     <h2>{{'adminUserForm.addEditUser' | message}}</h2>
     <section class="openlmis-table-container">
-        <button ng-click="vm.addRole()" class="primary">{{'adminUserForm.addRole' | message}}</button>
         <form id="newUserForm"class="user-form" ng-submit="vm.createUser()">
             <label for="username">{{'adminUserForm.username' | message}}</label>
             <input id="username" ng-model="vm.user.username" type="text" required/>
@@ -32,32 +31,5 @@
             <input form="newUserForm" type="submit"
                 value="{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}"/>
         </form>
-        <table>
-            <caption ng-if="!vm.user.roleAssignments || vm.user.roleAssignments.length === 0">
-                {{'adminUserForm.noRolesAssigned' | message}}
-            </caption>
-            <thead>
-                <tr>
-                    <th>{{'adminUserForm.role' | message}}</th>
-                    <th>{{'adminUserForm.program' | message}}</th>
-                    <th>{{'adminUserForm.supervisoryNode' | message}}</th>
-                    <th>{{'adminUserForm.warehouse' | message}}</th>
-                    <th>{{'adminUserForm.actions' | message}}</th>
-                </tr>
-            </thead>
-            <tbody tbody-title="{{type}}" ng-repeat="(type, roleAssignments) in vm.user.roleAssignments | groupBy:'$type'">
-                <tr ng-repeat="roleAssignment in roleAssignments">
-                    <td>{{vm.getRoleName(roleAssignment.roleId)}}</td>
-                    <td>{{vm.getProgramName(roleAssignment.programCode)}}</td>
-                    <td>{{vm.getSupervisoryNodeName(roleAssignment.supervisoryNodeCode)}}</td>
-                    <td>{{vm.getWarehouseName(roleAssignment.warehouseCode)}}</td>
-                    <td>
-                        <button class="danger" ng-click="vm.removeRole(roleAssignment)">
-                            {{'adminUserForm.removeRole' | message}}
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </section>
 </div>

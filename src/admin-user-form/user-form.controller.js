@@ -29,23 +29,17 @@
         .controller('UserFormController', controller);
 
         controller.$inject = [
-            'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService', 'userRoleAssignmentFactory',
-            'loadingModalService', '$state', 'notificationService', 'UserPasswordModal', 'authUserService', 'UserAddRoleModal'
+            'user', 'referencedataUserService', 'loadingModalService', '$state',
+            'notificationService', 'UserPasswordModal', 'authUserService'
         ];
 
-        function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService, userRoleAssignmentFactory,
-                            loadingModalService, $state, notificationService, UserPasswordModal, authUserService, UserAddRoleModal) {
+        function controller(user, referencedataUserService, loadingModalService,
+                            $state, notificationService, UserPasswordModal, authUserService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.createUser = createUser;
-        vm.getRoleName = getRoleName;
-        vm.getProgramName = getProgramName;
-        vm.getSupervisoryNodeName = getSupervisoryNodeName;
-        vm.getWarehouseName = getWarehouseName;
-        vm.removeRole = removeRole;
-        vm.addRole = addRole;
 
         /**
          * @ngdoc property
@@ -72,50 +66,6 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-form.controller:UserFormController
-         * @name roles
-         * @type {Array}
-         *
-         * @description
-         * List of all roles.
-         */
-        vm.roles = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserFormController
-         * @name supervisoryNodes
-         * @type {Array}
-         *
-         * @description
-         * List of all supervisory nodes.
-         */
-        vm.supervisoryNodes = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserFormController
-         * @name warehouses
-         * @type {Array}
-         *
-         * @description
-         * List of all warehouses.
-         */
-        vm.warehouses = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserFormController
-         * @name programs
-         * @type {Array}
-         *
-         * @description
-         * List of all programs.
-         */
-        vm.programs = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserFormController
          * @name user
          * @type {String}
          *
@@ -135,134 +85,9 @@
         function onInit() {
             vm.updateMode = !!user;
             vm.user = user ? user : {
-                roleAssignments: [],
                 loginRestricted: false
             };
-            vm.roles = roles;
-            vm.supervisoryNodes = supervisoryNodes;
-            vm.warehouses = warehouses;
-            vm.programs = programs;
             vm.notification = 'adminUserForm.user' + (vm.updateMode ? 'Updated' : 'Created') + 'Successfully';
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name getSupervisoryNodeName
-         *
-         * @description
-         * Returns name of the supervisory node.
-         *
-         * @param  {String} supervisoryNodeCode the supervisory node code
-         * @return {String}                     the supervisory node name
-         */
-        function getSupervisoryNodeName(supervisoryNodeCode) {
-            if(!supervisoryNodeCode) return undefined;
-            return $filter('filter')(vm.supervisoryNodes, {
-                code: supervisoryNodeCode
-            }, true)[0].$display;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name getProgramName
-         *
-         * @description
-         * Returns name of the program.
-         *
-         * @param  {String} programCode the program code
-         * @return {String}             the program name
-         */
-        function getProgramName(programCode) {
-            if(!programCode) return undefined;
-            var filtered = $filter('filter')(vm.programs, {
-                code: programCode
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].name;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name getWarehouseName
-         *
-         * @description
-         * Returns name of the warehouse.
-         *
-         * @param  {String} warehouseCode the warehouse code
-         * @return {String}               the warehouse name
-         */
-        function getWarehouseName(warehouseCode) {
-            if(!warehouseCode) return undefined;
-            var filtered = $filter('filter')(vm.warehouses, {
-                code: warehouseCode
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].name;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name getRoleName
-         *
-         * @description
-         * Returns name of the role.
-         *
-         * @param  {String} roleId the role UUID
-         * @return {String}        the role name
-         */
-        function getRoleName(roleId) {
-            if(!roleId) return undefined;
-            var filtered = $filter('filter')(vm.roles, {
-                id: roleId
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].name;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name addRole
-         *
-         * @description
-         * Adds new role assignment to user object.
-         */
-        function addRole() {
-            (new UserAddRoleModal(vm.user, getUnusedSupervisoryNodes(), vm.programs, vm.warehouses, vm.roles)).then(function(newRole) {
-                userRoleAssignmentFactory.addTypeToRoleAssignments([newRole], vm.roles);
-				vm.user.roleAssignments.push(newRole);
-			});
-        }
-
-        function getUnusedSupervisoryNodes() {
-            var nodes = [];
-
-            angular.forEach(vm.supervisoryNodes , function(node) {
-                var filtered = $filter('filter')(vm.user.roleAssignments, {
-                    supervisoryNodeCode: node.code
-                });
-                if(filtered.length < 1) nodes.push(node);
-            });
-
-            return nodes;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name removeRole
-         *
-         * @description
-         * Removes role from user object.
-         */
-        function removeRole(roleAssignment) {
-            var index = vm.user.roleAssignments.indexOf(roleAssignment);
-            if(index < 0) return;
-            vm.user.roleAssignments.splice(index, 1);
         }
 
         /**

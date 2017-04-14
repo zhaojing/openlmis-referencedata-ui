@@ -13,21 +13,8 @@
     "adminUserForm.createUser": "Create user",
     "adminUserForm.userCreatedSuccessfully": "User created successfully!",
     "adminUserForm.userUpdatedSuccessfully": "User updated successfully!",
-    "adminUserForm.program": "Program",
-    "adminUserForm.supervisoryNode": "Supervisory node",
-    "adminUserForm.warehouse": "Warehouse",
-    "adminUserForm.role": "Role",
-    "adminUserForm.noRolesAssigned": "User has no roles assigned.",
-    "adminUserForm.addRole": "Add role",
-    "adminUserForm.removeRole": "Remove role",
-    "adminUserForm.actions": "Actions",
-    "adminUserForm.type": "Type",
-    "adminUserForm.roleAlreadyAssigned": "Role already assigned!",
-    "adminUserForm.supervisionInvalid": "Supervisory node or program are required for supervision role!",
-    "adminUserForm.fulfillmentInvalid": "Warehouse is required for fulfillment role!",
     "adminUserForm.passwordSetSuccessfully": "User password has been set successfully!",
     "adminUserForm.cancel": "Cancel",
     "adminUserForm.createPassword": "Create password",
-    "adminUserForm.password": "Password",
-    "adminUserForm.requiredSupervisionField": "Required supervision filed"
+    "adminUserForm.password": "Password"
 }

@@ -10,5 +10,6 @@
     "adminUserList.actions": "Actions",
     "adminUserList.users.error": "There are no matches for user.",
     "adminUserList.name": "Name",
-    "adminUserList.username": "Username"
+    "adminUserList.username": "Username",
+    "adminUserList.roles": "Roles"
 }

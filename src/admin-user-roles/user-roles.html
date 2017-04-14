@@ -1,0 +1,81 @@
+<div class="page">
+    <h2>{{'adminUserRoles.editUserRoles' | message}}</h2>
+    <h3>{{'adminUserRoles.user' | message}}: {{vm.user.username}}</h3>
+    <nav>
+        <ul bs-active-pane="vm.selectedType" bs-tabs>
+            <li ng-repeat="type in vm.types" bs-pane
+                data-title="{{type.displayName | message}}">
+                <section class="openlmis-table-container">
+                    <table>
+                        <caption ng-if="!vm.filteredRoleAssignments || vm.user.filteredRoleAssignments.length === 0">
+                            {{'adminUserRoles.noRolesAssigned' | message}}
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th ng-if="vm.isSupervisionType()">
+                                    {{'adminUserRoles.program' | message}}
+                                </th>
+                                <th ng-if="vm.isSupervisionType()">
+                                    {{'adminUserRoles.supervisoryNode' | message}}
+                                </th>
+                                <th ng-if="vm.isFulfillmentType()">
+                                    {{'adminUserRoles.warehouse' | message}}
+                                </th>
+                                <th>{{'adminUserRoles.role' | message}}</th>
+                                <th>{{'adminUserRoles.actions' | message}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td ng-if="vm.isSupervisionType()">
+                                    <select id="program" ng-model="vm.selectedProgram"
+                                        ng-options="program.code as program.name for program in vm.programs"
+                                        ng-required="!vm.selectedSupervisoryNode">
+                                    </select>
+                                </td>
+                                <td ng-if="vm.isSupervisionType()">
+                                    <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
+                                        ng-options="supervisoryNode.code as supervisoryNode.$display for supervisoryNode in vm.unusedSupervisoryNodes"
+                                        ng-required="!vm.selectedProgram">
+                                    </select>
+                                </td>
+                                <td ng-if="vm.isFulfillmentType()">
+                                    <select id="warehouse" ng-model="vm.selectedWarehouse" required
+                                        ng-options="warehouse.code as warehouse.name for warehouse in vm.warehouses">
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="role" ng-model="vm.selectedRole"
+                                        ng-options="role.id as role.name for role in vm.filteredRoles" required>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="primary" ng-click="vm.addRole()">{{'adminUserRoles.addRole' | message}}</button>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="roleAssignment in vm.filteredRoleAssignments">
+                                <td ng-if="vm.isSupervisionType()">
+                                    {{vm.getProgramName(roleAssignment.programCode)}}
+                                </td>
+                                <td ng-if="vm.isSupervisionType()">
+                                    {{vm.getSupervisoryNodeName(roleAssignment.supervisoryNodeCode)}}
+                                </td>
+                                <td ng-if="vm.isFulfillmentType()">
+                                    {{vm.getWarehouseName(roleAssignment.warehouseCode)}}
+                                </td>
+                                <td>{{vm.getRoleName(roleAssignment.roleId)}}</td>
+                                <td>
+                                    <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole' | message}}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="openlmis-toolbar">
+    <input type="button" ng-click="vm.saveUserRoles()" class="primary" value="{{'adminUserRoles.saveUserRoles' | message}}"/>
+    <input type="button" ng-click="vm.goToUserList()" value="{{'adminUserRoles.cancel' | message}}">
+</div>
