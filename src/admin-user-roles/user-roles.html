@@ -5,6 +5,35 @@
         <ul bs-active-pane="vm.selectedType" bs-tabs>
             <li ng-repeat="type in vm.types" bs-pane
                 data-title="{{type.displayName | message}}">
+                <form class="form-inline" ng-submit="vm.addRole()">
+                    <div class="form-group" ng-if="vm.isSupervisionType()">
+                        <label for="program">{{'adminUserRoles.program' | message}}</label>
+                        <select id="program" ng-model="vm.selectedProgram"
+                            ng-options="program.code as program.name for program in vm.programs"
+                            ng-required="!vm.selectedSupervisoryNode">
+                        </select>
+                    </div>
+                    <div class="form-group" ng-if="vm.isSupervisionType()">
+                        <label for="supervisoryNode">{{'adminUserRoles.supervisoryNode' | message}}</label>
+                        <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
+                            ng-options="supervisoryNode.code as supervisoryNode.$display for supervisoryNode in vm.unusedSupervisoryNodes"
+                            ng-required="!vm.selectedProgram">
+                        </select>
+                    </div>
+                    <div class="form-group" ng-if="vm.isFulfillmentType()">
+                        <label for="warehouse">{{'adminUserRoles.warehouse' | message}}</label>
+                        <select id="warehouse" ng-model="vm.selectedWarehouse" required
+                            ng-options="warehouse.code as warehouse.name for warehouse in vm.warehouses">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">{{'adminUserRoles.role' | message}}</label>
+                        <select id="role" ng-model="vm.selectedRole"
+                            ng-options="role.id as role.name for role in vm.filteredRoles" required>
+                        </select>
+                    </div>
+                    <input type="submit" class="primary" value="{{'adminUserRoles.addRole' | message}}"></input>
+                </form>
                 <section class="openlmis-table-container">
                     <table>
                         <caption ng-if="!vm.filteredRoleAssignments || vm.user.filteredRoleAssignments.length === 0">
@@ -26,33 +55,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td ng-if="vm.isSupervisionType()">
-                                    <select id="program" ng-model="vm.selectedProgram"
-                                        ng-options="program.code as program.name for program in vm.programs"
-                                        ng-required="!vm.selectedSupervisoryNode">
-                                    </select>
-                                </td>
-                                <td ng-if="vm.isSupervisionType()">
-                                    <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
-                                        ng-options="supervisoryNode.code as supervisoryNode.$display for supervisoryNode in vm.unusedSupervisoryNodes"
-                                        ng-required="!vm.selectedProgram">
-                                    </select>
-                                </td>
-                                <td ng-if="vm.isFulfillmentType()">
-                                    <select id="warehouse" ng-model="vm.selectedWarehouse" required
-                                        ng-options="warehouse.code as warehouse.name for warehouse in vm.warehouses">
-                                    </select>
-                                </td>
-                                <td>
-                                    <select id="role" ng-model="vm.selectedRole"
-                                        ng-options="role.id as role.name for role in vm.filteredRoles" required>
-                                    </select>
-                                </td>
-                                <td>
-                                    <button class="primary" ng-click="vm.addRole()">{{'adminUserRoles.addRole' | message}}</button>
-                                </td>
-                            </tr>
                             <tr ng-repeat="roleAssignment in vm.filteredRoleAssignments">
                                 <td ng-if="vm.isSupervisionType()">
                                     {{vm.getProgramName(roleAssignment.programCode)}}

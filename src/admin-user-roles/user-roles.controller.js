@@ -309,7 +309,7 @@
          * Checks if supervision tab is selected.
          */
         function isSupervisionType() {
-            return vm.selectedType === 1;
+            return vm.selectedType === 0;
         }
 
         /**
@@ -321,7 +321,7 @@
          * Checks if fulfillment tab is selected.
          */
         function isFulfillmentType() {
-            return vm.selectedType === 0;
+            return vm.selectedType === 1;
         }
 
         /**
