@@ -45,7 +45,7 @@
                     url: openlmisUrlFactory('/api/users/search'),
                     method: 'POST'
                 },
-                createUser: {
+                saveUser: {
                     url: openlmisUrlFactory('/api/users'),
                     method: 'PUT',
                     transformRequest: transformRequest
@@ -55,7 +55,7 @@
         this.get = get;
         this.search = search;
         this.getAll = getAll;
-        this.createUser = createUser;
+        this.saveUser = saveUser;
 
         /**
          * @ngdoc method
@@ -121,7 +121,7 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-user.referencedataUserService
-         * @name createUser
+         * @name saveUser
          *
          * @description
          * Creates new user.
@@ -129,8 +129,8 @@
          * @param   {Object}    user    the user to be created
          * @return  {Promise}           the promise resolving to newly created user
          */
-        function createUser(user) {
-            return resource.createUser(undefined, user).$promise;
+        function saveUser(user) {
+            return resource.saveUser(undefined, user).$promise;
         }
 
         function transformRequest(user) {

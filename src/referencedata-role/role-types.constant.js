@@ -19,13 +19,13 @@
 
     /**
      * @ngdoc object
-     * @name admin-user-form.ROLE_TYPE
+     * @name referencedata-role.ROLE_TYPE
      *
      * @description
      * This is constant for role types.
      */
     angular
-        .module('admin-user-form')
+        .module('referencedata-role')
         .constant('ROLE_TYPES', types());
 
     function types() {

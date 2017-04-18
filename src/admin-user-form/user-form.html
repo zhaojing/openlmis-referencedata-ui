@@ -1,7 +1,7 @@
 <div class="page">
     <h2>{{'adminUserForm.addEditUser' | message}}</h2>
     <section class="openlmis-table-container">
-        <form id="newUserForm"class="user-form" ng-submit="vm.createUser()">
+        <form id="newUserForm"class="user-form" ng-submit="vm.saveUser()">
             <label for="username">{{'adminUserForm.username' | message}}</label>
             <input id="username" ng-model="vm.user.username" type="text" required/>
             <label for="email">{{'adminUserForm.email' | message}}</label>

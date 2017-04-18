@@ -20,7 +20,7 @@ describe('UserFormController', function() {
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['createUser']);
+            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['saveUser']);
             $provide.service('referencedataUserService', function() {
                 return referencedataUserService;
             });
@@ -63,8 +63,8 @@ describe('UserFormController', function() {
 
     describe('init', function() {
 
-        it('should expose createUser method', function() {
-            expect(angular.isFunction(vm.createUser)).toBe(true);
+        it('should expose saveUser method', function() {
+            expect(angular.isFunction(vm.saveUser)).toBe(true);
         });
 
         it('should set user', function() {
@@ -97,30 +97,30 @@ describe('UserFormController', function() {
 
         beforeEach(function() {
             deferred = $q.defer();
-            referencedataUserService.createUser.andReturn(deferred.promise);
+            referencedataUserService.saveUser.andReturn(deferred.promise);
         });
 
         it('should open loading modal', function() {
-            vm.createUser();
+            vm.saveUser();
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should call referencedataUserService', function() {
-            vm.createUser();
-            expect(referencedataUserService.createUser).toHaveBeenCalledWith(user);
+            vm.saveUser();
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
         });
 
         it('should call referencedataUserService with changes', function() {
             vm.user.username = 'newUserName';
             user.username = 'newUserName';
 
-            vm.createUser();
-            expect(referencedataUserService.createUser).toHaveBeenCalledWith(user);
+            vm.saveUser();
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
         });
 
         it('should show notification', function() {
             deferred.resolve();
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
 
             expect(notificationService.success).toHaveBeenCalledWith(vm.notification);
@@ -128,7 +128,7 @@ describe('UserFormController', function() {
 
         it('should redirect to parent state', function() {
             deferred.resolve();
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
 
             expect($state.go).toHaveBeenCalledWith('^', {}, {
@@ -138,14 +138,14 @@ describe('UserFormController', function() {
 
         it('should close loading modal', function() {
             deferred.resolve();
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should not show notification if request fails', function() {
             deferred.reject();
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -155,7 +155,7 @@ describe('UserFormController', function() {
     describe('create user', function() {
 
         beforeEach(function() {
-            referencedataUserService.createUser.andReturn($q.when(user));
+            referencedataUserService.saveUser.andReturn($q.when(user));
             authUserService.saveUser.andReturn($q.when(user));
             UserPasswordModal.andReturn($q.when(user));
 
@@ -166,23 +166,23 @@ describe('UserFormController', function() {
         });
 
         it('should open loading modal', function() {
-            vm.createUser();
+            vm.saveUser();
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should call referencedataUserService', function() {
-            vm.createUser();
-            expect(referencedataUserService.createUser).toHaveBeenCalled();
+            vm.saveUser();
+            expect(referencedataUserService.saveUser).toHaveBeenCalled();
         });
 
         it('should call referencedataUserService with changes', function() {
             vm.user.username = 'newUserName';
-            vm.createUser();
-            expect(referencedataUserService.createUser).toHaveBeenCalledWith(vm.user);
+            vm.saveUser();
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(vm.user);
         });
 
         it('should call authUserService', function() {
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
 
             expect(authUserService.saveUser).toHaveBeenCalledWith({
@@ -194,14 +194,14 @@ describe('UserFormController', function() {
         });
 
         it('should call UserPasswordModal', function() {
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
 
             expect(UserPasswordModal).toHaveBeenCalledWith(user.username);
         });
 
         it('should change email if it is empty string', function() {
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
 
             expect($state.go).toHaveBeenCalledWith('^', {}, {
@@ -210,13 +210,13 @@ describe('UserFormController', function() {
         });
 
         it('should call notificationService', function() {
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
             expect(notificationService.success).toHaveBeenCalledWith(vm.notification);
         });
 
         it('should close loading modal', function() {
-            vm.createUser();
+            vm.saveUser();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
         });

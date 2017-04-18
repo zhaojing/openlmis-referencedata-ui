@@ -30,11 +30,11 @@
 
         controller.$inject = [
             'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService',
-            'userRoleAssignmentFactory', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope'
+            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope'
         ];
 
         function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService,
-                            userRoleAssignmentFactory, loadingModalService, $state, notificationService, ROLE_TYPES, $scope) {
+                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope) {
 
         var vm = this;
 
@@ -208,7 +208,6 @@
             vm.supervisoryNodes = supervisoryNodes;
             vm.warehouses = warehouses;
             vm.programs = programs;
-            vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
             vm.types = ROLE_TYPES;
             vm.selectedType = 0;
             reloadTable();
@@ -235,9 +234,11 @@
          */
         function getSupervisoryNodeName(supervisoryNodeCode) {
             if(!supervisoryNodeCode) return undefined;
-            return $filter('filter')(vm.supervisoryNodes, {
+            var filtered = $filter('filter')(vm.supervisoryNodes, {
                 code: supervisoryNodeCode
-            }, true)[0].$display;
+            }, true);
+            if(!filtered || filtered.length < 1) return undefined;
+            return filtered[0].$display;
         }
 
         /**
@@ -382,7 +383,7 @@
         function saveUserRoles() {
             var loadingPromise = loadingModalService.open(true);
 
-            return referencedataUserService.createUser(vm.user).then(function() {
+            return referencedataUserService.saveUser(vm.user).then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminUserRoles.updateSuccessful');
                 });
@@ -425,7 +426,7 @@
 
             vm.filteredRoles = $filter('filter')(vm.roles, {
                 $type: vm.types[vm.selectedType].name
-            }, true);
+            });
 
             vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
         }
@@ -435,6 +436,8 @@
             vm.selectedSupervisoryNode = undefined;
             vm.selectedWarehouse = undefined;
             vm.selectedRole = undefined;
+            vm.newRoleForm.$setPristine();
+            vm.newRoleForm.$setUntouched();
         }
 
         function isNewRoleInvalid() {

@@ -39,7 +39,7 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.createUser = createUser;
+        vm.saveUser = saveUser;
 
         /**
          * @ngdoc property
@@ -93,17 +93,17 @@
         /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserFormController
-         * @name createUser
+         * @name saveUser
          *
          * @description
          * Creates or updates the user.
          *
          * @return {Promise} the promise resolving to th created/updated user
          */
-        function createUser() {
+        function saveUser() {
             var loadingPromise = loadingModalService.open(true);
 
-            return referencedataUserService.createUser(vm.user).then(function(savedUser) {
+            return referencedataUserService.saveUser(vm.user).then(function(savedUser) {
                 if(vm.updateMode) {
                     loadingPromise.then(function () {
                         notificationService.success(vm.notification);

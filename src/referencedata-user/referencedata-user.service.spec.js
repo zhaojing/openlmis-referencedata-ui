@@ -131,7 +131,7 @@ describe('referencedataUserService', function() {
         expect(data.id).toEqual(user1.id);
     });
 
-    describe('createUser', function() {
+    describe('saveUser', function() {
 
         var user, userResponse;
 
@@ -166,13 +166,13 @@ describe('referencedataUserService', function() {
                 'Content-Type': 'application/json;charset=utf-8'
             });
 
-            referencedataUserService.createUser(user);
+            referencedataUserService.saveUser(user);
             $httpBackend.flush();
             $rootScope.$apply();
         });
 
         it('should return promise', function() {
-            var result = referencedataUserService.createUser(user);
+            var result = referencedataUserService.saveUser(user);
             $httpBackend.flush();
             $rootScope.$apply();
 
@@ -182,7 +182,7 @@ describe('referencedataUserService', function() {
         it('should return promise that resolves to user', function() {
             var result;
 
-            referencedataUserService.createUser(user).then(function(response) {
+            referencedataUserService.saveUser(user).then(function(response) {
                 result = response;
             });
 

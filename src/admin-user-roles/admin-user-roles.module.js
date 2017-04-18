@@ -25,6 +25,7 @@
      */
     angular.module('admin-user-roles', [
         'mgcrea.ngStrap.tab',
+        'openlmis-modal',
         'openlmis-rights',
         'referencedata-program',
         'referencedata-role',

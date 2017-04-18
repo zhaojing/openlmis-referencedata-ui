@@ -1,0 +1,430 @@
+/*
+ * This program is part of the OpenLMIS logistics management information system platform software.
+ * Copyright © 2017 VillageReach
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU Affero General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU Affero General Public License for more details. You should have received a copy of
+ * the GNU Affero General Public License along with this program. If not, see
+ * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
+ */
+
+describe('UserRolesController', function () {
+
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService,
+        scope, vm, user, roles, supervisoryNodes, warehouses, programs;
+
+    beforeEach(function() {
+
+        module('admin-user-roles', function($provide) {
+            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['saveUser']);
+            $provide.service('referencedataUserService', function() {
+                return referencedataUserService;
+            });
+
+            notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
+            $provide.service('notificationService', function() {
+                return notificationService;
+            });
+
+            loadingModalService = jasmine.createSpyObj('loadingModalService', ['close', 'open']);
+            $provide.service('loadingModalService', function() {
+                return loadingModalService;
+            });
+        });
+
+        inject(function($injector) {
+            $controller = $injector.get('$controller');
+            $rootScope = $injector.get('$rootScope');
+            $state = $injector.get('$state');
+            $q = $injector.get('$q');
+            ROLE_TYPES = $injector.get('ROLE_TYPES');
+        });
+
+        user = {
+            roleAssignments: [
+                {
+                    roleId: 'role-id-1',
+                    supervisoryNodeCode: 'node-code-1',
+                    programCode: 'program-code-1',
+                    $type: ROLE_TYPES[0].name
+                },
+                {
+                    roleId: 'role-id-2',
+                    $type: ROLE_TYPES[3].name
+                }
+            ]
+        };
+        roles = [
+            {
+                name: 'role-1',
+                id: 'role-id-1',
+                $type: ROLE_TYPES[0].name
+            },
+            {
+                name: 'role-2',
+                id: 'role-id-2',
+                $type: ROLE_TYPES[3].name
+            },
+            {
+                name: 'role-3',
+                id: 'role-id-3',
+                $type: ROLE_TYPES[0].name
+            },
+            {
+                name: 'role-4',
+                id: 'role-id-4',
+                $type: ROLE_TYPES[1].name
+            }
+        ];
+        supervisoryNodes = [
+            {
+                code: 'node-code-1',
+                $display: 'node-1'
+            },
+            {
+                code: 'node-code-2',
+                $display: 'node-2'
+            }
+        ];
+        warehouses = [
+            {
+                code: 'warehouse-code-1',
+                name: 'warehouse-1'
+            },
+            {
+                code: 'warehouse-code-2',
+                name: 'warehouse-2'
+            }
+        ];
+        programs = [
+            {
+                code: 'program-code-1',
+                name: 'program-1'
+            },
+            {
+                code: 'program-code-2',
+                name: 'program-2'
+            }
+        ];
+        scope = $rootScope.$new();
+
+        vm = $controller('UserRolesController', {
+            user: user,
+            roles: roles,
+            supervisoryNodes: supervisoryNodes,
+            warehouses: warehouses,
+            programs: programs,
+            $scope: scope
+        });
+        vm.newRoleForm = jasmine.createSpyObj('newRoleForm', ['$setPristine', '$setUntouched']);
+
+        vm.$onInit();
+        scope.$apply();
+
+        spyOn($state, 'go').andReturn();
+    });
+
+    describe('on init', function() {
+
+        it('should expose getRoleName method', function() {
+            expect(angular.isFunction(vm.getRoleName)).toBe(true);
+        });
+
+        it('should expose getProgramName method', function() {
+            expect(angular.isFunction(vm.getProgramName)).toBe(true);
+        });
+
+        it('should expose getSupervisoryNodeName method', function() {
+            expect(angular.isFunction(vm.getSupervisoryNodeName)).toBe(true);
+        });
+
+        it('should expose getWarehouseName method', function() {
+            expect(angular.isFunction(vm.getWarehouseName)).toBe(true);
+        });
+
+        it('should expose removeRole method', function() {
+            expect(angular.isFunction(vm.removeRole)).toBe(true);
+        });
+
+        it('should expose addRole method', function() {
+            expect(angular.isFunction(vm.addRole)).toBe(true);
+        });
+
+        it('should expose saveUserRoles method', function() {
+            expect(angular.isFunction(vm.saveUserRoles)).toBe(true);
+        });
+
+        it('should expose isFulfillmentType method', function() {
+            expect(angular.isFunction(vm.isFulfillmentType)).toBe(true);
+        });
+
+        it('should expose isSupervisionType method', function() {
+            expect(angular.isFunction(vm.isSupervisionType)).toBe(true);
+        });
+
+        it('should expose goToUserList method', function() {
+            expect(angular.isFunction(vm.goToUserList)).toBe(true);
+        });
+
+        it('should set user', function() {
+            expect(vm.user).toEqual(user);
+        });
+
+        it('should set roles', function() {
+            expect(vm.roles).toEqual(roles);
+        });
+
+        it('should set supervisoryNodes', function() {
+            expect(vm.supervisoryNodes).toEqual(supervisoryNodes);
+        });
+
+        it('should set warehouses', function() {
+            expect(vm.warehouses).toEqual(warehouses);
+        });
+
+        it('should set programs', function() {
+            expect(vm.programs).toEqual(programs);
+        });
+
+        it('should set programs', function() {
+            expect(vm.programs).toEqual(programs);
+        });
+
+        it('should set unusedSupervisoryNodes', function() {
+            expect(vm.unusedSupervisoryNodes).toEqual([supervisoryNodes[1]]);
+        });
+
+        it('should set types', function() {
+            expect(vm.types).toEqual(ROLE_TYPES);
+        });
+
+        it('should set selectedType', function() {
+            expect(vm.selectedType).toEqual(0);
+        });
+
+        it('should set filteredRoleAssignments', function() {
+            expect(vm.filteredRoleAssignments).toEqual([user.roleAssignments[0]]);
+        });
+
+        it('should set filteredRoles', function() {
+            expect(vm.filteredRoles).toEqual([roles[0], roles[2]]);
+        });
+
+        it('should clear selected values after selected type changes', function() {
+            vm.selectedProgram = programs[0].code;
+            vm.selectedType = 1;
+            scope.$apply();
+            expect(vm.selectedProgram).toBe(undefined);
+        });
+
+        it('should reload table after selected type changes', function() {
+            vm.selectedProgram = programs[0].code;
+            vm.selectedType = 1;
+            scope.$apply();
+            expect(vm.filteredRoleAssignments).toBe(undefined);
+            expect(vm.filteredRoles.length).toEqual(1);
+        });
+    });
+
+    describe('getSupervisoryNodeName', function() {
+
+        it('should return supervisory node name if exists', function() {
+            expect(vm.getSupervisoryNodeName(supervisoryNodes[0].code)).toEqual(supervisoryNodes[0].$display);
+        });
+
+        it('should return undefined if supervisory node code does not exists', function() {
+            expect(vm.getSupervisoryNodeName('some-code')).toEqual(undefined);
+        });
+    });
+
+    describe('getProgramName', function() {
+
+        it('should return program name if exists', function() {
+            expect(vm.getProgramName(programs[0].code)).toEqual(programs[0].name);
+        });
+
+        it('should return undefined if program code does not exists', function() {
+            expect(vm.getProgramName('some-code')).toEqual(undefined);
+        });
+    });
+
+    describe('getWarehouseName', function() {
+
+        it('should return warehouse name if exists', function() {
+            expect(vm.getWarehouseName(warehouses[0].code)).toEqual(warehouses[0].name);
+        });
+
+        it('should return undefined if warehouse code does not exists', function() {
+            expect(vm.getWarehouseName('some-code')).toEqual(undefined);
+        });
+    });
+
+    describe('getRoleName', function() {
+
+        it('should return role name if exists', function() {
+            expect(vm.getRoleName(roles[0].id)).toEqual(roles[0].name);
+        });
+
+        it('should return undefined if role id does not exists', function() {
+            expect(vm.getRoleName('some-code')).toEqual(undefined);
+        });
+    });
+
+    describe('isSupervisionType', function() {
+
+        it('should return true if selected type is supervision', function() {
+            expect(vm.isSupervisionType()).toBe(true);
+        });
+
+        it('should return false if selected type is not supervision', function() {
+            vm.selectedType = 1;
+            expect(vm.isSupervisionType()).toBe(false);
+        });
+    });
+
+    describe('isFulfillmentType', function() {
+
+        it('should return true if selected type is fulfillment', function() {
+            vm.selectedType = 1;
+            expect(vm.isFulfillmentType()).toBe(true);
+        });
+
+        it('should return false if selected type is not fulfillment', function() {
+            expect(vm.isFulfillmentType()).toBe(false);
+        });
+    });
+
+    describe('addRole', function() {
+
+        it('should display error notification if role is already assigned', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+
+            vm.selectedRole = roles[1].id;
+            vm.selectedType = 3;
+
+            vm.addRole();
+
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
+            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.roleAlreadyAssigned');
+        });
+
+        it('should display error notification if supervision role is invalid', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+
+            vm.selectedRole = roles[2].id;
+
+            vm.addRole();
+
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
+            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.supervisionInvalid');
+        });
+
+        it('should display error notification if supervision role is invalid', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+
+            vm.selectedType = 1;
+            vm.selectedRole = roles[3].id;
+
+            vm.addRole();
+
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
+            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.fulfillmentInvalid');
+        });
+
+        it('should add new supervision role assignment', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+
+            vm.selectedRole = roles[2].id;
+            vm.selectedSupervisoryNode = supervisoryNodes[1].code;
+
+            vm.addRole();
+
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
+            expect(notificationService.error).not.toHaveBeenCalled();
+            expect(vm.unusedSupervisoryNodes.length).toBe(0);
+            expect(vm.user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[2].id);
+            expect(vm.selectedRole).toEqual(undefined);
+            expect(vm.newRoleForm.$setUntouched).toHaveBeenCalledWith();
+            expect(vm.newRoleForm.$setPristine).toHaveBeenCalledWith();
+        });
+    });
+
+    describe('remove role', function() {
+
+        it('should remove role assignment if it exists', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+            vm.removeRole(vm.user.roleAssignments[0]);
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount - 1);
+        });
+
+        it('should not remove role assignment if it does not exists', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+            vm.removeRole('roleAssignment');
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
+        });
+    });
+
+    describe('saveUser', function() {
+
+        beforeEach(function() {
+            referencedataUserService.saveUser.andReturn($q.when(true));
+            loadingModalService.open.andReturn($q.when(true));
+            vm.saveUserRoles();
+        });
+
+        it('should open loading modal', function() {
+            expect(loadingModalService.open).toHaveBeenCalledWith(true);
+        });
+
+        it('should call referencedataUserService', function() {
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
+        });
+
+        it('should show success notification', function() {
+            $rootScope.$apply();
+            expect(notificationService.success).toHaveBeenCalledWith('adminUserRoles.updateSuccessful');
+        });
+
+        it('should redirect to users list', function() {
+            $rootScope.$apply();
+            expect($state.go).toHaveBeenCalledWith('^', {}, {
+                    reload: true
+                });
+        });
+
+        it('should close loading modal', function() {
+            $rootScope.$apply();
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should show error notification if save failed', function() {
+            var deferred = $q.defer();
+            deferred.reject();
+
+            $rootScope.$apply();
+            referencedataUserService.saveUser.andReturn(deferred.promise);
+            vm.saveUserRoles();
+            $rootScope.$apply();
+
+            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.updateFailed');
+        });
+    });
+
+    describe('goToUserList', function() {
+
+        beforeEach(function() {
+            vm.goToUserList();
+        });
+
+        it('should redirect to users list page', function() {
+            expect($state.go).toHaveBeenCalledWith('^', {}, {
+                    reload: true
+                });
+        });
+    });
+});
