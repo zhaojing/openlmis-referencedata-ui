@@ -30,11 +30,11 @@
 
         controller.$inject = [
             'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService',
-            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope'
+            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope', '$q'
         ];
 
         function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService,
-                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope) {
+                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope, $q) {
 
         var vm = this;
 
@@ -332,9 +332,12 @@
          *
          * @description
          * Adds new role assignment to user object.
+         *
+         * @return {Promise} resolves if new role is valid
          */
         function addRole() {
-            var invalidMessage = isNewRoleInvalid();
+            var deferred = $q.defer(),
+                invalidMessage = isNewRoleInvalid();
 
             if(!invalidMessage) {
                 var roleAssignment = {
@@ -350,9 +353,13 @@
                 user.roleAssignments.push(roleAssignment);
                 reloadTable();
                 clearSelectedValues();
+                deferred.resolve();
             } else {
                 notificationService.error(invalidMessage);
+                deferred.reject();
             }
+
+            return deferred.promise;
         }
 
         /**
@@ -436,8 +443,6 @@
             vm.selectedSupervisoryNode = undefined;
             vm.selectedWarehouse = undefined;
             vm.selectedRole = undefined;
-            vm.newRoleForm.$setPristine();
-            vm.newRoleForm.$setUntouched();
         }
 
         function isNewRoleInvalid() {

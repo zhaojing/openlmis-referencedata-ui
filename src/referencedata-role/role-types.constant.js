@@ -44,7 +44,7 @@
             },
             {
                 name: 'GENERAL_ADMIN',
-                displayName: 'referencedataRoles.admin'
+                displayName: 'referencedataRoles.administration'
             }
         ];
     }

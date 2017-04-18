@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('UserRolesController', function () {
+describe('UserRolesController', function() {
 
     var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService,
         scope, vm, user, roles, supervisoryNodes, warehouses, programs;
@@ -121,7 +121,6 @@ describe('UserRolesController', function () {
             programs: programs,
             $scope: scope
         });
-        vm.newRoleForm = jasmine.createSpyObj('newRoleForm', ['$setPristine', '$setUntouched']);
 
         vm.$onInit();
         scope.$apply();
@@ -301,6 +300,10 @@ describe('UserRolesController', function () {
 
     describe('addRole', function() {
 
+        it('should return promise', function() {
+            expect(angular.isFunction(vm.addRole().then)).toBe(true);
+        });
+
         it('should display error notification if role is already assigned', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
@@ -349,8 +352,6 @@ describe('UserRolesController', function () {
             expect(vm.unusedSupervisoryNodes.length).toBe(0);
             expect(vm.user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[2].id);
             expect(vm.selectedRole).toEqual(undefined);
-            expect(vm.newRoleForm.$setUntouched).toHaveBeenCalledWith();
-            expect(vm.newRoleForm.$setPristine).toHaveBeenCalledWith();
         });
     });
 
