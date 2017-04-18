@@ -40,6 +40,7 @@
         vm.$onInit = onInit;
         vm.saveRole = saveRole;
         vm.getLabel = typeNameFactory.getLabel;
+        vm.getMessage = typeNameFactory.getMessage;
         vm.isNoneSelected = isNoneSelected;
 
         /**

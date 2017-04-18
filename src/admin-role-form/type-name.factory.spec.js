@@ -27,10 +27,13 @@ describe('typeNameFactory', function() {
         typeLabel = 'Some awesome type name';
         typeDescription = 'Some not so short, but maybe a little, description';
         type = 'SOME_AWESOME_TYPE_NAME';
+        right = 'SOME_RIGHT_NAME';
+        rightMessage = 'Some right';
 
         spyOn(messageService, 'get').andCallFake(function(key) {
             if (key === 'adminRoleForm.someAwesomeTypeName.label') return typeLabel;
             if (key === 'adminRoleForm.someAwesomeTypeName.description') return typeDescription;
+            if (key === 'adminRoleForm.someRightName') return rightMessage;
         });
     });
 
@@ -62,6 +65,22 @@ describe('typeNameFactory', function() {
             typeNameFactory.getDescription(type);
 
             expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.someAwesomeTypeName.description');
+        });
+
+    });
+
+    describe('getMessage', function() {
+
+        it('should return localized message', function() {
+            var result = typeNameFactory.getMessage(right);
+
+            expect(result).toEqual(rightMessage);
+        });
+
+        it('should build label key', function() {
+            typeNameFactory.getMessage(right);
+
+            expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.someRightName');
         });
 
     });

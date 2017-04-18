@@ -32,6 +32,7 @@
     function typeNameFactory(messageService) {
         var factory = {
             getLabel: getLabel,
+            getMessage: getMessage,
             getDescription: getDescription
         };
         return factory;
@@ -64,6 +65,21 @@
          */
         function getDescription(type) {
             return messageService.get('adminRoleForm.' + toCamelCase(type) + '.description');
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-role-form.typeNameFactory
+         * @name getMessage
+         *
+         * @description
+         * Returns message keys for the given type.
+         *
+         * @param   {String}    type    the type to parse
+         * @return  {String}            the localized message
+         */
+        function getMessage(type) {
+            return messageService.get('adminRoleForm.' + toCamelCase(type));
         }
 
         function toCamelCase(string) {

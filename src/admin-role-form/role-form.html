@@ -13,7 +13,7 @@
     		<legend>Rights</legend>
             <label ng-repeat="right in vm.rights">
                <input type="checkbox" ng-model="right.checked" ng-required="vm.isNoneSelected()"/>
-               {{vm.getLabel(right.name)}}
+               {{vm.getMessage(right.name)}}
             </label>
     	</fieldset>
         <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
