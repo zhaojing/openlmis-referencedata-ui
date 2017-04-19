@@ -16,5 +16,8 @@
     "adminUserForm.passwordSetSuccessfully": "User password has been set successfully!",
     "adminUserForm.cancel": "Cancel",
     "adminUserForm.createPassword": "Create password",
-    "adminUserForm.password": "Password"
+    "adminUserForm.password": "Password",
+    "adminUserForm.removeHomeFacility.question": "Role and Program assignments for this facility will be deleted. Do you want to continue?",
+    "adminUserForm.removeHomeFacility.label": "Remove home facility",
+    "adminUserForm.homeFacility": "Home facility"
 }

@@ -29,17 +29,18 @@
         .controller('UserFormController', controller);
 
         controller.$inject = [
-            'user', 'referencedataUserService', 'loadingModalService', '$state',
-            'notificationService', 'UserPasswordModal', 'authUserService'
+            'user', 'facilities', 'referencedataUserService', 'loadingModalService', 'confirmService',
+            '$filter', '$state', 'notificationService', 'UserPasswordModal', 'authUserService'
         ];
 
-        function controller(user, referencedataUserService, loadingModalService,
-                            $state, notificationService, UserPasswordModal, authUserService) {
+        function controller(user, facilities, referencedataUserService, loadingModalService, confirmService,
+                            $filter, $state, notificationService, UserPasswordModal, authUserService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.saveUser = saveUser;
+        vm.removeHomeFacility = removeHomeFacility;
 
         /**
          * @ngdoc property
@@ -51,6 +52,17 @@
          * User object to be created/updated.
          */
         vm.user = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserFormController
+         * @name facilities
+         * @type {Array}
+         *
+         * @description
+         * List of all possible facilities.
+         */
+        vm.facilities = undefined;
 
         /**
          * @ngdoc property
@@ -87,6 +99,7 @@
             vm.user = user ? user : {
                 loginRestricted: false
             };
+            vm.facilities = facilities;
             vm.notification = 'adminUserForm.user' + (vm.updateMode ? 'Updated' : 'Created') + 'Successfully';
         }
 
@@ -126,6 +139,22 @@
                 }
             })
             .finally(loadingModalService.close);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserFormController
+         * @name removeHomeFacility
+         *
+         * @description
+         * Displays confirm modal for deleting home facility.
+         * After confirmation removes home facility and all
+         */
+        function removeHomeFacility() {
+            confirmService.confirmDestroy('adminUserForm.removeHomeFacility.question', 'adminUserForm.removeHomeFacility.label').then(function() {
+                vm.user.homeFacility = undefined;
+                vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
+            });
         }
 
         function goToUserList() {

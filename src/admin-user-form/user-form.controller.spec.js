@@ -15,8 +15,8 @@
 
 describe('UserFormController', function() {
 
-    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, referencedataUserService, authUserService, UserPasswordModal,
-        vm, user;
+    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, referencedataUserService, authUserService, UserPasswordModal, confirmService,
+        vm, user, facilities;
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
@@ -28,6 +28,11 @@ describe('UserFormController', function() {
             authUserService = jasmine.createSpyObj('authUserService', ['saveUser']);
             $provide.service('authUserService', function() {
                 return authUserService;
+            });
+
+            confirmService = jasmine.createSpyObj('confirmService', ['confirmDestroy']);
+            $provide.service('confirmService', function() {
+                return confirmService;
             });
 
             UserPasswordModal = jasmine.createSpy('UserPasswordModalMock');
@@ -50,13 +55,35 @@ describe('UserFormController', function() {
         spyOn(loadingModalService, 'close').andReturn();
         spyOn(notificationService, 'success').andReturn();
 
+        facilities = [
+            {
+                code: 'facility-code-1',
+                name: 'facility-1'
+            },
+            {
+                code: 'facility-code-2',
+                name: 'facility-2'
+            }
+        ];
         user = {
             id: 'user-id',
-            username: 'random-user'
+            username: 'random-user',
+            homeFacility: facilities[0],
+            roleAssignments: [
+                {
+                    roleId: 'role-id-1',
+                    programCode: 'program-code-1'
+                },
+                {
+                    roleId: 'role-id-2',
+                    warehouseCode: 'warehouse-code-1'
+                }
+            ]
         };
 
         vm = $controller('UserFormController', {
-            user: user
+            user: user,
+            facilities: facilities
         });
         vm.$onInit();
     });
@@ -65,6 +92,10 @@ describe('UserFormController', function() {
 
         it('should expose saveUser method', function() {
             expect(angular.isFunction(vm.saveUser)).toBe(true);
+        });
+
+        it('should expose removeHomeFacility method', function() {
+            expect(angular.isFunction(vm.removeHomeFacility)).toBe(true);
         });
 
         it('should set user', function() {
@@ -81,7 +112,8 @@ describe('UserFormController', function() {
 
         it('should set updateMode if there is no user passed to controller', function() {
             vm = $controller('UserFormController', {
-                user: undefined
+                user: undefined,
+                facilities: facilities
             });
             vm.$onInit();
 
@@ -160,7 +192,8 @@ describe('UserFormController', function() {
             UserPasswordModal.andReturn($q.when(user));
 
             vm = $controller('UserFormController', {
-                user: undefined
+                user: undefined,
+                facilities: facilities
             });
             vm.$onInit();
         });
@@ -219,6 +252,28 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
+        });
+    });
+
+    describe('removeHomeFacility', function() {
+
+        beforeEach(function() {
+            confirmService.confirmDestroy.andReturn($q.when(true));
+            vm.removeHomeFacility();
+            $rootScope.$apply();
+        });
+
+        it('should show confirm modal', function() {
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith('adminUserForm.removeHomeFacility.question', 'adminUserForm.removeHomeFacility.label');
+        });
+
+        it('should remove home facility from user json', function() {
+            expect(vm.user.homeFacility).toBe(undefined);
+        });
+
+        it('should remove home facility role assignments', function() {
+            expect(vm.user.roleAssignments.length).toBe(1);
+            expect(vm.user.roleAssignments[0].programCode).toBe(undefined);
         });
     });
 });
