@@ -30,11 +30,11 @@
 
         controller.$inject = [
             'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService',
-            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope', '$q'
+            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope', '$q', 'confirmService'
         ];
 
         function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService,
-                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope, $q) {
+                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope, $q, confirmService) {
 
         var vm = this;
 
@@ -373,10 +373,12 @@
          * @param {Object} roleAssignment the role assignment to be removed
          */
         function removeRole(roleAssignment) {
-            var index = vm.user.roleAssignments.indexOf(roleAssignment);
-            if(index < 0) return;
-            vm.user.roleAssignments.splice(index, 1);
-            reloadTable();
+            confirmService.confirmDestroy('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label').then(function() {
+                var index = vm.user.roleAssignments.indexOf(roleAssignment);
+                if(index < 0) return;
+                vm.user.roleAssignments.splice(index, 1);
+                reloadTable();
+            });
         }
 
         /**

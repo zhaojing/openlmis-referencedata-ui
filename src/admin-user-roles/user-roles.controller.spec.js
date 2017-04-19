@@ -15,7 +15,7 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService,
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService, confirmService,
         scope, vm, user, roles, supervisoryNodes, warehouses, programs;
 
     beforeEach(function() {
@@ -29,6 +29,11 @@ describe('UserRolesController', function() {
             notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
             $provide.service('notificationService', function() {
                 return notificationService;
+            });
+
+            confirmService = jasmine.createSpyObj('confirmService', ['confirmDestroy']);
+            $provide.service('confirmService', function() {
+                return confirmService;
             });
 
             loadingModalService = jasmine.createSpyObj('loadingModalService', ['close', 'open']);
@@ -355,17 +360,29 @@ describe('UserRolesController', function() {
         });
     });
 
-    describe('remove role', function() {
+    describe('removeRole', function() {
+
+        var roleAssignmentsCount;
+
+        beforeEach(function() {
+            confirmService.confirmDestroy.andReturn($q.when(true));
+            roleAssignmentsCount = vm.user.roleAssignments.length;
+        });
+
+        it('should show confirm modal', function() {
+            vm.removeRole(vm.user.roleAssignments[0]);
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label');
+        });
 
         it('should remove role assignment if it exists', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
             vm.removeRole(vm.user.roleAssignments[0]);
+            $rootScope.$apply();
             expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount - 1);
         });
 
         it('should not remove role assignment if it does not exists', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
             vm.removeRole('roleAssignment');
+            $rootScope.$apply();
             expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
         });
     });
