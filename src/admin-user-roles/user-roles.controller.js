@@ -436,13 +436,16 @@
             });
 
             vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
+
+            if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0].code;
+            if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0].id;
         }
 
         function clearSelectedValues() {
             vm.selectedProgram = undefined;
             vm.selectedSupervisoryNode = undefined;
-            vm.selectedWarehouse = undefined;
-            vm.selectedRole = undefined;
+            if(vm.warehouses.length !== 1) vm.selectedWarehouse = undefined;
+            if(vm.filteredRoles.length !== 1) vm.selectedRole = undefined;
         }
 
         function isNewRoleInvalid() {
