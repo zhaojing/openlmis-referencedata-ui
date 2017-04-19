@@ -30,11 +30,11 @@
 
         controller.$inject = [
             'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService',
-            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope', '$q', 'confirmService'
+            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope', '$q'
         ];
 
         function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService,
-                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope, $q, confirmService) {
+                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope, $q) {
 
         var vm = this;
 
@@ -373,12 +373,10 @@
          * @param {Object} roleAssignment the role assignment to be removed
          */
         function removeRole(roleAssignment) {
-            confirmService.confirmDestroy('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label').then(function() {
-                var index = vm.user.roleAssignments.indexOf(roleAssignment);
-                if(index < 0) return;
-                vm.user.roleAssignments.splice(index, 1);
-                reloadTable();
-            });
+            var index = vm.user.roleAssignments.indexOf(roleAssignment);
+            if(index < 0) return;
+            vm.user.roleAssignments.splice(index, 1);
+            reloadTable();
         }
 
         /**
@@ -438,18 +436,13 @@
             });
 
             vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
-
-            if(vm.programs.length === 1) vm.selectedProgram = vm.programs[0].code;
-            if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0].code;
-            if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0].id;
-            if(vm.unusedSupervisoryNodes.length === 1) vm.selectedSupervisoryNode = vm.unusedSupervisoryNodes[0].code;
         }
 
         function clearSelectedValues() {
-            if(vm.programs.length !== 1) vm.selectedProgram = undefined;
-            if(vm.warehouses.length !== 1) vm.selectedWarehouse = undefined;
-            if(vm.filteredRoles.length !== 1) vm.selectedRole = undefined;
-            if(vm.unusedSupervisoryNodes.length !== 1) vm.selectedSupervisoryNode = undefined;
+            vm.selectedProgram = undefined;
+            vm.selectedSupervisoryNode = undefined;
+            vm.selectedWarehouse = undefined;
+            vm.selectedRole = undefined;
         }
 
         function isNewRoleInvalid() {

@@ -12,8 +12,7 @@
     "adminUserRoles.role": "Role",
     "adminUserRoles.actions": "Actions",
     "adminUserRoles.addRole": "Add role",
-    "adminUserRoles.removeRole.label": "Remove role",
-    "adminUserRoles.removeRole.question": "Selected role assignments will be removed. Are you sure?",
+    "adminUserRoles.removeRole": "Remove role",
     "adminUserRoles.saveUserRoles": "Save user roles",
     "adminUserRoles.cancel": "Cancel",
     "adminUserRoles.user": "User"
