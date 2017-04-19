@@ -23,7 +23,7 @@
 
 	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('administration.users.roles', {
+		$stateProvider.state('openlmis.administration.users.roles', {
 			label: 'adminUserForm.addEditUser',
 			url: '/users/:id/roles',
 			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
