@@ -58,7 +58,7 @@
          * @param   {String}    type    the template name
          */
         function selectType(type) {
-            $state.go('administration.roles.createUpdate', {
+            $state.go('openlmis.administration.roles.createUpdate', {
                 type: type
             });
         }
