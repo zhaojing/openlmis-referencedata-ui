@@ -28,9 +28,6 @@
         'openlmis-modal',
         'openlmis-rights',
         'referencedata-facility',
-        'referencedata-program',
-        'referencedata-role',
-        'referencedata-supervisory-node',
         'referencedata-user',
         'ui.router'
     ]);

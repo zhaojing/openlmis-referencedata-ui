@@ -23,31 +23,17 @@
 
 	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('administration.users.form', {
+		$stateProvider.state('openlmis.administration.users.form', {
 			label: 'adminUserForm.addEditUser',
 			url: '/users/form/:id',
 			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
 			resolve: {
-				roles: function(referencedataRoleFactory) {
-					return referencedataRoleFactory.getAllWithType();
-				},
-				programs: function(programService) {
-					return programService.getAll();
-				},
-				supervisoryNodes: function(supervisoryNodeFactory) {
-					return supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay();
-				},
-				warehouses: function(facilityService) {
+				facilities: function(facilityService) {
 					return facilityService.getAll();
 				},
-				user: function($q, referencedataUserService, userRoleAssignmentFactory, $stateParams, roles) {
+				user: function(referencedataUserService, $stateParams) {
                     if($stateParams.id) {
-						var deferred = $q.defer();
-						referencedataUserService.get($stateParams.id).then(function(user) {
-							userRoleAssignmentFactory.addTypeToRoleAssignments(user.roleAssignments, roles);
-							deferred.resolve(user);
-						}, deferred.reject);
-						return deferred.promise;
+						return referencedataUserService.get($stateParams.id);
 					}
                     return undefined;
 				}
