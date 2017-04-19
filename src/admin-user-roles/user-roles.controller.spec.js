@@ -15,7 +15,7 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService,
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService, confirmService,
         scope, vm, user, roles, supervisoryNodes, warehouses, programs;
 
     beforeEach(function() {
@@ -24,6 +24,11 @@ describe('UserRolesController', function() {
             referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['saveUser']);
             $provide.service('referencedataUserService', function() {
                 return referencedataUserService;
+            });
+
+            confirmService = jasmine.createSpyObj('confirmService', ['confirmDestroy']);
+            $provide.service('confirmService', function() {
+                return confirmService;
             });
 
             notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
@@ -320,6 +325,7 @@ describe('UserRolesController', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedRole = roles[2].id;
+            vm.selectedSupervisoryNode = undefined;
 
             vm.addRole();
 
@@ -327,7 +333,7 @@ describe('UserRolesController', function() {
             expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.supervisionInvalid');
         });
 
-        it('should display error notification if supervision role is invalid', function() {
+        it('should display error notification if fulfillment role is invalid', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedType = 1;
@@ -355,17 +361,29 @@ describe('UserRolesController', function() {
         });
     });
 
-    describe('remove role', function() {
+    describe('removeRole', function() {
+
+        var roleAssignmentsCount;
+
+        beforeEach(function() {
+            confirmService.confirmDestroy.andReturn($q.when(true));
+            roleAssignmentsCount = vm.user.roleAssignments.length;
+        });
+
+        it('should show confirm modal', function() {
+            vm.removeRole(vm.user.roleAssignments[0]);
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label');
+        });
 
         it('should remove role assignment if it exists', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
             vm.removeRole(vm.user.roleAssignments[0]);
+            $rootScope.$apply();
             expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount - 1);
         });
 
         it('should not remove role assignment if it does not exists', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
             vm.removeRole('roleAssignment');
+            $rootScope.$apply();
             expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
         });
     });
