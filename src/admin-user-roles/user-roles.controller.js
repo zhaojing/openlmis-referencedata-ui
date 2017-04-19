@@ -438,13 +438,18 @@
             });
 
             vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
+
+            if(vm.programs.length === 1) vm.selectedProgram = vm.programs[0].code;
+            if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0].code;
+            if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0].id;
+            if(vm.unusedSupervisoryNodes.length === 1) vm.selectedSupervisoryNode = vm.unusedSupervisoryNodes[0].code;
         }
 
         function clearSelectedValues() {
-            vm.selectedProgram = undefined;
-            vm.selectedSupervisoryNode = undefined;
-            vm.selectedWarehouse = undefined;
-            vm.selectedRole = undefined;
+            if(vm.programs.length !== 1) vm.selectedProgram = undefined;
+            if(vm.warehouses.length !== 1) vm.selectedWarehouse = undefined;
+            if(vm.filteredRoles.length !== 1) vm.selectedRole = undefined;
+            if(vm.unusedSupervisoryNodes.length !== 1) vm.selectedSupervisoryNode = undefined;
         }
 
         function isNewRoleInvalid() {

@@ -325,6 +325,7 @@ describe('UserRolesController', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedRole = roles[2].id;
+            vm.selectedSupervisoryNode = undefined;
 
             vm.addRole();
 
@@ -332,7 +333,7 @@ describe('UserRolesController', function() {
             expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.supervisionInvalid');
         });
 
-        it('should display error notification if supervision role is invalid', function() {
+        it('should display error notification if fulfillment role is invalid', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedType = 1;
