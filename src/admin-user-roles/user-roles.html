@@ -57,7 +57,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="roleAssignment in vm.filteredRoleAssignments">
+                            <tr ng-repeat="roleAssignment in vm.filteredRoleAssignments | orderBy : '$name'">
                                 <td ng-if="vm.isSupervisionType()">
                                     {{vm.getProgramName(roleAssignment.programCode)}}
                                 </td>
@@ -67,7 +67,7 @@
                                 <td ng-if="vm.isFulfillmentType()">
                                     {{vm.getWarehouseName(roleAssignment.warehouseCode)}}
                                 </td>
-                                <td>{{vm.getRoleName(roleAssignment.roleId)}}</td>
+                                <td>{{roleAssignment.$name}}</td>
                                 <td>
                                     <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole.label' | message}}</button>
                                 </td>

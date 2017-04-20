@@ -62,17 +62,24 @@ describe('userRoleAssignmentFactory', function() {
         ];
     });
 
-    describe('addTypeToRoleAssignments', function() {
+    describe('addInfoToRoleAssignments', function() {
 
-        it('should expose addTypeToRoleAssignments method', function() {
-            expect(angular.isFunction(userRoleAssignmentFactory.addTypeToRoleAssignments)).toBe(true);
+        it('should expose addInfoToRoleAssignments method', function() {
+            expect(angular.isFunction(userRoleAssignmentFactory.addInfoToRoleAssignments)).toBe(true);
         });
 
         it('should set types property for all roles', function() {
-            userRoleAssignmentFactory.addTypeToRoleAssignments(roleAssignments, roles);
+            userRoleAssignmentFactory.addInfoToRoleAssignments(roleAssignments, roles);
             expect(roleAssignments[0].$type).toEqual(roles[0].rights[0].type);
             expect(roleAssignments[1].$type).toEqual(roles[0].rights[0].type);
             expect(roleAssignments[2].$type).toEqual(roles[1].rights[0].type);
+        });
+
+        it('should set names property for all roles', function() {
+            userRoleAssignmentFactory.addInfoToRoleAssignments(roleAssignments, roles);
+            expect(roleAssignments[0].$name).toEqual(roles[0].name);
+            expect(roleAssignments[1].$name).toEqual(roles[0].name);
+            expect(roleAssignments[2].$name).toEqual(roles[1].name);
         });
     });
 });

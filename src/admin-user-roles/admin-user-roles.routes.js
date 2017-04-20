@@ -44,7 +44,7 @@
 					var deferred = $q.defer();
 
 					referencedataUserService.get($stateParams.id).then(function(user) {
-						userRoleAssignmentFactory.addTypeToRoleAssignments(user.roleAssignments, roles);
+						userRoleAssignmentFactory.addInfoToRoleAssignments(user.roleAssignments, roles);
 						deferred.resolve(user);
 					}, deferred.reject);
 

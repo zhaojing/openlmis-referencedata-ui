@@ -39,7 +39,6 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.getRoleName = getRoleName;
         vm.getProgramName = getProgramName;
         vm.getSupervisoryNodeName = getSupervisoryNodeName;
         vm.getWarehouseName = getWarehouseName;
@@ -276,26 +275,6 @@
             if(!warehouseCode) return undefined;
             var filtered = $filter('filter')(vm.warehouses, {
                 code: warehouseCode
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].name;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name getRoleName
-         *
-         * @description
-         * Returns name of the role.
-         *
-         * @param  {String} roleId the role UUID
-         * @return {String}        the role name
-         */
-        function getRoleName(roleId) {
-            if(!roleId) return undefined;
-            var filtered = $filter('filter')(vm.roles, {
-                id: roleId
             }, true);
             if(!filtered || filtered.length < 1) return undefined;
             return filtered[0].name;

@@ -33,13 +33,13 @@
     function factory($filter) {
 
         return {
-            addTypeToRoleAssignments: addTypeToRoleAssignments
+            addInfoToRoleAssignments: addInfoToRoleAssignments
         };
 
         /**
          * @ngdoc method
          * @methodOf admin-user-form.userRoleAssignmentFactory
-         * @name addTypeToRoleAssignments
+         * @name addInfoToRoleAssignments
          *
          * @description
          * Adds role type property to user role assignments based on given roles.
@@ -47,13 +47,18 @@
          * @param {Array} roleAssignments array of role assignments
          * @param {Array} roles           array of roles
          */
-        function addTypeToRoleAssignments(roleAssignments, roles) {
+        function addInfoToRoleAssignments(roleAssignments, roles) {
             angular.forEach(roleAssignments, function(roleAssignment) {
                 var filteredRoles = $filter('filter')(roles, {
                     id: roleAssignment.roleId
                 }, true);
-                if(filteredRoles.length > 0) roleAssignment.$type = filteredRoles[0].rights[0].type;
-                else roleAssignment.$type = '';
+                if(filteredRoles.length > 0) {
+                    roleAssignment.$type = filteredRoles[0].rights[0].type;
+                    roleAssignment.$name = filteredRoles[0].name;
+                } else {
+                    roleAssignment.$type = '';
+                    roleAssignment.$name = '';
+                }
             });
         }
     }

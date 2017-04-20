@@ -135,10 +135,6 @@ describe('UserRolesController', function() {
 
     describe('on init', function() {
 
-        it('should expose getRoleName method', function() {
-            expect(angular.isFunction(vm.getRoleName)).toBe(true);
-        });
-
         it('should expose getProgramName method', function() {
             expect(angular.isFunction(vm.getProgramName)).toBe(true);
         });
@@ -265,17 +261,6 @@ describe('UserRolesController', function() {
 
         it('should return undefined if warehouse code does not exists', function() {
             expect(vm.getWarehouseName('some-code')).toEqual(undefined);
-        });
-    });
-
-    describe('getRoleName', function() {
-
-        it('should return role name if exists', function() {
-            expect(vm.getRoleName(roles[0].id)).toEqual(roles[0].name);
-        });
-
-        it('should return undefined if role id does not exists', function() {
-            expect(vm.getRoleName('some-code')).toEqual(undefined);
         });
     });
 
