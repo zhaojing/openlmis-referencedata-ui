@@ -148,7 +148,7 @@
          *
          * @description
          * Displays confirm modal for deleting home facility.
-         * After confirmation removes home facility and all
+         * After confirmation removes home facility and all role assignments for home facility.
          */
         function removeHomeFacility() {
             confirmService.confirmDestroy('adminUserForm.removeHomeFacility.question', 'adminUserForm.removeHomeFacility.label').then(function() {
