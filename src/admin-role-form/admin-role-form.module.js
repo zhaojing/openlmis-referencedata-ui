@@ -16,6 +16,12 @@
 
     'use strict';
 
+    /**
+     * @module admin-role-form
+     *
+     * @description
+     * Provides base admin-role state and controller for adding/updating user info.
+     */
     angular.module('admin-role-form', [
         'openlmis-i18n',
         'openlmis-modal',

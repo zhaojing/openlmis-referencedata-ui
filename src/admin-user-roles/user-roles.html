@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label for="role">{{'adminUserRoles.role' | message}}</label>
                         <select id="role" ng-model="vm.selectedRole"
-                            ng-options="role.id as role.name for role in vm.filteredRoles" required>
+                            ng-options="role as role.name for role in vm.filteredRoles" required>
                         </select>
                     </div>
                     <input type="submit" class="primary" value="{{'adminUserRoles.addRole' | message}}"></input>
