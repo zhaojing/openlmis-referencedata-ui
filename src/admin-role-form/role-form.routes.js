@@ -23,6 +23,7 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.roles.createUpdate', {
+            label: 'adminRoleForm.createUpdateRole',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
                 role: function($stateParams, referencedataRoleService) {
@@ -31,7 +32,7 @@
                 type: function(role, $state, $stateParams) {
                     if (role) return role.rights[0].type;
                     if ($stateParams.type) return $stateParams.type;
-                    $state.go('administration.roles.selectType');
+                    $state.go('openlmis.administration.roles.selectType');
                 },
                 rights: function($q, $filter, role, type, referencedataRightService) {
                     var deferred = $q.defer();
@@ -53,7 +54,7 @@
             },
             url: '/:roleId',
             views: {
-                '@': {
+                '@openlmis': {
                     controller: 'RoleFormController',
                     templateUrl: 'admin-role-form/role-form.html',
                     controllerAs: 'vm',

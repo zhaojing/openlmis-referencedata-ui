@@ -23,6 +23,7 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.roles.selectType', {
+            label: 'adminRoleForm.createUpdateRole',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
                 types: function($filter, referencedataRightService, $q) {
@@ -37,7 +38,7 @@
             },
             url: '/:roleId/selectType',
             views: {
-                '@': {
+                '@openlmis': {
                     controller: 'TypeFormController',
                     templateUrl: 'admin-role-form/type-form.html',
                     controllerAs: 'vm',

@@ -39,7 +39,7 @@
 				}
 			},
 			views: {
-                '@': {
+                '@openlmis': {
                     controller: 'UserFormController',
                     templateUrl: 'admin-user-form/user-form.html',
                     controllerAs: 'vm',

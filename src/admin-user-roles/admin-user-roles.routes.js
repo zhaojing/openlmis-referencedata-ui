@@ -52,7 +52,7 @@
 				}
 			},
 			views: {
-                '@': {
+                '@openlmis': {
                     controller: 'UserRolesController',
                     templateUrl: 'admin-user-roles/user-roles.html',
                     controllerAs: 'vm',

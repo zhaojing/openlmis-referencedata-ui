@@ -1,43 +1,41 @@
-<div class="page">
-    <h2>{{'adminUserForm.addEditUser' | message}}</h2>
-    <section class="openlmis-table-container">
-        <form id="newUserForm"class="user-form" ng-submit="vm.saveUser()">
-            <label for="username">{{'adminUserForm.username' | message}}</label>
-            <input id="username" ng-model="vm.user.username" type="text" required/>
-            <label for="email">{{'adminUserForm.email' | message}}</label>
-            <input id="email" ng-model="vm.user.email" type="text" />
-            <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
-            <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
-            <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
-            <input id="lastName" ng-model="vm.user.lastName" type="text" required/>
-            <fieldset class="form-group">
-                <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
-                <label class="radio">
-                    <input type="radio" ng-model="vm.user.loginRestricted"
-                        ng-value="true" required/>
-                    {{'adminUserForm.yes' | message}}
-                </label>
-                <label class="radio">
-                    <input type="radio" ng-model="vm.user.loginRestricted"
-                        ng-value="false" required/>
-                    {{'adminUserForm.no' | message}}
-                </label>
-            </fieldset>
-            <label>
-                <span>{{'adminUserForm.emailVerified' | message}}</span>
-                <span ng-if="vm.user.verified">{{'adminUserForm.yes' | message}}</span>
-                <span ng-if="!vm.user.verified">{{'adminUserForm.no' | message}}</span>
+<h2>{{'adminUserForm.addEditUser' | message}}</h2>
+<section class="openlmis-table-container">
+    <form id="newUserForm"class="user-form" ng-submit="vm.saveUser()">
+        <label for="username">{{'adminUserForm.username' | message}}</label>
+        <input id="username" ng-model="vm.user.username" type="text" required/>
+        <label for="email">{{'adminUserForm.email' | message}}</label>
+        <input id="email" ng-model="vm.user.email" type="text" />
+        <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
+        <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
+        <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
+        <input id="lastName" ng-model="vm.user.lastName" type="text" required/>
+        <fieldset class="form-group">
+            <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
+            <label class="radio">
+                <input type="radio" ng-model="vm.user.loginRestricted"
+                    ng-value="true" required/>
+                {{'adminUserForm.yes' | message}}
             </label>
-            <label>{{'adminUserForm.homeFacility' | message}}</label>
-            <select id="homeFacility" ng-model="vm.user.homeFacility"
-                ng-options="vm.getFacilityDisplay(facility) for facility in vm.facilities track by facility.id"
-                ng-required="vm.user.homeFacility && vm.user.homeFacility.code"
-                no-auto-select="true">
-            </select>
-            <input type="button" ng-if="vm.user.homeFacility.code" ng-click="vm.removeHomeFacility()" class="danger"
-                value="{{'adminUserForm.removeHomeFacility.label' | message}}"/>
-            <input form="newUserForm" type="submit"
-                value="{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}"/>
-        </form>
-    </section>
-</div>
+            <label class="radio">
+                <input type="radio" ng-model="vm.user.loginRestricted"
+                    ng-value="false" required/>
+                {{'adminUserForm.no' | message}}
+            </label>
+        </fieldset>
+        <label>
+            <span>{{'adminUserForm.emailVerified' | message}}</span>
+            <span ng-if="vm.user.verified">{{'adminUserForm.yes' | message}}</span>
+            <span ng-if="!vm.user.verified">{{'adminUserForm.no' | message}}</span>
+        </label>
+        <label>{{'adminUserForm.homeFacility' | message}}</label>
+        <select id="homeFacility" ng-model="vm.user.homeFacility"
+            ng-options="vm.getFacilityDisplay(facility) for facility in vm.facilities track by facility.id"
+            ng-required="vm.user.homeFacility && vm.user.homeFacility.code"
+            no-auto-select="true">
+        </select>
+        <input type="button" ng-if="vm.user.homeFacility.code" ng-click="vm.removeHomeFacility()" class="danger"
+            value="{{'adminUserForm.removeHomeFacility.label' | message}}"/>
+        <input form="newUserForm" type="submit"
+            value="{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}"/>
+    </form>
+</section>

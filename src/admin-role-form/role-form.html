@@ -1,23 +1,21 @@
-<div class="page">
-    <h2>{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</h2>
-    <form ng-submit="vm.saveRole()">
-        <label>
-            <span>{{'adminRoleForm.type' | message}}</span>
-            <span>{{vm.getLabel(vm.type)}}</span>
+<h2>{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</h2>
+<form ng-submit="vm.saveRole()">
+    <label>
+        <span>{{'adminRoleForm.type' | message}}</span>
+        <span>{{vm.getLabel(vm.type)}}</span>
+    </label>
+    <label>{{'adminRoleForm.name' | message}}</label>
+    <input class="form-control" ng-model="vm.role.name" required/>
+    <label>{{'adminRoleForm.description' | message}}</label>
+    <textarea ng-model="vm.role.description" required></textarea>
+    <fieldset class="form-group">
+        <legend>Rights</legend>
+        <label ng-repeat="right in vm.rights">
+           <input type="checkbox" ng-model="right.checked" ng-required="vm.isNoneSelected()"/>
+           {{vm.getMessage(right.name)}}
         </label>
-        <label>{{'adminRoleForm.name' | message}}</label>
-        <input class="form-control" ng-model="vm.role.name" required/>
-        <label>{{'adminRoleForm.description' | message}}</label>
-        <textarea ng-model="vm.role.description" required></textarea>
-        <fieldset class="form-group">
-    		<legend>Rights</legend>
-            <label ng-repeat="right in vm.rights">
-               <input type="checkbox" ng-model="right.checked" ng-required="vm.isNoneSelected()"/>
-               {{vm.getMessage(right.name)}}
-            </label>
-    	</fieldset>
-        <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
-        <input type="submit"
-            value="{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}"/>
-    </form>
-</div>
+    </fieldset>
+    <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
+    <input type="submit"
+        value="{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}"/>
+</form>

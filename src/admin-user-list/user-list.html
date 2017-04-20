@@ -1,47 +1,45 @@
-<div class="page">
-    <h2>{{'adminUserList.users.label' | message}}</h2>
-    <section class="openlmis-table-container">
-        <button ui-sref="administration.users.form" class="primary">{{'adminUserList.addUser' | message}}</button>
-        <form ng-submit="vm.search()">
-            <fieldset class="form-group">
-                <adminUserList for="firstName">{{'adminUserList.firstName' | message}}</adminUserList>
-                <input type="text" id="firstName" ng-model="vm.firstName"/>
-            </fieldset>
-            <fieldset class="form-group">
-                <adminUserList for="lastName">{{'adminUserList.lastName' | message}}</adminUserList>
-                <input type="text" id="lastName" ng-model="vm.lastName"/>
-            </fieldset>
-            <fieldset class="form-group">
-                <adminUserList for="email">{{'adminUserList.email' | message}}</adminUserList>
-                <input type="text" id="email" ng-model="vm.email"/>
-            </fieldset>
-            <input type="submit" value="{{'adminUserList.search'|message}}"/>
-        </form>
-        <table>
-            <caption ng-if="!vm.users || vm.users.length === 0">
-                {{'adminUserList.users.error' | message}}
-            </caption>
-            <thead>
-                <tr>
-                    <th>{{'adminUserList.name' | message}}</th>
-                    <th>{{'adminUserList.username' | message}}</th>
-                    <th>{{'adminUserList.email' | message}}</th>
-                    <th>{{'adminUserList.actions' | message}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="user in vm.users">
-                    <td>{{user.firstName}} {{user.lastName}}</td>
-                    <td>{{user.username}}</td>
-                    <td>{{user.email}}</td>
-                    <td>
-                        <a ui-sref="openlmis.administration.users.form({id: user.id})">{{'adminUserList.edit' | message}}</a>
-                        <a ui-sref="openlmis.administration.users.roles({id: user.id})">{{'adminUserList.roles' | message}}</a>
-                        <a ng-click="vm.resetUserPassword(user.username)">{{'adminUserList.resetPassword' | message}}</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <openlmis-pagination/>
-    </section>
-</div>
+<h2>{{'adminUserList.users.label' | message}}</h2>
+<section class="openlmis-table-container">
+    <button ui-sref="openlmis.administration.users.form" class="primary">{{'adminUserList.addUser' | message}}</button>
+    <form ng-submit="vm.search()">
+        <fieldset class="form-group">
+            <adminUserList for="firstName">{{'adminUserList.firstName' | message}}</adminUserList>
+            <input type="text" id="firstName" ng-model="vm.firstName"/>
+        </fieldset>
+        <fieldset class="form-group">
+            <adminUserList for="lastName">{{'adminUserList.lastName' | message}}</adminUserList>
+            <input type="text" id="lastName" ng-model="vm.lastName"/>
+        </fieldset>
+        <fieldset class="form-group">
+            <adminUserList for="email">{{'adminUserList.email' | message}}</adminUserList>
+            <input type="text" id="email" ng-model="vm.email"/>
+        </fieldset>
+        <input type="submit" value="{{'adminUserList.search'|message}}"/>
+    </form>
+    <table>
+        <caption ng-if="!vm.users || vm.users.length === 0">
+            {{'adminUserList.users.error' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminUserList.name' | message}}</th>
+                <th>{{'adminUserList.username' | message}}</th>
+                <th>{{'adminUserList.email' | message}}</th>
+                <th>{{'adminUserList.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="user in vm.users">
+                <td>{{user.firstName}} {{user.lastName}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                    <a ui-sref="openlmis.administration.users.form({id: user.id})">{{'adminUserList.edit' | message}}</a>
+                    <a ui-sref="openlmis.administration.users.roles({id: user.id})">{{'adminUserList.roles' | message}}</a>
+                    <a ng-click="vm.resetUserPassword(user.username)">{{'adminUserList.resetPassword' | message}}</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination/>
+</section>
