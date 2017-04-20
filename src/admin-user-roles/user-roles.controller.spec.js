@@ -297,7 +297,7 @@ describe('UserRolesController', function() {
         it('should display error notification if role is already assigned', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
-            vm.selectedRole = roles[1];
+            vm.selectedRole = roles[1].id;
             vm.selectedType = 3;
 
             vm.addRole();
@@ -309,7 +309,7 @@ describe('UserRolesController', function() {
         it('should display error notification if supervision role is invalid', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
-            vm.selectedRole = roles[2];
+            vm.selectedRole = roles[2].id;
             vm.selectedSupervisoryNode = undefined;
 
             vm.addRole();
@@ -322,7 +322,7 @@ describe('UserRolesController', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedType = 1;
-            vm.selectedRole = roles[3];
+            vm.selectedRole = roles[3].id;
 
             vm.addRole();
 
@@ -333,7 +333,7 @@ describe('UserRolesController', function() {
         it('should add new supervision role assignment', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
-            vm.selectedRole = roles[2];
+            vm.selectedRole = roles[2].id;
             vm.selectedSupervisoryNode = supervisoryNodes[1].code;
 
             vm.addRole();
