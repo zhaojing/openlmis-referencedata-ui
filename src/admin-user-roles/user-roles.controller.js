@@ -153,10 +153,10 @@
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
          * @name selectedRole
-         * @type {String}
+         * @type {Object}
          *
          * @description
-         * Contains selected role UUID.
+         * Contains selected role.
          */
         vm.selectedRole = undefined;
 
@@ -320,7 +320,7 @@
 
             if(!invalidMessage) {
                 var roleAssignment = {
-                    roleId: vm.selectedRole
+                    roleId: vm.selectedRole.id
                 };
                 if(isSupervisionType()) {
                     roleAssignment.supervisoryNodeCode = vm.selectedSupervisoryNode;
@@ -329,6 +329,7 @@
                     roleAssignment.warehouseCode = vm.selectedWarehouse;
                 }
                 roleAssignment.$type = vm.types[vm.selectedType].name;
+                roleAssignment.$name = vm.selectedRole.name;
                 user.roleAssignments.push(roleAssignment);
                 reloadTable();
                 clearSelectedValues();
@@ -419,7 +420,7 @@
             vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
 
             if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0].code;
-            if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0].id;
+            if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0];
         }
 
         function clearSelectedValues() {
@@ -440,7 +441,7 @@
             if(!vm.selectedRole) return false;
             var alreadyExist = false;
             angular.forEach(vm.user.roleAssignments, function(role) {
-                var isEqual = vm.selectedRole === role.roleId;
+                var isEqual = vm.selectedRole.id === role.roleId;
                 if(isSupervisionType()) {
                     isEqual = isEqual &&
                         vm.selectedSupervisoryNode === role.supervisoryNodeCode &&
