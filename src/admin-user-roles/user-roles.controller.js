@@ -388,8 +388,11 @@
                 var isEqual = vm.selectedRole.id === role.roleId;
                 if(isSupervisionType()) {
                     isEqual = isEqual &&
-                        vm.selectedSupervisoryNode.code === role.supervisoryNodeCode &&
                         vm.selectedProgram.code === role.programCode;
+
+                    if(vm.selectedSupervisoryNode)
+                        isEqual = isEqual &&
+                            vm.selectedSupervisoryNode.code === role.supervisoryNodeCode;
                 }
                 else if(isFulfillmentType()) {
                     isEqual = isEqual &&
