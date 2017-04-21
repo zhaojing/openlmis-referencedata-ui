@@ -1,6 +1,6 @@
 <h2>{{'adminUserRoles.editUserRoles' | message}}</h2>
 <h3>{{'adminUserRoles.user' | message}}: {{vm.user.username}}</h3>
-<nav>
+<nav class="user-roles">
     <ul bs-active-pane="vm.selectedType" bs-tabs>
         <li ng-repeat="type in vm.types" bs-pane
             data-title="{{type.displayName | message}}">
