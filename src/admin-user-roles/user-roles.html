@@ -8,23 +8,21 @@
                 <div class="form-group" ng-if="vm.isSupervisionType()">
                     <label for="program">{{'adminUserRoles.program' | message}}</label>
                     <select id="program" ng-model="vm.selectedProgram"
-                        ng-options="program.code as program.name for program in vm.programs"
-                        ng-required="!vm.selectedSupervisoryNode && !vm.selectedProgram"
-                        no-auto-select="true">
+                        ng-options="program as program.name for program in vm.programs"
+                        required>
                     </select>
                 </div>
                 <div class="form-group" ng-if="vm.isSupervisionType() && vm.unusedSupervisoryNodes && vm.unusedSupervisoryNodes.length > 0">
                     <label for="supervisoryNode">{{'adminUserRoles.supervisoryNode' | message}}</label>
                     <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
-                        ng-options="supervisoryNode.code as supervisoryNode.$display for supervisoryNode in vm.unusedSupervisoryNodes"
-                        ng-required="!vm.selectedProgram && !vm.selectedSupervisoryNode"
+                        ng-options="supervisoryNode as supervisoryNode.$display for supervisoryNode in vm.unusedSupervisoryNodes"
                         no-auto-select="true">
                     </select>
                 </div>
                 <div class="form-group" ng-if="vm.isFulfillmentType()">
                     <label for="warehouse">{{'adminUserRoles.warehouse' | message}}</label>
                     <select id="warehouse" ng-model="vm.selectedWarehouse" required
-                        ng-options="warehouse.code as warehouse.name for warehouse in vm.warehouses">
+                        ng-options="warehouse as warehouse.name for warehouse in vm.warehouses">
                     </select>
                 </div>
                 <div class="form-group">
@@ -58,15 +56,15 @@
                     <tbody>
                         <tr ng-repeat="roleAssignment in vm.filteredRoleAssignments | orderBy : '$name'">
                             <td ng-if="vm.isSupervisionType()">
-                                {{vm.getProgramName(roleAssignment.programCode)}}
+                                {{roleAssignment.$programName}}
                             </td>
                             <td ng-if="vm.isSupervisionType()">
-                                {{vm.getSupervisoryNodeName(roleAssignment.supervisoryNodeCode)}}
+                                {{roleAssignment.$supervisoryNodeName}}
                             </td>
                             <td ng-if="vm.isFulfillmentType()">
-                                {{vm.getWarehouseName(roleAssignment.warehouseCode)}}
+                                {{roleAssignment.$warehouseName}}
                             </td>
-                            <td>{{roleAssignment.$name}}</td>
+                            <td>{{roleAssignment.$roleName}}</td>
                             <td>
                                 <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole.label' | message}}</button>
                             </td>

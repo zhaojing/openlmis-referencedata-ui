@@ -2,7 +2,7 @@
     "adminUserRoles.updateSuccessful": "User roles updated successfully!",
     "adminUserRoles.updateFailed": "Failed to update user roles",
     "adminUserRoles.roleAlreadyAssigned": "This role is already assigned!",
-    "adminUserRoles.supervisionInvalid": "Supervision role assignment requires supervisory node or program selected!",
+    "adminUserRoles.supervisionInvalid": "Supervision role assignment requires selected program!",
     "adminUserRoles.fulfillmentInvalid": "Fulfillment role assignment requires selected warehouse!",
     "adminUserRoles.editUserRoles": "Edit user roles",
     "adminUserRoles.noRolesAssigned": "No roles assigned",

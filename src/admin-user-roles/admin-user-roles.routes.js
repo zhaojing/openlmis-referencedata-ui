@@ -40,11 +40,11 @@
 				warehouses: function(facilityService) {
 					return facilityService.getAll();
 				},
-				user: function($q, referencedataUserService, userRoleAssignmentFactory, $stateParams, roles) {
+				user: function($q, referencedataUserService, userRoleAssignmentFactory, $stateParams, roles, programs, supervisoryNodes, warehouses) {
 					var deferred = $q.defer();
 
 					referencedataUserService.get($stateParams.id).then(function(user) {
-						userRoleAssignmentFactory.addInfoToRoleAssignments(user.roleAssignments, roles);
+						userRoleAssignmentFactory.addInfoToRoleAssignments(user.roleAssignments, roles, programs, supervisoryNodes, warehouses);
 						deferred.resolve(user);
 					}, deferred.reject);
 

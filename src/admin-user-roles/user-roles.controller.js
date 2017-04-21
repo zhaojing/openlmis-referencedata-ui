@@ -39,9 +39,6 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.getProgramName = getProgramName;
-        vm.getSupervisoryNodeName = getSupervisoryNodeName;
-        vm.getWarehouseName = getWarehouseName;
         vm.removeRole = removeRole;
         vm.addRole = addRole;
         vm.saveUserRoles = saveUserRoles;
@@ -164,10 +161,10 @@
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
          * @name selectedSupervisoryNode
-         * @type {String}
+         * @type {Object}
          *
          * @description
-         * Contains selected supervisory node code.
+         * Contains selected supervisory node.
          */
         vm.selectedSupervisoryNode = undefined;
 
@@ -175,10 +172,10 @@
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
          * @name selectedProgram
-         * @type {String}
+         * @type {Object}
          *
          * @description
-         * Contains selected program code.
+         * Contains selected program.
          */
         vm.selectedProgram = undefined;
 
@@ -186,10 +183,10 @@
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
          * @name selectedWarehouse
-         * @type {String}
+         * @type {Object}
          *
          * @description
-         * Contains selected warehouse code.
+         * Contains selected warehouse.
          */
         vm.selectedWarehouse = undefined;
 
@@ -218,66 +215,6 @@
                     clearSelectedValues();
                 }
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name getSupervisoryNodeName
-         *
-         * @description
-         * Returns name of the supervisory node.
-         *
-         * @param  {String} supervisoryNodeCode the supervisory node code
-         * @return {String}                     the supervisory node name
-         */
-        function getSupervisoryNodeName(supervisoryNodeCode) {
-            if(!supervisoryNodeCode) return undefined;
-            var filtered = $filter('filter')(vm.supervisoryNodes, {
-                code: supervisoryNodeCode
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].$display;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name getProgramName
-         *
-         * @description
-         * Returns name of the program.
-         *
-         * @param  {String} programCode the program code
-         * @return {String}             the program name
-         */
-        function getProgramName(programCode) {
-            if(!programCode) return undefined;
-            var filtered = $filter('filter')(vm.programs, {
-                code: programCode
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].name;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name getWarehouseName
-         *
-         * @description
-         * Returns name of the warehouse.
-         *
-         * @param  {String} warehouseCode the warehouse code
-         * @return {String}               the warehouse name
-         */
-        function getWarehouseName(warehouseCode) {
-            if(!warehouseCode) return undefined;
-            var filtered = $filter('filter')(vm.warehouses, {
-                code: warehouseCode
-            }, true);
-            if(!filtered || filtered.length < 1) return undefined;
-            return filtered[0].name;
         }
 
         /**
@@ -320,16 +257,22 @@
 
             if(!invalidMessage) {
                 var roleAssignment = {
-                    roleId: vm.selectedRole.id
+                    roleId: vm.selectedRole.id,
+                    $roleName: vm.selectedRole.name,
+                    $type: vm.types[vm.selectedType].name
                 };
                 if(isSupervisionType()) {
-                    roleAssignment.supervisoryNodeCode = vm.selectedSupervisoryNode;
-                    roleAssignment.programCode = vm.selectedProgram;
+                    roleAssignment.programCode = vm.selectedProgram.code;
+                    roleAssignment.$programName = vm.selectedProgram.name;
+
+                    if(vm.selectedSupervisoryNode) {
+                        roleAssignment.supervisoryNodeCode = vm.selectedSupervisoryNode.code;
+                        roleAssignment.$supervisoryNodeName = vm.selectedSupervisoryNode.$display;
+                    }
                 } else if(isFulfillmentType()) {
-                    roleAssignment.warehouseCode = vm.selectedWarehouse;
+                    roleAssignment.warehouseCode = vm.selectedWarehouse.code;
+                    roleAssignment.$warehouseName = vm.selectedWarehouse.name;
                 }
-                roleAssignment.$type = vm.types[vm.selectedType].name;
-                roleAssignment.$name = vm.selectedRole.name;
                 user.roleAssignments.push(roleAssignment);
                 reloadTable();
                 clearSelectedValues();
@@ -419,7 +362,7 @@
 
             vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
 
-            if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0].code;
+            if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0];
             if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0];
         }
 
@@ -432,7 +375,7 @@
 
         function isNewRoleInvalid() {
             if(roleAlreadyAssigned()) return 'adminUserRoles.roleAlreadyAssigned';
-            if(isSupervisionType() && !(vm.selectedSupervisoryNode || vm.selectedProgram)) return 'adminUserRoles.supervisionInvalid';
+            if(isSupervisionType() && !vm.selectedProgram) return 'adminUserRoles.supervisionInvalid';
             else if(isFulfillmentType() && !vm.selectedWarehouse) return 'adminUserRoles.fulfillmentInvalid';
             return undefined;
         }
@@ -444,12 +387,12 @@
                 var isEqual = vm.selectedRole.id === role.roleId;
                 if(isSupervisionType()) {
                     isEqual = isEqual &&
-                        vm.selectedSupervisoryNode === role.supervisoryNodeCode &&
-                        vm.selectedProgram === role.programCode;
+                        vm.selectedSupervisoryNode.code === role.supervisoryNodeCode &&
+                        vm.selectedProgram.code === role.programCode;
                 }
                 else if(isFulfillmentType()) {
                     isEqual = isEqual &&
-                        vm.selectedWarehouse === role.warehouseCode;
+                        vm.selectedWarehouse.code === role.warehouseCode;
                 }
                 alreadyExist = alreadyExist || isEqual;
             });

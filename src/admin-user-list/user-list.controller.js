@@ -67,8 +67,6 @@
          *
          * @description
          * Reloads page with new search parameters.
-         *
-         * @param {String} username	the username of the user
          */
 		function search() {
 			var stateParams = angular.copy($stateParams);

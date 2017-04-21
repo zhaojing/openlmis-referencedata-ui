@@ -135,18 +135,6 @@ describe('UserRolesController', function() {
 
     describe('on init', function() {
 
-        it('should expose getProgramName method', function() {
-            expect(angular.isFunction(vm.getProgramName)).toBe(true);
-        });
-
-        it('should expose getSupervisoryNodeName method', function() {
-            expect(angular.isFunction(vm.getSupervisoryNodeName)).toBe(true);
-        });
-
-        it('should expose getWarehouseName method', function() {
-            expect(angular.isFunction(vm.getWarehouseName)).toBe(true);
-        });
-
         it('should expose removeRole method', function() {
             expect(angular.isFunction(vm.removeRole)).toBe(true);
         });
@@ -216,51 +204,18 @@ describe('UserRolesController', function() {
         });
 
         it('should clear selected values after selected type changes', function() {
-            vm.selectedProgram = programs[0].code;
+            vm.selectedProgram = programs[0];
             vm.selectedType = 1;
             scope.$apply();
             expect(vm.selectedProgram).toBe(undefined);
         });
 
         it('should reload table after selected type changes', function() {
-            vm.selectedProgram = programs[0].code;
+            vm.selectedProgram = programs[0];
             vm.selectedType = 1;
             scope.$apply();
             expect(vm.filteredRoleAssignments).toBe(undefined);
             expect(vm.filteredRoles.length).toEqual(1);
-        });
-    });
-
-    describe('getSupervisoryNodeName', function() {
-
-        it('should return supervisory node name if exists', function() {
-            expect(vm.getSupervisoryNodeName(supervisoryNodes[0].code)).toEqual(supervisoryNodes[0].$display);
-        });
-
-        it('should return undefined if supervisory node code does not exists', function() {
-            expect(vm.getSupervisoryNodeName('some-code')).toEqual(undefined);
-        });
-    });
-
-    describe('getProgramName', function() {
-
-        it('should return program name if exists', function() {
-            expect(vm.getProgramName(programs[0].code)).toEqual(programs[0].name);
-        });
-
-        it('should return undefined if program code does not exists', function() {
-            expect(vm.getProgramName('some-code')).toEqual(undefined);
-        });
-    });
-
-    describe('getWarehouseName', function() {
-
-        it('should return warehouse name if exists', function() {
-            expect(vm.getWarehouseName(warehouses[0].code)).toEqual(warehouses[0].name);
-        });
-
-        it('should return undefined if warehouse code does not exists', function() {
-            expect(vm.getWarehouseName('some-code')).toEqual(undefined);
         });
     });
 
@@ -310,7 +265,7 @@ describe('UserRolesController', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedRole = roles[2];
-            vm.selectedSupervisoryNode = undefined;
+            vm.selectedProgram = undefined;
 
             vm.addRole();
 
@@ -334,7 +289,8 @@ describe('UserRolesController', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
             vm.selectedRole = roles[2];
-            vm.selectedSupervisoryNode = supervisoryNodes[1].code;
+            vm.selectedProgram = programs[1];
+            vm.selectedSupervisoryNode = supervisoryNodes[1];
 
             vm.addRole();
 
@@ -342,6 +298,9 @@ describe('UserRolesController', function() {
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(vm.unusedSupervisoryNodes.length).toBe(0);
             expect(vm.user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[2].id);
+            expect(vm.user.roleAssignments[roleAssignmentsCount].$roleName).toEqual(roles[2].name);
+            expect(vm.user.roleAssignments[roleAssignmentsCount].$programName).toEqual(programs[1].name);
+            expect(vm.user.roleAssignments[roleAssignmentsCount].$supervisoryNodeName).toEqual(supervisoryNodes[1].$display);
             expect(vm.selectedRole).toEqual(undefined);
         });
     });

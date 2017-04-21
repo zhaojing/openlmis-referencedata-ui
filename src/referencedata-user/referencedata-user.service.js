@@ -118,6 +118,7 @@
         function search(paginationParams, queryParams) {
             return resource.search(paginationParams, queryParams).$promise;
         }
+
         /**
          * @ngdoc method
          * @methodOf referencedata-user.referencedataUserService
