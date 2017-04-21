@@ -18,7 +18,7 @@ services:
       - ui-components
       - ui-layout
   auth-ui:
-    image: openlmis/auth-ui:4.0.1-SNAPSHOT
+    image: openlmis/auth-ui:5.0.0-SNAPSHOT
     volumes:
       - '/openlmis-auth-ui'
   ui-components:
@@ -26,7 +26,7 @@ services:
     volumes:
       - '/openlmis-ui-components'
   ui-layout:
-    image: openlmis/ui-layout:4.1.0-SNAPSHOT
+    image: openlmis/ui-layout:5.0.0-SNAPSHOT
     volumes:
       - '/openlmis-ui-layout'
   image:
