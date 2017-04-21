@@ -390,9 +390,16 @@
                     isEqual = isEqual &&
                         vm.selectedProgram.code === role.programCode;
 
-                    if(vm.selectedSupervisoryNode)
-                        isEqual = isEqual &&
-                            vm.selectedSupervisoryNode.code === role.supervisoryNodeCode;
+                    if(role.supervisoryNodeCode) {
+                        if(vm.selectedSupervisoryNode){
+                            isEqual = isEqual &&
+                                vm.selectedSupervisoryNode.code === role.supervisoryNodeCode;
+                        } else {
+                            isEqual = false;
+                        }
+                    } else if(vm.selectedSupervisoryNode) {
+                        isEqual = false;
+                    }
                 }
                 else if(isFulfillmentType()) {
                     isEqual = isEqual &&
