@@ -345,7 +345,7 @@
             angular.forEach(vm.supervisoryNodes , function(node) {
                 var filtered = $filter('filter')(vm.user.roleAssignments, {
                     supervisoryNodeCode: node.code
-                });
+                }, true);
                 if(filtered.length < 1) nodes.push(node);
             });
 
