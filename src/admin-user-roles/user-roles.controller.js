@@ -376,6 +376,7 @@
         function isNewRoleInvalid() {
             if(roleAlreadyAssigned()) return 'adminUserRoles.roleAlreadyAssigned';
             if(isSupervisionType() && !vm.selectedProgram) return 'adminUserRoles.supervisionInvalid';
+            if(isSupervisionType() && !vm.selectedSupervisoryNode && !vm.user.homeFacility) return 'adminUserRoles.homeFacilityRoleInvalid';
             else if(isFulfillmentType() && !vm.selectedWarehouse) return 'adminUserRoles.fulfillmentInvalid';
             return undefined;
         }

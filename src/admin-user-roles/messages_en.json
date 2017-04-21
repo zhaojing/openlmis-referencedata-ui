@@ -3,6 +3,7 @@
     "adminUserRoles.updateFailed": "Failed to update user roles",
     "adminUserRoles.roleAlreadyAssigned": "This role is already assigned!",
     "adminUserRoles.supervisionInvalid": "Supervision role assignment requires selected program!",
+    "adminUserRoles.homeFacilityRoleInvalid": "User has no home facility assigned so home facility role cannot be assigned!",
     "adminUserRoles.fulfillmentInvalid": "Fulfillment role assignment requires selected warehouse!",
     "adminUserRoles.editUserRoles": "Edit user roles",
     "adminUserRoles.noRolesAssigned": "No roles assigned",

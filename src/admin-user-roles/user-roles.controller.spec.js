@@ -273,6 +273,19 @@ describe('UserRolesController', function() {
             expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.supervisionInvalid');
         });
 
+        it('should display error notification if home facility role cannot be assigned', function() {
+            var roleAssignmentsCount = vm.user.roleAssignments.length;
+
+            vm.selectedRole = roles[2];
+            vm.selectedProgram = programs[1];
+            vm.user.homeFacility = undefined;
+
+            vm.addRole();
+
+            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
+            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.homeFacilityRoleInvalid');
+        });
+
         it('should display error notification if fulfillment role is invalid', function() {
             var roleAssignmentsCount = vm.user.roleAssignments.length;
 
