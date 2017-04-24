@@ -15,29 +15,29 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	/**
+    /**
      * @ngdoc service
      * @name referencedata-geographic-zone.geographicZoneService
      *
      * @description
      * Responsible for retrieving all geographic zone information from server.
      */
-	angular
-		.module('referencedata-geographic-zone')
-	    .service('geographicZoneService', service);
+    angular
+        .module('referencedata-geographic-zone')
+        .service('geographicZoneService', service);
 
     service.$inject = ['$resource', 'referencedataUrlFactory'];
 
     function service($resource, referencedataUrlFactory) {
 
         var resource = $resource(referencedataUrlFactory('/api/geographicZones/:id'), {}, {
-			getAll: {
-				url: referencedataUrlFactory('/api/geographicZones'),
-				method: 'GET'
-			}
-		});
+            getAll: {
+                url: referencedataUrlFactory('/api/geographicZones'),
+                method: 'GET'
+            }
+        });
 
         this.get = get;
         this.getAll = getAll;
@@ -71,7 +71,7 @@
          * @return {Promise} 			      the paginated object of all geographic zones
          */
         function getAll(paginationParams) {
-			return resource.getAll(paginationParams).$promise;
+            return resource.getAll(paginationParams).$promise;
         }
     }
 })();
