@@ -18,21 +18,14 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @module referencedata-geographic-zone
      *
      * @description
-     * This is constant for administration rights.
+     * Responsible for providing geographic zone info to other modules.
      */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
-
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE'
-        };
-    }
+    angular.module('referencedata-geographic-zone', [
+        'ngResource',
+        'referencedata'
+    ]);
 
 })();

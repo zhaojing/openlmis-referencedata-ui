@@ -216,11 +216,55 @@ describe('facilityService', function() {
 
     });
 
+    describe('search', function() {
+
+        var page, size, name, url;
+
+        beforeEach(function() {
+            page = 0;
+            size = 2;
+            name = 'facility';
+            url = referencedataUrlFactory('/api/facilities/search?page=' + page + '&size=' + size);
+
+            $httpBackend.when('POST', url)
+                .respond(200, {content: [facilityOne, facilityTwo]});
+        });
+
+        it('should make correct request', function() {
+            $httpBackend.expectPOST(url);
+
+            facilityService.search({
+                page: page,
+                size: size
+            }, {
+                name: name
+            });
+            $httpBackend.flush();
+        });
+
+        it('should resolve to facility list', function() {
+            var result;
+
+            facilityService.search({
+                page: page,
+                size: size
+            }, {
+                name: name
+            }).then(function(paginatedObject) {
+                result = paginatedObject;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result.content.length).toEqual(2);
+            expect(result.content).toEqual([facilityOne, facilityTwo]);
+        });
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });
-
 });
 
 function checkConnection() {

@@ -18,21 +18,16 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @module admin-facility-list
      *
      * @description
-     * This is constant for administration rights.
+     * Provides facility list screen for administrator.
      */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
-
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE'
-        };
-    }
-
+    angular.module('admin-facility-list', [
+        'openlmis-pagination',
+        'openlmis-rights',
+        'referencedata-facility',
+        'referencedata-geographic-zone',
+        'ui.router'
+    ]);
 })();

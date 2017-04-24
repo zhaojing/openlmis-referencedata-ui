@@ -112,8 +112,9 @@
          * @description
          * Searches for users and returns paginated result.
          *
-         * @param  {Object}  params the search params
-         * @return {Promise}        the page of users
+         * @param  {Object}  paginationParams the pagination params
+         * @param  {Object}  queryParams      the search params
+         * @return {Promise}                  the page of users
          */
         function search(paginationParams, queryParams) {
             return resource.search(paginationParams, queryParams).$promise;

@@ -53,6 +53,10 @@
 					url: referencedataUrlFactory('/api/users/:userId/fulfillmentFacilities'),
 					method: 'GET',
 					isArray: true
+				},
+				search: {
+					url: referencedataUrlFactory('/api/facilities/search'),
+					method: 'POST',
 				}
 	        });
 
@@ -60,6 +64,7 @@
         this.getAll = getAll;
 		this.getUserSupervisedFacilities = getUserSupervisedFacilities;
         this.getFulfillmentFacilities = getFulfillmentFacilities;
+		this.search = search;
 
 		/**
          * @ngdoc method
@@ -121,6 +126,22 @@
 
             return deferred.promise;
         }
+
+		/**
+		 * @ngdoc method
+		 * @methodOf referencedata-facility.facilityService
+		 * @name search
+		 *
+		 * @description
+		 * Searches facilities using given parameters.
+		 *
+		 * @param  {Object}  paginationParams the pagination parameters
+		 * @param  {Object}  queryParams      the search parameters
+         * @return {Promise}                  the requested page of filtered facilities.
+		 */
+		function search(paginationParams, queryParams) {
+			return resource.search(paginationParams, queryParams).$promise;
+		}
 
 		/**
 		 * @ngdoc method
