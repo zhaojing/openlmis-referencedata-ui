@@ -83,6 +83,14 @@
          */
         vm.geographicZone = undefined;
 
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name $onInit
+         *
+         * @description
+         * Method that is executed on initiating FacilityListController.
+         */
         function onInit() {
 			vm.facilities = facilities;
 			vm.geographicZones = geographicZones;
