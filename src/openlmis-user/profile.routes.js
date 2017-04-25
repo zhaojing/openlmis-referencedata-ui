@@ -27,6 +27,7 @@
 
         $stateProvider.state('openlmis.profile', {
             url: '/profile',
+            label: 'openlmisUser.profile',
             templateUrl: 'openlmis-user/profile.html',
             controller: 'UserProfileController',
             controllerAs: 'vm',

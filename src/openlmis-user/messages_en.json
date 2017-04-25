@@ -2,5 +2,6 @@
     "openlmisUser.basicInformation": "Basic information",
     "openlmisUser.firstName": "First name",
     "openlmisUser.lastName": "Last name",
-    "openlmisUser.email": "Email"
+    "openlmisUser.email": "Email",
+    "openlmisUser.profile": "Profile"
 }
