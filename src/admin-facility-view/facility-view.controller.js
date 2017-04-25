@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,15 +24,15 @@
      * @description
      * Controller for managing facility view screen.
      */
-	angular
-		.module('admin-facility-view')
-		.controller('FacilityViewController', controller);
+    angular
+        .module('admin-facility-view')
+        .controller('FacilityViewController', controller);
 
-	controller.$inject = ['$state', 'facility'];
+    controller.$inject = ['$state', 'facility'];
 
-	function controller($state, facility) {
+    function controller($state, facility) {
 
-		var vm = this;
+        var vm = this;
 
         vm.$onInit = onInit;
         vm.goToFacilityList = goToFacilityList;
@@ -57,7 +57,7 @@
          * Method that is executed on initiating FacilityListController.
          */
         function onInit() {
-			vm.facility = facility;
+            vm.facility = facility;
         }
 
         /**
@@ -68,11 +68,10 @@
          * @description
          * Redirects to facility list screen.
          */
-		function goToFacilityList() {
+        function goToFacilityList() {
             $state.go('^', {}, {
                 reload: true
             });
-		}
-	}
-
+        }
+    }
 })();

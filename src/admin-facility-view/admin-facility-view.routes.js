@@ -15,18 +15,18 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-facility-view').config(routes);
+    angular.module('admin-facility-view').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.facilities.view', {
-			label: 'adminFacilityView.viewFacility',
-			url: '/facilities/:id',
-			accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
+        $stateProvider.state('openlmis.administration.facilities.view', {
+            label: 'adminFacilityView.viewFacility',
+            url: '/facilities/:id',
+            accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
             views: {
                 '@openlmis': {
                     controller: 'FacilityViewController',
@@ -34,11 +34,11 @@
                     controllerAs: 'vm',
                 }
             },
-			resolve: {
-				facility: function(facilityService, $stateParams) {
-					return facilityService.get($stateParams.id);
-				}
-			}
-		});
-	}
+            resolve: {
+                facility: function(facilityService, $stateParams) {
+                    return facilityService.get($stateParams.id);
+                }
+            }
+        });
+    }
 })();
