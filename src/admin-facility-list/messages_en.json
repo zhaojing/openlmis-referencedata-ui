@@ -8,5 +8,6 @@
     "adminFacilityList.active": "Active",
     "adminFacilityList.enabled": "Enabled",
     "adminFacilityList.actions": "Actions",
-    "adminFacilityList.search": "Search"
+    "adminFacilityList.search": "Search",
+    "adminFacilityList.view": "View"
 }

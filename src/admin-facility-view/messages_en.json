@@ -1,0 +1,14 @@
+{
+    "adminFacilityView.facilityName": "Facility name",
+    "adminFacilityView.facilityCode": "Facility code",
+    "adminFacilityView.facilityType": "Facility type",
+    "adminFacilityView.operationalDate": "Operational date",
+    "adminFacilityView.activeFacility": "Active facility",
+    "adminFacilityView.programsSupported": "Programs supported",
+    "adminFacilityView.noProgramsSupported": "No supported programs assigned.",
+    "adminFacilityView.program": "Program",
+    "adminFacilityView.startDate": "Start date",
+    "adminFacilityView.active": "Active",
+    "adminFacilityView.cancel": "Cancel",
+    "adminFacilityView.viewFacility": "View facility"
+}
