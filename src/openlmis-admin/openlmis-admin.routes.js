@@ -27,17 +27,9 @@
 		$stateProvider.state('openlmis.administration', {
             abstract: true,
             showInNavigation: true,
-            priority: 0,
+            priority: -999,
             label: 'openlmisAdmin.administration',
             url: '/administration',
-            template: '<div ui-view></div>'
-        });
-
-		$stateProvider.state('openlmis.administration.configure', {
-            abstract: true,
-            showInNavigation: true,
-            label: 'openlmisAdmin.configure',
-            url: '/configure',
             template: '<div ui-view></div>'
         });
 	}
