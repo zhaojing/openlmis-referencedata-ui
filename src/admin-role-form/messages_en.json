@@ -4,11 +4,11 @@
     "adminRoleForm.createRole": "Create role",
     "adminRoleForm.createUpdateRole": "Create/Update role",
     "adminRoleForm.description": "Description",
-    "adminRoleForm.facilitiesManage.label": "Manage facilities",
-    "adminRoleForm.facilityApprovedOrderablesManage.label": "Manage facility approved orderables",
+    "adminRoleForm.facilitiesManage": "Manage facilities",
+    "adminRoleForm.facilityApprovedOrderablesManage": "Manage facility approved orderables",
     "adminRoleForm.generalAdmin.description": "General administration role responsible for managing zones, stock sources, adjustments, facilities etc.",
     "adminRoleForm.generalAdmin.label": "Administration",
-    "adminRoleForm.geographicZonesManage.label": "Manage geographic zones",
+    "adminRoleForm.geographicZonesManage": "Manage geographic zones",
     "adminRoleForm.name": "Name",
     "adminRoleForm.orderablesManage": "Manage orderable",
     "adminRoleForm.orderFulfillment.description": "Provides rights for viewing, transferring, editing orders and managing proof of deliveries.",
@@ -50,5 +50,7 @@
     "adminRoleForm.supplyLinesManage": "Manage supply lines",
     "adminRoleForm.systemSettingsManage": "Manage system settings",
     "adminRoleForm.type": "Type",
-    "adminRoleForm.updateRole": "Update role"
+    "adminRoleForm.updateRole": "Update role",
+    "adminRoleForm.userRolesManage": "Manage user roles",
+    "adminRoleForm.usersManage": "Manage users"
 }
