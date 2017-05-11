@@ -21,7 +21,8 @@ describe('referencedataUserService', function() {
     beforeEach(function() {
         module('referencedata-user', function($provide) {
             var localStorageFactoryMock = jasmine.createSpy();
-            offlineUserDetails = jasmine.createSpyObj('offlineUserDetails', ['getBy', 'put']);
+            offlineUserDetails = jasmine.createSpyObj('offlineUserDetails', ['getBy', 'put', 'getAll']);
+            offlineUserDetails.getAll.andReturn([false]);
             localStorageFactoryMock.andReturn(offlineUserDetails);
             $provide.factory('localStorageFactory', function() {
                 return localStorageFactoryMock;
