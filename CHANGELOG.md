@@ -5,6 +5,7 @@ Compatibility breaking changes:
 
 * [OLMIS-2107](https://openlmis.atlassian.net/browse/OLMIS-2107): Add breadcrumbs to top of page navigation
   * All states have been modified to be descendants of the main state.
+* [OLMIS-2224](https://openlmis.atlassian.net/browse/OLMIS-2224): Fixed mocking localStorageFactory
 
 New functionality added in a backwards-compatible manner:
 

@@ -21,9 +21,13 @@ describe('referencedataUserService', function() {
     beforeEach(function() {
         module('referencedata-user', function($provide) {
             var localStorageFactoryMock = jasmine.createSpy();
-            offlineUserDetails = jasmine.createSpyObj('offlineUserDetails', ['getBy', 'put', 'getAll']);
-            offlineUserDetails.getAll.andReturn([false]);
-            localStorageFactoryMock.andReturn(offlineUserDetails);
+            offlineUserDetails = jasmine.createSpyObj('offlineUserDetails', ['getBy', 'put']);
+            var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll', 'clearAll']);
+            offlineFlag.getAll.andReturn([false]);
+            localStorageFactoryMock.andCallFake(function(name) {
+                if(name === 'offlineFlag') return offlineFlag;
+                return offlineUserDetails;
+            });
             $provide.factory('localStorageFactory', function() {
                 return localStorageFactoryMock;
             });
