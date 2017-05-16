@@ -1,7 +1,7 @@
 {
     "adminRoleForm.cancel": "Cancel",
     "adminRoleForm.confirm": "Are you sure?",
-    "adminRoleForm.createRole": "Create role",
+    "adminRoleForm.createRole": "Create Role",
     "adminRoleForm.createUpdateRole": "Create/Update Role",
     "adminRoleForm.description": "Description",
     "adminRoleForm.facilitiesManage": "Manage facilities",
@@ -50,7 +50,7 @@
     "adminRoleForm.supplyLinesManage": "Manage supply lines",
     "adminRoleForm.systemSettingsManage": "Manage system settings",
     "adminRoleForm.type": "Type",
-    "adminRoleForm.updateRole": "Update role",
+    "adminRoleForm.updateRole": "Update Role",
     "adminRoleForm.userRolesManage": "Manage user roles",
     "adminRoleForm.usersManage": "Manage users"
 }
