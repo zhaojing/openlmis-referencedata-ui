@@ -17,23 +17,28 @@
 
     'use strict';
 
-    /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
-     *
-     * @description
-     * This is constant for administration rights.
-     */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
+    angular.module('admin-product-view').config(routes);
 
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE'
-        };
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+
+        $stateProvider.state('openlmis.administration.products.view', {
+            label: 'adminProductView.orderableDetails',
+            url: '/products/:id',
+            accessRights: [ADMINISTRATION_RIGHTS.PRODUCTS_MANAGE],
+            views: {
+                '@openlmis': {
+                    controller: 'ProductViewController',
+                    templateUrl: 'admin-product-view/product-view.html',
+                    controllerAs: 'vm',
+                }
+            },
+            resolve: {
+                product: function(orderableService, $stateParams) {
+                    return orderableService.get($stateParams.id);
+                }
+            }
+        });
     }
-
 })();

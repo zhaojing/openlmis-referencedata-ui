@@ -18,22 +18,14 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @module referencedata-orderable
      *
      * @description
-     * This is constant for administration rights.
+     * Responsible for providing orderable info to other modules.
      */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
-
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE'
-        };
-    }
+    angular.module('referencedata-orderable', [
+        'ngResource',
+        'openlmis-urls'
+    ]);
 
 })();

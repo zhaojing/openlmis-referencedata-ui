@@ -1,0 +1,72 @@
+<div>
+    <h2>{{'adminProductView.orderableDetails' | message}}</h2>
+    <dl>
+        <dt>{{'adminProductView.productCode' | message}}</dt>
+        <dd>{{vm.product.productCode}}<dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.name' | message}}</dt>
+        <dd>{{vm.product.fullProductName}}<dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.dispensingUnit' | message}}</dt>
+        <dd>{{vm.product.dispensable.dispensingUnit}}<dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.packRoundingThreshold' | message}}</dt>
+        <dd>{{vm.product.packRoundingThreshold}}<dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.netContent' | message}}</dt>
+        <dd>{{vm.product.netContent}}<dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.roundToZero' | message}}</dt>
+        <dd><i ng-class="{'icon-ok': vm.product.roundToZero, 'icon-remove': !vm.product.roundToZero}"></i><dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.description' | message}}</dt>
+        <dd>{{vm.product.description}}<dd>
+    </dl>
+    <dl>
+        <dt>{{'adminProductView.associatedPrograms' | message}}</dt>
+        <dd>
+            <section class="openlmis-table-container">
+                <table>
+                    <caption ng-if="!vm.product.programs || vm.product.programs.length === 0">
+                        {{'adminProductView.noAssociatedPrograms' | message}}
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>{{'adminProductView.programId' | message}}</th>
+                            <th>{{'adminProductView.productId' | message}}</th>
+                            <th>{{'adminProductView.active' | message}}</th>
+                            <th>{{'adminProductView.displayOrder' | message}}</th>
+                            <th>{{'adminProductView.dosesPerPatient' | message}}</th>
+                            <th>{{'adminProductView.fullSupply' | message}}</th>
+                            <th>{{'adminProductView.pricePerPack' | message}}</th>
+                            <th>{{'adminProductView.orderableDisplayCategoryId' | message}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="program in vm.product.programs">
+                            <td>{{program.programId}}</td>
+                            <td>{{program.orderableDisplayCategoryId}}</td>
+                            <td>
+                                <i ng-class="{'icon-ok': program.active, 'icon-remove': !program.active}"></i>
+                            </td>
+                            <td>{{program.displayOrder}}</td>
+                            <td>{{program.dosesPerPatient}}</td>
+                            <td>
+                                <i ng-class="{'icon-ok': program.fullSupply, 'icon-remove': !program.fullSupply}"></i>
+                            </td>
+                            <td>{{program.pricePerPack}}</td>
+                            <td>{{program.orderableCategoryDisplayName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        <dd>
+    </dl>
+    <button ng-click="vm.goToProductList()">{{'adminProductView.cancel' | message}}</button>
+</div>

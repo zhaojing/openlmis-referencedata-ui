@@ -1,0 +1,22 @@
+{
+    "adminProductView.productView" : "View Product",
+    "adminProductView.orderableDetails": "Orderable Details",
+    "adminProductView.productCode": "Product Code",
+    "adminProductView.name": "Name",
+    "adminProductView.dispensingUnit": "Dispensing Unit",
+    "adminProductView.packRoundingThreshold": "Pack Rounding Threshold",
+    "adminProductView.netContent": "Net Content",
+    "adminProductView.roundToZero": "Round to Zero",
+    "adminProductView.description": "Description",
+    "adminProductView.associatedPrograms": "Associated Programs",
+    "adminProductView.noAssociatedPrograms": "No associated programs assigned.",
+    "adminProductView.programId": "Program ID",
+    "adminProductView.productId": "Product ID",
+    "adminProductView.active": "Active",
+    "adminProductView.displayOrder": "Display Order",
+    "adminProductView.dosesPerPatient": "Doses per Patient",
+    "adminProductView.fullSupply": "Full Supply",
+    "adminProductView.pricePerPack": "Price per Pack",
+    "adminProductView.orderableDisplayCategoryId": "OrderableDisplayCategoryID",
+    "adminProductView.cancel": "Cancel"
+}
