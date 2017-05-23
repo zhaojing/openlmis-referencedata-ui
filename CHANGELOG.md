@@ -1,6 +1,10 @@
 5.0.1 / Coming soon
 ==================
 
+New functionality added in a backwards-compatible manner:
+
+* [OLMIS-2370](https://openlmis.atlassian.net/browse/OLMIS-2370) - List and view screens for Orderables.
+
 Bug fixes
 
 * [OLMIS-2445](https://openlmis.atlassian.net/browse/OLMIS-2445) - Button and title capitalization are consistent.
