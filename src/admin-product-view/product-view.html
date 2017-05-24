@@ -50,8 +50,8 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="program in vm.product.programs">
-                            <td>{{program.programId}}</td>
-                            <td>{{program.orderableDisplayCategoryId}}</td>
+                            <td>{{program.$program.name}}</td>
+                            <td>{{vm.product.productCode}}</td>
                             <td>
                                 <i ng-class="{'icon-ok': program.active, 'icon-remove': !program.active}"></i>
                             </td>

@@ -35,8 +35,8 @@
                 }
             },
             resolve: {
-                product: function(orderableService, $stateParams) {
-                    return orderableService.get($stateParams.id);
+                product: function(orderableFactory, $stateParams) {
+                    return orderableFactory.getOrderableWithProgramData($stateParams.id);
                 }
             }
         });
