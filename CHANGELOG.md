@@ -1,4 +1,4 @@
-5.0.1 / Coming soon
+5.1.0 / Coming soon
 ==================
 
 New functionality added in a backwards-compatible manner:
