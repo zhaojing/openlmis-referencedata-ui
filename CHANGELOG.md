@@ -1,4 +1,4 @@
-5.1.0 / Coming soon
+5.1.0 / 2017-05-26
 ==================
 
 New functionality added in a backwards-compatible manner:
