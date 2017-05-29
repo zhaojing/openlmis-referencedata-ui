@@ -6,6 +6,7 @@ Improvements:
 * [OLMIS-2444](https://openlmis.atlassian.net/browse/OLMIS-2444): Added new "success" button class.
 * [OLMIS-2384](https://openlmis.atlassian.net/browse/OLMIS-2384): Changed "email verified" label from text to checkbox and added cancel button to user edit page.
 * [OLMIS-2385](https://openlmis.atlassian.net/browse/OLMIS-2385): Changed type message.
+* [OLMIS-2495](https://openlmis.atlassian.net/browse/OLMIS-2495): Changed links to buttons on user list screen.
 
 5.1.0 / 2017-05-26
 ==================

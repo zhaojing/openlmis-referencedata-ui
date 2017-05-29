@@ -34,9 +34,9 @@
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>
                 <td>
-                    <a ui-sref="openlmis.administration.users.form({id: user.id})">{{'adminUserList.edit' | message}}</a>
-                    <a ui-sref="openlmis.administration.users.roles({id: user.id})">{{'adminUserList.roles' | message}}</a>
-                    <a ng-click="vm.resetUserPassword(user.username)">{{'adminUserList.resetPassword' | message}}</a>
+                    <button class="primary" ui-sref="openlmis.administration.users.form({id: user.id})">{{'adminUserList.edit' | message}}</button>
+                    <button class="primary" ui-sref="openlmis.administration.users.roles({id: user.id})">{{'adminUserList.roles' | message}}</button>
+                    <button class="primary" ng-click="vm.resetUserPassword(user.username)">{{'adminUserList.resetPassword' | message}}</button>
                 </td>
             </tr>
         </tbody>
