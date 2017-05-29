@@ -45,11 +45,11 @@
     "adminRoleForm.stockOrganizationsManage": "Manage stock organizations",
     "adminRoleForm.stockSourcesManage": "Manage stock sources",
     "adminRoleForm.supervision.description": "Provides rights for managing requisitions.",
-    "adminRoleForm.supervision.label": "Requisition",
+    "adminRoleForm.supervision.label": "Supervision",
     "adminRoleForm.supervisoryNodesManage": "Manage supervisory nodes",
     "adminRoleForm.supplyLinesManage": "Manage supply lines",
     "adminRoleForm.systemSettingsManage": "Manage system settings",
-    "adminRoleForm.type": "Type",
+    "adminRoleForm.roleType": "Role Type: ",
     "adminRoleForm.updateRole": "Update Role",
     "adminRoleForm.userRolesManage": "Manage user roles",
     "adminRoleForm.usersManage": "Manage users"

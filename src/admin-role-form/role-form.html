@@ -1,7 +1,7 @@
 <h2>{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</h2>
 <form ng-submit="vm.saveRole()">
     <label>
-        <span>{{'adminRoleForm.type' | message}}</span>
+        <span>{{'adminRoleForm.roleType' | message}}</span>
         <span>{{vm.getLabel(vm.type)}}</span>
     </label>
     <label>{{'adminRoleForm.name' | message}}</label>
