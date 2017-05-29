@@ -19,5 +19,6 @@
     "adminUserForm.password": "Password",
     "adminUserForm.removeHomeFacility.question": "Role and Program assignments for this facility will be deleted. Do you want to continue?",
     "adminUserForm.removeHomeFacility.label": "Remove Home Facility",
-    "adminUserForm.homeFacility": "Home facility"
+    "adminUserForm.homeFacility": "Home facility",
+    "adminUserForm.cancel": "Cancel"
 }

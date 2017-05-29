@@ -22,11 +22,12 @@
                 {{'adminUserForm.no' | message}}
             </label>
         </fieldset>
-        <label>
-            <span>{{'adminUserForm.emailVerified' | message}}</span>
-            <span ng-if="vm.user.verified">{{'adminUserForm.yes' | message}}</span>
-            <span ng-if="!vm.user.verified">{{'adminUserForm.no' | message}}</span>
-        </label>
+        <fieldset class="form-group">
+            <label>
+                <input type="checkbox" ng-model="vm.user.verified" disabled/>
+                {{'adminUserForm.emailVerified' | message}}
+            </label>
+        </fieldset>
         <label>{{'adminUserForm.homeFacility' | message}}</label>
         <select id="homeFacility" ng-model="vm.user.homeFacility"
             ng-options="vm.getFacilityDisplay(facility) for facility in vm.facilities track by facility.id"
@@ -35,6 +36,7 @@
         </select>
         <input type="button" ng-if="vm.user.homeFacility.code" ng-click="vm.removeHomeFacility()" class="danger"
             value="{{'adminUserForm.removeHomeFacility.label' | message}}"/>
+        <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
         <input form="newUserForm" type="submit" ng-class="{'success': !vm.updateMode}"
             value="{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}"/>
     </form>
