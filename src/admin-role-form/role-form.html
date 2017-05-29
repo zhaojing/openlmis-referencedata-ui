@@ -16,6 +16,6 @@
         </label>
     </fieldset>
     <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
-    <input type="submit"
+    <input type="submit" ng-class="{'success': vm.role.id}"
         value="{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}"/>
 </form>
