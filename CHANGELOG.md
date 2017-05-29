@@ -1,3 +1,10 @@
+5.1.1 / WIP
+==================
+
+Improvements:
+
+* [OLMIS-2444](https://openlmis.atlassian.net/browse/OLMIS-2444): Added new "success" button class.
+
 5.1.0 / 2017-05-26
 ==================
 
