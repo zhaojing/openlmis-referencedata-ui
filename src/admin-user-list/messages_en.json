@@ -5,7 +5,7 @@
     "adminUserList.email": "Email",
     "adminUserList.addUser": "Add User",
     "adminUserList.edit": "Edit",
-    "adminUserList.resetPassword": "Reset password",
+    "adminUserList.resetPassword": "Reset Password",
     "adminUserList.search": "Search",
     "adminUserList.actions": "Actions",
     "adminUserList.users.error": "There are no matches for user.",
