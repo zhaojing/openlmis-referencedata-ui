@@ -1,5 +1,5 @@
 <h2>{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</h2>
-<form ng-submit="vm.saveRole()">
+<form>
     <label>
         <span>{{'adminRoleForm.roleType' | message}}</span>
         <span>{{vm.getLabel(vm.type)}}</span>
@@ -15,7 +15,8 @@
            {{vm.getMessage(right.name)}}
         </label>
     </fieldset>
-    <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
-    <input type="submit" ng-class="{'success': !vm.role.id}"
-        value="{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}"/>
 </form>
+<div class="openlmis-toolbar">
+    <button ng-class="{'add': !vm.role.id, 'primary': vm.role.id}" ng-click="vm.saveRole()">{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</button>
+    <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
+</div>

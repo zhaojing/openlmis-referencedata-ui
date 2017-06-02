@@ -1,6 +1,6 @@
 <h2>{{'adminUserForm.addEditUser' | message}}</h2>
 <section class="openlmis-table-container">
-    <form id="newUserForm"class="user-form" ng-submit="vm.saveUser()">
+    <form id="newUserForm">
         <label for="username">{{'adminUserForm.username' | message}}</label>
         <input id="username" ng-model="vm.user.username" type="text" required/>
         <label for="email">{{'adminUserForm.email' | message}}</label>
@@ -34,10 +34,9 @@
             ng-required="vm.user.homeFacility && vm.user.homeFacility.code"
             no-auto-select="true">
         </select>
-        <input type="button" ng-if="vm.user.homeFacility.code" ng-click="vm.removeHomeFacility()" class="danger"
-            value="{{'adminUserForm.removeHomeFacility.label' | message}}"/>
-        <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
-        <input form="newUserForm" type="submit" ng-class="{'success': !vm.updateMode}"
-            value="{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}"/>
     </form>
 </section>
+<div class="openlmis-toolbar">
+    <button ng-class="{'add': !vm.updateMode, 'primary': vm.updateMode}" ng-click="vm.saveUser()">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
+    <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
+</div>
