@@ -4,7 +4,7 @@
     <ul bs-active-pane="vm.selectedType" bs-tabs>
         <li ng-repeat="type in vm.types" bs-pane
             data-title="{{type.displayName | message}}">
-            <form class="form-inline" reload-form>
+            <form class="form-inline" ng-submit="vm.addRole()" reload-form>
                 <div class="form-group" ng-if="vm.isSupervisionType()">
                     <label for="program">{{'adminUserRoles.program' | message}}</label>
                     <select id="program" ng-model="vm.selectedProgram"
@@ -31,7 +31,7 @@
                         ng-options="role as role.name for role in vm.filteredRoles" required>
                     </select>
                 </div>
-                <button class="add" ng-click="vm.addRole()">{{'adminUserRoles.addRole' | message}}</button>
+                <button type="submit" class="add">{{'adminUserRoles.addRole' | message}}</button>
             </form>
             <section class="openlmis-table-container">
                 <table>
