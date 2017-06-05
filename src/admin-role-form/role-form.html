@@ -17,6 +17,6 @@
     </fieldset>
 </form>
 <div class="openlmis-toolbar">
-    <button ng-class="{'add': !vm.role.id, 'primary': vm.role.id}" ng-click="vm.saveRole()">{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</button>
+    <button ng-class="primary" ng-click="vm.saveRole()">{{(vm.role.id ? 'adminRoleForm.updateRole' : 'adminRoleForm.createRole') | message}}</button>
     <button ui-sref="^">{{'adminRoleForm.cancel' | message}}</button>
 </div>
