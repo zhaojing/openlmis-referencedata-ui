@@ -1,6 +1,6 @@
 <h2>{{'adminUserForm.addEditUser' | message}}</h2>
 <section class="openlmis-table-container">
-    <form id="newUserForm">
+    <form id="newUserForm" ng-submit="vm.saveUser()">
         <label for="username">{{'adminUserForm.username' | message}}</label>
         <input id="username" ng-model="vm.user.username" type="text" required/>
         <label for="email">{{'adminUserForm.email' | message}}</label>
@@ -37,6 +37,6 @@
     </form>
 </section>
 <div class="openlmis-toolbar">
-    <button class="primary" ng-click="vm.saveUser()">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
+    <button class="primary" form="newUserForm" type="submit">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
     <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
 </div>
