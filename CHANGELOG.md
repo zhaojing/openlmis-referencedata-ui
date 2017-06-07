@@ -8,7 +8,7 @@ Improvements:
 * [OLMIS-2385](https://openlmis.atlassian.net/browse/OLMIS-2385): Changed type message.
 * [OLMIS-2495](https://openlmis.atlassian.net/browse/OLMIS-2495): Changed links to buttons on user list screen.
 * [OLMIS-2494](https://openlmis.atlassian.net/browse/OLMIS-2494): Name, description and rights will
-no properly be marked as required on the Role creation/edit screen.
+now properly be marked as required on the Role creation/edit screen.
 
 5.1.0 / 2017-05-26
 ==================
