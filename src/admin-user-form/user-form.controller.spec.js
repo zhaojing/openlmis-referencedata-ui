@@ -188,6 +188,65 @@ describe('UserFormController', function() {
         });
     });
 
+    describe('update user with home facility', function() {
+
+        it('should show confirmation for removing user home facility roles if home facility changed', function() {
+            vm.user.homeFacility = null;
+            var expectedMessage = {
+                'messageKey': 'adminUserForm.removeHomeFacility.confirmation',
+                'messageParams': {
+                    'facility': vm.initialHomeFacility.name,
+                    'username': vm.user.username
+                }
+            };
+
+            confirmService.confirmDestroy.andReturn($q.when(true));
+            vm.saveUser();
+            $rootScope.$apply();
+
+            expect(confirmService.confirmDestroy).toHaveBeenCalledWith(
+                expectedMessage,
+                'adminUserForm.removeHomeFacility.removeRoles',
+                'adminUserForm.removeHomeFacility.keepRoles'
+            );
+        });
+
+        it('should keep user facility rights if user choose to keep them', function() {
+            var deferred = $q.defer();
+
+            vm.user.homeFacility = null;
+
+            confirmService.confirmDestroy.andReturn(deferred.promise);
+            deferred.reject();
+
+            vm.saveUser();
+            $rootScope.$apply();
+
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(vm.user);
+            expect(vm.user.roleAssignments.length).toBe(2);
+        });
+
+        it('should not keep user facility rights if user choose to remove them', function() {
+            var confirmDeferred = $q.defer(),
+                saveDeferred = $q.defer();
+
+            vm.user.homeFacility = null;
+
+            confirmService.confirmDestroy.andReturn(confirmDeferred.promise);
+            confirmDeferred.resolve();
+
+            referencedataUserService.saveUser.andReturn(saveDeferred.promise);
+            saveDeferred.resolve();
+
+            vm.saveUser();
+            $rootScope.$apply();
+
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(vm.user);
+            expect(vm.user.roleAssignments.length).toBe(1);
+        });
+
+    });
+
     describe('create user', function() {
 
         beforeEach(function() {
