@@ -15,30 +15,12 @@
 
 describe('facilityTypeService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, offlineService,
-        facilityTypesStorage, facilityTypeOne, facilityTypeTwo, $q;
+    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, facilityTypeOne, facilityTypeTwo;
 
     beforeEach(function() {
-        module('referencedata-facility-type', function($provide){
-
-            facilityTypesStorage = jasmine.createSpyObj('facilityTypesStorage', ['getBy', 'getAll', 'put']);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function() {
-                return facilityTypesStorage;
-            });
-            $provide.service('localStorageFactory', function() {
-                return localStorageFactorySpy;
-            });
-
-            offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
-            offlineService.checkConnection.andCallFake(checkConnection);
-            $provide.service('offlineService', function() {
-                return offlineService;
-            });
-
-        });
+        module('referencedata-facility-type');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
             $httpBackend = $injector.get('$httpBackend');
             $rootScope = $injector.get('$rootScope');
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
@@ -57,30 +39,11 @@ describe('facilityTypeService', function() {
 
     describe('get', function() {
 
-        it('should get facility type by id from storage while offline', function() {
+        it('should get facility type by id', function() {
             var data;
 
-            facilityTypesStorage.getBy.andReturn(facilityTypeTwo);
-
-            offlineService.isOffline.andReturn(true);
-
-            facilityTypeService.get(facilityTypeTwo.id).then(function(response) {
-                data = response;
-            });
-
-            $rootScope.$apply();
-
-            expect(data.id).toBe(facilityTypeTwo.id);
-        });
-
-        it('should get facility type by id and save it to storage', function() {
-            var data,
-                spy = jasmine.createSpy();
-
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id)).respond(200, facilityTypeOne);
-            facilityTypesStorage.put.andCallFake(spy);
-
-            offlineService.isOffline.andReturn(false);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id))
+                .respond(200, facilityTypeOne);
 
             facilityTypeService.get(facilityTypeOne.id).then(function(response) {
                 data = response;
@@ -90,37 +53,17 @@ describe('facilityTypeService', function() {
             $rootScope.$apply();
 
             expect(data.id).toBe(facilityTypeOne.id);
-            expect(spy).toHaveBeenCalled();
+            expect(data.name).toBe(facilityTypeOne.name);
         });
     });
 
     describe('getAll', function() {
 
-        it('should get all facility types from storage while offline', function() {
+        it('should get all facility types', function() {
             var data;
 
-            facilityTypesStorage.getAll.andReturn([facilityTypeOne, facilityTypeTwo]);
-
-            offlineService.isOffline.andReturn(true);
-
-            facilityTypeService.getAll().then(function(response) {
-                data = response;
-            });
-
-            $rootScope.$apply();
-
-            expect(data[0].id).toBe(facilityTypeOne.id);
-            expect(data[1].id).toBe(facilityTypeTwo.id);
-        });
-
-        it('should get all facility types and save them to storage', function() {
-            var data,
-                spy = jasmine.createSpy();
-
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes')).respond(200, [facilityTypeOne, facilityTypeTwo]);
-            facilityTypesStorage.put.andCallFake(spy);
-
-            offlineService.isOffline.andReturn(false);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes'))
+                .respond(200, [facilityTypeOne, facilityTypeTwo]);
 
             facilityTypeService.getAll().then(function(response) {
                 data = response;
@@ -131,7 +74,6 @@ describe('facilityTypeService', function() {
 
             expect(data[0].id).toBe(facilityTypeOne.id);
             expect(data[1].id).toBe(facilityTypeTwo.id);
-            expect(spy.callCount).toEqual(2);
         });
     });
 
@@ -140,7 +82,3 @@ describe('facilityTypeService', function() {
         $httpBackend.verifyNoOutstandingRequest();
     });
 });
-
-function checkConnection() {
-    return $q.when(true);
-}

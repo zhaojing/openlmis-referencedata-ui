@@ -25,17 +25,16 @@
      * Responsible for retrieving all facilityType information from server.
      */
     angular
-    .module('referencedata-facility-type')
-    .service('facilityTypeService', service);
+        .module('referencedata-facility-type')
+        .service('facilityTypeService', service);
 
     service.$inject = [
-        '$q', '$resource', 'referencedataUrlFactory', 'offlineService', 'localStorageFactory'
+        '$resource', 'referencedataUrlFactory'
     ];
 
-    function service($q, $resource, referencedataUrlFactory, offlineService, localStorageFactory) {
+    function service($resource, referencedataUrlFactory) {
 
-            var facilityTypesOffline = localStorageFactory('facilityTypes'),
-            resource = $resource(referencedataUrlFactory('/api/facilityTypes/:id'), {}, {
+            var resource = $resource(referencedataUrlFactory('/api/facilityTypes/:id'), {}, {
                 getAll: {
                     url: referencedataUrlFactory('/api/facilityTypes/'),
                     method: 'GET',
@@ -52,29 +51,15 @@
              * @name get
              *
              * @description
-             * Retrieves facility type by id. When user is offline it gets facility type from offline storage.
-             * If user is online it stores facility type into offline storage.
+             * Retrieves facility type by id.
              *
              * @param  {String}  facilityTypeId facilityType UUID
              * @return {Promise}                facilityType promise
              */
             function get(facilityTypeId) {
-                var facilityType,
-                deferred = $q.defer();
-
-                if(offlineService.isOffline()) {
-                    facilityType = facilityTypesOffline.getBy('id', facilityTypeId);
-                    facilityType ? deferred.resolve(facilityType) : deferred.reject();
-                } else {
-                    resource.get({id: facilityTypeId}, function(data) {
-                        facilityTypesOffline.put(data);
-                        deferred.resolve(data);
-                    }, function() {
-                        deferred.reject();
-                    });
-                }
-
-                return deferred.promise;
+                return resource.get({
+                    id: facilityTypeId
+                }).$promise;
             }
 
             /**
@@ -89,22 +74,7 @@
              * @return {Promise} Array of facility types
              */
             function getAll() {
-                var deferred = $q.defer();
-
-                if(offlineService.isOffline()) {
-                    deferred.resolve(facilityTypesOffline.getAll());
-                } else {
-                    resource.getAll(function(facilities) {
-                        angular.forEach(facilities, function(facilityType) {
-                            facilityTypesOffline.put(facilityType);
-                        });
-                        deferred.resolve(facilities);
-                    }, function() {
-                        deferred.reject();
-                    });
-                }
-
-                return deferred.promise;
+                return resource.getAll().$promise;
             }
 
         }

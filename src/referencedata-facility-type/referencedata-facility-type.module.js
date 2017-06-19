@@ -25,8 +25,6 @@
      */
     angular.module('referencedata-facility-type', [
         'ngResource',
-        'openlmis-local-storage',
-        'openlmis-offline',
         'referencedata'
     ]);
 
