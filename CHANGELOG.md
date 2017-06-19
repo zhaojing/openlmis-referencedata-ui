@@ -9,6 +9,8 @@ Improvements:
 * [OLMIS-2495](https://openlmis.atlassian.net/browse/OLMIS-2495): Changed links to buttons on user list screen.
 * [OLMIS-2494](https://openlmis.atlassian.net/browse/OLMIS-2494): Name, description and rights will
 now properly be marked as required on the Role creation/edit screen.
+* [OLMIS-2648](https://openlmis.atlassian.net/browse/OLMIS-2648): When changing user's home facility,
+system also prompts for removing roles for old home facility.
 
 5.1.0 / 2017-05-26
 ==================

@@ -123,7 +123,8 @@
          * @name saveUser
          *
          * @description
-         * Creates or updates the user.
+         * Creates or updates the user. If home facility has changed, a confirmation modal
+         * is shown for deleting user's roles for old home facility, and deletes them if accepted.
          *
          * @return {Promise} the promise resolving to the created/updated user
          */
@@ -166,7 +167,6 @@
          * Processes the user update workflow, along with displaying the loading modal.
          *
          * @param  {Boolean} removeFacilityRights indicates if user home facility rights should be removed
-         *
          * @return {Promise} the promise resolving on the process completed
          */
         function processUpdateUser(removeFacilityRights) {
