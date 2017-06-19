@@ -68,8 +68,7 @@
              * @name getAll
              *
              * @description
-             * Retrieves all facility types. When user is offline it gets facility types from offline storage.
-             * If user is online it stores all facility types into offline storage.
+             * Retrieves all facility types.
              *
              * @return {Promise} Array of facility types
              */
