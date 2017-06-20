@@ -1,0 +1,41 @@
+<h2>{{'adminSupervisoryNodeEdit.editSupervisoryNode' | message}}</h2>
+<form id="editSupervisoryNode">
+    <label for="code">{{'adminSupervisoryNodeEdit.code' | message}}</label>
+    <input id="code" class="form-control" ng-model="vm.supervisoryNode.code" required disabled/>
+    <label for="supervisoryNodeName">{{'adminSupervisoryNodeEdit.supervisoryNodeName' | message}}</label>
+    <input id="supervisoryNodeName" class="form-control" ng-model="vm.supervisoryNode.name" required disabled/>
+    <label for="supervisoryNodeName">{{'adminSupervisoryNodeEdit.supervisoryNodeName' | message}}</label>
+    <input id="supervisoryNodeName" class="form-control" ng-model="vm.supervisoryNode.facility.name" required disabled/>
+</form>
+<label>{{'adminSupervisoryNodeEdit.childNodes' | message}}</label>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.nodesPage || vm.nodesPage.length === 0">
+            {{'adminSupervisoryNodeEdit.noChildNodes' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminSupervisoryNodeEdit.name' | message}}</th>
+                <th>{{'adminSupervisoryNodeEdit.code' | message}}</th>
+                <th>{{'adminSupervisoryNodeEdit.facility' | message}}</th>
+                <th>{{'adminSupervisoryNodeEdit.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="node in vm.nodesPage">
+                <td>{{node.name}}</td>
+                <td>{{node.code}}</td>
+                <td>{{node.$facility.name}}</td>
+                <td>
+                    <button ui-sref="openlmis.administration.supervisoryNodes.edit({id: node.id})">{{'adminSupervisoryNodeEdit.edit' | message}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination
+        list="vm.childNodes"
+        paged-list="vm.nodesPage"/>
+</section>
+<div class="openlmis-toolbar">
+    <button ng-click="vm.goToSupervisoryNodeList()">{{'adminSupervisoryNodeEdit.cancel' | message}}</button>
+</div>

@@ -28,12 +28,13 @@
         .module('referencedata-supervisory-node')
         .factory('supervisoryNodeFactory', factory);
 
-    factory.$inject = ['$q', 'supervisoryNodeService'];
+    factory.$inject = ['$q', '$filter', 'supervisoryNodeService', 'facilityService'];
 
-    function factory($q, supervisoryNodeService) {
+    function factory($q, $filter, supervisoryNodeService, facilityService) {
 
         return {
-            getAllSupervisoryNodesWithDisplay: getAllSupervisoryNodesWithDisplay
+            getAllSupervisoryNodesWithDisplay: getAllSupervisoryNodesWithDisplay,
+            getSupervisoryNode: getSupervisoryNode
         };
 
         /**
@@ -54,6 +55,42 @@
                     node.$display = node.name + ' (' + node.facility.name + ')';
                 });
                 deferred.resolve(supervisoryNodes);
+            }, deferred.reject);
+
+            return deferred.promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.supervisoryNodeFactory
+         * @name getSupervisoryNode
+         *
+         * @description
+         * Returns a supervisory node. All child nodes facilities have additional info.
+         *
+         * @param  {String}  id Supervisory Node UUID
+         * @return {Promise}    Array of role assignments
+         */
+        function getSupervisoryNode(id) {
+            var deferred = $q.defer();
+
+            $q.all([
+                supervisoryNodeService.get(id),
+                facilityService.getAll()
+            ]).then(function(responses) {
+                var supervisoryNode =  responses[0],
+                    facilities = responses[1];
+
+                angular.forEach(supervisoryNode.childNodes, function(node) {
+                    var filtered = $filter('filter')(facilities, {
+                        id: node.facility.id
+                    });
+                    if(filtered && filtered.length > 0) {
+                        node.$facility = filtered[0];
+                    }
+                });
+
+                deferred.resolve(supervisoryNode);
             }, deferred.reject);
 
             return deferred.promise;

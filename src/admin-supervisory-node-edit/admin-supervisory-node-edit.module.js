@@ -18,15 +18,14 @@
     'use strict';
 
     /**
-     * @module referencedata-supervisory-node
+     * @module admin-supervisory-node-edit
      *
      * @description
-     * Provides roles information from server.
+     * Provides supervisory node edit screen for administrator.
      */
-    angular.module('referencedata-supervisory-node', [
-        'referencedata-facility',
-        'ngResource',
-        'openlmis-urls'
+    angular.module('admin-supervisory-node-edit', [
+        'openlmis-rights',
+        'referencedata-supervisory-node',
+        'ui.router'
     ]);
-
 })();

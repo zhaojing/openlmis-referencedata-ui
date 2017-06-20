@@ -15,13 +15,18 @@
 
 describe('supervisoryNodeFactory', function() {
 
-    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, supervisoryNodes;
+    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, facilityService, supervisoryNodes, facilities;
 
     beforeEach(function() {
         module('referencedata-supervisory-node', function($provide) {
-            supervisoryNodeService = jasmine.createSpyObj('supervisoryNodeService', ['getAll']);
+            supervisoryNodeService = jasmine.createSpyObj('supervisoryNodeService', ['getAll', 'get']);
             $provide.service('supervisoryNodeService', function() {
                 return supervisoryNodeService;
+            });
+
+            facilityService = jasmine.createSpyObj('facilityService', ['getAll']);
+            $provide.service('facilityService', function() {
+                return facilityService;
             });
         });
 
@@ -37,16 +42,40 @@ describe('supervisoryNodeFactory', function() {
                 code: 'SN1',
                 name: 'node-1',
                 facility: {
-                    name: 'facility-1'
-                }
+                    name: 'facility-1',
+                    id: 'facility-id-1'
+                },
+                childNodes: [
+                    {
+                        id: '2',
+                        code: 'SN2',
+                        name: 'node-2',
+                        facility: {
+                            id: 'facility-id-2'
+                        },
+                        childNodes: []
+                    }
+                ]
             },
             {
                 id: '2',
                 code: 'SN2',
                 name: 'node-2',
                 facility: {
-                    name: 'facility-2'
-                }
+                    name: 'facility-2',
+                    id: 'facility-id-2'
+                },
+                childNodes: []
+            }
+        ];
+        facilities = [
+            {
+                name: 'facility-1',
+                id: 'facility-id-1'
+            },
+            {
+                name: 'facility-2',
+                id: 'facility-id-2'
             }
         ];
 
@@ -66,6 +95,44 @@ describe('supervisoryNodeFactory', function() {
             expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
             expect(data[0].$display).toEqual(data[0].name + ' (' + data[0].facility.name + ')');
             expect(data[1].$display).toEqual(data[1].name + ' (' + data[1].facility.name + ')');
+        });
+    });
+
+    describe('getSupervisoryNode', function() {
+
+        beforeEach(function() {
+            supervisoryNodeService.get.andReturn($q.when(supervisoryNodes[0]));
+            facilityService.getAll.andReturn($q.when(facilities));
+        });
+
+        it('should return promise', function() {
+            var result = supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
+            expect(angular.isFunction(result.then)).toBe(true);
+        });
+
+        it('should call supervisoryNodeService', function() {
+            supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
+            expect(supervisoryNodeService.get).toHaveBeenCalledWith(supervisoryNodes[0].id);
+        });
+
+        it('should call facilityService', function() {
+            supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
+            expect(facilityService.getAll).toHaveBeenCalled();
+        });
+
+        it('should add facility info to child nodes', function() {
+            var supervisoryNode;
+
+            supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id).then(function(response) {
+                supervisoryNode = response;
+            });
+            $rootScope.$apply();
+
+            expect(supervisoryNode.id).toEqual(supervisoryNodes[0].id);
+            angular.forEach(supervisoryNode.childNodes, function(node) {
+                expect(node.$facility).not.toBe(undefined);
+                expect(node.$facility.id).toEqual(node.facility.id);
+            });
         });
     });
 });
