@@ -51,7 +51,8 @@
 
         function doInit(responses) {
             vm.homeFacility = responses[0];
-            vm.homePrograms = responses[1];
+            vm.homePrograms = getSupportedHomeFacilityPrograms(responses[1]);
+
             vm.supervisedPrograms = responses[2];
             vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
 
@@ -65,6 +66,17 @@
             }
 
             updateFacilities(true);
+
+            function getSupportedHomeFacilityPrograms(programs) {
+                var supportedPrograms = vm.homeFacility.supportedPrograms.map(function(program) {
+                    return program.id;
+                });
+
+                return $filter('filter')(programs, function(program) {
+                    console.log(program.id);
+                    return supportedPrograms.indexOf(program.id) >= 0;
+                });
+            }
         }
 
         function updateForm() {

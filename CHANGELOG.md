@@ -11,6 +11,8 @@ Improvements:
 now properly be marked as required on the Role creation/edit screen.
 * [OLMIS-2648](https://openlmis.atlassian.net/browse/OLMIS-2648): When changing user's home facility,
 system also prompts for removing roles for old home facility.
+* [OLMIS-2689](https://openlmis.atlassian.net/browse/OLMIS-2689): When filtering by home facility on initiate requisition view,
+only programs supported by home facility are shown.
 
 5.1.0 / 2017-05-26
 ==================
