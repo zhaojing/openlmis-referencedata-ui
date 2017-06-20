@@ -3,11 +3,13 @@
     "adminSupervisoryNodeEdit.code": "Code",
     "adminSupervisoryNodeEdit.supervisoryNodeName": "Supervisory Node Name",
     "adminSupervisoryNodeEdit.associatedFacility": "Associated Facility",
+    "adminSupervisoryNodeEdit.parentNode": "Parent Node",
     "adminSupervisoryNodeEdit.childNodes": "Child Nodes",
     "adminSupervisoryNodeEdit.noChildNodes": "No child nodes assigned",
     "adminSupervisoryNodeEdit.name": "Name",
     "adminSupervisoryNodeEdit.facility": "Facility",
     "adminSupervisoryNodeEdit.actions": "Actions",
     "adminSupervisoryNodeEdit.edit": "Edit",
-    "adminSupervisoryNodeEdit.cancel": "Cancel"
+    "adminSupervisoryNodeEdit.cancel": "Cancel",
+    "adminSupervisoryNodeEdit.description": "Description"
 }
