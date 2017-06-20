@@ -21,7 +21,7 @@
         .controller('OpenlmisFacilityProgramSelectController', controller);
 
     controller.$inject = [
-        '$q', '$stateParams', '$filter', 'loadingModalService',  'cacheService', 'CACHE_KEYS'
+        '$q', '$stateParams', '$filter', 'loadingModalService', 'cacheService', 'CACHE_KEYS'
     ];
 
     function controller($q, $stateParams, $filter, loadingModalService, cacheService, CACHE_KEYS) {
@@ -73,7 +73,6 @@
                 });
 
                 return $filter('filter')(programs, function(program) {
-                    console.log(program.id);
                     return supportedPrograms.indexOf(program.id) >= 0;
                 });
             }
