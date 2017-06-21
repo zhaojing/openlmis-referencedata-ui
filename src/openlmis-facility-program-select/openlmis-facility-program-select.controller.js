@@ -12,10 +12,19 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
+    /**
+     * @ngdoc controller
+     * @name openlmis-facility-program-select.controller:OpenlmisFacilityProgramSelectController
+     *
+     * @description
+     * Controller responsible for facilities and programs on the openlmis-facility-program-select
+     * component.
+     */
     angular
         .module('openlmis-facility-program-select')
         .controller('OpenlmisFacilityProgramSelectController', controller);
@@ -32,6 +41,14 @@
         vm.updateForm = updateForm;
         vm.updateFacilities = updateFacilities;
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.controller:OpenlmisFacilityProgramSelectController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method of the controller.
+         */
         function onInit() {
             if (isDataReady()) {
                 doInit(getData());
@@ -39,14 +56,6 @@
                 loadingModalService.open();
                 $q.all(getData()).then(doInit);
             }
-        }
-
-        function getData() {
-            return [
-                cacheService.get(CACHE_KEYS.HOME_FACILITY),
-                cacheService.get(CACHE_KEYS.HOME_PROGRAMS),
-                cacheService.get(CACHE_KEYS.SUPERVISED_PROGRAMS)
-            ];
         }
 
         function doInit(responses) {
@@ -65,28 +74,37 @@
                 )[0];
             }
 
-            updateFacilities(true);
-
-            function getSupportedHomeFacilityPrograms(programs) {
-                var supportedPrograms = vm.homeFacility.supportedPrograms.map(function(program) {
-                    return program.id;
-                });
-
-                return $filter('filter')(programs, function(program) {
-                    return supportedPrograms.indexOf(program.id) >= 0;
-                });
-            }
+            vm.updateFacilities(true);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.controller:OpenlmisFacilityProgramSelectController
+         * @name updateForm
+         *
+         * @description
+         * Updates the form by clearing program and facility selection and setting appropriate
+         * lists.
+         */
         function updateForm() {
             vm.program = undefined;
-            updateFacilities();
+            vm.updateFacilities();
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.controller:OpenlmisFacilityProgramSelectController
+         * @name updateFacilities
+         *
+         * @description
+         * Updates the facility list by clearing the facility selection and setting appropriate
+         * facility list.
+         *
+         * @param  {Boolean} init   the flag defining wether initial values should be set based on
+         *                          on the state parameters
+         */
         function updateFacilities(init) {
-            if (!init) {
-                vm.facility = undefined;
-            }
+            vm.facility = undefined;
 
             if (!vm.isSupervised) {
                 vm.facilities = [vm.homeFacility];
@@ -102,9 +120,7 @@
                     setFacilities(cacheService.get(programId));
                 } else {
                     loadingModalService.open();
-                    $q.when(
-                        cacheService.get(programId)
-                    ).then(setFacilities);
+                    $q.when(cacheService.get(programId)).then(setFacilities);
                 }
             }
 
@@ -120,6 +136,26 @@
                 loadingModalService.close();
             }
         }
+
+        function getData() {
+            return [
+                cacheService.get(CACHE_KEYS.HOME_FACILITY),
+                cacheService.get(CACHE_KEYS.HOME_PROGRAMS),
+                cacheService.get(CACHE_KEYS.SUPERVISED_PROGRAMS)
+            ];
+        }
+
+        function getSupportedHomeFacilityPrograms(programs) {
+            var supportedPrograms = vm.homeFacility.supportedPrograms.map(function(program) {
+                return program.id;
+            });
+
+            return $filter('filter')(programs, function(program) {
+                return supportedPrograms.indexOf(program.id) >= 0;
+            });
+        }
+
+
 
         function isDataReady() {
             return cacheService.isReady(CACHE_KEYS.HOME_FACILITY) &&

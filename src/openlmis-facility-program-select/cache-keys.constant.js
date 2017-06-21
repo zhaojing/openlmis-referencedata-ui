@@ -18,24 +18,22 @@
     'use strict';
 
     /**
-    * @ngdoc object
-    * @name openlmis-facility-program-select.CACHE_KEYS
-    *
-    * @description
-    * Stores cache keys for openlmis-facility-program-select module.
-    */
+     * @ngdoc object
+     * @name openlmis-facility-program-select.CACHE_KEYS
+     *
+     * @description
+     * Stores cache keys for openlmis-facility-program-select module.
+     */
     angular
         .module('openlmis-facility-program-select')
         .constant('CACHE_KEYS', status());
 
     function status() {
-
         return {
             HOME_FACILITY: 'HOME_FACILITY',
             HOME_PROGRAMS: 'HOME_PROGRAMS',
             SUPERVISED_PROGRAMS: 'SUPERVISED_PROGRAMS'
         };
-
     }
 
 })();

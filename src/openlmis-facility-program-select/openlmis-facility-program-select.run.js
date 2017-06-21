@@ -14,6 +14,7 @@
  */
 
 (function() {
+
     'use strict';
 
     angular
@@ -27,9 +28,9 @@
         $rootScope.$watch(function() {
             return authorizationService.getUser();
         }, function(user, oldUser) {
-            if (user) {
+            if (user && user.user_id) {
                 facilityProgramCacheService.load();
-            } else {
+            } else if (user) {
                 facilityProgramCacheService.clear();
             }
         }, true);

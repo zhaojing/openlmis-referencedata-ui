@@ -12,12 +12,21 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
+    /**
+     * @module openlmis-facility-program-select
+     *
+     * @description
+     * Proved openlmis-facility-program-select component for selecting facility and program.
+     */
     angular.module('openlmis-facility-program-select', [
-        'openlmis-cache'
+        'openlmis-cache',
+        'referencedata-facility',
+        'referencedata-program'
     ]);
 
 })();

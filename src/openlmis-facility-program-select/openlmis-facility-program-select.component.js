@@ -12,6 +12,7 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
@@ -21,7 +22,18 @@
      * @name openlmis-facility-program-select.component:openlmisFacilityProgramSelect
      *
      * @description
-     *
+     * Component responsible for selecting facility, facility type and program. This component will
+     * look for supervised, facility and program parameters in the state parameters to set the
+     * initial values.
+
+     * @example
+     * ```
+     * <openlmis-facility-program-select
+     *      is-supervised="vm.supervisedFlag"
+     *      program="vm.programObject"
+     *      facility="vm.facilityObject">
+     * </openlmis-facility-program-select>
+     * ```
      */
     angular
         .module('openlmis-facility-program-select')
@@ -34,6 +46,6 @@
             controller: 'OpenlmisFacilityProgramSelectController',
             controllerAs: 'vm',
             templateUrl: 'openlmis-facility-program-select/openlmis-facility-program-select.html'
-		});
+        });
 
 })();

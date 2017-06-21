@@ -15,96 +15,218 @@
 
 describe('OpenlmisFacilityProgramSelectController', function() {
 
-    var $state, $scope, $controller, cacheService, CACHE_KEYS, vm, user;
+    var vm, $stateParams, cacheService, homeFacility, homePrograms, supervisedPrograms,
+        CACHE_KEYS, loadingModalService, facilities;
 
     beforeEach(function() {
-        module('referencedata-facility');
-
         module('openlmis-facility-program-select');
 
-        module('openlmis-cache', function($provide) {
-            cacheService = jasmine.createSpyObj('cacheService', ['isReady', 'get']);
-            $provide.service('cacheService', function() {
-                return cacheService;
+        inject(function($injector) {
+            cacheService = $injector.get('cacheService');
+            $stateParams = $injector.get('$stateParams');
+            CACHE_KEYS = $injector.get('CACHE_KEYS');
+            loadingModalService = $injector.get('loadingModalService');
+            vm = $injector.get('$controller')('OpenlmisFacilityProgramSelectController');
+        });
+
+        homePrograms = [{
+            id: 'program-one-id'
+        }, {
+            id: 'program-two-id'
+        }];
+
+        supervisedPrograms = [{
+            id: 'program-two-id'
+        }, {
+            id: 'program-three-id'
+        }];
+
+        facilities = [{
+            id: 'facility-one-id'
+        }, {
+            id: 'facility-two-id'
+        }];
+
+        homeFacility = {
+            id: 'home-facility-id',
+            supportedPrograms: [
+                homePrograms[0]
+            ]
+        };
+
+        spyOn(cacheService, 'get');
+        spyOn(cacheService, 'isReady').andReturn(true);
+    });
+
+    describe('$onInit', function() {
+
+        beforeEach(function() {
+            cacheService.isReady.andReturn(true);
+            cacheService.get.andCallFake(function(key) {
+                if (key === CACHE_KEYS.HOME_FACILITY) return homeFacility;
+                if (key === CACHE_KEYS.HOME_PROGRAMS) return homePrograms;
+                if (key === CACHE_KEYS.SUPERVISED_PROGRAMS) return supervisedPrograms;
             });
         });
 
-        inject(function($injector) {
-            $controller = $injector.get('$controller');
-            cacheService = $injector.get('cacheService');
-            CACHE_KEYS = $injector.get("CACHE_KEYS");
+        it('should expose home facility', function() {
+            vm.$onInit();
+
+            expect(vm.homeFacility).toEqual(homeFacility);
         });
+
+        it('should expose supervised programs', function() {
+            vm.$onInit();
+
+            expect(vm.supervisedPrograms).toEqual(supervisedPrograms);
+        });
+
+        it('should expose isSupervised', function() {
+            $stateParams.supervised = 'true';
+
+            vm.$onInit();
+
+            expect(vm.isSupervised).toEqual(true);
+        });
+
+        it('should expose program for home facility', function() {
+            $stateParams.program = 'program-one-id';
+
+            vm.$onInit();
+
+            expect(vm.program).toEqual(homePrograms[0]);
+        });
+
+        it('should update facilities', function() {
+            spyOn(vm, 'updateFacilities');
+
+            vm.$onInit();
+
+            expect(vm.updateFacilities).toHaveBeenCalledWith(true);
+        });
+
+        it('should expose only supported programs for home facility', function() {
+            vm.$onInit();
+
+            expect(vm.homePrograms).toEqual(homeFacility.supportedPrograms);
+        });
+
     });
 
-    describe('init', function() {
+    describe('updateForm', function() {
+
+        it('should clear program', function() {
+            vm.program = {
+                id: 'some-program-id'
+            };
+
+            vm.updateForm();
+
+            expect(vm.program).toBeUndefined();
+        });
+
+        it('should update facilities', function() {
+            spyOn(vm, 'updateFacilities');
+
+            vm.updateForm();
+
+            expect(vm.updateFacilities).toHaveBeenCalledWith();
+        });
+
+    });
+
+    describe('updateFacilities for home facility', function() {
 
         beforeEach(function() {
-            supervisedPrograms = [
-                {'id': '7938919f-6f61-4d1a-a4dc-923c31e9cd45'}
-            ];
+            vm.homeFacility = homeFacility;
+            vm.isSupervised = false;
 
-            homePrograms = [
-                {'id': 'dce17f2e-af3e-40ad-8e00-3496adef44c3'},
-                {'id': '9456c3e9-c4a6-4a28-9e08-47ceb16a4121'}
-            ];
+            spyOn(loadingModalService, 'close');
+        });
 
-            homeFacility = {
-                'id': 'ac1d268b-ce10-455f-bf87-9c667da8f060',
-                'supportedPrograms': [
-                    homePrograms[0]
-                ]
-            };
+        it('should expose home facility as facility list', function() {
+            vm.updateFacilities();
+
+            expect(vm.facilities).toEqual([homeFacility]);
+        });
+
+        it('should select home facility', function() {
+            vm.updateFacilities();
+
+            expect(vm.facility).toEqual(homeFacility);
+        });
+
+        it('should close loading modal', function() {
+            vm.updateFacilities();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+    });
+
+    describe('updateFacilities for supervised facilities', function() {
+
+        beforeEach(function() {
+            vm.homeFacility = homeFacility;
+            vm.isSupervised = true;
+
+            spyOn(loadingModalService, 'close');
+        });
+
+        it('should clear facility list if program was not selected', function() {
+            vm.updateFacilities();
+
+            expect(vm.facilities).toEqual([]);
+        });
+
+        it('should close loading modal if no program was selected', function() {
+            vm.updateFacilities();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should retrieve facility list from the cache', function() {
+            vm.program = homePrograms[1];
+
+            vm.updateFacilities();
+
+            expect(cacheService.get).toHaveBeenCalledWith(homePrograms[1].id);
+        });
+
+        it('should set facility based on state params on init', function() {
+            $stateParams.facility = 'facility-two-id';
+            vm.program = homePrograms[1];
 
             cacheService.isReady.andReturn(true);
             cacheService.get.andCallFake(function(key) {
-                if (key === CACHE_KEYS.HOME_FACILITY) {
-                    return homeFacility;
-                } else if (key === CACHE_KEYS.HOME_PROGRAMS) {
-                    return homePrograms;
-                } else {
-                    return supervisedPrograms;
-                }
-            });
-        });
-
-        it('should display only supported programs for home facility', function() {
-            vm = $controller('OpenlmisFacilityProgramSelectController', {
-                $stateParams: {supervised: 'false'}
+                if (key === 'program-two-id') return facilities;
             });
 
-            vm.$onInit();
+            vm.updateFacilities(true);
 
-            expect(vm.homePrograms).toEqual(homeFacility.supportedPrograms)
+            expect(vm.facility).toEqual(facilities[1]);
         });
 
-        it('should display all supervised programs in supervised mode', function() {
-            vm = $controller('OpenlmisFacilityProgramSelectController', {
-                $stateParams: {supervised: 'true'}
+        it('should expose facilities for the program', function() {
+            vm.program = homePrograms[1];
+
+            cacheService.isReady.andReturn(true);
+            cacheService.get.andCallFake(function(key) {
+                if (key === 'program-two-id') return facilities;
             });
 
-            vm.$onInit();
+            vm.updateFacilities();
 
-            expect(vm.supervisedPrograms).toEqual(supervisedPrograms)
+            expect(vm.facilities).toEqual(facilities);
         });
 
-        it('should display only home facility in non-supervised mode', function() {
-            vm = $controller('OpenlmisFacilityProgramSelectController', {
-                $stateParams: {supervised: 'false'}
-            });
+        it('should clear facility', function() {
+            vm.facility = facilities[0];
 
-            vm.$onInit();
+            vm.updateFacilities();
 
-            expect(vm.facilities).toEqual([homeFacility])
+            expect(vm.facility).toBeUndefined();
         });
 
-        it('should display empty facility list in supervised mode', function() {
-            vm = $controller('OpenlmisFacilityProgramSelectController', {
-                $stateParams: {supervised: 'true'}
-            });
-
-            vm.$onInit();
-
-            expect(vm.facilities).toEqual([])
-        });
     });
 });
