@@ -29,11 +29,23 @@ describe('OpenlmisFacilityProgramSelectController', function() {
             vm = $injector.get('$controller')('OpenlmisFacilityProgramSelectController');
         });
 
-        homePrograms = [{
-            id: 'program-one-id'
-        }, {
-            id: 'program-two-id'
-        }];
+        homePrograms = [
+            {
+                id: 'program-one-id',
+                supportActive: true,
+                programActive: true
+            },
+            {
+                id: 'program-two-id',
+                supportActive: true,
+                programActive: true
+            },
+            {
+               id: 'e7a503c8-9f74-45d5-97c0-7041d91321b1',
+               supportActive: false,
+               programActive: true
+            }
+        ];
 
         supervisedPrograms = [{
             id: 'program-two-id'
@@ -61,7 +73,6 @@ describe('OpenlmisFacilityProgramSelectController', function() {
     describe('$onInit', function() {
 
         beforeEach(function() {
-            cacheService.isReady.andReturn(true);
             cacheService.get.andCallFake(function(key) {
                 if (key === CACHE_KEYS.HOME_FACILITY) return homeFacility;
                 if (key === CACHE_KEYS.HOME_PROGRAMS) return homePrograms;
