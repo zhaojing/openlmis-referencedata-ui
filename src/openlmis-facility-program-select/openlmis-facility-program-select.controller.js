@@ -75,17 +75,6 @@
             }
 
             vm.updateFacilities(true);
-
-            function getSupportedHomeFacilityPrograms(programs) {
-                var supportedPrograms = vm.homeFacility.supportedPrograms.map(function(program) {
-                    return program.id;
-                });
-
-                return $filter('filter')(programs, function(program) {
-                    return supportedPrograms.indexOf(program.id) >= 0 &&
-                        program.programActive && program.supportActive;
-                });
-            }
         }
 
         /**
@@ -162,7 +151,8 @@
             });
 
             return $filter('filter')(programs, function(program) {
-                return supportedPrograms.indexOf(program.id) >= 0;
+                return supportedPrograms.indexOf(program.id) >= 0 &&
+                    program.programActive && program.supportActive;
             });
         }
 
