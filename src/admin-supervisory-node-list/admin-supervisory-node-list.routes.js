@@ -15,49 +15,49 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-supervisory-node-list').config(routes);
+    angular.module('admin-supervisory-node-list').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.supervisoryNodes', {
-			showInNavigation: true,
-			label: 'adminSupervisoryNodeList.supervisoryNodes',
-			url: '/supervisoryNodes?name&zoneId&page&size',
-			controller: 'SupervisoryNodeListController',
-			templateUrl: 'admin-supervisory-node-list/supervisory-node-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.SUPERVISORY_NODES_MANAGE],
-			resolve: {
-				supervisoryNodes: function(paginationService, supervisoryNodeService, $stateParams) {
-					/*return paginationService.registerList($stateParams, function() {
-					    var params = angular.copy(stateParams),
-							page = stateParams.page,
-							size = stateParams.size;
+        $stateProvider.state('openlmis.administration.supervisoryNodes', {
+            showInNavigation: true,
+            label: 'adminSupervisoryNodeList.supervisoryNodes',
+            url: '/supervisoryNodes?name&zoneId&page&size',
+            controller: 'SupervisoryNodeListController',
+            templateUrl: 'admin-supervisory-node-list/supervisory-node-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.SUPERVISORY_NODES_MANAGE],
+            resolve: {
+                supervisoryNodes: function(paginationService, supervisoryNodeService, $stateParams) {
+                    /*return paginationService.registerList($stateParams, function() {
+                        var params = angular.copy(stateParams),
+                        page = stateParams.page,
+                        size = stateParams.size;
 
-						delete params.page;
-						delete params.size;
+                        delete params.page;
+                        delete params.size;
 
-						return supervisoryNodeService.search({
-							page: page,
-							size: size
-						}, params);
-					});*/
+                        return supervisoryNodeService.search({
+                            page: page,
+                            size: size
+                        }, params);
+                    });*/
                     return supervisoryNodeService.getAll();
-				},
-				geographicZones: function($q, geographicZoneService) {
-					var deferred = $q.defer();
+                },
+                geographicZones: function($q, geographicZoneService) {
+                    var deferred = $q.defer();
 
-					geographicZoneService.getAll().then(function(response) {
-						deferred.resolve(response.content);
-					}, deferred.reject);
+                    geographicZoneService.getAll().then(function(response) {
+                        deferred.resolve(response.content);
+                    }, deferred.reject);
 
-					return deferred.promise;
-				}
-			}
-		});
-	}
+                    return deferred.promise;
+                }
+            }
+        });
+    }
 })();

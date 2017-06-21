@@ -39,10 +39,10 @@
                     return supervisoryNodeFactory.getSupervisoryNode($stateParams.id);
                 },
                 childNodes: function(paginationService, supervisoryNode, $stateParams) {
-					return paginationService.registerList(null, $stateParams, function() {
+                    return paginationService.registerList(null, $stateParams, function() {
                         return supervisoryNode.childNodes;
-					});
-				},
+                    });
+                },
             }
         });
     }

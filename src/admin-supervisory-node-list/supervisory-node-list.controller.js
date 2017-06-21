@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,20 +24,20 @@
      * @description
      * Controller for managing supervisory node list screen.
      */
-	angular
-		.module('admin-supervisory-node-list')
-		.controller('SupervisoryNodeListController', controller);
+    angular
+        .module('admin-supervisory-node-list')
+        .controller('SupervisoryNodeListController', controller);
 
-	controller.$inject = ['$state', '$stateParams', 'supervisoryNodes', 'geographicZones'];
+    controller.$inject = ['$state', '$stateParams', 'supervisoryNodes', 'geographicZones'];
 
-	function controller($state, $stateParams, supervisoryNodes, geographicZones) {
+    function controller($state, $stateParams, supervisoryNodes, geographicZones) {
 
-		var vm = this;
+        var vm = this;
 
         vm.$onInit = onInit;
         vm.search = search;
 
-		/**
+        /**
          * @ngdoc property
          * @propertyOf admin-supervisory-node-list.controller:SupervisoryNodeListController
          * @name supervisoryNodes
@@ -48,7 +48,7 @@
          */
         vm.supervisoryNodes = undefined;
 
-		/**
+        /**
          * @ngdoc property
          * @propertyOf admin-supervisory-node-list.controller:SupervisoryNodeListController
          * @name geographicZones
@@ -90,8 +90,8 @@
          * Method that is executed on initiating SupervisoryNodeListController.
          */
         function onInit() {
-			vm.supervisoryNodes = supervisoryNodes;
-			vm.geographicZones = geographicZones;
+            vm.supervisoryNodes = supervisoryNodes;
+            vm.geographicZones = geographicZones;
             vm.supervisoryNodeName = $stateParams.name;
             vm.geographicZone = $stateParams.zoneId;
         }
@@ -104,16 +104,15 @@
          * @description
          * Reloads page with new search parameters.
          */
-		function search() {
-			var stateParams = angular.copy($stateParams);
+        function search() {
+            var stateParams = angular.copy($stateParams);
 
-			stateParams.name = vm.supervisoryNodeName;
-			stateParams.zoneId = vm.geographicZone;
+            stateParams.name = vm.supervisoryNodeName;
+            stateParams.zoneId = vm.geographicZone;
 
-			$state.go('openlmis.administration.supervisoryNodes', stateParams, {
-				reload: true
-			});
-		}
-	}
-
+            $state.go('openlmis.administration.supervisoryNodes', stateParams, {
+                reload: true
+            });
+        }
+    }
 })();
