@@ -34,10 +34,9 @@
         'REQUISITION_RIGHTS', 'facilityService', 'cacheService', 'CACHE_KEYS'
     ];
 
-    function service(
-        facilityFactory, programService, authorizationService, $q, $filter, REQUISITION_RIGHTS,
-        facilityService, cacheService, CACHE_KEYS
-    ) {
+    function service(facilityFactory, programService, authorizationService, $q, $filter, REQUISITION_RIGHTS,
+                     facilityService, cacheService, CACHE_KEYS) {
+
         this.load = load;
         this.clear = clear;
 
@@ -47,7 +46,7 @@
          * @name load
          *
          * @description
-         * Loads all the data required by the component and caches them in memory. The things that
+         * Loads all the data required by the component and caches them in memory. The objects that
          * will be stored are home facility, home programs, supervised programs and a list of
          * facility for each program.
          */

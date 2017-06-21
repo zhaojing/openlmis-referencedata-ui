@@ -1,10 +1,10 @@
 {
     "openlmisFacilityProgramSelect.facility": "Facility",
-    "openlmisFacilityProgramSelect.facilityType": "Facility type",
-    "openlmisFacilityProgramSelect.myFacility": "My facility",
+    "openlmisFacilityProgramSelect.facilityType": "Facility Type",
+    "openlmisFacilityProgramSelect.myFacility": "My Facility",
     "openlmisFacilityProgramSelect.program": "Program",
-    "openlmisFacilityProgramSelect.supervisedFacility": "Supervised facility",
-    "openlmisFacilityProgramSelect.selectFacility": "Select facility",
-    "openlmisFacilityProgramSelect.selectProgram": "Select program",
+    "openlmisFacilityProgramSelect.supervisedFacility": "Supervised Facility",
+    "openlmisFacilityProgramSelect.selectFacility": "Select Facility",
+    "openlmisFacilityProgramSelect.selectProgram": "Select Program",
     "openlmisFacilityProgramSelect.type": "Type"
 }

@@ -22,7 +22,7 @@
      * @name openlmis-facility-program-select.controller:OpenlmisFacilityProgramSelectController
      *
      * @description
-     * Controller responsible for facilities and programs on the openlmis-facility-program-select
+     * Controller responsible for facilities and programs for the openlmis-facility-program-select
      * component.
      */
     angular

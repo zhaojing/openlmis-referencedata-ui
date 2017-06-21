@@ -15,9 +15,7 @@
 
 describe('facilityProgramCacheService', function() {
 
-    /*
-        Could use more test...
-     */
+    //Could use more tests...
 
     var facilityProgramCacheService, cacheService, facilityFactory, CACHE_KEYS, $q,
         authorizationService, programService, $rootScope, REQUISITION_RIGHTS, facilityService;
