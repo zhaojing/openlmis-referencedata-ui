@@ -122,6 +122,18 @@ describe('OpenlmisFacilityProgramSelectController', function() {
             expect(vm.homePrograms).toEqual(homeFacility.supportedPrograms);
         });
 
+        it('should not expose home programs if home facility is undefined', function() {
+            cacheService.get.andCallFake(function(key) {
+                if (key === CACHE_KEYS.HOME_FACILITY) return undefined;
+                if (key === CACHE_KEYS.HOME_PROGRAMS) return homePrograms;
+                if (key === CACHE_KEYS.SUPERVISED_PROGRAMS) return supervisedPrograms;
+            });
+
+            vm.$onInit();
+
+            expect(vm.homePrograms).toBeUndefined();
+        });
+
     });
 
     describe('updateForm', function() {

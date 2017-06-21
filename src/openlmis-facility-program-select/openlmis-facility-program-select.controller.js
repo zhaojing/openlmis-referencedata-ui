@@ -146,6 +146,8 @@
         }
 
         function getSupportedHomeFacilityPrograms(programs) {
+            if (!vm.homeFacility) return;
+
             var supportedPrograms = vm.homeFacility.supportedPrograms.map(function(program) {
                 return program.id;
             });
@@ -155,8 +157,6 @@
                     program.programActive && program.supportActive;
             });
         }
-
-
 
         function isDataReady() {
             return cacheService.isReady(CACHE_KEYS.HOME_FACILITY) &&
