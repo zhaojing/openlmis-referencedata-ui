@@ -30,21 +30,9 @@ describe('OpenlmisFacilityProgramSelectController', function() {
         });
 
         homePrograms = [
-            {
-                id: 'program-one-id',
-                supportActive: true,
-                programActive: true
-            },
-            {
-                id: 'program-two-id',
-                supportActive: true,
-                programActive: true
-            },
-            {
-               id: 'e7a503c8-9f74-45d5-97c0-7041d91321b1',
-               supportActive: false,
-               programActive: true
-            }
+            { id: 'program-one-id' },
+            { id: 'program-two-id' },
+            { id: 'program-three-id' }
         ];
 
         supervisedPrograms = [{
@@ -62,7 +50,16 @@ describe('OpenlmisFacilityProgramSelectController', function() {
         homeFacility = {
             id: 'home-facility-id',
             supportedPrograms: [
-                homePrograms[0]
+                {
+                    id: 'program-one-id',
+                    supportActive: true,
+                    programActive: true
+                },
+                {
+                    id: 'program-three-id',
+                    supportActive: true,
+                    programActive: false
+                }
             ]
         };
 
@@ -119,7 +116,7 @@ describe('OpenlmisFacilityProgramSelectController', function() {
         it('should expose only supported programs for home facility', function() {
             vm.$onInit();
 
-            expect(vm.homePrograms).toEqual(homeFacility.supportedPrograms);
+            expect(vm.homePrograms).toEqual([homePrograms[0]]);
         });
 
         it('should not expose home programs if home facility is undefined', function() {

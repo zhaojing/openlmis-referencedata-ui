@@ -147,14 +147,20 @@
 
         function getSupportedHomeFacilityPrograms(programs) {
             if (!vm.homeFacility) return;
-
-            var supportedPrograms = vm.homeFacility.supportedPrograms.map(function(program) {
+            
+            var supportedProgramIds = vm.homeFacility.supportedPrograms.map(function(program) {
                 return program.id;
             });
 
             return $filter('filter')(programs, function(program) {
-                return supportedPrograms.indexOf(program.id) >= 0 &&
-                    program.programActive && program.supportActive;
+                var programIndex = supportedProgramIds.indexOf(program.id);
+
+                if (programIndex < 0) {
+                    return false;
+                }
+
+                var supportedProgram = vm.homeFacility.supportedPrograms[programIndex];
+                return supportedProgram.programActive && supportedProgram.supportActive;
             });
         }
 
