@@ -13,6 +13,7 @@ now properly be marked as required on the Role creation/edit screen.
 system also prompts for removing roles for old home facility.
 * [OLMIS-2689](https://openlmis.atlassian.net/browse/OLMIS-2689): When filtering by home facility on initiate requisition view,
 only programs supported by home facility are shown.
+* [OLMIS-2280](https://openlmis.atlassian.net/browse/OLMIS-2280): Added supervisory list + edit screens.
 
 5.1.0 / 2017-05-26
 ==================

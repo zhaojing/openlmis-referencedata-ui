@@ -28,13 +28,19 @@
         .module('referencedata-supervisory-node')
         .service('supervisoryNodeService', service);
 
-    service.$inject = ['openlmisUrlFactory', '$resource'];
+    service.$inject = ['referencedataUrlFactory', '$resource'];
 
-    function service(openlmisUrlFactory, $resource) {
-        var resource = $resource(openlmisUrlFactory('/api/supervisoryNodes/:id'));
+    function service(referencedataUrlFactory, $resource) {
+        var resource = $resource(referencedataUrlFactory('/api/supervisoryNodes/:id'), {}, {
+            search: {
+                url: referencedataUrlFactory('/api/supervisoryNodes/search'),
+                method: 'POST',
+            }
+        });
 
         this.get = get;
         this.getAll = getAll;
+        this.search = search;
 
         /**
          * @ngdoc method
@@ -65,6 +71,22 @@
          */
         function getAll() {
             return resource.query().$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.supervisoryNodeService
+         * @name search
+         *
+         * @description
+         * Searches supervisory nodes using given parameters.
+         *
+         * @param  {Object}  paginationParams The pagination parameters
+         * @param  {Object}  queryParams      The search parameters
+         * @return {Promise}                  The requested page of filtered supervisory nodes
+         */
+        function search(paginationParams, queryParams) {
+            return resource.search(paginationParams, queryParams).$promise;
         }
     }
 })();

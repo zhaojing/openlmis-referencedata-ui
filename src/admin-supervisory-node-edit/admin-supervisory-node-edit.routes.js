@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.administration.supervisoryNodes.edit', {
             label: 'adminSupervisoryNodeEdit.editSupervisoryNode',
-            url: '/supervisoryNodes/:id?page&size',
+            url: '/supervisoryNodes/:id',
             accessRights: [ADMINISTRATION_RIGHTS.SUPERVISORY_NODES_MANAGE],
             views: {
                 '@openlmis': {

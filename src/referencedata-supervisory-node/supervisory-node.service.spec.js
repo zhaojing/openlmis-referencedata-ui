@@ -15,7 +15,7 @@
 
 describe('supervisoryNodeService', function() {
 
-    var $rootScope, $httpBackend, openlmisUrlFactory, supervisoryNodeService, supervisoryNodes;
+    var $rootScope, $httpBackend, referencedataUrlFactory, supervisoryNodeService, supervisoryNodes;
 
     beforeEach(function() {
         module('referencedata-supervisory-node');
@@ -23,7 +23,7 @@ describe('supervisoryNodeService', function() {
         inject(function($injector) {
             $httpBackend = $injector.get('$httpBackend');
             $rootScope = $injector.get('$rootScope');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             supervisoryNodeService = $injector.get('supervisoryNodeService');
         });
 
@@ -44,7 +44,7 @@ describe('supervisoryNodeService', function() {
         var data;
 
         beforeEach(function() {
-            $httpBackend.when('GET', openlmisUrlFactory('/api/supervisoryNodes'))
+            $httpBackend.when('GET', referencedataUrlFactory('/api/supervisoryNodes'))
                 .respond(200, supervisoryNodes);
         });
 
@@ -63,7 +63,7 @@ describe('supervisoryNodeService', function() {
     describe('get', function() {
 
         beforeEach(function() {
-            $httpBackend.when('GET', openlmisUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id)).respond(200, supervisoryNodes[0]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id)).respond(200, supervisoryNodes[0]);
         });
 
         it('should return promise', function() {
@@ -86,12 +86,56 @@ describe('supervisoryNodeService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', openlmisUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id));
+            $httpBackend.expect('GET', referencedataUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id));
 
             supervisoryNodeService.get(supervisoryNodes[0].id);
             $httpBackend.flush();
         });
+    });
 
+    describe('search', function() {
+
+        var page, size, name, url;
+
+        beforeEach(function() {
+            page = 0;
+            size = 2;
+            name = 'supervisoryNode';
+            url = referencedataUrlFactory('/api/supervisoryNodes/search?page=' + page + '&size=' + size);
+
+            $httpBackend.when('POST', url)
+                .respond(200, {content: [supervisoryNodes[0], supervisoryNodes[1]]});
+        });
+
+        it('should make correct request', function() {
+            $httpBackend.expectPOST(url);
+
+            supervisoryNodeService.search({
+                page: page,
+                size: size
+            }, {
+                name: name
+            });
+            $httpBackend.flush();
+        });
+
+        it('should resolve to supervisory node` list', function() {
+            var result;
+
+            supervisoryNodeService.search({
+                page: page,
+                size: size
+            }, {
+                name: name
+            }).then(function(paginatedObject) {
+                result = paginatedObject;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result.content.length).toEqual(2);
+            expect(result.content).toEqual([supervisoryNodes[0], supervisoryNodes[1]]);
+        });
     });
 
     afterEach(function() {

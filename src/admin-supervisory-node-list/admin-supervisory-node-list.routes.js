@@ -33,7 +33,7 @@
             accessRights: [ADMINISTRATION_RIGHTS.SUPERVISORY_NODES_MANAGE],
             resolve: {
                 supervisoryNodes: function(paginationService, supervisoryNodeService, $stateParams) {
-                    /*return paginationService.registerList($stateParams, function() {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
                         page = stateParams.page,
                         size = stateParams.size;
@@ -45,8 +45,7 @@
                             page: page,
                             size: size
                         }, params);
-                    });*/
-                    return supervisoryNodeService.getAll();
+                    });
                 },
                 geographicZones: function($q, geographicZoneService) {
                     var deferred = $q.defer();
