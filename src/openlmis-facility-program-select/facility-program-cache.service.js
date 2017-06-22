@@ -102,10 +102,32 @@
             cacheService.clear(CACHE_KEYS.HOME_FACILITY);
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
+         * @name whenReady
+         *
+         * @description
+         * Returns a promise that resolves when all the required data has been requested. This
+         * doesn't necessarily mean that the data has been already downloaded.
+         *
+         * @return {Promise}    the promise resolved when all data has been requested
+         */
         function whenReady() {
             return deferred.promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
+         * @name isReady
+         *
+         * @description
+         * Returns information whether all the required data has been requested. This doesn't
+         * necessarily mean that the data has been already downloaded.
+         *
+         * @return {Promise}    the promise resolved when all data has been requested
+         */
         function isReady() {
             return ready;
         }
