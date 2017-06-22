@@ -6,8 +6,8 @@
     <input id="supervisoryNodeName" class="form-control" ng-model="vm.supervisoryNode.name" required disabled/>
     <label for="facility">{{'adminSupervisoryNodeEdit.associatedFacility' | message}}</label>
     <input id="facility" class="form-control" ng-model="vm.supervisoryNode.facility.name" required disabled/>
-    <label ng-if="vm.supervisoryNode.parentNode" for="parentNode">{{'adminSupervisoryNodeEdit.parentNode' | message}}</label>
-    <input ng-if="vm.supervisoryNode.parentNode" id="parentNode" class="form-control" ng-model="vm.supervisoryNode.parentNode.name" disabled/>
+    <label for="parentSupervisoryNode">{{'adminSupervisoryNodeEdit.parentNode' | message}}</label>
+    <input id="parentSupervisoryNode" class="form-control" ng-model="vm.supervisoryNode.parentNode.name" disabled/>
     <label for="description">{{'adminSupervisoryNodeEdit.description' | message}}</label>
     <textarea id="description" ng-model="vm.supervisoryNode.description" disabled></textarea>
 </form>
