@@ -16,7 +16,7 @@
 describe('OpenlmisFacilityProgramSelectController', function() {
 
     var vm, $stateParams, cacheService, homeFacility, homePrograms, supervisedPrograms,
-        CACHE_KEYS, loadingModalService, facilities;
+        CACHE_KEYS, loadingModalService, facilities, facilityProgramCacheService;
 
     beforeEach(function() {
         module('openlmis-facility-program-select');
@@ -26,6 +26,7 @@ describe('OpenlmisFacilityProgramSelectController', function() {
             $stateParams = $injector.get('$stateParams');
             CACHE_KEYS = $injector.get('CACHE_KEYS');
             loadingModalService = $injector.get('loadingModalService');
+            facilityProgramCacheService = $injector.get('facilityProgramCacheService');
             vm = $injector.get('$controller')('OpenlmisFacilityProgramSelectController');
         });
 
@@ -75,6 +76,8 @@ describe('OpenlmisFacilityProgramSelectController', function() {
                 if (key === CACHE_KEYS.HOME_PROGRAMS) return homePrograms;
                 if (key === CACHE_KEYS.SUPERVISED_PROGRAMS) return supervisedPrograms;
             });
+
+            spyOn(facilityProgramCacheService, 'isReady').andReturn(true);
         });
 
         it('should expose home facility', function() {

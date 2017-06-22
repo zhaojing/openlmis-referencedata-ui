@@ -37,8 +37,13 @@
     function service(facilityFactory, programService, authorizationService, $q, $filter, REQUISITION_RIGHTS,
                      facilityService, cacheService, CACHE_KEYS) {
 
+        var deferred = $q.defer(),
+            ready = false;
+
         this.load = load;
         this.clear = clear;
+        this.whenReady = whenReady;
+        this.isReady = isReady;
 
         /**
          * @ngdoc method
@@ -53,11 +58,23 @@
         function load() {
             cacheService.cache(CACHE_KEYS.HOME_FACILITY, facilityFactory.getUserHomeFacility());
 
+            var promises = [];
             $q.all(cachePrograms()).then(function(programLists) {
                 angular.forEach($filter('unique')(
                     programLists[0].concat(programLists[1]), 'id'
-                ), cacheFacilities);
-            });
+                ), function(program) {
+                    var promise = cacheFacilities(program);
+
+                    if (promise) {
+                        promises.push(promise);
+                    }
+                });
+            }, deferred.reject);
+
+            $q.all(promises).then(function() {
+                ready = true;
+                deferred.resolve();
+            }, deferred.reject);
         }
 
         /**
@@ -85,6 +102,14 @@
             cacheService.clear(CACHE_KEYS.HOME_FACILITY);
         }
 
+        function whenReady() {
+            return deferred.promise;
+        }
+
+        function isReady() {
+            return ready;
+        }
+
         function cachePrograms() {
             var userId = authorizationService.getUser().user_id;
 
@@ -106,7 +131,9 @@
             var promises = getFacilityListsPromises(program.id);
 
             if(promises.length > 0) {
-                cacheService.cache(program.id, $q.all(promises), function (facilityList) {
+                var promise = $q.all(promises);
+
+                cacheService.cache(program.id, promise, function (facilityList) {
                     var facilities;
 
                     if(promises.length > 1) {
@@ -117,6 +144,8 @@
 
                     return facilities;
                 });
+
+                return promise;
             }
         }
 
