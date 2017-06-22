@@ -1,5 +1,9 @@
-5.1.1 / WIP
+5.2.0 / 2017-06-22
 ==================
+
+New functionality added in a backwards-compatible manner:
+
+* [OLMIS-2567](https://openlmis.atlassian.net/browse/OLMIS-2567): Added openlmis-facility-program-select component.
 
 Improvements:
 
