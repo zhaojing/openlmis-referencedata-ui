@@ -43,6 +43,9 @@
                     url: openlmisUrlFactory('api/users/:userId/programs'),
                     method: 'GET',
                     isArray: true
+                },
+                'save': {
+                    method: 'PUT'
                 }
             }),
             userProgramsOffline = localStorageFactory('userPrograms');
@@ -50,7 +53,8 @@
         return {
             get: get,
             getAll: getAll,
-            getUserPrograms: getUserPrograms
+            getUserPrograms: getUserPrograms,
+            save: save
         };
 
         /**
@@ -85,11 +89,26 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-program.programService
+         * @name save
+         *
+         * @description
+         * Saves program to the server.
+         *
+         * @param  {Object}  program Program to be saved
+         * @return {Promise}         Saved program
+         */
+        function save(program) {
+            return resource.save(program).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-program.programService
          * @name getUserPrograms
          *
          * @description
          * Retrieves programs for the current user and saves them in the local storage.
-         * If the user is offline program are retreived from the local storage.
+         * If the user is offline program are retrieved from the local storage.
          *
          * @param  {String}  userId            User UUID
          * @param  {Boolean} isForHomeFacility Indicates if programs should be for home or supervised facilities

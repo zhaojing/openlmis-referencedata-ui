@@ -125,4 +125,26 @@ describe('programService', function() {
         expect(programsStorage.put.callCount).toEqual(2);
     });
 
+    it('should save program', function() {
+        var data;
+
+        $httpBackend.when('PUT', openlmisUrlFactory('/api/programs/save'))
+            .respond(200, function() {
+                return program2;
+            });
+
+        programService.save(program1).then(function(response) {
+            data = response;
+        });
+
+        $httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(data.id).toEqual(program2.id);
+    });
+
+    afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
 });
