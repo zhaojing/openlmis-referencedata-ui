@@ -128,10 +128,8 @@ describe('programService', function() {
     it('should save program', function() {
         var data;
 
-        $httpBackend.when('PUT', openlmisUrlFactory('/api/programs/save'))
-            .respond(200, function() {
-                return program2;
-            });
+        $httpBackend.when('PUT', openlmisUrlFactory('/api/programs'))
+            .respond(200, program2);
 
         programService.save(program1).then(function(response) {
             data = response;
