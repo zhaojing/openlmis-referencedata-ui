@@ -19,12 +19,12 @@
     'use strict';
 
     /**
-    * @ngdoc service
-    * @name referencedata-facility.facilityFactory
-    *
-    * @description
-    * Allows the user to retrieve facilities.
-    */
+     * @ngdoc service
+     * @name referencedata-facility.facilityFactory
+     *
+     * @description
+     * Allows the user to retrieve facilities.
+     */
     angular
     .module('referencedata-facility')
     .factory('facilityFactory', factory);
