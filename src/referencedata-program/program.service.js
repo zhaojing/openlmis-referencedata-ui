@@ -59,7 +59,7 @@
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
-            getUserSupportedPrograms: getUserSupportedPrograms,
+            getUserHomeFacilitySupportedPrograms: getUserHomeFacilitySupportedPrograms,
             update: update
         };
 
@@ -152,9 +152,10 @@
          * @description
          * Gets all user supported programs for home facility.
          *
-         * @return {Promise} Array of all user home facility programs that are supported by home facility.
+         * @param  {String}  userId  User UUID
+         * @return {Promise}         Array of all user home facility programs that are supported by home facility.
          */
-        function getUserSupportedPrograms(userId) {
+        function getUserHomeFacilitySupportedPrograms(userId) {
             return resource.getUserSupportedPrograms({userId: userId}).$promise;
         }
     }

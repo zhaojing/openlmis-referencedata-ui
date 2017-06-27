@@ -92,7 +92,7 @@ describe('programService', function() {
         $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/supportedPrograms'))
             .respond(200, [program1, program2]);
 
-        programService.getUserSupportedPrograms(userId).then(function(response) {
+        programService.getUserHomeFacilitySupportedPrograms(userId).then(function(response) {
             data = response;
         });
 
