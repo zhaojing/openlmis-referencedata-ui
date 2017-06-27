@@ -46,6 +46,11 @@
                 },
                 'update': {
                     method: 'PUT'
+                },
+                'getUserSupportedPrograms': {
+                    url: openlmisUrlFactory('api/users/:userId/supportedPrograms'),
+                    method: 'GET',
+                    isArray: true
                 }
             }),
             userProgramsOffline = localStorageFactory('userPrograms');
@@ -54,6 +59,7 @@
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
+            getUserSupportedPrograms: getUserSupportedPrograms,
             update: update
         };
 
@@ -136,6 +142,20 @@
                 });
             }
             return deferred.promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-program.programService
+         * @name getUserSupportedPrograms
+         *
+         * @description
+         * Gets all user supported programs for home facility.
+         *
+         * @return {Promise} Array of all user home facility programs that are supported by home facility.
+         */
+        function getUserSupportedPrograms(userId) {
+            return resource.getUserSupportedPrograms({userId: userId}).$promise;
         }
     }
 })();

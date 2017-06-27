@@ -69,13 +69,30 @@ describe('programService', function() {
     });
 
     it('should get all programs', function() {
-        var data,
-            programWithTemplate = angular.copy(program2);
+        var data;
 
         $httpBackend.when('GET', openlmisUrlFactory('/api/programs'))
         .respond(200, [program1, program2]);
 
         programService.getAll().then(function(response) {
+            data = response;
+        });
+
+        $httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(data[0].id).toEqual(program1.id);
+        expect(data[1].id).toEqual(program2.id);
+    });
+
+    it('should get all supported programs', function() {
+        var data,
+            userId = '1';
+
+        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/supportedPrograms'))
+            .respond(200, [program1, program2]);
+
+        programService.getUserSupportedPrograms(userId).then(function(response) {
             data = response;
         });
 
