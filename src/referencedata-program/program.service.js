@@ -104,7 +104,7 @@
          * @return {Promise}         Saved program
          */
         function update(program) {
-            return resource.update(program).$promise;
+            return resource.update({id: program.id}, program).$promise;
         }
 
         /**
