@@ -131,7 +131,7 @@ describe('programService', function() {
         $httpBackend.when('PUT', openlmisUrlFactory('/api/programs'))
             .respond(200, program2);
 
-        programService.save(program1).then(function(response) {
+        programService.update(program1).then(function(response) {
             data = response;
         });
 

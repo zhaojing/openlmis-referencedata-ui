@@ -44,7 +44,7 @@
                     method: 'GET',
                     isArray: true
                 },
-                'save': {
+                'update': {
                     method: 'PUT'
                 }
             }),
@@ -54,7 +54,7 @@
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
-            save: save
+            update: update
         };
 
         /**
@@ -97,8 +97,8 @@
          * @param  {Object}  program Program to be saved
          * @return {Promise}         Saved program
          */
-        function save(program) {
-            return resource.save(program).$promise;
+        function update(program) {
+            return resource.update(program).$promise;
         }
 
         /**
