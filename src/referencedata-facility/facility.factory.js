@@ -61,22 +61,22 @@
          */
         function getUserFacilities(userId, rightName) {
             var promises = [],
-				    facilities = [],
-            right = authorizationService.getRightByName(rightName),
-				    deferred = $q.defer();
+				facilities = [],
+                right = authorizationService.getRightByName(rightName),
+				deferred = $q.defer();
 
             programService.getUserPrograms(userId, false).then(function(supervisedPrograms) {
                 angular.forEach(supervisedPrograms, function(program) {
-    				        promises.push(facilityService.getUserSupervisedFacilities(userId, program.id, right.id));
-    		        });
-    			      $q.all(promises).then(function(results) {
-                    angular.forEach(results, function(result) {
-                        facilities = facilities.concat(result);
-                    });
-                    deferred.resolve($filter('unique')(facilities, 'id'));
-    			      }, function() {
-    				    deferred.reject();
-    			  });
+    				promises.push(facilityService.getUserSupervisedFacilities(userId, program.id, right.id));
+    			});
+    			$q.all(promises).then(function(results) {
+    				angular.forEach(results, function(result) {
+    					facilities = facilities.concat(result);
+    				});
+    				deferred.resolve($filter('unique')(facilities, 'id'));
+    			}, function() {
+    				deferred.reject();
+    			});
             }, function() {
                 deferred.reject();
             });
