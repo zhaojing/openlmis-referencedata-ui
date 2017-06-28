@@ -98,13 +98,15 @@
          * @name save
          *
          * @description
-         * Saves program to the server.
+         * Updates program.
          *
-         * @param  {Object}  program Program to be saved
-         * @return {Promise}         Saved program
+         * @param  {Object}  program Program to be updated
+         * @return {Promise}         Updated program
          */
         function update(program) {
-            return resource.update({id: program.id}, program).$promise;
+            return resource.update({
+                id: program.id
+            }, program).$promise;
         }
 
         /**
