@@ -7,6 +7,7 @@
 New functionality added in a backwards-compatible manner:
 
 * [OLMIS-2567](https://openlmis.atlassian.net/browse/OLMIS-2567): Added openlmis-facility-program-select component.
+* [OLMIS-2729](https://openlmis.atlassian.net/browse/OLMIS-2729): Added getUserSupportedPrograms to program service.
 
 Improvements:
 
@@ -20,7 +21,10 @@ now properly be marked as required on the Role creation/edit screen.
 system also prompts for removing roles for old home facility.
 * [OLMIS-2689](https://openlmis.atlassian.net/browse/OLMIS-2689): When filtering by home facility on initiate requisition view,
 only programs supported by home facility are shown.
-* [OLMIS-2280](https://openlmis.atlassian.net/browse/OLMIS-2280): Added supervisory list + edit screens.
+* [OLMIS-2446](https://openlmis.atlassian.net/browse/OLMIS-2446): Made Add/Edit title dynamic.
+* [OLMIS-2411](https://openlmis.atlassian.net/browse/OLMIS-2411): Supervisory node dropdown always exists
+  * If a role is getting assigned that is already assigned, an error notification is showed instead
+
 
 5.1.0 / 2017-05-26
 ==================
