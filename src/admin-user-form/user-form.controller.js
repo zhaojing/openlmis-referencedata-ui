@@ -30,11 +30,11 @@
 
         controller.$inject = [
             'user', 'facilities', 'referencedataUserService', 'loadingModalService', 'confirmService',
-            '$filter', '$state', 'notificationService', 'UserPasswordModal', 'authUserService', 'messageService'
+            '$filter', '$state', 'notificationService', 'UserPasswordModal', 'authUserService'
         ];
 
         function controller(user, facilities, referencedataUserService, loadingModalService, confirmService,
-                            $filter, $state, notificationService, UserPasswordModal, authUserService, messageService) {
+                            $filter, $state, notificationService, UserPasswordModal, authUserService) {
 
         var vm = this;
 
@@ -42,7 +42,6 @@
         vm.saveUser = saveUser;
         vm.removeHomeFacility = removeHomeFacility;
         vm.getFacilityDisplay = getFacilityDisplay;
-        vm.addEditUser = addEditUser;
 
         /**
          * @ngdoc property
@@ -290,15 +289,6 @@
         function getFacilityDisplay(facility) {
             return facility.code + ' - ' + facility.name;
         }
-
-        function addEditUser() {
-            if (vm.updateMode) {
-                return messageService.get('adminUserForm.editUser', {username: vm.user.username});
-            } else {
-                return messageService.get('adminUserForm.addUser');
-            }
-        };
-
 
         function goToUserList() {
             $state.go('^', {}, {
