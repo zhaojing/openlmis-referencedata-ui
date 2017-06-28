@@ -1,6 +1,8 @@
 {
     "adminUserForm.addEdit": "Add/Edit",
     "adminUserForm.addEditUser": "Add/Edit User",
+    "adminUserForm.editUser": "Edit ${username}",
+    "adminUserForm.addUser": "Add User",
     "adminUserForm.username": "Username",
     "adminUserForm.email": "Email",
     "adminUserForm.firstName": "First name",
