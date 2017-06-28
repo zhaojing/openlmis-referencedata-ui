@@ -116,17 +116,6 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name programs
-         * @type {Array}
-         *
-         * @description
-         * List of all supervisory nodes that were not assigned to user yet.
-         */
-        vm.unusedSupervisoryNodes = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
          * @name types
          * @type {Array}
          *
@@ -339,19 +328,6 @@
             });
         }
 
-        function getUnusedSupervisoryNodes() {
-            var nodes = [];
-
-            angular.forEach(vm.supervisoryNodes , function(node) {
-                var filtered = $filter('filter')(vm.user.roleAssignments, {
-                    supervisoryNodeCode: node.code
-                }, true);
-                if(filtered.length < 1) nodes.push(node);
-            });
-
-            return nodes;
-        }
-
         function reloadTable() {
             var groupedRoleAssignments = $filter('groupBy')(vm.user.roleAssignments, '$type');
             vm.filteredRoleAssignments = groupedRoleAssignments[vm.types[vm.selectedType].name];
@@ -359,8 +335,6 @@
             vm.filteredRoles = $filter('filter')(vm.roles, {
                 $type: vm.types[vm.selectedType].name
             });
-
-            vm.unusedSupervisoryNodes = getUnusedSupervisoryNodes();
 
             if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0];
             if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0];

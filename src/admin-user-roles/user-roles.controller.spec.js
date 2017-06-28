@@ -183,10 +183,6 @@ describe('UserRolesController', function() {
             expect(vm.programs).toEqual(programs);
         });
 
-        it('should set unusedSupervisoryNodes', function() {
-            expect(vm.unusedSupervisoryNodes).toEqual([supervisoryNodes[1]]);
-        });
-
         it('should set types', function() {
             expect(vm.types).toEqual(ROLE_TYPES);
         });
@@ -309,7 +305,6 @@ describe('UserRolesController', function() {
 
             expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
             expect(notificationService.error).not.toHaveBeenCalled();
-            expect(vm.unusedSupervisoryNodes.length).toBe(0);
             expect(vm.user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[2].id);
             expect(vm.user.roleAssignments[roleAssignmentsCount].$roleName).toEqual(roles[2].name);
             expect(vm.user.roleAssignments[roleAssignmentsCount].$programName).toEqual(programs[1].name);

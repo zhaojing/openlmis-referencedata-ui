@@ -12,10 +12,10 @@
                         required>
                     </select>
                 </div>
-                <div class="form-group" ng-if="vm.isSupervisionType() && vm.unusedSupervisoryNodes && vm.unusedSupervisoryNodes.length > 0">
+                <div class="form-group" ng-if="vm.isSupervisionType()">
                     <label for="supervisoryNode">{{'adminUserRoles.supervisoryNode' | message}}</label>
                     <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
-                        ng-options="supervisoryNode as supervisoryNode.$display for supervisoryNode in vm.unusedSupervisoryNodes"
+                        ng-options="supervisoryNode as supervisoryNode.$display for supervisoryNode in vm.supervisoryNodes"
                         no-auto-select="true">
                     </select>
                 </div>
