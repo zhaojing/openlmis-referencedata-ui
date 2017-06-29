@@ -95,7 +95,7 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-program.programService
-         * @name save
+         * @name update
          *
          * @description
          * Updates program.
