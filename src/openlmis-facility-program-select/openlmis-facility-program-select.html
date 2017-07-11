@@ -14,6 +14,7 @@
     <label class="radio">
         <input type="radio"
             ng-model="vm.isSupervised"
+            ng-disabled="vm.supervisedPrograms.length == 0"
             ng-value="true"
             ng-change="vm.updateForm()"/>
         {{'openlmisFacilityProgramSelect.supervisedFacility' | message}}
