@@ -52,5 +52,6 @@
     "adminRoleForm.roleType": "Role Type: ",
     "adminRoleForm.updateRole": "Update Role",
     "adminRoleForm.userRolesManage": "Manage user roles",
-    "adminRoleForm.usersManage": "Manage users"
+    "adminRoleForm.usersManage": "Manage users",
+    "adminRoleForm.cceManage": "Manage CCE"
 }
