@@ -112,21 +112,9 @@ describe('RequisitionGroupListController', function () {
 
     describe('search', function() {
 
-        it('should set zone param', function() {
+        it('should set all params', function() {
             vm.geographicZone = 'some-zone';
-
-            vm.search();
-
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroups', {
-                page: stateParams.page,
-                size: stateParams.size,
-                zone: 'some-zone',
-                name: stateParams.name,
-                program: stateParams.program
-            }, {reload: true});
-        });
-
-        it('should set name param', function() {
+            vm.program = 'some-program';
             vm.name = 'some-name';
 
             vm.search();
@@ -134,22 +122,8 @@ describe('RequisitionGroupListController', function () {
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroups', {
                 page: stateParams.page,
                 size: stateParams.size,
-                zone: stateParams.zone,
+                zone: 'some-zone',
                 name: 'some-name',
-                program: stateParams.program
-            }, {reload: true});
-        });
-
-        it('should set name description', function() {
-            vm.program = 'some-program';
-
-            vm.search();
-
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroups', {
-                page: stateParams.page,
-                size: stateParams.size,
-                zone: stateParams.zone,
-                name: stateParams.name,
                 program: 'some-program'
             }, {reload: true});
         });

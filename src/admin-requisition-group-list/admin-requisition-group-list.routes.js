@@ -15,45 +15,45 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-requisition-group-list').config(routes);
+    angular.module('admin-requisition-group-list').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.requisitionGroups', {
-			showInNavigation: true,
-			label: 'adminRequisitionGroupList.requisitionGroups',
-			url: '/requisitionGroups?name&zone&program&page&size',
-			controller: 'RequisitionGroupListController',
-			templateUrl: 'admin-requisition-group-list/requisition-group-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.REQUISITION_GROUPS_MANAGE],
-			resolve: {
+        $stateProvider.state('openlmis.administration.requisitionGroups', {
+            showInNavigation: true,
+            label: 'adminRequisitionGroupList.requisitionGroups',
+            url: '/requisitionGroups?name&zone&program&page&size',
+            controller: 'RequisitionGroupListController',
+            templateUrl: 'admin-requisition-group-list/requisition-group-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.REQUISITION_GROUPS_MANAGE],
+            resolve: {
                 programs: function(programService) {
                     return programService.getAll();
                 },
                 geographicZones: function(geographicZoneService) {
                     return geographicZoneService.getAll();
                 },
-				requisitionGroups: function(paginationService, requisitionGroupService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
+                requisitionGroups: function(paginationService, requisitionGroupService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
-							page = stateParams.page,
-							size = stateParams.size;
+                            page = stateParams.page,
+                            size = stateParams.size;
 
-						delete params.page;
-						delete params.size;
+                        delete params.page;
+                        delete params.size;
 
-						return requisitionGroupService.search({
-							page: page,
-							size: size
-						}, params);
-					});
-				}
-			}
-		});
-	}
+                        return requisitionGroupService.search({
+                            page: page,
+                            size: size
+                        }, params);
+                    });
+                }
+            }
+        });
+    }
 })();

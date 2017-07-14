@@ -1,0 +1,30 @@
+<h3>{{'adminRequisitionGroupView.associatedFacilities' | message}}</h3>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.memberFacilites ||
+                vm.memberFacilites.length === 0">
+            {{'adminRequisitionGroupView.noAssociatedFacilities' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminRequisitionGroupView.facilityName' | message}}</th>
+                <th>{{'adminRequisitionGroupView.geographicZone' | message}}</th>
+                <th>{{'adminRequisitionGroupView.facilityType' | message}}</th>
+                <th>{{'adminRequisitionGroupView.facilityEnabled' | message}}</th>
+                <th>{{'adminRequisitionGroupView.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="facility in vm.memberFacilitiesPage">
+                <td>{{facility.name}}</td>
+                <td>{{facility.geographicZone.name}}</td>
+                <td>{{facility.facilityType.name}}</td>
+                <td><i ng-class="{'icon-ok': facility.enabled, 'icon-remove': !facility.enabled}"></i></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination
+        list="vm.memberFacilities"
+        paged-list="vm.memberFacilitiesPage"/>
+</section>

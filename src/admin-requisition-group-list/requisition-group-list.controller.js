@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,14 +24,14 @@
      * @description
      * Controller for managing requisition group list screen.
      */
-	angular
-		.module('admin-requisition-group-list')
-		.controller('RequisitionGroupListController', controller);
+    angular
+        .module('admin-requisition-group-list')
+        .controller('RequisitionGroupListController', controller);
 
-	controller.$inject = ['$state', '$stateParams', 'requisitionGroups', 'programs', 'geographicZones'];
+    controller.$inject = ['$state', '$stateParams', 'requisitionGroups', 'programs', 'geographicZones'];
 
-	function controller($state, $stateParams, requisitionGroups, programs, geographicZones) {
-		var vm = this;
+    function controller($state, $stateParams, requisitionGroups, programs, geographicZones) {
+        var vm = this;
 
         vm.$onInit = onInit;
         vm.search = search;
@@ -45,7 +45,7 @@
          * @description
          * Contains filtered requisition groups.
          */
-		vm.requisitionGroups = undefined;
+        vm.requisitionGroups = undefined;
 
         /**
          * @ngdoc property
@@ -56,7 +56,7 @@
          * @description
          * Contains list of all programs.
          */
-		vm.programs = undefined;
+        vm.programs = undefined;
 
         /**
          * @ngdoc property
@@ -67,7 +67,7 @@
          * @description
          * Contains list of all geographic zones.
          */
-		vm.geographicZones = undefined;
+        vm.geographicZones = undefined;
 
         /**
          * @ngdoc property
@@ -78,7 +78,7 @@
          * @description
          * Contains name param for searching requisition groups.
          */
-		vm.name = undefined;
+        vm.name = undefined;
 
         /**
          * @ngdoc property
@@ -111,15 +111,15 @@
          * Method that is executed on initiating ProductListController.
          */
         function onInit() {
-			vm.requisitionGroups = requisitionGroups;
-			vm.programs = programs;
+            vm.requisitionGroups = requisitionGroups;
+            vm.programs = programs;
             vm.geographicZones = geographicZones;
             vm.program = $stateParams.program;
             vm.geographicZone = $stateParams.zone;
-    		vm.name = $stateParams.name;
+            vm.name = $stateParams.name;
         }
 
-		/**
+        /**
          * @ngdoc method
          * @methodOf admin-requisition-group-list.controller:RequisitionGroupListController
          * @name search
@@ -127,17 +127,17 @@
          * @description
          * Reloads page with new search parameters.
          */
-		function search() {
-			var stateParams = angular.copy($stateParams);
+        function search() {
+            var stateParams = angular.copy($stateParams);
 
-			stateParams.zone = vm.geographicZone;
-			stateParams.name = vm.name;
+            stateParams.zone = vm.geographicZone;
+            stateParams.name = vm.name;
             stateParams.program = vm.program;
 
-			$state.go('openlmis.administration.requisitionGroups', stateParams, {
-				reload: true
-			});
-		}
-	}
+            $state.go('openlmis.administration.requisitionGroups', stateParams, {
+                reload: true
+            });
+        }
+    }
 
 })();

@@ -62,7 +62,9 @@
          * @return {Promise}    Requisition Group info
          */
         function get(id) {
-            return resource.get({id: id}).$promise;
+            return resource.get({
+                id: id
+            }).$promise;
         }
 
         /**
