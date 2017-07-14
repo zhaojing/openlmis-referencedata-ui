@@ -1,6 +1,9 @@
 5.2.1 / Current Snapshot
 ========================
 
+New functionality added in a backwards-compatible manner:
+* [OLMIS-2696](https://openlmis.atlassian.net/browse/OLMIS-2696): Added requisition group administration screen.
+
 5.2.0 / 2017-06-22
 ==================
 
