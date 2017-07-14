@@ -23,7 +23,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.requisitionGroup.view', {
+        $stateProvider.state('openlmis.administration.requisitionGroups.view', {
             label: 'adminRequisitionGroupView.viewRequisitionGroup',
             url: '/requisitionGroups/:id',
             accessRights: [ADMINISTRATION_RIGHTS.REQUISITION_GROUPS_MANAGE],
