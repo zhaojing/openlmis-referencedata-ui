@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 (function(){
 
     'use strict';
@@ -84,9 +83,9 @@
          * @name getAll
          *
          * @description
-         * Gets all programs and adds requisition templates to them.
+         * Gets all programs.
          *
-         * @return {Promise} Array of all programs with templates
+         * @return {Promise} Array of all programs
          */
         function getAll() {
             return resource.getAll().$promise;

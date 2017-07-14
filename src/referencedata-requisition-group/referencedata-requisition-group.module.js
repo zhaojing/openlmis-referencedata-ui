@@ -18,24 +18,15 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @module referencedata-requisition-group
      *
      * @description
-     * This is constant for administration rights.
+     * Responsible for providing requisition group info to other modules.
      */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
-
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE'
-        };
-    }
+    angular.module('referencedata-requisition-group', [
+        'ngResource',
+        'openlmis-local-storage',
+        'referencedata'
+    ]);
 
 })();
