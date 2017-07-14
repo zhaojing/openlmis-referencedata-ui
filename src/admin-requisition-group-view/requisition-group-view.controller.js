@@ -71,6 +71,17 @@
         vm.memberFacilitiesPage = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-requisition-group-view.controller:RequisitionGroupViewController
+         * @name selectedType
+         * @type {Number}
+         *
+         * @description
+         * Contains number of currently selected tab.
+         */
+        vm.selectedType = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf admin-requisition-group-view.controller:RequisitionGroupViewController
          * @name $onInit
@@ -81,6 +92,7 @@
         function onInit() {
             vm.requisitionGroup = requisitionGroup;
             vm.memberFacilities = memberFacilities;
+            vm.selectedTab = 0;
         }
 
         /**

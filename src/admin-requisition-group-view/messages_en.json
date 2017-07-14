@@ -16,5 +16,6 @@
     "adminRequisitionGroupView.geographicZone": "Geographic Zone",
     "adminRequisitionGroupView.facilityType": "Facility Type",
     "adminRequisitionGroupView.facilityEnabled": "Facility Enabled",
-    "adminRequisitionGroupView.cancel": "Cancel"
+    "adminRequisitionGroupView.cancel": "Cancel",
+    "adminRequisitionGroupView.facilities": "Facilities"
 }

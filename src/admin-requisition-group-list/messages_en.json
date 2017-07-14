@@ -9,5 +9,6 @@
     "adminRequisitionGroupList.geographicZone": "Geographic Zone",
     "adminRequisitionGroupList.numberOfFacilities": "Number of Facilities",
     "adminRequisitionGroupList.actions": "Actions",
-    "adminRequisitionGroupList.view": "View"
+    "adminRequisitionGroupList.view": "View",
+    "adminRequisitionGroupList.noRequisitionGroups": "No requisition groups found."
 }
