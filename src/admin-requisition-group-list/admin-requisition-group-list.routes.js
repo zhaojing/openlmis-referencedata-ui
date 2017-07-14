@@ -35,8 +35,14 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                geographicZones: function(geographicZoneService) {
-                    return geographicZoneService.getAll();
+                geographicZones: function($q, geographicZoneService) {
+                    var deferred = $q.defer();
+
+                    geographicZoneService.getAll().then(function(response) {
+                        deferred.resolve(response.content);
+                    }, deferred.reject);
+
+                    return deferred.promise;
                 },
                 requisitionGroups: function(paginationService, requisitionGroupService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
