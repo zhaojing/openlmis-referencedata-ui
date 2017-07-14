@@ -48,30 +48,12 @@ describe('RequisitionGroupViewController', function () {
 
     describe('onInit', function() {
 
-        it('should expose goToRequisitionGroupList method', function() {
-            expect(angular.isFunction(vm.goToRequisitionGroupList)).toBe(true);
-        });
-
         it('should expose requisition group', function() {
             expect(vm.requisitionGroup).toEqual(requisitionGroup);
         });
 
         it('should expose member facilities', function() {
             expect(vm.memberFacilities).toEqual(memberFacilities);
-        });
-    });
-
-    describe('goToRequisitionGroupList', function() {
-
-        beforeEach(function() {
-            spyOn($state, 'go').andReturn();
-            vm.goToRequisitionGroupList();
-        });
-
-        it('should call state go with correct params', function() {
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
-                reload: true
-            });
         });
     });
 });

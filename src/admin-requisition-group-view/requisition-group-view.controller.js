@@ -35,7 +35,6 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.goToRequisitionGroupList = goToRequisitionGroupList;
 
         /**
          * @ngdoc property
@@ -93,20 +92,6 @@
             vm.requisitionGroup = requisitionGroup;
             vm.memberFacilities = memberFacilities;
             vm.selectedTab = 0;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-requisition-group-view.controller:RequisitionGroupViewController
-         * @name goToRequisitionGroupList
-         *
-         * @description
-         * Redirects to requisition group list screen.
-         */
-        function goToRequisitionGroupList() {
-            $state.go('^', {}, {
-                reload: true
-            });
         }
     }
 })();
