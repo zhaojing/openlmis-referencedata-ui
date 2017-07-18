@@ -3,7 +3,6 @@
     "adminRequisitionGroupView.requisitionGroupCode": "Requisition Group Code",
     "adminRequisitionGroupView.requisitionGroupName": "Requisition Group Name",
     "adminRequisitionGroupView.supervisoryNode": "Supervisory Node",
-    "adminRequisitionGroupView.associations": "Associations",
     "adminRequisitionGroupView.programsAndSchedules": "Programs and Schedules",
     "adminRequisitionGroupView.noAssociatedProgramAndSchedules": "No Associated Programs and Schedules",
     "adminRequisitionGroupView.program": "Program",
