@@ -38,9 +38,9 @@
                 requisitionGroup: function(requisitionGroupService, $stateParams) {
                     return requisitionGroupService.get($stateParams.id);
                 },
-                memberFacilities: function(paginationService, requisitionGroup, $stateParams) {
+                memberFacilities: function($filter, paginationService, requisitionGroup, $stateParams) {
                     return paginationService.registerList(null, $stateParams, function() {
-                        return requisitionGroup.memberFacilities;
+                        return $filter('orderBy')(requisitionGroup.memberFacilities, 'name');
                     });
                 },
             }
