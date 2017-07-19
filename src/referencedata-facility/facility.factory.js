@@ -43,7 +43,8 @@
                 getRequestingFacilities: getRequestingFacilities,
                 getUserHomeFacility: getUserHomeFacility,
                 getUserSupervisedFacilities: getUserSupervisedFacilities,
-                getAllUserFacilities: getAllUserFacilities
+                getAllUserFacilities: getAllUserFacilities,
+                searchAndOrderFacilities: searchAndOrderFacilities
             };
 
 
@@ -213,6 +214,32 @@
                 });
 
                 return deferred.promise;
+            }
+
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility.facilityFactory
+             * @name searchAndOrderFacilities
+             *
+             * @description
+             * Returns ordered list of facilities filtered with given value.
+             *
+             * @param  {Array}  facilities  the list of facilities to be filtered
+             * @param  {String} filterValue the filter value for name field
+             * @param  {String} orderBy     the filed name for ordering
+             * @return {Array}              the set of facilities
+             */
+            function searchAndOrderFacilities(facilities, filterValue, orderBy) {
+                var result;
+
+                if (!filterValue) {
+                    result = facilities;
+                } else {
+                    result = $filter('filter')(facilities, {
+                        name: filterValue
+                    }, false);
+                }
+                return $filter('orderBy')(result, orderBy);
             }
         }
 

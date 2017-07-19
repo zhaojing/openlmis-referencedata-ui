@@ -1,4 +1,11 @@
 <section class="openlmis-table-container">
+    <form ng-submit="vm.searchForFacilities()">
+        <fieldset class="form-group">
+            <label for="name">{{'adminRequisitionGroupList.requisitionGroupName' | message}}</label>
+            <input type="text" id="name" ng-model="vm.facilityName"/>
+        </fieldset>
+        <button class="primary" type="submit">{{'adminRequisitionGroupList.search' | message}}</button>
+    </form>
     <table>
         <caption ng-if="!vm.memberFacilitiesPage ||
                 vm.memberFacilitiesPage.length === 0">

@@ -26,6 +26,7 @@
     angular.module('admin-requisition-group-view', [
         'openlmis-rights',
         'referencedata-requisition-group',
+        'referencedata-facility',
         'ui.router'
     ]);
 })();

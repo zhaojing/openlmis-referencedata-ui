@@ -301,6 +301,24 @@ describe('facilityFactory', function() {
 
     });
 
+    describe('searchAndOrderFacilities', function() {
+
+        it('should order by name', function() {
+            var result = facilityFactory.searchAndOrderFacilities([facility2, facility1], null, 'name');
+
+            expect(result.length).toEqual(2);
+            expect(result[0].name).toEqual(facility1.name);
+            expect(result[1].name).toEqual(facility2.name);
+        });
+
+        it('should filter name by given value', function() {
+            var result = facilityFactory.searchAndOrderFacilities([facility2, facility1], '1', 'name');
+
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual(facility1.name);
+        });
+    });
+
     function createFacility(id, name) {
         return {
             id: id,

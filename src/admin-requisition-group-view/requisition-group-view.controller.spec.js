@@ -16,7 +16,7 @@
 describe('RequisitionGroupViewController', function () {
 
     var $state, $controller,
-        vm, requisitionGroup, memberFacilities;
+        vm, requisitionGroup, memberFacilities, stateParams;
 
     beforeEach(function() {
         module('admin-requisition-group-view');
@@ -38,12 +38,22 @@ describe('RequisitionGroupViewController', function () {
                 id: 'facility-2'
             }
         ];
+        stateParams = {
+            page: 0,
+            size: 10,
+            id: 'group-id',
+            tab: 0,
+            facilityName: 'facility',
+        }
 
         vm = $controller('RequisitionGroupViewController', {
             requisitionGroup: requisitionGroup,
-            memberFacilities: memberFacilities
+            memberFacilities: memberFacilities,
+            $stateParams: stateParams
         });
         vm.$onInit();
+
+        spyOn($state, 'go').andReturn();
     });
 
     describe('onInit', function() {
@@ -54,6 +64,40 @@ describe('RequisitionGroupViewController', function () {
 
         it('should expose member facilities', function() {
             expect(vm.memberFacilities).toEqual(memberFacilities);
+        });
+
+        it('should expose facility name', function() {
+            expect(vm.facilityName).toEqual(stateParams.facilityName);
+        });
+
+        it('should expose selected tab', function() {
+            expect(vm.selectedTab).toEqual(stateParams.tab);
+        });
+
+        it('should expose search for facilities method', function() {
+            expect(angular.isFunction(vm.searchForFacilities)).toBe(true);
+        });
+    });
+
+    describe('searchForFacilities', function() {
+
+        it('should set facility name param', function() {
+            vm.facilityName = 'some-name';
+
+            vm.searchForFacilities();
+
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroups.view', {
+                page: stateParams.page,
+                size: stateParams.size,
+                id: stateParams.id,
+                tab: 1,
+                facilityName: 'some-name'
+            }, {reload: true});
+        });
+
+        it('should call state go method', function() {
+            vm.searchForFacilities();
+            expect($state.go).toHaveBeenCalled();
         });
     });
 });

@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.administration.requisitionGroups.view', {
             label: 'adminRequisitionGroupView.viewRequisitionGroup',
-            url: '/requisitionGroups/:id',
+            url: '/requisitionGroups/:id?tab&facilityName',
             accessRights: [ADMINISTRATION_RIGHTS.REQUISITION_GROUPS_MANAGE],
             views: {
                 '@openlmis': {
@@ -38,11 +38,11 @@
                 requisitionGroup: function(requisitionGroupService, $stateParams) {
                     return requisitionGroupService.get($stateParams.id);
                 },
-                memberFacilities: function($filter, paginationService, requisitionGroup, $stateParams) {
+                memberFacilities: function($stateParams, paginationService, requisitionGroup, facilityFactory) {
                     return paginationService.registerList(null, $stateParams, function() {
-                        return $filter('orderBy')(requisitionGroup.memberFacilities, 'name');
+                        return facilityFactory.searchAndOrderFacilities(requisitionGroup.memberFacilities, $stateParams.facilityName, 'name');
                     });
-                },
+                }
             }
         });
     }

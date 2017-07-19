@@ -43,7 +43,7 @@
                 <td>{{requisitionGroup.supervisoryNode.facility.geographicZone.name}}</td>
                 <td>{{requisitionGroup.memberFacilities.length}}</td>
                 <td>
-                    <a ui-sref="openlmis.administration.requisitionGroups.view({id: requisitionGroup.id})">{{'adminRequisitionGroupList.view' | message}}</a>
+                    <button class="primary" ui-sref="openlmis.administration.requisitionGroups.view({id: requisitionGroup.id})">{{'adminRequisitionGroupList.view' | message}}</button>
                 </td>
             </tr>
         </tbody>

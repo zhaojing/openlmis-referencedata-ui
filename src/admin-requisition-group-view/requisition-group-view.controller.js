@@ -28,13 +28,14 @@
         .module('admin-requisition-group-view')
         .controller('RequisitionGroupViewController', controller);
 
-    controller.$inject = ['$state', 'requisitionGroup', 'memberFacilities'];
+    controller.$inject = ['$state', '$stateParams', 'requisitionGroup', 'memberFacilities'];
 
-    function controller($state, requisitionGroup, memberFacilities) {
+    function controller($state, $stateParams, requisitionGroup, memberFacilities) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.searchForFacilities = searchForFacilities;
 
         /**
          * @ngdoc property
@@ -46,6 +47,17 @@
          * Contains requisition group object.
          */
         vm.requisitionGroup = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-requisition-group-view.controller:RequisitionGroupViewController
+         * @name facilityName
+         * @type {String}
+         *
+         * @description
+         * Contains requisition group object.
+         */
+        vm.facilityName = undefined;
 
         /**
          * @ngdoc property
@@ -82,7 +94,7 @@
 
         /**
          * @ngdoc method
-         * @propertyOf admin-requisition-group-view.controller:RequisitionGroupViewController
+         * @methodOf admin-requisition-group-view.controller:RequisitionGroupViewController
          * @name $onInit
          *
          * @description
@@ -91,7 +103,27 @@
         function onInit() {
             vm.requisitionGroup = requisitionGroup;
             vm.memberFacilities = memberFacilities;
-            vm.selectedTab = 0;
+            vm.facilityName = $stateParams.facilityName;
+            vm.selectedTab = $stateParams.tab ? parseInt($stateParams.tab) : 0;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-requisition-group-view.controller:RequisitionGroupViewController
+         * @name search
+         *
+         * @description
+         * Reloads page with new search parameters.
+         */
+        function searchForFacilities() {
+            var stateParams = angular.copy($stateParams);
+
+            stateParams.facilityName = vm.facilityName;
+            stateParams.tab = 1;
+
+            $state.go('openlmis.administration.requisitionGroups.view', stateParams, {
+                reload: true
+            });
         }
     }
 })();
