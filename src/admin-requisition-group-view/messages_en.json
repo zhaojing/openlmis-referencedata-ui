@@ -14,5 +14,6 @@
     "adminRequisitionGroupView.facilityType": "Facility Type",
     "adminRequisitionGroupView.facilityEnabled": "Facility Enabled",
     "adminRequisitionGroupView.cancel": "Cancel",
-    "adminRequisitionGroupView.facilities": "Facilities"
+    "adminRequisitionGroupView.facilities": "Facilities",
+    "adminRequisitionGroupList.facilityName": "Facility Name"
 }

@@ -86,7 +86,7 @@ describe('RequisitionGroupViewController', function () {
 
             vm.searchForFacilities();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroups.view', {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroupView', {
                 page: stateParams.page,
                 size: stateParams.size,
                 id: stateParams.id,

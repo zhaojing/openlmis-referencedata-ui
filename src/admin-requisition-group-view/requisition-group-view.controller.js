@@ -121,7 +121,7 @@
             stateParams.facilityName = vm.facilityName;
             stateParams.tab = 1;
 
-            $state.go('openlmis.administration.requisitionGroups.view', stateParams, {
+            $state.go('openlmis.administration.requisitionGroupView', stateParams, {
                 reload: true
             });
         }
