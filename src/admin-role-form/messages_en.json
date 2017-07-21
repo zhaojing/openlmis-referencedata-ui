@@ -53,5 +53,7 @@
     "adminRoleForm.updateRole": "Update Role",
     "adminRoleForm.userRolesManage": "Manage user roles",
     "adminRoleForm.usersManage": "Manage users",
-    "adminRoleForm.cceManage": "Manage CCE"
+    "adminRoleForm.cceManage": "Manage CCE",
+    "adminRoleForm.cceInventoryView": "View Cold Chain Equipment Inventory",
+    "adminRoleForm.cceInventoryEdit": "Edit Cold Chain Equipment Inventory"
 }
