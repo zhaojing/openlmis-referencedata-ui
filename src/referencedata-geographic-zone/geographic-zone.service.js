@@ -36,11 +36,16 @@
             getAll: {
                 url: referencedataUrlFactory('/api/geographicZones'),
                 method: 'GET'
+            },
+            'search': {
+                url: referencedataUrlFactory('/api/geographicZones/search'),
+                method: 'POST'
             }
         });
 
         this.get = get;
         this.getAll = getAll;
+        this.search = search;
 
         /**
          * @ngdoc method
@@ -72,6 +77,22 @@
          */
         function getAll(paginationParams) {
             return resource.getAll(paginationParams).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-geographic-zone.geographicZoneService
+         * @name search
+         *
+         * @description
+         * Searches Geographic Zones using given parameters.
+         *
+         * @param  {Object}  paginationParams the pagination parameters
+         * @param  {Object}  queryParams      the search parameters
+         * @return {Promise}                  the requested page of filtered geographic zones
+         */
+        function search(paginationParams, queryParams) {
+            return resource.search(paginationParams, queryParams).$promise;
         }
     }
 })();

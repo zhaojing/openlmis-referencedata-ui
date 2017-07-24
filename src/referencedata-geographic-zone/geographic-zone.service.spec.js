@@ -103,6 +103,52 @@ describe('geographicZoneService', function() {
 
     });
 
+    describe('search', function() {
+
+        var searchParams,
+            paginationParams;
+
+        beforeEach(function() {
+            searchParams = {
+                code: 'some-code',
+                name: 'some-name'
+            };
+            paginationParams = {
+                page: 0,
+                size: 10,
+            };
+            $httpBackend.when('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
+                paginationParams.page + '&size=' + paginationParams.size)).respond(200, {content: geographicZones});
+        });
+
+        it('should return promise', function() {
+            var result = geographicZoneService.search(paginationParams, searchParams);
+            $httpBackend.flush();
+
+            expect(result.then).not.toBeUndefined();
+        });
+
+        it('should resolve to geographic zones', function() {
+            var result;
+
+            geographicZoneService.search(paginationParams, searchParams).then(function(data) {
+                result = data;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result.content)).toEqual(angular.toJson(geographicZones));
+        });
+
+        it('should make a proper request', function() {
+            $httpBackend.expect('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
+                paginationParams.page + '&size=' + paginationParams.size));
+
+            geographicZoneService.search(paginationParams, searchParams);
+            $httpBackend.flush();
+        });
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingRequest();
         $httpBackend.verifyNoOutstandingExpectation();

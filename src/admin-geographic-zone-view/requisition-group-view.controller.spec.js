@@ -13,30 +13,33 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('GeographicZoneViewController', function () {
 
-    'use strict';
+    var $controller,
+        vm, geographicZone;
 
-    /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
-     *
-     * @description
-     * This is constant for administration rights.
-     */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
+    beforeEach(function() {
+        module('admin-geographic-zone-view');
 
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE'
+        inject(function($injector) {
+            $controller = $injector.get('$controller');
+        });
+
+        geographicZone = {
+            id: 'zone-id',
+            name: 'zone-name'
         };
-    }
 
-})();
+        vm = $controller('GeographicZoneViewController', {
+            geographicZone: geographicZone
+        });
+        vm.$onInit();
+    });
+
+    describe('onInit', function() {
+
+        it('should expose geographic zone', function() {
+            expect(vm.geographicZone).toEqual(geographicZone);
+        });
+    });
+});

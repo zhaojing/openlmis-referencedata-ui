@@ -1,0 +1,19 @@
+{
+    "adminGeographicZoneView.viewGeographicZone": "View Geographic Zone",
+    "adminGeographicZoneView.requisitionGroupCode": "Requisition Group Code",
+    "adminGeographicZoneView.requisitionGroupName": "Requisition Group Name",
+    "adminGeographicZoneView.supervisoryNode": "Supervisory Node",
+    "adminGeographicZoneView.programsAndSchedules": "Programs and Schedules",
+    "adminGeographicZoneView.noAssociatedProgramAndSchedules": "No Associated Programs and Schedules",
+    "adminGeographicZoneView.program": "Program",
+    "adminGeographicZoneView.schedule": "Schedule",
+    "adminGeographicZoneView.actions": "Actions",
+    "adminGeographicZoneView.noAssociatedFacilities": "No Associated Facilities",
+    "adminGeographicZoneView.facilityName": "Facility Name",
+    "adminGeographicZoneView.geographicZone": "Geographic Zone",
+    "adminGeographicZoneView.facilityType": "Facility Type",
+    "adminGeographicZoneView.facilityEnabled": "Facility Enabled",
+    "adminGeographicZoneView.cancel": "Cancel",
+    "adminGeographicZoneView.facilities": "Facilities",
+    "adminGeographicZoneView.facilityName": "Facility Name"
+}

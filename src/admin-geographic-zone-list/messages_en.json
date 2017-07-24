@@ -1,0 +1,10 @@
+{
+    "adminGeographicZoneList.geographicZones": "Geographic Zones",
+    "adminGeographicZoneList.name": "Name",
+    "adminGeographicZoneList.parent": "Parent",
+    "adminGeographicZoneList.search": "Search",
+    "adminGeographicZoneList.noGeographicZones": "No geographic zones found.",
+    "adminGeographicZoneList.code": "Code",
+    "adminGeographicZoneList.level": "Level",
+    "adminGeographicZoneList.view": "View"
+}
