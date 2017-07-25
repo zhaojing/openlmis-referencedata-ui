@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.geographicZones', {
             showInNavigation: true,
             label: 'adminGeographicZoneList.geographicZones',
-            url: '/geographicZones?name&parent&page&size',
+            url: '/geographicZones?name&parent&page&size&sort',
             controller: 'GeographicZoneListController',
             templateUrl: 'admin-geographic-zone-list/geographic-zone-list.html',
             controllerAs: 'vm',
@@ -45,14 +45,17 @@
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
                             page = stateParams.page,
-                            size = stateParams.size;
+                            size = stateParams.size,
+                            sort = stateParams.sort;
 
                         delete params.page;
                         delete params.size;
+                        delete params.sort;
 
                         return geographicZoneService.search({
                             page: page,
-                            size: size
+                            size: size,
+                            sort: sort ? sort : "name"
                         }, params);
                     });
                 }
