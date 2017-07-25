@@ -22,7 +22,7 @@
      * @name admin-geographic-zone-view.controller:GeographicZoneViewController
      *
      * @description
-     * Controller for managing requisition group view screen.
+     * Controller for managing geographic zone view screen.
      */
     angular
         .module('admin-geographic-zone-view')
@@ -39,11 +39,11 @@
         /**
          * @ngdoc property
          * @propertyOf admin-geographic-zone-view.controller:GeographicZoneViewController
-         * @name requisitionGroup
+         * @name geographicZone
          * @type {Object}
          *
          * @description
-         * Contains requisition group object.
+         * Contains geographic zone object.
          */
         vm.geographicZone = undefined;
 
