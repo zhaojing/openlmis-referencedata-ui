@@ -76,7 +76,7 @@
          * @type {String}
          *
          * @description
-         * Contains geographic zone code param for searching geographic zones by parent.
+         * Contains geographic zone id param for searching geographic zones by parent.
          */
         vm.parent = undefined;
 
@@ -86,7 +86,7 @@
          * @name $onInit
          *
          * @description
-         * Method that is executed on initiating ProductListController.
+         * Method that is executed on initiating GeographicZoneListController.
          */
         function onInit() {
             vm.filteredGeographicZones = filteredGeographicZones;

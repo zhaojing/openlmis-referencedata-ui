@@ -8,7 +8,7 @@
         <fieldset class="form-group">
             <label for="parent">{{'adminGeographicZoneList.parent' | message}}</label>
             <select id="parent"
-                    ng-options="parent.code as parent.name for parent in vm.geographicZones"
+                    ng-options="parent.id as parent.name for parent in vm.geographicZones"
                     ng-model="vm.parent">
             </select>
         </fieldset>
@@ -31,7 +31,7 @@
             <tr ng-repeat="geographicZone in vm.filteredGeographicZones">
                 <td>{{geographicZone.name}}</td>
                 <td>{{geographicZone.code}}</td>
-                <td>{{geographicZone.level}}</td>
+                <td>{{geographicZone.level.code}}</td>
                 <td>{{geographicZone.parent.name}}</td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.geographicZones.view({id: geographicZone.id})">{{'adminGeographicZoneList.view' | message}}</button>

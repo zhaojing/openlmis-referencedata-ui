@@ -9,8 +9,8 @@
         <input id="code" class="form-control" ng-model="vm.geographicZone.code" required disabled/>
     </fieldset>
     <fieldset class="form-group">
-        <label for="level">{{'adminGeographicZoneView.geographicZoneLevel' | message}}</label>
-        <input id="level" class="form-control" ng-model="vm.geographicZone.level" required disabled/>
+        <label for="level">{{'adminGeographicZoneView.geographicLevel' | message}}</label>
+        <input id="level" class="form-control" ng-model="vm.geographicZone.level.code" required disabled/>
     </fieldset>
     <fieldset class="form-group">
         <label for="parent">{{'adminGeographicZoneView.parent' | message}}</label>
@@ -18,11 +18,7 @@
     </fieldset>
     <fieldset class="form-group">
         <label for="catchmentPopulation">{{'adminGeographicZoneView.catchmentPopulation' | message}}</label>
-        <input id="parent" class="form-control" ng-model="vm.geographicZone.parent.name" disabled/>
-    </fieldset>
-    <fieldset class="form-group">
-        <label for="catchmentPopulation">{{'adminGeographicZoneView.catchmentPopulation' | message}}</label>
-        <input id="catchmentPopulation" class="form-control" ng-model="vm.geographicZone.population" disabled/>
+        <input id="catchmentPopulation" class="form-control" ng-model="vm.geographicZone.catchmentPopulation" disabled/>
     </fieldset>
     <fieldset class="form-group">
         <label for="longitude">{{'adminGeographicZoneView.longitude' | message}}</label>

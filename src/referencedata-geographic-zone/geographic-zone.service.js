@@ -37,7 +37,7 @@
                 url: referencedataUrlFactory('/api/geographicZones'),
                 method: 'GET'
             },
-            'search': {
+            search: {
                 url: referencedataUrlFactory('/api/geographicZones/search'),
                 method: 'POST'
             }

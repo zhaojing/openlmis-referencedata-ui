@@ -3,6 +3,7 @@
 
 New functionality added in a backwards-compatible manner:
 * [OLMIS-2696](https://openlmis.atlassian.net/browse/OLMIS-2696): Added requisition group administration screen.
+* [OLMIS-2698](https://openlmis.atlassian.net/browse/OLMIS-2698): Added geographic zone administration screens.
 
 5.2.0 / 2017-06-22
 ==================

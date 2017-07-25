@@ -137,7 +137,7 @@ describe('geographicZoneService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(angular.toJson(result.content)).toEqual(angular.toJson(geographicZones));
+            expect(result.content).toEqual(geographicZones);
         });
 
         it('should make a proper request', function() {

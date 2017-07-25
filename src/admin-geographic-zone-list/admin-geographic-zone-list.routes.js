@@ -32,8 +32,14 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.GEOGRAPHIC_ZONES_MANAGE],
             resolve: {
-                geographicZones: function(geographicZoneService) {
-                    return geographicZoneService.getAll();
+                geographicZones: function($q, geographicZoneService) {
+                    var deferred = $q.defer();
+
+                    geographicZoneService.getAll().then(function(response) {
+                        deferred.resolve(response.content);
+                    }, deferred.reject);
+
+                    return deferred.promise;
                 },
                 filteredGeographicZones: function($stateParams, geographicZoneService, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
