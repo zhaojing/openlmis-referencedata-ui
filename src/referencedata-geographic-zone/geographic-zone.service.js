@@ -87,11 +87,21 @@
          * @description
          * Searches Geographic Zones using given parameters.
          *
-         * @param  {Object}  paginationParams the pagination parameters
-         * @param  {Object}  queryParams      the search parameters
-         * @return {Promise}                  the requested page of filtered geographic zones
+         * @param  {Object}  params the pagination and query parameters
+         * @return {Promise}        the requested page of filtered geographic zones
          */
-        function search(paginationParams, queryParams) {
+        function search(params) {
+            var paginationParams = {
+                    page: params.page,
+                    size: params.size,
+                    sort: params.sort
+                },
+                queryParams = angular.copy(params);
+
+            delete queryParams.page;
+            delete queryParams.size;
+            delete queryParams.sort;
+
             return resource.search(paginationParams, queryParams).$promise;
         }
     }

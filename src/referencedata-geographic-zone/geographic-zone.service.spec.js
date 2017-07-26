@@ -105,24 +105,31 @@ describe('geographicZoneService', function() {
 
     describe('search', function() {
 
-        var searchParams,
-            paginationParams;
+        var params;
 
         beforeEach(function() {
-            searchParams = {
+            params = {
                 code: 'some-code',
-                name: 'some-name'
-            };
-            paginationParams = {
+                name: 'some-name',
+                sort: 'name',
                 page: 0,
-                size: 10,
+                size: 10
             };
             $httpBackend.when('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size)).respond(200, {content: geographicZones});
+                params.page + '&size=' + params.size + '&sort=' + params.sort)).respond(function(method, url, body) {
+                    var parsedBody = JSON.parse(body);
+                    if (parsedBody.code === params.code && parsedBody.name === params.name) {
+                        return [200, {
+                            content: geographicZones
+                        }];
+                    } else {
+                        return [400];
+                    }
+                });
         });
 
         it('should return promise', function() {
-            var result = geographicZoneService.search(paginationParams, searchParams);
+            var result = geographicZoneService.search(params);
             $httpBackend.flush();
 
             expect(result.then).not.toBeUndefined();
@@ -131,7 +138,8 @@ describe('geographicZoneService', function() {
         it('should resolve to geographic zones', function() {
             var result;
 
-            geographicZoneService.search(paginationParams, searchParams).then(function(data) {
+            geographicZoneService.search(params).then(function(data) {
+                dump(data);
                 result = data;
             });
             $httpBackend.flush();
@@ -142,9 +150,9 @@ describe('geographicZoneService', function() {
 
         it('should make a proper request', function() {
             $httpBackend.expect('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size));
+                params.page + '&size=' + params.size + '&sort=' + params.sort));
 
-            geographicZoneService.search(paginationParams, searchParams);
+            geographicZoneService.search(params);
             $httpBackend.flush();
         });
     });

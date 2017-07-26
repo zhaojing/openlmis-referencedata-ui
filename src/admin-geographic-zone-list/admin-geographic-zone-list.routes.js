@@ -43,20 +43,13 @@
                 },
                 filteredGeographicZones: function($stateParams, geographicZoneService, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        var params = angular.copy(stateParams),
-                            page = stateParams.page,
-                            size = stateParams.size,
-                            sort = stateParams.sort;
+                        var params = angular.copy(stateParams);
 
-                        delete params.page;
-                        delete params.size;
-                        delete params.sort;
+                        if (!params.sort) {
+                            params.sort = "name";
+                        }
 
-                        return geographicZoneService.search({
-                            page: page,
-                            size: size,
-                            sort: sort ? sort : "name"
-                        }, params);
+                        return geographicZoneService.search(params);
                     });
                 }
             }
