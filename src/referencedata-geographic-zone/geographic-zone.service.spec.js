@@ -139,7 +139,6 @@ describe('geographicZoneService', function() {
             var result;
 
             geographicZoneService.search(params).then(function(data) {
-                dump(data);
                 result = data;
             });
             $httpBackend.flush();
