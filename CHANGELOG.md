@@ -5,6 +5,10 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-2696](https://openlmis.atlassian.net/browse/OLMIS-2696): Added requisition group administration screen.
 * [OLMIS-2698](https://openlmis.atlassian.net/browse/OLMIS-2698): Added geographic zone administration screens.
 
+Bug fixes
+
+* [OLMIS-2905](https://openlmis.atlassian.net/browse/OLMIS-2905): User with only POD_MANAGE or ORDERS_MANAGE can now access 'View Orders' page.
+
 5.2.0 / 2017-06-22
 ==================
 
