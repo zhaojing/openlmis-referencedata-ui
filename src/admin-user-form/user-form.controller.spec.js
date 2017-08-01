@@ -98,10 +98,6 @@ describe('UserFormController', function() {
             expect(angular.isFunction(vm.removeHomeFacility)).toBe(true);
         });
 
-        it('should expose getFacilityDisplay method', function() {
-            expect(angular.isFunction(vm.getFacilityDisplay)).toBe(true);
-        });
-
         it('should set user', function() {
             expect(vm.user).toBe(user);
         });
@@ -337,13 +333,6 @@ describe('UserFormController', function() {
         it('should remove home facility role assignments', function() {
             expect(vm.user.roleAssignments.length).toBe(1);
             expect(vm.user.roleAssignments[0].programCode).toBe(undefined);
-        });
-    });
-
-    describe('getFacilityDisplay', function() {
-
-        it('should return proper string', function() {
-            expect(vm.getFacilityDisplay(facilities[0])).toEqual(facilities[0].code + ' - ' + facilities[0].name);
         });
     });
 });

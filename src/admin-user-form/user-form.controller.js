@@ -41,7 +41,6 @@
         vm.$onInit = onInit;
         vm.saveUser = saveUser;
         vm.removeHomeFacility = removeHomeFacility;
-        vm.getFacilityDisplay = getFacilityDisplay;
 
         /**
          * @ngdoc property
@@ -273,21 +272,6 @@
                 vm.user.homeFacility = undefined;
                 vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name getFacilityDisplay
-         *
-         * @description
-         * Returns combined code and name of facility separated by '-'.
-         *
-         * @param  {Object} facility the facility to be displayed
-         * @return {String}          the facility display string
-         */
-        function getFacilityDisplay(facility) {
-            return facility.code + ' - ' + facility.name;
         }
 
         function goToUserList() {

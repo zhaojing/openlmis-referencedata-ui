@@ -29,7 +29,7 @@
 			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
 			resolve: {
 				facilities: function(facilityService) {
-					return facilityService.getAll();
+					return facilityService.getAllMinimal();
 				},
 				user: function(referencedataUserService, $stateParams) {
                     if($stateParams.id) {

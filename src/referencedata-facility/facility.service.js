@@ -44,6 +44,11 @@
                     method: 'GET',
                     isArray: true
                 },
+                getAllMinimal: {
+                    url: referencedataUrlFactory('/api/facilities/minimal'),
+                    method: 'GET',
+                    isArray: true
+                },
                 getUserSupervisedFacilities: {
                     url: referencedataUrlFactory('api/users/:userId/supervisedFacilities'),
                     method: 'GET',
@@ -62,6 +67,7 @@
 
             this.get = get;
             this.getAll = getAll;
+            this.getAllMinimal = getAllMinimal;
             this.getUserSupervisedFacilities = getUserSupervisedFacilities;
             this.getFulfillmentFacilities = getFulfillmentFacilities;
             this.search = search;
@@ -201,6 +207,20 @@
              */
             function getFulfillmentFacilities(params) {
                 return resource.getFulfillmentFacilities(params).$promise;
+            }
+
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility.facilityService
+             * @name getAllMinimal
+             *
+             * @description
+             * Retrieves all facilities with id and name fields.
+             *
+             * @return {Promise} Array of facilities with minimal representation
+             */
+            function getAllMinimal() {
+                return resource.getAllMinimal().$promise;
             }
         }
     })();

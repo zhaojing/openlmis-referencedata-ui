@@ -135,6 +135,25 @@ describe('facilityService', function() {
         });
     });
 
+    describe('getAllMinimal', function() {
+
+        it('should get all facilities with minimal representation', function() {
+            var data;
+
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/minimal')).respond(200, [facilityOne, facilityTwo]);
+
+            facilityService.getAllMinimal().then(function(response) {
+                data = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data[0].id).toBe(facilityOne.id);
+            expect(data[1].id).toBe(facilityTwo.id);
+        });
+    });
+
     describe('getUserSupervisedFacilities', function() {
         it('should get supervised facilities from storage while offline', function() {
             var data,
