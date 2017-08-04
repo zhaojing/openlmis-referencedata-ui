@@ -13,31 +13,33 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('SupplyLineViewController', function () {
 
-    'use strict';
+    var $controller,
+        vm, supplyLine;
 
-    /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
-     *
-     * @description
-     * This is constant for administration rights.
-     */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
+    beforeEach(function() {
+        module('admin-supply-line-view');
 
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE',
-            SUPPLY_LINES_MANAGE: 'SUPPLY_LINES_MANAGE'
+        inject(function($injector) {
+            $controller = $injector.get('$controller');
+        });
+
+        supplyLine = {
+            id: 'line-id',
+            name: 'line-name'
         };
-    }
 
-})();
+        vm = $controller('SupplyLineViewController', {
+            supplyLine: supplyLine
+        });
+        vm.$onInit();
+    });
+
+    describe('onInit', function() {
+
+        it('should expose supply line', function() {
+            expect(vm.supplyLine).toEqual(supplyLine);
+        });
+    });
+});

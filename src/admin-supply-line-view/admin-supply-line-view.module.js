@@ -18,26 +18,14 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @module admin-supply-line-view
      *
      * @description
-     * This is constant for administration rights.
+     * Provides supply line view screen for administrator.
      */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
-
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE',
-            SUPPLY_LINES_MANAGE: 'SUPPLY_LINES_MANAGE'
-        };
-    }
-
+    angular.module('admin-supply-line-view', [
+        'openlmis-rights',
+        'referencedata-supply-line',
+        'ui.router'
+    ]);
 })();

@@ -1,0 +1,10 @@
+{
+    "adminSupplyLineList.supplyLines": "Supply Lines",
+    "adminSupplyLineList.supplyingFacility": "Supplying Facility",
+    "adminSupplyLineList.search": "Search",
+    "adminSupplyLineList.noSupplyingLines": "No supply lines found.",
+    "adminSupplyLineList.supervisoryNode": "Supervisory Node",
+    "adminSupplyLineList.program": "Program",
+    "adminSupplyLineList.view": "View",
+    "adminSupplyLineList.actions": "Actions"
+}
