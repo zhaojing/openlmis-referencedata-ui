@@ -13,6 +13,7 @@ New functionality added in a backwards-compatible manner:
 Bug fixes
 
 * [OLMIS-2905](https://openlmis.atlassian.net/browse/OLMIS-2905): User with only POD_MANAGE or ORDERS_MANAGE can now access 'View Orders' page.
+* [OLMIS-2714](https://openlmis.atlassian.net/browse/OLMIS-2714): Fixed loading modal closing too soon after saving user.
 
 5.2.0 / 2017-06-22
 ==================

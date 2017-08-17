@@ -180,11 +180,11 @@
             }
 
             return savePromise.then(function() {
-                loadingPromise.then(function () {
+                loadingPromise.then(function() {
                     notificationService.success(vm.notification);
                 });
                 goToUserList();
-            }).finally(loadingModalService.close);
+            }, loadingModalService.close);
         }
 
         /**
@@ -207,8 +207,7 @@
                 (new UserPasswordModal(savedUser.username)).finally(function () {
                     goToUserList();
                 });
-            }, loadingModalService.close)
-            .finally(loadingModalService.close);
+            }, loadingModalService.close);
         }
 
         /**

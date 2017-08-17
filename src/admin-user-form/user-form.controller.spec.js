@@ -186,13 +186,6 @@ describe('UserFormController', function() {
             });
         });
 
-        it('should close loading modal', function() {
-            deferred.resolve();
-            vm.saveUser();
-            $rootScope.$apply();
-            expect(loadingModalService.close).toHaveBeenCalled();
-        });
-
         it('should not show notification if request fails', function() {
             deferred.reject();
             vm.saveUser();
@@ -324,12 +317,6 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
             expect(notificationService.success).toHaveBeenCalledWith(vm.notification);
-        });
-
-        it('should close loading modal', function() {
-            vm.saveUser();
-            $rootScope.$apply();
-            expect(loadingModalService.close).toHaveBeenCalled();
         });
     });
 
