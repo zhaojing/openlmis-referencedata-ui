@@ -131,7 +131,6 @@ describe('UserFormController', function() {
             deferred = $q.defer();
             referencedataUserService.saveUser.andReturn($q.when(user));
             authUserService.saveUser.andReturn(deferred.promise);
-
         });
 
         it('should open loading modal', function() {
@@ -257,8 +256,11 @@ describe('UserFormController', function() {
 
     describe('create user', function() {
 
+        var deferred;
+
         beforeEach(function() {
-            referencedataUserService.saveUser.andReturn($q.when(user));
+            deferred = $q.defer();
+            referencedataUserService.saveUser.andReturn(deferred.promise);
             authUserService.saveUser.andReturn($q.when(user));
             UserPasswordModal.andReturn($q.when(user));
 
@@ -286,6 +288,7 @@ describe('UserFormController', function() {
         });
 
         it('should call authUserService', function() {
+            deferred.resolve(user);
             vm.saveUser();
             $rootScope.$apply();
 
@@ -298,6 +301,7 @@ describe('UserFormController', function() {
         });
 
         it('should call UserPasswordModal', function() {
+            deferred.resolve(user);
             vm.saveUser();
             $rootScope.$apply();
 
@@ -305,6 +309,7 @@ describe('UserFormController', function() {
         });
 
         it('should change email if it is empty string', function() {
+            deferred.resolve(user);
             vm.saveUser();
             $rootScope.$apply();
 
@@ -314,9 +319,17 @@ describe('UserFormController', function() {
         });
 
         it('should call notificationService', function() {
+            deferred.resolve(user);
             vm.saveUser();
             $rootScope.$apply();
             expect(notificationService.success).toHaveBeenCalledWith(vm.notification);
+        });
+
+        it('should should close loading modal if request failed', function() {
+            deferred.reject();
+            vm.saveUser();
+            $rootScope.$apply();
+            expect(loadingModalService.close).toHaveBeenCalled();
         });
     });
 
