@@ -42,11 +42,17 @@ describe('OpenlmisFacilityProgramSelectController', function() {
             id: 'program-three-id'
         }];
 
-        facilities = [{
-            id: 'facility-one-id'
-        }, {
-            id: 'facility-two-id'
-        }];
+        facilities = [
+            {
+                id: 'facility-one-id'
+            },
+            {
+                id: 'facility-two-id'
+            },
+            {
+                id: 'facility-three-id'
+            }
+        ];
 
         homeFacility = {
             id: 'home-facility-id',
@@ -192,6 +198,7 @@ describe('OpenlmisFacilityProgramSelectController', function() {
         beforeEach(function() {
             vm.homeFacility = homeFacility;
             vm.isSupervised = true;
+            vm.module = "some-module";
 
             spyOn(loadingModalService, 'close');
         });
@@ -211,6 +218,13 @@ describe('OpenlmisFacilityProgramSelectController', function() {
         it('should retrieve facility list from the cache', function() {
             vm.program = homePrograms[1];
 
+            cacheService.get.andCallFake(function(key) {
+                if (key === 'program-two-id') return {
+                    "some-module": facilities,
+                    "other-module": []
+                };
+            });
+
             vm.updateFacilities();
 
             expect(cacheService.get).toHaveBeenCalledWith(homePrograms[1].id);
@@ -222,7 +236,10 @@ describe('OpenlmisFacilityProgramSelectController', function() {
 
             cacheService.isReady.andReturn(true);
             cacheService.get.andCallFake(function(key) {
-                if (key === 'program-two-id') return facilities;
+                if (key === 'program-two-id') return {
+                    "some-module": facilities,
+                    "other-module": []
+                };
             });
 
             vm.updateFacilities(true);
@@ -235,12 +252,33 @@ describe('OpenlmisFacilityProgramSelectController', function() {
 
             cacheService.isReady.andReturn(true);
             cacheService.get.andCallFake(function(key) {
-                if (key === 'program-two-id') return facilities;
+                if (key === 'program-two-id') return {
+                    "some-module": facilities,
+                    "other-module": []
+                };
             });
 
             vm.updateFacilities();
 
             expect(vm.facilities).toEqual(facilities);
+        });
+
+        it('should expose all facilities if module name is not specified', function() {
+            vm.program = homePrograms[1];
+
+            cacheService.isReady.andReturn(true);
+            cacheService.get.andCallFake(function(key) {
+                if (key === 'program-two-id') return {
+                    "some-module": [facilities[0], facilities[1]],
+                    "other-module": [facilities[1], facilities[2]]
+                };
+            });
+
+            vm.module = undefined;
+
+            vm.updateFacilities();
+
+            expect(vm.facilities).toEqual([facilities[0], facilities[1], facilities[2]]);
         });
 
         it('should clear facility', function() {

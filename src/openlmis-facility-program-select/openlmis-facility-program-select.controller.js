@@ -107,7 +107,15 @@
             }
 
             function setFacilities(facilities) {
-                vm.facilities = facilities;
+                if (vm.module) {
+                    vm.facilities = facilities[vm.module];
+                } else {
+                    var allFacilities = [];
+                    angular.forEach(facilities, function(facilityList) {
+                        allFacilities = allFacilities.concat(facilityList);
+                    });
+                    vm.facilities = $filter('unique')(allFacilities, 'id');
+                }
 
                 if (init && $stateParams.facility) {
                     vm.facility = $filter('filter')(vm.facilities, {

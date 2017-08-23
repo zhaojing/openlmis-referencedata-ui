@@ -38,12 +38,29 @@
                      facilityService, cacheService, CACHE_KEYS) {
 
         var deferred = $q.defer(),
-            ready = false;
+            ready = false,
+            modulesWithRights = {};
 
         this.load = load;
         this.clear = clear;
         this.whenReady = whenReady;
         this.isReady = isReady;
+        this.pushRightsForModule = pushRightsForModule;
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
+         * @name pushRightsForModule
+         *
+         * @description
+         * Module can load set of rights that will be used to fetch supervised facilities.
+         *
+         * @param {String} moduleName name that will be used to get specified rights
+         * @param {Array}  rightArray array of rights
+         */
+        function pushRightsForModule(moduleName, rightArray) {
+            modulesWithRights[moduleName] = rightArray;
+        }
 
         /**
          * @ngdoc method
@@ -69,11 +86,11 @@
                         promises.push(promise);
                     }
                 });
-            }, deferred.reject);
 
-            $q.all(promises).then(function() {
-                ready = true;
-                deferred.resolve();
+                $q.all(promises).then(function() {
+                    ready = true;
+                    deferred.resolve();
+                }, deferred.reject);
             }, deferred.reject);
         }
 
@@ -150,49 +167,59 @@
         }
 
         function cacheFacilities(program) {
-            var promises = getFacilityListsPromises(program.id);
+            var modulesAndPromises = getFacilityListsPromises(program.id);
 
-            if(promises.length > 0) {
-                var promise = $q.all(promises);
+            if (modulesAndPromises.promises.length > 0) {
+                var promise = $q.all(modulesAndPromises.promises);
 
-                cacheService.cache(program.id, promise, function (facilityList) {
-                    var facilities;
+                cacheService.cache(program.id, promise, function(facilityList) {
+                    var facilitiesObject = {};
 
-                    if(promises.length > 1) {
-                        facilities = facilityList[0].concat(facilityList[1]);
-                    } else {
-                        facilities = facilityList[0];
-                    }
+                    angular.forEach(facilityList, function(facilities, index) {
+                        var moduleName = modulesAndPromises.modules[index];
 
-                    return facilities;
+                        if (facilitiesObject[moduleName]) {
+                            var uniqueFacilities = $filter('unique')(facilitiesObject[modulesAndPromises.modules[index]].concat(facilities), 'id');
+                            facilitiesObject[modulesAndPromises.modules[index]] = uniqueFacilities;
+                        } else {
+                            facilitiesObject[modulesAndPromises.modules[index]] = facilities;
+                        }
+                    });
+
+                    return facilitiesObject;
                 });
 
                 return promise;
             }
+
+            return $q.when([]);
         }
 
         function getFacilityListsPromises(programId) {
-            var authorizeRightId = getRightId(REQUISITION_RIGHTS.REQUISITION_AUTHORIZE),
-                createRightId = getRightId(REQUISITION_RIGHTS.REQUISITION_CREATE),
-                userId = authorizationService.getUser().user_id,
-                promises = [];
+            var userId = authorizationService.getUser().user_id,
+                promises = [],
+                modules = [];
 
-            if(createRightId && userId) {
-                promises.push(facilityService.getUserSupervisedFacilities(
-                    userId,
-                    programId,
-                    createRightId
-                ));
-            }
-            if(authorizeRightId && userId) {
-                promises.push(facilityService.getUserSupervisedFacilities(
-                    userId,
-                    programId,
-                    authorizeRightId
-                ));
+            if (userId) {
+                angular.forEach(modulesWithRights, function(moduleRights, moduleName) {
+                    angular.forEach(moduleRights, function(right) {
+                        var rightId = getRightId(right);
+                        if (rightId) {
+                            modules.push(moduleName);
+                            promises.push(facilityService.getUserSupervisedFacilities(
+                                userId,
+                                programId,
+                                rightId
+                            ));
+                        }
+                    });
+                });
             }
 
-            return promises;
+            return {
+                modules: modules,
+                promises: promises
+            };
         }
 
         function getRightId(rightName) {

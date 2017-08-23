@@ -24,14 +24,15 @@
      * @description
      * Component responsible for selecting facility, facility type and program. This component will
      * look for supervised, facility and program parameters in the state parameters to set the
-     * initial values.
+     * initial values, module parameter is for recognizing module where this component is used.
 
      * @example
      * ```
      * <openlmis-facility-program-select
      *      is-supervised="vm.supervisedFlag"
      *      program="vm.programObject"
-     *      facility="vm.facilityObject">
+     *      facility="vm.facilityObject"
+     *      module="'openlmis-some-module-name'">
      * </openlmis-facility-program-select>
      * ```
      */
@@ -41,7 +42,8 @@
             bindings: {
                 isSupervised: '=',
                 program: '=',
-                facility: '='
+                facility: '=',
+                module: '=?'
             },
             controller: 'OpenlmisFacilityProgramSelectController',
             controllerAs: 'vm',
