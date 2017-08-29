@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc service
@@ -29,15 +29,15 @@
      * cache has been created.
      */
 
-	angular.module('referencedata-facilities-cache')
-		.service('facilityCacheService', service);
+    angular.module('referencedata-facilities-cache')
+        .service('facilityCacheService', service);
 
-	service.$inject = ['$q', '$rootScope', 'localStorageFactory', 'facilityService', '$urlRouter'];
+    service.$inject = ['$q', '$rootScope', 'localStorageFactory', 'facilityService', '$urlRouter'];
 
-	function service($q, $rootScope, localStorageFactory, facilityService, $urlRouter) {
-		var cachingFacilitiesPromise;
+    function service($q, $rootScope, localStorageFactory, facilityService, $urlRouter) {
+        var cachingFacilitiesPromise;
 
-		this.initialize = initialize;
+        this.initialize = initialize;
 
         /**
          * @ngdoc method
@@ -47,11 +47,11 @@
          * @description
          * Sets up listenters for events in the service.
          */
-		function initialize() {
-			$rootScope.$on('openlmis-auth.login', cacheFacilities);
-			$rootScope.$on('openlmis-auth.logout', removeFacilitiesCache);
-			$rootScope.$on('$stateChangeStart', pauseIfLoading);
-		}
+        function initialize() {
+            $rootScope.$on('openlmis-auth.login', cacheFacilities);
+            $rootScope.$on('openlmis-auth.logout', removeFacilitiesCache);
+            $rootScope.$on('$stateChangeStart', pauseIfLoading);
+        }
 
         /**
          * @ngdoc method
@@ -65,16 +65,16 @@
          * The main part of this function manages a promise, which is used to
          * block state changes while the facility list is being downloaded.
          */
-		function cacheFacilities() {
-			if(!cachingFacilitiesPromise) {
-				cachingFacilitiesPromise = $q.defer();
-				facilityService.getAllMinimal()
-				.finally(function(){
-					cachingFacilitiesPromise.resolve();
-					cachingFacilitiesPromise = undefined;
-				});
-			}
-		}
+        function cacheFacilities() {
+            if(!cachingFacilitiesPromise) {
+                cachingFacilitiesPromise = $q.defer();
+                facilityService.getAllMinimal()
+                .finally(function(){
+                    cachingFacilitiesPromise.resolve();
+                    cachingFacilitiesPromise = undefined;
+                });
+            }
+        }
 
         /**
          * @ngdoc method
@@ -84,28 +84,30 @@
          * @description
          * Removes the facility cache.
          */
-		function removeFacilitiesCache() {
-			facilityService.clearMinimalFacilitiesCache();
-		}
+        function removeFacilitiesCache() {
+            facilityService.clearMinimalFacilitiesCache();
+        }
 
         /**
          * @ngdoc method
          * @methodOf referencedata-facilities-cache.facilityCacheService
          * @name pauseIfLoading
          *
+         * @param {Object} event State change event from $stateChangeStart
+         *
          * @description
          * Cancels any state changes while the caching promise is loading. After
          * loading is complete, the browser is directed to the current state.
          */
-		function pauseIfLoading(event) {
-			if(cachingFacilitiesPromise) {
-				event.preventDefault();
+        function pauseIfLoading(event) {
+            if(cachingFacilitiesPromise) {
+                event.preventDefault();
 
-				cachingFacilitiesPromise.then(function(){
-					$urlRouter.sync();
-				});
-			}
-		}
-	}
+                cachingFacilitiesPromise.then(function(){
+                    $urlRouter.sync();
+                });
+            }
+        }
+    }
 
 })();

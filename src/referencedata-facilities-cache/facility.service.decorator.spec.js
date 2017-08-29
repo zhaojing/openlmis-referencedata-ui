@@ -14,62 +14,61 @@
  */
 
 describe('Facility service minimal decorator', function() {
-	var facilityService, originalFacilityService, $rootScope, cache;
+    var facilityService, originalFacilityService, $rootScope, cache;
 
-	beforeEach(module('referencedata-facilities-cache'));
+    beforeEach(module('referencedata-facilities-cache'));
 
-	beforeEach(module(function($provide, $injector){
-		cache = jasmine.createSpyObj('cache', ['getAll', 'put']);
+    beforeEach(module(function($provide, $injector){
+        cache = jasmine.createSpyObj('cache', ['getAll', 'put']);
 
-		$provide.factory('localStorageFactory', function(){
-			return function(){
-				return cache;
-			};
-		});
+        $provide.factory('localStorageFactory', function(){
+            return function(){
+                return cache;
+            };
+        });
 
-		cache.getAll.andReturn([]);
-	}));
+        cache.getAll.andReturn([]);
+    }));
 
-	beforeEach(inject(function(_facilityService_, _$rootScope_){
-		facilityService = _facilityService_;
-		$rootScope = _$rootScope_;
-	}));
+    beforeEach(inject(function(_facilityService_, _$rootScope_){
+        facilityService = _facilityService_;
+        $rootScope = _$rootScope_;
+    }));
 
-	it('will return a cached list of minimal facilities if available', function() {
-		cache.getAll.andReturn([{}, {}, {}]);
+    it('will return a cached list of minimal facilities if available', function() {
+        cache.getAll.andReturn([{}, {}, {}]);
 
-		var results = false;
-		facilityService.getAllMinimal().then(function(res){
-			results = res;
-		});
-		$rootScope.$apply(); // resolving promises
+        var results = false;
+        facilityService.getAllMinimal().then(function(res){
+            results = res;
+        });
+        $rootScope.$apply(); // resolving promises
 
-		expect(results.length).toBe(3);
-	});
+        expect(results.length).toBe(3);
+    });
 
-	it('will return original facilityService.getAllMinimal if no cache', inject(function($httpBackend, referencedataUrlFactory) {
-		var facilities = [{
-			uuid: 1,
-			name: 'example'
-		}];
+    it('will return original facilityService.getAllMinimal if no cache', inject(function($httpBackend, referencedataUrlFactory) {
+        var facilities = [{
+            uuid: 1,
+            name: 'example'
+        }];
 
-		$httpBackend.when('GET', referencedataUrlFactory('/api/facilities/minimal'))
-		.respond(200, facilities);
+        $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/minimal'))
+        .respond(200, facilities);
 
-		cache.getAll.andReturn([]);
+        cache.getAll.andReturn([]);
 
-		var results;
-		facilityService.getAllMinimal().then(function(_results){
-			results = _results;
-		});
-		$httpBackend.flush();
-		$rootScope.$apply();
-		
-		expect(results.length).toBe(1);
-	}));
+        var results;
+        facilityService.getAllMinimal().then(function(_results){
+            results = _results;
+        });
+        $httpBackend.flush();
+        $rootScope.$apply();
+        
+        expect(results.length).toBe(1);
 
-	it('will store the last cached list until the cache is cleared', function() {
-
-	});
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    }));
 
 });
