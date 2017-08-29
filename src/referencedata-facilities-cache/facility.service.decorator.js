@@ -17,12 +17,14 @@
 
     'use strict';
 
-    // Adds offline cache to minimal facility representation
-    // So that minimal can be called, and it will return a list
-    // in a promise... screens programmed against this will still
-    // work .. even if caching is removed...
-    // 
-    
+    /**
+     * @ngdoc service
+     * @name referencedata-facilities-cache.facilityService
+     *
+     * @description
+     * Decorates methods to the facilityService, making it so the minimal
+     * facility list is loaded once.
+     */    
     angular.module('referencedata-facilities-cache')
         .config(config);
 
@@ -42,6 +44,16 @@
 
         return $delegate;
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityService
+         * @name getAllMinimal
+         *
+         * @description
+         * Gets a minimal representation of all facilities from the
+         * referencedata service, which is then stored and only retrived from
+         * the user's browser.
+         */
         function cachedGetAllMinimal() {
             var cachedFacilities = minimalFacilitiesCache.getAll();
 
@@ -59,6 +71,14 @@
             }
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityCacheService
+         * @name clearMinimalFacilitiesCache
+         *
+         * @description
+         * Deletes any facilities stored in the user's browser cache.
+         */
         function clearCache() {
             minimalFacilitiesCache.clearAll();
         }

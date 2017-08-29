@@ -24,12 +24,19 @@ describe('facilityCacheService', function() {
 		$rootScope = _$rootScope_;
 
 		spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve([]));
+		spyOn(facilityService, 'clearMinimalFacilitiesCache').andCallThrough();
 	}));
 
 	it('will download a list of facilities when the user logs in', function() {
-		$rootScope.$emit('auth.login');
+		$rootScope.$emit('openlmis-auth.login');
 
 		expect(facilityService.getAllMinimal).toHaveBeenCalled();
+	});
+
+	it('will clear cached facilities when a user logs out', function() {
+		$rootScope.$emit('openlmis-auth.logout');
+
+		expect(facilityService.clearMinimalFacilitiesCache).toHaveBeenCalled();
 	});
 
 });

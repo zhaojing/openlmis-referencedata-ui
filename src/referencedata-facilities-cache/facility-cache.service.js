@@ -17,10 +17,18 @@
 
 	'use strict';
 
-	// listens for login/logout events, and 
-	// downloads/clear the minimal facility
-	// cache
-	// 
+    /**
+     * @ngdoc service
+     * @name referencedata-facilities-cache.facilityCacheService
+     *
+     * @description
+     * Triggers the facility service to store a minimal list of facilities
+     * until the user logs out.
+     *
+     * This service will stop a state change from happening until the facilites
+     * cache has been created.
+     */
+
 	angular.module('referencedata-facilities-cache')
 		.service('facilityCacheService', service);
 
@@ -31,22 +39,64 @@
 
 		this.initialize = initialize;
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityCacheService
+         * @name initialize
+         *
+         * @description
+         * Sets up listenters for events in the service.
+         */
 		function initialize() {
-			$rootScope.$on('auth.login', cacheFacilities);
-			$rootScope.$on('auth.login-modal', cacheFacilities);
-
+			$rootScope.$on('openlmis-auth.login', cacheFacilities);
+			$rootScope.$on('openlmis-auth.logout', removeFacilitiesCache);
 			$rootScope.$on('$stateChangeStart', pauseIfLoading);
 		}
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityCacheService
+         * @name cacheFacilities
+         *
+         * @description
+         * Runs facilityService.getAllMinimal, which has been modified to store
+         * the recieved list in the browsers cache.
+         *
+         * The main part of this function manages a promise, which is used to
+         * block state changes while the facility list is being downloaded.
+         */
 		function cacheFacilities() {
-			cachingFacilitiesPromise = $q.defer();
-			facilityService.getAllMinimal()
-			.finally(function(){
-				cachingFacilitiesPromise.resolve();
-				cachingFacilitiesPromise = undefined;
-			});
+			if(!cachingFacilitiesPromise) {
+				cachingFacilitiesPromise = $q.defer();
+				facilityService.getAllMinimal()
+				.finally(function(){
+					cachingFacilitiesPromise.resolve();
+					cachingFacilitiesPromise = undefined;
+				});
+			}
 		}
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityCacheService
+         * @name removeFacilitiesCache
+         *
+         * @description
+         * Removes the facility cache.
+         */
+		function removeFacilitiesCache() {
+			facilityService.clearMinimalFacilitiesCache();
+		}
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityCacheService
+         * @name pauseIfLoading
+         *
+         * @description
+         * Cancels any state changes while the caching promise is loading. After
+         * loading is complete, the browser is directed to the current state.
+         */
 		function pauseIfLoading(event) {
 			if(cachingFacilitiesPromise) {
 				event.preventDefault();
