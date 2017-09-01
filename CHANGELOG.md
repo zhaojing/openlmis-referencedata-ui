@@ -1,4 +1,4 @@
-5.2.1 / Current Snapshot
+5.2.1 / 2017-09-01
 ========================
 
 Improvements:
