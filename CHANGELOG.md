@@ -10,6 +10,8 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-3085:](https://openlmis.atlassian.net/browse/OLMIS-3085) Made minimal facility list download and cache when user logs in.
 * [OLMIS-2696](https://openlmis.atlassian.net/browse/OLMIS-2696): Added requisition group administration screen.
 * [OLMIS-2698](https://openlmis.atlassian.net/browse/OLMIS-2698): Added geographic zone administration screens.
+* [OLMIS-2853](https://openlmis.atlassian.net/browse/OLMIS-2853): Added view Supply Lines screen.
+* [OLMIS-2600](https://openlmis.atlassian.net/browse/OLMIS-2600): Added view Program Settings screen.
 
 Bug fixes
 
