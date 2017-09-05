@@ -18,7 +18,7 @@ describe('programService', function() {
     var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, program1, program2;
 
     beforeEach(function() {
-        module('referencedata-program', function($provide){
+        module('referencedata-program', function($provide, $qProvider){
             programsStorage = jasmine.createSpyObj('programsStorage', ['getBy', 'getAll', 'put', 'search']);
             var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function() {
                 return programsStorage;
@@ -27,7 +27,10 @@ describe('programService', function() {
                 return localStorageFactorySpy;
             });
 
-            offlineService = jasmine.createSpyObj('offlineService', ['isOffline']);
+            offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
+            offlineService.checkConnection.andReturn({
+                'finally': function() {}
+            });
             $provide.service('offlineService', function() {
                 return offlineService;
             });

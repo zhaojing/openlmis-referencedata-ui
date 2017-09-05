@@ -26,7 +26,8 @@
     angular.module('referencedata-program', [
         'ngResource',
         'openlmis-local-storage',
-        'openlmis-urls'
+        'openlmis-urls',
+        'openlmis-offline'
     ]);
 
 })();

@@ -1,3 +1,10 @@
+5.2.2 / In development
+========================
+
+Bug fixes:
+
+* Added openlmis-offline as a dependency to the referencedata-program module.
+
 5.2.1 / 2017-09-01
 ========================
 
