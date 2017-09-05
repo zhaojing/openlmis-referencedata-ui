@@ -3,15 +3,19 @@
     <button ui-sref="openlmis.administration.users.form" class="add">{{'adminUserList.addUser' | message}}</button>
     <form ng-submit="vm.search()">
         <fieldset class="form-group">
-            <adminUserList for="firstName">{{'adminUserList.firstName' | message}}</adminUserList>
+            <label for="username">{{'adminUserList.username' | message}}</label>
+            <input type="text" id="username" ng-model="vm.username"/>
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="firstName">{{'adminUserList.firstName' | message}}</label>
             <input type="text" id="firstName" ng-model="vm.firstName"/>
         </fieldset>
         <fieldset class="form-group">
-            <adminUserList for="lastName">{{'adminUserList.lastName' | message}}</adminUserList>
+            <label for="lastName">{{'adminUserList.lastName' | message}}</label>
             <input type="text" id="lastName" ng-model="vm.lastName"/>
         </fieldset>
         <fieldset class="form-group">
-            <adminUserList for="email">{{'adminUserList.email' | message}}</adminUserList>
+            <label for="email">{{'adminUserList.email' | message}}</label>
             <input type="text" id="email" ng-model="vm.email"/>
         </fieldset>
         <input type="submit" value="{{'adminUserList.search'|message}}"/>

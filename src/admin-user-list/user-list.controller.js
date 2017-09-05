@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,25 +24,26 @@
      * @description
      * Controller for managing user list screen.
      */
-	angular
-		.module('admin-user-list')
-		.controller('UserListController', controller);
+    angular
+        .module('admin-user-list')
+        .controller('UserListController', controller);
 
-	controller.$inject = [
-		'$state', '$stateParams', 'users', 'confirmService', 'UserPasswordModal'
-	];
+    controller.$inject = [
+        '$state', '$stateParams', 'users', 'confirmService', 'UserPasswordModal'
+    ];
 
-	function controller($state, $stateParams, users, confirmService, UserPasswordModal) {
+    function controller($state, $stateParams, users, confirmService, UserPasswordModal) {
 
-		var vm = this;
+        var vm = this;
 
-		vm.users = users;
-		vm.firstName = $stateParams.firstName;
-		vm.lastName = $stateParams.lastName;
-		vm.email = $stateParams.email;
+        vm.users = users;
+        vm.firstName = $stateParams.firstName;
+        vm.lastName = $stateParams.lastName;
+        vm.email = $stateParams.email;
+        vm.username = $stateParams.username;
 
         vm.resetUserPassword = resetUserPassword;
-		vm.search = search;
+        vm.search = search;
 
         /**
          * @ngdoc method
@@ -54,13 +55,13 @@
          *
          * @param {String} username	the username of the user
          */
-		function resetUserPassword(username) {
+        function resetUserPassword(username) {
             (new UserPasswordModal(username)).then(function() {
-				$state.reload();
-			});
-		}
+                $state.reload();
+            });
+        }
 
-		/**
+        /**
          * @ngdoc method
          * @methodOf admin-user-list.controller:UsersListController
          * @name search
@@ -68,17 +69,18 @@
          * @description
          * Reloads page with new search parameters.
          */
-		function search() {
-			var stateParams = angular.copy($stateParams);
+        function search() {
+            var stateParams = angular.copy($stateParams);
 
-			stateParams.lastName = vm.lastName;
-			stateParams.firstName = vm.firstName;
-			stateParams.email = vm.email;
+            stateParams.lastName = vm.lastName;
+            stateParams.firstName = vm.firstName;
+            stateParams.email = vm.email;
+            stateParams.username = vm.username;
 
-			$state.go('openlmis.administration.users', stateParams, {
-				reload: true
-			});
-		}
-	}
+            $state.go('openlmis.administration.users', stateParams, {
+                reload: true
+            });
+        }
+    }
 
 })();

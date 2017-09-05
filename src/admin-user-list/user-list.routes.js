@@ -15,32 +15,34 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-user-list').config(routes);
+    angular.module('admin-user-list').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.users', {
-			showInNavigation: true,
-			label: 'adminUserList.users.label',
-			url: '/users?firstName&lastName&email&page&size',
-			controller: 'UserListController',
-			templateUrl: 'admin-user-list/user-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
-			resolve: {
-				users: function(paginationService, referencedataUserService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
-						return referencedataUserService.search({
-							page: stateParams.page,
-							size: stateParams.size
-						}, stateParams);
-					});
-				}
-			}
-		});
-	}
+        $stateProvider.state('openlmis.administration.users', {
+            showInNavigation: true,
+            label: 'adminUserList.users.label',
+            url: '/users?firstName&lastName&email&page&size&username',
+            controller: 'UserListController',
+            templateUrl: 'admin-user-list/user-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            resolve: {
+                users: function(paginationService, referencedataUserService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var params = angular.copy(stateParams);
+
+                        if (!params.sort) {
+                            params.sort = "username";
+                        }
+                        return referencedataUserService.search(params);
+                    });
+                }
+            }
+        });
+    }
 })();

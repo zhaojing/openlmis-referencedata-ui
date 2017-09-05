@@ -103,7 +103,8 @@ describe('UserListController', function () {
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: vm.lastName,
                 firstName: undefined,
-                email: undefined
+                email: undefined,
+                username: undefined
             }, {reload: true});
         });
 
@@ -115,7 +116,8 @@ describe('UserListController', function () {
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: undefined,
                 firstName: vm.firstName,
-                email: undefined
+                email: undefined,
+                username: undefined
             }, {reload: true});
         });
 
@@ -128,8 +130,23 @@ describe('UserListController', function () {
                 lastName: undefined,
                 firstName: undefined,
                 email: vm.email,
+                username: undefined
             }, {reload: true});
         });
+
+        it('should set username param', function() {
+            vm.username = 'username';
+
+            vm.search();
+
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
+                lastName: undefined,
+                firstName: undefined,
+                email: undefined,
+                username: vm.username
+            }, {reload: true});
+        });
+
 
         it('should call state go method', function() {
             vm.search();

@@ -16,7 +16,7 @@
 describe('referencedataUserService', function() {
 
     var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, user1,
-        user2, offlineUserDetails;
+    user2, offlineUserDetails;
 
     beforeEach(function() {
         module('referencedata-user', function($provide) {
@@ -110,23 +110,27 @@ describe('referencedataUserService', function() {
 
     it('should search for users', function() {
         var data,
-            paginationParams = {
-                param1: 'param1'
-            },
-            queryParams = {
-                param2: 'param2'
-            };
+        params = {
+            param: 'param',
+            page: 0,
+            size: 10,
+            sort: "username"
+        };
 
-        $httpBackend.when('POST', openlmisUrlFactory('/api/users/search?param1=' + paginationParams.param1))
+        $httpBackend.when('POST', openlmisUrlFactory('/api/users/search?page=' + params.page +
+        '&size=' + params.size +
+        '&sort=' + params.sort))
         .respond(function(method, url, data) {
-            if(!angular.equals(data, angular.toJson(queryParams))){
+            if(!angular.equals(data, angular.toJson({
+                param: 'param'
+            }))){
                 return [404];
             } else {
                 return [200, angular.toJson(user1)];
             }
         });
 
-        referencedataUserService.search(paginationParams, queryParams).then(function(response) {
+        referencedataUserService.search(params).then(function(response) {
             data = response;
         });
 

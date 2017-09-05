@@ -35,22 +35,22 @@
 
     function service($q, openlmisUrlFactory, $resource, offlineService, localStorageFactory) {
         var offlineUserDetails = localStorageFactory('offlineUserDetails'),
-            resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
-                getAll: {
-                    url: openlmisUrlFactory('/api/users'),
-                    method: 'GET',
-                    isArray: true
-                },
-                search: {
-                    url: openlmisUrlFactory('/api/users/search'),
-                    method: 'POST'
-                },
-                saveUser: {
-                    url: openlmisUrlFactory('/api/users'),
-                    method: 'PUT',
-                    transformRequest: transformRequest
-                }
-            });
+        resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
+            getAll: {
+                url: openlmisUrlFactory('/api/users'),
+                method: 'GET',
+                isArray: true
+            },
+            search: {
+                url: openlmisUrlFactory('/api/users/search'),
+                method: 'POST'
+            },
+            saveUser: {
+                url: openlmisUrlFactory('/api/users'),
+                method: 'PUT',
+                transformRequest: transformRequest
+            }
+        });
 
         this.get = get;
         this.search = search;
@@ -112,11 +112,21 @@
          * @description
          * Searches for users and returns paginated result.
          *
-         * @param  {Object}  paginationParams the pagination params
-         * @param  {Object}  queryParams      the search params
-         * @return {Promise}                  the page of users
+         * @param  {Object}  params the pagination and search params
+         * @return {Promise}        the page of users
          */
-        function search(paginationParams, queryParams) {
+        function search(params) {
+            var paginationParams = {
+                page: params.page,
+                size: params.size,
+                sort: params.sort
+            },
+            queryParams = angular.copy(params);
+
+            delete queryParams.page;
+            delete queryParams.size;
+            delete queryParams.sort;
+
             return resource.search(paginationParams, queryParams).$promise;
         }
 
