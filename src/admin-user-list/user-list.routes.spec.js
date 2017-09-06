@@ -70,9 +70,6 @@ describe('openlmis.administration.users state', function() {
             number: 0
         }));
 
-        dialogSpy = jasmine.createSpyObj('dialog', ['hide']);
-        spyOn(openlmisModalService, 'createDialog').andReturn(dialogSpy);
-
         state = $state.get('openlmis.administration.users');
     });
 
