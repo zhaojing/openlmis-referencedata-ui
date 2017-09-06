@@ -1,6 +1,10 @@
 5.2.2 / In development
 ========================
 
+Improvement:
+
+* [OLMIS-2857](https://openlmis.atlassian.net/browse/OLMIS-2857): Added username filter to user list screen.
+
 Bug fixes:
 
 * Added openlmis-offline as a dependency to the referencedata-program module.
