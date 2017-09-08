@@ -158,8 +158,16 @@
 
                 var currentUser = authorizationService.getUser();
                 referencedataUserService.get(currentUser.user_id).then(function(response) {
-                    deferred.resolve(response.homeFacility);
-                }, function() {
+                    if (response.homeFacilityId) {
+                        return facilityService.get(response.homeFacilityId);
+                    } else {
+                        return $q.reject();
+                    }
+                })
+                .then(function(homeFacility) {
+                    deferred.resolve(homeFacility);
+                })
+                .catch(function(){
                     deferred.reject();
                 });
 

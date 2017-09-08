@@ -27,7 +27,8 @@ describe('facilityFactory', function() {
 
             facilityService = jasmine.createSpyObj('facilityService', [
                 'getUserSupervisedFacilities',
-                'getFulfillmentFacilities'
+                'getFulfillmentFacilities',
+                'get'
             ]);
             $provide.factory('facilityService', function() {
                 return facilityService;
@@ -211,9 +212,9 @@ describe('facilityFactory', function() {
         beforeEach(inject(function(_referencedataUserService_) {
             referencedataUserService = _referencedataUserService_;
             spyOn(referencedataUserService, 'get');
-            referencedataUserService.get.andCallFake(function() {
-                return $q.when(true);
-            });
+            referencedataUserService.get.andReturn($q.resolve({
+                homeFacilityId: 'home-facility-id'
+            }));
 
             authorizationService.getUser.andReturn({
                 user_id: '1234'
@@ -221,9 +222,19 @@ describe('facilityFactory', function() {
         }));
 
         it('should fetch home facility for the current user', function() {
-            facilityFactory.getUserHomeFacility();
+            facilityService.get.andCallFake(function() {
+                return { name: 'Home Facility'};
+            });
+
+            var homeFacility;
+            facilityFactory.getUserHomeFacility().then(function (result) {
+                homeFacility = result;
+            });
+            $rootScope.$apply();
 
             expect(referencedataUserService.get).toHaveBeenCalled();
+            expect(facilityService.get).toHaveBeenCalledWith('home-facility-id');
+            expect(homeFacility.name).toEqual('Home Facility');
         });
     });
 

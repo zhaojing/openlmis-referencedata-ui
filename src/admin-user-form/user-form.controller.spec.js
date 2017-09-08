@@ -68,7 +68,7 @@ describe('UserFormController', function() {
         user = {
             id: 'user-id',
             username: 'random-user',
-            homeFacility: facilities[0],
+            homeFacilityId: facilities[0].id,
             roleAssignments: [
                 {
                     roleId: 'role-id-1',

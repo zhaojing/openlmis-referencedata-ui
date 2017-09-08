@@ -274,7 +274,7 @@ describe('UserRolesController', function() {
 
             vm.selectedRole = roles[2];
             vm.selectedProgram = programs[1];
-            vm.user.homeFacility = undefined;
+            vm.user.homeFacilityId = undefined;
 
             vm.addRole();
 

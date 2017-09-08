@@ -110,8 +110,15 @@
             vm.user = user ? user : {
                 loginRestricted: false
             };
+            if (user) {
+                angular.forEach(facilities, function(result) {
+                    if (result.id === vm.user.homeFacilityId) {
+                        vm.user.homeFacility = result;
+                    }
+                });
+            }
 
-            vm.initialHomeFacility = user ? user.homeFacility : undefined;
+            vm.initialHomeFacility = user ? vm.user.homeFacility : undefined;
             vm.notification = 'adminUserForm.user' + (vm.updateMode ? 'Updated' : 'Created') + 'Successfully';
             vm.facilities = facilities;
         }
@@ -129,7 +136,7 @@
          */
         function saveUser() {
             if (vm.updateMode) {
-                if (vm.initialHomeFacility && vm.initialHomeFacility != user.homeFacility) {
+                if (vm.initialHomeFacility && vm.initialHomeFacility != vm.user.homeFacility) {
                     return removeHomeFacilityRightsConfirmation().then(function() {
                         return processUpdateUser(true);
                     }, function() {
