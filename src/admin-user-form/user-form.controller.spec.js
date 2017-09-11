@@ -346,7 +346,7 @@ describe('UserFormController', function() {
         });
 
         it('should remove home facility from user json', function() {
-            expect(vm.user.homeFacility).toBe(undefined);
+            expect(vm.user.homeFacilityId).toBe(undefined);
         });
 
         it('should remove home facility role assignments', function() {

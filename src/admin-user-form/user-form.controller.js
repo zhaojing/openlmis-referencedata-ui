@@ -135,6 +135,12 @@
          * @return {Promise} the promise resolving to the created/updated user
          */
         function saveUser() {
+            if (vm.user.homeFacility) {
+                vm.user.homeFacilityId = vm.user.homeFacility.id;
+            } else {
+                vm.user.homeFacilityId = undefined;
+            }
+
             if (vm.updateMode) {
                 if (vm.initialHomeFacility && vm.initialHomeFacility != vm.user.homeFacility) {
                     return removeHomeFacilityRightsConfirmation().then(function() {
@@ -276,6 +282,7 @@
         function removeHomeFacility() {
             confirmService.confirmDestroy('adminUserForm.removeHomeFacility.question', 'adminUserForm.removeHomeFacility.label').then(function() {
                 vm.user.homeFacility = undefined;
+                vm.user.homeFacilityId = undefined;
                 vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
             });
         }
