@@ -43,7 +43,7 @@
             var roleAssignments = [];
 
             angular.forEach(input, function(roleAssignment) {
-                if(!(roleAssignment.programCode && !roleAssignment.supervisoryNodeCode))
+                if(!(roleAssignment.programId && !roleAssignment.supervisoryNodeId))
                     roleAssignments.push(roleAssignment);
             });
 

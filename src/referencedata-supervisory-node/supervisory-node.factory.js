@@ -45,7 +45,7 @@
          * @description
          * Returns list of the supervisory nodes with display property.
          *
-         * @return {Promise} roleAssignments array of role assignments
+         * @return {Promise} supervisoryNodes array of supervisory nodes
          */
         function getAllSupervisoryNodesWithDisplay() {
             var deferred = $q.defer();

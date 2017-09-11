@@ -60,9 +60,9 @@
                     roleAssignment.$roleName = '';
                 }
 
-                if(roleAssignment.programCode) {
+                if(roleAssignment.programId) {
                     filtered = $filter('filter')(programs, {
-                        code: roleAssignment.programCode
+                        id: roleAssignment.programId
                     }, true);
                     if(filtered.length > 0) {
                         roleAssignment.$programName = filtered[0].name;
@@ -71,9 +71,9 @@
                     }
                 }
 
-                if(roleAssignment.supervisoryNodeCode) {
+                if(roleAssignment.supervisoryNodeId) {
                     filtered = $filter('filter')(supervisoryNodes, {
-                        code: roleAssignment.supervisoryNodeCode
+                        id: roleAssignment.supervisoryNodeId
                     }, true);
                     if(filtered.length > 0) {
                         roleAssignment.$supervisoryNodeName = filtered[0].$display;
@@ -82,9 +82,9 @@
                     }
                 }
 
-                if(roleAssignment.warehouseCode) {
+                if(roleAssignment.warehouseId) {
                     filtered = $filter('filter')(warehouses, {
-                        code: roleAssignment.warehouseCode
+                        id: roleAssignment.warehouseId
                     }, true);
                     if(filtered.length > 0) {
                         roleAssignment.$warehouseName = filtered[0].name;

@@ -251,15 +251,15 @@
                     $type: vm.types[vm.selectedType].name
                 };
                 if(isSupervisionType()) {
-                    roleAssignment.programCode = vm.selectedProgram.code;
+                    roleAssignment.programId = vm.selectedProgram.id;
                     roleAssignment.$programName = vm.selectedProgram.name;
 
                     if(vm.selectedSupervisoryNode) {
-                        roleAssignment.supervisoryNodeCode = vm.selectedSupervisoryNode.code;
+                        roleAssignment.supervisoryNodeId = vm.selectedSupervisoryNode.id;
                         roleAssignment.$supervisoryNodeName = vm.selectedSupervisoryNode.$display;
                     }
                 } else if(isFulfillmentType()) {
-                    roleAssignment.warehouseCode = vm.selectedWarehouse.code;
+                    roleAssignment.warehouseId = vm.selectedWarehouse.id;
                     roleAssignment.$warehouseName = vm.selectedWarehouse.name;
                 }
                 user.roleAssignments.push(roleAssignment);
@@ -362,12 +362,12 @@
                 var isEqual = vm.selectedRole.id === role.roleId;
                 if(isSupervisionType()) {
                     isEqual = isEqual &&
-                        vm.selectedProgram.code === role.programCode;
+                        vm.selectedProgram.id === role.programId;
 
-                    if(role.supervisoryNodeCode) {
+                    if(role.supervisoryNodeId) {
                         if(vm.selectedSupervisoryNode){
                             isEqual = isEqual &&
-                                vm.selectedSupervisoryNode.code === role.supervisoryNodeCode;
+                                vm.selectedSupervisoryNode.id === role.supervisoryNodeId;
                         } else {
                             isEqual = false;
                         }
@@ -377,7 +377,7 @@
                 }
                 else if(isFulfillmentType()) {
                     isEqual = isEqual &&
-                        vm.selectedWarehouse.code === role.warehouseCode;
+                        vm.selectedWarehouse.id === role.warehouseId;
                 }
                 alreadyExist = alreadyExist || isEqual;
             });

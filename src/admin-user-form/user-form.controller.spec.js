@@ -57,11 +57,11 @@ describe('UserFormController', function() {
 
         facilities = [
             {
-                code: 'facility-code-1',
+                id: 'facility-id-1',
                 name: 'facility-1'
             },
             {
-                code: 'facility-code-2',
+                id: 'facility-id-2',
                 name: 'facility-2'
             }
         ];
@@ -72,11 +72,11 @@ describe('UserFormController', function() {
             roleAssignments: [
                 {
                     roleId: 'role-id-1',
-                    programCode: 'program-code-1'
+                    programId: 'program-id-1'
                 },
                 {
                     roleId: 'role-id-2',
-                    warehouseCode: 'warehouse-code-1'
+                    warehouseId: 'warehouse-id-1'
                 }
             ]
         };
@@ -351,7 +351,7 @@ describe('UserFormController', function() {
 
         it('should remove home facility role assignments', function() {
             expect(vm.user.roleAssignments.length).toBe(1);
-            expect(vm.user.roleAssignments[0].programCode).toBe(undefined);
+            expect(vm.user.roleAssignments[0].programId).toBe(undefined);
         });
     });
 });

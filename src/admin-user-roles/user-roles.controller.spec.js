@@ -54,8 +54,8 @@ describe('UserRolesController', function() {
             roleAssignments: [
                 {
                     roleId: 'role-id-1',
-                    supervisoryNodeCode: 'node-code-1',
-                    programCode: 'program-code-1',
+                    supervisoryNodeId: 'node-id-1',
+                    programId: 'program-id-1',
                     $type: ROLE_TYPES[0].name
                 },
                 {
@@ -88,31 +88,31 @@ describe('UserRolesController', function() {
         ];
         supervisoryNodes = [
             {
-                code: 'node-code-1',
+                id: 'node-id-1',
                 $display: 'node-1'
             },
             {
-                code: 'node-code-2',
+                id: 'node-id-2',
                 $display: 'node-2'
             }
         ];
         warehouses = [
             {
-                code: 'warehouse-code-1',
+                id: 'warehouse-id-1',
                 name: 'warehouse-1'
             },
             {
-                code: 'warehouse-code-2',
+                id: 'warehouse-id-2',
                 name: 'warehouse-2'
             }
         ];
         programs = [
             {
-                code: 'program-code-1',
+                id: 'program-id-1',
                 name: 'program-1'
             },
             {
-                code: 'program-code-2',
+                id: 'program-id-2',
                 name: 'program-2'
             }
         ];

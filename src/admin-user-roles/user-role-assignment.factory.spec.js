@@ -47,39 +47,39 @@ describe('userRoleAssignmentFactory', function() {
         ];
         programs = [
             {
-                code: 'program-code-1',
+                id: 'program-id-1',
                 name: 'program-1'
             },
             {
-                code: 'program-code-2',
+                id: 'program-id-2',
                 name: 'program-2'
             }
         ];
         supervisoryNodes = [
             {
-                code: 'supervisory-node-code-1',
+                id: 'supervisory-node-id-1',
                 $display: 'supervisory-node-1'
             }
         ];
         warehouses = [
             {
-                code: 'warehouse-code-1',
+                id: 'warehouse-id-1',
                 name: 'warehouse-1'
             }
         ];
 
         roleAssignments = [
             {
-                programCode: 'program-code-1',
+                programId: 'program-id-1',
                 roleId: roles[0].id
             },
             {
-                programCode: 'program-code-2',
-                supervisoryNodeCode: 'supervisory-node-code-1',
+                programId: 'program-id-2',
+                supervisoryNodeId: 'supervisory-node-id-1',
                 roleId: roles[0].id
             },
             {
-                warehouseCode: 'warehouse-code-1',
+                warehouseId: 'warehouse-id-1',
                 roleId: roles[1].id
             },
 
