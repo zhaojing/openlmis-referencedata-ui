@@ -1,5 +1,6 @@
 <h2>{{'adminUserList.users.label' | message}}</h2>
 <section class="openlmis-table-container">
+    <openlmis-sort sort-options="vm.options"/>
     <button ui-sref="openlmis.administration.users.form" class="add">{{'adminUserList.addUser' | message}}</button>
     <form ng-submit="vm.search()">
         <fieldset class="form-group">

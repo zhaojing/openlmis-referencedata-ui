@@ -42,6 +42,21 @@
         vm.email = $stateParams.email;
         vm.username = $stateParams.username;
 
+        vm.options = [
+            {
+                display: 'adminUserList.username',
+                value: 'username'
+            },
+            {
+                display: 'adminUserList.firstName',
+                value: 'firstName'
+            },
+            {
+                display: 'adminUserList.lastName',
+                value: 'lastName'
+            }
+        ];
+
         vm.resetUserPassword = resetUserPassword;
         vm.search = search;
 

@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.users', {
             showInNavigation: true,
             label: 'adminUserList.users.label',
-            url: '/users?firstName&lastName&email&page&size&username',
+            url: '/users?firstName&lastName&email&page&size&username?sort',
             controller: 'UserListController',
             templateUrl: 'admin-user-list/user-list.html',
             controllerAs: 'vm',
@@ -34,12 +34,7 @@
             resolve: {
                 users: function(paginationService, referencedataUserService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        var params = angular.copy(stateParams);
-
-                        if (!params.sort) {
-                            params.sort = "username";
-                        }
-                        return referencedataUserService.search(params);
+                        return referencedataUserService.search(stateParams);
                     });
                 }
             }

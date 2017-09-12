@@ -28,6 +28,7 @@
         'openlmis-modal',
         'openlmis-pagination',
         'openlmis-rights',
+        'openlmis-sort',
         'referencedata-user',
         'ui.router'
     ]);

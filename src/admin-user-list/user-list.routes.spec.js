@@ -35,7 +35,8 @@ describe('openlmis.administration.users state', function() {
         params = {
             param: 'param',
             page: 0,
-            size: 10
+            size: 10,
+            sort: 'username'
         };
 
         users = [
@@ -74,10 +75,7 @@ describe('openlmis.administration.users state', function() {
     });
 
     it('should fetch a list of users', function() {
-        var result,
-            searchParams = angular.copy(params);
-
-        searchParams.sort = 'username';
+        var result;
 
         spyOn(paginationService, 'registerUrl').andCallFake(function(givenParams, method) {
             if (givenParams === params && angular.isFunction(method)) {
@@ -92,7 +90,7 @@ describe('openlmis.administration.users state', function() {
 
         expect(result).toEqual(usersPage);
         expect(result.content).toEqual(users);
-        expect(referencedataUserService.search).toHaveBeenCalledWith(searchParams);
+        expect(referencedataUserService.search).toHaveBeenCalledWith(params);
         expect(paginationService.registerUrl).toHaveBeenCalled();
     });
 
