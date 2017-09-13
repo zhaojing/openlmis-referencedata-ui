@@ -29,10 +29,10 @@
         .controller('UserListController', controller);
 
     controller.$inject = [
-        '$state', '$stateParams', 'users', 'confirmService', 'UserPasswordModal'
+        '$state', '$stateParams', 'users', 'confirmService', 'UserPasswordModal', 'messageService'
     ];
 
-    function controller($state, $stateParams, users, confirmService, UserPasswordModal) {
+    function controller($state, $stateParams, users, confirmService, UserPasswordModal, messageService) {
 
         var vm = this;
 

@@ -25,6 +25,7 @@
      */
     angular.module('admin-user-list', [
         'admin-user-form',
+        'openlmis-i18n',
         'openlmis-modal',
         'openlmis-pagination',
         'openlmis-rights',
