@@ -44,15 +44,15 @@
 
         vm.options = [
             {
-                display: 'adminUserList.username',
+                display: messageService.get('adminUserList.username'),
                 value: 'username'
             },
             {
-                display: 'adminUserList.firstName',
+                display: messageService.get('adminUserList.firstName'),
                 value: 'firstName'
             },
             {
-                display: 'adminUserList.lastName',
+                display: messageService.get('adminUserList.lastName'),
                 value: 'lastName'
             }
         ];
