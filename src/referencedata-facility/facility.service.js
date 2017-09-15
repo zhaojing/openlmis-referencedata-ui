@@ -71,6 +71,7 @@
             this.getUserSupervisedFacilities = getUserSupervisedFacilities;
             this.getFulfillmentFacilities = getFulfillmentFacilities;
             this.search = search;
+            this.save = save;
 
             /**
              * @ngdoc method
@@ -192,6 +193,21 @@
                     });
                 }
                 return deferred.promise;
+            }
+
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility.facilityService
+             * @name save
+             *
+             * @description
+             * Saves the given facility on the OpenLMIS server.
+             *
+             * @param   {Object}    facility    the facility to be saveDeferred
+             * @return  {Promise}               the saved facility
+             */
+            function save(facility) {
+                return resource.save(null, facility).$promise;
             }
 
             /**

@@ -280,6 +280,25 @@ describe('facilityService', function() {
         });
     });
 
+    describe('save', function() {
+
+        it('should resolve to facility', function() {
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/facilities'), facilityOne)
+                .respond(200, facilityOne);
+
+            var result;
+
+            facilityService.save(facilityOne).then(function(facility) {
+                result = facility;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(facilityOne));
+        });
+
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();

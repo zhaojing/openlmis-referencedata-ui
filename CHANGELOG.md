@@ -4,6 +4,7 @@
 New features:
 * [OLMIS-3153](https://openlmis.atlassian.net/browse/OLMIS-3153)
     * Added facilityOperatorsService for communicating with the facilityOperators endpoints
+    * Extended facilityService with the ability to save facility
 
 Improvement:
 
