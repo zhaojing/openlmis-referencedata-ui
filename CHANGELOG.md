@@ -1,6 +1,10 @@
 5.2.2 / In development
 ========================
 
+New features:
+* [OLMIS-3153](https://openlmis.atlassian.net/browse/OLMIS-3153)
+    * Added facilityOperatorsService for communicating with the facilityOperators endpoints
+
 Improvement:
 
 * [OLMIS-2857](https://openlmis.atlassian.net/browse/OLMIS-2857): Added username filter to user list screen.
