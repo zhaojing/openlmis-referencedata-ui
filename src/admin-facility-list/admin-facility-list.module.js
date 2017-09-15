@@ -24,6 +24,7 @@
      * Provides facility list screen for administrator.
      */
     angular.module('admin-facility-list', [
+        'openlmis-admin',
         'openlmis-pagination',
         'openlmis-rights',
         'referencedata-facility',

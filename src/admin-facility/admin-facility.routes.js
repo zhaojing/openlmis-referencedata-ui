@@ -17,15 +17,32 @@
 
     'use strict';
 
-    /**
-     * @module openlmis-admin
-     *
-     * @description
-     * Provides base openlmis-admin state for administration panel.
-     */
-    angular.module('openlmis-admin', [
-        'openlmis-main-state',
-        'ui.router'
-    ]);
+    angular
+        .module('admin-facility')
+        .config(config);
+
+    config.$inject = ['$stateProvider'];
+
+    function config($stateProvider) {
+        $stateProvider.state('openlmis.administration.facilities.facility', {
+            abstract: true,
+            resolve: {
+                facility: facilityResolve
+            },
+            params: {
+                facility: undefined
+            },
+            url: '/:facilityId'
+        });
+    }
+
+    function facilityResolve($stateParams, facilityService) {
+        if ($stateParams.facility) {
+            return $stateParams.facility;
+        } else if ($stateParams.facilityId) {
+            return facilityService.get($stateParams.facilityId);
+        }
+        return {};
+    }
 
 })();

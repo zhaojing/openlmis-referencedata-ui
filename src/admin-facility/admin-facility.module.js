@@ -18,14 +18,14 @@
     'use strict';
 
     /**
-     * @module openlmis-admin
+     * @module
+     * admin-facility
      *
-     * @description
-     * Provides base openlmis-admin state for administration panel.
+     * @describe
+     * Provide abstract state for grouping all facility related state. Stores the facility.
      */
-    angular.module('openlmis-admin', [
-        'openlmis-main-state',
-        'ui.router'
+    angular.module('admin-facility', [
+        'admin-facility-list'
     ]);
 
 })();
