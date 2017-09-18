@@ -62,20 +62,11 @@ describe('UserListController', function () {
     });
 
     it('should expose sort options', function() {
-        expect(vm.options).toEqual([
-            {
-                value: 'firstName',
-                display: 'adminUserList.firstName'
-            },
-            {
-                value: 'lastName',
-                display: 'adminUserList.lastName'
-            },
-            {
-                value: 'username',
-                display: 'adminUserList.username'
-            }
-        ]);
+        expect(vm.options).toEqual({
+            'firstName': 'adminUserList.firstName',
+            'lastName': 'adminUserList.lastName',
+            'username': 'adminUserList.username'
+        });
     });
 
     describe('resetUserPassword', function() {

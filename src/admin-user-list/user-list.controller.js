@@ -103,20 +103,11 @@
          * @description
          * Holds options for sorting user list.
          */
-        vm.options = [
-            {
-                value: 'firstName',
-                display: 'adminUserList.firstName'
-            },
-            {
-                value: 'lastName',
-                display: 'adminUserList.lastName'
-            },
-            {
-                value: 'username',
-                display: 'adminUserList.username'
-            }
-        ];
+        vm.options = {
+            'firstName': 'adminUserList.firstName',
+            'lastName': 'adminUserList.lastName',
+            'username': 'adminUserList.username'
+        };
 
         /**
          * @ngdoc method
