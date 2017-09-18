@@ -36,34 +36,92 @@
 
         var vm = this;
 
-        vm.users = users;
-        vm.firstName = $stateParams.firstName;
-        vm.lastName = $stateParams.lastName;
-        vm.email = $stateParams.email;
-        vm.username = $stateParams.username;
-
-        vm.options = [
-            {
-                display: messageService.get('adminUserList.username'),
-                value: 'username'
-            },
-            {
-                display: messageService.get('adminUserList.firstName'),
-                value: 'firstName'
-            },
-            {
-                display: messageService.get('adminUserList.lastName'),
-                value: 'lastName'
-            }
-        ];
-
         vm.resetUserPassword = resetUserPassword;
         vm.search = search;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-list.controller:UsersListController
+         * @name users
+         * @type {Array}
+         *
+         * @description
+         * Holds user list.
+         */
+        vm.users = users;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-list.controller:UsersListController
+         * @name firstName
+         * @type {String}
+         *
+         * @description
+         * Holds user first name filter value.
+         */
+        vm.firstName = $stateParams.firstName;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-list.controller:UsersListController
+         * @name lastName
+         * @type {String}
+         *
+         * @description
+         * Holds user last name filter value.
+         */
+        vm.lastName = $stateParams.lastName;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-list.controller:UsersListController
+         * @name email
+         * @type {String}
+         *
+         * @description
+         * Holds user email filter value.
+         */
+        vm.email = $stateParams.email;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-list.controller:UsersListController
+         * @name username
+         * @type {String}
+         *
+         * @description
+         * Holds username filter value.
+         */
+        vm.username = $stateParams.username;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-list.controller:UsersListController
+         * @name options
+         * @type {Object}
+         *
+         * @description
+         * Holds options for sorting user list.
+         */
+        vm.options = [
+            {
+                value: 'firstName',
+                display: 'adminUserList.firstName'
+            },
+            {
+                value: 'lastName',
+                display: 'adminUserList.lastName'
+            },
+            {
+                value: 'username',
+                display: 'adminUserList.username'
+            }
+        ];
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-list.controller:UsersListController
-         * @name editUser
+         * @name resetUserPassword
          *
          * @description
          * Opens a modal for entering new user password.

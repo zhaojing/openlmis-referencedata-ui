@@ -36,28 +36,46 @@ describe('UserListController', function () {
             $rootScope = $injector.get('$rootScope');
             $state = $injector.get('$state');
             $q = $injector.get('$q');
-            usersList = [
-                {
-                    id: 1,
-                    username: 'administrator'
-                },
-                {
-                    id: 2,
-                    username: 'user'
-                }
-            ];
-            stateParams = {
-                page: 0,
-                size: 10
-            };
+        });
 
-            vm = $controller('UserListController', {
-                users: usersList
-            });
+        usersList = [
+            {
+                id: 1,
+                username: 'administrator'
+            },
+            {
+                id: 2,
+                username: 'user'
+            }
+        ];
+        stateParams = {
+            page: 0,
+            size: 10
+        };
+
+        vm = $controller('UserListController', {
+            users: usersList
         });
 
         spyOn($state, 'reload').andReturn();
         spyOn($state, 'go').andReturn();
+    });
+
+    it('should expose sort options', function() {
+        expect(vm.options).toEqual([
+            {
+                value: 'firstName',
+                display: 'adminUserList.firstName'
+            },
+            {
+                value: 'lastName',
+                display: 'adminUserList.lastName'
+            },
+            {
+                value: 'username',
+                display: 'adminUserList.username'
+            }
+        ]);
     });
 
     describe('resetUserPassword', function() {

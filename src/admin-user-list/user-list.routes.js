@@ -26,7 +26,10 @@
         $stateProvider.state('openlmis.administration.users', {
             showInNavigation: true,
             label: 'adminUserList.users.label',
-            url: '/users?firstName&lastName&email&page&size&username?sort',
+            url: '/users?firstName&lastName&email&page&size&username&sort',
+            params: {
+                sort: 'username'
+            },
             controller: 'UserListController',
             templateUrl: 'admin-user-list/user-list.html',
             controllerAs: 'vm',
