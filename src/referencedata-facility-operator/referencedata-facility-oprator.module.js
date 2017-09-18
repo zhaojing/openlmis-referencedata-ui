@@ -21,7 +21,7 @@
      * @module referencedata-facility-operator
      *
      * @description
-     *
+     * Provides service for communicating with the facilityOperators endpoint of the OpenLMIS.
      */
     angular.module('referencedata-facility-operator', [
         'ngResource',

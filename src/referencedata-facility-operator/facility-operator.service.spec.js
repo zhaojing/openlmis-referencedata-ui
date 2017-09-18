@@ -52,7 +52,7 @@ describe('facilityOperatorService', function() {
         });
 
         facilityOperators = [{
-            i: "9456c3e9-c4a6-4a28-9e08-47ceb16a4121",
+            id: "9456c3e9-c4a6-4a28-9e08-47ceb16a4121",
             code: "moh",
             name: "Ministry of Health",
             description: null,
