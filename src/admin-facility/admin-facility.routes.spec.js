@@ -31,8 +31,12 @@ describe('openlmis.administration.facilities.facility state', function() {
             facilityResolve = state.resolve.facility;
         });
 
-        it('should pass inventory item if it was given', function() {
+        it('should pass facility if it was given', function() {
             var result;
+
+            $stateParams = {
+                facility: facility
+            };
 
             $q.when(facilityResolve($stateParams, facilityService)).then(function(facility) {
                 result = facility;
@@ -43,10 +47,13 @@ describe('openlmis.administration.facilities.facility state', function() {
             expect(result).toEqual(facility);
         });
 
-        it('should download inventory item if it was not given but ID was given', function() {
+        it('should download facility if it was not given but ID was given', function() {
             var result;
 
-            $stateParams.facility = undefined;
+            $stateParams = {
+                facility: undefined,
+                facilityId: facility.id
+            };
 
             $q.when(facilityResolve($stateParams, facilityService)).then(function(facility) {
                 result = facility;
@@ -57,9 +64,10 @@ describe('openlmis.administration.facilities.facility state', function() {
             expect(result).toEqual(facility);
         });
 
-        it('should return empty object if no inventory item or ID is given', function() {
-            $stateParams.facility = undefined;
-            $stateParams.facilityId = undefined;
+        it('should return empty object if no facility or ID is given', function() {
+            var result;
+
+            $stateParams = {}
 
             $q.when(facilityResolve($stateParams, facilityService)).then(function(facility) {
                 result = facility;
@@ -86,11 +94,6 @@ describe('openlmis.administration.facilities.facility state', function() {
 
         facility = {
             id: 'some-facility-id'
-        };
-
-        $stateParams = {
-            facilityId: facility.id,
-            facility: facility
         };
 
         spyOn(facilityService, 'get').andReturn($q.when(facility));
