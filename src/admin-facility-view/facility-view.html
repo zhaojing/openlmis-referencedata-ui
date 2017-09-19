@@ -1,52 +1,11 @@
-<div>
-    <h2>{{'adminFacilityView.viewFacility' | message}}</h2>
-    <dl>
-        <dt>{{'adminFacilityView.facilityName' | message}}</dt>
-        <dd>{{vm.facility.name}}<dd>
-    </dl>
-    <dl>
-        <dt>{{'adminFacilityView.facilityCode' | message}}</dt>
-        <dd>{{vm.facility.code}}<dd>
-    </dl>
-    <dl>
-        <dt>{{'adminFacilityView.facilityType' | message}}</dt>
-        <dd>{{vm.facility.type.name}}<dd>
-    </dl>
-    <dl ng-if="vm.facility.goLiveDate">
-        <dt>{{'adminFacilityView.operationalDate' | message}}</dt>
-        <dd>{{vm.facility.goLiveDate | openlmisDate}}<dd>
-    </dl>
-    <dl>
-        <dt>{{'adminFacilityView.activeFacility' | message}}</dt>
-        <dd><i ng-class="{'icon-ok': vm.facility.active}"></i><dd>
-    </dl>
-    <dl>
-        <dt>{{'adminFacilityView.programsSupported' | message}}</dt>
-        <dd>
-            <section class="openlmis-table-container">
-                <table>
-                    <caption ng-if="!vm.facility.supportedPrograms || vm.facility.supportedPrograms.length === 0">
-                        {{'adminFacilityView.noProgramsSupported' | message}}
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th>{{'adminFacilityView.program' | message}}</th>
-                            <th>{{'adminFacilityView.active' | message}}</th>
-                            <th>{{'adminFacilityView.startDate' | message}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="program in vm.facility.supportedPrograms">
-                            <td>{{program.name}}</td>
-                            <td>
-                                <i ng-class="{'icon-ok': program.supportActive}"></i>
-                            </td>
-                            <td>{{program.supportStartDate | openlmisDate}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-        <dd>
-    </dl>
-    <button ng-click="vm.goToFacilityList()">{{'adminFacilityView.cancel' | message}}</button>
-</div>
+<h2>{{'adminFacilityView.edit' | message: {facility: vm.facility.name} }}</h2>
+<nav class="user-roles">
+    <ul bs-active-pane="vm.selectedTab" bs-tabs>
+        <li bs-pane data-title="{{'adminFacilityView.facilityInformation' | message}}">
+            <ng-include src="'admin-facility-view/facility-information.html'"></ng-include>
+        </li>
+        <li bs-pane data-title="{{'adminFacilityView.associatedPrograms' | message}}">
+            <ng-include src="'admin-facility-view/associated-programs.html'"></ng-include>
+        </li>
+    </ul>
+</nav>

@@ -62,6 +62,9 @@
                 search: {
                     url: referencedataUrlFactory('/api/facilities/search'),
                     method: 'POST',
+                },
+                update: {
+                    method: 'PUT'
                 }
             });
 
@@ -201,12 +204,17 @@
              * @name save
              *
              * @description
-             * Saves the given facility on the OpenLMIS server.
+             * Saves the given facility on the OpenLMIS server. If object has id PUT method is called, if not POST.
              *
              * @param   {Object}    facility    the facility to be saveDeferred
              * @return  {Promise}               the saved facility
              */
             function save(facility) {
+                if (facility.id) {
+                    return resource.update({
+                        id: facility.id
+                    }, facility).$promise;
+                }
                 return resource.save(null, facility).$promise;
             }
 

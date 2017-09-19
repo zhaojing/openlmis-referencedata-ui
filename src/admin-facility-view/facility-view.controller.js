@@ -28,14 +28,19 @@
         .module('admin-facility-view')
         .controller('FacilityViewController', controller);
 
-    controller.$inject = ['$state', 'facility'];
+    controller.$inject = [
+        '$stateParams', '$state', 'facility', 'facilityTypes', 'geographicZones',
+        'facilityOperators', 'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
+    ];
 
-    function controller($state, facility) {
+    function controller($stateParams, $state, facility, facilityTypes, geographicZones,
+        facilityOperators, facilityService, confirmService, loadingModalService, notificationService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.goToFacilityList = goToFacilityList;
+        vm.saveFacility = saveFacility;
 
         /**
          * @ngdoc property
@@ -49,6 +54,50 @@
         vm.facility = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-facility-view.controller:FacilityViewController
+         * @name facilityTypes
+         * @type {Array}
+         *
+         * @description
+         * Contains all facility types.
+         */
+        vm.facilityTypes = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-facility-view.controller:FacilityViewController
+         * @name geographicZones
+         * @type {Array}
+         *
+         * @description
+         * Contains all geographic zones.
+         */
+        vm.geographicZones = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-facility-view.controller:FacilityViewController
+         * @name facilityOperators
+         * @type {Array}
+         *
+         * @description
+         * Contains all facility operators.
+         */
+        vm.facilityOperators = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-facility-view.controller:FacilityViewController
+         * @name selectedTab
+         * @type {String}
+         *
+         * @description
+         * Contains currently selected tab.
+         */
+        vm.selectedTab = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf admin-facility-view.controller:FacilityViewController
          * @name $onInit
@@ -58,6 +107,10 @@
          */
         function onInit() {
             vm.facility = facility;
+            vm.facilityTypes = facilityTypes;
+            vm.geographicZones = geographicZones;
+            vm.facilityOperators = facilityOperators;
+            vm.selectedTab = $stateParams.tab ? parseInt($stateParams.tab) : 0;
         }
 
         /**
@@ -71,6 +124,31 @@
         function goToFacilityList() {
             $state.go('^', {}, {
                 reload: true
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name saveFacility
+         *
+         * @description
+         * Saves facility and redirects to facility list screen.
+         */
+        function saveFacility() {
+            confirmService.confirm({
+                    messageKey: 'adminFacilityView.saveFacility.confirm',
+                    messageParams: {
+                        facility: vm.facility.name
+                    }
+                }, 'adminFacilityView.save').then(function() {
+                var loadingPromise = loadingModalService.open();
+                facilityService.save(vm.facility).then(function() {
+                    loadingPromise.then(function() {
+                        notificationService.success('adminFacilityView.saveFacility.success');
+                    });
+                    goToFacilityList();
+                }, loadingModalService.close);
             });
         }
     }

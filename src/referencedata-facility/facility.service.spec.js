@@ -282,7 +282,8 @@ describe('facilityService', function() {
 
     describe('save', function() {
 
-        it('should resolve to facility', function() {
+        it('should save new facility', function() {
+            facilityOne.id = undefined;
             $httpBackend.expectPOST(referencedataUrlFactory('/api/facilities'), facilityOne)
                 .respond(200, facilityOne);
 
@@ -297,6 +298,20 @@ describe('facilityService', function() {
             expect(angular.toJson(result)).toEqual(angular.toJson(facilityOne));
         });
 
+        it('should update existing facility', function() {
+            $httpBackend.expectPUT(referencedataUrlFactory('/api/facilities/' + facilityOne.id), facilityOne)
+                .respond(200, facilityOne);
+
+            var result;
+
+            facilityService.save(facilityOne).then(function(facility) {
+                result = facility;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(facilityOne));
+        });
     });
 
     afterEach(function() {

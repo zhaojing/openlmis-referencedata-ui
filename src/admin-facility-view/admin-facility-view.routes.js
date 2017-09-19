@@ -24,8 +24,8 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.facilities.view', {
-            label: 'adminFacilityView.viewFacility',
-            url: '/facilities/:id',
+            label: 'adminFacilityView.editFacility',
+            url: '/facilities/:id?tab',
             accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
             views: {
                 '@openlmis': {
@@ -37,7 +37,22 @@
             resolve: {
                 facility: function(facilityService, $stateParams) {
                     return facilityService.get($stateParams.id);
-                }
+                },
+                facilityTypes: function(facilityTypeService) {
+                    return facilityTypeService.getAll();
+                },
+                geographicZones: function($q, geographicZoneService) {
+					var deferred = $q.defer();
+
+					geographicZoneService.getAll().then(function(response) {
+						deferred.resolve(response.content);
+					}, deferred.reject);
+
+					return deferred.promise;
+				},
+                facilityOperators: function(facilityOperatorService) {
+				    return facilityOperatorService.getAll();
+				}
             }
         });
     }

@@ -1,8 +1,7 @@
 {
-    "adminFacilityView.facilityName": "Facility name",
-    "adminFacilityView.facilityCode": "Facility code",
-    "adminFacilityView.facilityType": "Facility type",
-    "adminFacilityView.operationalDate": "Operational date",
+    "adminFacilityView.facilityName": "Facility Name",
+    "adminFacilityView.facilityCode": "Facility Node",
+    "adminFacilityView.facilityType": "Facility Type",
     "adminFacilityView.activeFacility": "Active facility",
     "adminFacilityView.programsSupported": "Programs supported",
     "adminFacilityView.noProgramsSupported": "No supported programs assigned.",
@@ -10,5 +9,15 @@
     "adminFacilityView.startDate": "Start date",
     "adminFacilityView.active": "Active",
     "adminFacilityView.cancel": "Cancel",
-    "adminFacilityView.viewFacility": "View Facility"
+    "adminFacilityView.editFacility": "Edit Facility",
+    "adminFacilityView.edit": "Edit ${facility}",
+    "adminFacilityView.save": "Save",
+    "adminFacilityView.saveFacility.confirm": "Do you want to save changes for ${facility} ?",
+    "adminFacilityView.saveFacility.success": "Facility saved successfully!",
+    "adminFacilityView.operationalDate": "Operational Date",
+    "adminFacilityView.geographicZone": "Geographic Zone",
+    "adminFacilityView.description": "Description",
+    "adminFacilityView.operatedBy": "Operated by",
+    "adminFacilityView.facilityInformation": "Facility Information",
+    "adminFacilityView.associatedPrograms": "Associated Programs"
 }

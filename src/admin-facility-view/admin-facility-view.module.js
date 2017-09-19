@@ -25,7 +25,10 @@
      */
     angular.module('admin-facility-view', [
         'openlmis-rights',
+        'openlmis-modal',
         'referencedata-facility',
+        'referencedata-facility-type',
+        'referencedata-geographic-zone',
         'ui.router'
     ]);
 })();

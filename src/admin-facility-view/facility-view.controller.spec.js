@@ -15,24 +15,85 @@
 
 describe('FacilityViewController', function () {
 
-    var $state, $controller,
-        vm, facility;
+    var $q, $rootScope, $state, $controller, loadingModalService, confirmService, notificationService, facilityService, facilitySavePromise, loadingModalPromise,
+        vm, facility, facilityTypes, geographicZones, facilityOperators;
 
     beforeEach(function() {
-        module('admin-facility-view');
+        module('admin-facility-view', function($provide) {
+            facilityService = jasmine.createSpyObj('facilityService', ['save']);
+            $provide.service('facilityService', function() {
+                return facilityService;
+            });
+
+            loadingModalService = jasmine.createSpyObj('loadingModalService', ['open', 'close']);
+            $provide.service('loadingModalService', function() {
+                return loadingModalService;
+            });
+        });
 
         inject(function($injector) {
+            $q = $injector.get('$q');
+            $rootScope = $injector.get('$rootScope');
             $controller = $injector.get('$controller');
             $state = $injector.get('$state');
+            confirmService = $injector.get('confirmService');
+            notificationService = $injector.get('notificationService');
         });
+
+        facilitySavePromise = $q.defer();
+        facilityService.save.andReturn(facilitySavePromise.promise);
+
+        loadingModalPromise = $q.defer();
+        loadingModalService.open.andReturn(loadingModalPromise.promise);
+
+        spyOn(confirmService, 'confirm').andReturn($q.when(true));
+        spyOn(notificationService, 'success').andReturn(true);
+        spyOn($state, 'go').andReturn();
+
+        facilityTypes = [
+            {
+                id: 'type-1-id',
+                name: 'type-1'
+            },
+            {
+                id: 'type-2-id',
+                name: 'type-2'
+            }
+        ];
+
+        geographicZones = [
+            {
+                id: 'zone-1-id',
+                name: 'zone-1'
+            },
+            {
+                id: 'zone-2-id',
+                name: 'zone-2'
+            }
+        ];
+
+        facilityOperators = [
+            {
+                id: 'operator-1-id',
+                name: 'operator-1'
+            },
+            {
+                id: 'operator-2-id',
+                name: 'operator-2'
+            }
+        ];
 
         facility = {
             id: 'facility-id',
-            name: 'facility-name'
+            name: 'facility-name',
+            type: facilityTypes[0]
         };
 
         vm = $controller('FacilityViewController', {
-            facility: facility
+            facility: facility,
+            facilityTypes: facilityTypes,
+            geographicZones: geographicZones,
+            facilityOperators: facilityOperators
         });
         vm.$onInit();
     });
@@ -43,22 +104,83 @@ describe('FacilityViewController', function () {
             expect(angular.isFunction(vm.goToFacilityList)).toBe(true);
         });
 
+        it('should expose saveFacility method', function() {
+            expect(angular.isFunction(vm.saveFacility)).toBe(true);
+        });
+
         it('should expose facility', function() {
             expect(vm.facility).toEqual(facility);
+        });
+
+        it('should expose facilityTypes list', function() {
+            expect(vm.facilityTypes).toEqual(facilityTypes);
+        });
+
+        it('should expose geographicZones list', function() {
+            expect(vm.geographicZones).toEqual(geographicZones);
+        });
+
+        it('should expose facilityOperators list', function() {
+            expect(vm.facilityOperators).toEqual(facilityOperators);
         });
     });
 
     describe('goToFacilityList', function() {
 
-        beforeEach(function() {
-            spyOn($state, 'go').andReturn();
-            vm.goToFacilityList();
-        });
-
         it('should call state go with correct params', function() {
+            vm.goToFacilityList();
             expect($state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
+        });
+    });
+
+    describe('saveFacility', function() {
+
+        it('should call confirm service', function() {
+            vm.saveFacility();
+            expect(confirmService.confirm).toHaveBeenCalledWith({
+                messageKey: 'adminFacilityView.saveFacility.confirm',
+                messageParams: {
+                    facility: vm.facility.name
+                }
+            }, 'adminFacilityView.save');
+        });
+
+        it('should open loading modal', function() {
+            vm.saveFacility();
+            $rootScope.$apply();
+            expect(loadingModalService.open).toHaveBeenCalled();
+        });
+
+        it('should call facilityService save method', function() {
+            vm.saveFacility();
+            $rootScope.$apply();
+            expect(facilityService.save).toHaveBeenCalledWith(vm.facility);
+        });
+
+        it('should close loading modal after save fails', function() {
+            facilitySavePromise.reject();
+            vm.saveFacility();
+            $rootScope.$apply();
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should go to facility list after successful save', function() {
+            facilitySavePromise.resolve(vm.facility);
+            vm.saveFacility();
+            $rootScope.$apply();
+            expect($state.go).toHaveBeenCalledWith('^', {}, {
+                reload: true
+            });
+        });
+
+        it('should show success notification after successful save', function() {
+            facilitySavePromise.resolve(vm.facility);
+            loadingModalPromise.resolve();
+            vm.saveFacility();
+            $rootScope.$apply();
+            expect(notificationService.success).toHaveBeenCalledWith('adminFacilityView.saveFacility.success');
         });
     });
 });
