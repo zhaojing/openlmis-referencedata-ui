@@ -29,12 +29,12 @@
         .controller('FacilityViewController', controller);
 
     controller.$inject = [
-        '$stateParams', '$state', 'facility', 'facilityTypes', 'geographicZones',
-        'facilityOperators', 'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
+        '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators',
+        'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller($stateParams, $state, facility, facilityTypes, geographicZones,
-        facilityOperators, facilityService, confirmService, loadingModalService, notificationService) {
+    function controller($state, facility, facilityTypes, geographicZones, facilityOperators,
+        facilityService, confirmService, loadingModalService, notificationService) {
 
         var vm = this;
 
@@ -110,7 +110,7 @@
             vm.facilityTypes = facilityTypes;
             vm.geographicZones = geographicZones;
             vm.facilityOperators = facilityOperators;
-            vm.selectedTab = $stateParams.tab ? parseInt($stateParams.tab) : 0;
+            vm.selectedTab = 0;
         }
 
         /**

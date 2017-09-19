@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.administration.facilities.view', {
             label: 'adminFacilityView.editFacility',
-            url: '/facilities/:id?tab',
+            url: '/:id?tab',
             accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
             views: {
                 '@openlmis': {

@@ -1,11 +1,17 @@
 <h2>{{'adminFacilityView.edit' | message: {facility: vm.facility.name} }}</h2>
-<nav class="user-roles">
-    <ul bs-active-pane="vm.selectedTab" bs-tabs>
-        <li bs-pane data-title="{{'adminFacilityView.facilityInformation' | message}}">
-            <ng-include src="'admin-facility-view/facility-information.html'"></ng-include>
-        </li>
-        <li bs-pane data-title="{{'adminFacilityView.associatedPrograms' | message}}">
-            <ng-include src="'admin-facility-view/associated-programs.html'"></ng-include>
-        </li>
-    </ul>
-</nav>
+<form name="facilityEdit" class="facility-edit" ng-submit="vm.saveFacility()">
+    <nav>
+        <ul bs-active-pane="vm.selectedTab" bs-tabs>
+            <li bs-pane data-title="{{'adminFacilityView.facilityInformation' | message}}">
+                <ng-include src="'admin-facility-view/facility-information.html'"></ng-include>
+            </li>
+            <li bs-pane data-title="{{'adminFacilityView.associatedPrograms' | message}}">
+                <ng-include src="'admin-facility-view/associated-programs.html'"></ng-include>
+            </li>
+        </ul>
+    </nav>
+    <div class="button-group">
+        <button class="primary" type="submit">{{'adminFacilityView.save' | message}}</button>
+        <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
+    </div>
+</form>
