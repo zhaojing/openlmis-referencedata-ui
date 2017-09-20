@@ -1,41 +1,45 @@
-<form id="facility-edit=form" name="facilityEdit" ng-submit="vm.saveFacility()">
+<form id="facility-edit=form" name="facilityEdit" ng-submit="vm.saveFacility(vm.facilityDetails)">
     <label for="facilityName">{{'adminFacilityView.facilityName' | message}}</label>
-    <input class="form-control" id="facilityName" ng-model="vm.facility.name" required/>
+    <input class="form-control" id="facilityName" ng-model="vm.facilityDetails.name" required/>
 
     <label for="facilityCode">{{'adminFacilityView.facilityCode' | message}}</label>
-    <input class="form-control" id="facilityCode" ng-model="vm.facility.code" required/>
+    <input class="form-control" id="facilityCode" ng-model="vm.facilityDetails.code" required/>
 
     <label for="facilityType">{{'adminFacilityView.facilityType' | message}}</label>
     <select id="facilityType"
-        ng-model="vm.facility.type"
+        ng-model="vm.facilityDetails.type"
         ng-options="type as type.name for type in vm.facilityTypes track by type.id"
         required>
     </select>
 
     <label for="operationalDate">{{'adminFacilityView.operationalDate' | message}}</label>
     <openlmis-datepicker input-id="operationalDate"
-        value="vm.facility.goLiveDate"
+        value="vm.facilityDetails.goLiveDate"
         required="true">
     </openlmis-datepicker>
 
     <label for="facilityActive" class="checkbox">
-       <input id="facilityActive" type="checkbox" ng-model="vm.facility.active"/>
+       <input id="facilityActive" type="checkbox" ng-model="vm.facilityDetails.active"/>
        {{'adminFacilityView.activeFacility' | message}}
     </label>
 
     <label for="geographicZone">{{'adminFacilityView.geographicZone' | message}}</label>
     <select id="geographicZone"
-        ng-model="vm.facility.geographicZone"
+        ng-model="vm.facilityDetails.geographicZone"
         ng-options="geographicZone as geographicZone.name for geographicZone in vm.geographicZones track by geographicZone.id"
         required>
     </select>
 
     <label for="description">{{'adminFacilityView.description' | message}}</label>
-    <textarea id="description" ng-model="vm.facility.description"></textarea>
+    <textarea id="description" ng-model="vm.facilityDetails.description"></textarea>
 
     <label for="facilityOperator">{{'adminFacilityView.operatedBy' | message}}</label>
     <select id="facilityOperator"
-        ng-model="vm.facility.facilityOperator"
+        ng-model="vm.facilityDetails.facilityOperator"
         ng-options="facilityOperator as facilityOperator.name for facilityOperator in vm.facilityOperators track by facilityOperator.id">
     </select>
+    <div class="button-group">
+        <button class="primary" type"submit">{{'adminFacilityView.save' | message}}</button>
+        <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
+    </div>
 </form>

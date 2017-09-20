@@ -29,11 +29,11 @@
         .controller('FacilityViewController', controller);
 
     controller.$inject = [
-        '$scope', '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'programs',
+        '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'programs',
         'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller($scope, $state, facility, facilityTypes, geographicZones, facilityOperators, programs,
+    function controller($state, facility, facilityTypes, geographicZones, facilityOperators, programs,
         facilityService, confirmService, loadingModalService, notificationService) {
 
         var vm = this;
@@ -42,7 +42,6 @@
         vm.goToFacilityList = goToFacilityList;
         vm.saveFacility = saveFacility;
         vm.addProgram = addProgram;
-        vm.isFormValid = isFormValid;
 
         /**
          * @ngdoc property
@@ -120,13 +119,15 @@
          */
         function onInit() {
             vm.facility = facility;
+            vm.facilityDetails = angular.copy(facility);
+            vm.facilityWithPrograms = angular.copy(facility);
             vm.facilityTypes = facilityTypes;
             vm.geographicZones = geographicZones;
             vm.facilityOperators = facilityOperators;
             vm.programs = programs;
             vm.selectedTab = 0;
 
-            angular.forEach(vm.facility.supportedPrograms, function(supportedProgram) {
+            angular.forEach(vm.facilityWithPrograms.supportedPrograms, function(supportedProgram) {
                 vm.programs = vm.programs.filter(function(program) {
                     return supportedProgram.id != program.id;
                 });
@@ -154,8 +155,10 @@
          *
          * @description
          * Saves facility and redirects to facility list screen.
+         *
+         * @param {Object} facility facility that will be send to the server
          */
-        function saveFacility() {
+        function saveFacility(editedFacility) {
             var message = {
                     messageKey: 'adminFacilityView.saveFacility.confirm',
                     messageParams: {
@@ -165,7 +168,7 @@
             confirmService.confirm(message, 'adminFacilityView.save')
             .then(function() {
                 var loadingPromise = loadingModalService.open();
-                facilityService.save(vm.facility)
+                facilityService.save(editedFacility)
                 .then(function() {
                     loadingPromise.then(function() {
                         notificationService.success('adminFacilityView.saveFacility.success');
@@ -197,12 +200,7 @@
             supportedProgram.supportStartDate = vm.selectedStartDate;
             supportedProgram.supportActive = true;
 
-            vm.facility.supportedPrograms.push(supportedProgram);
-        }
-
-        function isFormValid() {
-            console.log($scope.facilityEdit.$valid);
-            return $scope.facilityEdit.$valid;
+            vm.facilityWithPrograms.supportedPrograms.push(supportedProgram);
         }
     }
 })();

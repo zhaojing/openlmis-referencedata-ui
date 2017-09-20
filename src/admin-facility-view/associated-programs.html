@@ -28,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="program in vm.facility.supportedPrograms">
+            <tr ng-repeat="program in vm.facilityWithPrograms.supportedPrograms">
                 <td>{{program.name}}</td>
                 <td>
                     <i ng-class="{'icon-ok': program.supportActive}"></i>
@@ -38,3 +38,7 @@
         </tbody>
     </table>
 </section>
+<div class="button-group">
+    <button class="primary" ng-click="vm.saveFacility(vm.facilityWithPrograms)">{{'adminFacilityView.savePrograms' | message}}</button>
+    <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
+</div>

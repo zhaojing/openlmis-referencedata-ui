@@ -1,8 +1,7 @@
 <h2>{{'adminFacilityView.edit' | message: {facility: vm.facility.name} }}</h2>
 <nav class="facility-edit">
     <ul bs-active-pane="vm.selectedTab" bs-tabs>
-        <li bs-pane data-title="{{'adminFacilityView.facilityInformation' | message}}"
-            ng-class="{'is-invalid': !vm.isFormValid()}">
+        <li bs-pane data-title="{{'adminFacilityView.facilityInformation' | message}}">
             <ng-include src="'admin-facility-view/facility-information.html'"></ng-include>
         </li>
         <li bs-pane data-title="{{'adminFacilityView.associatedPrograms' | message}}">
@@ -10,7 +9,3 @@
         </li>
     </ul>
 </nav>
-<div class="openlmis-toolbar">
-    <button class="primary" type"submit" form="facility-edit=form">{{'adminFacilityView.save' | message}}</button>
-    <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
-</div>

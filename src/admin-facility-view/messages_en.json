@@ -21,5 +21,6 @@
     "adminFacilityView.operatedBy": "Operated by",
     "adminFacilityView.facilityInformation": "Facility Information",
     "adminFacilityView.associatedPrograms": "Associated Programs",
-    "adminFacilityView.add": "Add"
+    "adminFacilityView.add": "Add",
+    "adminFacilityView.savePrograms": "Save Programs"
 }

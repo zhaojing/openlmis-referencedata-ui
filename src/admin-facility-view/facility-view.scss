@@ -2,7 +2,7 @@ nav.facility-edit {
 
     > ul {
 
-        padding-bottom: 1em;
+        padding: 0;
 
         li.tab-pane {
             padding: 1em;
@@ -11,19 +11,9 @@ nav.facility-edit {
         li a {
             text-decoration: none;
         }
+    }
 
-        li.is-invalid > a {
-        	padding-right: 2em !important;
-        	@include icon("exclamation-circle");
-        	&::before{
-        		position: absolute;
-        		top: 50%;
-        		right: 0.5em;
-        		transform: translateY(-50%);
-        		color: $brand-danger;
-                border-left: none;
-        	}
-        }
-
+    div.button-group {
+        max-width: 440px;
     }
 }

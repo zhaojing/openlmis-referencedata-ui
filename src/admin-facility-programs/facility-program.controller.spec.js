@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('FacilityProgramsController', function() {
+describe('FacilityProgramsController', function() {
 
     var vm, facility, programs, $rootScope, $q, $state, loadingModalService, notificationService,
         facilityService, $rootScope;
