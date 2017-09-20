@@ -1,0 +1,39 @@
+<div class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>{{'adminFacilityAdd.addFacility' | message}}</h1>
+            </div>
+            <div class="modal-body">
+                <form id="add-facility-form" ng-submit="vm.save()">
+                    <label for="facility-name">{{'adminFacilityAdd.facilityName' | message}}</label>
+                    <input id="facility-name" type="text" ng-model="vm.facility.name" required/>
+                    <label for="facility-code">{{'adminFacilityAdd.facilityCode' | message}}</label>
+                    <input id="facility-code" type="text" ng-model="vm.facility.code" required/>
+                    <label for="facility-type">{{'adminFacilityAdd.facilityType' | message}}</label>
+                    <select id="facility-type" ng-model="vm.facility.type" ng-options="type.name for type in vm.facilityTypes" required></select>
+                    <label for="operational-date">{{'adminFacilityAdd.operationalDate' | message}}</label>
+                    <openlmis-datepicker input-id="operational-date" value="vm.facility.goLiveDate"></openlmis-datepicker>
+                    <label class="checkbox" for="active-facility">
+                		<input id="active-facility" type="checkbox" ng-model="vm.facility.active"/>
+                		{{'adminFacilityAdd.activeFacility' | message}}
+                	</label>
+                    <label class="checkbox" for="enabled">
+                		<input id="enabled" type="checkbox" ng-model="vm.facility.enabled"/>
+                		{{'adminFacilityAdd.enabled' | message}}
+                	</label>
+                    <label for="geographic-zone">{{'adminFacilityAdd.geographicZone' | message}}</label>
+                    <select id="geographic-zone" ng-model="vm.facility.geographicZone" ng-options="zone.name for zone in vm.geographicZones" required></select>
+                    <label for="description">{{'adminFacilityAdd.description' | message}}</label>
+                    <textarea id="description" ng-model="vm.facility.description"></textarea>
+                    <label for="facility-operator">{{'adminFacilityAdd.facilityOperator' | message}}</label>
+                    <select id="facility-operator" ng-model="vm.facility.operator" ng-options="operator.name for operator in vm.facilityOperators"></select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel" ng-click="vm.goToPreviousState()">{{'adminFacilityAdd.cancel' | message}}</button>
+                <button class="primary" form="add-facility-form">{{'adminFacilityAdd.save' | message}}</button>
+            </div>
+        </div>
+    </div>
+</div>

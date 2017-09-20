@@ -24,8 +24,8 @@
      * Provides base openlmis-admin state for administration panel.
      */
     angular.module('openlmis-admin', [
-        'openlmis-main-state',
-        'ui.router'
+        'ui.router',
+        'openlmis-main-state'
     ]);
 
 })();

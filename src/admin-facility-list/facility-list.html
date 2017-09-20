@@ -1,5 +1,8 @@
 <h2>{{'adminFacilityList.facilities' | message}}</h2>
 <section class="openlmis-table-container">
+    <button id="add-facility" class="add" ng-click="vm.goToAddFacilityPage()">
+        {{'adminFacilityList.addFacility' | message}}
+    </button>
     <form ng-submit="vm.search()">
         <fieldset class="form-group">
             <label for="facilityName">{{'adminFacilityList.name' | message}}</label>
