@@ -1,4 +1,4 @@
-<form name="facilityEdit" ng-submit="vm.saveFacility()">
+<form id="facility-edit=form" name="facilityEdit" ng-submit="vm.saveFacility()">
     <label for="facilityName">{{'adminFacilityView.facilityName' | message}}</label>
     <input class="form-control" id="facilityName" ng-model="vm.facility.name" required/>
 
@@ -38,8 +38,4 @@
         ng-model="vm.facility.facilityOperator"
         ng-options="facilityOperator as facilityOperator.name for facilityOperator in vm.facilityOperators track by facilityOperator.id">
     </select>
-    <div class="button-group">
-        <button class="primary" type="submit">{{'adminFacilityView.save' | message}}</button>
-        <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
-    </div>
 </form>

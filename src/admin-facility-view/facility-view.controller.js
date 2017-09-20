@@ -29,11 +29,11 @@
         .controller('FacilityViewController', controller);
 
     controller.$inject = [
-        '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators',
+        '$scope', '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'programs',
         'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller($state, facility, facilityTypes, geographicZones, facilityOperators,
+    function controller($scope, $state, facility, facilityTypes, geographicZones, facilityOperators, programs,
         facilityService, confirmService, loadingModalService, notificationService) {
 
         var vm = this;
@@ -41,6 +41,8 @@
         vm.$onInit = onInit;
         vm.goToFacilityList = goToFacilityList;
         vm.saveFacility = saveFacility;
+        vm.addProgram = addProgram;
+        vm.isFormValid = isFormValid;
 
         /**
          * @ngdoc property
@@ -89,6 +91,17 @@
         /**
          * @ngdoc property
          * @propertyOf admin-facility-view.controller:FacilityViewController
+         * @name programs
+         * @type {Array}
+         *
+         * @description
+         * Contains all programs.
+         */
+        vm.programs = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-facility-view.controller:FacilityViewController
          * @name selectedTab
          * @type {String}
          *
@@ -110,7 +123,14 @@
             vm.facilityTypes = facilityTypes;
             vm.geographicZones = geographicZones;
             vm.facilityOperators = facilityOperators;
+            vm.programs = programs;
             vm.selectedTab = 0;
+
+            angular.forEach(vm.facility.supportedPrograms, function(supportedProgram) {
+                vm.programs = vm.programs.filter(function(program) {
+                    return supportedProgram.id != program.id;
+                });
+            });
         }
 
         /**
@@ -151,11 +171,38 @@
                         notificationService.success('adminFacilityView.saveFacility.success');
                     });
                     goToFacilityList();
-                }).catch(function() {
+                })
+                .catch(function() {
                     loadingModalService.close();
                     notificationService.error('adminFacilityView.saveFacility.fail');
                 });
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name addProgram
+         *
+         * @description
+         * Adds program to associated program list.
+         */
+        function addProgram() {
+            var supportedProgram = angular.copy(vm.selectedProgram);
+
+            vm.programs = vm.programs.filter(function(program) {
+                return supportedProgram.id != program.id;
+            });
+
+            supportedProgram.supportStartDate = vm.selectedStartDate;
+            supportedProgram.supportActive = true;
+
+            vm.facility.supportedPrograms.push(supportedProgram);
+        }
+
+        function isFormValid() {
+            console.log($scope.facilityEdit.$valid);
+            return $scope.facilityEdit.$valid;
         }
     }
 })();

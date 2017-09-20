@@ -1,34 +1,40 @@
-<form name="associatedPrograms" ng-submit="vm.saveFacility()">
-    <dl>
-        <dt>{{'adminFacilityView.programsSupported' | message}}</dt>
-        <dd>
-            <section class="openlmis-table-container">
-                <table>
-                    <caption ng-if="!vm.facility.supportedPrograms || vm.facility.supportedPrograms.length === 0">
-                        {{'adminFacilityView.noProgramsSupported' | message}}
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th>{{'adminFacilityView.program' | message}}</th>
-                            <th>{{'adminFacilityView.active' | message}}</th>
-                            <th>{{'adminFacilityView.startDate' | message}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="program in vm.facility.supportedPrograms">
-                            <td>{{program.name}}</td>
-                            <td>
-                                <i ng-class="{'icon-ok': program.supportActive}"></i>
-                            </td>
-                            <td>{{program.supportStartDate | openlmisDate}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-        <dd>
-    </dl>
-    <div class="button-group">
-        <button class="primary" type="submit">{{'adminFacilityView.save' | message}}</button>
-        <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
+<form class="form-inline" ng-submit="vm.addProgram()" reload-form>
+    <div class="form-group">
+        <label for="program">{{'adminFacilityView.program' | message}}</label>
+        <select id="program" ng-model="vm.selectedProgram"
+            ng-options="program as program.name for program in vm.programs"
+            required>
+        </select>
     </div>
-<form>
+    <div class="form-group">
+        <label for="startDate">{{'adminFacilityView.startDate' | message}}</label>
+        <openlmis-datepicker input-id="startDate"
+            value="vm.selectedStartDate"
+            required="true">
+        </openlmis-datepicker>
+    </div>
+    <button type="submit" class="add">{{'adminFacilityView.add' | message}}</button>
+</form>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.facility.supportedPrograms || vm.facility.supportedPrograms.length === 0">
+            {{'adminFacilityView.noAssociatedPrograms' | message: {facility: vm.facility.name} }}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminFacilityView.program' | message}}</th>
+                <th>{{'adminFacilityView.active' | message}}</th>
+                <th>{{'adminFacilityView.startDate' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="program in vm.facility.supportedPrograms">
+                <td>{{program.name}}</td>
+                <td>
+                    <i ng-class="{'icon-ok': program.supportActive}"></i>
+                </td>
+                <td>{{program.supportStartDate | openlmisDate}}</td>
+            </tr>
+        </tbody>
+    </table>
+</section>

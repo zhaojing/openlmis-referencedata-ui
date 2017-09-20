@@ -35,7 +35,7 @@
             },
             parentResolves: ['facility'],
             templateUrl: 'admin-facility-add/facility-add.html',
-            url: ''
+            url: '/new'
         });
 
         function facilityTypesResolve(facilityTypeService) {

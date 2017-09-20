@@ -29,6 +29,7 @@
         'referencedata-facility',
         'referencedata-facility-type',
         'referencedata-geographic-zone',
+        'referencedata-program',
         'ui.router'
     ]);
 })();

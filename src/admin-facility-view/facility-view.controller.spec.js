@@ -16,7 +16,7 @@
 describe('FacilityViewController', function () {
 
     var $q, $rootScope, $state, $controller, loadingModalService, confirmService, notificationService, facilityService, facilitySavePromise, loadingModalPromise,
-        vm, facility, facilityTypes, geographicZones, facilityOperators;
+        vm, facility, facilityTypes, geographicZones, facilityOperators, programs;
 
     beforeEach(function() {
         module('admin-facility-view', function($provide) {
@@ -48,6 +48,7 @@ describe('FacilityViewController', function () {
 
         spyOn(confirmService, 'confirm').andReturn($q.when(true));
         spyOn(notificationService, 'success').andReturn(true);
+        spyOn(notificationService, 'error').andReturn(true);
         spyOn($state, 'go').andReturn();
 
         facilityTypes = [
@@ -83,6 +84,17 @@ describe('FacilityViewController', function () {
             }
         ];
 
+        programs = [
+            {
+                id: 'program-1-id',
+                name: 'program-1'
+            },
+            {
+                id: 'program-2-id',
+                name: 'program-2'
+            }
+        ];
+
         facility = {
             id: 'facility-id',
             name: 'facility-name',
@@ -93,7 +105,8 @@ describe('FacilityViewController', function () {
             facility: facility,
             facilityTypes: facilityTypes,
             geographicZones: geographicZones,
-            facilityOperators: facilityOperators
+            facilityOperators: facilityOperators,
+            programs: programs
         });
         vm.$onInit();
     });
@@ -122,6 +135,10 @@ describe('FacilityViewController', function () {
 
         it('should expose facilityOperators list', function() {
             expect(vm.facilityOperators).toEqual(facilityOperators);
+        });
+
+        it('should expose program list', function() {
+            expect(vm.programs).toEqual(programs);
         });
     });
 
@@ -159,11 +176,12 @@ describe('FacilityViewController', function () {
             expect(facilityService.save).toHaveBeenCalledWith(vm.facility);
         });
 
-        it('should close loading modal after save fails', function() {
+        it('should close loading modal and show error notification after save fails', function() {
             facilitySavePromise.reject();
             vm.saveFacility();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
+            expect(notificationService.error).toHaveBeenCalledWith('adminFacilityView.saveFacility.fail');
         });
 
         it('should go to facility list after successful save', function() {

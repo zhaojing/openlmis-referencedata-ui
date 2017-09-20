@@ -52,7 +52,10 @@
 				},
                 facilityOperators: function(facilityOperatorService) {
 				    return facilityOperatorService.getAll();
-				}
+				},
+                programs: function(programService) {
+                    return programService.getAll();
+                }
             }
         });
     }
