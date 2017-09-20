@@ -9,6 +9,6 @@
     "adminFacilityList.enabled": "Enabled",
     "adminFacilityList.actions": "Actions",
     "adminFacilityList.search": "Search",
-    "adminFacilityList.view": "View",
-    "adminFacilityList.addFacility": "Add Facility"
+    "adminFacilityList.addFacility": "Add Facility",
+    "adminFacilityList.edit": "Edit"
 }

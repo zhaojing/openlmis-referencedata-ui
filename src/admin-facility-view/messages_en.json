@@ -14,6 +14,7 @@
     "adminFacilityView.save": "Save",
     "adminFacilityView.saveFacility.confirm": "Do you want to save changes for ${facility} ?",
     "adminFacilityView.saveFacility.success": "Facility saved successfully!",
+    "adminFacilityView.saveFacility.fail": "Failed to save facility!",
     "adminFacilityView.operationalDate": "Operational Date",
     "adminFacilityView.geographicZone": "Geographic Zone",
     "adminFacilityView.description": "Description",

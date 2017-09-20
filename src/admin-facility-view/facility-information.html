@@ -1,48 +1,45 @@
-<fieldset class="form-group">
+<form name="facilityEdit" ng-submit="vm.saveFacility()">
     <label for="facilityName">{{'adminFacilityView.facilityName' | message}}</label>
     <input class="form-control" id="facilityName" ng-model="vm.facility.name" required/>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="facilityCode">{{'adminFacilityView.facilityCode' | message}}</label>
     <input class="form-control" id="facilityCode" ng-model="vm.facility.code" required/>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="facilityType">{{'adminFacilityView.facilityType' | message}}</label>
     <select id="facilityType"
         ng-model="vm.facility.type"
         ng-options="type as type.name for type in vm.facilityTypes track by type.id"
         required>
     </select>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="operationalDate">{{'adminFacilityView.operationalDate' | message}}</label>
     <openlmis-datepicker input-id="operationalDate"
         value="vm.facility.goLiveDate"
         required="true">
     </openlmis-datepicker>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="facilityActive" class="checkbox">
        <input id="facilityActive" type="checkbox" ng-model="vm.facility.active"/>
        {{'adminFacilityView.activeFacility' | message}}
     </label>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="geographicZone">{{'adminFacilityView.geographicZone' | message}}</label>
     <select id="geographicZone"
         ng-model="vm.facility.geographicZone"
         ng-options="geographicZone as geographicZone.name for geographicZone in vm.geographicZones track by geographicZone.id"
         required>
     </select>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="description">{{'adminFacilityView.description' | message}}</label>
     <textarea id="description" ng-model="vm.facility.description"></textarea>
-</fieldset>
-<fieldset class="form-group">
+
     <label for="facilityOperator">{{'adminFacilityView.operatedBy' | message}}</label>
     <select id="facilityOperator"
         ng-model="vm.facility.facilityOperator"
         ng-options="facilityOperator as facilityOperator.name for facilityOperator in vm.facilityOperators track by facilityOperator.id">
     </select>
-</fieldset>
+    <div class="button-group">
+        <button class="primary" type="submit">{{'adminFacilityView.save' | message}}</button>
+        <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
+    </div>
+</form>

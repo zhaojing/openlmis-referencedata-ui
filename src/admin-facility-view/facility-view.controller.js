@@ -136,19 +136,25 @@
          * Saves facility and redirects to facility list screen.
          */
         function saveFacility() {
-            confirmService.confirm({
+            var message = {
                     messageKey: 'adminFacilityView.saveFacility.confirm',
                     messageParams: {
                         facility: vm.facility.name
                     }
-                }, 'adminFacilityView.save').then(function() {
+                };
+            confirmService.confirm(message, 'adminFacilityView.save')
+            .then(function() {
                 var loadingPromise = loadingModalService.open();
-                facilityService.save(vm.facility).then(function() {
+                facilityService.save(vm.facility)
+                .then(function() {
                     loadingPromise.then(function() {
                         notificationService.success('adminFacilityView.saveFacility.success');
                     });
                     goToFacilityList();
-                }, loadingModalService.close);
+                }).catch(function() {
+                    loadingModalService.close();
+                    notificationService.error('adminFacilityView.saveFacility.fail');
+                });
             });
         }
     }

@@ -23,9 +23,9 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.facilities.view', {
+        $stateProvider.state('openlmis.administration.facilities.edit', {
             label: 'adminFacilityView.editFacility',
-            url: '/:id?tab',
+            url: '/:id',
             accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
             views: {
                 '@openlmis': {
