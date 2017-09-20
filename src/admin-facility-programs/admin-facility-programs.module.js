@@ -17,32 +17,19 @@
 
     'use strict';
 
-    angular
-        .module('admin-facility')
-        .config(config);
-
-    config.$inject = ['$stateProvider'];
-
-    function config($stateProvider) {
-        $stateProvider.state('openlmis.administration.facilities.facility', {
-            abstract: true,
-            resolve: {
-                facility: facilityResolve
-            },
-            params: {
-                facility: undefined
-            },
-            url: '/facility/:facilityId'
-        });
-    }
-
-    function facilityResolve($stateParams, facilityService) {
-        if ($stateParams.facility) {
-            return $stateParams.facility;
-        } else if ($stateParams.facilityId) {
-            return facilityService.get($stateParams.facilityId);
-        }
-        return {};
-    }
+    /**
+     * @module admin-facility-programs
+     *
+     * @description
+     * Provides modal for managing supported programs.
+     */
+    angular.module('admin-facility-programs', [
+        'admin-facility',
+        'openlmis-modal',
+        'openlmis-modal-state',
+        'ui.router',
+        'openlmis-templates',
+        'openlmis-form'
+    ]);
 
 })();

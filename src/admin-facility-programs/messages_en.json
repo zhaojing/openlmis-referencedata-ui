@@ -1,0 +1,14 @@
+{
+    "adminFacilityPrograms.assignProgramsTo": "Assign Programs to ${facility}",
+    "adminFacilityPrograms.program": "Program",
+    "adminFacilityPrograms.startDate": "Start Date",
+    "adminFacilityPrograms.active": "Active",
+    "adminFacilityPrograms.cancel": "Cancel",
+    "adminFacilityPrograms.save": "Save",
+    "adminFacilityPrograms.facilityHasBeenSaved": "Facility has been saved!",
+    "adminFacilityPrograms.facilityAndProgramsHasBeenSaved": "Facility and programs has been saved!",
+    "adminFacilityPrograms.failedToSaveFacility": "Failed to save facility!",
+    "adminFacilityPrograms.failedToSaveFacilityAndPrograms": "Failed to save facility and programs!",
+    "adminFacilityPrograms.addProgram": "Add Program",
+    "adminFacilityPrograms.noProgramsSupported": "No supported programs assigned."
+}

@@ -18,31 +18,30 @@
     'use strict';
 
     angular
-        .module('admin-facility')
-        .config(config);
+        .module('admin-facility-programs')
+        .config(routes);
 
-    config.$inject = ['$stateProvider'];
+    routes.$inject = ['modalStateProvider'];
 
-    function config($stateProvider) {
-        $stateProvider.state('openlmis.administration.facilities.facility', {
-            abstract: true,
+    function routes(modalStateProvider) {
+        var dialog;
+
+        modalStateProvider.state('openlmis.administration.facilities.facility.programs', {
+            controller: 'FacilityProgramsController',
+            controllerAs: 'vm',
+            parentResolves: ['facility'],
             resolve: {
-                facility: facilityResolve
+                programs: programsResolve,
             },
-            params: {
-                facility: undefined
-            },
-            url: '/facility/:facilityId'
+            templateUrl: 'admin-facility-programs/facility-programs.html',
+            url: '/programs'
         });
-    }
 
-    function facilityResolve($stateParams, facilityService) {
-        if ($stateParams.facility) {
-            return $stateParams.facility;
-        } else if ($stateParams.facilityId) {
-            return facilityService.get($stateParams.facilityId);
+        programsResolve.$inject = ['programService'];
+        function programsResolve(programService) {
+            return programService.getAll();
         }
-        return {};
+
     }
 
 })();
