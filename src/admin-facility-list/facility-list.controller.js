@@ -38,6 +38,7 @@
 
         vm.$onInit = onInit;
         vm.search = search;
+		vm.goToAddFacilityPage = goToAddFacilityPage;
 
 		/**
          * @ngdoc property
@@ -115,6 +116,18 @@
 			$state.go('openlmis.administration.facilities', stateParams, {
 				reload: true
 			});
+		}
+
+		/**
+		 * @ngdoc method
+		 * @methodOf admin-facility-list.controller:FacilityListController
+		 * @name goToAddFacilityPage
+		 *
+		 * @description
+		 * Takes the user to the add facility page.
+		 */
+		function goToAddFacilityPage() {
+		    $state.go('openlmis.administration.facilities.facility.add');
 		}
 	}
 

@@ -18,19 +18,34 @@
     'use strict';
 
     /**
-     * @module admin-facility-list
+     * @ngdoc controller
+     * @name admin-facility-programs.controller:FacilityProgramController
      *
      * @description
-     * Provides facility list screen for administrator.
+     * Controller for the Add Programs page.
      */
-    angular.module('admin-facility-list', [
-        'openlmis-admin',
-        'openlmis-pagination',
-        'openlmis-rights',
-        'openlmis-templates',
-        'referencedata-facility',
-        'referencedata-geographic-zone',
-        'openlmis-admin',
-        'ui.router'
-    ]);
+    angular
+        .module('admin-facility-programs')
+        .controller('FacilityProgramController', FacilityProgramController);
+
+    FacilityProgramController.$inject = ['facility'];
+
+    function FacilityProgramController(facility) {
+        var vm = this;
+
+        vm.$onInit = onInit;
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-programs.controller:FacilityProgramController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method of the FacilityProgramController.
+         */
+        function onInit() {
+            vm.facility = facility;
+        }
+    }
+
 })();

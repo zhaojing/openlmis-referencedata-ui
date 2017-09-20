@@ -18,19 +18,20 @@
     'use strict';
 
     /**
-     * @module admin-facility-list
+     * @module admin-facility-add
      *
      * @description
-     * Provides facility list screen for administrator.
+     * Provides a modal for adding new facilities to the OpenLMIS.
      */
-    angular.module('admin-facility-list', [
-        'openlmis-admin',
-        'openlmis-pagination',
-        'openlmis-rights',
-        'openlmis-templates',
+    angular.module('admin-facility-add', [
         'referencedata-facility',
-        'referencedata-geographic-zone',
-        'openlmis-admin',
-        'ui.router'
+        'referencedata-facility-type',
+        'referencedata-facility-operator',
+        'admin-facility',
+        'openlmis-modal',
+        'openlmis-templates',
+        'openlmis-state-tracker',
+        'openlmis-modal-state'
     ]);
+
 })();

@@ -18,19 +18,16 @@
     'use strict';
 
     /**
-     * @module admin-facility-list
+     * @module admin-facility-programs
      *
      * @description
-     * Provides facility list screen for administrator.
+     * Provides modal for managing supported programs.
      */
-    angular.module('admin-facility-list', [
-        'openlmis-admin',
-        'openlmis-pagination',
-        'openlmis-rights',
-        'openlmis-templates',
-        'referencedata-facility',
-        'referencedata-geographic-zone',
-        'openlmis-admin',
+    angular.module('admin-facility-programs', [
+        'admin-facility',
+        'openlmis-modal',
+        'openlmis-modal-state',
         'ui.router'
     ]);
+
 })();

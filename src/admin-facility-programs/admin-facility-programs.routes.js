@@ -17,20 +17,31 @@
 
     'use strict';
 
-    /**
-     * @module admin-facility-list
-     *
-     * @description
-     * Provides facility list screen for administrator.
-     */
-    angular.module('admin-facility-list', [
-        'openlmis-admin',
-        'openlmis-pagination',
-        'openlmis-rights',
-        'openlmis-templates',
-        'referencedata-facility',
-        'referencedata-geographic-zone',
-        'openlmis-admin',
-        'ui.router'
-    ]);
+    angular
+        .module('admin-facility-programs')
+        .config(routes);
+
+    routes.$inject = ['modalStateProvider'];
+
+    function routes(modalStateProvider) {
+        var dialog;
+
+        modalStateProvider.state('openlmis.administration.facilities.facility.programs', {
+            controller: 'FacilityProgramController',
+            controllerAs: 'vm',
+            parentResolves: ['facility'],
+            resolve: {
+                programs: programsResolve,
+            },
+            templateUrl: 'admin-facility-programs/facility-programs.html',
+            url: '/programs'
+        });
+
+        programsResolve.$inject = ['programService'];
+        function programsResolve(programService) {
+            return programService.getAll();
+        }
+
+    }
+
 })();
