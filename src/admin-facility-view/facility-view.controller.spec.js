@@ -118,7 +118,11 @@ describe('FacilityViewController', function () {
         });
 
         it('should expose saveFacility method', function() {
-            expect(angular.isFunction(vm.saveFacility)).toBe(true);
+            expect(angular.isFunction(vm.saveFacilityDetails)).toBe(true);
+        });
+
+        it('should expose saveFacilitySupportedPrograms method', function() {
+            expect(angular.isFunction(vm.saveFacilitySupportedPrograms)).toBe(true);
         });
 
         it('should expose facility', function() {
@@ -155,7 +159,7 @@ describe('FacilityViewController', function () {
     describe('saveFacility', function() {
 
         it('should call confirm service', function() {
-            vm.saveFacility(facility);
+            vm.saveFacilityDetails();
             expect(confirmService.confirm).toHaveBeenCalledWith({
                 messageKey: 'adminFacilityView.saveFacility.confirm',
                 messageParams: {
@@ -165,20 +169,20 @@ describe('FacilityViewController', function () {
         });
 
         it('should open loading modal', function() {
-            vm.saveFacility(facility);
+            vm.saveFacilityDetails();
             $rootScope.$apply();
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should call facilityService save method', function() {
-            vm.saveFacility(facility);
+            vm.saveFacilityDetails();
             $rootScope.$apply();
             expect(facilityService.save).toHaveBeenCalledWith(vm.facility);
         });
 
         it('should close loading modal and show error notification after save fails', function() {
             facilitySavePromise.reject();
-            vm.saveFacility(facility);
+            vm.saveFacilityDetails();
             $rootScope.$apply();
             expect(loadingModalService.close).toHaveBeenCalled();
             expect(notificationService.error).toHaveBeenCalledWith('adminFacilityView.saveFacility.fail');
@@ -186,7 +190,7 @@ describe('FacilityViewController', function () {
 
         it('should go to facility list after successful save', function() {
             facilitySavePromise.resolve(vm.facility);
-            vm.saveFacility(facility);
+            vm.saveFacilityDetails();
             $rootScope.$apply();
             expect($state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
@@ -196,7 +200,7 @@ describe('FacilityViewController', function () {
         it('should show success notification after successful save', function() {
             facilitySavePromise.resolve(vm.facility);
             loadingModalPromise.resolve();
-            vm.saveFacility(facility);
+            vm.saveFacilityDetails();
             $rootScope.$apply();
             expect(notificationService.success).toHaveBeenCalledWith('adminFacilityView.saveFacility.success');
         });

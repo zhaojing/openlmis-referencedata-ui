@@ -40,7 +40,8 @@
 
         vm.$onInit = onInit;
         vm.goToFacilityList = goToFacilityList;
-        vm.saveFacility = saveFacility;
+        vm.saveFacilityDetails = saveFacilityDetails
+        vm.saveFacilitySupportedPrograms = saveFacilitySupportedPrograms;
         vm.addProgram = addProgram;
 
         /**
@@ -151,13 +152,28 @@
         /**
          * @ngdoc method
          * @methodOf admin-facility-list.controller:FacilityListController
-         * @name saveFacility
+         * @name saveFacilityDetails
          *
          * @description
-         * Saves facility and redirects to facility list screen.
-         *
-         * @param {Object} facility facility that will be send to the server
+         * Saves facility details and redirects to facility list screen.
          */
+        function saveFacilityDetails() {
+            saveFacility(vm.facilityDetails);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name saveFacilitySupportedPrograms
+         *
+         * @description
+         * Saves facility supported programs and redirects to facility list screen.
+         */
+        function saveFacilitySupportedPrograms() {
+            saveFacility(vm.facilityWithPrograms);
+        }
+
+
         function saveFacility(editedFacility) {
             var message = {
                     messageKey: 'adminFacilityView.saveFacility.confirm',
@@ -199,6 +215,9 @@
 
             supportedProgram.supportStartDate = vm.selectedStartDate;
             supportedProgram.supportActive = true;
+
+            vm.selectedStartDate = null;
+            vm.selectedProgram = null;
 
             vm.facilityWithPrograms.supportedPrograms.push(supportedProgram);
         }
