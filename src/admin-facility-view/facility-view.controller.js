@@ -29,11 +29,11 @@
         .controller('FacilityViewController', controller);
 
     controller.$inject = [
-        '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'programs',
+        '$q', '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'programs',
         'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller($state, facility, facilityTypes, geographicZones, facilityOperators, programs,
+    function controller($q, $state, facility, facilityTypes, geographicZones, facilityOperators, programs,
         facilityService, confirmService, loadingModalService, notificationService) {
 
         var vm = this;
@@ -220,6 +220,8 @@
             vm.selectedProgram = null;
 
             vm.facilityWithPrograms.supportedPrograms.push(supportedProgram);
+
+            return $q.when();
         }
     }
 })();
