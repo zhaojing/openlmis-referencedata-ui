@@ -38,7 +38,7 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.addProgram = addProgram
+        vm.addProgram = addProgram;
         vm.save = save;
         vm.cancel = cancel;
         vm.isNotAssigned = isNotAssigned;
@@ -118,17 +118,30 @@
          * @name isNotAssigned
          *
          * @description
+         * Returns a method used for sorting programs.
+         *
+         * @return  {Function}  the function that filters out already assigned programs
+         */
+        function isNotAssigned() {
+            return isProgramNotAssigned;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-programs.controller:FacilityProgramsController
+         * @name isProgramNotAssigned
+         * @private
+         *
+         * @description
          * Check if the given programs is already assigned to the facility.
          *
          * @param   {Object}    program the program to be checked
          * @return  {Boolean}           true if the program is already assigned, false otherwise
          */
-        function isNotAssigned() {
-            return function(program) {
-                return $filter('filter')(vm.facility.supportedPrograms, {
-                    id: program.id
-                }).length === 0;
-            };
+        function isProgramNotAssigned(program) {
+            return $filter('filter')(vm.facility.supportedPrograms, {
+                id: program.id
+            }).length === 0;
         }
 
         function doSave(facility, successMessage, errorMessage) {
@@ -140,7 +153,7 @@
                 $state.go('openlmis.administration.facilities', {}, {
                     reload: true
                 });
-            }, function() {
+            }).catch(function() {
                 loadingPromise.then(function() {
                     notificationService.error(errorMessage);
                 });
