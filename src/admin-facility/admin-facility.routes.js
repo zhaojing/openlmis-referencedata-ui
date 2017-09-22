@@ -32,15 +32,14 @@
             params: {
                 facility: undefined
             },
-            url: '/facility/:facilityId'
+            url: '/new'
         });
     }
 
-    function facilityResolve($stateParams, facilityService) {
+    facilityResolve.$inject = ['$stateParams'];
+    function facilityResolve($stateParams) {
         if ($stateParams.facility) {
             return $stateParams.facility;
-        } else if ($stateParams.facilityId) {
-            return facilityService.get($stateParams.facilityId);
         }
         return {};
     }

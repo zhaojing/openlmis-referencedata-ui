@@ -30,28 +30,19 @@
             controllerAs: 'vm',
             resolve: {
                 facilityTypes: facilityTypesResolve,
-                geographicZones: geographicZonesResolve,
                 facilityOperators: facilityOperatorsResolve
             },
-            parentResolves: ['facility'],
+            parentResolves: ['facility', 'geographicZones'],
             templateUrl: 'admin-facility-add/facility-add.html',
-            url: '/new'
+            url: '/details'
         });
 
+        facilityTypesResolve.$inject = ['facilityTypeService'];
         function facilityTypesResolve(facilityTypeService) {
             return facilityTypeService.getAll();
         }
 
-        function geographicZonesResolve(geographicZoneService, $q) {
-            var deferred = $q.defer();
-
-            geographicZoneService.getAll().then(function(response) {
-                deferred.resolve(response.content);
-            }, deferred.reject);
-
-            return deferred.promise;
-        }
-
+        facilityOperatorsResolve.$inject = ['facilityOperatorService'];
         function facilityOperatorsResolve(facilityOperatorService) {
             return facilityOperatorService.getAll();
         }

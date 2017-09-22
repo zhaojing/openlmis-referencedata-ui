@@ -19,7 +19,7 @@ describe('facility-list.html template', function() {
 
     beforeEach(prepareSuite);
 
-    describe('Add Facility element', function() {
+    describe('Add Facility button', function() {
 
         it('should take user to the Add Facility page', function() {
             template.find('#add-facility').click();

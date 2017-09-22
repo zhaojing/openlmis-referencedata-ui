@@ -22,7 +22,8 @@
      * @name admin-facility-add.controller:FacilityAddController
      *
      * @description
-     *
+     * Provides methods for Add Facility modal. Allows returning to previous states and saving
+     * facility.
      */
     angular
         .module('admin-facility-add')
@@ -70,10 +71,12 @@
          * Saves the facility and takes user back to the previous state.
          */
         function save() {
+            var confirmMessage = messageService.get('adminFacilityAdd.doYouWantToAddPrograms', {
+                facility: vm.facility.name
+            });
+
             confirmService.confirm(
-                messageService.get('adminFacilityAdd.doYouWantToAddPrograms', {
-                    facility: vm.facility.name
-                }),
+                confirmMessage,
                 'adminFacilityAdd.addPrograms',
                 'adminFacilityAdd.cancel'
             ).then(function() {
@@ -87,7 +90,7 @@
                         notificationService.success('adminFacilityAdd.facilityHasBeenSaved');
                     });
                     stateTrackerService.goToPreviousState();
-                }, function() {
+                }).catch(function() {
                     loadingPromise.then(function() {
                         notificationService.error('adminFacilityAdd.failedToSaveFacility');
                     });

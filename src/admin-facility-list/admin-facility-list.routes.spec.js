@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis.administration.facilities.facility state', function() {
+describe('openlmis.administration.facilities state', function() {
 
     'use strict';
 
@@ -22,36 +22,59 @@ describe('openlmis.administration.facilities.facility state', function() {
 
     beforeEach(prepareSuite);
 
-    it('should resolve to facility if it was given', function() {
-        goToState('openlmis.administration.facilities.facility.fake', {
-            facility: facilities[0]
-        });
+    it('should be available under /administration/facilities URL', function() {
+        expect($state.current.name).not.toEqual('openlmis.administration.facilities');
 
-        expect($state.current.name).toEqual('openlmis.administration.facilities.facility.fake');
-        expect(getResolvedValue('facility')).toEqual(facilities[0]);
+        goTo('/administration/facilities');
+
+        expect($state.current.name).toEqual('openlmis.administration.facilities');
     });
 
-    it('should resolve to empty object', function() {
-        goToUrl('/administration/facilities/new/fake');
+    it('should resolve geographicZones', function() {
+        geographicZoneService.getAll.andReturn($q.when({
+            content: geographicZones
+        }));
 
-        expect($state.current.name).toEqual('openlmis.administration.facilities.facility.fake');
-        expect(getResolvedValue('facility')).toEqual({});
+        goTo('/administration/facilities');
+
+        expect($state.current.name).toEqual('openlmis.administration.facilities');
+        expect(getResolvedValue('geographicZones')).toEqual(geographicZones);
+    });
+
+    it('should resolve facilities', function() {
+        facilityService.search.andReturn($q.when({
+            content: facilities
+        }));
+
+        goTo('/administration/facilities?name=Facility&page=1&size=2&zoneId=zone-one');
+
+        expect($state.current.name).toEqual('openlmis.administration.facilities');
+        expect(getResolvedValue('facilities')).toEqual(facilities);
+        expect(facilityService.search).toHaveBeenCalledWith({
+            page: '1',
+            size: '2'
+        }, {
+            name: 'Facility',
+            zoneId: 'zone-one'
+        });
+    });
+
+    it('should use template', function() {
+        spyOn($templateCache, 'get').andCallThrough();
+
+        goTo('/administration/facilities');
+
+        expect($templateCache.get).toHaveBeenCalledWith('admin-facility-list/facility-list.html');
     });
 
     function prepareSuite() {
-        module('admin-facility', fakeState);
+        module('admin-facility-list');
         inject(services);
         prepareTestData();
         prepareSpies();
 
         $state.go('openlmis');
         $rootScope.$apply();
-    }
-
-    function fakeState($stateProvider) {
-        $stateProvider.state('openlmis.administration.facilities.facility.fake', {
-            url: '/fake'
-        });
     }
 
     function services($injector) {
@@ -90,13 +113,8 @@ describe('openlmis.administration.facilities.facility state', function() {
         }));
     }
 
-    function goToUrl(url) {
+    function goTo(url) {
         $location.url(url);
-        $rootScope.$apply();
-    }
-
-    function goToState() {
-        $state.go.apply(this, arguments);
         $rootScope.$apply();
     }
 
