@@ -15,7 +15,7 @@
 
 describe('FacilityViewController', function () {
 
-    var $q, $rootScope, $state, $controller, loadingModalService, confirmService, notificationService, facilityService, facilitySavePromise, loadingModalPromise,
+    var $q, $rootScope, $state, $controller, loadingModalService, notificationService, facilityService, facilitySavePromise, loadingModalPromise,
         vm, facility, facilityTypes, geographicZones, facilityOperators, programs;
 
     beforeEach(function() {
@@ -36,7 +36,6 @@ describe('FacilityViewController', function () {
             $rootScope = $injector.get('$rootScope');
             $controller = $injector.get('$controller');
             $state = $injector.get('$state');
-            confirmService = $injector.get('confirmService');
             notificationService = $injector.get('notificationService');
         });
 
@@ -46,7 +45,6 @@ describe('FacilityViewController', function () {
         loadingModalPromise = $q.defer();
         loadingModalService.open.andReturn(loadingModalPromise.promise);
 
-        spyOn(confirmService, 'confirm').andReturn($q.when(true));
         spyOn(notificationService, 'success').andReturn(true);
         spyOn(notificationService, 'error').andReturn(true);
         spyOn($state, 'go').andReturn();
@@ -157,16 +155,6 @@ describe('FacilityViewController', function () {
     });
 
     describe('saveFacility', function() {
-
-        it('should call confirm service', function() {
-            vm.saveFacilityDetails();
-            expect(confirmService.confirm).toHaveBeenCalledWith({
-                messageKey: 'adminFacilityView.saveFacility.confirm',
-                messageParams: {
-                    facility: vm.facility.name
-                }
-            }, 'adminFacilityView.save');
-        });
 
         it('should open loading modal', function() {
             vm.saveFacilityDetails();

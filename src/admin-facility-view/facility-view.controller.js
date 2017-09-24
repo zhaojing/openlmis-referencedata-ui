@@ -29,12 +29,12 @@
         .controller('FacilityViewController', controller);
 
     controller.$inject = [
-        '$q', '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'programs',
-        'facilityService', 'confirmService', 'loadingModalService', 'notificationService'
+        '$q', '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators',
+        'programs', 'facilityService', 'loadingModalService', 'notificationService'
     ];
 
-    function controller($q, $state, facility, facilityTypes, geographicZones, facilityOperators, programs,
-        facilityService, confirmService, loadingModalService, notificationService) {
+    function controller($q, $state, facility, facilityTypes, geographicZones, facilityOperators,
+        programs, facilityService, loadingModalService, notificationService) {
 
         var vm = this;
 
@@ -175,26 +175,18 @@
 
 
         function saveFacility(editedFacility) {
-            var message = {
-                    messageKey: 'adminFacilityView.saveFacility.confirm',
-                    messageParams: {
-                        facility: vm.facility.name
-                    }
-                };
-            confirmService.confirm(message, 'adminFacilityView.save')
+            var loadingPromise = loadingModalService.open();
+
+            facilityService.save(editedFacility)
             .then(function() {
-                var loadingPromise = loadingModalService.open();
-                facilityService.save(editedFacility)
-                .then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success('adminFacilityView.saveFacility.success');
-                    });
-                    goToFacilityList();
-                })
-                .catch(function() {
-                    loadingModalService.close();
-                    notificationService.error('adminFacilityView.saveFacility.fail');
+                loadingPromise.then(function() {
+                    notificationService.success('adminFacilityView.saveFacility.success');
                 });
+                goToFacilityList();
+            })
+            .catch(function() {
+                loadingModalService.close();
+                notificationService.error('adminFacilityView.saveFacility.fail');
             });
         }
 
