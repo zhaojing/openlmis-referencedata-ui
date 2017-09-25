@@ -18,27 +18,36 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @ngdoc service
+     * @name referencedata-isa.isaService
      *
      * @description
-     * This is constant for administration rights.
+     * Responsible for retrieving Ideal Stock Amounts from the server.
      */
     angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
+        .module('referencedata-isa')
+        .factory('isaService', service);
 
-    function rights() {
+    service.$inject = ['referencedataUrlFactory'];
+
+    function service(referencedataUrlFactory) {
+
         return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE',
-            SUPPLY_LINES_MANAGE: 'SUPPLY_LINES_MANAGE',
-            SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE: 'SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE'
+            getDownloadUrl: getDownloadUrl
         };
-    }
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-isa.isaService
+         * @name getDownloadUrl
+         *
+         * @description
+         * Returns URL for downloading Ideal Stock Amounts in csv format file.
+         *
+         * @return {String} the URL for downloading Ideal Stock Amounts
+         */
+        function getDownloadUrl() {
+            return referencedataUrlFactory('/api/idealStockAmounts?format=csv');
+        }
+    }
 })();

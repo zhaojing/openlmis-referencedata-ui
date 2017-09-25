@@ -18,27 +18,36 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @ngdoc controller
+     * @name admin-isa-manage.controller:IsaManageController
      *
      * @description
-     * This is constant for administration rights.
+     * Controller for managing Ideal Stock Amounts.
      */
     angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
+        .module('admin-isa-manage')
+        .controller('IsaManageController', controller);
 
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE',
-            SUPPLY_LINES_MANAGE: 'SUPPLY_LINES_MANAGE',
-            SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE: 'SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE'
-        };
+    controller.$inject = ['isaService'];
+
+    function controller(isaService) {
+
+        var vm = this;
+
+        vm.getExportUrl = getExportUrl;
+
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-isa-manage.controller:IsaManageController
+         * @name getExportUrl
+         *
+         * @description
+         * Returns url for downloading csv file with all ideal stock amounts.
+         */
+        function getExportUrl() {
+            return isaService.getDownloadUrl();
+        }
     }
 
 })();

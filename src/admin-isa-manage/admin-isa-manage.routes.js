@@ -17,28 +17,20 @@
 
     'use strict';
 
-    /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
-     *
-     * @description
-     * This is constant for administration rights.
-     */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
+    angular.module('admin-isa-manage').config(routes);
 
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE',
-            SUPPLY_LINES_MANAGE: 'SUPPLY_LINES_MANAGE',
-            SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE: 'SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE'
-        };
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+
+        $stateProvider.state('openlmis.administration.isa', {
+            showInNavigation: true,
+            label: 'adminIsaManage.isa',
+            url: '/isa/manage',
+            controller: 'IsaManageController',
+            templateUrl: 'admin-isa-manage/isa-manage.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE]
+        });
     }
-
 })();
