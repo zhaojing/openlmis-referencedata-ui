@@ -6,6 +6,8 @@ New features:
     * Added facilityOperatorsService for communicating with the facilityOperators endpoints
     * Extended facilityService with the ability to save facility
 * [OLMIS-3154](https://openlmis.atlassian.net/browse/OLMIS-3154): Changed facility view to edit screen.
+* [OLMIS-3228](https://openlmis.atlassian.net/browse/OLMIS-3228): Create Download Current ISA Values page
+
 Improvement:
 
 * [OLMIS-2857](https://openlmis.atlassian.net/browse/OLMIS-2857): Added username filter to user list screen.
