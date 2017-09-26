@@ -1,7 +1,7 @@
 <h2>{{'adminIsaManage.manageIsa' | message}}</h2>
 <form id="catalogItemUpload" ng-submit="vm.upload()">
-    <aside class="export">
-        {{'adminIsaManage.viewIsaAsCsv' | message}}
+    <div class="minor-heading">
+        <div class="title">{{'adminIsaManage.viewIsaAsCsv' | message}}</div>
         <input openlmis-download="{{vm.getExportUrl()}}" type="button" value="{{'adminIsaManage.export' | message}}"/>
-    </aside>
+    </div>
 </form>

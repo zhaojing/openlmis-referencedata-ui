@@ -44,6 +44,8 @@
          *
          * @description
          * Returns url for downloading csv file with all ideal stock amounts.
+         *
+         * @return {String} url for downloading csv.
          */
         function getExportUrl() {
             return isaService.getDownloadUrl();
