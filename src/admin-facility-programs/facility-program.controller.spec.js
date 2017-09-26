@@ -121,7 +121,7 @@ describe('FacilityProgramsController', function() {
             $rootScope.$apply();
 
             expect(notificationService.success)
-                .toHaveBeenCalledWith('adminFacilityPrograms.facilityAndProgramsHasBeenSaved');
+                .toHaveBeenCalledWith('adminFacilityPrograms.facilityAndProgramsHaveBeenSaved');
         });
 
         it('should show error notification if save failed', function() {

@@ -126,15 +126,47 @@ describe('facility-programs.html template', function() {
 
     });
 
-    describe('Save button', function() {
 
-        it('should call $scope.vm.save method', function() {
+    describe('assign-programs-form', function() {
+
+        var form, formCtrl;
+
+        beforeEach(function() {
+            form = template.find('#assign-programs-form');
+            formCtrl = form.controller('form');
+        });
+
+        it('should call vm.save on submit', function() {
             $scope.vm.save = jasmine.createSpy('save');
+            $scope.vm.facility = {
+                supportedPrograms: [{
+                    supportStartDate: new Date('08/10/2017')
+                }, {
+                    supportStartDate: new Date('08/10/2017')
+                }]
+            };
+            $rootScope.$apply();
 
-            template.find('#save').click();
-            $timeout.flush();
+            form.triggerHandler('submit');
+            $rootScope.$apply();
 
             expect($scope.vm.save).toHaveBeenCalled();
+        });
+
+        it('should require all start dates', function() {
+            $scope.vm.facility = {
+                supportedPrograms: [{
+                    supportStartDate: undefined
+                }, {
+                    supportStartDate: new Date('08/10/2017')
+                }]
+            };
+            $rootScope.$apply();
+
+            form.triggerHandler('submit');
+            $rootScope.$apply();
+
+            expect(formCtrl.$invalid).toBe(true);
         });
 
     });

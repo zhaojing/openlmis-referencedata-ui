@@ -16,12 +16,12 @@
                         <label for="start-date">{{'adminFacilityPrograms.startDate' | message}}</label>
                         <openlmis-datepicker input-id="start-date" value="vm.startDate" required="true"></openlmis-datepicker>
                     </div>
-                    <button class="add" type="submit">{{'adminFacilityPrograms.addProgram' | message}}</button>
+                    <button class="add" type="submit">{{'adminFacilityPrograms.add' | message}}</button>
                 </form>
-                <section class="openlmis-table-container">
+                <form class="openlmis-table-container" id="assign-programs-form" ng-submit="vm.save()">
                     <table>
                         <caption ng-if="!vm.facility.supportedPrograms || vm.facility.supportedPrograms.length === 0">
-                            {{'adminFacilityPrograms.noProgramsSupported' | message}}
+                            {{'adminFacilityPrograms.noProgramsAreAssociatedWith' | message:({facility: vm.facility.name})}}
                         </caption>
                         <thead>
                             <tr>
@@ -34,15 +34,17 @@
                             <tr ng-repeat="program in vm.facility.supportedPrograms">
                                 <td>{{program.name}}</td>
                                 <td ><input type="checkbox" ng-model="program.supportActive"/></td>
-                                <td>{{program.supportStartDate | openlmisDate}}</td>
+                                <td>
+                                    <openlmis-datepicker value="program.supportStartDate" required="true"></openlmis-datepicker>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                </section>
+                </form>
             </div>
             <div class="modal-footer">
                 <button id="cancel" ng-click="vm.cancel()">{{'adminFacilityPrograms.cancel' | message}}</button>
-                <button id="save" class="primary" ng-click="vm.save()">{{'adminFacilityPrograms.save' | message}}</button>
+                <button id="save" class="primary" form="assign-programs-form">{{'adminFacilityPrograms.save' | message}}</button>
             </div>
         </div>
     </div>

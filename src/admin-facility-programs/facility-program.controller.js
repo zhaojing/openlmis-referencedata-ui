@@ -91,7 +91,7 @@
         function save() {
             doSave(
                 vm.facility,
-                'adminFacilityPrograms.facilityAndProgramsHasBeenSaved',
+                'adminFacilityPrograms.facilityAndProgramsHaveBeenSaved',
                 'adminFacilityPrograms.failedToSaveFacilityAndPrograms'
             );
         }

@@ -6,9 +6,9 @@
     "adminFacilityPrograms.cancel": "Cancel",
     "adminFacilityPrograms.save": "Save",
     "adminFacilityPrograms.facilityHasBeenSaved": "Facility has been saved!",
-    "adminFacilityPrograms.facilityAndProgramsHasBeenSaved": "Facility and programs has been saved!",
+    "adminFacilityPrograms.facilityAndProgramsHaveBeenSaved": "Facility and programs have been saved!",
     "adminFacilityPrograms.failedToSaveFacility": "Failed to save facility!",
     "adminFacilityPrograms.failedToSaveFacilityAndPrograms": "Failed to save facility and programs!",
-    "adminFacilityPrograms.addProgram": "Add Program",
-    "adminFacilityPrograms.noProgramsSupported": "No supported programs assigned."
+    "adminFacilityPrograms.add": "Add",
+    "adminFacilityPrograms.noProgramsAreAssociatedWith": "No programs are associated with ${facility}"
 }
