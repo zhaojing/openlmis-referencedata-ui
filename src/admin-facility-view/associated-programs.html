@@ -30,9 +30,7 @@
         <tbody>
             <tr ng-repeat="program in vm.facilityWithPrograms.supportedPrograms">
                 <td>{{program.name}}</td>
-                <td>
-                    <td><input type="checkbox" ng-model="program.supportActive"/></td>
-                </td>
+                <td><input type="checkbox" ng-model="program.supportActive"/></td>
                 <td>{{program.supportStartDate | openlmisDate}}</td>
             </tr>
         </tbody>
