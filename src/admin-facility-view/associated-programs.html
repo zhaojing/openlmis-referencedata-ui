@@ -31,7 +31,7 @@
             <tr ng-repeat="program in vm.facilityWithPrograms.supportedPrograms">
                 <td>{{program.name}}</td>
                 <td>
-                    <i ng-class="{'icon-ok': program.supportActive}"></i>
+                    <td><input type="checkbox" ng-model="program.supportActive"/></td>
                 </td>
                 <td>{{program.supportStartDate | openlmisDate}}</td>
             </tr>
