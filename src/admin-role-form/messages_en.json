@@ -57,7 +57,7 @@
     "adminRoleForm.cceInventoryView": "View Cold Chain Equipment Inventory",
     "adminRoleForm.cceInventoryEdit": "Edit Cold Chain Equipment Inventory",
     "adminRoleForm.programsManage": "Manage programs",
-    "adminRoleForm.systemIdealStockAmountManage": "Manage System Ideal Stock Amount",
+    "adminRoleForm.systemIdealStockAmountsManage": "Manage System Ideal Stock Amounts",
     "adminRoleForm.idealStockAmountView": "View Ideal Stock Amount",
     "adminRoleForm.idealStockAmountEdit": "Edit Ideal Stock Amount"
 }

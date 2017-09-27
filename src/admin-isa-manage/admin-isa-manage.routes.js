@@ -30,7 +30,7 @@
             controller: 'IsaManageController',
             templateUrl: 'admin-isa-manage/isa-manage.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.SYSTEM_IDEAL_STOCK_AMOUNT_MANAGE]
+            accessRights: [ADMINISTRATION_RIGHTS.SYSTEM_IDEAL_STOCK_AMOUNTS_MANAGE]
         });
     }
 })();
