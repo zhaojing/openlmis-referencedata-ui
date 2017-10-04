@@ -31,7 +31,7 @@ describe('userRightsFactory', function() {
     }));
 
     beforeEach(function() {
-        userRightsFactory('userId')
+        userRightsFactory.buildRights('userId')
         .then(function(builtRights) {
             rights = builtRights;
         });

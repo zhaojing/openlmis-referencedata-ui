@@ -33,7 +33,9 @@
 
     function factory($q, permissionService) {
 
-        return buildRights;
+        return {
+            buildRights: buildRights
+        };
 
         /**
          * @ngdoc method

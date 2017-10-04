@@ -23,14 +23,11 @@
      * @description
      * Provides methods to get a user's permissions and rights.
      *
-     * This module is intended to be used as part of the
-     * openlmis-auth.authorizationService. We recommend that you don't directly
-     * access these services.
+     * This module loads rights and permissions into the authorizationService.
      */
     angular.module('openlmis-permissions', [
-        'openlmis-urls',
-        'openlmis-local-storage',
-        'openlmis-config'
+        'openlmis-auth',
+        'openlmis-loading'
     ]);
 
 })();
