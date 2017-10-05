@@ -7,6 +7,7 @@ New features:
     * Extended facilityService with the ability to save facility
 * [OLMIS-3154](https://openlmis.atlassian.net/browse/OLMIS-3154): Changed facility view to edit screen.
 * [OLMIS-3228](https://openlmis.atlassian.net/browse/OLMIS-3228): Create Download Current ISA Values page
+* [OLMIS-2217](https://openlmis.atlassian.net/browse/OLMIS-2217): Added ability to send reset password email
 
 Improvement:
 
