@@ -13,38 +13,38 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+// (function() {
 
-    'use strict';
+//     'use strict';
 
-    angular
-        .module('openlmis-permissions')
-        .run(buildRights);
+//     angular
+//         .module('openlmis-permissions')
+//         .run(buildRights);
 
-    buildRights.$inject = ['$q', '$rootScope', 'loadingService', 'authorizationService', 'userRightsFactory'];
+//     buildRights.$inject = ['$q', '$rootScope', 'loadingService', 'authorizationService', 'userRightsFactory'];
 
-    function buildRights($q, $rootScope, loadingService, authorizationService, userRightsFactory) {
-        $rootScope.$on('openlmis-auth.login', getRights);
-        $rootScope.$on('openlmis-auth.logout', clearRights);
+//     function buildRights($q, $rootScope, loadingService, authorizationService, userRightsFactory) {
+//         $rootScope.$on('openlmis-auth.login', getRights);
+//         $rootScope.$on('openlmis-auth.logout', clearRights);
 
-        function getRights() {
-            var deferred = $q.defer(),
-                user = authorizationService.getUser();
-            loadingService.register('openlmis-permissions.getRights', deferred.promise);
+//         function getRights() {
+//             var deferred = $q.defer(),
+//                 user = authorizationService.getUser();
+//             loadingService.register('openlmis-permissions.getRights', deferred.promise);
 
-            userRightsFactory.buildRights(user.user_id)
-            .then(function(rights) {
-                authorizationService.setRights(rights);
-            })
-            .finally(function(){
-                deferred.resolve();
-            });
+//             userRightsFactory.buildRights(user.user_id)
+//             .then(function(rights) {
+//                 authorizationService.setRights(rights);
+//             })
+//             .finally(function(){
+//                 deferred.resolve();
+//             });
 
-        }
+//         }
 
-        function clearRights() {
-            authorizationService.clearRights();
-        }
-    }
+//         function clearRights() {
+//             authorizationService.clearRights();
+//         }
+//     }
 
-})();
+// })();

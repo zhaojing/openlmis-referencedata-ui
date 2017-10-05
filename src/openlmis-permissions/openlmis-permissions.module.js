@@ -27,7 +27,8 @@
      */
     angular.module('openlmis-permissions', [
         'openlmis-auth',
-        'openlmis-loading'
+        'openlmis-loading',
+        'referencedata-program'
     ]);
 
 })();

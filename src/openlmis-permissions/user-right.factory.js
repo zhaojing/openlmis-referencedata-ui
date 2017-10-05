@@ -13,118 +13,174 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+// (function(){
 
-    'use strict';
+//     'use strict';
 
-    /**
-     * @ngdoc service
-     * @name openlmis-permissions.userRightsFactory
-     *
-     * @description
-     * Creates a list of rights for a user that can be used for quickly testing
-     * user permissions.
-     */
-    angular
-        .module('openlmis-permissions')
-        .factory('userRightsFactory', factory);
+//     /**
+//      * @ngdoc service
+//      * @name openlmis-permissions.userRightsFactory
+//      *
+//      * @description
+//      * Creates a list of rights for a user that can be used for quickly testing
+//      * user permissions.
+//      */
+//     angular
+//         .module('openlmis-permissions')
+//         .factory('userRightsFactory', factory);
 
-    factory.$inject = ['$q', 'permissionService'];
+//     factory.$inject = ['$q', 'permissionService', 'programService'];
 
-    function factory($q, permissionService) {
+//     function factory($q, permissionService, programService) {
 
-        return {
-            buildRights: buildRights
-        };
+//         return {
+//             buildRights: buildRights
+//         };
 
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-permissions.userRightsFactory
-         * @name buildRights
-         *
-         * @param {String} userId ID of user to build rights for
-         * @return {Promise} Promise that will resolve into an arry of right objects
-         *
-         * @description
-         * Loads permissions from the permission service, and turns them into a
-         * collection of rights.
-         *
-         * Example right object:
-         * ```
-         * {
-         *   name: "EXAMPLE_RIGHT",
-         *   programIds: ["ABC-123"],
-         *   supervisoryNodeIds: ["555-555-EFG"],
-         *   warehouseIds: [], // Empty arrays are inserted into object as placeholder
-         *   isDirect: false // Boolean that indicates that the right has no program or facility connections
-         * }
-         * ```
-         */
-        function buildRights(userId) {
-            var deferred = $q.defer();
+//         /**
+//          * @ngdoc method
+//          * @methodOf openlmis-permissions.userRightsFactory
+//          * @name buildRights
+//          *
+//          * @param {String} userId ID of user to build rights for
+//          * @return {Promise} Promise that will resolve into an arry of right objects
+//          *
+//          * @description
+//          * Loads permissions from the permission service, and turns them into a
+//          * collection of rights.
+//          *
+//          * Example right object:
+//          * ```
+//          * {
+//          *   name: "EXAMPLE_RIGHT",
+//          *   programIds: ["ABC-123"],
+//          *   programCodes: ["abc123"]
+//          *   facilityIds: [], // Empty arrays are inserted into object as placeholder
+//          *   isDirect: false // Boolean that indicates that the right has no program or facility connections
+//          * }
+//          * ```
+//          */
+//         function buildRights(userId) {
+//             var deferred = $q.defer();
 
-            if(!userId) {
-                return $q.reject();
-            }
+//             if(!userId) {
+//                 return $q.reject();
+//             }
             
-            permissionService.load(userId)
-            .then(buildRightsObject)
-            .then(function(rights) {
-                var rightsArray = [];
+//             permissionService.load(userId)
+//             .then(buildRightsObject)
+//             .then(function(rights) {
+//                 console.info('### plain rights ###');
+//                 return addProgramCodeToRights(userId, rights);
+//             })
+//             .then(function(rights) {
+//                 console.info('### with code? ###');
+//                 console.info(rights);
+//                 console.info('###########');
+//                 var rightsArray = [];
 
-                Object.keys(rights).forEach(function(key) {
-                    rightsArray.push(rights[key]);
-                });
+//                 Object.keys(rights).forEach(function(key) {
+//                     rightsArray.push(rights[key]);
+//                 });
 
-                deferred.resolve(rightsArray);
-            });
+//                 deferred.resolve(rightsArray);
+//             })
+//             .catch(deferred.reject);
 
-            return deferred.promise;
-        }
-    }
+//             return deferred.promise;
+//         }
 
-    /**
-     * @ngdoc method
-     * @methodOf openlmis-permissions.userRightsFactory
-     * @name  buildRightsObject
-     * 
-     * @param  {Array} permissions List of user permissions
-     * @return {Object} Object of user rights
-     *
-     * @description
-     * Transforms a list of permissions into an object with each key matching a
-     * user right object.
-     */
-    function buildRightsObject(permissions) {
-        var rights = {};
+//         *
+//          * @ngdoc method
+//          * @methodOf openlmis-permissions.userRightsFactory
+//          * @name  buildRightsObject
+//          * 
+//          * @param  {Array} permissions List of user permissions
+//          * @param  {Array} facilities  List of facilities
+//          * @param  {Array} programs    List of programs
+//          * @return {Object}            Object of user rights
+//          *
+//          * @description
+//          * Transforms a list of permissions into an object with each key matching a
+//          * user right object.
+         
+//         function buildRightsObject(permissions, programs) {
+//             var rights = {};
 
-        function getRight(permission) {
-            if(!rights.hasOwnProperty(permission.right)){
-                rights[permission.right] = {
-                    name: permission.right,
-                    programIds: [],
-                    facilityIds: [],
-                    isDirect: true
-                };
-            }
+//             function getRight(permission) {
+//                 if(!rights.hasOwnProperty(permission.right)){
+//                     rights[permission.right] = {
+//                         name: permission.right,
+//                         programIds: [],
+//                         facilityIds: [],
+//                         isDirect: true
+//                     };
+//                 }
 
-            return rights[permission.right];
-        }
+//                 return rights[permission.right];
+//             }
 
-        permissions.forEach(function(permission) {
-            var right = getRight(permission);
+//             permissions.forEach(function(permission) {
+//                 var right = getRight(permission);
 
-            if(permission.programId && right.programIds.indexOf(permission.programId) === -1) {
-                right.programIds.push(permission.programId);
-                right.isDirect = false;
-            }
-            if(permission.facilityId && right.facilityIds.indexOf(permission.facilityId) === -1) {
-                right.facilityIds.push(permission.facilityId);
-                right.isDirect = false;
-            }
-        });
+//                 if(permission.programId && right.programIds.indexOf(permission.programId) === -1) {
+//                     right.programIds.push(permission.programId);
+//                     right.isDirect = false;
+//                 }
 
-        return rights;
-    }
+//                 if(permission.facilityId && right.facilityIds.indexOf(permission.facilityId) === -1) {
+//                     right.facilityIds.push(permission.facilityId);
+//                     right.isDirect = false;
+//                 }
+//             });
 
-})();
+//             return rights;
+//         }
+
+//         /**
+//          * @ngdoc method
+//          * @methodOf openlmis-permissions.userRightsFactory
+//          * @name  addProgramCodeToRights
+//          * 
+//          * @param  {Array} userId The user id we want programs for
+//          * @param  {Array} rights List of rights
+//          * @return {Promise}      Resolves to rights with program codes
+//          *
+//          * @description
+//          * If successful, the returned promise is returned back into the rights
+//          * with programCodes loaded.
+//          */
+//         function addProgramCodeToRights(userId, rights) {
+//             var deferred = $q.defer();
+
+//             programService.getAllUserPrograms(userId)
+//             .then(function(programs) {
+//                 var obj = {};
+
+//                 programs.forEach(function(program) {
+//                     obj[program.id] = program.code;
+//                 });
+
+//                 return $q.resolve(obj);
+//             })
+//             .then(function(programsObj) {
+//                 angular.forEach(rights, function(right) {
+//                     addProgramCodeToRights(right, programsObj);
+//                 });
+
+//                 deferred.resolve(rights);
+//             });
+
+//             return deferred.promise;
+//         }
+
+//         function addProgramCodes(right, programsObj) {
+//             right.programCodes = [];
+//             right.programIds.forEach(function(programId) {
+//                 if(programsObj.hasOwnProperty(programId)) {
+//                     right.programCodes.push(programsObj[programId]);
+//                 }
+//             });
+//         }
+//     }
+// })();
