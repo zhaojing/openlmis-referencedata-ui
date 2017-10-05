@@ -13,73 +13,73 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-// describe('userRightsFactory', function() {
+describe('userRightsFactory', function() {
 
-//     var $rootScope, $q, rights;
+    var $rootScope, $q, rights;
 
-//     beforeEach(module('openlmis-permissions'));
+    beforeEach(module('openlmis-permissions'));
 
-//     beforeEach(inject(function(_$rootScope_,  _$q_, _userRightsFactory_) {
-//         $rootScope = _$rootScope_;
-//         $q = _$q_;
-//         userRightsFactory = _userRightsFactory_;
-//     }));
+    beforeEach(inject(function(_$rootScope_,  _$q_, _userRightsFactory_) {
+        $rootScope = _$rootScope_;
+        $q = _$q_;
+        userRightsFactory = _userRightsFactory_;
+    }));
 
-//     beforeEach(inject(function(permissionService) {
-//         var permissions = makePermissions();
-//         spyOn(permissionService, 'load').andReturn($q.resolve(permissions));
-//     }));
+    beforeEach(inject(function(permissionService) {
+        var permissions = makePermissions();
+        spyOn(permissionService, 'load').andReturn($q.resolve(permissions));
+    }));
 
-//     beforeEach(function() {
-//         userRightsFactory.buildRights('userId')
-//         .then(function(builtRights) {
-//             rights = builtRights;
-//         });
+    beforeEach(function() {
+        userRightsFactory.buildRights('userId')
+        .then(function(builtRights) {
+            rights = builtRights;
+        });
 
-//         $rootScope.$apply();
-//     });
+        $rootScope.$apply();
+    });
 
-//     it('should not duplicate rights', function() {
-//         expect(rights.length).toBe(3);
-//     });
+    it('should not duplicate rights', function() {
+        expect(rights.length).toBe(3);
+    });
 
-//     it('should group programs', function() {
-//         expect(rights[0].programIds.length).toBe(2);
-//         expect(rights[0].programIds[0]).toBe('program1');
-//         expect(rights[0].programIds[1]).toBe('program2');
-//     });
+    it('should group programs', function() {
+        expect(rights[0].programIds.length).toBe(2);
+        expect(rights[0].programIds[0]).toBe('program1');
+        expect(rights[0].programIds[1]).toBe('program2');
+    });
 
-//     it('should group facilities', function() {
-//         expect(rights[1].facilityIds.length).toBe(2);
-//         expect(rights[1].facilityIds[0]).toBe('facility-1');
-//         expect(rights[1].facilityIds[1]).toBe('facility-2');
-//     });
+    it('should group facilities', function() {
+        expect(rights[1].facilityIds.length).toBe(2);
+        expect(rights[1].facilityIds[0]).toBe('facility-1');
+        expect(rights[1].facilityIds[1]).toBe('facility-2');
+    });
 
-//     it('should mark right as direct if no program or facility id is associated with permission', function() {
-//         expect(rights[2].isDirect).toBe(true);
-//     });
+    it('should mark right as direct if no program or facility id is associated with permission', function() {
+        expect(rights[2].isDirect).toBe(true);
+    });
 
-//     function makePermissions() {
-//         return [{
-//             right: 'example',
-//             facilityId: 'facility-1',
-//             programId: 'program1'
-//         }, {
-//             right: 'example',
-//             facilityId: 'facility-2',
-//             programId: 'program1'
-//         }, {
-//             right: 'example',
-//             facilityId: 'facility-3',
-//             programId: 'program2'
-//         }, {
-//             right: 'otherExample',
-//             facilityId: 'facility-1'
-//         }, {
-//             right: 'otherExample',
-//             facilityId: 'facility-2'
-//         }, {
-//             right: 'DIRECT_RIGHT'
-//         }];
-//     }
-// });
+    function makePermissions() {
+        return [{
+            right: 'example',
+            facilityId: 'facility-1',
+            programId: 'program1'
+        }, {
+            right: 'example',
+            facilityId: 'facility-2',
+            programId: 'program1'
+        }, {
+            right: 'example',
+            facilityId: 'facility-3',
+            programId: 'program2'
+        }, {
+            right: 'otherExample',
+            facilityId: 'facility-1'
+        }, {
+            right: 'otherExample',
+            facilityId: 'facility-2'
+        }, {
+            right: 'DIRECT_RIGHT'
+        }];
+    }
+});

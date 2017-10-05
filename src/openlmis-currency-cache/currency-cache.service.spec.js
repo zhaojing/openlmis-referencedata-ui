@@ -13,51 +13,51 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-// describe('openlmis-currency-cache.currencyCacheService', function() {
-//     var $rootScope, currencyService;
+describe('openlmis-currency-cache.currencyCacheService', function() {
+    var $rootScope, currencyService;
 
-//     beforeEach(module('openlmis-currency-cache'));
+    beforeEach(module('openlmis-currency-cache'));
 
-//     beforeEach(inject(function(_$rootScope_) {
-//         $rootScope = _$rootScope_;
-//     }));
+    beforeEach(inject(function(_$rootScope_) {
+        $rootScope = _$rootScope_;
+    }));
 
-//     beforeEach(inject(function(_currencyService_, $q) {
-//         currencyService = _currencyService_;
+    beforeEach(inject(function(_currencyService_, $q) {
+        currencyService = _currencyService_;
         
-//         spyOn(currencyService, 'getCurrencySettings')
-//         .andReturn($q.resolve());
-//     }));
+        spyOn(currencyService, 'getCurrencySettings')
+        .andReturn($q.resolve());
+    }));
 
-//     it('gets currency settings at login', function() {
-//         $rootScope.$emit('openlmis-auth.login');
+    it('gets currency settings at login', function() {
+        $rootScope.$emit('openlmis-auth.login');
 
-//         expect(currencyService.getCurrencySettings).toHaveBeenCalled();
-//     });
+        expect(currencyService.getCurrencySettings).toHaveBeenCalled();
+    });
 
-//     it('stops $stateChangeStart while waiting for currency settings', inject(function($q, $urlRouter) {
-//         var deferred = $q.defer();
-//         currencyService.getCurrencySettings.andReturn(deferred.promise);
+    it('stops $stateChangeStart while waiting for currency settings', inject(function($q, $urlRouter) {
+        var deferred = $q.defer();
+        currencyService.getCurrencySettings.andReturn(deferred.promise);
 
-//         spyOn($urlRouter, 'sync').andCallThrough();
+        spyOn($urlRouter, 'sync').andCallThrough();
 
-//         var waiting;
-//         $rootScope.$on('$stateChangeStart', function(event) {
-//             if(event.defaultPrevented) {
-//                 waiting = true;
-//             }
-//         });
+        var waiting;
+        $rootScope.$on('$stateChangeStart', function(event) {
+            if(event.defaultPrevented) {
+                waiting = true;
+            }
+        });
 
-//         $rootScope.$emit('openlmis-auth.login');
-//         $rootScope.$emit('$stateChangeStart');
-//         $rootScope.$apply();
+        $rootScope.$emit('openlmis-auth.login');
+        $rootScope.$emit('$stateChangeStart');
+        $rootScope.$apply();
         
-//         expect(waiting).toBe(true);
+        expect(waiting).toBe(true);
 
-//         deferred.resolve();
-//         $rootScope.$apply();
+        deferred.resolve();
+        $rootScope.$apply();
 
-//         expect($urlRouter.sync).toHaveBeenCalled();
-//     }));
+        expect($urlRouter.sync).toHaveBeenCalled();
+    }));
 
-// });
+});
