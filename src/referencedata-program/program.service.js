@@ -58,6 +58,7 @@
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
+            getAllUserPrograms: getAllUserPrograms,
             getUserHomeFacilitySupportedPrograms: getUserHomeFacilitySupportedPrograms,
             update: update
         };
@@ -143,6 +144,30 @@
                 });
             }
             return deferred.promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-program.programService
+         * @name getUserPrograms
+         *
+         * @description
+         * Retrieves programs for the current user and saves them in the local storage.
+         * If the user is offline program are retrieved from the local storage.
+         *
+         * @param  {String}  userId            User UUID
+         * @return {Promise}                   Array of programs
+         */
+        function getAllUserPrograms(userId) {
+            var cachedPrograms = userProgramsOffline.search({
+                userIdOffline: userId
+            });
+
+            if(cachedPrograms) {
+                return $q.resolve(cachedPrograms)
+            }
+
+            deferred.resolve(programs);
         }
 
         /**
