@@ -13,72 +13,72 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('userRightsRun', function() {
-    var userRightsFactory, authorizationService, $rootScope, loadingService;
+// describe('userRightsRun', function() {
+//     var userRightsFactory, authorizationService, $rootScope, loadingService;
 
-    beforeEach(module('openlmis-permissions'));
+//     beforeEach(module('openlmis-permissions'));
 
-    beforeEach(inject(function($injector, $q) {
-        $rootScope = $injector.get('$rootScope');
+//     beforeEach(inject(function($injector, $q) {
+//         $rootScope = $injector.get('$rootScope');
 
-        userRightsFactory = $injector.get('userRightsFactory');
-        spyOn(userRightsFactory, 'buildRights').andReturn($q.resolve());
+//         userRightsFactory = $injector.get('userRightsFactory');
+//         spyOn(userRightsFactory, 'buildRights').andReturn($q.resolve());
 
-        authorizationService = $injector.get('authorizationService');
-        spyOn(authorizationService, 'setRights');
-        spyOn(authorizationService, 'clearRights');
+//         authorizationService = $injector.get('authorizationService');
+//         spyOn(authorizationService, 'setRights');
+//         spyOn(authorizationService, 'clearRights');
 
-        loadingService = $injector.get('loadingService');
-        spyOn(loadingService, 'register').andCallThrough();
-    }));
+//         loadingService = $injector.get('loadingService');
+//         spyOn(loadingService, 'register').andCallThrough();
+//     }));
 
-    beforeEach(inject(function($q) {
+//     beforeEach(inject(function($q) {
         
-    }));
+//     }));
 
-    it('on openlmis-auth.login builds userRights', function() {
-        $rootScope.$emit('openlmis-auth.login');
+//     it('on openlmis-auth.login builds userRights', function() {
+//         $rootScope.$emit('openlmis-auth.login');
 
-        expect(userRightsFactory.buildRights).toHaveBeenCalled();
-    });
+//         expect(userRightsFactory.buildRights).toHaveBeenCalled();
+//     });
     
-    it('on openlmis-auth.login stores userRights to authorizationService', function() {
-        $rootScope.$emit('openlmis-auth.login');
-        $rootScope.$apply(); // makes buildRights resolve
+//     it('on openlmis-auth.login stores userRights to authorizationService', function() {
+//         $rootScope.$emit('openlmis-auth.login');
+//         $rootScope.$apply(); // makes buildRights resolve
 
-        expect(authorizationService.setRights).toHaveBeenCalled();
-    });
+//         expect(authorizationService.setRights).toHaveBeenCalled();
+//     });
 
-    it('should not load rights if there was an error building rights', inject(function($q) {
-        userRightsFactory.buildRights.andReturn($q.reject());
+//     it('should not load rights if there was an error building rights', inject(function($q) {
+//         userRightsFactory.buildRights.andReturn($q.reject());
 
-        $rootScope.$emit('openlmis-auth.login');
-        $rootScope.$apply();
+//         $rootScope.$emit('openlmis-auth.login');
+//         $rootScope.$apply();
 
-        expect(authorizationService.setRights).not.toHaveBeenCalled();
-    }));
+//         expect(authorizationService.setRights).not.toHaveBeenCalled();
+//     }));
 
-    it('on openlmis-auth.login registers with loadingService', function() {
-        $rootScope.$emit('openlmis-auth.login');
+//     it('on openlmis-auth.login registers with loadingService', function() {
+//         $rootScope.$emit('openlmis-auth.login');
 
-        expect(loadingService.register).toHaveBeenCalled();
-        expect(loadingService.register.mostRecentCall.args[0]).toBe('openlmis-permissions.getRights');
-    });
+//         expect(loadingService.register).toHaveBeenCalled();
+//         expect(loadingService.register.mostRecentCall.args[0]).toBe('openlmis-permissions.getRights');
+//     });
 
-    it('should change loadingService loading state as rights are stored', function() {
-        $rootScope.$emit('openlmis-auth.login');
+//     it('should change loadingService loading state as rights are stored', function() {
+//         $rootScope.$emit('openlmis-auth.login');
 
-        expect(loadingService.isLoading()).toBe(true);
+//         expect(loadingService.isLoading()).toBe(true);
 
-        $rootScope.$apply();
+//         $rootScope.$apply();
 
-        expect(loadingService.isLoading()).toBe(false);
-    });
+//         expect(loadingService.isLoading()).toBe(false);
+//     });
 
-    it('on openlmis-auth.logout clears rights from authorizationService', function() {
-        $rootScope.$emit('openlmis-auth.logout');
+//     it('on openlmis-auth.logout clears rights from authorizationService', function() {
+//         $rootScope.$emit('openlmis-auth.logout');
 
-        expect(authorizationService.clearRights).toHaveBeenCalled();
-    });
+//         expect(authorizationService.clearRights).toHaveBeenCalled();
+//     });
 
-});
+// });
