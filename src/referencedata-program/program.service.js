@@ -167,7 +167,16 @@
                 return $q.resolve(cachedPrograms)
             }
 
-            deferred.resolve(programs);
+            return resource.getUserPrograms({userId: userId})
+            .$promise
+            .then(function(programs) {
+                programs.forEach(function(program) {
+                    program.userIdOffline = userId;
+                    userProgramsOffline.put(program);
+                });
+                return programs;
+            })
+            .catch($q.reject());
         }
 
         /**

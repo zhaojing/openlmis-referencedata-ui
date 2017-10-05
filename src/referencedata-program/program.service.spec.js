@@ -161,6 +161,72 @@ describe('programService', function() {
         expect(data.id).toEqual(program2.id);
     });
 
+    describe('getAllUserPrograms', function() {
+
+        beforeEach(function() {
+            var programs = [{id:'test'}];
+            $httpBackend.when('GET', openlmisUrlFactory('api/users/userId/programs'))
+            .respond(200, programs);
+        });
+
+        it('will get a list of all the users programs', function() {
+            var resultSpy = jasmine.createSpy('resultSpy');
+
+            programService.getAllUserPrograms('userId')
+            .then(resultSpy);
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+            expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
+            expect(resultSpy.mostRecentCall.args[0].length).toBe(1);
+            expect(resultSpy.mostRecentCall.args[0][0].id).toBe('test');
+        });
+
+        it('will cache the first successful request', function() {
+            programService.getAllUserPrograms('userId');
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(programsStorage.put).toHaveBeenCalled();
+            expect(programsStorage.put.mostRecentCall.args[0].id).toBe('test');
+            expect(programsStorage.put.mostRecentCall.args[0].userIdOffline).toBe('userId');
+        });
+
+        it('will not cache an unsuccessful request', function() {
+            var resultSpy = jasmine.createSpy('resultSpy');
+            $httpBackend.when('GET', openlmisUrlFactory('api/users/userId/programs'))
+            .respond(400);
+
+            programService.getAllUserPrograms('userId')
+            .catch(resultSpy);
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+            expect(programsStorage.put).not.toHaveBeenCalled();
+        });
+
+        it('will return a cached response instead of making another request', function() {
+            var resultSpy = jasmine.createSpy('resultSpy');
+
+            programsStorage.search.andReturn([{id:'example'}]);
+
+            programService.getAllUserPrograms('userId')
+            .then(resultSpy);
+
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+            expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
+            expect(resultSpy.mostRecentCall.args[0][0].id).toBe('example');
+            $httpBackend.verifyNoOutstandingRequest();
+        });
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
