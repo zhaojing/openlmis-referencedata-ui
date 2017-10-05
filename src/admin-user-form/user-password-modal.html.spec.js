@@ -38,6 +38,23 @@ describe('user-password-modal.html template', function() {
 
     });
 
+    describe('SendResetEmail', function () {
+
+        it('should enable button if user has email', function() {
+            var button = template.find("#sendResetEmailButton");
+            expect(button.is(':disabled')).toEqual(false);
+        });
+
+        it('should disable button if user has no email', function() {
+            delete vm.user.email;
+            $rootScope.$apply();
+
+            var button = template.find("#sendResetEmailButton");
+            expect(button.is(':disabled')).toEqual(true);
+        });
+
+    });
+
     function prepareSuite() {
         var $controller, $templateRequest, $compile, $scope;
 
@@ -59,13 +76,16 @@ describe('user-password-modal.html template', function() {
 
         user = {
             username: 'random-user',
-            newPassword: 'new-password'
+            newPassword: 'new-password',
+            email: 'random-email'
         };
 
         vm = $controller('UserPasswordModalController', {
             user: user,
             modalDeferred: $q.defer()
         });
+
+        vm.$onInit();
 
         $scope.vm = vm;
 

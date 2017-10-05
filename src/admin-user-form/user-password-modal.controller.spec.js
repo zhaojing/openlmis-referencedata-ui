@@ -20,7 +20,7 @@ describe('UserPasswordModalController', function() {
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
-            authUserService = jasmine.createSpyObj('authUserService', ['resetPassword']);
+            authUserService = jasmine.createSpyObj('authUserService', ['resetPassword', 'sendResetEmail']);
             $provide.service('authUserService', function() {
                 return authUserService;
             });
@@ -40,7 +40,8 @@ describe('UserPasswordModalController', function() {
 
         user = {
             username: 'random-user',
-            newPassword: 'new-password'
+            newPassword: 'new-password',
+            email: 'random-email'
         };
         modalDeferred = $q.defer();
 
@@ -93,6 +94,45 @@ describe('UserPasswordModalController', function() {
 
             authUserService.resetPassword.andReturn(deferred.promise);
             vm.createPassword();
+            deferred.reject();
+            $rootScope.$apply();
+
+            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(notificationService.success.callCount).toBe(1);
+        });
+    });
+
+    describe('sendResetEmail', function() {
+
+        beforeEach(function() {
+            authUserService.sendResetEmail.andReturn($q.when(true));
+            vm.sendResetEmail();
+            $rootScope.$apply();
+        });
+
+        it('should open loading modal', function() {
+            expect(loadingModalService.open).toHaveBeenCalled();
+        });
+
+        it('should call authUserService', function() {
+            expect(authUserService.sendResetEmail).toHaveBeenCalledWith(user.email);
+        });
+
+        it('should sent reset email', function() {
+            expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.passwordResetSuccessfully');
+        });
+
+        it('should close loading modal', function() {
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should close loading modal if sent reset email request fails', function() {
+            expect(notificationService.success.callCount).toBe(1);
+
+            var deferred = $q.defer();
+
+            authUserService.sendResetEmail.andReturn(deferred.promise);
+            vm.sendResetEmail();
             deferred.reject();
             $rootScope.$apply();
 

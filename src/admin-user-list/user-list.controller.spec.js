@@ -71,22 +71,23 @@ describe('UserListController', function () {
 
     describe('resetUserPassword', function() {
 
-        var modalDeferred, username;
+        var modalDeferred, username, email;
 
         beforeEach(function() {
             username = 'username';
+            email = 'email';
             modalDeferred = $q.defer();
             UserPasswordModalMock.andReturn(modalDeferred.promise);
         });
 
         it('should open user password modal', function() {
-            vm.resetUserPassword(username);
+            vm.resetUserPassword(username, email);
 
-            expect(UserPasswordModalMock).toHaveBeenCalledWith(username);
+            expect(UserPasswordModalMock).toHaveBeenCalledWith(username, email);
         });
 
         it('should reload state after password change was successful', function() {
-            vm.resetUserPassword(username);
+            vm.resetUserPassword(username, email);
             modalDeferred.resolve();
             $rootScope.$apply();
 
@@ -94,7 +95,7 @@ describe('UserListController', function () {
         });
 
         it('should not reload state if password change was unsuccessful', function() {
-            vm.resetUserPassword(username);
+            vm.resetUserPassword(username, email);
             modalDeferred.reject();
             $rootScope.$apply();
 

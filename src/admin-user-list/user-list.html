@@ -41,7 +41,7 @@
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.users.form({id: user.id})">{{'adminUserList.edit' | message}}</button>
                     <button ui-sref="openlmis.administration.users.roles({id: user.id})">{{'adminUserList.roles' | message}}</button>
-                    <button ng-click="vm.resetUserPassword(user.username)">{{'adminUserList.resetPassword' | message}}</button>
+                    <button ng-click="vm.resetUserPassword(user.username, user.email)">{{'adminUserList.resetPassword' | message}}</button>
                 </td>
             </tr>
         </tbody>

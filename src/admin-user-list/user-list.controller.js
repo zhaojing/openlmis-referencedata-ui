@@ -119,8 +119,8 @@
          *
          * @param {String} username	the username of the user
          */
-        function resetUserPassword(username) {
-            (new UserPasswordModal(username)).then(function() {
+        function resetUserPassword(username, email) {
+            (new UserPasswordModal(username, email)).then(function() {
                 $state.reload();
             });
         }

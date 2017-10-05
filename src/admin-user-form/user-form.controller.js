@@ -217,7 +217,7 @@
                     notificationService.success(vm.notification);
                 });
 
-                (new UserPasswordModal(savedUser.username)).finally(function () {
+                (new UserPasswordModal(savedUser.username, savedUser.email)).finally(function () {
                     goToUserList();
                 });
             }, loadingModalService.close);
@@ -240,6 +240,8 @@
                     referenceDataUserId: savedUser.id,
                     role: 'USER',
                     username: savedUser.username
+                }).then(function () {
+                  return savedUser;
                 });
             });
         }

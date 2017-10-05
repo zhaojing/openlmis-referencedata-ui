@@ -68,6 +68,7 @@ describe('UserFormController', function() {
         user = {
             id: 'user-id',
             username: 'random-user',
+            email: 'random-email',
             homeFacilityId: facilities[0].id,
             roleAssignments: [
                 {
@@ -305,7 +306,7 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(UserPasswordModal).toHaveBeenCalledWith(user.username);
+            expect(UserPasswordModal).toHaveBeenCalledWith(user.username, user.email);
         });
 
         it('should change email if it is empty string', function() {

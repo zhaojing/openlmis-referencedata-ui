@@ -38,6 +38,7 @@
 
         vm.$onInit = onInit;
         vm.createPassword = createPassword;
+        vm.sendResetEmail = sendResetEmail;
 
         /**
          * @ngdoc property
@@ -80,6 +81,25 @@
                     notificationService.success('adminUserForm.passwordSetSuccessfully');
                 });
                 modalDeferred.resolve();
+            }).finally(loadingModalService.close);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserPasswordModalController
+         * @name sendResetEmail
+         *
+         * @description
+         * Requests sending reset password token to email address for given user.
+         */
+        function sendResetEmail() {
+            var loadingPromise = loadingModalService.open();
+
+            authUserService.sendResetEmail(vm.user.email).then(function() {
+              loadingPromise.then(function() {
+                  notificationService.success('adminUserForm.passwordResetSuccessfully');
+              });
+              modalDeferred.resolve();
             }).finally(loadingModalService.close);
         }
     }
