@@ -120,7 +120,7 @@
          * @param {String} username	the username of the user
          */
         function resetUserPassword(user) {
-            (userPasswordModalFactory.open(user)).then(function() {
+            userPasswordModalFactory.open(user).then(function() {
                 $state.reload();
             });
         }

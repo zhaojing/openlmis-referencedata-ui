@@ -217,7 +217,7 @@
                     notificationService.success(vm.notification);
                 });
 
-                (userPasswordModalFactory.open(savedUser)).finally(function () {
+                userPasswordModalFactory.open(savedUser).finally(function () {
                     goToUserList();
                 });
             }, loadingModalService.close);
