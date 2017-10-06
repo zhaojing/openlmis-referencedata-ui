@@ -19,15 +19,17 @@
 
     angular
         .module('admin-user-form')
-        .factory('UserPasswordModal', userPasswordModalFactory);
+        .factory('userPasswordModalFactory', factory);
 
-    userPasswordModalFactory.$inject = ['openlmisModalService'];
+    factory.$inject = ['openlmisModalService'];
 
-    function userPasswordModalFactory(openlmisModalService) {
+    function factory(openlmisModalService) {
 
-        return UserPasswordModal;
+        return {
+          open: open
+        }
 
-        function UserPasswordModal(user) {
+        function open(user) {
             var persistent = {
                 user: {
                     username: user.username,

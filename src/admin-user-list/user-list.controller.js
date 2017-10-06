@@ -29,10 +29,10 @@
         .controller('UserListController', controller);
 
     controller.$inject = [
-        '$state', '$stateParams', 'users', 'confirmService', 'UserPasswordModal', 'messageService'
+        '$state', '$stateParams', 'users', 'confirmService', 'userPasswordModalFactory', 'messageService'
     ];
 
-    function controller($state, $stateParams, users, confirmService, UserPasswordModal, messageService) {
+    function controller($state, $stateParams, users, confirmService, userPasswordModalFactory, messageService) {
 
         var vm = this;
 
@@ -120,7 +120,7 @@
          * @param {String} username	the username of the user
          */
         function resetUserPassword(user) {
-            (new UserPasswordModal(user)).then(function() {
+            (userPasswordModalFactory.open(user)).then(function() {
                 $state.reload();
             });
         }

@@ -15,7 +15,7 @@
 
 describe('UserFormController', function() {
 
-    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, referencedataUserService, authUserService, UserPasswordModal, confirmService,
+    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, referencedataUserService, authUserService, userPasswordModalFactoryMock, confirmService,
         vm, user, facilities;
 
     beforeEach(function() {
@@ -35,9 +35,10 @@ describe('UserFormController', function() {
                 return confirmService;
             });
 
-            UserPasswordModal = jasmine.createSpy('UserPasswordModalMock');
-            $provide.service('UserPasswordModal', function() {
-                return UserPasswordModal;
+
+            userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['open']);
+            $provide.service('userPasswordModalFactory', function() {
+                return userPasswordModalFactoryMock;
             });
         });
 
@@ -263,7 +264,7 @@ describe('UserFormController', function() {
             deferred = $q.defer();
             referencedataUserService.saveUser.andReturn(deferred.promise);
             authUserService.saveUser.andReturn($q.when(user));
-            UserPasswordModal.andReturn($q.when(user));
+            userPasswordModalFactoryMock.open.andReturn($q.when(user));
 
             vm = $controller('UserFormController', {
                 user: undefined,
@@ -301,12 +302,12 @@ describe('UserFormController', function() {
             });
         });
 
-        it('should call UserPasswordModal', function() {
+        it('should call userPasswordModalFactory', function() {
             deferred.resolve(user);
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(UserPasswordModal).toHaveBeenCalledWith(user);
+            expect(userPasswordModalFactoryMock.open).toHaveBeenCalledWith(user);
         });
 
         it('should change email if it is empty string', function() {

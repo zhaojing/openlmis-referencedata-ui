@@ -30,11 +30,11 @@
 
         controller.$inject = [
             'user', 'facilities', 'referencedataUserService', 'loadingModalService', 'confirmService',
-            '$filter', '$state', 'notificationService', 'UserPasswordModal', 'authUserService'
+            '$filter', '$state', 'notificationService', 'userPasswordModalFactory', 'authUserService'
         ];
 
         function controller(user, facilities, referencedataUserService, loadingModalService, confirmService,
-                            $filter, $state, notificationService, UserPasswordModal, authUserService) {
+                            $filter, $state, notificationService, userPasswordModalFactory, authUserService) {
 
         var vm = this;
 
@@ -217,7 +217,7 @@
                     notificationService.success(vm.notification);
                 });
 
-                (new UserPasswordModal(savedUser)).finally(function () {
+                (userPasswordModalFactory.open(savedUser)).finally(function () {
                     goToUserList();
                 });
             }, loadingModalService.close);
