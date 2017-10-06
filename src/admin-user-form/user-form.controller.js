@@ -217,7 +217,7 @@
                     notificationService.success(vm.notification);
                 });
 
-                (new UserPasswordModal(savedUser.username, savedUser.email)).finally(function () {
+                (new UserPasswordModal(savedUser)).finally(function () {
                     goToUserList();
                 });
             }, loadingModalService.close);

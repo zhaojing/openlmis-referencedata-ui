@@ -306,7 +306,7 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(UserPasswordModal).toHaveBeenCalledWith(user.username, user.email);
+            expect(UserPasswordModal).toHaveBeenCalledWith(user);
         });
 
         it('should change email if it is empty string', function() {

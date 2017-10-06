@@ -27,12 +27,12 @@
 
         return UserPasswordModal;
 
-        function UserPasswordModal(username, email) {
+        function UserPasswordModal(user) {
             var persistent = {
                 user: {
-                    username: username,
+                    username: user.username,
                     newPassword: undefined,
-                    email: email
+                    email: user.email
                 }
             }
 
