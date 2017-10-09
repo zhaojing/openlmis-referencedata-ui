@@ -15,23 +15,42 @@
 
 describe('IsaManageController', function () {
 
-    var $controller, isaService, vm;
+    var $controller, $state, $rootScope, $q, isaService, notificationService, messageService, loadingModalService,
+        file, vm;
 
     beforeEach(function() {
         module('admin-isa-manage');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
+            $state = $injector.get('$state');
+            $rootScope = $injector.get('$rootScope');
+            $q = $injector.get('$q');
             isaService = $injector.get('isaService');
+            notificationService = $injector.get('notificationService');
+            messageService = $injector.get('messageService');
+            loadingModalService = $injector.get('loadingModalService');
         });
 
+        file = {
+            fileName: 'file.csv',
+            content: 'file-content'
+        };
+
         vm = $controller('IsaManageController', {});
+
+        spyOn($state, 'reload').andReturn(true);
+        spyOn(loadingModalService, 'open').andReturn($q.when());
     });
 
     describe('init', function() {
 
         it('should expose getExportUrl method', function() {
             expect(angular.isFunction(vm.getExportUrl)).toBe(true);
+        });
+
+        it('should expose upload method', function() {
+            expect(angular.isFunction(vm.upload)).toBe(true);
         });
     });
 
@@ -45,6 +64,56 @@ describe('IsaManageController', function () {
 
             expect(result).toEqual(downloadUrl);
             expect(isaService.getDownloadUrl).toHaveBeenCalled();
+        });
+    });
+
+    describe('upload', function() {
+
+        var response,
+            deferred;
+
+        beforeEach(function() {
+            response = {amount: 2};
+            deferred = $q.defer();
+
+            spyOn(isaService, 'upload').andReturn(deferred.promise);
+            spyOn(notificationService, 'success');
+            spyOn(notificationService, 'error');
+        });
+
+        it('should call isaService and show success notification', function() {
+            var message = 'message';
+            spyOn(messageService, 'get').andReturn(message);
+
+            vm.file = file;
+            deferred.resolve(response);
+
+            vm.upload();
+            $rootScope.$apply();
+
+            expect(messageService.get).toHaveBeenCalledWith(
+                'adminIsaUpload.uploadSuccess', {amount: response.amount});
+            expect(isaService.upload).toHaveBeenCalledWith(file);
+            expect(notificationService.success).toHaveBeenCalledWith(message);
+            expect($state.reload).toHaveBeenCalled();
+        });
+
+        it('should show error notification if upload failed', function() {
+            vm.file = file;
+            deferred.reject();
+
+            vm.upload();
+            $rootScope.$apply();
+
+            expect(isaService.upload).toHaveBeenCalledWith(file);
+            expect(notificationService.error).toHaveBeenCalledWith('adminIsaUpload.uploadFailed');
+        });
+
+        it('should show error notification if file is not selected', function() {
+            vm.upload();
+
+            expect(notificationService.error).toHaveBeenCalledWith('adminIsaUpload.fileIsNotSelected');
+            expect(isaService.upload).not.toHaveBeenCalled();
         });
     });
 });

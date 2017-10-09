@@ -24,6 +24,7 @@
      * Provides Ideal Stock Amounts upload screen for administrator.
      */
     angular.module('admin-isa-manage', [
+        'openlmis-i18n',
         'openlmis-download',
         'openlmis-rights',
         'referencedata-isa',

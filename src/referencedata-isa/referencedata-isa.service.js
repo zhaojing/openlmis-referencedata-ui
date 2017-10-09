@@ -28,12 +28,23 @@
         .module('referencedata-isa')
         .factory('isaService', service);
 
-    service.$inject = ['referencedataUrlFactory'];
+    service.$inject = ['$resource', 'referencedataUrlFactory'];
 
-    function service(referencedataUrlFactory) {
+    function service($resource, referencedataUrlFactory) {
+
+        var resource = $resource(referencedataUrlFactory('/api/idealStockAmounts/:id'), {}, {
+                'upload': {
+                    url: referencedataUrlFactory('/api/idealStockAmounts?format=csv'),
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                }
+            });
 
         return {
-            getDownloadUrl: getDownloadUrl
+            getDownloadUrl: getDownloadUrl,
+            upload: upload
         };
 
         /**
@@ -48,6 +59,24 @@
          */
         function getDownloadUrl() {
             return referencedataUrlFactory('/api/idealStockAmounts?format=csv');
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-isa.isaService
+         * @name upload
+         *
+         * @description
+         * Uploads ISA records in csv file.
+         *
+         * @param  {Object}  file the csv file that will be uploaded
+         * @return {Promise}      the number of uploaded items
+         */
+        function upload(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            return resource.upload(formData).$promise;
         }
     }
 })();

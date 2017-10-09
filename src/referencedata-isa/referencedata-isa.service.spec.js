@@ -15,7 +15,7 @@
 
 describe('isaService', function() {
 
-    var referencedataUrlFactory, isaService;
+    var referencedataUrlFactory, $httpBackend, isaService;
 
     beforeEach(function() {
         module('referencedata-isa', function($provide) {
@@ -30,6 +30,7 @@ describe('isaService', function() {
         inject(function($injector) {
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             isaService = $injector.get('isaService');
+            $httpBackend = $injector.get('$httpBackend');
         });
     });
 
@@ -44,6 +45,44 @@ describe('isaService', function() {
 
             expect(result).toEqual('/api/idealStockAmounts?format=csv');
             expect(referencedataUrlFactory).toHaveBeenCalledWith('/api/idealStockAmounts?format=csv');
+        });
+    });
+
+    describe('upload', function() {
+
+        var file;
+
+        beforeEach(function() {
+            file = 'file-content';
+            $httpBackend.when('POST', referencedataUrlFactory('/api/idealStockAmounts?format=csv')).respond(200, {
+                content: file
+            });
+        });
+
+        it('should return promise', function() {
+            var result = isaService.upload(file);
+            $httpBackend.flush();
+
+            expect(result.then).not.toBeUndefined();
+        });
+
+        it('should resolve to catalog items', function() {
+            var result;
+
+            isaService.upload(file).then(function(data) {
+                result = data;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result.content)).toEqual(angular.toJson(file));
+        });
+
+        it('should make a proper request', function() {
+            $httpBackend.expect('POST', referencedataUrlFactory('/api/idealStockAmounts?format=csv'));
+
+            isaService.upload(file);
+            $httpBackend.flush();
         });
     });
 });

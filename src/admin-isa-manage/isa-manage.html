@@ -4,4 +4,10 @@
         <div class="title">{{'adminIsaManage.viewIsaAsCsv' | message}}</div>
         <input openlmis-download="{{vm.getExportUrl()}}" type="button" value="{{'adminIsaManage.export' | message}}"/>
     </div>
+    <p class="numeric-list">{{'adminIsaManage.isaUploadDescription' | message}}</p>
+    <fieldset openlmis-invalid="{{vm.invalidMessage}}" class="form-group">
+        <label for="file">{{'adminIsaManage.csvFile' | message}}</label>
+        <input id="file" type="file" ng-model="vm.file" accept=".csv" required/>
+    </fieldset>
+    <input type="submit" value="{{'adminIsaManage.upload' | message}}"/>
 </form>
