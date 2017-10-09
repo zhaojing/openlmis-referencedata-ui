@@ -14,19 +14,17 @@
  */
 
 describe('openlmis-currency-cache.currencyCacheService', function() {
-    var $rootScope, currencyService;
+    var $rootScope, currencyService, $q, $state;
 
     beforeEach(module('openlmis-currency-cache'));
 
-    beforeEach(inject(function(_$rootScope_) {
-        $rootScope = _$rootScope_;
-    }));
+    beforeEach(inject(function($injector) {
+        currencyService = $injector.get('currencyService');
+        $rootScope = $injector.get('$rootScope');
+        $q = $injector.get('$q');
+        $state = $injector.get('$state');
 
-    beforeEach(inject(function(_currencyService_, $q) {
-        currencyService = _currencyService_;
-        
-        spyOn(currencyService, 'getCurrencySettings')
-        .andReturn($q.resolve());
+        spyOn(currencyService, 'getCurrencySettings').andReturn($q.resolve());
     }));
 
     it('gets currency settings at login', function() {
@@ -39,25 +37,18 @@ describe('openlmis-currency-cache.currencyCacheService', function() {
         var deferred = $q.defer();
         currencyService.getCurrencySettings.andReturn(deferred.promise);
 
-        spyOn($urlRouter, 'sync').andCallThrough();
-
-        var waiting;
-        $rootScope.$on('$stateChangeStart', function(event) {
-            if(event.defaultPrevented) {
-                waiting = true;
-            }
-        });
+        spyOn($state, 'go').andCallThrough();
 
         $rootScope.$emit('openlmis-auth.login');
-        $rootScope.$emit('$stateChangeStart');
+        var event = $rootScope.$emit('$stateChangeStart', 'exampleState');
         $rootScope.$apply();
         
-        expect(waiting).toBe(true);
+        expect(event.defaultPrevented).toBe(true);
 
         deferred.resolve();
         $rootScope.$apply();
 
-        expect($urlRouter.sync).toHaveBeenCalled();
+        expect($state.go).toHaveBeenCalled();
     }));
 
 });
