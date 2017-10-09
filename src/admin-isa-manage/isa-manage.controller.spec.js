@@ -92,7 +92,7 @@ describe('IsaManageController', function () {
             $rootScope.$apply();
 
             expect(messageService.get).toHaveBeenCalledWith(
-                'adminIsaUpload.uploadSuccess', {amount: response.amount});
+                'adminIsaManage.uploadSuccess', {amount: response.amount});
             expect(isaService.upload).toHaveBeenCalledWith(file);
             expect(notificationService.success).toHaveBeenCalledWith(message);
             expect($state.reload).toHaveBeenCalled();
@@ -106,13 +106,13 @@ describe('IsaManageController', function () {
             $rootScope.$apply();
 
             expect(isaService.upload).toHaveBeenCalledWith(file);
-            expect(notificationService.error).toHaveBeenCalledWith('adminIsaUpload.uploadFailed');
+            expect(notificationService.error).toHaveBeenCalledWith('adminIsaManage.uploadFailed');
         });
 
         it('should show error notification if file is not selected', function() {
             vm.upload();
 
-            expect(notificationService.error).toHaveBeenCalledWith('adminIsaUpload.fileIsNotSelected');
+            expect(notificationService.error).toHaveBeenCalledWith('adminIsaManage.fileIsNotSelected');
             expect(isaService.upload).not.toHaveBeenCalled();
         });
     });

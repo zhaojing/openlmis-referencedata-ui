@@ -85,13 +85,13 @@
             vm.invalidMessage = undefined;
 
             if (!vm.file) {
-                notificationService.error('adminIsaUpload.fileIsNotSelected');
+                notificationService.error('adminIsaManage.fileIsNotSelected');
             } else {
                 var loadingPromise = loadingModalService.open();
                 isaService.upload(vm.file)
                 .then(function(data) {
                     var message = messageService.get(
-                        'adminIsaUpload.uploadSuccess',
+                        'adminIsaManage.uploadSuccess',
                         {amount: data.amount}
                     );
                     loadingPromise.then(function () {
@@ -101,7 +101,7 @@
                     $state.reload();
                 })
                 .catch(function(error) {
-                    notificationService.error('adminIsaUpload.uploadFailed');
+                    notificationService.error('adminIsaManage.uploadFailed');
                     vm.invalidMessage = error ? error.data.message : undefined;
                     vm.file = undefined;
                     loadingModalService.close();
