@@ -32,11 +32,9 @@
     angular.module('referencedata-facilities-cache')
         .service('facilityCacheService', service);
 
-    service.$inject = ['$q', '$rootScope', 'localStorageFactory', 'facilityService', '$urlRouter'];
+    service.$inject = ['$q', '$rootScope', 'localStorageFactory', 'facilityService', 'loadingService'];
 
-    function service($q, $rootScope, localStorageFactory, facilityService, $urlRouter) {
-        var cachingFacilitiesPromise;
-
+    function service($q, $rootScope, localStorageFactory, facilityService, loadingService) {
         this.initialize = initialize;
 
         /**
@@ -50,7 +48,6 @@
         function initialize() {
             $rootScope.$on('openlmis-auth.login', cacheFacilities);
             $rootScope.$on('openlmis-auth.logout', removeFacilitiesCache);
-            $rootScope.$on('$stateChangeStart', pauseIfLoading);
         }
 
         /**
@@ -66,14 +63,8 @@
          * block state changes while the facility list is being downloaded.
          */
         function cacheFacilities() {
-            if(!cachingFacilitiesPromise) {
-                cachingFacilitiesPromise = $q.defer();
-                facilityService.getAllMinimal()
-                .finally(function(){
-                    cachingFacilitiesPromise.resolve();
-                    cachingFacilitiesPromise = undefined;
-                });
-            }
+            var cachingPromise = facilityService.getAllMinimal();
+            loadingService.register('referencedata-facilities-cache.loading', cachingPromise);
         }
 
         /**
@@ -86,27 +77,6 @@
          */
         function removeFacilitiesCache() {
             facilityService.clearMinimalFacilitiesCache();
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-facilities-cache.facilityCacheService
-         * @name pauseIfLoading
-         *
-         * @param {Object} event State change event from $stateChangeStart
-         *
-         * @description
-         * Cancels any state changes while the caching promise is loading. After
-         * loading is complete, the browser is directed to the current state.
-         */
-        function pauseIfLoading(event) {
-            if(cachingFacilitiesPromise) {
-                event.preventDefault();
-
-                cachingFacilitiesPromise.then(function(){
-                    $urlRouter.sync();
-                });
-            }
         }
     }
 
