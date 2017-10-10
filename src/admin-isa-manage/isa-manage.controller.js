@@ -92,7 +92,9 @@
                 .then(function(data) {
                     var message = messageService.get(
                         'adminIsaManage.uploadSuccess',
-                        {amount: data.amount}
+                        {
+                            amount: data.amount
+                        }
                     );
                     loadingPromise.then(function () {
                         notificationService.success(message);

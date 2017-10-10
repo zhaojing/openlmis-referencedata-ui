@@ -73,7 +73,9 @@ describe('IsaManageController', function () {
             deferred;
 
         beforeEach(function() {
-            response = {amount: 2};
+            response = {
+                amount: 2
+            };
             deferred = $q.defer();
 
             spyOn(isaService, 'upload').andReturn(deferred.promise);
@@ -92,7 +94,9 @@ describe('IsaManageController', function () {
             $rootScope.$apply();
 
             expect(messageService.get).toHaveBeenCalledWith(
-                'adminIsaManage.uploadSuccess', {amount: response.amount});
+                'adminIsaManage.uploadSuccess', {
+                    amount: response.amount
+                });
             expect(isaService.upload).toHaveBeenCalledWith(file);
             expect(notificationService.success).toHaveBeenCalledWith(message);
             expect($state.reload).toHaveBeenCalled();
