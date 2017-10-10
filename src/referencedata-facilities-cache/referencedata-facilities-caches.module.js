@@ -26,7 +26,8 @@
     angular.module('referencedata-facilities-cache', [
         'openlmis-auth',
         'openlmis-local-storage',
-        'referencedata-facility'
+        'referencedata-facility',
+        'openlmis-loading'
     ]);
 
 })();
