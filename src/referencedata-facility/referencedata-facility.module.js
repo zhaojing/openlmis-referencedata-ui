@@ -26,6 +26,7 @@
     angular.module('referencedata-facility', [
         'ngResource',
         'openlmis-auth',
+        'openlmis-permissions',
         'openlmis-local-storage',
         'openlmis-rights',
         'referencedata',

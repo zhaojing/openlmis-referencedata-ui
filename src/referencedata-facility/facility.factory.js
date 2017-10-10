@@ -31,11 +31,11 @@
 
     factory.$inject = [
         'openlmisUrlFactory', '$q', '$filter', 'programService', 'authorizationService',
-        'referencedataUserService', 'facilityService', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS'
+        'referencedataUserService', 'facilityService', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS', 'permissionService'
     ];
 
     function factory(openlmisUrlFactory, $q, $filter, programService, authorizationService,
-        referencedataUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
+        referencedataUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS, permissionService) {
 
             return {
                 getUserFacilities: getUserFacilities,
@@ -201,25 +201,81 @@
              * @name getAllUserFacilities
              *
              * @description
-             * Returns home facility and supervised facilities for the user.
+             * Returns all facilities associated with the requisition view right,
+             * and the supported programs for those facilities.
              *
              * @param  {String} userId the ID of the user to get supervised facilities
              * @return {Array}         the set of all facilities for the user
              */
             function getAllUserFacilities(userId) {
-                var deferred = $q.defer();
+                return $q.all({
+                    facilityHash: getUserFacilityAndProgramIdsForRight(userId, REQUISITION_RIGHTS.REQUISITION_VIEW),
+                    minimalFacilities: facilityService.getAllMinimal(),
+                    programs: programService.getAllUserPrograms()
+                })
+                .then(function(results) {
+                    var minimalFacilities = results.minimalFacilities,
+                        programs = results.programs,
+                        programsHash = {},
+                        facilityHash = results.facilityHash,
+                        facilities = [];
 
-                $q.all([
-                    this.getUserFacilities(userId, REQUISITION_RIGHTS.REQUISITION_VIEW),
-                    this.getUserHomeFacility()
-                ]).then(function(results) {
-                    if(!results[1]) deferred.resolve(results[0]);
-                    deferred.resolve($filter('unique')(results[0].concat(results[1]), 'id'));
-                }, function() {
-                    deferred.reject();
+                    programs.forEach(function(program) {
+                        programsHash[program.id] = program;
+                    });
+
+                    minimalFacilities.forEach(function(facility) {
+                        if(facilityHash[facility.id]) {
+                            var programs = facilityHash[facility.id];
+                            facilityHash[facility.id] = facility;
+                            facility.supportedPrograms = programs;
+                        }
+                    });
+
+                    Object.keys(facilityHash).forEach(function(id) {
+                        var facility = facilityHash[id],
+                            fullPrograms = [];
+                        facility.supportedPrograms.forEach(function(programId) {
+                            if(programsHash[programId]) {
+                                fullPrograms.push(programsHash[programId]);
+                            }
+                        });
+                        facility.supportedPrograms = fullPrograms;
+                        facilities.push(facilityHash[id]);
+                    });
+
+                    facilities.sort(compareFacilityNames);
+
+                    return facilities;
                 });
+            }
 
-                return deferred.promise;
+            function getUserFacilityAndProgramIdsForRight(userId, right) {
+                return permissionService.load(userId)
+                .then(function(permissions) {
+                    var facilityHash = {};
+                    permissions.forEach(function(permission) {
+                        if(permission.right === right) {
+                            if(!facilityHash[permission.facilityId]) {
+                                facilityHash[permission.facilityId] = [];    
+                            }
+                            facilityHash[permission.facilityId].push(permission.programId);
+                        }
+                    });
+                    return facilityHash;
+                });
+            }
+
+            function compareFacilityNames(a, b) {
+                var aName = a.name.toUpperCase(),
+                    bName = b.name.toUpperCase();
+                if (aName < bName) {
+                    return -1;
+                }
+                if (aName > bName) {
+                    return 1;
+                }
+                return 0;
             }
 
             /**

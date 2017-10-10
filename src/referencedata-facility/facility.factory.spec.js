@@ -20,7 +20,7 @@ describe('facilityFactory', function() {
 
     beforeEach(function() {
         module('referencedata-facility', function($provide){
-            programService = jasmine.createSpyObj('programService', ['getUserPrograms']);
+            programService = jasmine.createSpyObj('programService', ['getUserPrograms', 'getAllUserPrograms']);
             $provide.factory('programService', function() {
                 return programService;
             });
@@ -28,7 +28,8 @@ describe('facilityFactory', function() {
             facilityService = jasmine.createSpyObj('facilityService', [
                 'getUserSupervisedFacilities',
                 'getFulfillmentFacilities',
-                'get'
+                'get',
+                'getAllMinimal'
             ]);
             $provide.factory('facilityService', function() {
                 return facilityService;
@@ -320,44 +321,87 @@ describe('facilityFactory', function() {
 
     describe('getAllUserFacilities', function() {
 
-        var userId, requisitionViewFacilities;
+        var userId, requisitionViewFacilities, permissionService;
 
-        beforeEach(function() {
+        beforeEach(inject(function(_permissionService_) {
             userId = 'user-id';
 
-            requisitionViewFacilities = [
-                createFacility('facility-one', 'facilityOne'),
-                createFacility('facility-two', 'facilityTwo')
+            facilityService.getAllMinimal.andReturn($q.resolve([
+                createFacility('facility-one', 'Facility'),
+                createFacility('facility-two', 'Another Facility'),
+                createFacility('example', 'Example Facility')                
+            ]));
+
+            programService.getAllUserPrograms.andReturn($q.resolve([{
+                id: 'program1',
+                name: 'A Program'
+            }]));
+
+            var permissions = [
+                {
+                    right: REQUISITION_RIGHTS.REQUISITION_VIEW,
+                    facilityId: 'facility-one',
+                    programId: 'program1'
+                },
+                {
+                    right: REQUISITION_RIGHTS.REQUISITION_VIEW,
+                    facilityId: 'facility-two',
+                    programId: 'program1'
+                },
+                {
+                    right: 'bad-example',
+                    facilityId: 'example'
+                }
             ];
 
-            spyOn(facilityFactory, 'getUserFacilities').andCallFake(function() {
-                return $q.when(requisitionViewFacilities);
-            });
+            permissionService = _permissionService_;
+            spyOn(permissionService, 'load').andReturn($q.resolve(permissions))
 
-            spyOn(facilityFactory, 'getUserHomeFacility').andReturn($q.when(requisitionViewFacilities));
-        });
+        }));
 
-        it('should fetch facilities for REQUISITION_VIEW right', function() {
-            facilityFactory.getAllUserFacilities(userId);
-
-            expect(facilityFactory.getUserHomeFacility).toHaveBeenCalled();
-            expect(facilityFactory.getUserFacilities)
-                .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
-        });
-
-        it('should resolve to set of facilities', function() {
-            var result;
-
-            facilityFactory.getAllUserFacilities(userId).then(function(facilities) {
-                result = facilities;
+        it('returns only facilities with a REQUISITION_VIEW right permission', function() {
+            var returnedFacilities;
+            facilityFactory.getAllUserFacilities(userId)
+            .then(function(facilities) {
+                returnedFacilities = facilities;
             });
             $rootScope.$apply();
 
-            expect(result.length).toBe(2);
-            expect(result[0]).toEqual(requisitionViewFacilities[0]);
-            expect(result[1]).toEqual(requisitionViewFacilities[1]);
+            returnedFacilities.forEach(function(facility) {
+                expect(facility.id).not.toBe('example');
+            });
         });
 
+        it('should resolve to set of facilities, ordered alphebetically', function() {
+            var returnedFacilities;
+
+            facilityFactory.getAllUserFacilities(userId)
+            .then(function(facilities) {
+                returnedFacilities = facilities;
+            });
+
+            $rootScope.$apply();
+
+            expect(returnedFacilities.length).toBe(2);
+            expect(returnedFacilities[0].id).toBe('facility-two');
+            expect(returnedFacilities[0].name).toBe('Another Facility');
+        });
+
+        it('will resolve facilities with full supported programs', function() {
+            var returnedFacilities;
+
+            facilityFactory.getAllUserFacilities(userId)
+            .then(function(facilities) {
+                returnedFacilities = facilities;
+            });
+
+            $rootScope.$apply();
+
+            expect(Array.isArray(returnedFacilities[0].supportedPrograms)).toBe(true);
+            expect(returnedFacilities[0].supportedPrograms.length).toBe(1);
+            expect(returnedFacilities[0].supportedPrograms[0].id).toBe('program1');
+            expect(returnedFacilities[0].supportedPrograms[0].name).toBe('A Program');           
+        });
     });
 
     describe('searchAndOrderFacilities', function() {
