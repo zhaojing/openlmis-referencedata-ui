@@ -33,6 +33,15 @@ describe('facilityCacheService', function() {
 		expect(facilityService.getAllMinimal).toHaveBeenCalled();
 	});
 
+	it('will register with loadingService after user logs in', inject(function(loadingService) {
+		spyOn(loadingService, 'register');
+
+		$rootScope.$emit('openlmis-auth.login');
+
+		expect(loadingService.register).toHaveBeenCalled();
+		expect(loadingService.mostRecentCall.args[0]).toBe('referencedata-facilities-cache.loading');
+	}));
+
 	it('will clear cached facilities when a user logs out', function() {
 		$rootScope.$emit('openlmis-auth.logout');
 
