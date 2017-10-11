@@ -90,15 +90,13 @@
          * @name  buildRightsObject
          * 
          * @param  {Array} permissions List of user permissions
-         * @param  {Array} facilities  List of facilities
-         * @param  {Array} programs    List of programs
          * @return {Object}            Object of user rights
          *
          * @description
          * Transforms a list of permissions into an object with each key matching a
          * user right object.
          */
-        function buildRightsObject(permissions, programs) {
+        function buildRightsObject(permissions) {
             var rights = {};
 
             function getRight(permission) {
@@ -149,15 +147,18 @@
 
             programService.getAllUserPrograms(userId)
             .then(function(programs) {
-                var obj = {};
+                // Change the program list to a hash dictonary to
+                // doing multiple loops when adding program codes to
+                // rights
+                var programsHash = {};
                 programs.forEach(function(program) {
-                    obj[program.id] = program.code;
+                    programsHash[program.id] = program.code;
                 });
-                return $q.resolve(obj);
+                return $q.resolve(programsHash);
             })
-            .then(function(programsObj) {
+            .then(function(programsHash) {
                 Object.keys(rights).forEach(function(key) {
-                    addProgramCodes(rights[key], programsObj);
+                    addProgramCodes(rights[key], programsHash);
                 });
 
                 deferred.resolve(rights);
@@ -166,11 +167,11 @@
             return deferred.promise;
         }
 
-        function addProgramCodes(right, programsObj) {
+        function addProgramCodes(right, programsHash) {
             right.programCodes = [];
             right.programIds.forEach(function(programId) {
-                if(programsObj[programId]) {
-                    right.programCodes.push(programsObj[programId]);
+                if(programsHash[programId]) {
+                    right.programCodes.push(programsHash[programId]);
                 }
             });
         }
