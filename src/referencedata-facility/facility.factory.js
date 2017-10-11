@@ -138,8 +138,7 @@
             }
 
             function getFulfillmentFacilities(userId, rightName) {
-                var right = authorizationService.getRightByName(rightName);
-                return right ? facilityService.getFulfillmentFacilities({userId: userId, rightId: right.id}) : [];
+                return getAllUserFacilititiesForRight(userId, rightName);
             }
 
             /**
@@ -208,8 +207,12 @@
              * @return {Array}         the set of all facilities for the user
              */
             function getAllUserFacilities(userId) {
+                return getAllUserFacilititiesForRight(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
+            }
+
+            function getAllUserFacilititiesForRight(userId, right) {
                 return $q.all({
-                    facilityHash: getUserFacilityAndProgramIdsForRight(userId, REQUISITION_RIGHTS.REQUISITION_VIEW),
+                    facilityHash: getUserFacilityAndProgramIdsForRight(userId, right),
                     minimalFacilities: facilityService.getAllMinimal(),
                     programs: programService.getAllUserPrograms()
                 })
