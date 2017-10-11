@@ -52,7 +52,8 @@
                     isArray: true
                 }
             }),
-            userProgramsOffline = localStorageFactory('userPrograms');
+            userProgramsOffline = localStorageFactory('userPrograms'),
+            userProgramsCache = localStorageFactory('usersPrograms');
 
         return {
             get: get,
@@ -159,11 +160,11 @@
          * @return {Promise}                   Array of programs
          */
         function getAllUserPrograms(userId) {
-            var cachedPrograms = userProgramsOffline.search({
+            var cachedPrograms = userProgramsCache.search({
                 userIdOffline: userId
             });
 
-            if(cachedPrograms) {
+            if(cachedPrograms.length) {
                 return $q.resolve(cachedPrograms)
             }
 
@@ -172,11 +173,13 @@
             .then(function(programs) {
                 programs.forEach(function(program) {
                     program.userIdOffline = userId;
-                    userProgramsOffline.put(program);
+                    userProgramsCache.put(program);
                 });
                 return programs;
             })
-            .catch($q.reject());
+            .catch(function() {
+                return $q.reject();
+            });
         }
 
         /**
