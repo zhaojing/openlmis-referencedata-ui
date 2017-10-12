@@ -17,6 +17,7 @@ Improvement:
 Bug fixes:
 
 * Added openlmis-offline as a dependency to the referencedata-program module.
+* [OLMIS-3291](https://openlmis.atlassian.net/browse/OLMIS-3291): Fixed incorrect state name.
 
 5.2.1 / 2017-09-01
 ========================
