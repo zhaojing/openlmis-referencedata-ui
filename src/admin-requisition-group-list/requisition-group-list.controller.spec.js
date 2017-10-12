@@ -119,7 +119,7 @@ describe('RequisitionGroupListController', function () {
 
             vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroups', {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroupList', {
                 page: stateParams.page,
                 size: stateParams.size,
                 zone: 'some-zone',

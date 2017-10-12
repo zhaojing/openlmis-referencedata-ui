@@ -134,7 +134,7 @@
             stateParams.name = vm.name;
             stateParams.program = vm.program;
 
-            $state.go('openlmis.administration.requisitionGroups', stateParams, {
+            $state.go('openlmis.administration.requisitionGroupList', stateParams, {
                 reload: true
             });
         }
