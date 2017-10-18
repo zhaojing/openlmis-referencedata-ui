@@ -291,22 +291,8 @@
                         facilities.push(facilityHash[id]);
                     });
 
-                    facilities.sort(compareFacilityNames);
-
-                    return facilities;
+                    return _.sortBy(facilities, 'name');
                 });
-            }
-
-            function compareFacilityNames(a, b) {
-                var aName = a.name.toUpperCase(),
-                    bName = b.name.toUpperCase();
-                if (aName < bName) {
-                    return -1;
-                }
-                if (aName > bName) {
-                    return 1;
-                }
-                return 0;
             }
 
             /**
