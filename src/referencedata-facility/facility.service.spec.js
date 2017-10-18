@@ -30,7 +30,13 @@ describe('facilityService', function() {
             });
 
             offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
-            offlineService.checkConnection.andCallFake(checkConnection);
+            // Mocking out run call
+            offlineService.checkConnection.andCallFake(function() {
+                return {
+                    finally: function() {}
+                }
+            });
+            
             $provide.service('offlineService', function() {
                 return offlineService;
             });
@@ -314,12 +320,119 @@ describe('facilityService', function() {
         });
     });
 
+    describe('getUserFacilitiesForRight', function() {
+
+        beforeEach(inject(function(permissionService, $q) {
+            var permissions = [{
+                right: 'example',
+                facilityId: '1',
+                programId: 'program-1'
+            }, {
+                right: 'example',
+                facilityId: '1',
+                programId: 'program-2'
+            }, {
+                right: 'example',
+                facilityId: '2',
+                programId: 'program-1'
+            }, {
+                right: 'test',
+                facilityId: '2'
+            }];
+            
+            var facilities = [
+                facilityOne,
+                facilityTwo
+            ];
+
+            spyOn(permissionService, 'load').andReturn($q.resolve(permissions));
+            spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve(facilities));
+        }));
+
+        it('should reject if a userId is not specified', function() {
+            var resultSpy = jasmine.createSpy('spy');
+
+            facilityService.getUserFacilitiesForRight()
+            .catch(resultSpy);
+
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+        });
+
+        it('should reject if a right is not specified', function() {
+            var resultSpy = jasmine.createSpy('spy');
+
+            facilityService.getUserFacilitiesForRight('userId')
+            .catch(resultSpy);
+
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+        });
+
+        it('should get permissions for user', inject(function(permissionService) {
+            facilityService.getUserFacilitiesForRight('userId', 'right');
+
+            $rootScope.$apply();
+
+            expect(permissionService.load).toHaveBeenCalledWith('userId');
+        }));
+
+        it('will only return facilities that are associated with the right', function() {
+            var results;
+
+            facilityService.getUserFacilitiesForRight('userId', 'example')
+            .then(function(facilities) {
+                results = facilities;
+            });
+            $rootScope.$apply();
+
+            expect(results.length).toBe(2);
+            expect(results[0].id).toBe('1');
+
+            results = undefined;
+            facilityService.getUserFacilitiesForRight('userId', 'test')
+            .then(function(facilities) {
+                results = facilities;
+            });
+            $rootScope.$apply();
+
+            expect(results.length).toBe(1);
+            expect(results[0].id).toBe('2');      
+        });
+
+        it('will sort the returned facilities alphebetically by name', function() {
+            var results;
+
+            facilityTwo.name = "Another Facility"; // This name should make facility 2 first
+            facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
+                results = facilities
+            });
+            $rootScope.$apply();
+
+            expect(results.length).toBe(2);
+            expect(results[0].name).toBe('Another Facility');
+        });
+
+        it('will add program ids into facility.supportedPrograms array', function() {
+            var results;
+
+            facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
+                results = facilities
+            });
+            $rootScope.$apply();
+
+            expect(results[0].id).toBe('1');
+            expect(Array.isArray(results[0].supportedPrograms)).toBe(true);
+            expect(results[0].supportedPrograms.length).toBe(2);
+            expect(results[0].supportedPrograms[0].id).toBe('program-1');
+        });
+
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });
 });
-
-function checkConnection() {
-    return $q.when(true);
-}

@@ -30,11 +30,11 @@
 
     service.$inject = [
         '$q', '$filter', '$resource', 'referencedataUrlFactory', 'offlineService',
-        'localStorageFactory', 'authorizationService'
+        'localStorageFactory', 'authorizationService', 'permissionService'
     ];
 
     function service($q, $filter, $resource, referencedataUrlFactory, offlineService,
-        localStorageFactory, authorizationService) {
+        localStorageFactory, authorizationService, permissionService) {
 
             var facilitiesOffline = localStorageFactory('facilities'),
             supervisedFacilitiesOffline = localStorageFactory('supervisedFacilities'),
@@ -71,6 +71,7 @@
             this.get = get;
             this.getAll = getAll;
             this.getAllMinimal = getAllMinimal;
+            this.getUserFacilitiesForRight = getUserFacilitiesForRight;
             this.getUserSupervisedFacilities = getUserSupervisedFacilities;
             this.getFulfillmentFacilities = getFulfillmentFacilities;
             this.search = search;
@@ -231,6 +232,81 @@
              */
             function getFulfillmentFacilities(params) {
                 return resource.getFulfillmentFacilities(params).$promise;
+            }
+
+
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility.facilityService
+             * @name getUserFacilitiesForRight
+             *
+             * @description
+             * Returns all facilities that a user has a permission with the given
+             * right for.
+             *
+             * @param  {String}  userId The user's id that we are checking
+             * @param  {String}  right  The right name that we are checking
+             * @return {Promise}        An array of matching facilities.
+             */
+            function getUserFacilitiesForRight(userId, right) {
+                if(!userId || !right) {
+                    return $q.reject();
+                }
+                return $q.all({
+                    permissions: permissionService.load(userId),
+                    minimalFacilities: this.getAllMinimal()
+                })
+                .then(function(results) {
+                    var permissions = results.permissions,
+                        minimalFacilities = results.minimalFacilities,
+                        facilityHash = {};
+
+                    permissions.forEach(function(permission) {
+                        if(permission.right === right) {
+                            if(!facilityHash[permission.facilityId]) {
+                                facilityHash[permission.facilityId] = {
+                                    id: permission.facilityId,
+                                    supportedPrograms: []
+                                };    
+                            }
+
+                            if(permission.programId) {
+                                facilityHash[permission.facilityId].supportedPrograms.push({
+                                    id:permission.programId
+                                });
+                            }
+                        }
+                    });
+
+                    minimalFacilities.forEach(function(facility) {
+                        if(facilityHash[facility.id]) {
+                            _.extend(facilityHash[facility.id], facility);
+                        }
+                    });
+                    return facilityHash;
+                })
+                .then(function(facilityHash) {
+                    var facilities = [];
+                    Object.keys(facilityHash).forEach(function(id) {
+                        facilities.push(facilityHash[id]);
+                    });
+
+                    facilities.sort(compareFacilityNames);
+
+                    return facilities;
+                });
+            }
+
+            function compareFacilityNames(a, b) {
+                var aName = a.name.toUpperCase(),
+                    bName = b.name.toUpperCase();
+                if (aName < bName) {
+                    return -1;
+                }
+                if (aName > bName) {
+                    return 1;
+                }
+                return 0;
             }
 
             /**

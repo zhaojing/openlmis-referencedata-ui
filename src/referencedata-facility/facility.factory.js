@@ -100,11 +100,14 @@
                 var deferred = $q.defer();
 
                 $q.all([
-                    getFulfillmentFacilities(userId, FULFILLMENT_RIGHTS.ORDERS_VIEW),
-                    getFulfillmentFacilities(userId, FULFILLMENT_RIGHTS.PODS_MANAGE)
-                ]).then(function(results) {
-                    deferred.resolve($filter('unique')(results[0].concat(results[1]), 'id'));
-                }, function() {
+                    getAllUserFacilitiesForRightWithProgram(userId, FULFILLMENT_RIGHTS.ORDERS_VIEW),
+                    getAllUserFacilitiesForRightWithProgram(userId, FULFILLMENT_RIGHTS.PODS_MANAGE)
+                ])
+                .then(function(results) {
+                    var combinedResults = $filter('unique')(results[0].concat(results[1]), 'id');
+                    deferred.resolve(combinedResults);
+                })
+                .catch(function() {
                     deferred.reject();
                 });
 
@@ -135,10 +138,6 @@
                 });
 
                 return deferred.promise;
-            }
-
-            function getFulfillmentFacilities(userId, rightName) {
-                return getAllUserFacilititiesForRight(userId, rightName);
             }
 
             /**
@@ -207,78 +206,33 @@
              * @return {Array}         the set of all facilities for the user
              */
             function getAllUserFacilities(userId) {
-                return getAllUserFacilititiesForRight(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
+                return getAllUserFacilitiesForRightWithProgram(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
             }
 
-            function getAllUserFacilititiesForRight(userId, right) {
+            function getAllUserFacilitiesForRightWithProgram(userId, right) {
                 return $q.all({
-                    facilityHash: getUserFacilityAndProgramIdsForRight(userId, right),
-                    minimalFacilities: facilityService.getAllMinimal(),
+                    facilities: facilityService.getUserFacilitiesForRight(userId, right),
                     programs: programService.getAllUserPrograms()
                 })
                 .then(function(results) {
-                    var minimalFacilities = results.minimalFacilities,
+                    var facilities = results.facilities,
                         programs = results.programs,
-                        programsHash = {},
-                        facilityHash = results.facilityHash,
-                        facilities = [];
+                        programsHash = {};
 
                     programs.forEach(function(program) {
                         programsHash[program.id] = program;
                     });
 
-                    minimalFacilities.forEach(function(facility) {
-                        if(facilityHash[facility.id]) {
-                            var programs = facilityHash[facility.id];
-                            facilityHash[facility.id] = facility;
-                            facility.supportedPrograms = programs;
-                        }
-                    });
-
-                    Object.keys(facilityHash).forEach(function(id) {
-                        var facility = facilityHash[id],
-                            fullPrograms = [];
-                        facility.supportedPrograms.forEach(function(programId) {
-                            if(programsHash[programId]) {
-                                fullPrograms.push(programsHash[programId]);
+                    facilities.forEach(function(facility) {
+                        facility.supportedPrograms.forEach(function(program) {
+                            if(programsHash[program.id]) {
+                                _.extend(program, programsHash[program.id]);
                             }
                         });
-                        facility.supportedPrograms = fullPrograms;
-                        facilities.push(facilityHash[id]);
                     });
-
-                    facilities.sort(compareFacilityNames);
 
                     return facilities;
                 });
-            }
-
-            function getUserFacilityAndProgramIdsForRight(userId, right) {
-                return permissionService.load(userId)
-                .then(function(permissions) {
-                    var facilityHash = {};
-                    permissions.forEach(function(permission) {
-                        if(permission.right === right) {
-                            if(!facilityHash[permission.facilityId]) {
-                                facilityHash[permission.facilityId] = [];    
-                            }
-                            facilityHash[permission.facilityId].push(permission.programId);
-                        }
-                    });
-                    return facilityHash;
-                });
-            }
-
-            function compareFacilityNames(a, b) {
-                var aName = a.name.toUpperCase(),
-                    bName = b.name.toUpperCase();
-                if (aName < bName) {
-                    return -1;
-                }
-                if (aName > bName) {
-                    return 1;
-                }
-                return 0;
             }
 
             /**
