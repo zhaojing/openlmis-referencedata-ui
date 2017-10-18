@@ -59,7 +59,7 @@ describe('userRightsFactory', function() {
         expect(rights[0].programIds[1]).toBe('program2');
     });
 
-    it('should group progam codes', function() {
+    it('should group program codes', function() {
         expect(rights[0].programCodes.length).toBe(2);
         expect(rights[0].programCodes[0]).toBe('p1');
         expect(rights[0].programCodes[1]).toBe('p2');

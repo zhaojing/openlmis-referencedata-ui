@@ -147,9 +147,6 @@
 
             programService.getAllUserPrograms(userId)
             .then(function(programs) {
-                // Change the program list to a hash dictonary to
-                // doing multiple loops when adding program codes to
-                // rights
                 var programsHash = {};
                 programs.forEach(function(program) {
                     programsHash[program.id] = program.code;
