@@ -27,6 +27,7 @@ describe('openlmis-permissions.permissionService', function() {
         localStorageService = _localStorageService_;
         spyOn(localStorageService, 'get').andReturn(null);
         spyOn(localStorageService, 'add').andCallThrough();
+        spyOn(localStorageService, 'remove');
     }));
 
     beforeEach(inject(function(openlmisUrlFactory, _$httpBackend_) {
@@ -40,6 +41,12 @@ describe('openlmis-permissions.permissionService', function() {
         .respond(permissionStrings);
 
     }));
+
+    it('empty will clear permission strings from browser', function() {
+        permissionService.empty();
+
+        expect(localStorageService.remove).toHaveBeenCalledWith('permissions');
+    });
 
     it('will fail and empty all permissions if userId not entered', function() {
         spyOn(permissionService, 'empty').andCallThrough();
