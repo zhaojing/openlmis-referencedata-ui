@@ -64,7 +64,7 @@ describe('Facility service minimal decorator', function() {
         });
         $httpBackend.flush();
         $rootScope.$apply();
-        
+
         expect(results.length).toBe(1);
 
         $httpBackend.verifyNoOutstandingExpectation();

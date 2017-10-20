@@ -24,7 +24,7 @@
      * @description
      * Decorates methods to the facilityService, making it so the minimal
      * facility list is loaded once.
-     */    
+     */
     angular.module('referencedata-facilities-cache')
         .config(config);
 
@@ -51,7 +51,7 @@
          *
          * @description
          * Gets a minimal representation of all facilities from the
-         * referencedata service, which is then stored and only retrived from
+         * referencedata service, which is then stored and only retrieved from
          * the user's browser.
          */
         function cachedGetAllMinimal() {

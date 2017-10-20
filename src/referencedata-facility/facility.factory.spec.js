@@ -35,7 +35,6 @@ describe('facilityFactory', function() {
 
         programService = $injector.get('programService');
         spyOn(programService, 'getUserPrograms');
-        spyOn(programService, 'getAllUserPrograms');
 
         authorizationService = $injector.get('authorizationService');
         spyOn(authorizationService, 'getRightByName');
@@ -109,7 +108,7 @@ describe('facilityFactory', function() {
                 if (right === FULFILLMENT_RIGHTS.PODS_MANAGE) return $q.when(podsManageFacilities);
             });
 
-            programService.getAllUserPrograms.andCallFake(function() {
+            programService.getUserPrograms.andCallFake(function() {
                 return $q.when([]);
             })
         }));
@@ -271,7 +270,7 @@ describe('facilityFactory', function() {
 
             facilityService.getUserFacilitiesForRight.andReturn($q.resolve(facilities));
 
-            programService.getAllUserPrograms.andReturn($q.resolve([{
+            programService.getUserPrograms.andReturn($q.resolve([{
                 id: 'program1',
                 name: 'A Program'
             }]));
@@ -311,7 +310,7 @@ describe('facilityFactory', function() {
             expect(Array.isArray(returnedFacilities[0].supportedPrograms)).toBe(true);
             expect(returnedFacilities[0].supportedPrograms.length).toBe(1);
             expect(returnedFacilities[0].supportedPrograms[0].id).toBe('program1');
-            expect(returnedFacilities[0].supportedPrograms[0].name).toBe('A Program');           
+            expect(returnedFacilities[0].supportedPrograms[0].name).toBe('A Program');
         });
     });
 

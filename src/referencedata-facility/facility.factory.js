@@ -66,7 +66,7 @@
                 right = authorizationService.getRightByName(rightName),
                 deferred = $q.defer();
 
-                programService.getUserPrograms(userId, false).then(function(supervisedPrograms) {
+                programService.getUserPrograms(userId).then(function(supervisedPrograms) {
                     angular.forEach(supervisedPrograms, function(program) {
                         promises.push(facilityService.getUserSupervisedFacilities(userId, program.id, right.id));
                     });
@@ -212,7 +212,7 @@
             function getAllUserFacilitiesForRightWithProgram(userId, right) {
                 return $q.all({
                     facilities: facilityService.getUserFacilitiesForRight(userId, right),
-                    programs: programService.getAllUserPrograms()
+                    programs: programService.getUserPrograms()
                 })
                 .then(function(results) {
                     var facilities = results.facilities,

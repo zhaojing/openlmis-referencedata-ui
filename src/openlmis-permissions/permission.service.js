@@ -67,7 +67,7 @@
          * @return {Promise} A promise that resolves a if there is a match
          *
          * @description
-         * The returned promise will resolve if the browser has a matching 
+         * The returned promise will resolve if the browser has a matching
          * permission. If there is no permission that EXACTLY matches, then
          * the promise is rejected.
          *
@@ -127,7 +127,7 @@
          * @name load
          *
          * @param {String} userId ID of user to get permissions for
-         * 
+         *
          * @return {Promise} A promise with an Array of permission objects
          *
          * @description
@@ -150,7 +150,7 @@
                 savedUserId = userId;
                 this.empty();
             }
-            
+
             return getCachedPermissions()
             .catch(function() {
                 return getPermissionStringsFromServer(userId)
@@ -189,7 +189,7 @@
                 deferred.reject();
             });
 
-            return deferred.promise;           
+            return deferred.promise;
         }
 
         function getCachedPermissions() {
@@ -210,7 +210,7 @@
          * @ngdoc method
          * @methodOf openlmis-permissions.permissionService
          * @name empty
-         * 
+         *
          * @return {Promise} Promise resolves once cache is cleared
          *
          * @description

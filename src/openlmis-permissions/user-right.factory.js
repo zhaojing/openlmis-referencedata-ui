@@ -66,7 +66,7 @@
             if(!userId) {
                 return $q.reject();
             }
-            
+
             permissionService.load(userId)
             .then(buildRightsObject)
             .then(function(rights) {
@@ -88,7 +88,7 @@
          * @ngdoc method
          * @methodOf openlmis-permissions.userRightsFactory
          * @name  buildRightsObject
-         * 
+         *
          * @param  {Array} permissions List of user permissions
          * @return {Object}            Object of user rights
          *
@@ -133,7 +133,7 @@
          * @ngdoc method
          * @methodOf openlmis-permissions.userRightsFactory
          * @name  addProgramCodeToRights
-         * 
+         *
          * @param  {Array} userId The user id we want programs for
          * @param  {Array} rights List of rights
          * @return {Promise}      Resolves to rights with program codes
@@ -145,7 +145,7 @@
         function addProgramCodeToRights(userId, rights) {
             var deferred = $q.defer();
 
-            programService.getAllUserPrograms(userId)
+            programService.getUserPrograms(userId)
             .then(function(programs) {
                 var programsHash = {};
                 programs.forEach(function(program) {

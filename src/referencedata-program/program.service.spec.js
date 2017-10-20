@@ -88,24 +88,6 @@ describe('programService', function() {
         expect(data[1].id).toEqual(program2.id);
     });
 
-    it('should get all supported programs', function() {
-        var data,
-            userId = '1';
-
-        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/supportedPrograms'))
-            .respond(200, [program1, program2]);
-
-        programService.getUserHomeFacilitySupportedPrograms(userId).then(function(response) {
-            data = response;
-        });
-
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(data[0].id).toEqual(program1.id);
-        expect(data[1].id).toEqual(program2.id);
-    });
-
     it('should get user programs from storage while offline', function() {
         var data,
             userId = '1',
@@ -126,14 +108,13 @@ describe('programService', function() {
 
     it('should get user programs and save them to storage', function() {
         var data,
-            userId = '1',
-            isForHomeFacility = '2';
+            userId = '1';
 
-        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/programs?forHomeFacility=' + isForHomeFacility)).respond(200, [program1, program2]);
+        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/programs')).respond(200, [program1, program2]);
 
         offlineService.isOffline.andReturn(false);
 
-        programService.getUserPrograms(userId, isForHomeFacility).then(function(response) {
+        programService.getUserPrograms(userId).then(function(response) {
             data = response;
         });
 
@@ -161,7 +142,7 @@ describe('programService', function() {
         expect(data.id).toEqual(program2.id);
     });
 
-    describe('getAllUserPrograms', function() {
+    describe('getUserPrograms', function() {
         var usersProgramResponse;
 
         beforeEach(function() {
@@ -175,7 +156,7 @@ describe('programService', function() {
         it('will get a list of all the users programs', function() {
             var resultSpy = jasmine.createSpy('resultSpy');
 
-            programService.getAllUserPrograms('userId')
+            programService.getUserPrograms('userId')
             .then(resultSpy);
 
             $httpBackend.flush();
@@ -188,7 +169,7 @@ describe('programService', function() {
         });
 
         it('will cache the first successful request', function() {
-            programService.getAllUserPrograms('userId');
+            programService.getUserPrograms('userId');
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -202,7 +183,7 @@ describe('programService', function() {
             var resultSpy = jasmine.createSpy('resultSpy');
             usersProgramResponse.respond(400);
 
-            programService.getAllUserPrograms('userId')
+            programService.getUserPrograms('userId')
             .catch(resultSpy);
 
             $httpBackend.flush();
@@ -217,7 +198,7 @@ describe('programService', function() {
 
             programsStorage.search.andReturn([{id:'example'}]);
 
-            programService.getAllUserPrograms('userId')
+            programService.getUserPrograms('userId')
             .then(resultSpy);
 
             $rootScope.$apply();

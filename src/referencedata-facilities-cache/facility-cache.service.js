@@ -25,7 +25,7 @@
      * Triggers the facility service to store a minimal list of facilities
      * until the user logs out.
      *
-     * This service will stop a state change from happening until the facilites
+     * This service will stop a state change from happening until the facilities
      * cache has been created.
      */
 
@@ -43,7 +43,7 @@
          * @name initialize
          *
          * @description
-         * Sets up listenters for events in the service.
+         * Sets up listeners for events in the service.
          */
         function initialize() {
             $rootScope.$on('openlmis-auth.login', cacheFacilities);
@@ -57,7 +57,7 @@
          *
          * @description
          * Runs facilityService.getAllMinimal, which has been modified to store
-         * the recieved list in the browsers cache.
+         * the received list in the browsers cache.
          *
          * The main part of this function manages a promise, which is used to
          * block state changes while the facility list is being downloaded.
@@ -79,5 +79,4 @@
             facilityService.clearMinimalFacilitiesCache();
         }
     }
-
 })();

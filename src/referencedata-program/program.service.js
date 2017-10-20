@@ -52,15 +52,12 @@
                     isArray: true
                 }
             }),
-            userProgramsOffline = localStorageFactory('userPrograms'),
-            userProgramsCache = localStorageFactory('usersPrograms');
+            userProgramsCache = localStorageFactory('userPrograms');
 
         return {
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
-            getAllUserPrograms: getAllUserPrograms,
-            getUserHomeFacilitySupportedPrograms: getUserHomeFacilitySupportedPrograms,
             update: update
         };
 
@@ -119,52 +116,15 @@
          * Retrieves programs for the current user and saves them in the local storage.
          * If the user is offline program are retrieved from the local storage.
          *
-         * @param  {String}  userId            User UUID
-         * @param  {Boolean} isForHomeFacility Indicates if programs should be for home or supervised facilities
-         * @return {Promise}                   Array of programs
+         * @param  {String}  userId User UUID
+         * @return {Promise}        Array of programs
          */
-        function getUserPrograms(userId, isForHomeFacility) {
-            var deferred = $q.defer();
-            if(offlineService.isOffline()) {
-                var programs = userProgramsOffline.search({
-                    userIdOffline: userId,
-                    isForHomeFacilityOffline: isForHomeFacility
-                });
-                deferred.resolve(programs);
-            } else {
-                resource.getUserPrograms({userId: userId, forHomeFacility: isForHomeFacility}, function(response) {
-                    angular.forEach(response, function(program) {
-                        var storageProgram = angular.copy(program);
-                        storageProgram.userIdOffline = userId;
-                        storageProgram.isForHomeFacilityOffline = isForHomeFacility;
-                        userProgramsOffline.put(storageProgram);
-                    });
-                    deferred.resolve(response);
-                }, function() {
-                    deferred.reject();
-                });
-            }
-            return deferred.promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-program.programService
-         * @name getUserPrograms
-         *
-         * @description
-         * Retrieves programs for the current user and saves them in the local storage.
-         * If the user is offline program are retrieved from the local storage.
-         *
-         * @param  {String}  userId            User UUID
-         * @return {Promise}                   Array of programs
-         */
-        function getAllUserPrograms(userId) {
+        function getUserPrograms(userId) {
             var cachedPrograms = userProgramsCache.search({
                 userIdOffline: userId
             });
 
-            if(cachedPrograms.length) {
+            if (cachedPrograms && cachedPrograms.length) {
                 return $q.resolve(cachedPrograms)
             }
 
@@ -180,21 +140,6 @@
             .catch(function() {
                 return $q.reject();
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-program.programService
-         * @name getUserSupportedPrograms
-         *
-         * @description
-         * Gets all user supported programs for home facility.
-         *
-         * @param  {String}  userId  User UUID
-         * @return {Promise}         Array of all user home facility programs that are supported by home facility.
-         */
-        function getUserHomeFacilitySupportedPrograms(userId) {
-            return resource.getUserSupportedPrograms({userId: userId}).$promise;
         }
     }
 })();

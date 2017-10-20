@@ -27,7 +27,7 @@ describe('userRightsFactory', function() {
         spyOn(permissionService, 'load').andReturn($q.resolve(makePermissions()));
 
         programService = $injector.get('programService');
-        spyOn(programService, 'getAllUserPrograms').andReturn($q.resolve(makePrograms()));
+        spyOn(programService, 'getUserPrograms').andReturn($q.resolve(makePrograms()));
 
         userRightsFactory = $injector.get('userRightsFactory');
     }));
@@ -46,7 +46,7 @@ describe('userRightsFactory', function() {
     });
 
     it('should get all programs for userId', function() {
-        expect(programService.getAllUserPrograms).toHaveBeenCalledWith('userId');
+        expect(programService.getUserPrograms).toHaveBeenCalledWith('userId');
     });
 
     it('should not duplicate rights', function() {
