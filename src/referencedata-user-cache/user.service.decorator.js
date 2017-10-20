@@ -76,7 +76,7 @@
          * Deletes user programs stored in the browser cache.
          */
         function clearCache() {
-            userProgramsCache.clearAll();
+            userCache.clearAll();
         }
     }
 
