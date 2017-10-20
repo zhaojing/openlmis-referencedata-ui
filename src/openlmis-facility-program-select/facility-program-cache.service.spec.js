@@ -15,95 +15,155 @@
 
 describe('facilityProgramCacheService', function() {
 
-    //Could use more tests...
-
-    var facilityProgramCacheService, cacheService, facilityFactory, CACHE_KEYS, $q,
-        authorizationService, programService, $rootScope, REQUISITION_RIGHTS, facilityService;
+    var facilityProgramCacheService, $q, $rootScope, authorizationService, programService, facilityService, referencedataUserService, permissionService,
+        user, loadPromise;
 
     beforeEach(function() {
         module('openlmis-facility-program-select');
 
         inject(function($injector) {
-            facilityProgramCacheService = $injector.get('facilityProgramCacheService');
-            cacheService = $injector.get('cacheService');
-            facilityFactory = $injector.get('facilityFactory');
-            CACHE_KEYS = $injector.get('CACHE_KEYS');
             $q = $injector.get('$q');
-            authorizationService = $injector.get('authorizationService');
-            programService = $injector.get('programService');
             $rootScope = $injector.get('$rootScope');
-            REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
+            facilityProgramCacheService = $injector.get('facilityProgramCacheService');
+            authorizationService = $injector.get('authorizationService');
+            referencedataUserService = $injector.get('referencedataUserService');
+            programService = $injector.get('programService');
             facilityService = $injector.get('facilityService');
+            permissionService = $injector.get('permissionService');
         });
+
+        user = {
+            user_id: 'user-id'
+        };
+
+        referencedataUser = {
+            homeFacilityId: 'facility-1'
+        };
+
+        programs = [
+            {
+                id: 'program-1',
+                name: 'program-1-name'
+            },
+            {
+                id: 'program-2',
+                name: 'program-2-name'
+            }
+        ];
+
+        facilities = [
+            {
+                id: 'facility-1',
+                name: 'facility-1-name'
+            },
+            {
+                id: 'facility-2',
+                name: 'facility-2-name'
+            }
+        ];
+
+        permissions = [
+            {
+                right: 'right-1',
+                programId: 'program-1',
+                facilityId: 'facility-1'
+            },
+            {
+                right: 'right-1',
+                programId: 'program-2',
+                facilityId: 'facility-2'
+            },
+            {
+                right: 'right-2',
+                programId: 'program-2',
+                facilityId: 'facility-1'
+            }
+        ];
+
+        spyOn(authorizationService, 'getUser').andReturn(user);
+        spyOn(programService, 'getUserPrograms').andReturn($q.when(programs));
+        spyOn(facilityService, 'getAllMinimal').andReturn($q.when(facilities));
+        spyOn(permissionService, 'load').andReturn($q.when(permissions));
+        spyOn(referencedataUserService, 'get').andReturn($q.when(referencedataUser));
+
+        loadPromise = facilityProgramCacheService.loadData();
+        $rootScope.$apply();
     });
 
     describe('load', function() {
 
-        var user;
+        it('should return promise', function() {
+            expect(loadPromise.then).not.toBe(undefined);
+        });
 
-        beforeEach(function() {
-            user = {
-                user_id: 'user-id'
-            };
+        it('should call facilityService', function() {
+            expect(facilityService.getAllMinimal).toHaveBeenCalled();
+        });
 
-            spyOn(cacheService, 'cache').andCallFake(function(name, promise) {
-                return promise;
+        it('should call authorizationService', function() {
+            expect(authorizationService.getUser).toHaveBeenCalled();
+        });
+
+        it('should call programService', function() {
+            expect(programService.getUserPrograms).toHaveBeenCalled();
+        });
+
+        it('should call permissionService', function() {
+            expect(permissionService.load).toHaveBeenCalledWith(user.user_id);
+        });
+
+        it('should call referencedataUserService', function() {
+            expect(referencedataUserService.get).toHaveBeenCalledWith(user.user_id);
+        });
+
+        it('should reject promise if request fails', function() {
+            var result;
+
+            referencedataUserService.get.andReturn($q.reject());
+
+            facilityProgramCacheService.loadData()
+            .then(function() {
+                result = 'resolved';
+            })
+            .catch(function() {
+                result = 'rejected';
             });
-            spyOn(authorizationService, 'getUser').andReturn(user);
-            spyOn(programService, 'getUserPrograms');
-            spyOn(facilityService, 'getUserSupervisedFacilities');
+            $rootScope.$apply();
+
+            expect(referencedataUserService.get).toHaveBeenCalledWith(user.user_id);
+            expect(result).toEqual('rejected');
         });
-
-        it('should cache home facility', function() {
-            var promise = $q.when();
-
-            spyOn(facilityFactory, 'getUserHomeFacility').andReturn(promise);
-
-            facilityProgramCacheService.load();
-
-            expect(cacheService.cache).toHaveBeenCalledWith(
-                CACHE_KEYS.HOME_FACILITY,
-                promise
-            );
-        });
-
-        it('should cache home programs', function() {
-            var homePrograms = $q.when(),
-                supervisedPrograms = $q.when();
-
-            programService.getUserPrograms.andReturn(homePrograms);
-
-            facilityProgramCacheService.load();
-
-            expect(programService.getUserPrograms).toHaveBeenCalledWith(
-                user.user_id,
-                true
-            );
-
-            expect(cacheService.cache).toHaveBeenCalledWith(
-                CACHE_KEYS.HOME_PROGRAMS,
-                homePrograms
-            );
-        });
-
-        it('should cache supervisedPrograms', function() {
-            var supervisedPrograms = $q.when();
-
-            programService.getUserPrograms.andReturn(supervisedPrograms);
-
-            facilityProgramCacheService.load();
-
-            expect(programService.getUserPrograms).toHaveBeenCalledWith(
-                user.user_id,
-                false
-            );
-
-            expect(cacheService.cache).toHaveBeenCalledWith(
-                CACHE_KEYS.HOME_PROGRAMS,
-                supervisedPrograms
-            );
-        });
-
     });
 
+    describe('getUserHomeFacility', function() {
+
+        it('should return home facility', function() {
+            expect(facilityProgramCacheService.getUserHomeFacility()).toEqual(facilities[0]);
+        });
+    });
+
+    describe('getUserPrograms', function() {
+
+        it('should return home programs', function() {
+            expect(facilityProgramCacheService.getUserPrograms()).toEqual(programs);
+        });
+    });
+
+    describe('getSupervisedFacilities', function() {
+
+        beforeEach(function() {
+            facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
+            facilityProgramCacheService.pushRightsForModule('module-2', ['right-1', 'right-2']);
+        });
+
+        it('should return filtered facilities', function() {
+            expect(facilityProgramCacheService.getSupervisedFacilities('module', 'program-1')).toEqual([facilities[0]]);
+            expect(facilityProgramCacheService.getSupervisedFacilities('module', 'program-2')).toEqual([facilities[1]]);
+        });
+
+        it('should return all facilities if module was not registered', function() {
+            expect(facilityProgramCacheService.getSupervisedFacilities('other-module', 'program-1')).toEqual([facilities[0]]);
+            expect(facilityProgramCacheService.getSupervisedFacilities('other-module', 'program-2')).toEqual([facilities[0], facilities[1]]);
+        });
+    });
 });

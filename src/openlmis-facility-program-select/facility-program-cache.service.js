@@ -22,30 +22,102 @@
      * @name openlmis-facility-program-select.facilityProgramCacheService
      *
      * @description
-     * Service responsible for caching programs and facilities used by the
-     * openlmis-facility-program-select component.
+     * Service responsible for retrieving cached data for openlmis-facility-program-select component.
      */
     angular
         .module('openlmis-facility-program-select')
         .service('facilityProgramCacheService', service);
 
-    service.$inject = [
-        'facilityFactory', 'programService', 'authorizationService', '$q', '$filter',
-        'REQUISITION_RIGHTS', 'facilityService', 'cacheService', 'CACHE_KEYS'
-    ];
+    service.$inject = ['$q', 'programService', 'authorizationService', 'facilityService', 'referencedataUserService', 'permissionService'];
 
-    function service(facilityFactory, programService, authorizationService, $q, $filter, REQUISITION_RIGHTS,
-                     facilityService, cacheService, CACHE_KEYS) {
+    function service($q, programService, authorizationService, facilityService, referencedataUserService, permissionService) {
 
-        var deferred = $q.defer(),
-            ready = false,
-            modulesWithRights = {};
+        var modulesWithRights = {},
+            facilities = [],
+            programs = [],
+            permissions = [],
+            homeFacility;
 
-        this.load = load;
-        this.clear = clear;
-        this.whenReady = whenReady;
-        this.isReady = isReady;
+        this.loadData = loadData;
+        this.getUserHomeFacility = getUserHomeFacility;
+        this.getUserPrograms = getUserPrograms;
+        this.getSupervisedFacilities = getSupervisedFacilities;
         this.pushRightsForModule = pushRightsForModule;
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
+         * @name getUserHomeFacility
+         *
+         * @description
+         * Returns cached minimal representation of user home facility.
+         *
+         * @return {Object} user home facility
+         */
+        function getUserHomeFacility() {
+            return homeFacility;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
+         * @name getUserPrograms
+         *
+         * @description
+         * Returns all cached user supervised programs.
+         *
+         * @return {Array} user supervised programs
+         */
+        function getUserPrograms() {
+            return programs;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
+         * @name getSupervisedFacilities
+         *
+         * @description
+         * Returns all cached user supervised facilities
+         * filtered by program and rights stored for current module.
+         *
+         * @param  {String} moduleName name of current module
+         * @param  {String} programId  program id for filtering
+         * @return {Array}             user supervised facilities
+         */
+        function getSupervisedFacilities(moduleName, programId) {
+            var rights;
+
+            if (modulesWithRights[moduleName]) {
+                rights = modulesWithRights[moduleName];
+            } else {
+                rights = [];
+                for (var module in modulesWithRights) {
+                    rights = rights.concat(modulesWithRights[module]);
+                }
+            }
+
+            var facilityIds = [];
+            permissions.forEach(function(permission) {
+                if (rights.indexOf(permission.right) !== -1 && programId === permission.programId) {
+                    facilityIds.push(permission.facilityId);
+                }
+            });
+
+            // undefined or null in this list indicates that user has right without defined facilityId,
+            // so it means that he supervise all facilities
+            if (facilityIds.indexOf(undefined) !== -1 || facilityIds.indexOf(null) !== -1) {
+                return facilities;
+            } else {
+                var result = [];
+                facilities.forEach(function(facility) {
+                    if (facilityIds.indexOf(facility.id) !== -1) {
+                        result.push(facility);
+                    }
+                });
+                return result;
+            }
+        }
 
         /**
          * @ngdoc method
@@ -65,166 +137,46 @@
         /**
          * @ngdoc method
          * @methodOf openlmis-facility-program-select.facilityProgramCacheService
-         * @name load
+         * @name loadData
          *
          * @description
-         * Loads all the data required by the component and caches them in memory. The objects that
-         * will be stored are home facility, home programs, supervised programs and a list of
-         * facility for each program.
-         */
-        function load() {
-            cacheService.cache(CACHE_KEYS.HOME_FACILITY, facilityFactory.getUserHomeFacility());
-
-            var promises = [];
-            $q.all(cachePrograms()).then(function(programLists) {
-                angular.forEach($filter('unique')(
-                    programLists[0].concat(programLists[1]), 'id'
-                ), function(program) {
-                    var promise = cacheFacilities(program);
-
-                    if (promise) {
-                        promises.push(promise);
-                    }
-                });
-
-                $q.all(promises).then(function() {
-                    ready = true;
-                    deferred.resolve();
-                }, deferred.reject);
-            }, deferred.reject);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
-         * @name clear
+         * Loads all cached data for this module, like facilities, programs and permission strings.
+         * It have to called before using other methods except pushRightsForModule.
          *
-         * @description
-         * Removes all the stored data from the memory cache.
+         * @return {Promise} promise that resolves after successful load
          */
-        function clear() {
+        function loadData() {
+            var deferred = $q.defer(),
+                userId = authorizationService.getUser().user_id;
+
             $q.all([
-                $q.when(cacheService.get(CACHE_KEYS.HOME_PROGRAMS)),
-                $q.when(cacheService.get(CACHE_KEYS.SUPERVISED_PROGRAMS))
-            ]).then(function(programLists) {
-                angular.forEach($filter('unique')(
-                    programLists[0].concat(programLists[1]), 'id'
-                ), function(program) {
-                    cacheService.clear(program.id);
-                });
+                facilityService.getAllMinimal(),
+                programService.getUserPrograms(),
+                permissionService.load(userId)
+            ])
+            .then(function(responses) {
+                facilities = responses[0];
+                programs = responses[1];
+                permissions = responses[2];
+
+                referencedataUserService.get(userId)
+                .then(function(user) {
+                    homeFacility = getFacilityById(user.homeFacilityId);
+                    deferred.resolve();
+                })
+                .catch(deferred.reject);
+            })
+            .catch(function() {
+                deferred.reject();
             });
 
-            cacheService.clear(CACHE_KEYS.HOME_PROGRAMS);
-            cacheService.clear(CACHE_KEYS.SUPERVISED_PROGRAMS);
-            cacheService.clear(CACHE_KEYS.HOME_FACILITY);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
-         * @name whenReady
-         *
-         * @description
-         * Returns a promise that resolves when all the required data has been requested. This
-         * doesn't necessarily mean that the data has been already downloaded.
-         *
-         * @return {Promise}    the promise resolved when all data has been requested
-         */
-        function whenReady() {
             return deferred.promise;
         }
 
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-facility-program-select.facilityProgramCacheService
-         * @name isReady
-         *
-         * @description
-         * Returns information whether all the required data has been requested. This doesn't
-         * necessarily mean that the data has been already downloaded.
-         *
-         * @return {Promise}    the promise resolved when all data has been requested
-         */
-        function isReady() {
-            return ready;
-        }
-
-        function cachePrograms() {
-            var userId = authorizationService.getUser().user_id;
-
-            if (userId) {
-                return [
-                    cacheService.cache(
-                        CACHE_KEYS.HOME_PROGRAMS,
-                        programService.getUserPrograms(userId, true)
-                    ),
-                    cacheService.cache(
-                        CACHE_KEYS.SUPERVISED_PROGRAMS,
-                        programService.getUserPrograms(userId, false)
-                    )
-                ];
-            }
-        }
-
-        function cacheFacilities(program) {
-            var modulesAndPromises = getFacilityListsPromises(program.id);
-
-            if (modulesAndPromises.promises.length > 0) {
-                var promise = $q.all(modulesAndPromises.promises);
-
-                cacheService.cache(program.id, promise, function(facilityList) {
-                    var facilitiesObject = {};
-
-                    angular.forEach(facilityList, function(facilities, index) {
-                        var moduleName = modulesAndPromises.modules[index];
-
-                        if (facilitiesObject[moduleName]) {
-                            var uniqueFacilities = $filter('unique')(facilitiesObject[modulesAndPromises.modules[index]].concat(facilities), 'id');
-                            facilitiesObject[modulesAndPromises.modules[index]] = uniqueFacilities;
-                        } else {
-                            facilitiesObject[modulesAndPromises.modules[index]] = facilities;
-                        }
-                    });
-
-                    return facilitiesObject;
-                });
-
-                return promise;
-            }
-
-            return $q.when([]);
-        }
-
-        function getFacilityListsPromises(programId) {
-            var userId = authorizationService.getUser().user_id,
-                promises = [],
-                modules = [];
-
-            if (userId) {
-                angular.forEach(modulesWithRights, function(moduleRights, moduleName) {
-                    angular.forEach(moduleRights, function(right) {
-                        var rightId = getRightId(right);
-                        if (rightId) {
-                            modules.push(moduleName);
-                            promises.push(facilityService.getUserSupervisedFacilities(
-                                userId,
-                                programId,
-                                rightId
-                            ));
-                        }
-                    });
-                });
-            }
-
-            return {
-                modules: modules,
-                promises: promises
-            };
-        }
-
-        function getRightId(rightName) {
-            var right = authorizationService.getRightByName(rightName);
-            return right ? right.id : undefined;
+        function getFacilityById(id) {
+            return facilities.filter(function(facility) {
+                return facility.id === id;
+            })[0];
         }
     }
 

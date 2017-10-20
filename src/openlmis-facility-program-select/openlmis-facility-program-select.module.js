@@ -24,9 +24,11 @@
      * Proved openlmis-facility-program-select component for selecting facility and program.
      */
     angular.module('openlmis-facility-program-select', [
-        'openlmis-cache',
         'referencedata-facility',
-        'referencedata-program'
+        'referencedata-program',
+        'referencedata-user',
+        'openlmis-auth',
+        'openlmis-permissions'
     ]);
 
 })();

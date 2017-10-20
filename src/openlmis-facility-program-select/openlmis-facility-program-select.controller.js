@@ -29,13 +29,9 @@
         .module('openlmis-facility-program-select')
         .controller('OpenlmisFacilityProgramSelectController', controller);
 
-    controller.$inject = [
-        '$q', '$stateParams', '$filter', 'loadingModalService', 'cacheService', 'CACHE_KEYS',
-        'facilityProgramCacheService'
-    ];
+    controller.$inject = ['$q', '$stateParams', '$filter', 'facilityProgramCacheService'];
 
-    function controller($q, $stateParams, $filter, loadingModalService, cacheService, CACHE_KEYS,
-                        facilityProgramCacheService) {
+    function controller($q, $stateParams, $filter, facilityProgramCacheService) {
 
         var vm = this;
 
@@ -52,11 +48,22 @@
          * Initialization method of the controller.
          */
         function onInit() {
-            if (facilityProgramCacheService.isReady()) {
-                doInit();
-            } else {
-                facilityProgramCacheService.whenReady().then(doInit);
-            }
+            facilityProgramCacheService.loadData()
+            .then(function() {
+                vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
+                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms();
+                vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
+
+                if ($stateParams.program) {
+                    vm.program = $filter('filter')(vm.supervisedPrograms,
+                        {
+                            id: $stateParams.program
+                        }
+                    )[0];
+                }
+
+                vm.updateFacilities(true);
+            });
         }
 
         /**
@@ -91,101 +98,11 @@
             if (!vm.isSupervised) {
                 vm.facilities = [vm.homeFacility];
                 vm.facility = vm.facilities[0];
-                loadingModalService.close();
             } else if (!vm.program) {
                 vm.facilities = [];
-                loadingModalService.close();
             } else {
-                var programId = vm.program.id;
-
-                if (cacheService.isReady(programId)) {
-                    setFacilities(cacheService.get(programId));
-                } else {
-                    loadingModalService.open();
-                    $q.when(cacheService.get(programId)).then(setFacilities);
-                }
+                vm.facilities = facilityProgramCacheService.getSupervisedFacilities(vm.module, vm.program.id);
             }
-
-            function setFacilities(facilities) {
-                if (vm.module) {
-                    vm.facilities = facilities[vm.module];
-                } else {
-                    var allFacilities = [];
-                    angular.forEach(facilities, function(facilityList) {
-                        allFacilities = allFacilities.concat(facilityList);
-                    });
-                    vm.facilities = $filter('unique')(allFacilities, 'id');
-                }
-
-                if (init && $stateParams.facility) {
-                    vm.facility = $filter('filter')(vm.facilities, {
-                        id: $stateParams.facility
-                    })[0];
-                }
-
-                loadingModalService.close();
-            }
-        }
-
-        function doInit() {
-            if (isDataReady()) {
-                initVm(getData());
-            } else {
-                loadingModalService.open();
-                $q.all(getData()).then(initVm);
-            }
-        }
-
-        function initVm(responses) {
-            vm.homeFacility = responses[0];
-            vm.homePrograms = getSupportedHomeFacilityPrograms(responses[1]);
-
-            vm.supervisedPrograms = responses[2];
-            vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
-
-            if ($stateParams.program) {
-                vm.program = $filter('filter')(
-                    vm.isSupervised ? vm.supervisedPrograms : vm.homePrograms,
-                    {
-                        id: $stateParams.program
-                    }
-                )[0];
-            }
-
-            vm.updateFacilities(true);
-        }
-
-        function getData() {
-            return [
-                cacheService.get(CACHE_KEYS.HOME_FACILITY),
-                cacheService.get(CACHE_KEYS.HOME_PROGRAMS),
-                cacheService.get(CACHE_KEYS.SUPERVISED_PROGRAMS)
-            ];
-        }
-
-        function getSupportedHomeFacilityPrograms(programs) {
-            if (!vm.homeFacility) return;
-
-            var supportedProgramIds = vm.homeFacility.supportedPrograms.map(function(program) {
-                return program.id;
-            });
-
-            return $filter('filter')(programs, function(program) {
-                var programIndex = supportedProgramIds.indexOf(program.id);
-
-                if (programIndex < 0) {
-                    return false;
-                }
-
-                var supportedProgram = vm.homeFacility.supportedPrograms[programIndex];
-                return supportedProgram.programActive && supportedProgram.supportActive;
-            });
-        }
-
-        function isDataReady() {
-            return cacheService.isReady(CACHE_KEYS.HOME_FACILITY) &&
-                cacheService.isReady(CACHE_KEYS.HOME_PROGRAMS) &&
-                cacheService.isReady(CACHE_KEYS.SUPERVISED_PROGRAMS);
         }
     }
 
