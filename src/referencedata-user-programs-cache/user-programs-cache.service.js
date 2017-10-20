@@ -1,0 +1,78 @@
+/*
+ * This program is part of the OpenLMIS logistics management information system platform software.
+ * Copyright © 2017 VillageReach
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU Affero General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU Affero General Public License for more details. You should have received a copy of
+ * the GNU Affero General Public License along with this program. If not, see
+ * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
+ */
+
+(function() {
+
+    'use strict';
+
+    /**
+     * @ngdoc service
+     * @name referencedata-user-programs-cache.userProgramsCacheService
+     *
+     * @description
+     * Triggers the program service to store a list of user programs until the he/she logs out.
+     * This service will stop a state change from happening until the user programs cache has been created.
+     */
+
+    angular.module('referencedata-user-programs-cache')
+        .service('userProgramsCacheService', service);
+
+    service.$inject = ['$q', '$rootScope', 'programService', 'authorizationService', 'loadingService'];
+
+    function service($q, $rootScope, programService, authorizationService, loadingService) {
+        this.initialize = initialize;
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user-programs-cache.userProgramsCacheService
+         * @name initialize
+         *
+         * @description
+         * Sets up listeners for events in the service.
+         */
+        function initialize() {
+            $rootScope.$on('openlmis-auth.login', cachePrograms);
+            $rootScope.$on('openlmis-auth.logout', removeUserProgramsCache);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user-programs-cache.userProgramsCacheService
+         * @name cachePrograms
+         *
+         * @description
+         * Runs programService.getUserPrograms to cache user programs.
+         *
+         * The main part of this function manages a promise, which is used to
+         * block state changes while the program list is being downloaded.
+         */
+        function cachePrograms() {
+            var userId = authorizationService.getUser().user_id;
+            loadingService.register('referencedata-user-programs-cache.loading', programService.getUserPrograms(userId));
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user-programs-cache.userProgramsCacheService
+         * @name removeUserProgramsCache
+         *
+         * @description
+         * Removes the user programs cache.
+         */
+        function removeUserProgramsCache() {
+            programService.clearUserProgramsCache();
+        }
+    }
+})();
