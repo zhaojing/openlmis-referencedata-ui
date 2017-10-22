@@ -17,23 +17,23 @@
 
     'use strict';
 
-    angular.module('referencedata-user-programs-cache')
-        .run(initUserProgramCacheService);
+    angular.module('referencedata-user-cache')
+        .run(initUserCache);
 
-    initUserProgramCacheService.$inject = ['$q', '$rootScope', 'programService', 'authorizationService', 'loadingService'];
+    initUserCache.$inject = ['$q', '$rootScope', 'referencedataUserService', 'authorizationService', 'loadingService'];
 
-    function initUserProgramCacheService($q, $rootScope, programService, authorizationService, loadingService) {
+    function initUserCache($q, $rootScope, referencedataUserService, authorizationService, loadingService) {
 
-        $rootScope.$on('openlmis-auth.login', cachePrograms);
-        $rootScope.$on('openlmis-auth.logout', removeUserProgramsCache);
+        $rootScope.$on('openlmis-auth.login', cacheUser);
+        $rootScope.$on('openlmis-auth.logout', removeUserCache);
 
-        function cachePrograms() {
+        function cacheUser() {
             var userId = authorizationService.getUser().user_id;
-            loadingService.register('referencedata-user-programs-cache.loading', programService.getUserPrograms(userId));
+            loadingService.register('referencedata-user-cache.loading', referencedataUserService.get(userId));
         }
 
-        function removeUserProgramsCache() {
-            programService.clearUserProgramsCache();
+        function removeUserCache() {
+            referencedataUserService.clearUserCache();
         }
     }
 

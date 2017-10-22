@@ -12,70 +12,73 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
-/*
+
 describe('UserService get decorator', function() {
-    var referencedataUserService, originalUserService, $rootScope, cache;
+    var referencedataUserService, $rootScope, $httpBackend, referencedataUrlFactory,
+        user, cache;
 
     beforeEach(function() {
-        module('referencedata-user-cache', function($provide, $injector) {
-
+        module('referencedata');
+        module('referencedata-user-cache', function($provide) {
+            cache = jasmine.createSpyObj('cache', ['getBy', 'put', 'clearAll', 'getAll']);
+            cache.getAll.andReturn([]);
+            $provide.factory('localStorageFactory', function() {
+                return function() {
+                    return cache;
+                };
+            });
         });
 
+        inject(function($injector) {
+            referencedataUserService = $injector.get('referencedataUserService');
+            $rootScope = $injector.get('$rootScope');
+            $httpBackend = $injector.get('$httpBackend');
+            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+        });
 
+        user = {
+            id: 'user-id',
+            username: 'some-user'
+        };
     });
 
-    beforeEach(module(function($provide, $injector){
-        cache = jasmine.createSpyObj('cache', ['getAll', 'put']);
-
-        $provide.factory('localStorageFactory', function(){
-            return function(){
-                return cache;
-            };
-        });
-
-        cache.getAll.andReturn([]);
-    }));
-
-    beforeEach(inject(function(_facilityService_, _$rootScope_){
-        facilityService = _facilityService_;
-        $rootScope = _$rootScope_;
-    }));
-
-    it('will return a cached list of minimal facilities if available', function() {
-        cache.getAll.andReturn([{}, {}, {}]);
-
-        var results = false;
-        facilityService.getAllMinimal().then(function(res){
-            results = res;
-        });
-        $rootScope.$apply(); // resolving promises
-
-        expect(results.length).toBe(3);
-    });
-
-    it('will return original facilityService.getAllMinimal if no cache', inject(function($httpBackend, referencedataUrlFactory) {
-        var facilities = [{
-            uuid: 1,
-            name: 'example'
-        }];
-
-        $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/minimal'))
-        .respond(200, facilities);
-
-        cache.getAll.andReturn([]);
+    it('will return a cached user if available', function() {
+        cache.getBy.andReturn(user);
 
         var results;
-        facilityService.getAllMinimal().then(function(_results){
-            results = _results;
+        referencedataUserService.get(user.id).then(function(response) {
+            result = response;
+        });
+        $rootScope.$apply();
+
+        expect(result).toEqual(user);
+        expect(cache.getBy).toHaveBeenCalledWith('id', user.id);
+    });
+
+    it('will send original request if there is no user cached', function() {
+        $httpBackend.when('GET', referencedataUrlFactory('/api/users/' + user.id))
+        .respond(200, user);
+
+        cache.getBy.andReturn(undefined);
+
+        var result;
+        referencedataUserService.get(user.id).then(function(response) {
+            result = response;
         });
         $httpBackend.flush();
         $rootScope.$apply();
 
-        expect(results.length).toBe(1);
+        expect(result.username).toEqual(user.username);
+        expect(result.id).toEqual(user.id);
+        expect(cache.put).toHaveBeenCalled();
 
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
-    }));
+    });
 
+    it('should clear user cache', function() {
+        referencedataUserService.clearUserCache();
+
+        expect(cache.clearAll).toHaveBeenCalled();
+    });
 });
-*/

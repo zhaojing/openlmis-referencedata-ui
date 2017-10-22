@@ -53,6 +53,4 @@
             userProgramsCache.clearAll();
         }
     }
-
-
 })();

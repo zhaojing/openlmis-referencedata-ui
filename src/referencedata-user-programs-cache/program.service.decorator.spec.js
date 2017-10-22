@@ -12,64 +12,85 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
-/*
-describe('Facility service minimal decorator', function() {
-    var facilityService, originalFacilityService, $rootScope, cache;
 
-    beforeEach(module('referencedata-facilities-cache'));
+describe('ProgramService getUserPrograms decorator', function() {
+    var programService, $rootScope, $httpBackend, openlmisUrlFactory,
+        programs, user, cache;
 
-    beforeEach(module(function($provide, $injector){
-        cache = jasmine.createSpyObj('cache', ['getAll', 'put']);
-
-        $provide.factory('localStorageFactory', function(){
-            return function(){
-                return cache;
-            };
+    beforeEach(function() {
+        module('referencedata');
+        module('referencedata-user-programs-cache', function($provide) {
+            cache = jasmine.createSpyObj('cache', ['getBy', 'put', 'clearAll', 'getAll', 'search']);
+            cache.getAll.andReturn([]);
+            $provide.factory('localStorageFactory', function() {
+                return function() {
+                    return cache;
+                };
+            });
         });
 
-        cache.getAll.andReturn([]);
-    }));
-
-    beforeEach(inject(function(_facilityService_, _$rootScope_){
-        facilityService = _facilityService_;
-        $rootScope = _$rootScope_;
-    }));
-
-    it('will return a cached list of minimal facilities if available', function() {
-        cache.getAll.andReturn([{}, {}, {}]);
-
-        var results = false;
-        facilityService.getAllMinimal().then(function(res){
-            results = res;
+        inject(function($injector) {
+            programService = $injector.get('programService');
+            $rootScope = $injector.get('$rootScope');
+            $httpBackend = $injector.get('$httpBackend');
+            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
         });
-        $rootScope.$apply(); // resolving promises
 
-        expect(results.length).toBe(3);
+        user = {
+            id: 'user-id',
+            username: 'some-user'
+        };
+
+        programs = [
+            {
+                id: 'program-id-1',
+                name: 'program-1'
+            },
+            {
+                id: 'program-id-2',
+                name: 'program-2'
+            }
+        ];
     });
 
-    it('will return original facilityService.getAllMinimal if no cache', inject(function($httpBackend, referencedataUrlFactory) {
-        var facilities = [{
-            uuid: 1,
-            name: 'example'
-        }];
-
-        $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/minimal'))
-        .respond(200, facilities);
-
-        cache.getAll.andReturn([]);
+    it('will return a cached programs if available', function() {
+        cache.search.andReturn(programs);
 
         var results;
-        facilityService.getAllMinimal().then(function(_results){
-            results = _results;
+        programService.getUserPrograms(user.id).then(function(response) {
+            result = response;
+        });
+        $rootScope.$apply();
+
+        expect(result).toEqual(programs);
+        expect(cache.search).toHaveBeenCalled();
+    });
+
+    it('will send original request if there is no user programs cached', function() {
+        $httpBackend.when('GET', openlmisUrlFactory('/api/users/' + user.id + '/programs'))
+        .respond(200, programs);
+
+        cache.search.andReturn(undefined);
+
+        var result;
+        programService.getUserPrograms(user.id).then(function(response) {
+            result = response;
         });
         $httpBackend.flush();
         $rootScope.$apply();
 
-        expect(results.length).toBe(1);
+        expect(result.length).toEqual(2);
+        expect(result[0].id).toEqual(programs[0].id);
+        expect(result[1].id).toEqual(programs[1].id);
+        expect(cache.put.callCount).toEqual(2);
 
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
-    }));
+    });
 
+    it('should clear user cache', function() {
+        programService.clearUserProgramsCache();
+
+        expect(cache.clearAll).toHaveBeenCalled();
+    });
 });
-*/
