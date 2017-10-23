@@ -52,7 +52,7 @@ describe('ProgramService getUserPrograms decorator', function() {
         ];
     });
 
-    it('will return a cached programs if available', function() {
+    it('should return a cached programs if available', function() {
         cache.search.andReturn(programs);
 
         var results;
@@ -65,7 +65,7 @@ describe('ProgramService getUserPrograms decorator', function() {
         expect(cache.search).toHaveBeenCalled();
     });
 
-    it('will send original request if there is no user programs cached', function() {
+    it('should send original request if there is no user programs cached', function() {
         $httpBackend.when('GET', openlmisUrlFactory('api/users/' + user.id + '/programs'))
         .respond(200, programs);
 
@@ -87,7 +87,7 @@ describe('ProgramService getUserPrograms decorator', function() {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should clear user cache', function() {
+    it('should clear user programs cache', function() {
         programService.clearUserProgramsCache();
 
         expect(cache.clearAll).toHaveBeenCalled();
