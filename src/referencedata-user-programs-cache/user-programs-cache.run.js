@@ -22,15 +22,10 @@
 
     initUserProgramCacheService.$inject = ['$q', '$rootScope', 'programService', 'authorizationService', 'loadingService'];
 
-    function initUserProgramCacheService($q, $rootScope, programService, authorizationService, loadingService) {
+    function initUserProgramCacheService($q, $rootScope, programService) {
 
-        $rootScope.$on('openlmis-auth.login', cachePrograms);
+        //caching of user programs is done while downloading permission strings, also on login
         $rootScope.$on('openlmis-auth.logout', removeUserProgramsCache);
-
-        function cachePrograms() {
-            var userId = authorizationService.getUser().user_id;
-            loadingService.register('referencedata-user-programs-cache.loading', programService.getUserPrograms(userId));
-        }
 
         function removeUserProgramsCache() {
             programService.clearUserProgramsCache();

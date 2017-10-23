@@ -33,20 +33,6 @@ describe('user programs cache run', function() {
         };
     });
 
-    it('should cache user on login', function() {
-        var promise = $q.when(user);
-        spyOn(authorizationService, 'getUser').andReturn(user);
-        spyOn(programService, 'getUserPrograms').andReturn(promise);
-        spyOn(loadingService, 'register');
-
-        $rootScope.$emit('openlmis-auth.login');
-        $rootScope.$apply();
-
-        expect(authorizationService.getUser).toHaveBeenCalled();
-        expect(programService.getUserPrograms).toHaveBeenCalledWith(user.user_id);
-        expect(loadingService.register).toHaveBeenCalledWith('referencedata-user-programs-cache.loading', promise);
-    });
-
     it('should clear user programs cache on logout', function() {
         spyOn(programService, 'clearUserProgramsCache');
 
