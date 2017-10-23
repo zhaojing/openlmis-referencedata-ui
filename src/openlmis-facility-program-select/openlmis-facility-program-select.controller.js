@@ -88,11 +88,8 @@
          * @description
          * Updates the facility list by clearing the facility selection and setting appropriate
          * facility list.
-         *
-         * @param  {Boolean} init   the flag defining wether initial values should be set based on
-         *                          on the state parameters
          */
-        function updateFacilities(init) {
+        function updateFacilities() {
             vm.facility = undefined;
 
             if (!vm.isSupervised) {

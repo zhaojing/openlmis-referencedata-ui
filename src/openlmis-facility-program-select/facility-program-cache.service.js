@@ -141,15 +141,14 @@
          *
          * @description
          * Loads all cached data for this module, like facilities, programs and permission strings.
-         * It have to called before using other methods except pushRightsForModule.
+         * It have to be called before using other methods except pushRightsForModule.
          *
          * @return {Promise} promise that resolves after successful load
          */
         function loadData() {
-            var deferred = $q.defer(),
-                userId = authorizationService.getUser().user_id;
+            var userId = authorizationService.getUser().user_id;
 
-            $q.all([
+            return $q.all([
                 facilityService.getAllMinimal(),
                 programService.getUserPrograms(),
                 permissionService.load(userId)
@@ -159,18 +158,11 @@
                 programs = responses[1];
                 permissions = responses[2];
 
-                referencedataUserService.get(userId)
-                .then(function(user) {
-                    homeFacility = getFacilityById(user.homeFacilityId);
-                    deferred.resolve();
-                })
-                .catch(deferred.reject);
+                return referencedataUserService.get(userId);
             })
-            .catch(function() {
-                deferred.reject();
+            .then(function(user) {
+                homeFacility = getFacilityById(user.homeFacilityId);
             });
-
-            return deferred.promise;
         }
 
         function getFacilityById(id) {
