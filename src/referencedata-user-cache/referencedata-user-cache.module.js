@@ -26,6 +26,7 @@
     angular.module('referencedata-user-cache', [
         'openlmis-auth',
         'openlmis-local-storage',
+        'referencedata',
         'referencedata-user',
         'openlmis-loading'
     ]);

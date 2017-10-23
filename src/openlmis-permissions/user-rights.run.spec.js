@@ -32,16 +32,12 @@ describe('userRightsRun', function() {
         spyOn(loadingService, 'register').andCallThrough();
     }));
 
-    beforeEach(inject(function($q) {
-        
-    }));
-
     it('on openlmis-auth.login builds userRights', function() {
         $rootScope.$emit('openlmis-auth.login');
 
         expect(userRightsFactory.buildRights).toHaveBeenCalled();
     });
-    
+
     it('on openlmis-auth.login stores userRights to authorizationService', function() {
         $rootScope.$emit('openlmis-auth.login');
         $rootScope.$apply(); // makes buildRights resolve

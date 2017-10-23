@@ -18,7 +18,6 @@ describe('ProgramService getUserPrograms decorator', function() {
         programs, user, cache;
 
     beforeEach(function() {
-        module('referencedata');
         module('referencedata-user-programs-cache', function($provide) {
             cache = jasmine.createSpyObj('cache', ['getBy', 'put', 'clearAll', 'getAll', 'search']);
             cache.getAll.andReturn([]);

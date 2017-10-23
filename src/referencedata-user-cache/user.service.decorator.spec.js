@@ -18,7 +18,6 @@ describe('UserService get decorator', function() {
         user, cache;
 
     beforeEach(function() {
-        module('referencedata');
         module('referencedata-user-cache', function($provide) {
             cache = jasmine.createSpyObj('cache', ['getBy', 'put', 'clearAll', 'getAll']);
             cache.getAll.andReturn([]);
