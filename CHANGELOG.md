@@ -14,6 +14,7 @@ Improvement:
 
 * [OLMIS-2857](https://openlmis.atlassian.net/browse/OLMIS-2857): Added username filter to user list screen.
 * [OLMIS-3283](https://openlmis.atlassian.net/browse/OLMIS-3283): Added a "Show password" option on password reset screen.
+* Updated dev-ui version to 6.
 
 Bug fixes:
 
