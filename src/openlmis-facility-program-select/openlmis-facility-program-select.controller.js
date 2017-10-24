@@ -89,7 +89,7 @@
          * Updates the facility list by clearing the facility selection and setting appropriate
          * facility list.
          */
-        function updateFacilities() {
+        function updateFacilities(isInit) {
             vm.facility = undefined;
 
             if (!vm.isSupervised) {
@@ -99,6 +99,13 @@
                 vm.facilities = [];
             } else {
                 vm.facilities = facilityProgramCacheService.getSupervisedFacilities(vm.module, vm.program.id);
+                if (isInit) {
+                    vm.facility = $filter('filter')(vm.facilities,
+                        {
+                            id: $stateParams.facility
+                        }
+                    )[0];
+                }
             }
         }
     }
