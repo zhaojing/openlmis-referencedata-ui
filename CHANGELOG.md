@@ -21,6 +21,7 @@ Bug fixes:
 
 * Added openlmis-offline as a dependency to the referencedata-program module.
 * [OLMIS-3291](https://openlmis.atlassian.net/browse/OLMIS-3291): Fixed incorrect state name.
+* [OLMIS-3499](https://openlmis.atlassian.net/browse/OLMIS-3499): Fixed changing username in title header.
 
 5.2.1 / 2017-09-01
 ========================
