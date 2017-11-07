@@ -112,6 +112,10 @@ describe('UserFormController', function() {
             expect(vm.updateMode).toBe(true);
         });
 
+        it('should set initialUsername', function() {
+            expect(vm.initialUsername).toBe('random-user');
+        });
+
         it('should set updateMode if there is no user passed to controller', function() {
             vm = $controller('UserFormController', {
                 user: undefined,

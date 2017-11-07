@@ -98,6 +98,17 @@
         vm.initialHomeFacility = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserFormController
+         * @name initialUsername
+         * @type {String}
+         *
+         * @description
+         * Username of user to update.
+         */
+        vm.initialUsername = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserFormController
          * @name $onInit
@@ -116,6 +127,8 @@
                         vm.user.homeFacility = result;
                     }
                 });
+
+                vm.initialUsername = vm.user.username;
             }
 
             vm.initialHomeFacility = user ? vm.user.homeFacility : undefined;
