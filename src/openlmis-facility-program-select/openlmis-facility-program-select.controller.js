@@ -48,11 +48,11 @@
          * Initialization method of the controller.
          */
         function onInit() {
-            facilityProgramCacheService.loadData(vm.module)
+            facilityProgramCacheService.loadData()
             .then(function() {
                 vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
+                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms();
                 vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
-                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
 
                 if ($stateParams.program) {
                     vm.program = $filter('filter')(vm.supervisedPrograms,
@@ -77,7 +77,6 @@
          */
         function updateForm() {
             vm.program = undefined;
-            vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
             vm.updateFacilities();
         }
 
@@ -99,7 +98,7 @@
             } else if (!vm.program) {
                 vm.facilities = [];
             } else {
-                vm.facilities = facilityProgramCacheService.getSupervisedFacilities(vm.program.id);
+                vm.facilities = facilityProgramCacheService.getSupervisedFacilities(vm.module, vm.program.id);
                 if (isInit) {
                     vm.facility = $filter('filter')(vm.facilities,
                         {

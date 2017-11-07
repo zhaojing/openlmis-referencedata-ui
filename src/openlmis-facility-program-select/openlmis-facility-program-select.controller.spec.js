@@ -143,7 +143,7 @@ describe('OpenlmisFacilityProgramSelectController', function() {
             vm.updateFacilities();
 
             expect(vm.facilities).toEqual(facilities);
-            expect(facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(vm.program.id);
+            expect(facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(vm.module, vm.program.id);
         });
     });
 });
