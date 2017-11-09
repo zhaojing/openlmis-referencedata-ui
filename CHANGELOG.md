@@ -1,5 +1,5 @@
-5.3.0 / In development
-========================
+5.3.0 / 2017-11-09
+==================
 
 New features:
 * [OLMIS-3153](https://openlmis.atlassian.net/browse/OLMIS-3153)
@@ -11,20 +11,18 @@ New features:
 * [OLMIS-396](https://openlmis.atlassian.net/browse/OLMIS-396): Added upload functionality to manage ISA screen.
 
 Improvement:
-
 * [OLMIS-2857](https://openlmis.atlassian.net/browse/OLMIS-2857): Added username filter to user list screen.
 * [OLMIS-3283](https://openlmis.atlassian.net/browse/OLMIS-3283): Added a "Show password" option on password reset screen.
 * [OLMIS-3296](https://openlmis.atlassian.net/browse/OLMIS-3296): Reworked facility-program select component to use cached rograms, minimal facilities and permission strings.
 * Updated dev-ui version to 6.
 
 Bug fixes:
-
 * Added openlmis-offline as a dependency to the referencedata-program module.
 * [OLMIS-3291](https://openlmis.atlassian.net/browse/OLMIS-3291): Fixed incorrect state name.
 * [OLMIS-3499](https://openlmis.atlassian.net/browse/OLMIS-3499): Fixed changing username in title header.
 
 5.2.1 / 2017-09-01
-========================
+==================
 
 Improvements:
 
