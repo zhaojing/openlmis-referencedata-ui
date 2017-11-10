@@ -24,6 +24,7 @@
      * Provides base admin-role state and controller for retrieving list of roles from the OpenLMIS server.
      */
     angular.module('admin-role-list', [
+        'admin-role-form',
         'openlmis-pagination',
         'openlmis-rights',
         'referencedata-role',

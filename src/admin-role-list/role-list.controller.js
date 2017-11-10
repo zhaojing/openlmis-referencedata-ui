@@ -28,10 +28,12 @@
         .module('admin-role-list')
         .controller('RoleListController', controller);
 
-    controller.$inject = ['roles'];
+    controller.$inject = ['roles', 'typeNameFactory'];
 
-    function controller(roles) {
+    function controller(roles, typeNameFactory) {
         var vm = this;
+
+        vm.getLabel = typeNameFactory.getLabel;
 
         /**
          * @ngdoc property

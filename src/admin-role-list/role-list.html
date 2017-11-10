@@ -5,6 +5,7 @@
         <thead>
         <tr>
             <th>{{'adminRoleList.role' | message}}</th>
+            <th>{{'adminRoleList.roleType' | message}}</th>
             <th>{{'adminRoleList.description' | message}}</th>
             <th>{{'adminRoleList.actions' | message}}</th>
         </tr>
@@ -12,6 +13,7 @@
         <tbody>
         <tr ng-repeat="role in vm.rolesPage">
             <td>{{role.name}}</td>
+            <td>{{vm.getLabel(role.rights[0].type)}}</td>
             <td>{{role.description}}</td>
             <td>
                 <a ui-sref=".createUpdate({roleId: role.id})">{{'adminRoleList.edit' | message}}</a>

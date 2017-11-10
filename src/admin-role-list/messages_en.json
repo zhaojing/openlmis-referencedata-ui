@@ -4,5 +4,6 @@
     "adminRoleList.description": "Description",
     "adminRoleList.role": "Role",
     "adminRoleList.roles": "Roles",
-    "adminRoleList.edit": "Edit"
+    "adminRoleList.edit": "Edit",
+    "adminRoleList.roleType": "Role Type"
 }
