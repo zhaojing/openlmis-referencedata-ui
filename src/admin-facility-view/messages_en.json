@@ -22,5 +22,6 @@
     "adminFacilityView.associatedPrograms": "Associated Programs",
     "adminFacilityView.add": "Add",
     "adminFacilityView.savePrograms": "Save Programs",
-    "adminFacilityView.enabled": "Enabled"
+    "adminFacilityView.enabled": "Enabled",
+    "adminFacilityView.startDate.description": "The program start date determines the first date available for users to enter requisitions related to the program."
 }

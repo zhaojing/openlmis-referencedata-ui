@@ -17,3 +17,8 @@ nav.facility-edit {
         max-width: 440px;
     }
 }
+
+label.has-popover:before {
+    @include icon('info-circle');
+    margin-right: 0.5em;
+}
