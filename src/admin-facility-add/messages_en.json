@@ -14,5 +14,9 @@
     "adminFacilityAdd.facilityHasBeenSaved": "Facility has been saved!",
     "adminFacilityAdd.failedToSaveFacility": "Failed to save facility!",
     "adminFacilityAdd.addPrograms": "Add Programs",
-    "adminFacilityAdd.enabled": "Enabled"
+    "adminFacilityAdd.enabled": "Enabled",
+    "adminFacilityAdd.operationalDate.description": "This is used in reporting to record the date the facility becomes operational",
+    "adminFacilityAdd.activeFacility.description": "This determines whether or not the facility can submit requisitions or receive deliveries",
+    "adminFacilityAdd.enabled.description.checked": "Checked = The facility can operate",
+    "adminFacilityAdd.enabled.description.unchecked": "Unchecked = The facility is permanently decommissioned"
 }

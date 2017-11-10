@@ -31,7 +31,11 @@
             <tr ng-repeat="program in vm.facilityWithPrograms.supportedPrograms">
                 <td>{{program.name}}</td>
                 <td><input type="checkbox" ng-model="program.supportActive"/></td>
-                <td>{{program.supportStartDate | openlmisDate}}</td>
+                <td>
+                    <openlmis-datepicker input-id="programStartDate"
+                        value="program.supportStartDate">
+                    </openlmis-datepicker>
+                </td>
             </tr>
         </tbody>
     </table>

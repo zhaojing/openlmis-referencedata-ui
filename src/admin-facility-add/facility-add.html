@@ -14,14 +14,18 @@
                     <select id="facility-type" ng-model="vm.facility.type" ng-options="type.name for type in vm.facilityTypes" required></select>
                     <label for="operational-date">{{'adminFacilityAdd.operationalDate' | message}}</label>
                     <openlmis-datepicker input-id="operational-date" value="vm.facility.goLiveDate"></openlmis-datepicker>
+                    <p class="note">{{'adminFacilityAdd.operationalDate.description' | message}}</p>
                     <label class="checkbox" for="active-facility">
                 		<input id="active-facility" type="checkbox" ng-model="vm.facility.active"/>
                 		{{'adminFacilityAdd.activeFacility' | message}}
                 	</label>
+                    <p class="note">{{'adminFacilityAdd.activeFacility.description' | message}}</p>
                     <label class="checkbox" for="enabled">
                 		<input id="enabled" type="checkbox" ng-model="vm.facility.enabled"/>
                 		{{'adminFacilityAdd.enabled' | message}}
                 	</label>
+                    <p class="note">{{'adminFacilityAdd.enabled.description.checked' | message}}</p>
+                    <p class="note">{{'adminFacilityAdd.enabled.description.unchecked' | message}}</p>
                     <label for="geographic-zone">{{'adminFacilityAdd.geographicZone' | message}}</label>
                     <select id="geographic-zone" ng-model="vm.facility.geographicZone" ng-options="zone.name for zone in vm.geographicZones" required></select>
                     <label for="description">{{'adminFacilityAdd.description' | message}}</label>
