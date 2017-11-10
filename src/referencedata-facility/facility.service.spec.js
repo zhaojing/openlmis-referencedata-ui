@@ -139,6 +139,31 @@ describe('facilityService', function() {
             expect(data[1].id).toBe(facilityTwo.id);
             expect(spy.callCount).toEqual(2);
         });
+
+        it('should get all facilities by id and save them to storage', function() {
+            var data,
+                spy = jasmine.createSpy(),
+                idOne = "id-one",
+                idTwo = "id-two";
+
+            $httpBackend
+                .when('GET', referencedataUrlFactory('/api/facilities?id=' + idOne + '&id=' + idTwo))
+                .respond(200, [facilityOne, facilityTwo]);
+            facilitiesStorage.put.andCallFake(spy);
+
+            offlineService.isOffline.andReturn(false);
+
+            facilityService.getAll({id: [idOne, idTwo]}).then(function(response) {
+                data = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data[0].id).toBe(facilityOne.id);
+            expect(data[1].id).toBe(facilityTwo.id);
+            expect(spy.callCount).toEqual(2);
+        });
     });
 
     describe('getAllMinimal', function() {

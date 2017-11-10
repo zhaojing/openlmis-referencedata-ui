@@ -37,7 +37,6 @@
         localStorageFactory, authorizationService, permissionService) {
 
             var facilitiesOffline = localStorageFactory('facilities'),
-            supervisedFacilitiesOffline = localStorageFactory('supervisedFacilities'),
             resource = $resource(referencedataUrlFactory('/api/facilities/:id'), {}, {
                 getAll: {
                     url: referencedataUrlFactory('/api/facilities/'),
@@ -61,7 +60,7 @@
                 },
                 search: {
                     url: referencedataUrlFactory('/api/facilities/search'),
-                    method: 'POST',
+                    method: 'POST'
                 },
                 update: {
                     method: 'PUT'
@@ -117,15 +116,16 @@
              * Retrieves all facilities. When user is offline it gets facilities from offline storage.
              * If user is online it stores all facilities into offline storage.
              *
+             * @param  {String}  queryParams      the search parameters
              * @return {Promise} Array of facilities
              */
-            function getAll() {
+            function getAll(queryParams) {
                 var deferred = $q.defer();
 
                 if(offlineService.isOffline()) {
                     deferred.resolve(facilitiesOffline.getAll());
                 } else {
-                    resource.getAll(function(facilities) {
+                    resource.getAll(queryParams, function(facilities) {
                         angular.forEach(facilities, function(facility) {
                             facilitiesOffline.put(facility);
                         });
