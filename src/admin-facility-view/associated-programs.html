@@ -7,7 +7,7 @@
         </select>
     </div>
     <div class="form-group">
-        <label class="popover-icon" for="startDate" popover="{{'adminFacilityView.startDate.description' | message}}">{{'adminFacilityView.startDate' | message}}</label>
+        <label for="startDate">{{'adminFacilityView.startDate' | message}}</label>
         <openlmis-datepicker input-id="startDate"
             value="vm.selectedStartDate"
             required="true">
@@ -24,7 +24,7 @@
             <tr>
                 <th>{{'adminFacilityView.program' | message}}</th>
                 <th>{{'adminFacilityView.active' | message}}</th>
-                <th>{{'adminFacilityView.startDate' | message}}</th>
+                <th popover="{{'adminFacilityView.startDate.description' | message}}">{{'adminFacilityView.startDate' | message}}</th>
             </tr>
         </thead>
         <tbody>
