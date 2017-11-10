@@ -1,3 +1,8 @@
+5.3.1 / WIP
+
+Improvement:
+* [OLMIS-3306](https://openlmis.atlassian.net/browse/OLMIS-3306): Added role type column on the role list screen.
+
 5.3.0 / 2017-11-09
 ==================
 
