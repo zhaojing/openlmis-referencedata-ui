@@ -13,7 +13,7 @@
                         <select id="program" ng-model="vm.program" ng-options="program.name for program in vm.programs | filter:vm.isNotAssigned()" required></select>
                     </div>
                     <div class="form-group">
-                        <label for="start-date">{{'adminFacilityPrograms.startDate' | message}}</label>
+                        <label class="popover-icon" for="start-date" popover="{{'adminFacilityPrograms.startDate.description' | message}}">{{'adminFacilityPrograms.startDate' | message}}</label>
                         <openlmis-datepicker input-id="start-date" value="vm.startDate" required="true"></openlmis-datepicker>
                     </div>
                     <button class="add" type="submit">{{'adminFacilityPrograms.add' | message}}</button>
