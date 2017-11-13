@@ -109,7 +109,7 @@ describe('facilityService', function() {
 
             offlineService.isOffline.andReturn(true);
 
-            facilityService.getAll().then(function(response) {
+            facilityService.query().then(function(response) {
                 data = response;
             });
 
@@ -128,7 +128,7 @@ describe('facilityService', function() {
 
             offlineService.isOffline.andReturn(false);
 
-            facilityService.getAll().then(function(response) {
+            facilityService.query().then(function(response) {
                 data = response;
             });
 
@@ -153,7 +153,7 @@ describe('facilityService', function() {
 
             offlineService.isOffline.andReturn(false);
 
-            facilityService.getAll({id: [idOne, idTwo]}).then(function(response) {
+            facilityService.query({id: [idOne, idTwo]}).then(function(response) {
                 data = response;
             });
 

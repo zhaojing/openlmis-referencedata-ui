@@ -29,16 +29,16 @@
     .service('facilityService', service);
 
     service.$inject = [
-        '$q', '$filter', '$resource', 'referencedataUrlFactory', 'offlineService',
-        'localStorageFactory', 'authorizationService', 'permissionService'
+        '$q', '$resource', 'referencedataUrlFactory', 'offlineService',
+        'localStorageFactory', 'permissionService'
     ];
 
-    function service($q, $filter, $resource, referencedataUrlFactory, offlineService,
-        localStorageFactory, authorizationService, permissionService) {
+    function service($q, $resource, referencedataUrlFactory, offlineService,
+        localStorageFactory, permissionService) {
 
             var facilitiesOffline = localStorageFactory('facilities'),
             resource = $resource(referencedataUrlFactory('/api/facilities/:id'), {}, {
-                getAll: {
+                query: {
                     url: referencedataUrlFactory('/api/facilities/'),
                     method: 'GET',
                     isArray: true
@@ -68,7 +68,7 @@
             });
 
             this.get = get;
-            this.getAll = getAll;
+            this.query = query;
             this.getAllMinimal = getAllMinimal;
             this.getUserFacilitiesForRight = getUserFacilitiesForRight;
             this.getUserSupervisedFacilities = getUserSupervisedFacilities;
@@ -110,22 +110,23 @@
             /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
-             * @name getAll
+             * @name query
              *
              * @description
-             * Retrieves all facilities. When user is offline it gets facilities from offline storage.
+             * Retrieves all facilities that match given params or all facilities when no params provided.
+             * When user is offline it gets facilities from offline storage.
              * If user is online it stores all facilities into offline storage.
              *
              * @param  {String}  queryParams      the search parameters
              * @return {Promise} Array of facilities
              */
-            function getAll(queryParams) {
+            function query(queryParams) {
                 var deferred = $q.defer();
 
                 if(offlineService.isOffline()) {
                     deferred.resolve(facilitiesOffline.getAll());
                 } else {
-                    resource.getAll(queryParams, function(facilities) {
+                    resource.query(queryParams, function(facilities) {
                         angular.forEach(facilities, function(facility) {
                             facilitiesOffline.put(facility);
                         });
