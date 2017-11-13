@@ -23,5 +23,9 @@
     "adminFacilityView.add": "Add",
     "adminFacilityView.savePrograms": "Save Programs",
     "adminFacilityView.enabled": "Enabled",
-    "adminFacilityView.startDate.description": "The program start date determines the first date available for users to enter requisitions related to the program."
+    "adminFacilityView.startDate.description": "The program start date determines the first date available for users to enter requisitions related to the program.",
+    "adminFacilityView.operationalDate.description": "This is used in reporting to record the date the facility becomes operational",
+    "adminFacilityView.activeFacility.description": "This determines whether or not the facility can submit requisitions or receive deliveries",
+    "adminFacilityView.enabled.description.checked": "Checked = The facility can operate",
+    "adminFacilityView.enabled.description.unchecked": "Unchecked = The facility is permanently decommissioned"
 }

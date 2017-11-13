@@ -17,6 +17,7 @@
         value="vm.facilityDetails.goLiveDate"
         required="true">
     </openlmis-datepicker>
+    <p class="note">{{'adminFacilityView.operationalDate.description' | message}}</p>
 
     <label for="geographicZone">{{'adminFacilityView.geographicZone' | message}}</label>
     <select id="geographicZone"
@@ -29,11 +30,14 @@
        <input id="facilityActive" type="checkbox" ng-model="vm.facilityDetails.active"/>
        {{'adminFacilityView.activeFacility' | message}}
     </label>
+    <p class="note">{{'adminFacilityView.activeFacility.description' | message}}</p>
 
     <label for="facilityEnabled" class="checkbox">
        <input id="facilityEnabled" type="checkbox" ng-model="vm.facilityDetails.enabled"/>
        {{'adminFacilityView.enabled' | message}}
     </label>
+    <p class="note">{{'adminFacilityView.enabled.description.checked' | message}}</p>
+    <p class="note">{{'adminFacilityView.enabled.description.unchecked' | message}}</p>
 
     <label for="description">{{'adminFacilityView.description' | message}}</label>
     <textarea id="description" ng-model="vm.facilityDetails.description"></textarea>
