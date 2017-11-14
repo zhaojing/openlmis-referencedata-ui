@@ -36,6 +36,7 @@
             facilities = [],
             programs = [],
             permissions = [],
+            rights = [],
             homeFacility;
 
         this.loadData = loadData;
@@ -66,9 +67,26 @@
          * @description
          * Returns all cached user supervised programs.
          *
-         * @return {Array} user supervised programs
+         * @param  {Boolean} isSupervised if programs are for supervised facilities
+         * @return {Array}                user supervised programs
          */
-        function getUserPrograms() {
+        function getUserPrograms(isSupervised) {
+            if (!isSupervised) {
+                var programIds = [];
+                permissions.forEach(function(permission) {
+                    if (rights.indexOf(permission.right) !== -1 && homeFacility.id === permission.facilityId) {
+                        programIds.push(permission.programId);
+                    }
+                });
+
+                var result = [];
+                programs.forEach(function(program) {
+                    if (programIds.indexOf(program.id) !== -1) {
+                        result.push(program);
+                    }
+                });
+                return result;
+            }
             return programs;
         }
 
@@ -81,22 +99,10 @@
          * Returns all cached user supervised facilities
          * filtered by program and rights stored for current module.
          *
-         * @param  {String} moduleName name of current module
          * @param  {String} programId  program id for filtering
          * @return {Array}             user supervised facilities
          */
-        function getSupervisedFacilities(moduleName, programId) {
-            var rights;
-
-            if (modulesWithRights[moduleName]) {
-                rights = modulesWithRights[moduleName];
-            } else {
-                rights = [];
-                for (var module in modulesWithRights) {
-                    rights = rights.concat(modulesWithRights[module]);
-                }
-            }
-
+        function getSupervisedFacilities(programId) {
             var facilityIds = [];
             permissions.forEach(function(permission) {
                 if (rights.indexOf(permission.right) !== -1 && programId === permission.programId) {
@@ -104,19 +110,13 @@
                 }
             });
 
-            // undefined or null in this list indicates that user has right without defined facilityId,
-            // so it means that he supervise all facilities
-            if (facilityIds.indexOf(undefined) !== -1 || facilityIds.indexOf(null) !== -1) {
-                return facilities;
-            } else {
-                var result = [];
-                facilities.forEach(function(facility) {
-                    if (facilityIds.indexOf(facility.id) !== -1) {
-                        result.push(facility);
-                    }
-                });
-                return result;
-            }
+            var result = [];
+            facilities.forEach(function(facility) {
+                if (facilityIds.indexOf(facility.id) !== -1) {
+                    result.push(facility);
+                }
+            });
+            return result;
         }
 
         /**
@@ -143,9 +143,10 @@
          * Loads all cached data for this module, like facilities, programs and permission strings.
          * It have to be called before using other methods except pushRightsForModule.
          *
-         * @return {Promise} promise that resolves after successful load
+         * @param  {String}  moduleName name of current module
+         * @return {Promise}            promise that resolves after successful load
          */
-        function loadData() {
+        function loadData(moduleName) {
             var userId = authorizationService.getUser().user_id;
 
             return $q.all([
@@ -158,6 +159,8 @@
                 programs = responses[1];
                 permissions = responses[2];
 
+                loadRights(moduleName);
+
                 return referencedataUserService.get(userId);
             })
             .then(function(user) {
@@ -169,6 +172,12 @@
             return facilities.filter(function(facility) {
                 return facility.id === id;
             })[0];
+        }
+
+        function loadRights(moduleName) {
+            if (modulesWithRights[moduleName]) {
+                rights = modulesWithRights[moduleName];
+            }
         }
     }
 

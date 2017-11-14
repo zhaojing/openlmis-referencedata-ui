@@ -86,7 +86,8 @@ describe('facilityProgramCacheService', function() {
         spyOn(permissionService, 'load').andReturn($q.when(permissions));
         spyOn(referencedataUserService, 'get').andReturn($q.when(referencedataUser));
 
-        loadPromise = facilityProgramCacheService.loadData();
+        facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
+        loadPromise = facilityProgramCacheService.loadData('module');
         $rootScope.$apply();
     });
 
@@ -144,8 +145,12 @@ describe('facilityProgramCacheService', function() {
 
     describe('getUserPrograms', function() {
 
-        it('should return home programs', function() {
-            expect(facilityProgramCacheService.getUserPrograms()).toEqual(programs);
+        it('should return all supervised programs for supervised facilities', function() {
+            expect(facilityProgramCacheService.getUserPrograms(true)).toEqual(programs);
+        });
+
+        it('should return filtered programs for home facility', function() {
+            expect(facilityProgramCacheService.getUserPrograms(false)).toEqual([programs[0]]);
         });
     });
 
@@ -154,16 +159,14 @@ describe('facilityProgramCacheService', function() {
         beforeEach(function() {
             facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
             facilityProgramCacheService.pushRightsForModule('module-2', ['right-1', 'right-2']);
+
+            loadPromise = facilityProgramCacheService.loadData('module');
+            $rootScope.$apply();
         });
 
         it('should return filtered facilities', function() {
-            expect(facilityProgramCacheService.getSupervisedFacilities('module', 'program-1')).toEqual([facilities[0]]);
-            expect(facilityProgramCacheService.getSupervisedFacilities('module', 'program-2')).toEqual([facilities[1]]);
-        });
-
-        it('should return all facilities if module was not registered', function() {
-            expect(facilityProgramCacheService.getSupervisedFacilities('other-module', 'program-1')).toEqual([facilities[0]]);
-            expect(facilityProgramCacheService.getSupervisedFacilities('other-module', 'program-2')).toEqual([facilities[0], facilities[1]]);
+            expect(facilityProgramCacheService.getSupervisedFacilities('program-1')).toEqual([facilities[0]]);
+            expect(facilityProgramCacheService.getSupervisedFacilities('program-2')).toEqual([facilities[1]]);
         });
     });
 });
