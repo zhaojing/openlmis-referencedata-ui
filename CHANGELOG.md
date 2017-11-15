@@ -1,6 +1,8 @@
 5.3.1 / WIP
+===========
 
-Improvement:
+Improvements:
+
 * [OLMIS-3306](https://openlmis.atlassian.net/browse/OLMIS-3306): Added role type column on the role list screen.
 * [OLMIS-2285](https://openlmis.atlassian.net/browse/OLMIS-2285): Supported program start date is now editable on facility edit screen.
 * [OLMIS-3403](https://openlmis.atlassian.net/browse/OLMIS-3403): Added query params for get facilities.
@@ -9,6 +11,7 @@ Improvement:
 ==================
 
 New features:
+
 * [OLMIS-3153](https://openlmis.atlassian.net/browse/OLMIS-3153)
     * Added facilityOperatorsService for communicating with the facilityOperators endpoints
     * Extended facilityService with the ability to save facility
@@ -17,13 +20,15 @@ New features:
 * [OLMIS-2217](https://openlmis.atlassian.net/browse/OLMIS-2217): Added ability to send reset password email
 * [OLMIS-396](https://openlmis.atlassian.net/browse/OLMIS-396): Added upload functionality to manage ISA screen.
 
-Improvement:
+Improvements:
+
 * [OLMIS-2857](https://openlmis.atlassian.net/browse/OLMIS-2857): Added username filter to user list screen.
 * [OLMIS-3283](https://openlmis.atlassian.net/browse/OLMIS-3283): Added a "Show password" option on password reset screen.
 * [OLMIS-3296](https://openlmis.atlassian.net/browse/OLMIS-3296): Reworked facility-program select component to use cached rograms, minimal facilities and permission strings.
 * Updated dev-ui version to 6.
 
 Bug fixes:
+
 * Added openlmis-offline as a dependency to the referencedata-program module.
 * [OLMIS-3291](https://openlmis.atlassian.net/browse/OLMIS-3291): Fixed incorrect state name.
 * [OLMIS-3499](https://openlmis.atlassian.net/browse/OLMIS-3499): Fixed changing username in title header.
@@ -43,7 +48,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-2853](https://openlmis.atlassian.net/browse/OLMIS-2853): Added view Supply Lines screen.
 * [OLMIS-2600](https://openlmis.atlassian.net/browse/OLMIS-2600): Added view Program Settings screen.
 
-Bug fixes
+Bug fixes:
 
 * [OLMIS-2905](https://openlmis.atlassian.net/browse/OLMIS-2905): User with only POD_MANAGE or ORDERS_MANAGE can now access 'View Orders' page.
 * [OLMIS-2714](https://openlmis.atlassian.net/browse/OLMIS-2714): Fixed loading modal closing too soon after saving user.
