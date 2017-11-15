@@ -17,22 +17,35 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-facility
-     *
-     * @description
-     * Responsible for providing facility info to other modules.
-     */
-    angular.module('referencedata-facility', [
-        'ngResource',
-        'openlmis-auth',
-        'openlmis-permissions',
-        'openlmis-local-storage',
-        'openlmis-rights',
-        'referencedata',
-        'referencedata-program',
-        'referencedata-facility-type',
-        'referencedata-facility-operator'
-    ]);
+
+    angular
+        .module('referencedata-geographic-zone')
+        .factory('GeographicLevelBuilder', GeographicLevelBuilder);
+
+    GeographicLevelBuilder.$inject = ['GeographicLevel'];
+
+    function GeographicLevelBuilder(GeographicLevel) {
+
+        GeographicLevelBuilder.prototype.build = build;
+
+        return GeographicLevelBuilder;
+
+        function GeographicLevelBuilder() {
+            this.id = '93c05138-4550-4461-9e8a-79d5f050c223';
+            this.code = 'District';
+            this.name = 'District';
+            this.levelNumber = 3;
+        }
+
+        function build() {
+            return new GeographicLevel(
+                this.id,
+                this.code,
+                this.name,
+                this.levelNumber
+            );
+        }
+
+    }
 
 })();

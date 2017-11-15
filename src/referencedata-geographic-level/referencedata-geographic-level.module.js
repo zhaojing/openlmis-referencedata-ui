@@ -18,21 +18,11 @@
     'use strict';
 
     /**
-     * @module referencedata-facility
+     * @module referencedata-geographic-level
      *
      * @description
-     * Responsible for providing facility info to other modules.
+     * Responsible for providing geographic level info to other modules.
      */
-    angular.module('referencedata-facility', [
-        'ngResource',
-        'openlmis-auth',
-        'openlmis-permissions',
-        'openlmis-local-storage',
-        'openlmis-rights',
-        'referencedata',
-        'referencedata-program',
-        'referencedata-facility-type',
-        'referencedata-facility-operator'
-    ]);
+    angular.module('referencedata-geographic-level', []);
 
 })();

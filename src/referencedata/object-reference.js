@@ -18,21 +18,36 @@
     'use strict';
 
     /**
-     * @module referencedata-facility
+     * @ngdoc service
+     * @name referencedata.ObjectReference
      *
      * @description
-     * Responsible for providing facility info to other modules.
+     * Represents a single ObjectReference.
      */
-    angular.module('referencedata-facility', [
-        'ngResource',
-        'openlmis-auth',
-        'openlmis-permissions',
-        'openlmis-local-storage',
-        'openlmis-rights',
-        'referencedata',
-        'referencedata-program',
-        'referencedata-facility-type',
-        'referencedata-facility-operator'
-    ]);
+    angular
+        .module('referencedata')
+        .factory('ObjectReference', ObjectReference);
+
+    function ObjectReference() {
+
+        return ObjectReference;
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata.ObjectReference
+         * @name ObjectReference
+         *
+         * @description
+         * Creates a new instance of the ObjectReference class.
+         *
+         * @param  {String}  id     the UUID of the ObjectReference to be created
+         * @param  {String}  href   the href of the ObjectReference to be created
+         */
+        function ObjectReference(id, href) {
+            this.id = id;
+            this.href = href;
+        }
+
+    }
 
 })();

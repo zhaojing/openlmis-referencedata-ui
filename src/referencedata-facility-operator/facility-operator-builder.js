@@ -17,22 +17,37 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-facility
-     *
-     * @description
-     * Responsible for providing facility info to other modules.
-     */
-    angular.module('referencedata-facility', [
-        'ngResource',
-        'openlmis-auth',
-        'openlmis-permissions',
-        'openlmis-local-storage',
-        'openlmis-rights',
-        'referencedata',
-        'referencedata-program',
-        'referencedata-facility-type',
-        'referencedata-facility-operator'
-    ]);
+
+    angular
+        .module('referencedata-facility-operator')
+        .factory('FacilityOperatorBuilder', FacilityOperatorBuilder);
+
+    FacilityOperatorBuilder.$inject = ['FacilityOperator'];
+
+    function FacilityOperatorBuilder(FacilityOperator) {
+
+        FacilityOperatorBuilder.prototype.build = build;
+
+        return FacilityOperatorBuilder;
+
+        function FacilityOperatorBuilder() {
+            this.id = '9456c3e9-c4a6-4a28-9e08-47ceb16a4121';
+            this.code = 'moh';
+            this.name = 'Ministry of Health';
+            this.description = 'description';
+            this.displayOrder = 2;
+        }
+
+        function build() {
+            return new FacilityOperator(
+                this.id,
+                this.code,
+                this.name,
+                this.description,
+                this.displayOrder
+            );
+        }
+
+    }
 
 })();
