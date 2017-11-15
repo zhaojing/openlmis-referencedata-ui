@@ -52,7 +52,7 @@
             this.id = id;
             this.code = code;
             this.name = name;
-            this.description = levelNumber;
+            this.description = description;
             this.displayOrder = displayOrder;
             this.active = active;
         }
