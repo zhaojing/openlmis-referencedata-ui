@@ -99,8 +99,7 @@
          *
          * @param  {Object}  params the pagination and search params, i.e.
          * {
-         *      id: 'userOneID',
-         *      id: 'userTwoID',
+         *      id: ['userOneID', 'userTwoID'],
          *      page: 0,
          *      size: 10,
          *      sort: 'lastName,asc',
