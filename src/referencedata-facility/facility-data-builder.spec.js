@@ -20,26 +20,26 @@
 
     angular
         .module('referencedata-facility')
-        .factory('FacilityBuilder', FacilityBuilder);
+        .factory('FacilityDataBuilder', FacilityDataBuilder);
 
-    FacilityBuilder.$inject = ['Facility', 'GeographicZoneBuilder', 'FacilityTypeBuilder',
-        'FacilityOperatorBuilder'];
+    FacilityDataBuilder.$inject = ['Facility', 'GeographicZoneDataBuilder', 'FacilityTypeDataBuilder',
+        'FacilityOperatorDataBuilder'];
 
-    function FacilityBuilder(Facility, GeographicZoneBuilder, FacilityTypeBuilder,
-        FacilityOperatorBuilder) {
+    function FacilityDataBuilder(Facility, GeographicZoneDataBuilder, FacilityTypeDataBuilder,
+        FacilityOperatorDataBuilder) {
 
-        FacilityBuilder.prototype.build = build;
+        FacilityDataBuilder.prototype.build = build;
 
-        return FacilityBuilder;
+        return FacilityDataBuilder;
 
-        function FacilityBuilder() {
+        function FacilityDataBuilder() {
             this.id = '97546f93-ac93-435f-a437-cd629deb7d6d';
             this.code = 'N036';
             this.name = 'Assumane, Lichinga Cidade';
             this.description = 'description';
-            this.geographicZone = new GeographicZoneBuilder().build();
-            this.type = new FacilityTypeBuilder().build();
-            this.operator = new FacilityOperatorBuilder().build();
+            this.geographicZone = new GeographicZoneDataBuilder().build();
+            this.type = new FacilityTypeDataBuilder().build();
+            this.operator = new FacilityOperatorDataBuilder().build();
             this.active = true;
             this.goLiveDate = '2010-09-01';
             this.goDownDate = '2020-09-01';

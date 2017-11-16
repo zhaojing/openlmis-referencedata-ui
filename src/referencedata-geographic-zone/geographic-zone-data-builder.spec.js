@@ -20,22 +20,22 @@
 
     angular
         .module('referencedata-geographic-zone')
-        .factory('GeographicZoneBuilder', GeographicZoneBuilder);
+        .factory('GeographicZoneDataBuilder', GeographicZoneDataBuilder);
 
-    GeographicZoneBuilder.$inject = ['GeographicZone', 'GeographicLevelBuilder'];
+    GeographicZoneDataBuilder.$inject = ['GeographicZone', 'GeographicLevelDataBuilder'];
 
-    function GeographicZoneBuilder(GeographicZone, GeographicLevelBuilder) {
+    function GeographicZoneDataBuilder(GeographicZone, GeographicLevelDataBuilder) {
 
-        GeographicZoneBuilder.prototype.build = build;
-        GeographicZoneBuilder.prototype.withParent = withParent;
+        GeographicZoneDataBuilder.prototype.build = build;
+        GeographicZoneDataBuilder.prototype.withParent = withParent;
 
-        return GeographicZoneBuilder;
+        return GeographicZoneDataBuilder;
 
-        function GeographicZoneBuilder() {
+        function GeographicZoneDataBuilder() {
             this.id = '88b7eef3-b3f3-4f1a-9782-f5a88f78c56b';
             this.code = 'lichinga-distrito';
             this.name = 'Lichinga Distrito';
-            this.level = new GeographicLevelBuilder().build();
+            this.level = new GeographicLevelDataBuilder().build();
             this.catchmentPopulation = 12300;
             this.latitude = 35.189;
             this.longitude = -13.378;

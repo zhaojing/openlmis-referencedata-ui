@@ -19,32 +19,34 @@
 
 
     angular
-        .module('referencedata-facility-operator')
-        .factory('FacilityOperatorBuilder', FacilityOperatorBuilder);
+        .module('referencedata-facility-type')
+        .factory('FacilityTypeDataBuilder', FacilityTypeDataBuilder);
 
-    FacilityOperatorBuilder.$inject = ['FacilityOperator'];
+    FacilityTypeDataBuilder.$inject = ['FacilityType'];
 
-    function FacilityOperatorBuilder(FacilityOperator) {
+    function FacilityTypeDataBuilder(FacilityType) {
 
-        FacilityOperatorBuilder.prototype.build = build;
+        FacilityTypeDataBuilder.prototype.build = build;
 
-        return FacilityOperatorBuilder;
+        return FacilityTypeDataBuilder;
 
-        function FacilityOperatorBuilder() {
-            this.id = '9456c3e9-c4a6-4a28-9e08-47ceb16a4121';
-            this.code = 'moh';
-            this.name = 'Ministry of Health';
+        function FacilityTypeDataBuilder() {
+            this.id = 'ac1d268b-ce10-455f-bf87-9c667da8f060';
+            this.code = 'health_center';
+            this.name = 'Health Center';
             this.description = 'description';
             this.displayOrder = 2;
+            this.active = true;
         }
 
         function build() {
-            return new FacilityOperator(
+            return new FacilityType(
                 this.id,
                 this.code,
                 this.name,
                 this.description,
-                this.displayOrder
+                this.displayOrder,
+                this.active
             );
         }
 

@@ -19,30 +19,32 @@
 
 
     angular
-        .module('referencedata-geographic-zone')
-        .factory('GeographicLevelBuilder', GeographicLevelBuilder);
+        .module('referencedata-facility-operator')
+        .factory('FacilityOperatorDataBuilder', FacilityOperatorDataBuilder);
 
-    GeographicLevelBuilder.$inject = ['GeographicLevel'];
+    FacilityOperatorDataBuilder.$inject = ['FacilityOperator'];
 
-    function GeographicLevelBuilder(GeographicLevel) {
+    function FacilityOperatorDataBuilder(FacilityOperator) {
 
-        GeographicLevelBuilder.prototype.build = build;
+        FacilityOperatorDataBuilder.prototype.build = build;
 
-        return GeographicLevelBuilder;
+        return FacilityOperatorDataBuilder;
 
-        function GeographicLevelBuilder() {
-            this.id = '93c05138-4550-4461-9e8a-79d5f050c223';
-            this.code = 'District';
-            this.name = 'District';
-            this.levelNumber = 3;
+        function FacilityOperatorDataBuilder() {
+            this.id = '9456c3e9-c4a6-4a28-9e08-47ceb16a4121';
+            this.code = 'moh';
+            this.name = 'Ministry of Health';
+            this.description = 'description';
+            this.displayOrder = 2;
         }
 
         function build() {
-            return new GeographicLevel(
+            return new FacilityOperator(
                 this.id,
                 this.code,
                 this.name,
-                this.levelNumber
+                this.description,
+                this.displayOrder
             );
         }
 

@@ -20,21 +20,21 @@
 
     angular
         .module('referencedata')
-        .factory('ObjectReferenceBuilder', ObjectReferenceBuilder);
+        .factory('ObjectReferenceDataBuilder', ObjectReferenceDataBuilder);
 
-    ObjectReferenceBuilder.$inject = ['ObjectReference'];
+    ObjectReferenceDataBuilder.$inject = ['ObjectReference'];
 
-    function ObjectReferenceBuilder(ObjectReference) {
+    function ObjectReferenceDataBuilder(ObjectReference) {
 
-        ObjectReferenceBuilder.prototype.withId = withId;
-        ObjectReferenceBuilder.prototype.withHref = withHref;
-        ObjectReferenceBuilder.prototype.build = build;
+        ObjectReferenceDataBuilder.prototype.withId = withId;
+        ObjectReferenceDataBuilder.prototype.withHref = withHref;
+        ObjectReferenceDataBuilder.prototype.build = build;
 
-        return ObjectReferenceBuilder;
+        return ObjectReferenceDataBuilder;
 
-        function ObjectReferenceBuilder() {
+        function ObjectReferenceDataBuilder() {
             this.id = 'c284f9a6-1135-486d-94cc-fc550540f1ce';
-            this.href = 'https://test.openlmis.org/api/object-ref/c284f9a6-1135-486d-94cc-fc550540f1ce';
+            this.href = 'localhost';
         }
 
         function withId(newId) {

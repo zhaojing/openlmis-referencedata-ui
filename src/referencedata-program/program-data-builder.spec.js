@@ -19,34 +19,38 @@
 
 
     angular
-        .module('referencedata-facility-type')
-        .factory('FacilityTypeBuilder', FacilityTypeBuilder);
+        .module('referencedata-program')
+        .factory('ProgramDataBuilder', ProgramDataBuilder);
 
-    FacilityTypeBuilder.$inject = ['FacilityType'];
+    ProgramDataBuilder.$inject = ['Program'];
 
-    function FacilityTypeBuilder(FacilityType) {
+    function ProgramDataBuilder(Program) {
 
-        FacilityTypeBuilder.prototype.build = build;
+        ProgramDataBuilder.prototype.build = build;
 
-        return FacilityTypeBuilder;
+        return ProgramDataBuilder;
 
-        function FacilityTypeBuilder() {
-            this.id = 'ac1d268b-ce10-455f-bf87-9c667da8f060';
-            this.code = 'health_center';
-            this.name = 'Health Center';
+        function ProgramDataBuilder() {
+            this.id = '418bdc1d-c303-4bd0-b2d3-d8901150a983';
+            this.code = 'PRG004';
+            this.name = 'EPI';
             this.description = 'description';
-            this.displayOrder = 2;
             this.active = true;
+            this.periodsSkippable = true;
+            this.showNonFullSupplyTab = false;
+            this.enableDatePhysicalStockCountCompleted = false;
         }
 
         function build() {
-            return new FacilityType(
+            return new Program(
                 this.id,
                 this.code,
                 this.name,
                 this.description,
-                this.displayOrder,
-                this.active
+                this.active,
+                this.periodsSkippable,
+                this.showNonFullSupplyTab,
+                this.enableDatePhysicalStockCountCompleted
             );
         }
 

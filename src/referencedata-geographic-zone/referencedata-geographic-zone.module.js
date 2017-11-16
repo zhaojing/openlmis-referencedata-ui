@@ -25,8 +25,7 @@
      */
     angular.module('referencedata-geographic-zone', [
         'ngResource',
-        'referencedata',
-        'referencedata-geographic-level'
+        'referencedata'
     ]);
 
 })();

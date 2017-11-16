@@ -19,38 +19,30 @@
 
 
     angular
-        .module('referencedata-program')
-        .factory('ProgramBuilder', ProgramBuilder);
+        .module('referencedata-geographic-zone')
+        .factory('GeographicLevelDataBuilder', GeographicLevelDataBuilder);
 
-    ProgramBuilder.$inject = ['Program'];
+    GeographicLevelDataBuilder.$inject = ['GeographicLevel'];
 
-    function ProgramBuilder(Program) {
+    function GeographicLevelDataBuilder(GeographicLevel) {
 
-        ProgramBuilder.prototype.build = build;
+        GeographicLevelDataBuilder.prototype.build = build;
 
-        return ProgramBuilder;
+        return GeographicLevelDataBuilder;
 
-        function ProgramBuilder() {
-            this.id = '418bdc1d-c303-4bd0-b2d3-d8901150a983';
-            this.code = 'PRG004';
-            this.name = 'EPI';
-            this.description = 'description';
-            this.active = true;
-            this.periodsSkippable = true;
-            this.showNonFullSupplyTab = false;
-            this.enableDatePhysicalStockCountCompleted = false;
+        function GeographicLevelDataBuilder() {
+            this.id = '93c05138-4550-4461-9e8a-79d5f050c223';
+            this.code = 'District';
+            this.name = 'District';
+            this.levelNumber = 3;
         }
 
         function build() {
-            return new Program(
+            return new GeographicLevel(
                 this.id,
                 this.code,
                 this.name,
-                this.description,
-                this.active,
-                this.periodsSkippable,
-                this.showNonFullSupplyTab,
-                this.enableDatePhysicalStockCountCompleted
+                this.levelNumber
             );
         }
 

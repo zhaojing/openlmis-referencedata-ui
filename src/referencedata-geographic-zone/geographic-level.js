@@ -19,13 +19,13 @@
 
     /**
      * @ngdoc service
-     * @name referencedata-geographic-level.GeographicLevel
+     * @name referencedata-geographic-zone.GeographicLevel
      *
      * @description
      * Represents a single geographic level.
      */
     angular
-        .module('referencedata-geographic-level')
+        .module('referencedata-geographic-zone')
         .factory('GeographicLevel', GeographicLevel);
 
     function GeographicLevel() {
@@ -34,7 +34,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-geographic-level.GeographicLevel
+         * @methodOf referencedata-geographic-zone.GeographicLevel
          * @name GeographicLevel
          *
          * @description
