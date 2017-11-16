@@ -38,8 +38,7 @@
         resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
             query: {
                 url: openlmisUrlFactory('/api/users'),
-                method: 'GET',
-                isArray: true
+                method: 'GET'
             },
             search: {
                 url: openlmisUrlFactory('/api/users/search'),
