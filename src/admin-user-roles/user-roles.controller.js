@@ -22,29 +22,21 @@
      * @name admin-user-roles.controller:UserRolesController
      *
      * @description
-     * Exposes method for adding/removing user roles.
+     * Exposes method for saving user roles.
      */
     angular
         .module('admin-user-roles')
         .controller('UserRolesController', controller);
 
-        controller.$inject = [
-            'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$filter', 'referencedataUserService',
-            'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES', '$scope', '$q', 'confirmService'
-        ];
+    controller.$inject = ['user', 'referencedataUserService', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'];
 
-        function controller(user, supervisoryNodes, programs, roles, warehouses, $filter, referencedataUserService,
-                            loadingModalService, $state, notificationService, ROLE_TYPES, $scope, $q, confirmService) {
+    function controller(user, referencedataUserService, loadingModalService, $state, notificationService, ROLE_TYPES) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.removeRole = removeRole;
-        vm.addRole = addRole;
-        vm.saveUserRoles = saveUserRoles;
-        vm.isFulfillmentType = isFulfillmentType;
-        vm.isSupervisionType = isSupervisionType;
         vm.goToUserList = goToUserList;
+        vm.saveUserRoles = saveUserRoles;
 
         /**
          * @ngdoc property
@@ -60,62 +52,6 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name roles
-         * @type {Array}
-         *
-         * @description
-         * List of all roles.
-         */
-        vm.roles = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name roles
-         * @type {Array}
-         *
-         * @description
-         * List of roles for given type.
-         */
-        vm.filteredRoles = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name supervisoryNodes
-         * @type {Array}
-         *
-         * @description
-         * List of all supervisory nodes.
-         */
-        vm.supervisoryNodes = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name warehouses
-         * @type {Array}
-         *
-         * @description
-         * List of all warehouses.
-         */
-        vm.warehouses = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name programs
-         * @type {Array}
-         *
-
-         * @description
-         * List of all programs.
-         */
-        vm.programs = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
          * @name types
          * @type {Array}
          *
@@ -123,61 +59,6 @@
          * List of all role types.
          */
         vm.types = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name selectedType
-         * @type {Number}
-         *
-         * @description
-         * Currently selected type.
-         */
-        vm.selectedType = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name selectedRole
-         * @type {Object}
-         *
-         * @description
-         * Contains selected role.
-         */
-        vm.selectedRole = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name selectedSupervisoryNode
-         * @type {Object}
-         *
-         * @description
-         * Contains selected supervisory node.
-         */
-        vm.selectedSupervisoryNode = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name selectedProgram
-         * @type {Object}
-         *
-         * @description
-         * Contains selected program.
-         */
-        vm.selectedProgram = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name selectedWarehouse
-         * @type {Object}
-         *
-         * @description
-         * Contains selected warehouse.
-         */
-        vm.selectedWarehouse = undefined;
 
         /**
          * @ngdoc method
@@ -189,108 +70,7 @@
          */
         function onInit() {
             vm.user = user;
-            vm.roles = roles;
-            vm.supervisoryNodes = supervisoryNodes;
-            vm.warehouses = warehouses;
-            vm.programs = programs;
             vm.types = ROLE_TYPES;
-            vm.selectedType = 0;
-            reloadTable();
-            $scope.$watch(function() {
-                return vm.selectedType;
-            }, function(oldValue, newValue) {
-                if(oldValue !== newValue) {
-                    reloadTable();
-                    clearSelectedValues();
-                }
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name isSupervisionType
-         *
-         * @description
-         * Checks if supervision tab is selected.
-         */
-        function isSupervisionType() {
-            return vm.selectedType === 0;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name isFulfillmentType
-         *
-         * @description
-         * Checks if fulfillment tab is selected.
-         */
-        function isFulfillmentType() {
-            return vm.selectedType === 1;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name addRole
-         *
-         * @description
-         * Adds new role assignment to user object.
-         *
-         * @return {Promise} resolves if new role is valid
-         */
-        function addRole() {
-            var deferred = $q.defer(),
-                invalidMessage = isNewRoleInvalid();
-
-            if(!invalidMessage) {
-                var roleAssignment = {
-                    roleId: vm.selectedRole.id,
-                    $roleName: vm.selectedRole.name,
-                    $type: vm.types[vm.selectedType].name
-                };
-                if(isSupervisionType()) {
-                    roleAssignment.programId = vm.selectedProgram.id;
-                    roleAssignment.$programName = vm.selectedProgram.name;
-
-                    if(vm.selectedSupervisoryNode) {
-                        roleAssignment.supervisoryNodeId = vm.selectedSupervisoryNode.id;
-                        roleAssignment.$supervisoryNodeName = vm.selectedSupervisoryNode.$display;
-                    }
-                } else if(isFulfillmentType()) {
-                    roleAssignment.warehouseId = vm.selectedWarehouse.id;
-                    roleAssignment.$warehouseName = vm.selectedWarehouse.name;
-                }
-                user.roleAssignments.push(roleAssignment);
-                reloadTable();
-                clearSelectedValues();
-                deferred.resolve();
-            } else {
-                notificationService.error(invalidMessage);
-                deferred.reject();
-            }
-
-            return deferred.promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesController
-         * @name removeRole
-         *
-         * @description
-         * Removes role from user object.
-         *
-         * @param {Object} roleAssignment the role assignment to be removed
-         */
-        function removeRole(roleAssignment) {
-            confirmService.confirmDestroy('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label').then(function() {
-                var index = vm.user.roleAssignments.indexOf(roleAssignment);
-                if(index < 0) return;
-                vm.user.roleAssignments.splice(index, 1);
-                reloadTable();
-            });
         }
 
         /**
@@ -323,65 +103,9 @@
          * Redirects to user list.
          */
         function goToUserList() {
-            $state.go('^', {}, {
+            $state.go('openlmis.administration.users', {}, {
                 reload: true
             });
-        }
-
-        function reloadTable() {
-            var groupedRoleAssignments = $filter('groupBy')(vm.user.roleAssignments, '$type');
-            vm.filteredRoleAssignments = groupedRoleAssignments[vm.types[vm.selectedType].name];
-
-            vm.filteredRoles = $filter('filter')(vm.roles, {
-                $type: vm.types[vm.selectedType].name
-            });
-
-            if(vm.warehouses.length === 1) vm.selectedWarehouse = vm.warehouses[0];
-            if(vm.filteredRoles.length === 1) vm.selectedRole = vm.filteredRoles[0];
-        }
-
-        function clearSelectedValues() {
-            vm.selectedProgram = undefined;
-            vm.selectedSupervisoryNode = undefined;
-            if(vm.warehouses.length !== 1) vm.selectedWarehouse = undefined;
-            if(vm.filteredRoles.length !== 1) vm.selectedRole = undefined;
-        }
-
-        function isNewRoleInvalid() {
-            if(roleAlreadyAssigned()) return 'adminUserRoles.roleAlreadyAssigned';
-            if(isSupervisionType() && !vm.selectedProgram) return 'adminUserRoles.supervisionInvalid';
-            if(isSupervisionType() && !vm.selectedSupervisoryNode && !vm.user.homeFacilityId) return 'adminUserRoles.homeFacilityRoleInvalid';
-            else if(isFulfillmentType() && !vm.selectedWarehouse) return 'adminUserRoles.fulfillmentInvalid';
-            return undefined;
-        }
-
-        function roleAlreadyAssigned() {
-            if(!vm.selectedRole) return false;
-            var alreadyExist = false;
-            angular.forEach(vm.user.roleAssignments, function(role) {
-                var isEqual = vm.selectedRole.id === role.roleId;
-                if(isSupervisionType()) {
-                    isEqual = isEqual &&
-                        vm.selectedProgram.id === role.programId;
-
-                    if(role.supervisoryNodeId) {
-                        if(vm.selectedSupervisoryNode){
-                            isEqual = isEqual &&
-                                vm.selectedSupervisoryNode.id === role.supervisoryNodeId;
-                        } else {
-                            isEqual = false;
-                        }
-                    } else if(vm.selectedSupervisoryNode) {
-                        isEqual = false;
-                    }
-                }
-                else if(isFulfillmentType()) {
-                    isEqual = isEqual &&
-                        vm.selectedWarehouse.id === role.warehouseId;
-                }
-                alreadyExist = alreadyExist || isEqual;
-            });
-            return alreadyExist;
         }
     }
 })();

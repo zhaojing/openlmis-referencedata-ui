@@ -25,7 +25,7 @@
 
         $stateProvider.state('openlmis.administration.users.roles', {
             label: 'adminUserRoles.editUserRoles',
-            url: '/users/:id/roles',
+            url: '/:id/roles',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
                 roles: function(referencedataRoleFactory) {
@@ -61,9 +61,9 @@
             },
             views: {
                 '@openlmis': {
-                    controller: 'UserRolesController',
                     templateUrl: 'admin-user-roles/user-roles.html',
-                    controllerAs: 'vm',
+                    controller: 'UserRolesController',
+                    controllerAs: 'vm'
                 }
             }
         });

@@ -1,0 +1,71 @@
+<form class="form-inline" ng-submit="vm.addRole()" reload-form>
+    <div class="form-group" ng-if="vm.isSupervisionType()">
+        <label for="program">{{'adminUserRoles.program' | message}}</label>
+        <select id="program" ng-model="vm.selectedProgram"
+            ng-options="program as program.name for program in vm.programs"
+            required>
+        </select>
+    </div>
+    <div class="form-group" ng-if="vm.isSupervisionType()">
+        <label for="supervisoryNode">{{'adminUserRoles.supervisoryNode' | message}}</label>
+        <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
+            ng-options="supervisoryNode as supervisoryNode.$display for supervisoryNode in vm.supervisoryNodes"
+            no-auto-select="true">
+        </select>
+    </div>
+    <div class="form-group" ng-if="vm.isFulfillmentType()">
+        <label for="warehouse">{{'adminUserRoles.warehouse' | message}}</label>
+        <select id="warehouse" ng-model="vm.selectedWarehouse" required
+            ng-options="warehouse as warehouse.name for warehouse in vm.warehouses">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="role">{{'adminUserRoles.role' | message}}</label>
+        <select id="role" ng-model="vm.selectedRole"
+            ng-options="role as role.name for role in vm.filteredRoles" required>
+        </select>
+    </div>
+    <button type="submit" class="add">{{'adminUserRoles.addRole' | message}}</button>
+</form>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.filteredRoleAssignments || vm.filteredRoleAssignments.length === 0">
+            {{'adminUserRoles.noRolesAssigned' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th ng-if="vm.isSupervisionType()">
+                    {{'adminUserRoles.program' | message}}
+                </th>
+                <th ng-if="vm.isSupervisionType()">
+                    {{'adminUserRoles.supervisoryNode' | message}}
+                </th>
+                <th ng-if="vm.isFulfillmentType()">
+                    {{'adminUserRoles.warehouse' | message}}
+                </th>
+                <th>{{'adminUserRoles.role' | message}}</th>
+                <th>{{'adminUserRoles.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="roleAssignment in vm.items | orderBy : '$name'">
+                <td ng-if="vm.isSupervisionType()">
+                    {{roleAssignment.$programName}}
+                </td>
+                <td ng-if="vm.isSupervisionType()">
+                    {{roleAssignment.$supervisoryNodeName}}
+                </td>
+                <td ng-if="vm.isFulfillmentType()">
+                    {{roleAssignment.$warehouseName}}
+                </td>
+                <td>{{roleAssignment.$roleName}}</td>
+                <td>
+                    <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole.label' | message}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination
+        list="vm.filteredRoleAssignments"
+        paged-list="vm.items"/>
+</section>

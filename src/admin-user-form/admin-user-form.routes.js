@@ -25,7 +25,7 @@
 
 		$stateProvider.state('openlmis.administration.users.form', {
 			label: 'adminUserForm.addEditUser',
-			url: '/users/form/:id',
+			url: '/form/:id',
 			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
 			resolve: {
 				facilities: function(facilityService) {

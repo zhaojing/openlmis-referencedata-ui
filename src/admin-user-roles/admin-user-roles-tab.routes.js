@@ -26,26 +26,25 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.users.roles.tab', {
-            label: 'adminUserRoles.editUserRoles',
-            url: '/users/:id/roles/:tab?page&size',
+            url: '/:tab',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             params: {
-                tab: 0
+                tab: '0'
             },
+            controller: 'UserRolesTabController',
+            templateUrl: 'admin-user-roles/user-roles-tab.html',
+            controllerAs: 'vm',
             resolve: {
-                filteredUserRoles: function(paginationService, user, $stateParams) {
+                filteredRoleAssignments: function(paginationService, user, $stateParams, ROLE_TYPES) {
                     return paginationService.registerList(null, $stateParams, function() {
-                        return user.roles.filter(function(role) {
-                            return role.$type === ROLE_TYPES[$stateParams.tab].name;
+                        var filtered = user.roleAssignments.filter(function(role) {
+                            return role.$type === ROLE_TYPES[parseInt($stateParams.tab)].name;
+                        });
+
+                        return filtered.sort(function(a, b) {
+                            return (a.$roleName > b.$roleName) ? 1 : ((b.$roleName > a.$roleName) ? -1 : 0);
                         });
                     });
-                }
-            },
-            views: {
-                '@openlmis': {
-                    controller: 'UserRolesController',
-                    templateUrl: 'admin-user-roles/user-roles.html',
-                    controllerAs: 'vm',
                 }
             }
         });

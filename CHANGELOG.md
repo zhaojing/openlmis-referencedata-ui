@@ -6,6 +6,7 @@ Improvements:
 * [OLMIS-3306](https://openlmis.atlassian.net/browse/OLMIS-3306): Added role type column on the role list screen.
 * [OLMIS-2285](https://openlmis.atlassian.net/browse/OLMIS-2285): Supported program start date is now editable on facility edit screen.
 * [OLMIS-3403](https://openlmis.atlassian.net/browse/OLMIS-3403): Added query params for get facilities and get users.
+* [OLMIS-2727](https://openlmis.atlassian.net/browse/OLMIS-2727): Added pagination for user roles tab.
 
 Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.

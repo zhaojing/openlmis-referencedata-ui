@@ -15,20 +15,16 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService, confirmService,
-        scope, vm, user, roles, supervisoryNodes, warehouses, programs;
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService,
+        vm, user;
 
     beforeEach(function() {
 
         module('admin-user-roles', function($provide) {
+
             referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['saveUser']);
             $provide.service('referencedataUserService', function() {
                 return referencedataUserService;
-            });
-
-            confirmService = jasmine.createSpyObj('confirmService', ['confirmDestroy']);
-            $provide.service('confirmService', function() {
-                return confirmService;
             });
 
             notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
@@ -64,95 +60,21 @@ describe('UserRolesController', function() {
                 }
             ]
         };
-        roles = [
-            {
-                name: 'role-1',
-                id: 'role-id-1',
-                $type: ROLE_TYPES[0].name
-            },
-            {
-                name: 'role-2',
-                id: 'role-id-2',
-                $type: ROLE_TYPES[3].name
-            },
-            {
-                name: 'role-3',
-                id: 'role-id-3',
-                $type: ROLE_TYPES[0].name
-            },
-            {
-                name: 'role-4',
-                id: 'role-id-4',
-                $type: ROLE_TYPES[1].name
-            }
-        ];
-        supervisoryNodes = [
-            {
-                id: 'node-id-1',
-                $display: 'node-1'
-            },
-            {
-                id: 'node-id-2',
-                $display: 'node-2'
-            }
-        ];
-        warehouses = [
-            {
-                id: 'warehouse-id-1',
-                name: 'warehouse-1'
-            },
-            {
-                id: 'warehouse-id-2',
-                name: 'warehouse-2'
-            }
-        ];
-        programs = [
-            {
-                id: 'program-id-1',
-                name: 'program-1'
-            },
-            {
-                id: 'program-id-2',
-                name: 'program-2'
-            }
-        ];
-        scope = $rootScope.$new();
 
         vm = $controller('UserRolesController', {
-            user: user,
-            roles: roles,
-            supervisoryNodes: supervisoryNodes,
-            warehouses: warehouses,
-            programs: programs,
-            $scope: scope
+            user: user
         });
 
         vm.$onInit();
-        scope.$apply();
+        $rootScope.$apply();
 
         spyOn($state, 'go').andReturn();
     });
 
     describe('on init', function() {
 
-        it('should expose removeRole method', function() {
-            expect(angular.isFunction(vm.removeRole)).toBe(true);
-        });
-
-        it('should expose addRole method', function() {
-            expect(angular.isFunction(vm.addRole)).toBe(true);
-        });
-
         it('should expose saveUserRoles method', function() {
             expect(angular.isFunction(vm.saveUserRoles)).toBe(true);
-        });
-
-        it('should expose isFulfillmentType method', function() {
-            expect(angular.isFunction(vm.isFulfillmentType)).toBe(true);
-        });
-
-        it('should expose isSupervisionType method', function() {
-            expect(angular.isFunction(vm.isSupervisionType)).toBe(true);
         });
 
         it('should expose goToUserList method', function() {
@@ -163,180 +85,8 @@ describe('UserRolesController', function() {
             expect(vm.user).toEqual(user);
         });
 
-        it('should set roles', function() {
-            expect(vm.roles).toEqual(roles);
-        });
-
-        it('should set supervisoryNodes', function() {
-            expect(vm.supervisoryNodes).toEqual(supervisoryNodes);
-        });
-
-        it('should set warehouses', function() {
-            expect(vm.warehouses).toEqual(warehouses);
-        });
-
-        it('should set programs', function() {
-            expect(vm.programs).toEqual(programs);
-        });
-
-        it('should set programs', function() {
-            expect(vm.programs).toEqual(programs);
-        });
-
         it('should set types', function() {
             expect(vm.types).toEqual(ROLE_TYPES);
-        });
-
-        it('should set selectedType', function() {
-            expect(vm.selectedType).toEqual(0);
-        });
-
-        it('should set filteredRoleAssignments', function() {
-            expect(vm.filteredRoleAssignments).toEqual([user.roleAssignments[0]]);
-        });
-
-        it('should set filteredRoles', function() {
-            expect(vm.filteredRoles).toEqual([roles[0], roles[2]]);
-        });
-
-        it('should clear selected values after selected type changes', function() {
-            vm.selectedProgram = programs[0];
-            vm.selectedType = 1;
-            scope.$apply();
-            expect(vm.selectedProgram).toBe(undefined);
-        });
-
-        it('should reload table after selected type changes', function() {
-            vm.selectedProgram = programs[0];
-            vm.selectedType = 1;
-            scope.$apply();
-            expect(vm.filteredRoleAssignments).toBe(undefined);
-            expect(vm.filteredRoles.length).toEqual(1);
-        });
-    });
-
-    describe('isSupervisionType', function() {
-
-        it('should return true if selected type is supervision', function() {
-            expect(vm.isSupervisionType()).toBe(true);
-        });
-
-        it('should return false if selected type is not supervision', function() {
-            vm.selectedType = 1;
-            expect(vm.isSupervisionType()).toBe(false);
-        });
-    });
-
-    describe('isFulfillmentType', function() {
-
-        it('should return true if selected type is fulfillment', function() {
-            vm.selectedType = 1;
-            expect(vm.isFulfillmentType()).toBe(true);
-        });
-
-        it('should return false if selected type is not fulfillment', function() {
-            expect(vm.isFulfillmentType()).toBe(false);
-        });
-    });
-
-    describe('addRole', function() {
-
-        it('should return promise', function() {
-            expect(angular.isFunction(vm.addRole().then)).toBe(true);
-        });
-
-        it('should display error notification if role is already assigned', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
-
-            vm.selectedRole = roles[1];
-            vm.selectedType = 3;
-
-            vm.addRole();
-
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.roleAlreadyAssigned');
-        });
-
-        it('should display error notification if supervision role is invalid', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
-
-            vm.selectedRole = roles[2];
-            vm.selectedProgram = undefined;
-
-            vm.addRole();
-
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.supervisionInvalid');
-        });
-
-        it('should display error notification if home facility role cannot be assigned', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
-
-            vm.selectedRole = roles[2];
-            vm.selectedProgram = programs[1];
-            vm.user.homeFacilityId = undefined;
-
-            vm.addRole();
-
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.homeFacilityRoleInvalid');
-        });
-
-        it('should display error notification if fulfillment role is invalid', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
-
-            vm.selectedType = 1;
-            vm.selectedRole = roles[3];
-
-            vm.addRole();
-
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.fulfillmentInvalid');
-        });
-
-        it('should add new supervision role assignment', function() {
-            var roleAssignmentsCount = vm.user.roleAssignments.length;
-
-            vm.selectedRole = roles[2];
-            vm.selectedProgram = programs[1];
-            vm.selectedSupervisoryNode = supervisoryNodes[1];
-
-            vm.addRole();
-
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
-            expect(notificationService.error).not.toHaveBeenCalled();
-            expect(vm.user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[2].id);
-            expect(vm.user.roleAssignments[roleAssignmentsCount].$roleName).toEqual(roles[2].name);
-            expect(vm.user.roleAssignments[roleAssignmentsCount].$programName).toEqual(programs[1].name);
-            expect(vm.user.roleAssignments[roleAssignmentsCount].$supervisoryNodeName).toEqual(supervisoryNodes[1].$display);
-            expect(vm.selectedRole).toEqual(undefined);
-        });
-    });
-
-    describe('removeRole', function() {
-
-        var roleAssignmentsCount;
-
-        beforeEach(function() {
-            confirmService.confirmDestroy.andReturn($q.when(true));
-            roleAssignmentsCount = vm.user.roleAssignments.length;
-        });
-
-        it('should show confirm modal', function() {
-            vm.removeRole(vm.user.roleAssignments[0]);
-            expect(confirmService.confirmDestroy).toHaveBeenCalledWith('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label');
-        });
-
-        it('should remove role assignment if it exists', function() {
-            vm.removeRole(vm.user.roleAssignments[0]);
-            $rootScope.$apply();
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount - 1);
-        });
-
-        it('should not remove role assignment if it does not exists', function() {
-            vm.removeRole('roleAssignment');
-            $rootScope.$apply();
-            expect(vm.user.roleAssignments.length).toEqual(roleAssignmentsCount);
         });
     });
 
@@ -363,7 +113,7 @@ describe('UserRolesController', function() {
 
         it('should redirect to users list', function() {
             $rootScope.$apply();
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
                     reload: true
                 });
         });
@@ -393,7 +143,7 @@ describe('UserRolesController', function() {
         });
 
         it('should redirect to users list page', function() {
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
                     reload: true
                 });
         });
