@@ -92,13 +92,19 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-user.referencedataUserService
-         * @name getAll
+         * @name query
          *
          * @description
          * Gets all users that match given params or all facilities when no params provided.
          *
-         * @param  {Object}  params the pagination and search params
-         *
+         * @param  {Object}  params the pagination and search params, i.e.
+         * {
+         *      id: 'userOneID',
+         *      id: 'userTwoID',
+         *      page: 0,
+         *      size: 10,
+         *      sort: 'lastName,asc',
+         * }
          * @return {Promise} the array of all users
          */
         function query(params) {
