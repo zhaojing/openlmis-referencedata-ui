@@ -34,7 +34,7 @@
 
         function ObjectReferenceDataBuilder() {
             this.id = 'c284f9a6-1135-486d-94cc-fc550540f1ce';
-            this.href = 'localhost';
+            this.href = 'http://localhost/api/object-ref/c284f9a6-1135-486d-94cc-fc550540f1ce';
         }
 
         function withId(newId) {
