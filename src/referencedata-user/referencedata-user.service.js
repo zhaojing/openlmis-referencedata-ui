@@ -36,7 +36,7 @@
     function service($q, openlmisUrlFactory, $resource, offlineService, localStorageFactory) {
         var offlineUserDetails = localStorageFactory('offlineUserDetails'),
         resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
-            getAll: {
+            query: {
                 url: openlmisUrlFactory('/api/users'),
                 method: 'GET',
                 isArray: true
@@ -54,7 +54,7 @@
 
         this.get = get;
         this.search = search;
-        this.getAll = getAll;
+        this.query = query;
         this.saveUser = saveUser;
 
         /**
@@ -96,12 +96,14 @@
          * @name getAll
          *
          * @description
-         * Gets all users.
+         * Gets all users that match given params or all facilities when no params provided.
+         *
+         * @param  {Object}  params the pagination and search params
          *
          * @return {Promise} the array of all users
          */
-        function getAll() {
-            return resource.getAll().$promise;
+        function query(params) {
+            return resource.query(params).$promise;
         }
 
         /**

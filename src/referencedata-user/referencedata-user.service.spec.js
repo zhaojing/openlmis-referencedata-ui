@@ -15,8 +15,8 @@
 
 describe('referencedataUserService', function() {
 
-    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, user1,
-    user2, offlineUserDetails;
+    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, user1,
+    user2, offlineUserDetails, referencedataUserService
 
     beforeEach(function() {
         module('referencedata-user', function($provide) {
@@ -95,9 +95,37 @@ describe('referencedataUserService', function() {
         var data;
 
         $httpBackend.when('GET', openlmisUrlFactory('/api/users'))
-        .respond(200, [user1, user2]);
+            .respond(200, [user1, user2]);
 
-        referencedataUserService.getAll().then(function(response) {
+        referencedataUserService.query().then(function(response) {
+            data = response;
+        });
+
+        $httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(data[0].id).toEqual(user1.id);
+        expect(data[1].id).toEqual(user2.id);
+    });
+
+    it('should get all users by id with pagination params', function() {
+        var data = [],
+            idOne = "id-one",
+            idTwo = "id-two",
+            params = {
+                id: [idOne, idTwo],
+                page: 0,
+                size: 10,
+                sort: "username"
+            };
+
+        var url = openlmisUrlFactory('/api/users?id=' + idOne + '&id=' + idTwo +
+            '&page=' + params.page + '&size=' + params.size + '&sort=' + params.sort);
+        $httpBackend
+            .when('GET', url)
+            .respond(200, [user1, user2]);
+
+        referencedataUserService.query(params).then(function(response) {
             data = response;
         });
 
