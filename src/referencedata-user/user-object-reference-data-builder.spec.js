@@ -25,10 +25,10 @@
 
     function UserObjectReferenceDataBuilder(UserObjectReference) {
 
-        ObjectReferenceDataBuilder.prototype.withId = withId;
-        ObjectReferenceDataBuilder.prototype.withHref = withHref;
-        ObjectReferenceDataBuilder.prototype.withFirstName = withFirstName;
-        ObjectReferenceDataBuilder.prototype.withLastName = withLastName;
+        UserObjectReferenceDataBuilder.prototype.withId = withId;
+        UserObjectReferenceDataBuilder.prototype.withHref = withHref;
+        UserObjectReferenceDataBuilder.prototype.withFirstName = withFirstName;
+        UserObjectReferenceDataBuilder.prototype.withLastName = withLastName;
         UserObjectReferenceDataBuilder.prototype.build = build;
 
         return UserObjectReferenceDataBuilder;
