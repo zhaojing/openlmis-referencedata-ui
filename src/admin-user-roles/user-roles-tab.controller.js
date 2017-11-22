@@ -170,26 +170,21 @@
          * @return {Promise} resolves if new role is valid
          */
         function addRole() {
-            var invalidMessage = isNewRoleInvalid();
-
-            if (!invalidMessage) {
-                try {
-                    user.addRoleAssignment(vm.selectedRole.id, vm.selectedRole.name, tab,
-                        vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.id : undefined,
-                        vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.name : undefined,
-                        vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.id : undefined,
-                        vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.$display : undefined,
-                        vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.id : undefined,
-                        vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.name : undefined);
-                    reloadState();
-                    return $q.resolve();
-                }
-                catch (err) {
-                    invalidMessage = 'adminUserRoles.roleAlreadyAssigned';
-                }
+            try {
+                user.addRoleAssignment(vm.selectedRole.id, vm.selectedRole.name, tab,
+                    vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.id : undefined,
+                    vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.name : undefined,
+                    vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.id : undefined,
+                    vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.$display : undefined,
+                    vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.id : undefined,
+                    vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.name : undefined);
+                reloadState();
+                return $q.resolve();
             }
-            notificationService.error(invalidMessage);
-            return $q.reject();
+            catch (error) {
+                notificationService.error(error.message);
+                return $q.reject();
+            }
         }
 
         /**
@@ -208,11 +203,6 @@
                 user.removeRoleAssignment(roleAssignment);
                 reloadState();
             });
-        }
-
-        function isNewRoleInvalid() {
-            if (vm.selectedType === ROLE_TYPES.SUPERVISION && !vm.selectedSupervisoryNode && !user.homeFacilityId) return 'adminUserRoles.homeFacilityRoleInvalid';
-            return undefined;
         }
 
         function reloadState() {

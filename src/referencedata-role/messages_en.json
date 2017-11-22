@@ -2,5 +2,8 @@
     "referencedataRoles.fulfillment": "Fulfillment",
     "referencedataRoles.supervision": "Supervision",
     "referencedataRoles.administration": "Administration",
-    "referencedataRoles.reports": "Reports"
+    "referencedataRoles.reports": "Reports",
+    "referencedataRoles.roleAssignmentInvalid": "Role assignment invalid.",
+    "referencedataRoles.homeFacilityRoleInvalid": "Cannot assign Supervision role to user without home facility.",
+    "referencedataRoles.roleAlreadyAssigned": "Role already assigned."
 }

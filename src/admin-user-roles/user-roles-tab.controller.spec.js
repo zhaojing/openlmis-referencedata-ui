@@ -135,20 +135,20 @@ describe('UserRolesTabController', function() {
             vm.addRole();
 
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.roleAlreadyAssigned');
+            expect(notificationService.error).toHaveBeenCalledWith('referencedataRoles.roleAlreadyAssigned');
         });
 
         it('should display error notification if home facility role cannot be assigned', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
 
-            vm.selectedRole = roles[2];
+            vm.selectedRole = roles[1];
             vm.selectedProgram = programs[1];
             user.homeFacilityId = undefined;
 
             vm.addRole();
 
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.homeFacilityRoleInvalid');
+            expect(notificationService.error).toHaveBeenCalledWith('referencedataRoles.homeFacilityRoleInvalid');
         });
 
         it('should add new supervision role assignment', function() {
