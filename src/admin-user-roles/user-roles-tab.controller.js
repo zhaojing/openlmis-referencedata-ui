@@ -211,9 +211,7 @@
         }
 
         function isNewRoleInvalid() {
-            if (vm.selectedType === ROLE_TYPES.SUPERVISION && !vm.selectedProgram) return 'adminUserRoles.supervisionInvalid';
             if (vm.selectedType === ROLE_TYPES.SUPERVISION && !vm.selectedSupervisoryNode && !user.homeFacilityId) return 'adminUserRoles.homeFacilityRoleInvalid';
-            else if (vm.selectedType === ROLE_TYPES.ORDER_FULFILLMENT && !vm.selectedWarehouse) return 'adminUserRoles.fulfillmentInvalid';
             return undefined;
         }
 

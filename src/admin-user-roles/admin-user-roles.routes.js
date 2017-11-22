@@ -24,6 +24,7 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.users.roles', {
+            abstract: true,
             label: 'adminUserRoles.editUserRoles',
             url: '/:id/roles',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],

@@ -26,7 +26,7 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS, ROLE_TYPES) {
 
         $stateProvider.state('openlmis.administration.users.roles.' + ROLE_TYPES.ORDER_FULFILLMENT, {
-            //label: ROLE_TYPES.getLabel(ROLE_TYPES.ORDER_FULFILLMENT),
+            label: ROLE_TYPES.getLabel(ROLE_TYPES.ORDER_FULFILLMENT),
             url: '/fulfillment',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             controller: 'UserRolesTabController',

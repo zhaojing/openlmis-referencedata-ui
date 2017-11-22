@@ -26,7 +26,7 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS, ROLE_TYPES) {
 
         $stateProvider.state('openlmis.administration.users.roles.' + ROLE_TYPES.REPORTS, {
-            //label: ROLE_TYPES.getLabel(ROLE_TYPES.REPORTS),
+            label: ROLE_TYPES.getLabel(ROLE_TYPES.REPORTS),
             url: '/reports',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             controller: 'UserRolesTabController',

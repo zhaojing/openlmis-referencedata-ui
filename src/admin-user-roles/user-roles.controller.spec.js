@@ -15,7 +15,7 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService,
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService, UserDataBuilder,
         vm, user;
 
     beforeEach(function() {
@@ -44,22 +44,14 @@ describe('UserRolesController', function() {
             $state = $injector.get('$state');
             $q = $injector.get('$q');
             ROLE_TYPES = $injector.get('ROLE_TYPES');
+
+            UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        user = {
-            roleAssignments: [
-                {
-                    roleId: 'role-id-1',
-                    supervisoryNodeId: 'node-id-1',
-                    programId: 'program-id-1',
-                    type: ROLE_TYPES.SUPERVISION
-                },
-                {
-                    roleId: 'role-id-2',
-                    type: ROLE_TYPES.GENERAL_ADMIN
-                }
-            ]
-        };
+        user = new UserDataBuilder()
+            .withSupervisionRoleAssignment('role-id-1', 'node-id-1', 'program-id-1')
+            .withGeneralAdminRoleAssignment('role-id-2')
+            .build();
 
         vm = $controller('UserRolesController', {
             user: user
