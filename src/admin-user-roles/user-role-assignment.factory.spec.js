@@ -80,27 +80,27 @@ describe('userRoleAssignmentFactory', function() {
         });
 
         it('should set type properties for all assignments', function() {
-            expect(resultUser.roleAssignments[0].$type).toEqual(roles[0].rights[0].type);
-            expect(resultUser.roleAssignments[1].$type).toEqual(roles[1].rights[0].type);
-            expect(resultUser.roleAssignments[2].$type).toEqual(roles[2].rights[0].type);
+            expect(resultUser.roleAssignments[0].type).toEqual(roles[0].rights[0].type);
+            expect(resultUser.roleAssignments[1].type).toEqual(roles[1].rights[0].type);
+            expect(resultUser.roleAssignments[2].type).toEqual(roles[2].rights[0].type);
         });
 
         it('should set role name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[0].$roleName).toEqual(roles[0].name);
-            expect(resultUser.roleAssignments[1].$roleName).toEqual(roles[1].name);
-            expect(resultUser.roleAssignments[2].$roleName).toEqual(roles[2].name);
+            expect(resultUser.roleAssignments[0].roleName).toEqual(roles[0].name);
+            expect(resultUser.roleAssignments[1].roleName).toEqual(roles[1].name);
+            expect(resultUser.roleAssignments[2].roleName).toEqual(roles[2].name);
         });
 
         it('should set program name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[0].$programName).toEqual(programs[0].name);
+            expect(resultUser.roleAssignments[0].programName).toEqual(programs[0].name);
         });
 
         it('should set supervisory node name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[1].$supervisoryNodeName).toEqual(supervisoryNodes[0].$display);
+            expect(resultUser.roleAssignments[1].supervisoryNodeName).toEqual(supervisoryNodes[0].$display);
         });
 
         it('should set warehouse name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[2].$warehouseName).toEqual(warehouses[0].name);
+            expect(resultUser.roleAssignments[2].warehouseName).toEqual(warehouses[0].name);
         });
     });
 });

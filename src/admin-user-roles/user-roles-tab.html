@@ -20,7 +20,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="roleAssignment in vm.items | orderBy : '$name'">
-                <td>{{roleAssignment.$roleName}}</td>
+                <td>{{roleAssignment.roleName}}</td>
                 <td>
                     <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole.label' | message}}</button>
                 </td>

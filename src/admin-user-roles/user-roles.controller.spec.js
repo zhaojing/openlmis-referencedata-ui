@@ -52,11 +52,11 @@ describe('UserRolesController', function() {
                     roleId: 'role-id-1',
                     supervisoryNodeId: 'node-id-1',
                     programId: 'program-id-1',
-                    $type: ROLE_TYPES.SUPERVISION
+                    type: ROLE_TYPES.SUPERVISION
                 },
                 {
                     roleId: 'role-id-2',
-                    $type: ROLE_TYPES.GENERAL_ADMIN
+                    type: ROLE_TYPES.GENERAL_ADMIN
                 }
             ]
         };

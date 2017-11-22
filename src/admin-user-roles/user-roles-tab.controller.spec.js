@@ -187,9 +187,9 @@ describe('UserRolesTabController', function() {
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
             expect(notificationService.error).not.toHaveBeenCalled();
             expect(user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[1].id);
-            expect(user.roleAssignments[roleAssignmentsCount].$roleName).toEqual(roles[1].name);
-            expect(user.roleAssignments[roleAssignmentsCount].$programName).toEqual(programs[1].name);
-            expect(user.roleAssignments[roleAssignmentsCount].$supervisoryNodeName).toEqual(supervisoryNodes[1].$display);
+            expect(user.roleAssignments[roleAssignmentsCount].roleName).toEqual(roles[1].name);
+            expect(user.roleAssignments[roleAssignmentsCount].programName).toEqual(programs[1].name);
+            expect(user.roleAssignments[roleAssignmentsCount].supervisoryNodeName).toEqual(supervisoryNodes[1].$display);
         });
     });
 
