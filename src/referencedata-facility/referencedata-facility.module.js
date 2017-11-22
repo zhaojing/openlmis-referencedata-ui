@@ -32,7 +32,8 @@
         'referencedata',
         'referencedata-program',
         'referencedata-facility-type',
-        'referencedata-facility-operator'
+        'referencedata-facility-operator',
+        'referencedata-geographic-zone'
     ]);
 
 })();

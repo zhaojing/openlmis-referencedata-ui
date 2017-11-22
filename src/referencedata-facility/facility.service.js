@@ -268,7 +268,7 @@
                                 facilityHash[permission.facilityId] = {
                                     id: permission.facilityId,
                                     supportedPrograms: []
-                                };    
+                                };
                             }
 
                             if(permission.programId) {

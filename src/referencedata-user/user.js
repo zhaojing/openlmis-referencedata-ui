@@ -40,10 +40,23 @@
          * @description
          * Creates a new instance of the User class.
          *
-         * @return {Object} the user object
+         * @param  {String}  id              the UUID of the user to be created
+         * @param  {String}  username        the username of the user to be created
+         * @param  {String}  firstName       the first name of the user to be created
+         * @param  {String}  lastName        the last name of the user to be created
+         * @param  {String}  email           the email of the user to be created
+         * @param  {String}  timezone        the timezone of the user to be created
+         * @param  {String}  homeFacilityId  the operator of the user to be created
+         * @param  {Boolean} verified        true if the user to be created is active
+         * @param  {Boolean} active          the date when the user goes life
+         * @param  {Boolean} loginRestricted the date when the user goes down
+         * @param  {Boolean} allowNotify     the comment of the user to be created
+         * @param  {Object}  extraData       true if the user to be created is enabled
+         * @param  {Array}   roleAssignments true if the user to be created is accessible
+         * @return {Object}                  the user object
          */
         function User(id, username, firstName, lastName, email, timezone, homeFacilityId,
-                      verified, active, loginRestricted, allowNotify) {
+            verified, active, loginRestricted, allowNotify, extraData, roleAssignments) {
             this.id = id;
             this.username = username;
             this.firstName = firstName;
@@ -55,8 +68,8 @@
             this.active = active;
             this.loginRestricted = loginRestricted;
             this.allowNotify = allowNotify;
+            this.extraData = extraData;
+            this.roleAssignments = roleAssignments;
         }
-
     }
-
 })();

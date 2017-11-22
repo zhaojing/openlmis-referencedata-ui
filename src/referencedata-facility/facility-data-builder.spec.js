@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('referencedata-facility')
         .factory('FacilityDataBuilder', FacilityDataBuilder);
@@ -33,8 +32,10 @@
         return FacilityDataBuilder;
 
         function FacilityDataBuilder() {
-            this.id = '97546f93-ac93-435f-a437-cd629deb7d6d';
-            this.code = 'N036';
+            FacilityDataBuilder.instanceNumber = (FacilityDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'facility-id-' + FacilityDataBuilder.instanceNumber;
+            this.code = 'FA' + FacilityDataBuilder.instanceNumber;
             this.name = 'Assumane, Lichinga Cidade';
             this.description = 'description';
             this.geographicZone = new GeographicZoneDataBuilder().build();
@@ -68,7 +69,5 @@
                 this.extraData
             );
         }
-
     }
-
 })();

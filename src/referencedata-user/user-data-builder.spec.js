@@ -21,26 +21,33 @@
         .module('referencedata-user')
         .factory('UserDataBuilder', UserDataBuilder);
 
-    UserDataBuilder.$inject = ['User'];
+    UserDataBuilder.$inject = ['User', 'RoleAssignment'];
 
-    function UserDataBuilder(User) {
+    function UserDataBuilder(User,  RoleAssignment) {
 
         UserDataBuilder.prototype.build = build;
+        UserDataBuilder.prototype.withSupervisionRoleAssignment = withSupervisionRoleAssignment;
+        UserDataBuilder.prototype.withOrderFulfillmentRoleAssignment = withOrderFulfillmentRoleAssignment;
+        UserDataBuilder.prototype.withGeneralAdminRoleAssignment = withGeneralAdminRoleAssignment;
 
         return UserDataBuilder;
 
         function UserDataBuilder() {
-            this.id = '0b7b2042-205c-4685-a9d5-903143af12f0';
-            this.username = 'divo1';
-            this.firstName = 'Alan';
-            this.lastName = 'Ehrenfreund';
-            this.email = 'divo1@openlmis.org';
-            this.timezone = 'CET';
-            this.homeFacilityId = '97546f93-ac93-435f-a437-cd629deb7d6d';
+            UserDataBuilder.instanceNumber = (UserDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'user-id-' + UserDataBuilder.instanceNumber;
+            this.username = 'user-' + UserDataBuilder.instanceNumber;
+            this.firstName = 'Jack';
+            this.lastName = 'Smith';
+            this.email = 'jack.smith@opelmis.com';
+            this.timezone = 'UTC';
+            this.homeFacilityId = 'facility-id';
             this.verified = true;
             this.active = true;
-            this.loginRestricted = false;
+            this.loginRestricted = true;
             this.allowNotify = true;
+            this.extraData = {};
+            this.roleAssignments = [];
         }
 
         function build() {
@@ -52,13 +59,28 @@
                 this.email,
                 this.timezone,
                 this.homeFacilityId,
-                this.verified ,
+                this.verified,
                 this.active,
                 this.loginRestricted,
-                this.allowNotify
+                this.allowNotify,
+                this.extraData,
+                this.roleAssignments
             );
         }
 
-    }
+        function withSupervisionRoleAssignment(roleId, supervisoryNodeId, programId) {
+            this.roleAssignments.push(new RoleAssignment(roleId, null, supervisoryNodeId, programId));
+            return this;
+        }
 
+        function withOrderFulfillmentRoleAssignment(roleId, warehouseId) {
+            this.roleAssignments.push(new RoleAssignment(roleId, warehouseId, null, null));
+            return this;
+        }
+
+        function withGeneralAdminRoleAssignment(roleId) {
+            this.roleAssignments.push(new RoleAssignment(roleId, null, null, null));
+            return this;
+        }
+    }
 })();

@@ -31,8 +31,10 @@
         return ProgramDataBuilder;
 
         function ProgramDataBuilder() {
-            this.id = '418bdc1d-c303-4bd0-b2d3-d8901150a983';
-            this.code = 'PRG004';
+            ProgramDataBuilder.instanceNumber = (ProgramDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'program-id-' + ProgramDataBuilder.instanceNumber;
+            this.code = 'PRG' + ProgramDataBuilder.instanceNumber;
             this.name = 'EPI';
             this.description = 'description';
             this.active = true;
