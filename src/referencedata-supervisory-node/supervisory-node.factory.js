@@ -76,7 +76,7 @@
 
             $q.all([
                 supervisoryNodeService.get(id),
-                facilityService.getAll()
+                facilityService.query()
             ]).then(function(responses) {
                 var supervisoryNode =  responses[0],
                     facilities = responses[1];

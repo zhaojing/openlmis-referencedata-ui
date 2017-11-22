@@ -24,7 +24,7 @@ describe('supervisoryNodeFactory', function() {
                 return supervisoryNodeService;
             });
 
-            facilityService = jasmine.createSpyObj('facilityService', ['getAll']);
+            facilityService = jasmine.createSpyObj('facilityService', ['query']);
             $provide.service('facilityService', function() {
                 return facilityService;
             });
@@ -102,7 +102,7 @@ describe('supervisoryNodeFactory', function() {
 
         beforeEach(function() {
             supervisoryNodeService.get.andReturn($q.when(supervisoryNodes[0]));
-            facilityService.getAll.andReturn($q.when(facilities));
+            facilityService.query.andReturn($q.when(facilities));
         });
 
         it('should return promise', function() {
@@ -117,7 +117,7 @@ describe('supervisoryNodeFactory', function() {
 
         it('should call facilityService', function() {
             supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
-            expect(facilityService.getAll).toHaveBeenCalled();
+            expect(facilityService.query).toHaveBeenCalled();
         });
 
         it('should add facility info to child nodes', function() {
