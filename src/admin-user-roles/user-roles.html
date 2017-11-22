@@ -3,8 +3,8 @@
 <nav class="user-roles">
     <ul>
         <li ng-repeat="type in vm.types" ui-sref-active="active" role="presentation">
-            <a ui-sref="openlmis.administration.users.roles.tab({tab: {{$index}}, page: 0})" ui-sref-opts="{reload: 'openlmis.administration.users.roles.tab'}">
-                {{type.displayName | message}}
+            <a ui-sref="openlmis.administration.users.roles.{{type}}({page: 0})" ui-sref-opts="{reload: 'openlmis.administration.users.roles.{{type}}'}">
+                {{vm.getRoleTypeLabel(type) | message}}
             </a>
         </li>
     </ul>

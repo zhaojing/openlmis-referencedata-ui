@@ -15,110 +15,87 @@
 
 describe('userRoleAssignmentFactory', function() {
 
-    var userRoleAssignmentFactory,
-        roles, programs, supervisoryNodes, warehouses, roleAssignments;
+    var $q, userRoleAssignmentFactory, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder, SupervisoryNodeDataBuilder,
+        roles, programs, supervisoryNodes, warehouses, user;
 
     beforeEach(function() {
         module('admin-user-roles');
 
         inject(function($injector) {
+            $q = $injector.get('$q');
             userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
+            referencedataUserService = $injector.get('referencedataUserService');
+
+            UserDataBuilder = $injector.get('UserDataBuilder');
+            RoleDataBuilder = $injector.get('RoleDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
         });
 
-        roles = [
-            {
-                id: '1',
-                name: 'Warehouse Clerk',
-                rights: [
-                    {
-                        type: 'type-1'
-                    }
-                ]
-            },
-            {
-                id: '2',
-                name: 'Storeroom Manager',
-                rights: [
-                    {
-                        type: 'type-2'
-                    }
-                ]
-            }
-        ];
-        programs = [
-            {
-                id: 'program-id-1',
-                name: 'program-1'
-            },
-            {
-                id: 'program-id-2',
-                name: 'program-2'
-            }
-        ];
         supervisoryNodes = [
-            {
-                id: 'supervisory-node-id-1',
-                $display: 'supervisory-node-1'
-            }
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build(),
         ];
         warehouses = [
-            {
-                id: 'warehouse-id-1',
-                name: 'warehouse-1'
-            }
+            new FacilityDataBuilder().build(),
+            new FacilityDataBuilder().build()
+        ];
+        programs = [
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build()
+        ];
+        roles = [
+            new RoleDataBuilder().withSupervisionType().withRight({type: 'type-1'}).build(),
+            new RoleDataBuilder().withGeneralAdminType().withRight({type: 'type-2'}).build(),
+            new RoleDataBuilder().withOrderFulfillmentType().withRight({type: 'type-3'}).build()
         ];
 
-        roleAssignments = [
-            {
-                programId: 'program-id-1',
-                roleId: roles[0].id
-            },
-            {
-                programId: 'program-id-2',
-                supervisoryNodeId: 'supervisory-node-id-1',
-                roleId: roles[0].id
-            },
-            {
-                warehouseId: 'warehouse-id-1',
-                roleId: roles[1].id
-            },
-
-        ];
+        user = new UserDataBuilder()
+            .withSupervisionRoleAssignment(roles[0].id, supervisoryNodes[0].id, programs[0].id)
+            .withGeneralAdminRoleAssignment(roles[1].id)
+            .withOrderFulfillmentRoleAssignment(roles[1].id)
+            .build();
     });
 
-    describe('addInfoToRoleAssignments', function() {
+    describe('getUser', function() {
 
         beforeEach(function() {
-            userRoleAssignmentFactory.addInfoToRoleAssignments(roleAssignments, roles, programs, supervisoryNodes, warehouses);
+            spyOn(referencedataUserService, 'get').andReturn($q.resolve(user));
+            userRoleAssignmentFactory.getUser(user.id, roles, programs, supervisoryNodes, warehouses);
         });
 
         it('should expose addInfoToRoleAssignments method', function() {
-            expect(angular.isFunction(userRoleAssignmentFactory.addInfoToRoleAssignments)).toBe(true);
+            expect(angular.isFunction(userRoleAssignmentFactory.getUser)).toBe(true);
         });
 
-        it('should set type properties for all assignments', function() {
-            expect(roleAssignments[0].$type).toEqual(roles[0].rights[0].type);
-            expect(roleAssignments[1].$type).toEqual(roles[0].rights[0].type);
-            expect(roleAssignments[2].$type).toEqual(roles[1].rights[0].type);
+        it('should call referencedataUserService', function() {
+            expect(referencedataUserService.get).toHaveBeenCalledWith(user.id);
+        });
+
+        /*it('should set type properties for all assignments', function() {
+            expect(user.roleAssignments[0].$type).toEqual(roles[0].rights[0].type);
+            expect(user.roleAssignments[1].$type).toEqual(roles[0].rights[0].type);
+            expect(user.roleAssignments[2].$type).toEqual(roles[1].rights[0].type);
         });
 
         it('should set role name properties for all assignments', function() {
-            expect(roleAssignments[0].$roleName).toEqual(roles[0].name);
-            expect(roleAssignments[1].$roleName).toEqual(roles[0].name);
-            expect(roleAssignments[2].$roleName).toEqual(roles[1].name);
+            expect(user.roleAssignments[0].$roleName).toEqual(roles[0].name);
+            expect(user.roleAssignments[1].$roleName).toEqual(roles[0].name);
+            expect(user.roleAssignments[2].$roleName).toEqual(roles[1].name);
         });
 
         it('should set program name properties for all assignments', function() {
-            expect(roleAssignments[0].$programName).toEqual(programs[0].name);
-            expect(roleAssignments[1].$programName).toEqual(programs[1].name);
+            expect(user.roleAssignments[0].$programName).toEqual(programs[0].name);
+            expect(user.roleAssignments[1].$programName).toEqual(programs[1].name);
         });
 
         it('should set supervisory node name properties for all assignments', function() {
-            expect(roleAssignments[1].$supervisoryNodeName).toEqual(supervisoryNodes[0].$display);
+            expect(user.roleAssignments[1].$supervisoryNodeName).toEqual(supervisoryNodes[0].$display);
         });
 
         it('should set warehouse name properties for all assignments', function() {
-            expect(roleAssignments[2].$warehouseName).toEqual(warehouses[0].name);
-        });
+            expect(user.roleAssignments[2].$warehouseName).toEqual(warehouses[0].name);
+        });*/
     });
 });

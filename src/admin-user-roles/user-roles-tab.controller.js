@@ -29,31 +29,18 @@
         .controller('UserRolesTabController', controller);
 
     controller.$inject = [
-        'user', 'supervisoryNodes', 'programs', 'roles', 'warehouses', '$stateParams', '$filter', '$q',
-        '$state', 'notificationService', 'ROLE_TYPES', 'confirmService', 'filteredRoleAssignments'
+        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', 'ROLE_TYPES',
+        '$state', 'notificationService', 'confirmService', 'filteredRoleAssignments', 'filteredRoles'
     ];
 
-    function controller(user, supervisoryNodes, programs, roles, warehouses, $stateParams, $filter, $q,
-                        $state, notificationService, ROLE_TYPES, confirmService, filteredRoleAssignments) {
+    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, ROLE_TYPES,
+                        $state, notificationService, confirmService, filteredRoleAssignments, filteredRoles) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.removeRole = removeRole;
         vm.addRole = addRole;
-        vm.isFulfillmentType = isFulfillmentType;
-        vm.isSupervisionType = isSupervisionType;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesTabController
-         * @name roles
-         * @type {Array}
-         *
-         * @description
-         * List of all roles.
-         */
-        vm.roles = undefined;
 
         /**
          * @ngdoc property
@@ -103,22 +90,11 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesTabController
-         * @name types
-         * @type {Array}
-         *
-         * @description
-         * List of all role types.
-         */
-        vm.types = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-roles.controller:UserRolesTabController
          * @name selectedType
-         * @type {Number}
+         * @type {String}
          *
          * @description
-         * Currently selected type.
+         * Currently selected role type.
          */
         vm.selectedType = undefined;
 
@@ -175,42 +151,12 @@
          * Initialization method of the UserFormModalController.
          */
         function onInit() {
-            vm.roles = roles;
             vm.supervisoryNodes = supervisoryNodes;
             vm.warehouses = warehouses;
             vm.programs = programs;
-            vm.types = ROLE_TYPES;
-            vm.selectedType = parseInt($stateParams.tab);
-
+            vm.selectedType = tab;
             vm.filteredRoleAssignments = filteredRoleAssignments;
-
-            vm.filteredRoles = $filter('filter')(vm.roles, {
-                $type: vm.types[vm.selectedType].name
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesTabController
-         * @name isSupervisionType
-         *
-         * @description
-         * Checks if supervision tab is selected.
-         */
-        function isSupervisionType() {
-            return vm.selectedType === 0;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-roles.controller:UserRolesTabController
-         * @name isFulfillmentType
-         *
-         * @description
-         * Checks if fulfillment tab is selected.
-         */
-        function isFulfillmentType() {
-            return vm.selectedType === 1;
+            vm.filteredRoles = filteredRoles;
         }
 
         /**
@@ -224,36 +170,26 @@
          * @return {Promise} resolves if new role is valid
          */
         function addRole() {
-            var deferred = $q.defer(),
-                invalidMessage = isNewRoleInvalid();
+            var invalidMessage = isNewRoleInvalid();
 
-            if(!invalidMessage) {
-                var roleAssignment = {
-                    roleId: vm.selectedRole.id,
-                    $roleName: vm.selectedRole.name,
-                    $type: vm.types[vm.selectedType].name
-                };
-                if(isSupervisionType()) {
-                    roleAssignment.programId = vm.selectedProgram.id;
-                    roleAssignment.$programName = vm.selectedProgram.name;
-
-                    if(vm.selectedSupervisoryNode) {
-                        roleAssignment.supervisoryNodeId = vm.selectedSupervisoryNode.id;
-                        roleAssignment.$supervisoryNodeName = vm.selectedSupervisoryNode.$display;
-                    }
-                } else if(isFulfillmentType()) {
-                    roleAssignment.warehouseId = vm.selectedWarehouse.id;
-                    roleAssignment.$warehouseName = vm.selectedWarehouse.name;
+            if (!invalidMessage) {
+                try {
+                    user.addRoleAssignment(vm.selectedRole.id, vm.selectedRole.name, tab,
+                        vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.id : undefined,
+                        vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.name : undefined,
+                        vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.id : undefined,
+                        vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.$display : undefined,
+                        vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.id : undefined,
+                        vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.name : undefined);
+                    reloadState();
+                    return $q.resolve();
                 }
-                user.roleAssignments.push(roleAssignment);
-                deferred.resolve();
-                reloadState();
-            } else {
-                notificationService.error(invalidMessage);
-                deferred.reject();
+                catch (err) {
+                    invalidMessage = 'adminUserRoles.roleAlreadyAssigned';
+                }
             }
-
-            return deferred.promise;
+            notificationService.error(invalidMessage);
+            return $q.reject();
         }
 
         /**
@@ -267,54 +203,23 @@
          * @param {Object} roleAssignment the role assignment to be removed
          */
         function removeRole(roleAssignment) {
-            confirmService.confirmDestroy('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label').then(function() {
-                var index = user.roleAssignments.indexOf(roleAssignment);
-                if(index < 0) return;
-                user.roleAssignments.splice(index, 1);
+            confirmService.confirmDestroy('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label')
+            .then(function() {
+                user.removeRoleAssignment(roleAssignment);
                 reloadState();
             });
         }
 
         function isNewRoleInvalid() {
-            if(roleAlreadyAssigned()) return 'adminUserRoles.roleAlreadyAssigned';
-            if(isSupervisionType() && !vm.selectedProgram) return 'adminUserRoles.supervisionInvalid';
-            if(isSupervisionType() && !vm.selectedSupervisoryNode && !user.homeFacilityId) return 'adminUserRoles.homeFacilityRoleInvalid';
-            else if(isFulfillmentType() && !vm.selectedWarehouse) return 'adminUserRoles.fulfillmentInvalid';
+            if (vm.selectedType === ROLE_TYPES.SUPERVISION && !vm.selectedProgram) return 'adminUserRoles.supervisionInvalid';
+            if (vm.selectedType === ROLE_TYPES.SUPERVISION && !vm.selectedSupervisoryNode && !user.homeFacilityId) return 'adminUserRoles.homeFacilityRoleInvalid';
+            else if (vm.selectedType === ROLE_TYPES.ORDER_FULFILLMENT && !vm.selectedWarehouse) return 'adminUserRoles.fulfillmentInvalid';
             return undefined;
         }
 
-        function roleAlreadyAssigned() {
-            if(!vm.selectedRole) return false;
-            var alreadyExist = false;
-            angular.forEach(user.roleAssignments, function(role) {
-                var isEqual = vm.selectedRole.id === role.roleId;
-                if(isSupervisionType()) {
-                    isEqual = isEqual &&
-                        vm.selectedProgram.id === role.programId;
-
-                    if(role.supervisoryNodeId) {
-                        if(vm.selectedSupervisoryNode){
-                            isEqual = isEqual &&
-                                vm.selectedSupervisoryNode.id === role.supervisoryNodeId;
-                        } else {
-                            isEqual = false;
-                        }
-                    } else if(vm.selectedSupervisoryNode) {
-                        isEqual = false;
-                    }
-                }
-                else if(isFulfillmentType()) {
-                    isEqual = isEqual &&
-                        vm.selectedWarehouse.id === role.warehouseId;
-                }
-                alreadyExist = alreadyExist || isEqual;
-            });
-            return alreadyExist;
-        }
-
         function reloadState() {
-            $state.go('openlmis.administration.users.roles.tab', $stateParams, {
-				reload: 'openlmis.administration.users.roles.tab'
+            $state.go('openlmis.administration.users.roles.' + tab, $stateParams, {
+				reload: 'openlmis.administration.users.roles.' + tab
 			});
         }
     }

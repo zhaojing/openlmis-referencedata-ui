@@ -28,6 +28,7 @@
         'openlmis-modal',
         'openlmis-pagination',
         'openlmis-rights',
+        'referencedata-facility',
         'referencedata-program',
         'referencedata-role',
         'referencedata-supervisory-node',

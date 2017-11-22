@@ -37,6 +37,7 @@
         vm.$onInit = onInit;
         vm.goToUserList = goToUserList;
         vm.saveUserRoles = saveUserRoles;
+        vm.getRoleTypeLabel = getRoleTypeLabel;
 
         /**
          * @ngdoc property
@@ -70,7 +71,7 @@
          */
         function onInit() {
             vm.user = user;
-            vm.types = ROLE_TYPES;
+            vm.types = ROLE_TYPES.getRoleTypes();
         }
 
         /**
@@ -106,6 +107,21 @@
             $state.go('openlmis.administration.users', {}, {
                 reload: true
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-roles.controller:UserRolesController
+         * @name goToUserList
+         *
+         * @description
+         * Redirects to user list.
+         *
+         * @param  {String} type the role type name
+         * @return {String}      the message key for given role type
+         */
+        function getRoleTypeLabel(type) {
+            return ROLE_TYPES.getLabel(type);
         }
     }
 })();

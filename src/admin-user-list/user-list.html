@@ -40,7 +40,7 @@
                 <td>{{user.email}}</td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.users.form({id: user.id})">{{'adminUserList.edit' | message}}</button>
-                    <button ui-sref="openlmis.administration.users.roles.tab({id: user.id, tab: 0})">{{'adminUserList.roles' | message}}</button>
+                    <button ui-sref="openlmis.administration.users.roles.SUPERVISION({id: user.id})">{{'adminUserList.roles' | message}}</button>
                     <button ng-click="vm.resetUserPassword(user)">{{'adminUserList.resetPassword' | message}}</button>
                 </td>
             </tr>

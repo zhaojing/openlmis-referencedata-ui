@@ -52,11 +52,11 @@ describe('UserRolesController', function() {
                     roleId: 'role-id-1',
                     supervisoryNodeId: 'node-id-1',
                     programId: 'program-id-1',
-                    $type: ROLE_TYPES[0].name
+                    $type: ROLE_TYPES.SUPERVISION
                 },
                 {
                     roleId: 'role-id-2',
-                    $type: ROLE_TYPES[3].name
+                    $type: ROLE_TYPES.GENERAL_ADMIN
                 }
             ]
         };
@@ -86,7 +86,7 @@ describe('UserRolesController', function() {
         });
 
         it('should set types', function() {
-            expect(vm.types).toEqual(ROLE_TYPES);
+            expect(vm.types).toEqual(ROLE_TYPES.getRoleTypes());
         });
     });
 
@@ -144,8 +144,15 @@ describe('UserRolesController', function() {
 
         it('should redirect to users list page', function() {
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
-                    reload: true
-                });
+                reload: true
+            });
+        });
+    });
+
+    describe('getRoleTypeLabel', function() {
+
+        it('should redirect to users list page', function() {
+            expect(vm.getRoleTypeLabel(ROLE_TYPES.SUPERVISION)).toEqual(ROLE_TYPES.getLabel(ROLE_TYPES.SUPERVISION));
         });
     });
 });

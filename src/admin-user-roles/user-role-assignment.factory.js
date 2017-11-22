@@ -28,71 +28,84 @@
         .module('admin-user-roles')
         .factory('userRoleAssignmentFactory', factory);
 
-    factory.$inject = ['$filter'];
+    factory.$inject = ['$filter', 'referencedataUserService', 'User'];
 
-    function factory($filter) {
+    function factory($filter, referencedataUserService, User) {
 
         return {
-            addInfoToRoleAssignments: addInfoToRoleAssignments
+            getUser: getUser
         };
 
         /**
          * @ngdoc method
          * @methodOf admin-user-roles.userRoleAssignmentFactory
-         * @name addInfoToRoleAssignments
+         * @name getUser
          *
          * @description
-         * Adds role type property to user role assignments based on given roles.
+         * Returns user with role assignments that have added names to all properties
+         * based on given roles, programs, supervisory nodes and warehouses.
          *
-         * @param {Array} roleAssignments array of role assignments
-         * @param {Array} roles           array of roles
+         * @param  {String} userId           the UUID of the user that will be retrieved from server
+         * @param  {Array}  roles            the array of roles
+         * @param  {Array}  programs         the array of programs
+         * @param  {Array}  supervisoryNodes the array of supervisory nodes
+         * @param  {Array}  warehouses       the array of warehouses
+         * @return {User}                    the User object with role assignments with additional info
          */
-        function addInfoToRoleAssignments(roleAssignments, roles, programs, supervisoryNodes, warehouses) {
-            angular.forEach(roleAssignments, function(roleAssignment) {
-                var filtered = $filter('filter')(roles, {
-                    id: roleAssignment.roleId
-                }, true);
-                if(filtered.length > 0) {
-                    roleAssignment.$type = filtered[0].rights[0].type;
-                    roleAssignment.$roleName = filtered[0].name;
-                } else {
-                    roleAssignment.$type = '';
-                    roleAssignment.$roleName = '';
-                }
+        function getUser(userId, roles, programs, supervisoryNodes, warehouses) {
 
-                if(roleAssignment.programId) {
-                    filtered = $filter('filter')(programs, {
-                        id: roleAssignment.programId
-                    }, true);
-                    if(filtered.length > 0) {
-                        roleAssignment.$programName = filtered[0].name;
-                    } else {
-                        roleAssignment.$programName = '';
-                    }
-                }
+            return referencedataUserService.get(userId)
+            .then(function(response) {
+                var user = new User(response.id, response.username, response.firstName, response.lastName,
+                    response.email, response.timezone, response.homeFacilityId,
+                    response.verified, response.active, response.loginRestricted, response.allowNotify,
+                    response.extraData, []);
 
-                if(roleAssignment.supervisoryNodeId) {
-                    filtered = $filter('filter')(supervisoryNodes, {
-                        id: roleAssignment.supervisoryNodeId
-                    }, true);
-                    if(filtered.length > 0) {
-                        roleAssignment.$supervisoryNodeName = filtered[0].$display;
-                    } else {
-                        roleAssignment.$supervisoryNodeName = '';
-                    }
-                }
+                addInfoToRoleAssignments(user, response.roleAssignments, roles, programs, supervisoryNodes, warehouses);
 
-                if(roleAssignment.warehouseId) {
-                    filtered = $filter('filter')(warehouses, {
-                        id: roleAssignment.warehouseId
-                    }, true);
-                    if(filtered.length > 0) {
-                        roleAssignment.$warehouseName = filtered[0].name;
-                    } else {
-                        roleAssignment.$warehouseName = '';
-                    }
-                }
+                return user;
             });
+        }
+
+        function addInfoToRoleAssignments(user, roleAssignments, roles, programs, supervisoryNodes, warehouses) {
+            roleAssignments.forEach(function(roleAssignment) {
+                var filteredRoles = roles.filter(function(role) {
+                        return role.id === roleAssignment.roleId;
+                    }),
+                    filteredPrograms,
+                    filteredSupervisoryNodes,
+                    filteredWarehouses;
+
+                if (roleAssignment.programId) {
+                    filteredPrograms = programs.filter(function(program) {
+                        return program.id === roleAssignment.programId;
+                    });
+                }
+
+                if (roleAssignment.supervisoryNodeId) {
+                    filteredSupervisoryNodes = supervisoryNodes.filter(function(node) {
+                        return node.id === roleAssignment.supervisoryNodeId;
+                    });
+                }
+
+                if (roleAssignment.warehouseId) {
+                    filteredWarehouses = warehouses.filter(function(warehouse) {
+                        return warehouse.id === roleAssignment.warehouseId;
+                    });
+                }
+
+                user.addRoleAssignment(roleAssignment.roleId,
+                    filteredRoles[0].name,
+                    filteredRoles[0].rights[0].type,
+                    roleAssignment.programId,
+                    filteredPrograms ? filteredPrograms[0].name : undefined,
+                    roleAssignment.supervisoryNodeId,
+                    filteredSupervisoryNodes ? filteredSupervisoryNodes[0].$display : undefined,
+                    roleAssignment.warehouseId,
+                    filteredWarehouses ? filteredWarehouses[0].name : undefined);
+            });
+
+            return user;
         }
     }
 })();

@@ -48,15 +48,8 @@
 
                     return deferred.promise;
                 },
-                user: function($q, referencedataUserService, userRoleAssignmentFactory, $stateParams, roles, programs, supervisoryNodes, warehouses) {
-                    var deferred = $q.defer();
-
-                    referencedataUserService.get($stateParams.id).then(function(user) {
-                        userRoleAssignmentFactory.addInfoToRoleAssignments(user.roleAssignments, roles, programs, supervisoryNodes, warehouses);
-                        deferred.resolve(user);
-                    }, deferred.reject);
-
-                    return deferred.promise;
+                user: function(userRoleAssignmentFactory, $stateParams, roles, programs, supervisoryNodes, warehouses) {
+                    return userRoleAssignmentFactory.getUser($stateParams.id, roles, programs, supervisoryNodes, warehouses);
                 }
             },
             views: {

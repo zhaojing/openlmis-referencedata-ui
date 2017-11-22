@@ -15,7 +15,7 @@
 
 describe('UserRolesTabController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, loadingModalService, confirmService,
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, loadingModalService, confirmService, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder, SupervisoryNodeDataBuilder,
         stateParams, vm, user, roles, supervisoryNodes, warehouses, programs;
 
     beforeEach(function() {
@@ -38,87 +38,51 @@ describe('UserRolesTabController', function() {
             $state = $injector.get('$state');
             $q = $injector.get('$q');
             ROLE_TYPES = $injector.get('ROLE_TYPES');
+
+            UserDataBuilder = $injector.get('UserDataBuilder');
+            RoleDataBuilder = $injector.get('RoleDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
         });
 
-        user = {
-            roleAssignments: [
-                {
-                    roleId: 'role-id-1',
-                    supervisoryNodeId: 'node-id-1',
-                    programId: 'program-id-1',
-                    $type: ROLE_TYPES[0].name
-                },
-                {
-                    roleId: 'role-id-2',
-                    $type: ROLE_TYPES[3].name
-                }
-            ]
-        };
-        roles = [
-            {
-                name: 'role-1',
-                id: 'role-id-1',
-                $type: ROLE_TYPES[0].name
-            },
-            {
-                name: 'role-2',
-                id: 'role-id-2',
-                $type: ROLE_TYPES[3].name
-            },
-            {
-                name: 'role-3',
-                id: 'role-id-3',
-                $type: ROLE_TYPES[0].name
-            },
-            {
-                name: 'role-4',
-                id: 'role-id-4',
-                $type: ROLE_TYPES[1].name
-            }
-        ];
         supervisoryNodes = [
-            {
-                id: 'node-id-1',
-                $display: 'node-1'
-            },
-            {
-                id: 'node-id-2',
-                $display: 'node-2'
-            }
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build(),
         ];
         warehouses = [
-            {
-                id: 'warehouse-id-1',
-                name: 'warehouse-1'
-            },
-            {
-                id: 'warehouse-id-2',
-                name: 'warehouse-2'
-            }
+            new FacilityDataBuilder().build(),
+            new FacilityDataBuilder().build()
         ];
         programs = [
-            {
-                id: 'program-id-1',
-                name: 'program-1'
-            },
-            {
-                id: 'program-id-2',
-                name: 'program-2'
-            }
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build()
         ];
 
+        roles = [
+            new RoleDataBuilder().withSupervisionType().build(),
+            new RoleDataBuilder().withSupervisionType().build()
+        ];
+
+        user = new UserDataBuilder()
+            .withSupervisionRoleAssignment(roles[0].id, supervisoryNodes[0].id, programs[0].id)
+            .withGeneralAdminRoleAssignment(roles[1].id)
+            .build();
+
         stateParams = {
-            tab: 0
+            page: 0,
+            size: 10
         };
 
         vm = $controller('UserRolesTabController', {
             $stateParams: stateParams,
             user: user,
-            roles: roles,
+            filteredRoles: roles,
             supervisoryNodes: supervisoryNodes,
             warehouses: warehouses,
             programs: programs,
-            filteredRoleAssignments: user.roleAssignments
+            filteredRoleAssignments: [user.roleAssignments[0]],
+            tab: ROLE_TYPES.SUPERVISION
         });
 
         vm.$onInit();
@@ -128,26 +92,6 @@ describe('UserRolesTabController', function() {
     });
 
     describe('on init', function() {
-
-        it('should expose removeRole method', function() {
-            expect(angular.isFunction(vm.removeRole)).toBe(true);
-        });
-
-        it('should expose addRole method', function() {
-            expect(angular.isFunction(vm.addRole)).toBe(true);
-        });
-
-        it('should expose isFulfillmentType method', function() {
-            expect(angular.isFunction(vm.isFulfillmentType)).toBe(true);
-        });
-
-        it('should expose isSupervisionType method', function() {
-            expect(angular.isFunction(vm.isSupervisionType)).toBe(true);
-        });
-
-        it('should set roles', function() {
-            expect(vm.roles).toEqual(roles);
-        });
 
         it('should set supervisoryNodes', function() {
             expect(vm.supervisoryNodes).toEqual(supervisoryNodes);
@@ -161,44 +105,17 @@ describe('UserRolesTabController', function() {
             expect(vm.programs).toEqual(programs);
         });
 
-        it('should set types', function() {
-            expect(vm.types).toEqual(ROLE_TYPES);
-        });
-
         it('should set selectedType', function() {
-            expect(vm.selectedType).toEqual(0);
+            expect(vm.selectedType).toEqual(ROLE_TYPES.SUPERVISION);
         });
 
         it('should set filteredRoleAssignments', function() {
-            expect(vm.filteredRoleAssignments).toEqual(user.roleAssignments);
+            expect(vm.filteredRoleAssignments.length).toBe(1);
+            expect(vm.filteredRoleAssignments[0]).toEqual(user.roleAssignments[0]);
         });
 
         it('should set filteredRoles', function() {
-            expect(vm.filteredRoles).toEqual([roles[0], roles[2]]);
-        });
-    });
-
-    describe('isSupervisionType', function() {
-
-        it('should return true if selected type is supervision', function() {
-            expect(vm.isSupervisionType()).toBe(true);
-        });
-
-        it('should return false if selected type is not supervision', function() {
-            vm.selectedType = 1;
-            expect(vm.isSupervisionType()).toBe(false);
-        });
-    });
-
-    describe('isFulfillmentType', function() {
-
-        it('should return true if selected type is fulfillment', function() {
-            vm.selectedType = 1;
-            expect(vm.isFulfillmentType()).toBe(true);
-        });
-
-        it('should return false if selected type is not fulfillment', function() {
-            expect(vm.isFulfillmentType()).toBe(false);
+            expect(vm.filteredRoles).toEqual(roles);
         });
     });
 
@@ -211,8 +128,9 @@ describe('UserRolesTabController', function() {
         it('should display error notification if role is already assigned', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
 
-            vm.selectedRole = roles[1];
-            vm.selectedType = 3;
+            vm.selectedRole = roles[0];
+            vm.selectedProgram = programs[0];
+            vm.selectedSupervisoryNode = supervisoryNodes[0];
 
             vm.addRole();
 
@@ -248,7 +166,7 @@ describe('UserRolesTabController', function() {
         it('should display error notification if fulfillment role is invalid', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
 
-            vm.selectedType = 1;
+            vm.selectedType = ROLE_TYPES.ORDER_FULFILLMENT;
             vm.selectedRole = roles[3];
 
             vm.addRole();
@@ -260,7 +178,7 @@ describe('UserRolesTabController', function() {
         it('should add new supervision role assignment', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
 
-            vm.selectedRole = roles[2];
+            vm.selectedRole = roles[1];
             vm.selectedProgram = programs[1];
             vm.selectedSupervisoryNode = supervisoryNodes[1];
 
@@ -268,8 +186,8 @@ describe('UserRolesTabController', function() {
 
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
             expect(notificationService.error).not.toHaveBeenCalled();
-            expect(user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[2].id);
-            expect(user.roleAssignments[roleAssignmentsCount].$roleName).toEqual(roles[2].name);
+            expect(user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[1].id);
+            expect(user.roleAssignments[roleAssignmentsCount].$roleName).toEqual(roles[1].name);
             expect(user.roleAssignments[roleAssignmentsCount].$programName).toEqual(programs[1].name);
             expect(user.roleAssignments[roleAssignmentsCount].$supervisoryNodeName).toEqual(supervisoryNodes[1].$display);
         });

@@ -21,29 +21,35 @@
         .module('admin-user-roles')
         .config(routes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS', 'ROLE_TYPES'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS, ROLE_TYPES) {
 
-        $stateProvider.state('openlmis.administration.users.roles.tab', {
-            url: '/:tab',
+        $stateProvider.state('openlmis.administration.users.roles.' + ROLE_TYPES.ORDER_FULFILLMENT, {
+            //label: ROLE_TYPES.getLabel(ROLE_TYPES.ORDER_FULFILLMENT),
+            url: '/fulfillment',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
-            params: {
-                tab: '0'
-            },
             controller: 'UserRolesTabController',
-            templateUrl: 'admin-user-roles/user-roles-tab.html',
+            templateUrl: 'admin-user-roles/user-roles-fulfillment.html',
             controllerAs: 'vm',
             resolve: {
-                filteredRoleAssignments: function(paginationService, user, $stateParams, ROLE_TYPES) {
+                tab: function(ROLE_TYPES) {
+                    return ROLE_TYPES.ORDER_FULFILLMENT;
+                },
+                filteredRoleAssignments: function(paginationService, $stateParams, user, tab) {
                     return paginationService.registerList(null, $stateParams, function() {
                         var filtered = user.roleAssignments.filter(function(role) {
-                            return role.$type === ROLE_TYPES[parseInt($stateParams.tab)].name;
+                            return role.$type === tab;
                         });
 
                         return filtered.sort(function(a, b) {
                             return (a.$roleName > b.$roleName) ? 1 : ((b.$roleName > a.$roleName) ? -1 : 0);
                         });
+                    });
+                },
+                filteredRoles: function(roles, tab) {
+                    return roles.filter(function(role) {
+                        return role.$type === tab;
                     });
                 }
             }
