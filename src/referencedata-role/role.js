@@ -52,7 +52,7 @@
             this.name = name;
             this.description = description;
             this.rights = rights;
-            this.$type = type;
+            this.type = type;
         }
     }
 })();

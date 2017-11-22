@@ -76,28 +76,6 @@
                     supervisoryNodeName,
                     warehouseName
                 ));
-
-            function validateNewRoleAssignment(roleAssignments, roleId, roleName, roleType, programId, programName,
-                                                supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
-                if (((programId || supervisoryNodeId) && (warehouseId)) ||
-                    (!programId && supervisoryNodeId)) {
-                    throw new Error('Role assignment invalid');
-                } else if (isRoleAlreadyAssigned(roleAssignments, roleId, programId, supervisoryNodeId, warehouseId)) {
-                    throw new Error('Role already assigned');
-                }
-            }
-
-            function isRoleAlreadyAssigned(roleAssignments, roleId, programId, supervisoryNodeId, warehouseId) {
-                var alreadyExist = false;
-                roleAssignments.forEach(function(existingRoleAssignment) {
-                    alreadyExist = alreadyExist ||
-                        (existingRoleAssignment.roleId === roleId &&
-                            (!programId || existingRoleAssignment.programId === programId) &&
-                            (!supervisoryNodeId || existingRoleAssignment.supervisoryNodeId === supervisoryNodeId) &&
-                            (!warehouseId || existingRoleAssignment.warehouseId === warehouseId));
-                });
-                return alreadyExist;
-            }
         }
 
         /**
@@ -114,6 +92,28 @@
             var index = this.roleAssignments.indexOf(roleAssignment);
             if (index < 0) return;
             this.roleAssignments.splice(index, 1);
+        }
+
+        function validateNewRoleAssignment(roleAssignments, roleId, roleName, roleType, programId, programName,
+                                            supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
+            if (((programId || supervisoryNodeId) && (warehouseId)) ||
+                (!programId && supervisoryNodeId)) {
+                throw new Error('Role assignment invalid');
+            } else if (isRoleAlreadyAssigned(roleAssignments, roleId, programId, supervisoryNodeId, warehouseId)) {
+                throw new Error('Role already assigned');
+            }
+        }
+
+        function isRoleAlreadyAssigned(roleAssignments, roleId, programId, supervisoryNodeId, warehouseId) {
+            var alreadyExist = false;
+            roleAssignments.forEach(function(existingRoleAssignment) {
+                alreadyExist = alreadyExist ||
+                    (existingRoleAssignment.roleId === roleId &&
+                        (!programId || existingRoleAssignment.programId === programId) &&
+                        (!supervisoryNodeId || existingRoleAssignment.supervisoryNodeId === supervisoryNodeId) &&
+                        (!warehouseId || existingRoleAssignment.warehouseId === warehouseId));
+            });
+            return alreadyExist;
         }
     }
 })();

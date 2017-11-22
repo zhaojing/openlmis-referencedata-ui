@@ -45,14 +45,14 @@
          * @description
          * Retrieves all roles and assigns type attribute to each of them.
          *
-         * @return {Promise} array of roles with $type property
+         * @return {Promise} array of roles with type property
          */
         function getAllWithType() {
             var deferred = $q.defer();
 
             referencedataRoleService.getAll().then(function(roles) {
                 angular.forEach(roles, function(role) {
-                    role.$type = role.rights[0].type;
+                    role.type = role.rights[0].type;
                 });
                 deferred.resolve(roles);
             }, deferred.reject);

@@ -68,7 +68,7 @@ describe('referencedataRoleService', function() {
 
         it('should set types property for all roles', function() {
             angular.forEach(data, function(role) {
-                expect(role.$type).toEqual(role.rights[0].type);
+                expect(role.type).toEqual(role.rights[0].type);
             });
         });
     });

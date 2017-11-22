@@ -57,11 +57,11 @@
             this.warehouseId = warehouseId;
             this.supervisoryNodeId = supervisoryNodeId;
             this.programId = programId;
-            this.$roleName = roleName;
-            this.$type = roleType;
-            this.$programName = programName;
-            this.$supervisoryNodeName = supervisoryNodeName;
-            this.$warehouseName = warehouseName;
+            this.roleName = roleName;
+            this.type = roleType;
+            this.programName = programName;
+            this.supervisoryNodeName = supervisoryNodeName;
+            this.warehouseName = warehouseName;
         }
     }
 })();
