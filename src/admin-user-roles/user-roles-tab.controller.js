@@ -29,11 +29,11 @@
         .controller('UserRolesTabController', controller);
 
     controller.$inject = [
-        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', 'ROLE_TYPES',
+        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab',
         '$state', 'notificationService', 'confirmService', 'filteredRoleAssignments', 'filteredRoles'
     ];
 
-    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, ROLE_TYPES,
+    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab,
                         $state, notificationService, confirmService, filteredRoleAssignments, filteredRoles) {
 
         var vm = this;
@@ -172,12 +172,12 @@
         function addRole() {
             try {
                 user.addRoleAssignment(vm.selectedRole.id, vm.selectedRole.name, tab,
-                    vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.id : undefined,
-                    vm.selectedProgram && tab === ROLE_TYPES.SUPERVISION ? vm.selectedProgram.name : undefined,
-                    vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.id : undefined,
-                    vm.selectedSupervisoryNode && tab === ROLE_TYPES.SUPERVISION ? vm.selectedSupervisoryNode.$display : undefined,
-                    vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.id : undefined,
-                    vm.selectedWarehouse && tab === ROLE_TYPES.ORDER_FULFILLMENT ? vm.selectedWarehouse.name : undefined);
+                    vm.selectedProgram ? vm.selectedProgram.id : undefined,
+                    vm.selectedProgram ? vm.selectedProgram.name : undefined,
+                    vm.selectedSupervisoryNode ? vm.selectedSupervisoryNode.id : undefined,
+                    vm.selectedSupervisoryNode ? vm.selectedSupervisoryNode.$display : undefined,
+                    vm.selectedWarehouse ? vm.selectedWarehouse.id : undefined,
+                    vm.selectedWarehouse ? vm.selectedWarehouse.name : undefined);
                 reloadState();
                 return $q.resolve();
             }
