@@ -134,7 +134,7 @@ describe('openlmis-permissions.permissionService', function() {
             });
 
             $rootScope.$apply();
-            return success;    
+            return success;
         }
 
         it('will return FALSE if no arguments', function() {
@@ -149,7 +149,7 @@ describe('openlmis-permissions.permissionService', function() {
             expect(checkPermission({
                 right: 'example',
                 facilityId: 'facility-id'
-            })).toBe(true); 
+            })).toBe(true);
         });
 
         it('will resolve promise if the argument EXACTLY matches a permission', function() {

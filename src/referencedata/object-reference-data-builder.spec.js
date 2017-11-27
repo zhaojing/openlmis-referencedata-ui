@@ -29,7 +29,8 @@
         var separator = '/';
 
         ObjectReferenceDataBuilder.prototype.withId = withId;
-        ObjectReferenceDataBuilder.prototype.withHref = withHref;
+        ObjectReferenceDataBuilder.prototype.withResource = withResource;
+        ObjectReferenceDataBuilder.prototype.withServiceUrl = withServiceUrl;
         ObjectReferenceDataBuilder.prototype.build = build;
 
         return ObjectReferenceDataBuilder;
