@@ -26,6 +26,8 @@
 
     function ObjectReferenceDataBuilder(ObjectReference) {
 
+        var separator = '/';
+
         ObjectReferenceDataBuilder.prototype.withId = withId;
         ObjectReferenceDataBuilder.prototype.withHref = withHref;
         ObjectReferenceDataBuilder.prototype.build = build;
@@ -33,8 +35,11 @@
         return ObjectReferenceDataBuilder;
 
         function ObjectReferenceDataBuilder() {
-            this.id = 'c284f9a6-1135-486d-94cc-fc550540f1ce';
-            this.href = 'http://localhost/api/object-ref/c284f9a6-1135-486d-94cc-fc550540f1ce';
+            ObjectReferenceDataBuilder.instanceNumber = (ObjectReferenceDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'object-id-' + ObjectReferenceDataBuilder.instanceNumber;
+            this.serviceUrl = 'http://localhost/api';
+            this.resource = 'object';
         }
 
         function withId(newId) {
@@ -42,18 +47,21 @@
             return this;
         }
 
-        function withHref(newHref) {
-            this.href = newHref;
+        function withResource(resource) {
+            this.resource = resource;
+            return this;
+        }
+
+        function withServiceUrl(serviceUrl) {
+            this.serviceUrl = serviceUrl;
             return this;
         }
 
         function build() {
             return new ObjectReference(
                 this.id,
-                this.href
+                [this.serviceUrl, this.resource, this.id].join(separator)
             );
         }
-
     }
-
 })();
