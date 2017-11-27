@@ -48,9 +48,9 @@
         .module('openlmis-permissions')
         .service('permissionService', service);
 
-    service.$inject = ['$q', '$http', 'openlmisUrlFactory', 'localStorageService'];
+    service.$inject = ['$q', '$http', 'openlmisUrlFactory', 'localStorageService', 'Permission'];
 
-    function service($q, $http, openlmisUrlFactory, localStorageService) {
+    function service($q, $http, openlmisUrlFactory, localStorageService, Permission) {
         var savedUserId;  // Used in service.load
 
         this.hasPermission = hasPermission;
