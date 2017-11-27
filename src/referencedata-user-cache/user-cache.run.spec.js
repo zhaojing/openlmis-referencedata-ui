@@ -14,7 +14,7 @@
  */
 
 describe('user cache run', function() {
-    var referencedataUserService, $rootScope, loadingService, authorizationService,
+    var referencedataUserService, $q, $rootScope, loadingService, authorizationService, permissionService,
         user;
 
     beforeEach(function() {
@@ -24,8 +24,12 @@ describe('user cache run', function() {
             referencedataUserService = $injector.get('referencedataUserService');
             loadingService = $injector.get('loadingService');
             authorizationService = $injector.get('authorizationService');
+            permissionService = $injector.get('permissionService');
+            $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
         });
+
+        spyOn(permissionService, 'load').andReturn($q.resolve(true));
 
         user = {
             user_id: 'user-id',
