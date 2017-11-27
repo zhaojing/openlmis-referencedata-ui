@@ -90,7 +90,7 @@ describe('facilityFactory', function() {
 
         var userId, ordersViewFacilities, podsManageFacilities, ordersViewRight, podsManageRight;
 
-        beforeEach(inject(function(permissionService) {
+        beforeEach(inject(function() {
             userId = 'user-id';
 
             ordersViewFacilities = [
@@ -254,9 +254,9 @@ describe('facilityFactory', function() {
 
     describe('getAllUserFacilities', function() {
 
-        var userId, requisitionViewFacilities, permissionService;
+        var userId, requisitionViewFacilities;
 
-        beforeEach(inject(function(_permissionService_) {
+        beforeEach(inject(function() {
             var facility;
 
             userId = 'user-id';

@@ -31,11 +31,11 @@
 
     factory.$inject = [
         'openlmisUrlFactory', '$q', '$filter', 'programService', 'authorizationService',
-        'referencedataUserService', 'facilityService', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS', 'permissionService'
+        'referencedataUserService', 'facilityService', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS'
     ];
 
     function factory(openlmisUrlFactory, $q, $filter, programService, authorizationService,
-        referencedataUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS, permissionService) {
+        referencedataUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
 
             return {
                 getUserFacilities: getUserFacilities,
