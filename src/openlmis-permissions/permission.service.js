@@ -164,11 +164,7 @@
 
             permissionStrings.forEach(function(string) {
                 var parts = string.split('|');
-                permissions.push({
-                    right: parts[0],
-                    facilityId: parts[1],
-                    programId: parts[2]
-                });
+                permissions.push(new Permission(parts[0], parts[1], parts[2]));
             });
 
             return $q.resolve(permissions);

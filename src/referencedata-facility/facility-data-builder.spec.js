@@ -28,6 +28,7 @@
         FacilityOperatorDataBuilder) {
 
         FacilityDataBuilder.prototype.build = build;
+        FacilityDataBuilder.prototype.buildMinimal = buildMinimal;
 
         return FacilityDataBuilder;
 
@@ -67,6 +68,14 @@
                 this.openLmisAccessible,
                 this.location,
                 this.extraData
+            );
+        }
+
+        function buildMinimal() {
+            return new Facility(
+                this.id,
+                null,
+                this.name
             );
         }
     }
