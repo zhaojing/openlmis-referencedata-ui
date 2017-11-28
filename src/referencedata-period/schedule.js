@@ -19,26 +19,26 @@
 
     /**
      * @ngdoc service
-     * @name referencedata-period.Schedule
+     * @name referencedata-period.ProcessingSchedule
      *
      * @description
-     * Represents a single schedule.
+     * Represents a single processing schedule.
      */
     angular
         .module('referencedata-period')
-        .factory('Schedule', Schedule);
+        .factory('ProcessingSchedule', ProcessingSchedule);
 
-    function Schedule() {
+    function ProcessingSchedule() {
 
-        return Schedule;
+        return ProcessingSchedule;
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-period.Schedule
-         * @name Program
+         * @methodOf referencedata-period.ProcessingSchedule
+         * @name ProcessingSchedule
          *
          * @description
-         * Creates a new instance of the Schedule class.
+         * Creates a new instance of the ProcessingSchedule class.
          *
          * @param  {String}  id                 the UUID of the schedule to be created
          * @param  {Stting}  code               the code of the schedule to be created
@@ -46,7 +46,7 @@
          * @param  {String}  description        the description of the schedule to be created
          * @return {Object}                     the schedule object
          */
-        function Schedule(id, code, name, description) {
+        function ProcessingSchedule(id, code, name, description) {
             this.id = id;
             this.code = code;
             this.name = name;

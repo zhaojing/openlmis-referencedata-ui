@@ -20,25 +20,27 @@
 
     angular
         .module('referencedata-period')
-        .factory('ScheduleDataBuilder', ScheduleDataBuilder);
+        .factory('ProcessingScheduleDataBuilder', ProcessingScheduleDataBuilder);
 
-    ScheduleDataBuilder.$inject = ['Schedule'];
+    ProcessingScheduleDataBuilder.$inject = ['ProcessingSchedule'];
 
-    function ScheduleDataBuilder(Schedule) {
+    function ProcessingScheduleDataBuilder(ProcessingSchedule) {
 
-        ScheduleDataBuilder.prototype.build = build;
+        ProcessingScheduleDataBuilder.prototype.build = build;
 
-        return ScheduleDataBuilder;
+        return ProcessingScheduleDataBuilder;
 
-        function ScheduleDataBuilder() {
-            this.id = '9c15bd6e-3f6b-4b91-b53a-36c199d35eac';
+        function ProcessingScheduleDataBuilder() {
+            ProcessingScheduleDataBuilder.instanceNumber = (ProcessingScheduleDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'schedule-id-' + ProcessingScheduleDataBuilder.instanceNumber;
             this.code = 'SCH001';
             this.name = 'Monthly';
             this.description = 'description';
         }
 
         function build() {
-            return new Schedule(
+            return new ProcessingSchedule(
                 this.id,
                 this.code,
                 this.name,

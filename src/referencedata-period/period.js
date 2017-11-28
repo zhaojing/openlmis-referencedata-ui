@@ -35,7 +35,7 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-period.Period
-         * @name Program
+         * @name Period
          *
          * @description
          * Creates a new instance of the Period class.

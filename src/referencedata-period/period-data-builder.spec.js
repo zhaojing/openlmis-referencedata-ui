@@ -22,9 +22,9 @@
         .module('referencedata-period')
         .factory('PeriodDataBuilder', PeriodDataBuilder);
 
-    PeriodDataBuilder.$inject = ['Period', 'ScheduleDataBuilder'];
+    PeriodDataBuilder.$inject = ['Period', 'ProcessingScheduleDataBuilder'];
 
-    function PeriodDataBuilder(Period, ScheduleDataBuilder) {
+    function PeriodDataBuilder(Period, ProcessingScheduleDataBuilder) {
 
         PeriodDataBuilder.prototype.withStartDate = withStartDate;
         PeriodDataBuilder.prototype.withEndDate = withEndDate;
@@ -33,7 +33,9 @@
         return PeriodDataBuilder;
 
         function PeriodDataBuilder() {
-            this.id = '516ac930-0d28-49f5-a178-64764e22b236';
+            PeriodDataBuilder.instanceNumber = (PeriodDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'period-id-' + PeriodDataBuilder.instanceNumber;
             this.name = 'Jan2017';
             this.description = 'description';
             this.startDate = new Date(2017, 0, 1);
