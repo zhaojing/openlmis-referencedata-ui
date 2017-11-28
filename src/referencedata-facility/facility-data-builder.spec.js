@@ -54,8 +54,8 @@
         function build() {
             return new Facility(
                 this.id,
-                this.code,
                 this.name,
+                this.code,
                 this.description,
                 this.type,
                 this.operator,

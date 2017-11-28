@@ -39,7 +39,6 @@
         function build() {
             return new Facility(
                 this.id,
-                null,
                 this.name
             );
         }

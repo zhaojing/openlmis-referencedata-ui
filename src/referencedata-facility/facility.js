@@ -60,8 +60,8 @@
         function Facility(id, code, name, description, geographicZone, type, operator, active,
             goLiveDate, goDownDate, comment, enabled, openLmisAccessible, location, extraData) {
             this.id = id;
-            this.code = code;
             this.name = name;
+            this.code = code;
             this.description = description;
             this.geographicZone = geographicZone;
             this.type = type;
