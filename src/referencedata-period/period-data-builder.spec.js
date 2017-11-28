@@ -40,7 +40,7 @@
             this.description = 'description';
             this.startDate = new Date(2017, 0, 1);
             this.endDate = new Date(2017, 0, 31);
-            this.processingSchedule = new ScheduleDataBuilder().build();
+            this.processingSchedule = new ProcessingScheduleDataBuilder().build();
         }
 
         function withStartDate(newDate) {
