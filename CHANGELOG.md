@@ -7,6 +7,7 @@ Improvements:
 * [OLMIS-2285](https://openlmis.atlassian.net/browse/OLMIS-2285): Supported program start date is now editable on facility edit screen.
 * [OLMIS-3403](https://openlmis.atlassian.net/browse/OLMIS-3403): Added query params for get facilities and get users.
 * [OLMIS-2727](https://openlmis.atlassian.net/browse/OLMIS-2727): Added pagination for user roles tab.
+* [OLMIS-2727](https://openlmis.atlassian.net/browse/OLMIS-3607): Added builders for period and schedule.
 
 Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.
