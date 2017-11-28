@@ -41,8 +41,8 @@
          * Creates a new instance of the Facility class.
          *
          * @param  {String}  id                 the UUID of the facility to be created
-         * @param  {String}  code               the code of the facility to be created
          * @param  {String}  name               the name of the facility to be created
+         * @param  {String}  code               the code of the facility to be created
          * @param  {String}  description        the description of the facility to be created
          * @param  {Object}  geographicZone     the geographicZone of the facility to be created
          * @param  {Object}  type               the type of the facility to be created
@@ -57,7 +57,7 @@
          * @param  {Object}  extraData          the extraData of the facility to be created
          * @return {Object}                     the facility object
          */
-        function Facility(id, code, name, description, geographicZone, type, operator, active,
+        function Facility(id, name, code, description, geographicZone, type, operator, active,
             goLiveDate, goDownDate, comment, enabled, openLmisAccessible, location, extraData) {
             this.id = id;
             this.name = name;
