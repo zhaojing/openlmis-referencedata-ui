@@ -29,9 +29,11 @@
         .module('openlmis-facility-program-select')
         .controller('OpenlmisFacilityProgramSelectController', controller);
 
-    controller.$inject = ['$q', '$stateParams', '$filter', 'facilityProgramCacheService'];
+    controller.$inject = ['$q', '$stateParams', '$filter', 'facilityProgramCacheService',
+        'loadingModalService'];
 
-    function controller($q, $stateParams, $filter, facilityProgramCacheService) {
+    function controller($q, $stateParams, $filter, facilityProgramCacheService,
+        loadingModalService) {
 
         var vm = this;
 
@@ -48,22 +50,24 @@
          * Initialization method of the controller.
          */
         function onInit() {
-            facilityProgramCacheService.loadData(vm.module)
-            .then(function() {
-                vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
-                vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
-                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
+            var loadingPromise = loadingModalService.open();
+            facilityProgramCacheService.loadData(vm.module).then(function() {
+                loadingPromise.then(function() {
+                    vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
+                    vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
+                    vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
 
-                if ($stateParams.program) {
-                    vm.program = $filter('filter')(vm.supervisedPrograms,
-                        {
-                            id: $stateParams.program
-                        }
-                    )[0];
-                }
+                    if ($stateParams.program) {
+                        vm.program = $filter('filter')(vm.supervisedPrograms,
+                            {
+                                id: $stateParams.program
+                            }
+                        )[0];
+                    }
 
-                vm.updateFacilities(true);
-            });
+                    vm.updateFacilities(true);
+                });
+            }).finally(loadingModalService.close);
         }
 
         /**
