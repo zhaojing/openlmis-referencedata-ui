@@ -25,6 +25,8 @@
 
     function OrderableDataBuilder(Orderable) {
 
+        OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
+        OrderableDataBuilder.prototype.withId = withId;
         OrderableDataBuilder.prototype.build = build;
 
         return OrderableDataBuilder;
@@ -33,8 +35,18 @@
             OrderableDataBuilder.instanceNumber = (OrderableDataBuilder.instanceNumber || 0) + 1;
 
             this.id = 'orderable-id-' + OrderableDataBuilder.instanceNumber;
-            this.code = 'C' + OrderableDataBuilder.instanceNumber;
-            this.name = 'Acetylsalicylic Acid';
+            this.productCode = 'C' + OrderableDataBuilder.instanceNumber;
+            this.fullProductName = 'Acetylsalicylic Acid';
+        }
+
+        function withFullProductName(fullProductName) {
+            this.fullProductName = fullProductName;
+            return this;
+        }
+
+        function withId(id) {
+            this.id = id;
+            return this;
         }
 
         function build() {
