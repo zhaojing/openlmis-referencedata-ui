@@ -212,7 +212,7 @@
             function getAllUserFacilitiesForRightWithProgram(userId, right) {
                 return $q.all({
                     facilities: facilityService.getUserFacilitiesForRight(userId, right),
-                    programs: programService.getUserPrograms()
+                    programs: programService.getUserPrograms(userId)
                 })
                 .then(function(results) {
                     var facilities = results.facilities,
