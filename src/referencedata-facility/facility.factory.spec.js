@@ -125,6 +125,12 @@ describe('facilityFactory', function() {
             expect(facilityService.getUserFacilitiesForRight).toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.PODS_MANAGE);
         });
 
+        it('should fetch programs for current user', function() {
+            facilityFactory.getSupplyingFacilities(userId);
+
+            expect(programService.getUserPrograms).toHaveBeenCalledWith(userId);
+        });
+
         it('should resolve to set of facilities', function() {
             var result;
 
