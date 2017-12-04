@@ -37,6 +37,9 @@
             this.id = 'orderable-id-' + OrderableDataBuilder.instanceNumber;
             this.productCode = 'C' + OrderableDataBuilder.instanceNumber;
             this.fullProductName = 'Acetylsalicylic Acid';
+            this.dispensable = {
+              dispensingUnit: ""
+            };
         }
 
         function withFullProductName(fullProductName) {
@@ -53,7 +56,8 @@
             return new Orderable(
                 this.id,
                 this.productCode,
-                this.fullProductName
+                this.fullProductName,
+                this.dispensable
             );
         }
 
