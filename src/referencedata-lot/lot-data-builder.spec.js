@@ -23,7 +23,7 @@
 
     LotDataBuilder.$inject = ['Lot'];
 
-    function LotDataBuilder(Orderable) {
+    function LotDataBuilder(Lot) {
 
         LotDataBuilder.prototype.build = build;
 
