@@ -154,8 +154,7 @@
             function getUserHomeFacility() {
                 var deferred = $q.defer();
 
-                var currentUser = authorizationService.getUser();
-                referencedataUserService.get(currentUser.user_id).then(function(response) {
+                referencedataUserService.getCurrentUserInfo().then(function(response) {
                     if (response.homeFacilityId) {
                         return facilityService.get(response.homeFacilityId);
                     } else {

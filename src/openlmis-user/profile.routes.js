@@ -32,9 +32,8 @@
             controller: 'UserProfileController',
             controllerAs: 'vm',
             resolve: {
-                user: function (authorizationService, referencedataUserService) {
-                    var currentUser = authorizationService.getUser()
-                    return referencedataUserService.get(currentUser.user_id);
+                user: function (referencedataUserService) {
+                    return referencedataUserService.getCurrentUserInfo();
                 }
             }
         });

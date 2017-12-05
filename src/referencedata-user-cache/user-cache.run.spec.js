@@ -14,16 +14,18 @@
  */
 
 describe('user cache run', function() {
-    var referencedataUserService, $q, $rootScope, loadingService, authorizationService, permissionService,
-        user;
+    var referencedataUserService, $q, $rootScope, loadingService, permissionService, user;
 
     beforeEach(function() {
-        module('referencedata-user-cache');
+        module('referencedata-user-cache', function($provide) {
+            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['getCurrentUserInfo', 'clearUserCache']);
+            $provide.service('referencedataUserService', function() {
+                return referencedataUserService;
+            });
+        });
 
         inject(function($injector) {
-            referencedataUserService = $injector.get('referencedataUserService');
             loadingService = $injector.get('loadingService');
-            authorizationService = $injector.get('authorizationService');
             permissionService = $injector.get('permissionService');
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
@@ -39,21 +41,17 @@ describe('user cache run', function() {
 
     it('should cache user on login', function() {
         var promise = $q.when(user);
-        spyOn(authorizationService, 'getUser').andReturn(user);
-        spyOn(referencedataUserService, 'get').andReturn(promise);
+        referencedataUserService.getCurrentUserInfo.andReturn(promise);
         spyOn(loadingService, 'register');
 
         $rootScope.$emit('openlmis-auth.login');
         $rootScope.$apply();
 
-        expect(authorizationService.getUser).toHaveBeenCalled();
-        expect(referencedataUserService.get).toHaveBeenCalledWith(user.user_id);
+        expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
         expect(loadingService.register).toHaveBeenCalledWith('referencedata-user-cache.loading', promise);
     });
 
     it('should clear user cache on logout', function() {
-        spyOn(referencedataUserService, 'clearUserCache');
-
         $rootScope.$emit('openlmis-auth.logout');
         $rootScope.$apply();
 

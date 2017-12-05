@@ -30,10 +30,10 @@
         .service('referencedataUserService', service);
 
     service.$inject = [
-        '$q', 'openlmisUrlFactory', '$resource', 'offlineService', 'localStorageFactory'
+        'openlmisUrlFactory', '$resource', 'localStorageFactory'
     ];
 
-    function service($q, openlmisUrlFactory, $resource, offlineService, localStorageFactory) {
+    function service(openlmisUrlFactory, $resource, localStorageFactory) {
         var offlineUserDetails = localStorageFactory('offlineUserDetails'),
         resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
             query: {
@@ -62,31 +62,13 @@
          * @name get
          *
          * @description
-         * Gets user by id and stores it in the local storage.
+         * Gets user by id.
          *
          * @param  {String}  id the user UUID
          * @return {Promise}    the user info
          */
         function get(id) {
-            var deferred = $q.defer();
-
-            if(offlineService.isOffline()) {
-                var user = offlineUserDetails.getBy('id', id);
-                if (user) {
-                    deferred.resolve(user);
-                } else {
-                    deferred.reject();
-                }
-            } else {
-                resource.get({id: id}).$promise.then(function(response) {
-                    offlineUserDetails.put(response);
-                    deferred.resolve(response);
-                }, function() {
-                    deferred.reject();
-                });
-            }
-
-            return deferred.promise;
+            return resource.get({id: id}).$promise;
         }
 
         /**
