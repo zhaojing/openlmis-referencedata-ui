@@ -161,7 +161,7 @@
 
                 loadRights(moduleName);
 
-                return referencedataUserService.getCurrentUserInfo();
+                return referencedataUserService.get(userId);
             })
             .then(function(user) {
                 homeFacility = getFacilityById(user.homeFacilityId);

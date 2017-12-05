@@ -33,42 +33,40 @@
         $provide.decorator('referencedataUserService', decorator);
     }
 
-    decorator.$inject = ['$delegate', '$q', 'localStorageFactory', 'authorizationService'];
-    function decorator($delegate, $q, localStorageFactory, authorizationService) {
+    decorator.$inject = ['$delegate', '$q', 'localStorageFactory'];
+    function decorator($delegate, $q, localStorageFactory) {
         var originalGetUser = $delegate.get,
-            originalSaveUser = $delegate.saveUser,
-            userCache = localStorageFactory('user');
+        userCache = localStorageFactory('user');
 
-        $delegate.getCurrentUserInfo = getCurrentUserInfo;
+        $delegate.get = cachedGet;
         $delegate.clearUserCache = clearCache;
-        $delegate.saveUser = saveUser;
 
         return $delegate;
 
         /**
          * @ngdoc method
          * @methodOf referencedata-user-cache.referencedataUserService
-         * @name getCurrentUserInfo
+         * @name get
          *
          * @description
-         * Gets current user details from the
+         * Gets a user details from the
          * referencedata service, which is then stored and only retrieved from
          * the user's browser.
          *
          * @return {Promise}    promise that resolves with user info
+         * @param  {String}  id user id
          */
-        function getCurrentUserInfo() {
-            var userId = authorizationService.getUser().user_id;
-            var cachedUser = userCache.getBy('id', userId);
+        function cachedGet(id) {
+            var cachedUser = userCache.getBy('id', id);
 
             if (cachedUser) {
                 return $q.resolve(cachedUser);
             } else {
                 return originalGetUser.apply($delegate, arguments)
-                    .then(function(user) {
-                        userCache.put(user);
-                        return user;
-                    });
+                .then(function(user) {
+                    userCache.put(user);
+                    return user;
+                });
             }
         }
 
@@ -82,29 +80,6 @@
          */
         function clearCache() {
             userCache.clearAll();
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-user-cache.referencedataUserService
-         * @name saveUserCache
-         *
-         * @description
-         * Creates new user and store in browser cache.
-         *
-         * @param   {Object}    user    the user to be created
-         * @return  {Promise}           the promise resolving to newly created user
-         */
-        function saveUser(user) {
-            var userId = authorizationService.getUser().user_id;
-            if (userId === user.id) {
-                userCache.put(user);
-            }
-            return originalSaveUser.apply($delegate, arguments)
-                .then(function(user) {
-                    userCache.put(user);
-                    return user;
-                });
         }
     }
 })();

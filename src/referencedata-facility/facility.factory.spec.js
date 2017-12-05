@@ -18,34 +18,28 @@ describe('facilityFactory', function() {
     var $rootScope, $q, facility1, facility2, userPrograms, programService, facilityService,
         authorizationService, referencedataUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
 
-    beforeEach(function () {
-        module('referencedata-facility', function($provide) {
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['getCurrentUserInfo']);
-            $provide.service('referencedataUserService', function() {
-                return referencedataUserService;
-            });
-        });
+    beforeEach(module('referencedata-facility'));
 
-        inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            facilityFactory = $injector.get('facilityFactory');
-            REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
-            FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
+    beforeEach(inject(function($injector) {
+        $rootScope = $injector.get('$rootScope');
+        $q = $injector.get('$q');
+        facilityFactory = $injector.get('facilityFactory');
+        REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
+        FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
 
-            facilityService = $injector.get('facilityService');
-            spyOn(facilityService, 'getUserSupervisedFacilities');
-            spyOn(facilityService, 'getUserFacilitiesForRight');
-            spyOn(facilityService, 'get');
-            spyOn(facilityService, 'getAllMinimal');
+        facilityService = $injector.get('facilityService');
+        spyOn(facilityService, 'getUserSupervisedFacilities');
+        spyOn(facilityService, 'getUserFacilitiesForRight');
+        spyOn(facilityService, 'get');
+        spyOn(facilityService, 'getAllMinimal');
 
-            programService = $injector.get('programService');
-            spyOn(programService, 'getUserPrograms');
+        programService = $injector.get('programService');
+        spyOn(programService, 'getUserPrograms');
 
-            authorizationService = $injector.get('authorizationService');
-            spyOn(authorizationService, 'getRightByName');
-        });
-    });
+        authorizationService = $injector.get('authorizationService');
+        spyOn(authorizationService, 'getRightByName');
+        spyOn(authorizationService, 'getUser');
+    }));
 
     beforeEach(function() {
         facility1 = {
@@ -155,11 +149,17 @@ describe('facilityFactory', function() {
 
     describe('getUserHomeFacility', function() {
 
-        beforeEach(function() {
-            referencedataUserService.getCurrentUserInfo.andReturn($q.resolve({
+        beforeEach(inject(function(_referencedataUserService_) {
+            referencedataUserService = _referencedataUserService_;
+            spyOn(referencedataUserService, 'get');
+            referencedataUserService.get.andReturn($q.resolve({
                 homeFacilityId: 'home-facility-id'
             }));
-        });
+
+            authorizationService.getUser.andReturn({
+                user_id: '1234'
+            });
+        }));
 
         it('should fetch home facility for the current user', function() {
             facilityService.get.andCallFake(function() {
@@ -172,7 +172,7 @@ describe('facilityFactory', function() {
             });
             $rootScope.$apply();
 
-            expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
+            expect(referencedataUserService.get).toHaveBeenCalled();
             expect(facilityService.get).toHaveBeenCalledWith('home-facility-id');
             expect(homeFacility.name).toEqual('Home Facility');
         });

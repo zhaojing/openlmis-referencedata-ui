@@ -20,16 +20,16 @@
     angular.module('referencedata-user-cache')
         .run(initUserCache);
 
-    initUserCache.$inject = ['$rootScope', 'referencedataUserService', 'loadingService'];
+    initUserCache.$inject = ['$q', '$rootScope', 'referencedataUserService', 'authorizationService', 'loadingService'];
 
-    function initUserCache($rootScope, referencedataUserService, loadingService) {
+    function initUserCache($q, $rootScope, referencedataUserService, authorizationService, loadingService) {
 
         $rootScope.$on('openlmis-auth.login', cacheUser);
         $rootScope.$on('openlmis-auth.logout', removeUserCache);
 
         function cacheUser() {
-            var currentUserInfo = referencedataUserService.getCurrentUserInfo();
-            loadingService.register('referencedata-user-cache.loading', currentUserInfo);
+            var userId = authorizationService.getUser().user_id;
+            loadingService.register('referencedata-user-cache.loading', referencedataUserService.get(userId));
         }
 
         function removeUserCache() {

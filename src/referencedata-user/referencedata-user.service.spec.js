@@ -39,6 +39,7 @@ describe('referencedataUserService', function() {
             $q = $injector.get('$q');
             openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             referencedataUserService = $injector.get('referencedataUserService');
+            offlineService = $injector.get('offlineService');
         });
 
         user1 = {
@@ -57,11 +58,13 @@ describe('referencedataUserService', function() {
 
         beforeEach(function() {
             offlineUserDetails.getBy.andReturn('user');
+            spyOn(offlineService, 'isOffline');
             $httpBackend.when('GET', openlmisUrlFactory('/api/users/' + user1.id))
             .respond(200, user1);
         });
 
-        it('should get user by id', function() {
+        it('should get user by id while online', function() {
+            offlineService.isOffline.andReturn(false);
 
             referencedataUserService.get(user1.id).then(function(response) {
                 data = response;
@@ -71,6 +74,20 @@ describe('referencedataUserService', function() {
             $rootScope.$apply();
 
             expect(angular.toJson(data)).toEqual(angular.toJson(user1));
+        });
+
+        it('should get user from local storage while offline', function() {
+
+            offlineService.isOffline.andReturn(true);
+
+            referencedataUserService.get(user1.id).then(function(response) {
+                data = response;
+            });
+
+            $rootScope.$apply();
+
+            expect(offlineUserDetails.getBy).toHaveBeenCalledWith('id', user1.id);
+            expect(data).toEqual('user');
         });
     });
 
