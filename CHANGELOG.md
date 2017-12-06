@@ -1,4 +1,4 @@
-5.3.1 / WIP
+5.2.3 / WIP
 ===========
 
 Improvements:
@@ -8,13 +8,14 @@ Improvements:
 * [OLMIS-3403](https://openlmis.atlassian.net/browse/OLMIS-3403): Added query params for get facilities and get users.
 * [OLMIS-2727](https://openlmis.atlassian.net/browse/OLMIS-2727): Added pagination for user roles tab.
 * [OLMIS-3607](https://openlmis.atlassian.net/browse/OLMIS-3607): Added builders for period and schedule.
+* [OLMIS-3542](https://openlmis.atlassian.net/browse/OLMIS-3542): Updated password modal title and button to be based on context.
 
 Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.
 * [OLMIS-3243](https://openlmis.atlassian.net/browse/OLMIS-3403): Added builders for ObjectReference, Facility, Program etc.
 * [OLMIS-3727](https://openlmis.atlassian.net/browse/OLMIS-3727): Fixed getting user's programs.
 
-5.3.0 / 2017-11-09
+5.2.2 / 2017-11-09
 ==================
 
 New features:

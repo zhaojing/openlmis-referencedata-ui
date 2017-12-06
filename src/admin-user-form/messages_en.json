@@ -19,6 +19,7 @@
     "adminUserForm.passwordResetSuccessfully": "Reset email has been sent successfully!",
     "adminUserForm.cancel": "Cancel",
     "adminUserForm.createPassword": "Create Password",
+    "adminUserForm.resetPassword": "Reset Password",
     "adminUserForm.sendResetEmail": "Send reset email",
     "adminUserForm.password": "Password",
     "adminUserForm.homeFacility": "Home facility",

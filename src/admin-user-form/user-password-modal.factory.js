@@ -29,7 +29,7 @@
           open: open
         }
 
-        function open(user) {
+        function open(user, isNewUser) {
             var persistent = {
                 user: {
                     username: user.username,
@@ -46,6 +46,9 @@
                 resolve: {
                     user: function() {
                         return persistent.user;
+                    },
+                    isNewUser: function() {
+                        return isNewUser;
                     }
                 }
             }).promise.finally(function() {

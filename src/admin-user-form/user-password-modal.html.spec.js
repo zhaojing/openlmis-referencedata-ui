@@ -82,7 +82,8 @@ describe('user-password-modal.html template', function() {
 
         vm = $controller('UserPasswordModalController', {
             user: user,
-            modalDeferred: $q.defer()
+            modalDeferred: $q.defer(),
+            isNewUser: undefined
         });
 
         vm.$onInit();

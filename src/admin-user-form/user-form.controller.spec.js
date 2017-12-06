@@ -85,7 +85,8 @@ describe('UserFormController', function() {
 
         vm = $controller('UserFormController', {
             user: user,
-            facilities: facilities
+            facilities: facilities,
+            isNewUser: undefined
         });
         vm.$onInit();
     });
@@ -311,7 +312,7 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(userPasswordModalFactoryMock.open).toHaveBeenCalledWith(user);
+            expect(userPasswordModalFactoryMock.open).toHaveBeenCalledWith(user, true);
         });
 
         it('should change email if it is empty string', function() {

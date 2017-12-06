@@ -47,7 +47,8 @@ describe('UserPasswordModalController', function() {
 
         vm = $controller('UserPasswordModalController', {
             user: user,
-            modalDeferred: modalDeferred
+            modalDeferred: modalDeferred,
+            isNewUser: undefined
         });
         vm.$onInit();
     });

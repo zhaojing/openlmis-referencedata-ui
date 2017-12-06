@@ -29,10 +29,12 @@
         .controller('UserPasswordModalController', controller);
 
     controller.$inject = [
-        'user', 'modalDeferred', 'authUserService', 'loadingModalService', 'notificationService'
+        'user', 'isNewUser', 'modalDeferred', 'authUserService', 'loadingModalService',
+        'notificationService'
     ];
 
-    function controller(user, modalDeferred, authUserService, loadingModalService, notificationService) {
+    function controller(user, isNewUser, modalDeferred, authUserService, loadingModalService,
+                        notificationService) {
 
         var vm = this;
 
@@ -52,6 +54,18 @@
         vm.user = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserPasswordModalController
+         * @name isNewUser
+         * @type {boolean}
+         *
+         * @description
+         * Flag defining whether we're creating password for a new user or Updating
+         * it for already existing user.
+         */
+        vm.isNewUser = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserPasswordModalController
          * @name $onInit
@@ -61,6 +75,7 @@
          */
         function onInit() {
             vm.user = user;
+            vm.isNewUser = isNewUser;
         }
 
         /**
