@@ -64,7 +64,7 @@
             if (cachedUser) {
                 return $q.resolve(cachedUser);
             } else {
-                return originalGetUser.apply($delegate, arguments)
+                return originalGetUser.apply($delegate, [userId])
                     .then(function(user) {
                         userCache.put(user);
                         return user;

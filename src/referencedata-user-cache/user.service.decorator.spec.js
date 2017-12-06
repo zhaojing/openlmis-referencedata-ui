@@ -62,8 +62,8 @@ describe('UserService decorator', function() {
     });
 
     it('will send original request if there is no user cached', function() {
-        $httpBackend.when('GET', referencedataUrlFactory('/api/users/' + user.id))
-        .respond(200, user);
+        $httpBackend.expect('GET', referencedataUrlFactory('/api/users/' + user.id))
+            .respond(200, user);
 
         cache.getBy.andReturn(undefined);
 
