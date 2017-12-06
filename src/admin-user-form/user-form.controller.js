@@ -230,7 +230,7 @@
                     notificationService.success(vm.notification);
                 });
 
-                userPasswordModalFactory.open(savedUser, true).finally(function () {
+                userPasswordModalFactory.createPassword(savedUser).finally(function () {
                     goToUserList();
                 });
             }, loadingModalService.close);

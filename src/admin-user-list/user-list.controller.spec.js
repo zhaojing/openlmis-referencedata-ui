@@ -20,7 +20,7 @@ describe('UserListController', function () {
     beforeEach(function() {
         module('admin-user-list', function($provide) {
             confirmSpy = jasmine.createSpyObj('confirmService', ['confirm']);
-            userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['open']);
+            userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['resetPassword']);
 
             $provide.service('confirmService', function() {
                 return confirmSpy;
@@ -79,13 +79,13 @@ describe('UserListController', function () {
                 email: 'email'
             };
             modalDeferred = $q.defer();
-            userPasswordModalFactoryMock.open.andReturn(modalDeferred.promise);
+            userPasswordModalFactoryMock.resetPassword.andReturn(modalDeferred.promise);
         });
 
         it('should open user password modal', function() {
             vm.resetUserPassword(user);
 
-            expect(userPasswordModalFactoryMock.open).toHaveBeenCalledWith(user);
+            expect(userPasswordModalFactoryMock.resetPassword).toHaveBeenCalledWith(user);
         });
 
         it('should reload state after password change was successful', function() {

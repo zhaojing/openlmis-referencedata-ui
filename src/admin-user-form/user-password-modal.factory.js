@@ -26,10 +26,19 @@
     function factory(openlmisModalService) {
 
         return {
-          open: open
+            createPassword: createPassword,
+            resetPassword: resetPassword
+        };
+
+        function createPassword(user) {
+            return open(user, 'adminUserForm.createPassword');
         }
 
-        function open(user, isNewUser) {
+        function resetPassword(user) {
+            return open(user, 'adminUserForm.resetPassword');
+        }
+
+        function open(user, title) {
             var persistent = {
                 user: {
                     username: user.username,
@@ -47,8 +56,8 @@
                     user: function() {
                         return persistent.user;
                     },
-                    isNewUser: function() {
-                        return isNewUser;
+                    title: function() {
+                        return title;
                     }
                 }
             }).promise.finally(function() {

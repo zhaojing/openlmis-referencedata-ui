@@ -35,8 +35,7 @@ describe('UserFormController', function() {
                 return confirmService;
             });
 
-
-            userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['open']);
+            userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['createPassword']);
             $provide.service('userPasswordModalFactory', function() {
                 return userPasswordModalFactoryMock;
             });
@@ -269,7 +268,7 @@ describe('UserFormController', function() {
             deferred = $q.defer();
             referencedataUserService.saveUser.andReturn(deferred.promise);
             authUserService.saveUser.andReturn($q.when(user));
-            userPasswordModalFactoryMock.open.andReturn($q.when(user));
+            userPasswordModalFactoryMock.createPassword.andReturn($q.when(user));
 
             vm = $controller('UserFormController', {
                 user: undefined,
@@ -312,7 +311,7 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(userPasswordModalFactoryMock.open).toHaveBeenCalledWith(user, true);
+            expect(userPasswordModalFactoryMock.createPassword).toHaveBeenCalledWith(user);
         });
 
         it('should change email if it is empty string', function() {
