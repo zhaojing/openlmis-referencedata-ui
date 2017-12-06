@@ -19,12 +19,7 @@ describe('facilityFactory', function() {
         authorizationService, referencedataUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
 
     beforeEach(function () {
-        module('referencedata-facility', function($provide) {
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['getCurrentUserInfo']);
-            $provide.service('referencedataUserService', function() {
-                return referencedataUserService;
-            });
-        });
+        module('referencedata-facility');
 
         inject(function($injector) {
             $rootScope = $injector.get('$rootScope');
@@ -155,11 +150,13 @@ describe('facilityFactory', function() {
 
     describe('getUserHomeFacility', function() {
 
-        beforeEach(function() {
-            referencedataUserService.getCurrentUserInfo.andReturn($q.resolve({
-                homeFacilityId: 'home-facility-id'
-            }));
-        });
+        beforeEach(inject(function($injector) {
+            referencedataUserService = $injector.get('referencedataUserService')
+            spyOn(referencedataUserService, 'getCurrentUserInfo')
+                .andReturn($q.resolve({
+                    homeFacilityId: 'home-facility-id'
+                }));
+        }));
 
         it('should fetch home facility for the current user', function() {
             facilityService.get.andCallFake(function() {

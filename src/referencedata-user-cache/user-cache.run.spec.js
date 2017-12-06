@@ -17,18 +17,14 @@ describe('user cache run', function() {
     var referencedataUserService, $q, $rootScope, loadingService, permissionService, user;
 
     beforeEach(function() {
-        module('referencedata-user-cache', function($provide) {
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['getCurrentUserInfo', 'clearUserCache']);
-            $provide.service('referencedataUserService', function() {
-                return referencedataUserService;
-            });
-        });
+        module('referencedata-user-cache');
 
         inject(function($injector) {
             loadingService = $injector.get('loadingService');
             permissionService = $injector.get('permissionService');
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
+            referencedataUserService = $injector.get('referencedataUserService');
         });
 
         spyOn(permissionService, 'load').andReturn($q.resolve(true));
@@ -41,7 +37,7 @@ describe('user cache run', function() {
 
     it('should cache user on login', function() {
         var promise = $q.when(user);
-        referencedataUserService.getCurrentUserInfo.andReturn(promise);
+        spyOn(referencedataUserService, 'getCurrentUserInfo').andReturn(promise);
         spyOn(loadingService, 'register');
 
         $rootScope.$emit('openlmis-auth.login');
@@ -52,6 +48,8 @@ describe('user cache run', function() {
     });
 
     it('should clear user cache on logout', function() {
+        spyOn(referencedataUserService, 'clearUserCache');
+
         $rootScope.$emit('openlmis-auth.logout');
         $rootScope.$apply();
 

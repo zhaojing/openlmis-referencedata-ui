@@ -33,7 +33,8 @@
         'referencedata-program',
         'referencedata-facility-type',
         'referencedata-facility-operator',
-        'referencedata-geographic-zone'
+        'referencedata-geographic-zone',
+        'referencedata-user-cache'
     ]);
 
 })();

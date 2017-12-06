@@ -28,7 +28,8 @@
         'referencedata-program',
         'referencedata-user',
         'openlmis-auth',
-        'openlmis-permissions'
+        'openlmis-permissions',
+        'referencedata-user-cache'
     ]);
 
 })();

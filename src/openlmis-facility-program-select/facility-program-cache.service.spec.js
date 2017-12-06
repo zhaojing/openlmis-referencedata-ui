@@ -20,12 +20,7 @@ describe('facilityProgramCacheService', function() {
         user, loadPromise, programs, facilities;
 
     beforeEach(function() {
-        module('openlmis-facility-program-select', function($provide) {
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['getCurrentUserInfo']);
-            $provide.service('referencedataUserService', function() {
-                return referencedataUserService;
-            });
-        });
+        module('openlmis-facility-program-select');
 
         inject(function($injector) {
             $q = $injector.get('$q');
@@ -35,6 +30,7 @@ describe('facilityProgramCacheService', function() {
             programService = $injector.get('programService');
             facilityService = $injector.get('facilityService');
             permissionService = $injector.get('permissionService');
+            referencedataUserService = $injector.get('referencedataUserService');
         });
 
         user = {
@@ -89,7 +85,7 @@ describe('facilityProgramCacheService', function() {
         spyOn(programService, 'getUserPrograms').andReturn($q.when(programs));
         spyOn(facilityService, 'getAllMinimal').andReturn($q.when(facilities));
         spyOn(permissionService, 'load').andReturn($q.when(permissions));
-        referencedataUserService.getCurrentUserInfo.andReturn($q.when(referencedataUser));
+        spyOn(referencedataUserService, 'getCurrentUserInfo').andReturn($q.when(referencedataUser));
 
         facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
         loadPromise = facilityProgramCacheService.loadData('module');
