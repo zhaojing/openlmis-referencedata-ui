@@ -84,8 +84,7 @@ describe('UserFormController', function() {
 
         vm = $controller('UserFormController', {
             user: user,
-            facilities: facilities,
-            isNewUser: undefined
+            facilities: facilities
         });
         vm.$onInit();
     });
