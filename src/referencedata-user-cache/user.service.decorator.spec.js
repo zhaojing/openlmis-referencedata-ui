@@ -13,9 +13,9 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('UserService get decorator', function() {
+describe('UserService decorator', function() {
     var referencedataUserService, $rootScope, $httpBackend, referencedataUrlFactory,
-        user, cache;
+        user, authorizationService;
 
     beforeEach(function() {
         module('referencedata-user-cache', function($provide) {
@@ -33,19 +33,26 @@ describe('UserService get decorator', function() {
             $rootScope = $injector.get('$rootScope');
             $httpBackend = $injector.get('$httpBackend');
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            authorizationService = $injector.get('authorizationService');
         });
 
         user = {
             id: 'user-id',
             username: 'some-user'
         };
+
+        var authUser = {
+            user_id: 'user-id'
+        };
+
+        spyOn(authorizationService, 'getUser').andReturn(authUser);
     });
 
     it('will return a cached user if available', function() {
         cache.getBy.andReturn(user);
 
         var results;
-        referencedataUserService.get(user.id).then(function(response) {
+        referencedataUserService.getCurrentUserInfo(user.id).then(function(response) {
             result = response;
         });
         $rootScope.$apply();
@@ -61,7 +68,7 @@ describe('UserService get decorator', function() {
         cache.getBy.andReturn(undefined);
 
         var result;
-        referencedataUserService.get(user.id).then(function(response) {
+        referencedataUserService.getCurrentUserInfo(user.id).then(function(response) {
             result = response;
         });
         $httpBackend.flush();

@@ -15,18 +15,23 @@
 
 describe('facilityProgramCacheService', function() {
 
-    var facilityProgramCacheService, $q, $rootScope, authorizationService, programService, facilityService, referencedataUserService, permissionService,
-        user, loadPromise;
+    var facilityProgramCacheService, $q, $rootScope, authorizationService, programService,
+        facilityService, referencedataUserService, permissionService,
+        user, loadPromise, programs, facilities;
 
     beforeEach(function() {
-        module('openlmis-facility-program-select');
+        module('openlmis-facility-program-select', function($provide) {
+            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['getCurrentUserInfo']);
+            $provide.service('referencedataUserService', function() {
+                return referencedataUserService;
+            });
+        });
 
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             facilityProgramCacheService = $injector.get('facilityProgramCacheService');
             authorizationService = $injector.get('authorizationService');
-            referencedataUserService = $injector.get('referencedataUserService');
             programService = $injector.get('programService');
             facilityService = $injector.get('facilityService');
             permissionService = $injector.get('permissionService');
@@ -36,7 +41,7 @@ describe('facilityProgramCacheService', function() {
             user_id: 'user-id'
         };
 
-        referencedataUser = {
+        var referencedataUser = {
             homeFacilityId: 'facility-1'
         };
 
@@ -62,7 +67,7 @@ describe('facilityProgramCacheService', function() {
             }
         ];
 
-        permissions = [
+        var permissions = [
             {
                 right: 'right-1',
                 programId: 'program-1',
@@ -84,7 +89,7 @@ describe('facilityProgramCacheService', function() {
         spyOn(programService, 'getUserPrograms').andReturn($q.when(programs));
         spyOn(facilityService, 'getAllMinimal').andReturn($q.when(facilities));
         spyOn(permissionService, 'load').andReturn($q.when(permissions));
-        spyOn(referencedataUserService, 'get').andReturn($q.when(referencedataUser));
+        referencedataUserService.getCurrentUserInfo.andReturn($q.when(referencedataUser));
 
         facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
         loadPromise = facilityProgramCacheService.loadData('module');
@@ -114,13 +119,13 @@ describe('facilityProgramCacheService', function() {
         });
 
         it('should call referencedataUserService', function() {
-            expect(referencedataUserService.get).toHaveBeenCalledWith(user.user_id);
+            expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
         });
 
         it('should reject promise if request fails', function() {
             var result;
 
-            referencedataUserService.get.andReturn($q.reject());
+            referencedataUserService.getCurrentUserInfo.andReturn($q.reject());
 
             facilityProgramCacheService.loadData()
             .then(function() {
@@ -131,7 +136,7 @@ describe('facilityProgramCacheService', function() {
             });
             $rootScope.$apply();
 
-            expect(referencedataUserService.get).toHaveBeenCalledWith(user.user_id);
+            expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
             expect(result).toEqual('rejected');
         });
     });
