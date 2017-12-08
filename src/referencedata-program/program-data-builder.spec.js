@@ -39,6 +39,7 @@
             this.description = 'description';
             this.active = true;
             this.periodsSkippable = true;
+            this.skipAuthorization = false;
             this.showNonFullSupplyTab = false;
             this.enableDatePhysicalStockCountCompleted = false;
         }
@@ -51,6 +52,7 @@
                 this.description,
                 this.active,
                 this.periodsSkippable,
+                this.skipAuthorization,
                 this.showNonFullSupplyTab,
                 this.enableDatePhysicalStockCountCompleted
             );
