@@ -29,6 +29,8 @@
         UserDataBuilder.prototype.withSupervisionRoleAssignment = withSupervisionRoleAssignment;
         UserDataBuilder.prototype.withOrderFulfillmentRoleAssignment = withOrderFulfillmentRoleAssignment;
         UserDataBuilder.prototype.withGeneralAdminRoleAssignment = withGeneralAdminRoleAssignment;
+        UserDataBuilder.prototype.withId = withId;
+        UserDataBuilder.prototype.withUsername = withUsername;
 
         return UserDataBuilder;
 
@@ -66,6 +68,16 @@
                 this.extraData,
                 this.roleAssignments
             );
+        }
+
+        function withId(newId) {
+            this.id = newId;
+            return this;
+        }
+
+        function withUsername(newUsername) {
+            this.username = newUsername;
+            return this;
         }
 
         function withSupervisionRoleAssignment(roleId, supervisoryNodeId, programId) {

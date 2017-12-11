@@ -14,8 +14,8 @@
  */
 
 describe('currentUserService', function() {
-    var $q, user, cachedUser, authUser, currentUserCache, referencedataUserService, $rootScope, currentUserService,
-        authorizationService;
+    var $q, user, cachedUser, authUser, currentUserCache, referencedataUserService, $rootScope,
+        currentUserService, authorizationService, UserDataBuilder, AuthUserDataBuilder;
 
     beforeEach(function() {
         module('referencedata-user', function($provide) {
@@ -36,21 +36,20 @@ describe('currentUserService', function() {
             authorizationService = $injector.get('authorizationService');
             $rootScope = $injector.get('$rootScope');
             $q = $injector.get('$q');
+            UserDataBuilder = $injector.get('UserDataBuilder');
+            AuthUserDataBuilder = $injector.get('AuthUserDataBuilder');
         });
 
-        cachedUser = {
-            id: 'user-id',
-            username: 'someUsername'
-        };
+        authUser = new AuthUserDataBuilder().build();
 
-        user = {
-            id: 'user_id',
-            username: 'updateUsername'
-        };
+        cachedUser = new UserDataBuilder()
+            .withId(authUser.user_id)
+            .withUsername('cachedUser')
+            .build();
 
-        authUser = {
-            user_id: user.id
-        };
+        user = new UserDataBuilder()
+            .withId(authUser.user_id)
+            .build();
 
         spyOn(authorizationService, 'getUser');
         spyOn(referencedataUserService, 'get');

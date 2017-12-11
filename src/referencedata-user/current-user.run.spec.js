@@ -14,7 +14,7 @@
  */
 
 describe('currentUserService run', function() {
-    var currentUserService, $q, $rootScope, loadingService, user;
+    var currentUserService, $q, $rootScope, loadingService, user, UserDataBuilder;
 
     beforeEach(function() {
         module('referencedata-user');
@@ -24,13 +24,10 @@ describe('currentUserService run', function() {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             currentUserService = $injector.get('currentUserService');
+            UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-
-        user = {
-            user_id: 'user-id',
-            username: 'some-user'
-        };
+        user = new UserDataBuilder().build();
     });
 
     it('should cache user on login', function() {
