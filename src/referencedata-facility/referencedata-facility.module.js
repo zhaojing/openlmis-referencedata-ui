@@ -34,7 +34,7 @@
         'referencedata-facility-type',
         'referencedata-facility-operator',
         'referencedata-geographic-zone',
-        'referencedata-user-cache'
+        'referencedata-user'
     ]);
 
 })();

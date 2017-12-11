@@ -16,7 +16,7 @@
 describe('facilityFactory', function() {
 
     var $rootScope, $q, facility1, facility2, userPrograms, programService, facilityService,
-        authorizationService, referencedataUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
+        authorizationService, currentUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
 
     beforeEach(function () {
         module('referencedata-facility');
@@ -89,7 +89,7 @@ describe('facilityFactory', function() {
 
     describe('getSupplyingFacilities', function() {
 
-        var userId, ordersViewFacilities, podsManageFacilities, ordersViewRight, podsManageRight;
+        var userId, ordersViewFacilities, podsManageFacilities;
 
         beforeEach(inject(function() {
             userId = 'user-id';
@@ -111,7 +111,7 @@ describe('facilityFactory', function() {
 
             programService.getUserPrograms.andCallFake(function() {
                 return $q.when([]);
-            })
+            });
         }));
 
         it('should fetch facilities for ORDERS_VIEW right', function() {
@@ -151,8 +151,8 @@ describe('facilityFactory', function() {
     describe('getUserHomeFacility', function() {
 
         beforeEach(inject(function($injector) {
-            referencedataUserService = $injector.get('referencedataUserService')
-            spyOn(referencedataUserService, 'getCurrentUserInfo')
+            currentUserService = $injector.get('currentUserService')
+            spyOn(currentUserService, 'getUserInfo')
                 .andReturn($q.resolve({
                     homeFacilityId: 'home-facility-id'
                 }));
@@ -169,7 +169,7 @@ describe('facilityFactory', function() {
             });
             $rootScope.$apply();
 
-            expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
+            expect(currentUserService.getUserInfo).toHaveBeenCalled();
             expect(facilityService.get).toHaveBeenCalledWith('home-facility-id');
             expect(homeFacility.name).toEqual('Home Facility');
         });
@@ -257,14 +257,12 @@ describe('facilityFactory', function() {
 
     describe('getAllUserFacilities', function() {
 
-        var userId, requisitionViewFacilities;
+        var userId;
 
         beforeEach(inject(function() {
-            var facility;
-
             userId = 'user-id';
 
-            facilities = [
+            var facilities = [
                 createFacility('facility-one', 'Facility One'),
                 createFacility('facility-two', 'Facility Two')
             ];

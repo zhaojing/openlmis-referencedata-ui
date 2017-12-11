@@ -31,11 +31,11 @@
 
     factory.$inject = [
         'openlmisUrlFactory', '$q', '$filter', 'programService', 'authorizationService',
-        'referencedataUserService', 'facilityService', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS'
+        'currentUserService', 'facilityService', 'REQUISITION_RIGHTS', 'FULFILLMENT_RIGHTS'
     ];
 
     function factory(openlmisUrlFactory, $q, $filter, programService, authorizationService,
-        referencedataUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
+        currentUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
 
             return {
                 getUserFacilities: getUserFacilities,
@@ -154,7 +154,7 @@
             function getUserHomeFacility() {
                 var deferred = $q.defer();
 
-                referencedataUserService.getCurrentUserInfo().then(function(response) {
+                currentUserService.getUserInfo().then(function(response) {
                     if (response.homeFacilityId) {
                         return facilityService.get(response.homeFacilityId);
                     } else {

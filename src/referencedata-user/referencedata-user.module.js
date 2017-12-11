@@ -25,8 +25,9 @@
      */
     angular.module('referencedata-user', [
         'ngResource',
+        'openlmis-auth',
         'openlmis-local-storage',
-        'openlmis-offline',
+        'openlmis-loading',
         'openlmis-urls'
     ]);
 

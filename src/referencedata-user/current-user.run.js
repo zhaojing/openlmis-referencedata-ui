@@ -17,18 +17,25 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-user-cache
-     *
-     * @description
-     * Caches user details offline.
-     */
-    angular.module('referencedata-user-cache', [
-        'openlmis-auth',
-        'openlmis-local-storage',
-        'referencedata',
-        'referencedata-user',
-        'openlmis-loading'
-    ]);
+    angular
+    .module('referencedata-user')
+    .run(initCurrentUserCache);
+
+    initCurrentUserCache.$inject = ['$rootScope', 'currentUserService', 'loadingService'];
+
+    function initCurrentUserCache($rootScope, currentUserService, loadingService) {
+
+        $rootScope.$on('openlmis-auth.login', cacheUser);
+        $rootScope.$on('openlmis-auth.logout', removeUserCache);
+
+        function cacheUser() {
+            var currentUserInfo = currentUserService.getUserInfo();
+            loadingService.register('referencedata-user-cache.loading', currentUserInfo);
+        }
+
+        function removeUserCache() {
+            currentUserService.clearCache();
+        }
+    }
 
 })();

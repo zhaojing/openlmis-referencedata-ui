@@ -32,8 +32,8 @@
             controller: 'UserProfileController',
             controllerAs: 'vm',
             resolve: {
-                user: function (referencedataUserService) {
-                    return referencedataUserService.getCurrentUserInfo();
+                user: function (currentUserService) {
+                    return currentUserService.getUserInfo();
                 }
             }
         });

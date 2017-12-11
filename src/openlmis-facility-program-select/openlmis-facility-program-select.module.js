@@ -29,7 +29,7 @@
         'referencedata-user',
         'openlmis-auth',
         'openlmis-permissions',
-        'referencedata-user-cache'
+        'referencedata-user'
     ]);
 
 })();

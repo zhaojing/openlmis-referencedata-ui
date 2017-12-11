@@ -16,7 +16,7 @@
 describe('facilityProgramCacheService', function() {
 
     var facilityProgramCacheService, $q, $rootScope, authorizationService, programService,
-        facilityService, referencedataUserService, permissionService,
+        facilityService, currentUserService, permissionService,
         user, loadPromise, programs, facilities;
 
     beforeEach(function() {
@@ -30,7 +30,7 @@ describe('facilityProgramCacheService', function() {
             programService = $injector.get('programService');
             facilityService = $injector.get('facilityService');
             permissionService = $injector.get('permissionService');
-            referencedataUserService = $injector.get('referencedataUserService');
+            currentUserService = $injector.get('currentUserService');
         });
 
         user = {
@@ -85,7 +85,7 @@ describe('facilityProgramCacheService', function() {
         spyOn(programService, 'getUserPrograms').andReturn($q.when(programs));
         spyOn(facilityService, 'getAllMinimal').andReturn($q.when(facilities));
         spyOn(permissionService, 'load').andReturn($q.when(permissions));
-        spyOn(referencedataUserService, 'getCurrentUserInfo').andReturn($q.when(referencedataUser));
+        spyOn(currentUserService, 'getUserInfo').andReturn($q.when(referencedataUser));
 
         facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
         loadPromise = facilityProgramCacheService.loadData('module');
@@ -114,14 +114,14 @@ describe('facilityProgramCacheService', function() {
             expect(permissionService.load).toHaveBeenCalledWith(user.user_id);
         });
 
-        it('should call referencedataUserService', function() {
-            expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
+        it('should call currentUserService', function() {
+            expect(currentUserService.getUserInfo).toHaveBeenCalled();
         });
 
         it('should reject promise if request fails', function() {
             var result;
 
-            referencedataUserService.getCurrentUserInfo.andReturn($q.reject());
+            currentUserService.getUserInfo.andReturn($q.reject());
 
             facilityProgramCacheService.loadData()
             .then(function() {
@@ -132,7 +132,7 @@ describe('facilityProgramCacheService', function() {
             });
             $rootScope.$apply();
 
-            expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
+            expect(currentUserService.getUserInfo).toHaveBeenCalled();
             expect(result).toEqual('rejected');
         });
     });

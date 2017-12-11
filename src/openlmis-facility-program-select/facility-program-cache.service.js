@@ -28,9 +28,13 @@
         .module('openlmis-facility-program-select')
         .service('facilityProgramCacheService', service);
 
-    service.$inject = ['$q', 'programService', 'authorizationService', 'facilityService', 'referencedataUserService', 'permissionService'];
+    service.$inject = [
+        '$q', 'programService', 'authorizationService', 'facilityService', 'currentUserService',
+        'permissionService'
+    ];
 
-    function service($q, programService, authorizationService, facilityService, referencedataUserService, permissionService) {
+    function service($q, programService, authorizationService, facilityService, currentUserService,
+                     permissionService) {
 
         var modulesWithRights = {},
             facilities = [],
@@ -152,7 +156,8 @@
             return $q.all([
                 facilityService.getAllMinimal(),
                 programService.getUserPrograms(),
-                permissionService.load(userId)
+                permissionService.load(userId),
+                currentUserService.getUserInfo()
             ])
             .then(function(responses) {
                 facilities = responses[0];
@@ -161,10 +166,8 @@
 
                 loadRights(moduleName);
 
-                return referencedataUserService.getCurrentUserInfo();
-            })
-            .then(function(user) {
-                homeFacility = getFacilityById(user.homeFacilityId);
+                var currentUserDetails = responses[3];
+                homeFacility = getFacilityById(currentUserDetails.homeFacilityId);
             });
         }
 

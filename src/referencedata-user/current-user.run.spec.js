@@ -13,21 +13,19 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('user cache run', function() {
-    var referencedataUserService, $q, $rootScope, loadingService, permissionService, user;
+describe('currentUserService run', function() {
+    var currentUserService, $q, $rootScope, loadingService, user;
 
     beforeEach(function() {
-        module('referencedata-user-cache');
+        module('referencedata-user');
 
         inject(function($injector) {
             loadingService = $injector.get('loadingService');
-            permissionService = $injector.get('permissionService');
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
-            referencedataUserService = $injector.get('referencedataUserService');
+            currentUserService = $injector.get('currentUserService');
         });
 
-        spyOn(permissionService, 'load').andReturn($q.resolve(true));
 
         user = {
             user_id: 'user-id',
@@ -36,23 +34,31 @@ describe('user cache run', function() {
     });
 
     it('should cache user on login', function() {
+        spyOn(currentUserService, 'getUserInfo').andReturn($q.resolve(user));
+
+        $rootScope.$emit('openlmis-auth.login');
+        $rootScope.$apply();
+
+        expect(currentUserService.getUserInfo).toHaveBeenCalled();
+    });
+
+    it('should show loading modal until user is fetched', function() {
         var promise = $q.when(user);
-        spyOn(referencedataUserService, 'getCurrentUserInfo').andReturn(promise);
+        spyOn(currentUserService, 'getUserInfo').andReturn(promise);
         spyOn(loadingService, 'register');
 
         $rootScope.$emit('openlmis-auth.login');
         $rootScope.$apply();
 
-        expect(referencedataUserService.getCurrentUserInfo).toHaveBeenCalled();
         expect(loadingService.register).toHaveBeenCalledWith('referencedata-user-cache.loading', promise);
     });
 
     it('should clear user cache on logout', function() {
-        spyOn(referencedataUserService, 'clearUserCache');
+        spyOn(currentUserService, 'clearCache');
 
         $rootScope.$emit('openlmis-auth.logout');
         $rootScope.$apply();
 
-        expect(referencedataUserService.clearUserCache).toHaveBeenCalled();
+        expect(currentUserService.clearCache).toHaveBeenCalled();
     });
 });
