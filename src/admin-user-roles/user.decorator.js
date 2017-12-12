@@ -19,13 +19,13 @@
 
     /**
      * @ngdoc service
-     * @name referencedata-role.User
+     * @name admin-user-roles.User
      *
      * @description
      * Decorates User class with helper methods for role assignments.
      */
     angular
-        .module('referencedata-role')
+        .module('admin-user-roles')
         .config(config);
 
     config.$inject = ['$provide'];
@@ -44,7 +44,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-role.User
+         * @methodOf admin-user-roles.User
          * @name addRoleAssignment
          *
          * @description
@@ -80,7 +80,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-role.User
+         * @methodOf admin-user-roles.User
          * @name removeRoleAssignment
          *
          * @description
