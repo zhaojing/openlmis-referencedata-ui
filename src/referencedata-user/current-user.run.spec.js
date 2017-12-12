@@ -14,7 +14,7 @@
  */
 
 describe('currentUserService run', function() {
-    var currentUserService, $q, $rootScope, loadingService, user, UserDataBuilder;
+    var currentUserService, $q, $rootScope, loadingService;
 
     beforeEach(function() {
         module('referencedata-user');
@@ -24,14 +24,11 @@ describe('currentUserService run', function() {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             currentUserService = $injector.get('currentUserService');
-            UserDataBuilder = $injector.get('UserDataBuilder');
         });
-
-        user = new UserDataBuilder().build();
     });
 
     it('should cache user on login', function() {
-        spyOn(currentUserService, 'getUserInfo').andReturn($q.resolve(user));
+        spyOn(currentUserService, 'getUserInfo').andReturn($q.resolve());
 
         $rootScope.$emit('openlmis-auth.login');
         $rootScope.$apply();
@@ -40,7 +37,7 @@ describe('currentUserService run', function() {
     });
 
     it('should show loading modal until user is fetched', function() {
-        var promise = $q.when(user);
+        var promise = $q.when();
         spyOn(currentUserService, 'getUserInfo').andReturn(promise);
         spyOn(loadingService, 'register');
 

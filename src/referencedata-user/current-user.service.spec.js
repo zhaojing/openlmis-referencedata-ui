@@ -14,21 +14,14 @@
  */
 
 describe('currentUserService', function() {
-    var $q, user, cachedUser, authUser, currentUserCache, referencedataUserService, $rootScope,
+
+    var CURRENT_USER = 'currentUser';
+
+    var $q, user, cachedUser, authUser, localStorageService, referencedataUserService, $rootScope,
         currentUserService, authorizationService, UserDataBuilder, AuthUserDataBuilder;
 
     beforeEach(function() {
-        module('referencedata-user', function($provide) {
-            currentUserCache = jasmine.createSpyObj('currentUserCache', [
-                'getBy', 'put', 'clearAll'
-            ]);
-
-            $provide.factory('localStorageFactory', function() {
-                return function() {
-                    return currentUserCache;
-                };
-            });
-        });
+        module('referencedata-user');
 
         inject(function($injector) {
             referencedataUserService = $injector.get('referencedataUserService');
@@ -38,6 +31,7 @@ describe('currentUserService', function() {
             $q = $injector.get('$q');
             UserDataBuilder = $injector.get('UserDataBuilder');
             AuthUserDataBuilder = $injector.get('AuthUserDataBuilder');
+            localStorageService = $injector.get('localStorageService');
         });
 
         authUser = new AuthUserDataBuilder().build();
@@ -53,6 +47,7 @@ describe('currentUserService', function() {
 
         spyOn(authorizationService, 'getUser');
         spyOn(referencedataUserService, 'get');
+        spyOn(localStorageService, 'get');
     });
 
     describe('getUserInfo', function() {
@@ -66,7 +61,7 @@ describe('currentUserService', function() {
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(currentUserCache.getBy).not.toHaveBeenCalled();
+            expect(localStorageService.get).not.toHaveBeenCalled();
             expect(referencedataUserService.get).not.toHaveBeenCalled();
         });
 
@@ -87,7 +82,7 @@ describe('currentUserService', function() {
 
         it('should return cached user if available', function() {
             authorizationService.getUser.andReturn(authUser);
-            currentUserCache.getBy.andReturn(cachedUser);
+            localStorageService.get.andReturn(angular.toJson(cachedUser));
 
             var result;
             currentUserService.getUserInfo().then(function(response) {
@@ -96,7 +91,7 @@ describe('currentUserService', function() {
             $rootScope.$apply();
 
             expect(result).toEqual(cachedUser);
-            expect(currentUserCache.getBy).toHaveBeenCalledWith('id', authUser.user_id);
+            expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
             expect(referencedataUserService.get).not.toHaveBeenCalledWith();
         });
 
@@ -111,7 +106,7 @@ describe('currentUserService', function() {
             $rootScope.$apply();
 
             expect(result).toEqual(user);
-            expect(currentUserCache.getBy).toHaveBeenCalledWith('id', authUser.user_id);
+            expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
             expect(referencedataUserService.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
@@ -120,9 +115,11 @@ describe('currentUserService', function() {
     describe('clearCache', function() {
 
         it('should clear cache', function() {
+            spyOn(localStorageService, 'remove');
+
             currentUserService.clearCache();
 
-            expect(currentUserCache.clearAll).toHaveBeenCalled();
+            expect(localStorageService.remove).toHaveBeenCalledWith(CURRENT_USER);
         });
 
     });

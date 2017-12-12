@@ -21,9 +21,9 @@
         .module('referencedata-user')
         .factory('UserDataBuilder', UserDataBuilder);
 
-    UserDataBuilder.$inject = ['User', 'RoleAssignment'];
+    UserDataBuilder.$inject = ['userFactory', 'RoleAssignment'];
 
-    function UserDataBuilder(User,  RoleAssignment) {
+    function UserDataBuilder(userFactory,  RoleAssignment) {
 
         UserDataBuilder.prototype.build = build;
         UserDataBuilder.prototype.withSupervisionRoleAssignment = withSupervisionRoleAssignment;
@@ -53,7 +53,7 @@
         }
 
         function build() {
-            return new User(
+            return userFactory.buildUser(
                 this.id,
                 this.username,
                 this.firstName,

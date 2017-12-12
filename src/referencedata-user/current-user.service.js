@@ -29,13 +29,14 @@
         .service('currentUserService', currentUserInfo);
 
     currentUserInfo.$inject = [
-        '$q', 'referencedataUserService', 'localStorageFactory', 'authorizationService'
+        '$q', 'referencedataUserService', 'localStorageService', 'authorizationService',
+        'userFactory'
     ];
 
-    function currentUserInfo($q, referencedataUserService, localStorageFactory,
-                             authorizationService) {
+    function currentUserInfo($q, referencedataUserService, localStorageService,
+                             authorizationService, userFactory) {
 
-        var currentUserCache = localStorageFactory('user');
+        var CURRENT_USER = 'currentUser';
 
         this.getUserInfo = getUserInfo;
         this.clearCache = clearCache;
@@ -58,14 +59,14 @@
                 return $q.reject();
             }
 
-            var cachedUser = currentUserCache.getBy('id', authUser.user_id);
-            if (cachedUser) {
-                return $q.resolve(cachedUser);
+            var cachedUserAsJson = localStorageService.get(CURRENT_USER);
+            if (cachedUserAsJson) {
+                return $q.resolve(userFactory.buildUserFromJson(cachedUserAsJson));
             }
 
             return referencedataUserService.get(authUser.user_id)
             .then(function (refUser) {
-                currentUserCache.put(refUser);
+                localStorageService.add(CURRENT_USER, refUser.toJson());
                 return refUser;
             });
         }
@@ -79,7 +80,7 @@
          * Deletes users stored in the browser cache.
          */
         function clearCache() {
-            currentUserCache.clearAll();
+            localStorageService.remove(CURRENT_USER);
         }
     }
 

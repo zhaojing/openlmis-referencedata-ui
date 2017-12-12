@@ -30,6 +30,8 @@
 
     function User() {
 
+        User.prototype.toJson = toJson;
+
         return User;
 
         /**
@@ -70,6 +72,20 @@
             this.allowNotify = allowNotify;
             this.extraData = extraData;
             this.roleAssignments = roleAssignments;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.User
+         * @name toJson
+         *
+         * @description
+         * Serializes the given user into a JSON string.
+         *
+         * @return {String} the user as JSON string
+         */
+        function toJson() {
+            return angular.toJson(this);
         }
     }
 })();
