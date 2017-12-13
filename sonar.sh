@@ -6,4 +6,4 @@ npm install --no-optional
 
 # Built and test
 grunt
-grunt sonar --sonarLogin=$SONAR_LOGIN --sonarPassword=$SONAR_PASSWORD --projectName=$PROJECT_NAME --projectKey=$PROJECT_KEY --projectVersion=$PROJECT_VERSION
+grunt sonar --sonarLogin=$SONAR_LOGIN --sonarPassword=$SONAR_PASSWORD
