@@ -110,6 +110,25 @@ describe('currentUserService', function() {
             expect(referencedataUserService.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
+        it('should reject promise if object returned by service is not an User', function() {
+            authorizationService.getUser.andReturn(authUser);
+            referencedataUserService.get.andReturn($q.resolve({
+                not: 'an',
+                instance: 'of',
+                user: 'class'
+            }));
+
+            var rejected;
+            currentUserService.getUserInfo()
+            .catch(function() {
+                rejected = true;
+            });
+            $rootScope.$apply();
+
+            expect(rejected).toBe(true);
+            expect(referencedataUserService.get).toHaveBeenCalledWith(authUser.user_id);
+        });
+
     });
 
     describe('clearCache', function() {

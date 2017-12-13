@@ -15,40 +15,23 @@
 
 describe('referencedataUserService', function() {
 
-    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, user1,
-    user2, offlineUserDetails, referencedataUserService
+    var $rootScope, $httpBackend, openlmisUrlFactory, userOne, userTwo, referencedataUserService,
+        User, UserDataBuilder;
 
     beforeEach(function() {
-        module('referencedata-user', function($provide) {
-            var localStorageFactoryMock = jasmine.createSpy();
-            offlineUserDetails = jasmine.createSpyObj('offlineUserDetails', ['getBy', 'put']);
-            var offlineFlag = jasmine.createSpyObj('offlineRequisitions', ['getAll', 'clearAll']);
-            offlineFlag.getAll.andReturn([false]);
-            localStorageFactoryMock.andCallFake(function(name) {
-                if(name === 'offlineFlag') return offlineFlag;
-                return offlineUserDetails;
-            });
-            $provide.factory('localStorageFactory', function() {
-                return localStorageFactoryMock;
-            });
-        });
+        module('referencedata-user');
 
         inject(function($injector) {
             $httpBackend = $injector.get('$httpBackend');
             $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
             openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             referencedataUserService = $injector.get('referencedataUserService');
+            User = $injector.get('User');
+            UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        user1 = {
-            id: '1',
-            name: 'user1'
-        };
-        user2 = {
-            id: '2',
-            name: 'user2'
-        };
+        userOne = new UserDataBuilder().build();
+        userTwo = new UserDataBuilder().build();
     });
 
     describe('get', function() {
@@ -56,29 +39,40 @@ describe('referencedataUserService', function() {
         var data;
 
         beforeEach(function() {
-            offlineUserDetails.getBy.andReturn('user');
-            $httpBackend.when('GET', openlmisUrlFactory('/api/users/' + user1.id))
-            .respond(200, user1);
+            $httpBackend
+            .whenGET(openlmisUrlFactory('/api/users/' + userOne.id))
+            .respond(200, userOne);
         });
 
         it('should get user by id', function() {
 
-            referencedataUserService.get(user1.id).then(function(response) {
+            referencedataUserService.get(userOne.id).then(function(response) {
                 data = response;
             });
 
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(angular.toJson(data)).toEqual(angular.toJson(user1));
+            expect(angular.toJson(data)).toEqual(angular.toJson(userOne));
+        });
+
+        it('should return an instance of ', function() {
+            referencedataUserService.get(userOne.id).then(function(response) {
+                data = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data instanceof User).toBe(true);
         });
     });
 
     it('should get all users', function() {
-        var data = undefined;
+        var data;
 
         $httpBackend.when('GET', openlmisUrlFactory('/api/users'))
-            .respond(200, {content: [user1, user2]});
+            .respond(200, {content: [userOne, userTwo]});
 
         referencedataUserService.query().then(function(response) {
             data = response;
@@ -87,12 +81,12 @@ describe('referencedataUserService', function() {
         $httpBackend.flush();
         $rootScope.$apply();
 
-        expect(data.content[0].id).toEqual(user1.id);
-        expect(data.content[1].id).toEqual(user2.id);
+        expect(data.content[0].id).toEqual(userOne.id);
+        expect(data.content[1].id).toEqual(userTwo.id);
     });
 
     it('should get all users by id with pagination params', function() {
-        var data = undefined,
+        var data,
             idOne = "id-one",
             idTwo = "id-two",
             params = {
@@ -106,7 +100,7 @@ describe('referencedataUserService', function() {
             '&page=' + params.page + '&size=' + params.size + '&sort=' + params.sort);
         $httpBackend
             .when('GET', url)
-            .respond(200, {content: [user1, user2]});
+            .respond(200, {content: [userOne, userTwo]});
 
         referencedataUserService.query(params).then(function(response) {
             data = response;
@@ -115,8 +109,8 @@ describe('referencedataUserService', function() {
         $httpBackend.flush();
         $rootScope.$apply();
 
-        expect(data.content[0].id).toEqual(user1.id);
-        expect(data.content[1].id).toEqual(user2.id);
+        expect(data.content[0].id).toEqual(userOne.id);
+        expect(data.content[1].id).toEqual(userTwo.id);
     });
 
     it('should search for users', function() {
@@ -137,7 +131,7 @@ describe('referencedataUserService', function() {
             }))){
                 return [404];
             } else {
-                return [200, angular.toJson(user1)];
+                return [200, angular.toJson(userOne)];
             }
         });
 
@@ -148,7 +142,7 @@ describe('referencedataUserService', function() {
         $httpBackend.flush();
         $rootScope.$apply();
 
-        expect(data.id).toEqual(user1.id);
+        expect(data.id).toEqual(userOne.id);
     });
 
     describe('saveUser', function() {

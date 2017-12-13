@@ -30,10 +30,10 @@
         .service('referencedataUserService', service);
 
     service.$inject = [
-        'openlmisUrlFactory', '$resource', 'localStorageFactory'
+        'openlmisUrlFactory', '$resource', 'localStorageFactory', 'userFactory'
     ];
 
-    function service(openlmisUrlFactory, $resource, localStorageFactory) {
+    function service(openlmisUrlFactory, $resource, localStorageFactory, userFactory) {
         var offlineUserDetails = localStorageFactory('offlineUserDetails'),
         resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
             query: {
@@ -68,7 +68,10 @@
          * @return {Promise}    the user info
          */
         function get(id) {
-            return resource.get({id: id}).$promise;
+            return resource.get({id: id}).$promise
+            .then(function(response) {
+                return userFactory.buildUserFromResponse(response);
+            });
         }
 
         /**
