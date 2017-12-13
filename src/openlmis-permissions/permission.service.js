@@ -54,8 +54,10 @@
         var savedUserId;  // Used in service.load
 
         this.hasPermission = hasPermission;
+        this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
         this.load = load;
         this.empty = empty;
+        this.testPermission = testPermission;
 
         /**
          * @ngdoc method
@@ -72,9 +74,51 @@
          * the promise is rejected.
          *
          * If the permission object that is tested against doesn't have a
-         * 'right' property, then it is immedately rejected.
+         * 'right' property, then it is immediately rejected.
          */
         function hasPermission(userId, permission) {
+            return this.testPermission(userId, permission, permissionMatch);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name hasPermissionWithAnyProgram
+         *
+         * @param  {String} userId User to get test permission for
+         * @param  {Object} permission Object representing a permission
+         * @return {Promise} A promise that resolves a if there is a match
+         *
+         * @description
+         * The returned promise will resolve if the browser has a matching
+         * permission for any program. If there is no permission that matches, then
+         * the promise is rejected.
+         *
+         * If the permission object that is tested against doesn't have a
+         * 'right' property, then it is immediately rejected.
+         */
+        function hasPermissionWithAnyProgram(userId, permission) {
+            return this.testPermission(userId, permission, permissionMatchWithAnyProgram);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name testPermission
+         *
+         * @param  {String}     userId              User to get test permission for
+         * @param  {Object}     permission          Object representing a permission
+         * @param  {Function}   permissionMatchFn   A function that match permission
+         * @return {Promise}                        A promise that resolves a if there is a match
+         *
+         * @description
+         * The returned promise will resolve if the browser has a matching
+         * permission.
+         *
+         * If the permission object that is tested against doesn't have a
+         * 'right' property, then it is immediately rejected.
+         */
+        function testPermission(userId, permission, permissionMatchFn) {
             if(!permission) {
                 return $q.reject();
             }
@@ -86,24 +130,24 @@
             var deferred = $q.defer();
 
             this.load(userId)
-            .then(function(permissionsList) {
-                if(testPermissions(permissionsList, permission)) {
-                    deferred.resolve();
-                } else {
-                    deferred.reject();
-                }
-            })
-            .catch(function() {
-                deferred.reject()
-            });
+                .then(function(permissionsList) {
+                    if(testPermissions(permissionsList, permission, permissionMatchFn)) {
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                })
+                .catch(function() {
+                    deferred.reject()
+                });
 
             return deferred.promise;
         }
 
-        function testPermissions(permissionsList, permission) {
+        function testPermissions(permissionsList, permission, permissionMatchFn) {
             var i = 0;
             for(i; i < permissionsList.length; i++) {
-                if(permissionMatch(permissionsList[i], permission.right, permission.facilityId, permission.programId)) {
+                if(permissionMatchFn(permissionsList[i], permission.right, permission.facilityId, permission.programId)) {
                     return true;
                 }
             }
@@ -112,13 +156,14 @@
         }
 
         function permissionMatch(permission, right, facilityId, programId) {
-            if(permission.right === right
-                    && permission.facilityId === facilityId
-                    && permission.programId === programId) {
-                return true;
-            } else {
-                return false;
-            }
+            return permission.right === right
+                && permission.facilityId === facilityId
+                && permission.programId === programId;
+        }
+
+        function permissionMatchWithAnyProgram(permission, right, facilityId, programId) {
+            return permission.right === right
+                && permission.facilityId === facilityId
         }
 
         /**

@@ -172,5 +172,88 @@ describe('openlmis-permissions.permissionService', function() {
             })).toBe(true);
         });
 
+        it('will reject promise if the argument is missing program', function () {
+            localStorageService.get.andReturn([{
+                right: 'right',
+                facilityId: 'facility-id',
+                programId: 'program-id'
+            }]);
+
+            expect(checkPermission({
+                right: 'right',
+                facilityId: 'facility-id'
+            })).toBe(false);
+        });
+
     });
+
+    describe('hasPermissionWithAnyProgram', function() {
+        beforeEach(function () {
+            localStorageService.get.andReturn([{
+                right: 'example',
+                facilityId: 'facility-id'
+            }]);
+        });
+
+        function checkPermission(permissionObj) {
+            var success = false;
+
+            permissionService.hasPermissionWithAnyProgram('userId', permissionObj)
+                .then(function() {
+                    success = true;
+                });
+
+            $rootScope.$apply();
+            return success;
+        }
+
+        it('will return FALSE if no arguments', function() {
+            expect(checkPermission({})).toBe(false);
+        });
+        it('will return FALSE if the right is not set', function(){
+            expect(checkPermission({
+                facilityId: 'facility-id'
+            })).toBe(false);
+
+            expect(checkPermission({
+                right: 'example',
+                facilityId: 'facility-id'
+            })).toBe(true);
+        });
+
+        it('will resolve promise if the argument EXACTLY matches a permission', function() {
+            // Too vague
+            expect(checkPermission({
+                right: 'example'
+            })).toBe(false);
+
+            // Not too strict, program is ignored
+            expect(checkPermission({
+                right: 'example',
+                programId: 'program-id',
+                facilityId: 'facility-id'
+            })).toBe(true);
+
+            // Just right
+            expect(checkPermission({
+                right: 'example',
+                facilityId: 'facility-id'
+            })).toBe(true);
+        });
+
+        it('will resolve promise if the argument is missing program', function () {
+            localStorageService.get.andReturn([{
+                right: 'right',
+                facilityId: 'facility-id',
+                programId: 'program-id'
+            }]);
+
+            expect(checkPermission({
+                right: 'right',
+                facilityId: 'facility-id'
+            })).toBe(true);
+        });
+
+    });
+
 });
