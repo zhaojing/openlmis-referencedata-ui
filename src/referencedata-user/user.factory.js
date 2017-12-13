@@ -84,6 +84,10 @@
          * @return {User}               the user object
          */
         function buildUserFromResponse(response) {
+            if (!response) {
+                return undefined;
+            }
+
             return userFactory.buildUser(
                 response.id, response.username, response.firstName, response.lastName,
                 response.email, response.timezone, response.homeFacilityId, response.verified,
