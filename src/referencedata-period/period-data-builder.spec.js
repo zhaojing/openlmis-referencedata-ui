@@ -26,8 +26,13 @@
 
     function PeriodDataBuilder(Period, ProcessingScheduleDataBuilder) {
 
+        PeriodDataBuilder.buildWithoutStartDate = buildWithoutStartDate;
+        PeriodDataBuilder.buildWithoutEndDate = buildWithoutEndDate;
+
         PeriodDataBuilder.prototype.withStartDate = withStartDate;
         PeriodDataBuilder.prototype.withEndDate = withEndDate;
+        PeriodDataBuilder.prototype.withoutStartDate = withoutStartDate;
+        PeriodDataBuilder.prototype.withoutEndDate = withoutEndDate;
         PeriodDataBuilder.prototype.build = build;
 
         return PeriodDataBuilder;
@@ -48,9 +53,17 @@
             return this;
         }
 
+        function withoutStartDate() {
+            return this.withStartDate();
+        }
+
         function withEndDate(newDate) {
             this.endDate = newDate;
             return this;
+        }
+
+        function withoutEndDate() {
+            return this.withEndDate();
         }
 
         function build() {
@@ -62,6 +75,18 @@
                 this.endDate,
                 this.processingSchedule
             );
+        }
+
+        function buildWithoutStartDate() {
+            return new PeriodDataBuilder()
+                .withoutStartDate()
+                .build();
+        }
+
+        function buildWithoutEndDate() {
+            return new PeriodDataBuilder()
+                .withoutEndDate()
+                .build();
         }
 
     }
