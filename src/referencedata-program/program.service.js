@@ -58,7 +58,8 @@
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
-            update: update
+            update: update,
+            create: create
         };
 
         /**
@@ -105,6 +106,21 @@
             return resource.update({
                 id: program.id
             }, program).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-program.programService
+         * @name create
+         *
+         * @description
+         * Creates new program.
+         *
+         * @param  {Object}  program Program to be created
+         * @return {Promise}         Updated program
+         */
+        function create(program) {
+            return resource.save(null, program).$promise;
         }
 
         /**

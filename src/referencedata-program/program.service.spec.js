@@ -15,7 +15,7 @@
 
 describe('programService', function() {
 
-    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, program1, program2;
+    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, programService, program1, program2;
 
     beforeEach(function() {
         module('referencedata-program', function($provide, $qProvider){
@@ -124,6 +124,22 @@ describe('programService', function() {
         expect(data[0].id).toBe(program1.id);
         expect(data[1].id).toBe(program2.id);
         expect(programsStorage.put.callCount).toEqual(2);
+    });
+
+    it('should save program', function() {
+        var data;
+
+        $httpBackend.when('PUT', openlmisUrlFactory('/api/programs/' + program1.id))
+            .respond(200, program2);
+
+        programService.update(program1).then(function(response) {
+            data = response;
+        });
+
+        $httpBackend.flush();
+        $rootScope.$apply();
+
+        expect(data.id).toEqual(program2.id);
     });
 
     it('should save program', function() {
