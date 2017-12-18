@@ -18,28 +18,17 @@
     'use strict';
 
     /**
-     * @ngdoc object
-     * @name openlmis-rights.ADMINISTRATION_RIGHTS
+     * @module admin-service-account-list
      *
      * @description
-     * This is constant for administration rights.
+     * Provides service account list screen for administrator.
      */
-    angular
-        .module('openlmis-rights')
-        .constant('ADMINISTRATION_RIGHTS', rights());
-
-    function rights() {
-        return {
-            USERS_MANAGE: 'USERS_MANAGE',
-            FACILITIES_MANAGE: 'FACILITIES_MANAGE',
-            PRODUCTS_MANAGE: 'PRODUCTS_MANAGE',
-            SUPERVISORY_NODES_MANAGE: 'SUPERVISORY_NODES_MANAGE',
-            REQUISITION_GROUPS_MANAGE: 'REQUISITION_GROUPS_MANAGE',
-            GEOGRAPHIC_ZONES_MANAGE: 'GEOGRAPHIC_ZONES_MANAGE',
-            SUPPLY_LINES_MANAGE: 'SUPPLY_LINES_MANAGE',
-            SYSTEM_IDEAL_STOCK_AMOUNTS_MANAGE: 'SYSTEM_IDEAL_STOCK_AMOUNTS_MANAGE',
-            SERVICE_ACCOUNTS_MANAGE: 'SERVICE_ACCOUNTS_MANAGE'
-        };
-    }
-
+    angular.module('admin-service-account-list', [
+        'openlmis-i18n',
+        'openlmis-modal',
+        'openlmis-pagination',
+        'openlmis-rights',
+        'referencedata-service-account',
+        'ui.router'
+    ]);
 })();
