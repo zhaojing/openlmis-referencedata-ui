@@ -1,4 +1,4 @@
-5.2.3 / WIP
+5.3.0 / WIP
 ===========
 
 New features:
