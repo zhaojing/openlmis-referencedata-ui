@@ -1,6 +1,9 @@
 5.2.3 / WIP
 ===========
 
+New features:
+* [OLMIS-3828](https://openlmis.atlassian.net/browse/OLMIS-3828): Added Service Account list UI.
+
 Improvements:
 
 * [OLMIS-3306](https://openlmis.atlassian.net/browse/OLMIS-3306): Added role type column on the role list screen.
