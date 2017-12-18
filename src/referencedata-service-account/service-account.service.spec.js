@@ -38,7 +38,7 @@ describe('serviceAccountService', function() {
     describe('create', function() {
 
         beforeEach(function() {
-            $httpBackend.when('POST', referencedataUrlFactory('/api/serviceAccounts')).respond(200, serviceAccounts[0]);
+            $httpBackend.whenPOST(referencedataUrlFactory('/api/serviceAccounts')).respond(200, serviceAccounts[0]);
         });
 
         it('should return promise', function() {
@@ -61,7 +61,7 @@ describe('serviceAccountService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/serviceAccounts'));
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/serviceAccounts'));
 
             serviceAccountService.create();
             $httpBackend.flush();
@@ -71,7 +71,7 @@ describe('serviceAccountService', function() {
     describe('remove', function() {
 
         beforeEach(function() {
-            $httpBackend.when('DELETE', referencedataUrlFactory('/api/serviceAccounts')).respond(204);
+            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts')).respond(204);
         });
 
         it('should return promise', function() {
@@ -82,14 +82,14 @@ describe('serviceAccountService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('DELETE', referencedataUrlFactory('/api/serviceAccounts'));
+            $httpBackend.expectDELETE(referencedataUrlFactory('/api/serviceAccounts'));
 
             serviceAccountService.remove();
             $httpBackend.flush();
         });
     });
 
-    describe('getAll', function() {
+    describe('query', function() {
 
         var params = {
             page: 1,
@@ -97,13 +97,13 @@ describe('serviceAccountService', function() {
         };
 
         beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/serviceAccounts?page=' + params.page + '&size=' + params.size)).respond(200, {
+            $httpBackend.whenGET(referencedataUrlFactory('/api/serviceAccounts?page=' + params.page + '&size=' + params.size)).respond(200, {
                 content: serviceAccounts
             });
         });
 
         it('should return promise', function() {
-            var result = serviceAccountService.getAll(params);
+            var result = serviceAccountService.query(params);
             $httpBackend.flush();
 
             expect(result.then).not.toBeUndefined();
@@ -112,7 +112,7 @@ describe('serviceAccountService', function() {
         it('should resolve to service accounts page', function() {
             var result;
 
-            serviceAccountService.getAll(params)
+            serviceAccountService.query(params)
             .then(function(data) {
                 result = data;
             });
@@ -123,9 +123,9 @@ describe('serviceAccountService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', referencedataUrlFactory('/api/serviceAccounts?page=' + params.page + '&size=' + params.size));
+            $httpBackend.expectGET(referencedataUrlFactory('/api/serviceAccounts?page=' + params.page + '&size=' + params.size));
 
-            serviceAccountService.getAll(params);
+            serviceAccountService.query(params);
             $httpBackend.flush();
         });
     });

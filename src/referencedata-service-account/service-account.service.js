@@ -42,7 +42,7 @@
 
         return {
             create: create,
-            getAll: getAll,
+            query: query,
             remove: remove
         };
 
@@ -78,7 +78,7 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-service-account.serviceAccountService
-         * @name getAll
+         * @name query
          *
          * @description
          * Gets page of Service Accounts.
@@ -86,7 +86,7 @@
          * @param  {Object}  params the search params
          * @return {Promise}        the Service Account page
          */
-        function getAll(params) {
+        function query(params) {
             return resource.query(params).$promise;
         }
     }

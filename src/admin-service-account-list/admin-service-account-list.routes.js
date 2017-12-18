@@ -34,7 +34,7 @@
             resolve: {
                 serviceAccounts: function(paginationService, serviceAccountService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return serviceAccountService.getAll(stateParams);
+                        return serviceAccountService.query(stateParams);
                     });
                 }
             }
