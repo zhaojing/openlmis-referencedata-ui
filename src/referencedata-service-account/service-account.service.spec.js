@@ -70,21 +70,23 @@ describe('serviceAccountService', function() {
 
     describe('remove', function() {
 
+        var apiKey = 'key';
+
         beforeEach(function() {
-            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts')).respond(204);
+            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts/' + apiKey)).respond(204);
         });
 
         it('should return promise', function() {
-            var result = serviceAccountService.remove();
+            var result = serviceAccountService.remove(apiKey);
             $httpBackend.flush();
 
             expect(result.then).not.toBeUndefined();
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expectDELETE(referencedataUrlFactory('/api/serviceAccounts'));
+            $httpBackend.expectDELETE(referencedataUrlFactory('/api/serviceAccounts/' + apiKey));
 
-            serviceAccountService.remove();
+            serviceAccountService.remove(apiKey);
             $httpBackend.flush();
         });
     });

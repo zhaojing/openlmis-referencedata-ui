@@ -32,7 +32,7 @@
 
     function service($resource, referencedataUrlFactory) {
 
-        var resource = $resource(referencedataUrlFactory('/api/serviceAccounts/:id'), {}, {
+        var resource = $resource(referencedataUrlFactory('/api/serviceAccounts/:apiKey'), {}, {
             query: {
                 method: 'GET',
                 isArray: false,
@@ -72,7 +72,9 @@
          * @return {Promise}     resolves if Service Account was removed successfully
          */
         function remove(key) {
-            return resource.remove(key).$promise;
+            return resource.remove({
+                apiKey: key
+            }).$promise;
         }
 
         /**
