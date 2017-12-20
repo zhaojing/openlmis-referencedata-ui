@@ -17,14 +17,19 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-lot
-     *
-     * @description
-     * Responsible for providing lot info to other modules.
-     */
-    angular.module('referencedata-lot', [
-        'openlmis-i18n'
-    ]);
+    angular
+        .module('referencedata-lot')
+        .filter('lotCode', lotCodeFilter);
+
+    lotCodeFilter.$inject = ['messageService'];
+
+    function lotCodeFilter(messageService) {
+        return function(lot) {
+            if (lot) {
+                return lot.lotCode;
+            }
+            return messageService.get('referencedataLot.noLotDefined');
+        };
+    }
 
 })();
