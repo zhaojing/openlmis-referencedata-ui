@@ -41,7 +41,7 @@
             return {
                 apiKey: this.apiKey,
                 createdBy: this.createdBy,
-                createdDate: this.createdDate,
+                createdDate: this.createdDate
             }
         }
     }
