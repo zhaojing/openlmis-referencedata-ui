@@ -76,7 +76,7 @@
                 serviceAccountService.create()
                 .then(function(response) {
                     var successMessage = messageService.get('adminServiceAccount.add.success', {
-                        key: response.apiKey
+                        key: response.token
                     });
                     loadingPromise.then(function() {
                         notificationService.success(successMessage);
@@ -98,22 +98,22 @@
          * @description
          * Removes selected Service Account.
          *
-         * @param {String} apiKey the API key of selected Service Account
+         * @param {String} token the API key of selected Service Account
          */
-        function remove(apiKey) {
+        function remove(token) {
             var questionMessage = messageService.get('adminServiceAccount.delete.question', {
-                    key: apiKey
+                    key: token
                 }),
                 failureMessage = messageService.get('adminServiceAccount.delete.failure', {
-                    key: apiKey
+                    key: token
                 }),
                 successMessage = messageService.get('adminServiceAccount.delete.success', {
-                    key: apiKey
+                    key: token
                 });
             confirmService.confirm(questionMessage, 'adminServiceAccount.delete')
             .then(function() {
                 var loadingPromise = loadingModalService.open();
-                serviceAccountService.remove(apiKey)
+                serviceAccountService.remove(token)
                 .then(function() {
                     loadingPromise.then(function() {
                         notificationService.success(successMessage);

@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.serviceAccounts', {
             showInNavigation: true,
             label: 'adminServiceAccount.serviceAccounts',
-            url: '/serviceAccounts?page&size',
+            url: '/apiKeys?page&size',
             controller: 'ServiceAccountListController',
             templateUrl: 'admin-service-account-list/service-account-list.html',
             controllerAs: 'vm',

@@ -28,17 +28,19 @@
         .module('referencedata-service-account')
         .factory('serviceAccountService', service);
 
-    service.$inject = ['$resource', 'referencedataUrlFactory'];
+    service.$inject = ['$resource', 'openlmisUrlFactory'];
 
-    function service($resource, referencedataUrlFactory) {
+    function service($resource, openlmisUrlFactory) {
 
-        var resource = $resource(referencedataUrlFactory('/api/serviceAccounts/:apiKey'), {}, {
+        var authResource = $resource(openlmisUrlFactory('/api/apiKeys/:token'), {}, {
             query: {
                 method: 'GET',
                 isArray: false,
-                url: referencedataUrlFactory('/api/serviceAccounts')
+                url: openlmisUrlFactory('/api/apiKeys')
             }
         });
+
+        var referenceDataResource = $resource(openlmisUrlFactory('/api/serviceAccounts/:token'));
 
         return {
             create: create,
@@ -57,7 +59,13 @@
          * @return {Promise} new Service Account
          */
         function create() {
-            return resource.save().$promise;
+            return authResource.save().$promise.then(function (apiKey) {
+                return referenceDataResource.save({
+                    token: apiKey.token
+                }).$promise.then(function () {
+                    return apiKey;
+                });
+            });
         }
 
         /**
@@ -68,13 +76,17 @@
          * @description
          * Removes service account.
          *
-         * @param  {String}  key the API key of Service Account that will be removed
-         * @return {Promise}     resolves if Service Account was removed successfully
+         * @param  {String}  token the API key of Service Account that will be removed
+         * @return {Promise}       resolves if Service Account was removed successfully
          */
-        function remove(key) {
-            return resource.remove({
-                apiKey: key
-            }).$promise;
+        function remove(token) {
+            return referenceDataResource.remove({
+                token: token
+            }).$promise.then(function () {
+                return authResource.remove({
+                  token: token
+                });
+            });
         }
 
         /**
@@ -89,7 +101,7 @@
          * @return {Promise}        the Service Account page
          */
         function query(params) {
-            return resource.query(params).$promise;
+            return authResource.query(params).$promise;
         }
     }
 })();

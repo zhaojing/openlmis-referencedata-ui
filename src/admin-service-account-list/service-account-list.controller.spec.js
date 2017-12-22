@@ -111,12 +111,12 @@ describe('ServiceAccountListController', function () {
     describe('remove', function() {
 
         it('should remove service account and display success notification', function() {
-            vm.remove('key');
+            vm.remove('token');
             $rootScope.$apply();
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(serviceAccountService.remove).toHaveBeenCalledWith('key');
+            expect(serviceAccountService.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.delete.success');
             expect($state.reload).toHaveBeenCalled();
         });
@@ -124,7 +124,7 @@ describe('ServiceAccountListController', function () {
         it('should not call any service when confirmation fails', function() {
             confirmService.confirm.andReturn($q.reject());
 
-            vm.remove('key');
+            vm.remove('token');
             $rootScope.$apply();
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
@@ -138,12 +138,12 @@ describe('ServiceAccountListController', function () {
         it('should display error notification when service account delete fails', function() {
             serviceAccountService.remove.andReturn($q.reject());
 
-            vm.remove('key');
+            vm.remove('token');
             $rootScope.$apply();
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(serviceAccountService.remove).toHaveBeenCalledWith('key');
+            expect(serviceAccountService.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).toHaveBeenCalledWith('adminServiceAccount.delete.failure');
             expect(loadingModalService.close).toHaveBeenCalled();

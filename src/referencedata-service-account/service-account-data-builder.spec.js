@@ -32,14 +32,14 @@
         function ServiceAccountBuilder() {
             ServiceAccountBuilder.instanceNumber = (ServiceAccountBuilder.instanceNumber || 0) + 1;
 
-            this.apiKey = 'api-key-' + ServiceAccountBuilder.instanceNumber;
+            this.token = 'token-' + ServiceAccountBuilder.instanceNumber;
             this.createdBy = 'admin-id-' + ServiceAccountBuilder.instanceNumber;
             this.createdDate = new Date();
         }
 
         function build() {
             return {
-                apiKey: this.apiKey,
+                token: this.token,
                 createdBy: this.createdBy,
                 createdDate: this.createdDate
             }

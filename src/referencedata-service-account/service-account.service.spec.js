@@ -15,14 +15,14 @@
 
 describe('serviceAccountService', function() {
 
-    var referencedataUrlFactory, $httpBackend, $rootScope, serviceAccountService, ServiceAccountBuilder,
+    var openlmisUrlFactory, $httpBackend, $rootScope, serviceAccountService, ServiceAccountBuilder,
         serviceAccounts;
 
     beforeEach(function() {
         module('referencedata-service-account');
 
         inject(function($injector) {
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             serviceAccountService = $injector.get('serviceAccountService');
             $rootScope = $injector.get('$rootScope');
             $httpBackend = $injector.get('$httpBackend');
@@ -38,7 +38,8 @@ describe('serviceAccountService', function() {
     describe('create', function() {
 
         beforeEach(function() {
-            $httpBackend.whenPOST(referencedataUrlFactory('/api/serviceAccounts')).respond(200, serviceAccounts[0]);
+            $httpBackend.whenPOST(openlmisUrlFactory('/api/apiKeys')).respond(200, serviceAccounts[0]);
+            $httpBackend.whenPOST(openlmisUrlFactory('/api/serviceAccounts')).respond(200, serviceAccounts[0]);
         });
 
         it('should return promise', function() {
@@ -57,11 +58,12 @@ describe('serviceAccountService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(result.apiKey).toEqual(serviceAccounts[0].apiKey);
+            expect(result.token).toEqual(serviceAccounts[0].token);
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/serviceAccounts'));
+            $httpBackend.expectPOST(openlmisUrlFactory('/api/apiKeys'));
+            $httpBackend.expectPOST(openlmisUrlFactory('/api/serviceAccounts'));
 
             serviceAccountService.create();
             $httpBackend.flush();
@@ -70,23 +72,25 @@ describe('serviceAccountService', function() {
 
     describe('remove', function() {
 
-        var apiKey = 'key';
+        var token = 'key';
 
         beforeEach(function() {
-            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts/' + apiKey)).respond(204);
+            $httpBackend.whenDELETE(openlmisUrlFactory('/api/apiKeys/' + token)).respond(204);
+            $httpBackend.whenDELETE(openlmisUrlFactory('/api/serviceAccounts/' + token)).respond(204);
         });
 
         it('should return promise', function() {
-            var result = serviceAccountService.remove(apiKey);
+            var result = serviceAccountService.remove(token);
             $httpBackend.flush();
 
             expect(result.then).not.toBeUndefined();
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expectDELETE(referencedataUrlFactory('/api/serviceAccounts/' + apiKey));
+            $httpBackend.expectDELETE(openlmisUrlFactory('/api/serviceAccounts/' + token));
+            $httpBackend.expectDELETE(openlmisUrlFactory('/api/apiKeys/' + token));
 
-            serviceAccountService.remove(apiKey);
+            serviceAccountService.remove(token);
             $httpBackend.flush();
         });
     });
@@ -99,7 +103,7 @@ describe('serviceAccountService', function() {
         };
 
         beforeEach(function() {
-            $httpBackend.whenGET(referencedataUrlFactory('/api/serviceAccounts?page=' + params.page + '&size=' + params.size)).respond(200, {
+            $httpBackend.whenGET(openlmisUrlFactory('/api/apiKeys?page=' + params.page + '&size=' + params.size)).respond(200, {
                 content: serviceAccounts
             });
         });
@@ -125,7 +129,7 @@ describe('serviceAccountService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expectGET(referencedataUrlFactory('/api/serviceAccounts?page=' + params.page + '&size=' + params.size));
+            $httpBackend.expectGET(openlmisUrlFactory('/api/apiKeys?page=' + params.page + '&size=' + params.size));
 
             serviceAccountService.query(params);
             $httpBackend.flush();
