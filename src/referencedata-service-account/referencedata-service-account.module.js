@@ -24,8 +24,8 @@
      * Responsible for getting Service Account info from server.
      */
     angular.module('referencedata-service-account', [
+        'auth-api-keys',
         'ngResource',
         'referencedata'
     ]);
-
 })();

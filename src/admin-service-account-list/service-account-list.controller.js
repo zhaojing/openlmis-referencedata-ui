@@ -28,9 +28,9 @@
         .module('admin-service-account-list')
         .controller('ServiceAccountListController', controller);
 
-    controller.$inject = ['$state', 'serviceAccounts', 'serviceAccountService', 'confirmService', 'loadingModalService', 'notificationService', 'messageService'];
+    controller.$inject = ['$state', 'serviceAccounts', 'serviceAccountFactory', 'confirmService', 'loadingModalService', 'notificationService', 'messageService'];
 
-    function controller($state, serviceAccounts, serviceAccountService, confirmService, loadingModalService, notificationService, messageService) {
+    function controller($state, serviceAccounts, serviceAccountFactory, confirmService, loadingModalService, notificationService, messageService) {
 
         var vm = this;
 
@@ -73,7 +73,7 @@
             confirmService.confirm('adminServiceAccount.add.question', 'adminServiceAccount.add')
             .then(function() {
                 var loadingPromise = loadingModalService.open();
-                serviceAccountService.create()
+                serviceAccountFactory.create()
                 .then(function(response) {
                     var successMessage = messageService.get('adminServiceAccount.add.success', {
                         key: response.token
@@ -113,7 +113,7 @@
             confirmService.confirm(questionMessage, 'adminServiceAccount.delete')
             .then(function() {
                 var loadingPromise = loadingModalService.open();
-                serviceAccountService.remove(token)
+                serviceAccountFactory.remove(token)
                 .then(function() {
                     loadingPromise.then(function() {
                         notificationService.success(successMessage);

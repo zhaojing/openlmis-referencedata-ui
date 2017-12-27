@@ -26,6 +26,7 @@
     function ServiceAccountBuilder() {
 
         ServiceAccountBuilder.prototype.build = build;
+        ServiceAccountBuilder.prototype.withToken = withToken;
 
         return ServiceAccountBuilder;
 
@@ -43,6 +44,11 @@
                 createdBy: this.createdBy,
                 createdDate: this.createdDate
             }
+        }
+
+        function withToken(token) {
+            this.token = token;
+            return this;
         }
     }
 })();

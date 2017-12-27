@@ -32,9 +32,9 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.SERVICE_ACCOUNTS_MANAGE],
             resolve: {
-                serviceAccounts: function(paginationService, serviceAccountService, $stateParams) {
+                serviceAccounts: function(paginationService, apiKeysService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return serviceAccountService.query(stateParams);
+                        return apiKeysService.query(stateParams);
                     });
                 }
             }

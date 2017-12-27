@@ -15,7 +15,7 @@
 
 describe('ServiceAccountListController', function () {
 
-    var $q, $rootScope, $state, $controller, serviceAccountService, confirmService, loadingModalService, notificationService, messageService, ServiceAccountBuilder,
+    var $q, $rootScope, $state, $controller, serviceAccountFactory, confirmService, loadingModalService, notificationService, messageService, ServiceAccountBuilder,
         vm, serviceAccounts;
 
     beforeEach(function() {
@@ -31,7 +31,7 @@ describe('ServiceAccountListController', function () {
             notificationService = $injector.get('notificationService');
             loadingModalService = $injector.get('loadingModalService');
             messageService = $injector.get('messageService');
-            serviceAccountService = $injector.get('serviceAccountService');
+            serviceAccountFactory = $injector.get('serviceAccountFactory');
             ServiceAccountBuilder = $injector.get('ServiceAccountBuilder');
         });
 
@@ -49,8 +49,8 @@ describe('ServiceAccountListController', function () {
         spyOn(confirmService, 'confirm').andReturn($q.resolve());
         spyOn(loadingModalService, 'open').andReturn($q.resolve());
         spyOn(loadingModalService, 'close').andReturn($q.resolve());
-        spyOn(serviceAccountService, 'create').andReturn($q.resolve(serviceAccounts[0]));
-        spyOn(serviceAccountService, 'remove').andReturn($q.resolve());
+        spyOn(serviceAccountFactory, 'create').andReturn($q.resolve(serviceAccounts[0]));
+        spyOn(serviceAccountFactory, 'remove').andReturn($q.resolve());
         spyOn(notificationService, 'success').andReturn($q.resolve());
         spyOn(notificationService, 'error').andReturn($q.resolve());
         spyOn(messageService, 'get').andCallFake(function(key) {
@@ -73,7 +73,7 @@ describe('ServiceAccountListController', function () {
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(serviceAccountService.create).toHaveBeenCalled();
+            expect(serviceAccountFactory.create).toHaveBeenCalled();
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.add.success');
             expect($state.reload).toHaveBeenCalled();
         });
@@ -86,21 +86,21 @@ describe('ServiceAccountListController', function () {
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
             expect(loadingModalService.open).not.toHaveBeenCalled();
-            expect(serviceAccountService.create).not.toHaveBeenCalled();
+            expect(serviceAccountFactory.create).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalledWith();
             expect($state.reload).not.toHaveBeenCalled();
         });
 
         it('should display error notification when service account creation fails', function() {
-            serviceAccountService.create.andReturn($q.reject());
+            serviceAccountFactory.create.andReturn($q.reject());
 
             vm.add();
             $rootScope.$apply();
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(serviceAccountService.create).toHaveBeenCalled();
+            expect(serviceAccountFactory.create).toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).toHaveBeenCalledWith('adminServiceAccount.add.failure');
             expect(loadingModalService.close).toHaveBeenCalled();
@@ -116,7 +116,7 @@ describe('ServiceAccountListController', function () {
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(serviceAccountService.remove).toHaveBeenCalledWith('token');
+            expect(serviceAccountFactory.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.delete.success');
             expect($state.reload).toHaveBeenCalled();
         });
@@ -129,21 +129,21 @@ describe('ServiceAccountListController', function () {
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).not.toHaveBeenCalled();
-            expect(serviceAccountService.remove).not.toHaveBeenCalled();
+            expect(serviceAccountFactory.remove).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).not.toHaveBeenCalledWith();
             expect($state.reload).not.toHaveBeenCalled();
         });
 
         it('should display error notification when service account delete fails', function() {
-            serviceAccountService.remove.andReturn($q.reject());
+            serviceAccountFactory.remove.andReturn($q.reject());
 
             vm.remove('token');
             $rootScope.$apply();
 
             expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(serviceAccountService.remove).toHaveBeenCalledWith('token');
+            expect(serviceAccountFactory.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).toHaveBeenCalledWith('adminServiceAccount.delete.failure');
             expect(loadingModalService.close).toHaveBeenCalled();

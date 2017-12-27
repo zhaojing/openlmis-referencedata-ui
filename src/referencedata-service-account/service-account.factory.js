@@ -13,26 +13,24 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+(function(){
 
     'use strict';
 
     /**
      * @ngdoc service
-     * @name referencedata-service-account.serviceAccountService
+     * @name referencedata-service-account.serviceAccountFactory
      *
      * @description
-     * Responsible for retrieving Service Accounts from the server.
+     * Allows deleting/creating both API Key and connected Service Account.
      */
     angular
         .module('referencedata-service-account')
-        .factory('serviceAccountService', service);
+        .factory('serviceAccountFactory', factory);
 
-    service.$inject = ['$resource', 'referencedataUrlFactory'];
+    factory.$inject = ['serviceAccountService', 'apiKeysService'];
 
-    function service($resource, referencedataUrlFactory) {
-
-        var resource = $resource(referencedataUrlFactory('/api/serviceAccounts/:token'));
+    function factory(serviceAccountService, apiKeysService) {
 
         return {
             create: create,
@@ -41,36 +39,43 @@
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-service-account.serviceAccountService
+         * @methodOf referencedata-service-account.serviceAccountFactory
          * @name create
          *
          * @description
-         * Creates new service account.
+         * Creates new service account and API Key.
          *
-         * @param  {String}  token the API Key for new Service Account
-         * @return {Promise}       new Service Account
+         * @return {Promise} new API Key
          */
-        function create(token) {
-            return resource.save({
-                token: token
-            }).$promise;
+        function create() {
+            return apiKeysService.create().then(function(apiKey) {
+                return serviceAccountService.create(apiKey.token)
+                .then(function() {
+                    return apiKey;
+                });
+            });
         }
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-service-account.serviceAccountService
+         * @methodOf referencedata-service-account.serviceAccountFactory
          * @name remove
          *
          * @description
-         * Removes service account.
+         * Removes Service Account and connected API Key.
          *
          * @param  {String}  token the API key of Service Account that will be removed
-         * @return {Promise}       resolves if Service Account was removed successfully
+         * @return {Promise}       resolves if Service Account and API Key were removed successfully
          */
         function remove(token) {
-            return resource.remove({
+            return serviceAccountService.remove({
                 token: token
-            }).$promise;
+            })
+            .then(function() {
+                return apiKeysService.remove({
+                  token: token
+                });
+            });
         }
     }
 })();

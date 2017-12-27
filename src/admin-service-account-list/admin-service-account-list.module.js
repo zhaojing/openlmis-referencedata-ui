@@ -24,6 +24,7 @@
      * Provides service account list screen for administrator.
      */
     angular.module('admin-service-account-list', [
+        'auth-api-keys',
         'openlmis-i18n',
         'openlmis-modal',
         'openlmis-pagination',
