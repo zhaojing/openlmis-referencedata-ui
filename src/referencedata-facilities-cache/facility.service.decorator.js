@@ -73,7 +73,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-facilities-cache.facilityCacheService
+         * @methodOf referencedata-facilities-cache.facilityService
          * @name clearMinimalFacilitiesCache
          *
          * @description

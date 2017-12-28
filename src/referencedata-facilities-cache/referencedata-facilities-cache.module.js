@@ -27,7 +27,8 @@
         'openlmis-auth',
         'openlmis-local-storage',
         'referencedata-facility',
-        'openlmis-loading'
+        'openlmis-loading',
+        'openlmis-login'
     ]);
 
 })();
