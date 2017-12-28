@@ -28,6 +28,7 @@
     angular.module('openlmis-permissions', [
         'openlmis-auth',
         'openlmis-loading',
+        'openlmis-login',
         'referencedata-program'
     ]);
 

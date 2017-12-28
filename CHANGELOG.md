@@ -19,6 +19,8 @@ Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.
 * [OLMIS-3243](https://openlmis.atlassian.net/browse/OLMIS-3403): Added builders for ObjectReference, Facility, Program etc.
 * [OLMIS-3727](https://openlmis.atlassian.net/browse/OLMIS-3727): Fixed getting user's programs.
+* [OLMIS-3468](https://openlmis.atlassian.net/browse/OLMIS-3468): Fixed a bug with missing permissions after a relog.
+
 
 5.2.2 / 2017-11-09
 ==================
