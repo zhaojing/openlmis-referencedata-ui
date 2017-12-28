@@ -28,7 +28,8 @@
         'openlmis-loading',
         'openlmis-currency',
         'openlmis-local-storage',
-        'openlmis-auth'
+        'openlmis-auth',
+        'openlmis-login'
     ]);
 
 })();
