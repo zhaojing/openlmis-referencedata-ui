@@ -24,7 +24,6 @@
      * Caches minimal facility details to store offline.
      */
     angular.module('referencedata-facilities-cache', [
-        'openlmis-auth',
         'openlmis-local-storage',
         'referencedata-facility',
         'openlmis-loading',
