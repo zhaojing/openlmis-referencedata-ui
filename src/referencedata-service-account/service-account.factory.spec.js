@@ -81,12 +81,8 @@ describe('serviceAccountFactory', function() {
             serviceAccountFactory.remove(serviceAccount.token);
             $rootScope.$apply();
 
-            expect(serviceAccountService.remove).toHaveBeenCalledWith({
-                token: serviceAccount.token
-            });
-            expect(apiKeysService.remove).toHaveBeenCalledWith({
-                token: serviceAccount.token
-            });
+            expect(serviceAccountService.remove).toHaveBeenCalledWith(serviceAccount.token);
+            expect(apiKeysService.remove).toHaveBeenCalledWith(serviceAccount.token);
         });
     });
 });

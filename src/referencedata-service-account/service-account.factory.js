@@ -68,13 +68,9 @@
          * @return {Promise}       resolves if Service Account and API Key were removed successfully
          */
         function remove(token) {
-            return serviceAccountService.remove({
-                token: token
-            })
+            return serviceAccountService.remove(token)
             .then(function() {
-                return apiKeysService.remove({
-                  token: token
-                });
+                return apiKeysService.remove(token);
             });
         }
     }
