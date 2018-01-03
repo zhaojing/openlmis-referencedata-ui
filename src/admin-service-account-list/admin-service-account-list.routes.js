@@ -34,6 +34,7 @@
             resolve: {
                 serviceAccounts: function(paginationService, apiKeysService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
+                        stateParams.sort = 'creationDetails.createdDate,DESC';
                         return apiKeysService.query(stateParams);
                     });
                 }
