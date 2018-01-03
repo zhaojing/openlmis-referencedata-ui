@@ -58,7 +58,7 @@
          * Method that is executed on initiating ServiceAccountListController.
          */
         function onInit() {
-            vm.serviceAccounts = serviceAccounts;
+            vm.serviceAccounts = serviceAccounts.reverse();
         }
 
         /**
