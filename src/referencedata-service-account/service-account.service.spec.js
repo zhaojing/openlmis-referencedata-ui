@@ -70,8 +70,6 @@ describe('serviceAccountService', function() {
 
     describe('remove', function() {
 
-        var token = 'key';
-
         beforeEach(function() {
             $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts/' + serviceAccounts[0].token)).respond(204);
         });
