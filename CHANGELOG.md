@@ -14,6 +14,7 @@ Improvements:
 * [OLMIS-3542](https://openlmis.atlassian.net/browse/OLMIS-3542): Updated password modal title and button to be based on context.
 * [OLMIS-3782](https://openlmis.atlassian.net/browse/OLMIS-3782): Added new flag (skipAuthorization) to the program object to match backend changes.
 * [OLMIS-2666](https://openlmis.atlassian.net/browse/OLMIS-2666): Added create new program method in program service.
+* [OLMIS-3805](https://openlmis.atlassian.net/browse/OLMIS-3805): Updated Roles UI to allow fulfillment roles to non-warehouses.
 
 Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.

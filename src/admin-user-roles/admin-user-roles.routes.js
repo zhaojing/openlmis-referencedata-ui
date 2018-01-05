@@ -38,16 +38,8 @@
                 supervisoryNodes: function(supervisoryNodeFactory) {
                     return supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay();
                 },
-                warehouses: function($q, facilityService) {
-                    var deferred = $q.defer();
-
-                    facilityService.search(null, {
-                        type: 'warehouse'
-                    }).then(function(response) {
-                        deferred.resolve(response.content);
-                    }, deferred.reject);
-
-                    return deferred.promise;
+                warehouses: function(facilityService) {
+                    return facilityService.getAllMinimal();
                 },
                 user: function(userRoleAssignmentFactory, $stateParams, roles, programs, supervisoryNodes, warehouses) {
                     return userRoleAssignmentFactory.getUser($stateParams.id, roles, programs, supervisoryNodes, warehouses);
