@@ -58,7 +58,7 @@
         function login() {
             return originalLogin.apply($delegate, arguments)
             .then(function(response) {
-                return facilityService.getAllMinimal()
+                return facilityService.getAllMinimal({ activeOnly: true })
                 .then(function() {
                     return response;
                 });
