@@ -44,7 +44,8 @@
                 getUserHomeFacility: getUserHomeFacility,
                 getUserSupervisedFacilities: getUserSupervisedFacilities,
                 getAllUserFacilities: getAllUserFacilities,
-                searchAndOrderFacilities: searchAndOrderFacilities
+                searchAndOrderFacilities: searchAndOrderFacilities,
+                getActiveMinimalFacilities: getActiveMinimalFacilities
             };
 
 
@@ -258,6 +259,20 @@
                     }, false);
                 }
                 return $filter('orderBy')(result, orderBy);
+            }
+
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility.facilityFactory
+             * @name getActiveMinimalFacilities
+             *
+             * @description
+             * Returns minimal representation of active facilities.
+             *
+             * @return {Array}         the set of active facilities
+             */
+            function getActiveMinimalFacilities() {
+                return facilityService.getAllMinimal({ active: true });
             }
         }
 

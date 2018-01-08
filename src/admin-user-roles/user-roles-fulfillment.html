@@ -1,7 +1,7 @@
 <form class="form-inline" ng-submit="vm.addRole()" reload-form>
     <div class="form-group">
-        <label for="warehouse">{{'adminUserRoles.supplyingFacility' | message}}</label>
-        <select id="warehouse" ng-model="vm.selectedWarehouse" required
+        <label for="supplyingFacility">{{'adminUserRoles.supplyingFacility' | message}}</label>
+        <select id="supplyingFacility" ng-model="vm.selectedWarehouse" required
             ng-options="warehouse as warehouse.name for warehouse in vm.warehouses">
         </select>
     </div>

@@ -34,9 +34,9 @@
         $provide.decorator('loginService', decorator);
     }
 
-    decorator.$inject = ['$delegate', 'facilityService'];
+    decorator.$inject = ['$delegate', 'facilityService', 'facilityFactory'];
 
-    function decorator($delegate, facilityService) {
+    function decorator($delegate, facilityService, facilityFactory) {
 
         var originalLogin = $delegate.login,
             originalLogout = $delegate.logout;
@@ -52,13 +52,13 @@
          * @name login
          *
          * @description
-         * Runs facilityService.getAllMinimal, which has been modified to store
+         * Runs facilityFactory.getActiveMinimalFacilities, which has been modified to store
          * the received list in the browsers cache.
          */
         function login() {
             return originalLogin.apply($delegate, arguments)
             .then(function(response) {
-                return facilityService.getAllMinimal({ activeOnly: true })
+                return facilityFactory.getActiveMinimalFacilities()
                 .then(function() {
                     return response;
                 });

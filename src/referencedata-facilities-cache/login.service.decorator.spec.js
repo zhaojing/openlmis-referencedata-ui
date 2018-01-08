@@ -15,7 +15,8 @@
 
 describe('loginService facilities cache decorator', function() {
 
-    var loginService, $q, $rootScope, facilityService, originalLoginSpy, originalLogoutSpy;
+    var loginService, $q, $rootScope, facilityService, originalLoginSpy, originalLogoutSpy,
+        facilityFactory;
 
     beforeEach(function() {
         module('referencedata-facility', function($provide) {
@@ -35,6 +36,7 @@ describe('loginService facilities cache decorator', function() {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             loginService = $injector.get('loginService');
+            facilityFactory = $injector.get('facilityFactory');
             facilityService = $injector.get('facilityService');
         });
     });
@@ -44,7 +46,7 @@ describe('loginService facilities cache decorator', function() {
         var username, password, userInfo;
 
         beforeEach(function() {
-            spyOn(facilityService, 'getAllMinimal');
+            spyOn(facilityFactory, 'getActiveMinimalFacilities');
 
             username = 'validUsername';
             password = 'validPass';
@@ -73,13 +75,13 @@ describe('loginService facilities cache decorator', function() {
             $rootScope.$apply();
 
             expect(originalLoginSpy).toHaveBeenCalledWith(invalidUsername, invalidPassword);
-            expect(facilityService.getAllMinimal).not.toHaveBeenCalled();
+            expect(facilityFactory.getActiveMinimalFacilities).not.toHaveBeenCalled();
             expect(rejected).toBe(true);
         });
 
         it('should reject if service fails to fetch facilities', function() {
             originalLoginSpy.andReturn($q.resolve(userInfo));
-            facilityService.getAllMinimal.andReturn($q.reject());
+            facilityFactory.getActiveMinimalFacilities.andReturn($q.reject());
 
             var rejected;
             loginService.login(
@@ -92,13 +94,13 @@ describe('loginService facilities cache decorator', function() {
             $rootScope.$apply();
 
             expect(originalLoginSpy).toHaveBeenCalledWith(username, password);
-            expect(facilityService.getAllMinimal).toHaveBeenCalled();
+            expect(facilityFactory.getActiveMinimalFacilities).toHaveBeenCalled();
             expect(rejected).toEqual(true);
         });
 
         it('should resolve to the server response', function() {
             originalLoginSpy.andReturn($q.resolve(userInfo));
-            facilityService.getAllMinimal.andReturn($q.resolve());
+            facilityFactory.getActiveMinimalFacilities.andReturn($q.resolve());
 
             var result;
             loginService.login(
@@ -111,7 +113,7 @@ describe('loginService facilities cache decorator', function() {
             $rootScope.$apply();
 
             expect(originalLoginSpy).toHaveBeenCalledWith(username, password);
-            expect(facilityService.getAllMinimal).toHaveBeenCalled();
+            expect(facilityFactory.getActiveMinimalFacilities).toHaveBeenCalled();
             expect(result).toEqual(userInfo);
         });
 
