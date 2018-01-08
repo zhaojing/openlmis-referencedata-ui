@@ -28,6 +28,8 @@
         FacilityOperatorDataBuilder) {
 
         FacilityDataBuilder.prototype.build = build;
+        FacilityDataBuilder.prototype.withName = withName;
+        FacilityDataBuilder.prototype.withId = withId;
 
         return FacilityDataBuilder;
 
@@ -49,6 +51,16 @@
             this.openLmisAccessible = true;
             this.location = 'POINT(35.23962 -13.30037)';
             this.extraData = {};
+        }
+
+        function withName(newName) {
+            this.name = newName;
+            return this;
+        }
+
+        function withId(newId) {
+            this.id = newId;
+            return this;
         }
 
         function build() {

@@ -16,7 +16,8 @@
 describe('facilityFactory', function() {
 
     var $rootScope, $q, facility1, facility2, userPrograms, programService, facilityService,
-        authorizationService, currentUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS;
+        authorizationService, currentUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS,
+        FacilityDataBuilder, MinimalFacilityDataBuilder, ProgramDataBuilder;
 
     beforeEach(function () {
         module('referencedata-facility');
@@ -27,12 +28,14 @@ describe('facilityFactory', function() {
             facilityFactory = $injector.get('facilityFactory');
             REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
             FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
 
             facilityService = $injector.get('facilityService');
             spyOn(facilityService, 'getUserSupervisedFacilities');
             spyOn(facilityService, 'getUserFacilitiesForRight');
             spyOn(facilityService, 'get');
-            spyOn(facilityService, 'getAllMinimal');
 
             programService = $injector.get('programService');
             spyOn(programService, 'getUserPrograms');
@@ -43,24 +46,12 @@ describe('facilityFactory', function() {
     });
 
     beforeEach(function() {
-        facility1 = {
-            id: '1',
-            name: 'facility1'
-        };
-        facility2 = {
-            id: '2',
-            name: 'facility2'
-        };
+        facility1 = new FacilityDataBuilder().withId('1').withName('facility1').build();
+        facility2 = new FacilityDataBuilder().withId('2').withName('facility2').build();
 
         userPrograms = [
-            {
-                name: 'program1',
-                id: '1'
-            },
-            {
-                name: 'program2',
-                id: '2'
-            }
+            new ProgramDataBuilder().withId('1').withName('program1').build(),
+            new ProgramDataBuilder().withId('2').withName('program2').build()
         ];
     });
 
@@ -195,6 +186,27 @@ describe('facilityFactory', function() {
 
             expect(facilityService.getUserSupervisedFacilities)
                 .toHaveBeenCalledWith(userId, userPrograms[0], rightId);
+        });
+    });
+
+    describe('getActiveMinimalFacilities', function() {
+
+        beforeEach(function() {
+            spyOn(facilityService, 'getAllMinimal').andReturn($q.when([
+                new MinimalFacilityDataBuilder().withId('1').withName('facility1').build(),
+                new MinimalFacilityDataBuilder().withId('2').withName('facility2').build()
+            ]));
+        });
+
+        it('should fetch active minimal facilities', function() {
+            var minimalFacilities;
+            facilityFactory.getActiveMinimalFacilities().then(function (result) {
+                minimalFacilities = result;
+            });
+            $rootScope.$apply();
+
+            expect(facilityService.getAllMinimal).toHaveBeenCalledWith({ active: true });
+            expect(minimalFacilities.length).toEqual(2);
         });
     });
 

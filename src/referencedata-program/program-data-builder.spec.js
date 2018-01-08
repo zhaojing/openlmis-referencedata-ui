@@ -27,6 +27,8 @@
     function ProgramDataBuilder(Program) {
 
         ProgramDataBuilder.prototype.build = build;
+        ProgramDataBuilder.prototype.withId = withId;
+        ProgramDataBuilder.prototype.withName = withName;
 
         return ProgramDataBuilder;
 
@@ -42,6 +44,16 @@
             this.skipAuthorization = false;
             this.showNonFullSupplyTab = false;
             this.enableDatePhysicalStockCountCompleted = false;
+        }
+
+        function withName(newName) {
+            this.name = newName;
+            return this;
+        }
+
+        function withId(newId) {
+            this.id = newId;
+            return this;
         }
 
         function build() {

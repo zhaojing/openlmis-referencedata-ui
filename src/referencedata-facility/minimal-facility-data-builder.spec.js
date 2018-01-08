@@ -26,6 +26,8 @@
     function MinimalFacilityDataBuilder(Facility) {
 
         MinimalFacilityDataBuilder.prototype.build = build;
+        MinimalFacilityDataBuilder.prototype.withName = withName;
+        MinimalFacilityDataBuilder.prototype.withId = withId;
 
         return MinimalFacilityDataBuilder;
 
@@ -34,6 +36,16 @@
 
             this.id = 'facility-id-' + MinimalFacilityDataBuilder.instanceNumber;
             this.name = 'facility ' + MinimalFacilityDataBuilder.instanceNumber;
+        }
+
+        function withName(newName) {
+            this.name = newName;
+            return this;
+        }
+
+        function withId(newId) {
+            this.id = newId;
+            return this;
         }
 
         function build() {
