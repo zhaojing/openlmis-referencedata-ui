@@ -269,7 +269,7 @@
              * @description
              * Returns minimal representation of active facilities.
              *
-             * @return {Array}         the set of active facilities
+             * @return {Promise}         the page of active facilities
              */
             function getActiveMinimalFacilities() {
                 return facilityService.getAllMinimal({ active: true });
