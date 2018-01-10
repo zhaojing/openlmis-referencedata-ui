@@ -1,0 +1,11 @@
+{
+    "adminProcessingScheduleAdd.addProcessingSchedule": "Add Processing Schedule",
+    "adminProcessingScheduleAdd.processingScheduleCode": "Processing Schedule Code",
+    "adminProcessingScheduleAdd.processingScheduleName": "Processing Schedule Name",
+    "adminProcessingScheduleAdd.description": "Description",
+    "adminProcessingScheduleAdd.cancel": "Cancel",
+    "adminProcessingScheduleAdd.save": "Save",
+    "adminProcessingScheduleAdd.save.question": "Do you want to save Processing Period ${processingSchedule}?",
+    "adminProcessingScheduleAdd.save.success": "Processing Period has been saved",
+    "adminProcessingScheduleAdd.save.fail": "Failed to save Processing Period"
+}
