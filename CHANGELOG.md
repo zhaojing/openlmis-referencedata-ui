@@ -2,6 +2,7 @@
 ===========
 
 New features:
+* [OLMIS-3108:](https://openlmis.atlassian.net/browse/OLMIS-3108) Updated to use dev-ui v7 transifex build process
 * [OLMIS-3828](https://openlmis.atlassian.net/browse/OLMIS-3828): Added Service Account list UI.
 * [OLMIS-2695](https://openlmis.atlassian.net/browse/OLMIS-2695): Added Processing Schedule screens.
 
