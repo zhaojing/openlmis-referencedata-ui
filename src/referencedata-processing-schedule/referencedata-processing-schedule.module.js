@@ -18,15 +18,15 @@
     'use strict';
 
     /**
-     * @module referencedata-period
+     * @module referencedata-processing-schedule
      *
      * @description
-     * Responsible for providing period info to other modules.
+     * Responsible for providing processing schedule info to other modules.
      */
-    angular.module('referencedata-period', [
+    angular.module('referencedata-processing-schedule', [
         'ngResource',
-        'openlmis-urls',
-        'referencedata-processing-schedule'
+        'openlmis-rights',
+        'referencedata',
+        'referencedata-period'
     ]);
-
 })();

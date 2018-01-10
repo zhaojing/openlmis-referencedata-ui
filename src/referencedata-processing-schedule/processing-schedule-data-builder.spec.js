@@ -19,7 +19,7 @@
 
 
     angular
-        .module('referencedata-period')
+        .module('referencedata-processing-schedule')
         .factory('ProcessingScheduleDataBuilder', ProcessingScheduleDataBuilder);
 
     ProcessingScheduleDataBuilder.$inject = ['ProcessingSchedule'];
@@ -47,7 +47,5 @@
                 this.description
             );
         }
-
     }
-
 })();

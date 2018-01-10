@@ -28,13 +28,21 @@
 		.module('referencedata-period')
 	    .service('periodService', service);
 
-    service.$inject = ['$resource', 'openlmisUrlFactory'];
+    service.$inject = ['$resource', 'referencedataUrlFactory'];
 
-    function service($resource, openlmisUrlFactory) {
+    function service($resource, referencedataUrlFactory) {
 
-        var resource = $resource(openlmisUrlFactory('/api/processingPeriods/:id'), {}, {});
+        var resource = $resource(referencedataUrlFactory('/api/processingPeriods/:id'), {}, {
+            getBySchedule: {
+                method: 'GET',
+                url: referencedataUrlFactory('/api/processingPeriods/searchByScheduleAndDate'),
+                isArray: true
+            }
+        });
 
         this.get = get;
+        this.getBySchedule = getBySchedule;
+        this.create = create;
 
 		/**
          * @ngdoc method
@@ -51,6 +59,38 @@
             return resource.get({
 				id: periodId
 			}).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @name getBySchedule
+         * @methodOf referencedata-period.periodService
+         *
+         * @description
+         * Retrieves processing periods assigned to schedule from the server.
+         *
+         * @param  {String}  scheduleId Schedule UUID
+         * @return {Promise}            List of Periods
+         */
+        function getBySchedule(scheduleId) {
+            return resource.getBySchedule({
+				processingScheduleId: scheduleId
+			}).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @name create
+         * @methodOf referencedata-period.periodService
+         *
+         * @description
+         * Creates processing periods.
+         *
+         * @param  {Object}  period new Period
+         * @return {Promise}        created Period
+         */
+        function create(period) {
+            return resource.save(period).$promise;
         }
     }
 })();

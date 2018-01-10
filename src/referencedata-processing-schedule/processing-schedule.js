@@ -25,7 +25,7 @@
      * Represents a single processing schedule.
      */
     angular
-        .module('referencedata-period')
+        .module('referencedata-processing-schedule')
         .factory('ProcessingSchedule', ProcessingSchedule);
 
     function ProcessingSchedule() {
@@ -52,7 +52,5 @@
             this.name = name;
             this.description = description;
         }
-
     }
-
 })();
