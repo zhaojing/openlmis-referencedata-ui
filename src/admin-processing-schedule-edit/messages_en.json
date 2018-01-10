@@ -1,0 +1,15 @@
+{
+    "adminProcessingScheduleEdit.addProcessingPeriod.title": "Add Processing Period for \"${scheduleCode}\" schedule",
+    "adminProcessingScheduleEdit.addProcessingPeriod.description": "Add Processing Period to existing schedule",
+    "adminProcessingScheduleEdit.name": "Name",
+    "adminProcessingScheduleEdit.description": "Description",
+    "adminProcessingScheduleEdit.startDate": "Start Date",
+    "adminProcessingScheduleEdit.endDate": "End Date",
+    "adminProcessingScheduleEdit.add": "Add",
+    "adminProcessingScheduleEdit.cancel": "Cancel",
+    "adminProcessingScheduleEdit.code": "Code",
+    "adminProcessingScheduleEdit.add.question": "Do you want to add ${period} Processing Period",
+    "adminProcessingScheduleEdit.add.success": "Processing Period saved successfully",
+    "adminProcessingScheduleEdit.add.fail": "Failed to save Processing Period",
+    "adminProcessingScheduleEdit.noPeriodsAssigned": "No periods assigned to ${scheduleCode} Processing Schedule." 
+}

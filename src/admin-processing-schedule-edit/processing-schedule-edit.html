@@ -1,0 +1,59 @@
+<div class="modal edit-schedule-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>{{'adminProcessingScheduleEdit.addProcessingPeriod.title' | message:({scheduleCode: vm.processingSchedule.code})}}</h1>
+            </div>
+            <div class="modal-body">
+                <p>{{'adminProcessingScheduleEdit.addProcessingPeriod.description' | message}}</p>
+                <form id="add-processing-period-form" class="form-inline" ng-submit="vm.add()">
+                    <div class="form-group">
+                        <label for="name">{{'adminProcessingScheduleEdit.name' | message}}</label>
+                        <input type="text" id="name" ng-model="vm.newPeriod.name" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">{{'adminProcessingScheduleEdit.description' | message}}</label>
+                        <input type="text" id="description" ng-model="vm.newPeriod.description"></select>
+                    </div>
+                    <div class="form-group" ng-show="!vm.processingPeriods || !vm.processingPeriods.length > 0">
+                        <label for="start-date">{{'adminProcessingScheduleEdit.startDate' | message}}</label>
+                        <openlmis-datepicker max-date="vm.newPeriod.endDate" input-id="start-date" value="vm.newPeriod.startDate" required="true"></openlmis-datepicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">{{'adminProcessingScheduleEdit.endDate' | message}}</label>
+                        <openlmis-datepicker min-date="vm.newPeriod.startDate" input-id="end-date" value="vm.newPeriod.endDate" required="true"></openlmis-datepicker>
+                    </div>
+                    <button class="add" type="submit">{{'adminProcessingScheduleEdit.add' | message}}</button>
+                </form>
+                <section class="openlmis-table-container">
+                    <table>
+                        <caption ng-if="!vm.processingPeriods || vm.processingPeriods.length === 0">
+                            {{'adminProcessingScheduleEdit.noPeriodsAssigned' | message:({scheduleCode: vm.processingSchedule.code})}}
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th>{{'adminProcessingScheduleEdit.code' | message}}</th>
+                                <th>{{'adminProcessingScheduleEdit.name' | message}}</th>
+                                <th>{{'adminProcessingScheduleEdit.description' | message}}</th>
+                                <th>{{'adminProcessingScheduleEdit.startDate' | message}}</th>
+                                <th>{{'adminProcessingScheduleEdit.endDate' | message}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="period in vm.processingPeriods">
+                                <td>{{vm.processingSchedule.code}}</td>
+                                <td>{{period.name}}</td>
+                                <td>{{period.description}}</td>
+                                <td>{{period.startDate | openlmisDate}}</td>
+                                <td>{{period.endDate | openlmisDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel" ng-click="vm.goToPreviousState()">{{'adminProcessingScheduleEdit.cancel' | message}}</button>
+            </div>
+        </div>
+    </div>
+</div>
