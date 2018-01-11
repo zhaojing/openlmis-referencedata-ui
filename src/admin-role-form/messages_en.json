@@ -60,5 +60,7 @@
     "adminRoleForm.systemIdealStockAmountsManage": "Manage System Ideal Stock Amounts",
     "adminRoleForm.idealStockAmountView": "View Ideal Stock Amount",
     "adminRoleForm.idealStockAmountEdit": "Edit Ideal Stock Amount",
-    "adminRoleForm.serviceAccountsManage": "Manage Service Accounts"
+    "adminRoleForm.serviceAccountsManage": "Manage service accounts",
+    "adminRoleForm.shipmentsView": "View shipments",
+    "adminRoleForm.shipmentsEdit": "Edit shipments"
 }
