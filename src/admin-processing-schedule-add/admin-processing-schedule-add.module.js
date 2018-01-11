@@ -28,7 +28,7 @@
         'openlmis-modal',
         'openlmis-templates',
         'openlmis-modal-state',
-        'openlmis-state-tracker',
+        'openlmis-state-tracker'
     ]);
 
 })();

@@ -29,11 +29,11 @@
         .controller('ProcessingScheduleAddController', ProcessingScheduleAddController);
 
     ProcessingScheduleAddController.$inject = [
-        'confirmService', 'processingScheduleService', 'stateTrackerService', '$state',
+        'confirmService', 'processingScheduleService', '$state',
         'loadingModalService', 'notificationService', 'messageService'
     ];
 
-    function ProcessingScheduleAddController(confirmService, processingScheduleService, stateTrackerService, $state,
+    function ProcessingScheduleAddController(confirmService, processingScheduleService, $state,
                         loadingModalService, notificationService, messageService) {
         var vm = this;
 

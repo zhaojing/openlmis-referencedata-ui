@@ -80,7 +80,7 @@ describe('ProcessingScheduleAddController', function() {
             );
         });
 
-        it('should not save period if user does not confirms it', function() {
+        it('should not save period if user does not confirm it', function() {
             vm.save();
 
             confirmDeferred.reject();
@@ -110,7 +110,7 @@ describe('ProcessingScheduleAddController', function() {
             expect(notificationService.success).toHaveBeenCalledWith('adminProcessingScheduleAdd.save.success');
         });
 
-        it('should show notification if facility save has failed', function() {
+        it('should show notification if schedule save has failed', function() {
             vm.save();
 
             confirmDeferred.resolve();
@@ -121,7 +121,7 @@ describe('ProcessingScheduleAddController', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
-        it('should take to the user to add programs page after successful save', function() {
+        it('should take the user to processing schedule list page after successful save', function() {
             vm.save();
 
             confirmDeferred.resolve();
