@@ -25,6 +25,7 @@
      */
     angular.module('referencedata-period', [
         'ngResource',
+        'openlmis-date',
         'openlmis-urls',
         'referencedata-processing-schedule'
     ]);

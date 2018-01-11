@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('referencedata-period')
         .factory('PeriodDataBuilder', PeriodDataBuilder);
@@ -33,6 +32,7 @@
         PeriodDataBuilder.prototype.withEndDate = withEndDate;
         PeriodDataBuilder.prototype.withoutStartDate = withoutStartDate;
         PeriodDataBuilder.prototype.withoutEndDate = withoutEndDate;
+        PeriodDataBuilder.prototype.buildWithIsoStringsRandomDates = buildWithIsoStringsRandomDates;
         PeriodDataBuilder.prototype.build = build;
 
         return PeriodDataBuilder;
@@ -89,6 +89,11 @@
                 .build();
         }
 
+        function buildWithIsoStringsRandomDates(startDate, endDate) {
+            return this
+                .withStartDate(startDate.toISOString())
+                .withEndDate(endDate.toISOString())
+                .build();
+        }
     }
-
 })();

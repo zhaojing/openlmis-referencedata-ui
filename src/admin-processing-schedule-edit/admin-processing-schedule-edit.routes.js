@@ -33,12 +33,8 @@
                 processingSchedule: function($stateParams, processingScheduleService) {
                     return processingScheduleService.get($stateParams.id);
                 },
-                processingPeriods: function($stateParams, periodService) {
-                    return periodService.getBySchedule($stateParams.id).then(function(periods) {
-                        return periods.sort(function(a, b) {
-                            return Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : Date.parse(a.startDate) > Date.parse(b.startDate) ? 1 : 0;
-                        });
-                    });
+                processingPeriods: function($stateParams, periodFactory) {
+                    return periodFactory.getSortedPeriodsForSchedule($stateParams.id);
                 }
             },
             parentResolves: []

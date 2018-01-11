@@ -18,23 +18,24 @@
     'use strict';
 
     /**
-     * @ngdoc controller
-     * @name admin-processing-schedule-edit.controller:ProcessingScheduleEditController
-     *
-     * @description
-     * Provides methods for Edit Processing Schedule modal. Allows returning to previous states and editing Processing Schedule.
-     */
+    * @ngdoc controller
+    * @name admin-processing-schedule-edit.controller:ProcessingScheduleEditController
+    *
+    * @description
+    * Provides methods for Edit Processing Schedule modal. Allows returning to previous states and editing Processing Schedule.
+    */
     angular
         .module('admin-processing-schedule-edit')
         .controller('ProcessingScheduleEditController', ProcessingScheduleEditController);
 
     ProcessingScheduleEditController.$inject = [
         'processingSchedule', 'processingPeriods', 'confirmService', 'periodService', 'stateTrackerService',
-        '$state', 'loadingModalService', 'notificationService', 'messageService'
+        '$state', 'loadingModalService', 'notificationService', 'messageService', 'dateUtils'
     ];
 
     function ProcessingScheduleEditController(processingSchedule, processingPeriods, confirmService, periodService, stateTrackerService,
-                        $state, loadingModalService, notificationService, messageService) {
+                                            $state, loadingModalService, notificationService, messageService, dateUtils) {
+
         var vm = this;
 
         vm.add = add;
@@ -83,19 +84,13 @@
          * Method that is executed on initiating ProcessingScheduleEditController.
          */
         function onInit() {
-			vm.processingSchedule = processingSchedule;
+            vm.processingSchedule = processingSchedule;
             vm.processingPeriods = processingPeriods;
             vm.newPeriod = {
                 processingSchedule: processingSchedule
             };
             if (processingPeriods && processingPeriods.length > 0) {
-                var newStartDate;
-                if (processingPeriods[processingPeriods.length -1].endDate instanceof Date) {
-                    newStartDate = processingPeriods[processingPeriods.length -1].endDate;
-                } else {
-                    newStartDate = new Date(Date.parse(processingPeriods[processingPeriods.length -1].endDate));
-                }
-                vm.newPeriod.startDate = new Date(newStartDate.setTime(newStartDate.getTime() + 86400000)); // adds 1 day
+                vm.newPeriod.startDate = dateUtils.addDaysToDate(processingPeriods[processingPeriods.length - 1].endDate, 1);
             }
         }
 

@@ -99,7 +99,7 @@ describe('ProcessingScheduleEditController', function() {
             );
         });
 
-        it('should not add period if user does not confirms it', function() {
+        it('should not add period if user does not confirm it', function() {
             vm.add();
 
             confirmDeferred.reject();
@@ -119,7 +119,7 @@ describe('ProcessingScheduleEditController', function() {
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
-        it('should show notification if schedule was added successfully', function() {
+        it('should show notification if period was added successfully', function() {
             vm.add();
 
             confirmDeferred.resolve();
@@ -130,7 +130,7 @@ describe('ProcessingScheduleEditController', function() {
             expect(notificationService.success).toHaveBeenCalledWith('adminProcessingScheduleEdit.add.success');
         });
 
-        it('should show notification if facility save has failed', function() {
+        it('should show notification if period save has failed', function() {
             vm.add();
 
             confirmDeferred.resolve();
@@ -141,7 +141,7 @@ describe('ProcessingScheduleEditController', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
-        it('should take to the user to add programs page after successful add', function() {
+        it('should reload state after successful add', function() {
             vm.add();
 
             confirmDeferred.resolve();
