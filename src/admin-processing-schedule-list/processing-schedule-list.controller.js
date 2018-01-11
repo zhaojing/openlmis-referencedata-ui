@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,19 +24,19 @@
      * @description
      * Controller for managing processing schedule list screen.
      */
-	angular
-		.module('admin-processing-schedule-list')
-		.controller('ProcessingScheduleListController', controller);
+    angular
+        .module('admin-processing-schedule-list')
+        .controller('ProcessingScheduleListController', controller);
 
-	controller.$inject = ['processingSchedules'];
+    controller.$inject = ['processingSchedules'];
 
-	function controller(processingSchedules) {
+    function controller(processingSchedules) {
 
-		var vm = this;
+        var vm = this;
 
         vm.$onInit = onInit;
 
-		/**
+        /**
          * @ngdoc property
          * @propertyOf admin-processing-schedule-list.controller:ProcessingScheduleListController
          * @name processingSchedules
@@ -56,7 +56,7 @@
          * Method that is executed on initiating ProcessingScheduleListController.
          */
         function onInit() {
-			vm.processingSchedules = processingSchedules;
+            vm.processingSchedules = processingSchedules;
         }
-	}
+    }
 })();
