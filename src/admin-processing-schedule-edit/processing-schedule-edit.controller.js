@@ -39,7 +39,7 @@
         var vm = this;
 
         vm.add = add;
-        vm.goToPreviousState = goToPreviousState;
+        vm.goToPreviousState = stateTrackerService.goToPreviousState;
         vm.$onInit = onInit;
 
         /**
@@ -121,20 +121,6 @@
                     loadingModalService.close();
                     notificationService.error('adminProcessingScheduleEdit.add.fail');
                 });
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-processing-schedule-edit.controller:ProcessingScheduleEditController
-         * @name goToPreviousState
-         *
-         * @description
-         * Redirects user to Processing Schedule List screen.
-         */
-        function goToPreviousState() {
-            $state.go('openlmis.administration.processingSchedules', {}, {
-                reload: true
             });
         }
     }

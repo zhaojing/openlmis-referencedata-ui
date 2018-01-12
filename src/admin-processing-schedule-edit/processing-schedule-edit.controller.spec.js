@@ -156,9 +156,7 @@ describe('ProcessingScheduleEditController', function() {
 
         it('should redirect to Processing Period screen', function() {
             vm.goToPreviousState();
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.processingSchedules', {}, {
-                reload: true
-            });
+            expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });
 });
