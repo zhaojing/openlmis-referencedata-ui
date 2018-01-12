@@ -15,7 +15,7 @@
 
 describe('ProcessingScheduleAddController', function() {
 
-    var $controller, $rootScope, $q, $state, confirmService, processingScheduleService, stateTrackerService, loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder,
+    var $controller, $rootScope, $q, confirmService, processingScheduleService, stateTrackerService, loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder,
         vm, processingSchedule, confirmDeferred, saveDeferred, loadingDeferred;
 
     beforeEach(function() {
@@ -28,7 +28,6 @@ describe('ProcessingScheduleAddController', function() {
             $q = $injector.get('$q');
             processingScheduleService = $injector.get('processingScheduleService');
             stateTrackerService = $injector.get('stateTrackerService');
-            $state = $injector.get('$state');
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
             messageService = $injector.get('messageService');
@@ -44,7 +43,6 @@ describe('ProcessingScheduleAddController', function() {
         spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
         spyOn(stateTrackerService, 'goToPreviousState').andCallFake(loadingDeferred.resolve);
         spyOn(processingScheduleService, 'create').andReturn(saveDeferred.promise);
-        spyOn($state, 'go');
         spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
         spyOn(loadingModalService, 'close').andCallFake(loadingDeferred.resolve);
         spyOn(notificationService, 'success');
@@ -128,9 +126,7 @@ describe('ProcessingScheduleAddController', function() {
             saveDeferred.resolve(processingSchedule);
             $rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.processingSchedules', {}, {
-                reload: true
-            });
+            expect(stateTrackerService.goToPreviousState).toHaveBeenCalledWith('openlmis.administration.processingSchedules');
         });
     });
 
@@ -138,9 +134,7 @@ describe('ProcessingScheduleAddController', function() {
 
         it('should redirect to Processing Period screen', function() {
             vm.goToPreviousState();
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.processingSchedules', {}, {
-                reload: true
-            });
+            expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });
 });

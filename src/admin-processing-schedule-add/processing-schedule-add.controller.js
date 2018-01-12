@@ -29,16 +29,16 @@
         .controller('ProcessingScheduleAddController', ProcessingScheduleAddController);
 
     ProcessingScheduleAddController.$inject = [
-        'confirmService', 'processingScheduleService', '$state',
+        'confirmService', 'processingScheduleService', 'stateTrackerService',
         'loadingModalService', 'notificationService', 'messageService'
     ];
 
-    function ProcessingScheduleAddController(confirmService, processingScheduleService, $state,
+    function ProcessingScheduleAddController(confirmService, processingScheduleService, stateTrackerService,
                         loadingModalService, notificationService, messageService) {
         var vm = this;
 
         vm.save = save;
-        vm.goToPreviousState = goToPreviousState;
+        vm.goToPreviousState = stateTrackerService.goToPreviousState;
 
         /**
          * @ngdoc property
@@ -73,25 +73,11 @@
                     loadingPromise.then(function() {
                         notificationService.success('adminProcessingScheduleAdd.save.success');
                     });
-                    goToPreviousState();
+                    stateTrackerService.goToPreviousState('openlmis.administration.processingSchedules');
                 }).catch(function() {
                     loadingModalService.close();
                     notificationService.error('adminProcessingScheduleAdd.save.fail');
                 });
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-processing-schedule-add.controller:ProcessingScheduleAddController
-         * @name goToPreviousState
-         *
-         * @description
-         * Redirects user to Processing Schedule List screen.
-         */
-        function goToPreviousState() {
-            $state.go('openlmis.administration.processingSchedules', {}, {
-                reload: true
             });
         }
     }
