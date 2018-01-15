@@ -5,7 +5,7 @@
     "adminProcessingScheduleAdd.description": "Description",
     "adminProcessingScheduleAdd.cancel": "Cancel",
     "adminProcessingScheduleAdd.save": "Save",
-    "adminProcessingScheduleAdd.save.question": "Do you want to save Processing Period ${processingSchedule}?",
-    "adminProcessingScheduleAdd.save.success": "Processing Period has been saved",
-    "adminProcessingScheduleAdd.save.fail": "Failed to save Processing Period"
+    "adminProcessingScheduleAdd.save.question": "Do you want to save Processing Schedule ${processingSchedule}?",
+    "adminProcessingScheduleAdd.save.success": "Processing Schedule has been saved",
+    "adminProcessingScheduleAdd.save.fail": "Failed to save Processing Schedule"
 }
