@@ -8,6 +8,7 @@
     "adminFacilityView.program": "Program",
     "adminFacilityView.startDate": "Start Date",
     "adminFacilityView.active": "Active",
+    "adminFacilityView.locallyFulfill": "Locally fulfill",
     "adminFacilityView.cancel": "Cancel",
     "adminFacilityView.editFacility": "Edit Facility",
     "adminFacilityView.edit": "Edit ${facility}",
