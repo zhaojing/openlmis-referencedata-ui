@@ -33,7 +33,8 @@
     function factory(periodService, dateUtils) {
 
         return {
-            getSortedPeriodsForSchedule: getSortedPeriodsForSchedule
+            getSortedPeriodsForSchedule: getSortedPeriodsForSchedule,
+            getNewStartDateForSchedule: getNewStartDateForSchedule
         };
 
         /**
@@ -42,21 +43,51 @@
          * @name getSortedPeriodsForSchedule
          *
          * @description
-         * Retrieves Processing Periods assigned to given Processing Schedule.
+         * Retrieves Processing Periods assigned to given Processing Schedule that are sorted by start date.
          *
+         * @param  {String}  params     search and pagination params
          * @param  {String}  scheduleId Processing Schedule UUID
-         * @return {Promise}            list of Processing Periods
+         * @return {Promise}            page of Processing Periods
          */
-        function getSortedPeriodsForSchedule(scheduleId) {
-            return periodService.getBySchedule(scheduleId)
-            .then(function(periods) {
-                periods.forEach(function(period) {
+        function getSortedPeriodsForSchedule(params, scheduleId) {
+            params.sort = 'startDate';
+            params.processingScheduleId = scheduleId;
+
+            return periodService.query(params)
+            .then(function(page) {
+                page.content.forEach(function(period) {
                     period.startDate = dateUtils.toDate(period.startDate);
                     period.endDate = dateUtils.toDate(period.endDate);
                 });
-                return periods.sort(function(a, b) {
-                    return a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0;
-                });
+                return page;
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-period.periodFactory
+         * @name getNewStartDateForSchedule
+         *
+         * @description
+         * Retrieves newest Processing Period assigned to given Processing Schedule
+         * and returns start date for new Period.
+         *
+         * @param  {String}  scheduleId Processing Schedule UUID
+         * @return {Date}               start date for new Period
+         */
+        function getNewStartDateForSchedule(scheduleId) {
+            return periodService.query({
+                page: 0,
+                size: 1,
+                sort: 'startDate,desc',
+                processingScheduleId: scheduleId
+            })
+            .then(function(page) {
+                if (page.content && page.content.length > 0) {
+                    var lastEndDate = dateUtils.toDate(page.content[0].endDate);
+                    return dateUtils.addDaysToDate(lastEndDate, 1);
+                }
+                return undefined;
             });
         }
     }

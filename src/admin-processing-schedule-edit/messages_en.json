@@ -1,6 +1,6 @@
 {
     "adminProcessingScheduleEdit.addProcessingPeriod.title": "Add Processing Period for \"${scheduleCode}\" schedule",
-    "adminProcessingScheduleEdit.addProcessingPeriod.description": "Add Processing Period to existing schedule",
+    "adminProcessingScheduleEdit.addProcessingPeriod.description": "Add a Processing Period to an existing schedule",
     "adminProcessingScheduleEdit.name": "Name",
     "adminProcessingScheduleEdit.description": "Description",
     "adminProcessingScheduleEdit.startDate": "Start Date",
@@ -8,8 +8,9 @@
     "adminProcessingScheduleEdit.add": "Add",
     "adminProcessingScheduleEdit.cancel": "Cancel",
     "adminProcessingScheduleEdit.code": "Code",
-    "adminProcessingScheduleEdit.add.question": "Do you want to add ${period} Processing Period",
+    "adminProcessingScheduleEdit.add.question": "Do you want to add the ${period} Processing Period",
     "adminProcessingScheduleEdit.add.success": "Processing Period saved successfully",
     "adminProcessingScheduleEdit.add.fail": "Failed to save Processing Period",
-    "adminProcessingScheduleEdit.noPeriodsAssigned": "No periods assigned to ${scheduleCode} Processing Schedule." 
+    "adminProcessingScheduleEdit.noPeriodsAssigned": "No periods assigned to ${scheduleCode} Processing Schedule.",
+    "adminProcessingScheduleEdit.startDate.description": "The first start date should match when your organization will begin requisitioning and reporting."
 }

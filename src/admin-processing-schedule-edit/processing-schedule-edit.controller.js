@@ -30,11 +30,11 @@
 
     ProcessingScheduleEditController.$inject = [
         'processingSchedule', 'processingPeriods', 'confirmService', 'periodService', 'stateTrackerService',
-        '$state', 'loadingModalService', 'notificationService', 'messageService', 'dateUtils'
+        '$state', 'loadingModalService', 'notificationService', 'messageService', 'newStartDate'
     ];
 
     function ProcessingScheduleEditController(processingSchedule, processingPeriods, confirmService, periodService, stateTrackerService,
-                                            $state, loadingModalService, notificationService, messageService, dateUtils) {
+                                            $state, loadingModalService, notificationService, messageService, newStartDate) {
 
         var vm = this;
 
@@ -89,8 +89,8 @@
             vm.newPeriod = {
                 processingSchedule: processingSchedule
             };
-            if (processingPeriods && processingPeriods.length > 0) {
-                vm.newPeriod.startDate = dateUtils.addDaysToDate(processingPeriods[processingPeriods.length - 1].endDate, 1);
+            if (newStartDate) {
+                vm.newPeriod.startDate = newStartDate;
             }
         }
 
@@ -116,7 +116,7 @@
                     loadingPromise.then(function() {
                         notificationService.success('adminProcessingScheduleEdit.add.success');
                     });
-                    $state.reload();
+                    $state.reload('openlmis.administration.processingSchedules.edit');
                 }).catch(function() {
                     loadingModalService.close();
                     notificationService.error('adminProcessingScheduleEdit.add.fail');

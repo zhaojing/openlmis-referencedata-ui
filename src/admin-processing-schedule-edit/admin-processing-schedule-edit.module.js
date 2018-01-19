@@ -26,6 +26,7 @@
     angular.module('admin-processing-schedule-edit', [
         'referencedata-period',
         'referencedata-processing-schedule',
+        'openlmis-pagination',
         'openlmis-modal',
         'openlmis-templates',
         'openlmis-modal-state',

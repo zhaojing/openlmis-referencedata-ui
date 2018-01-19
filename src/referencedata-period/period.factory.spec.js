@@ -35,28 +35,79 @@ describe('periodFactory', function() {
             new PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-10-12'), new Date('2017-10-12'))
         ];
 
-        spyOn(periodService, 'getBySchedule').andReturn($q.resolve(periods));
+        spyOn(periodService, 'query').andReturn($q.resolve({
+            content: periods
+        }));
     });
 
     describe('getSortedPeriodsForSchedule', function() {
 
-        var scheduleId = 'schedule-id';
+        var data,
+            scheduleId = 'schedule-id',
+            params = {
+                page: 1,
+                size: 10
+            };
 
-        it('should get sorted periods', function() {
-            var data;
-
-            periodFactory.getSortedPeriodsForSchedule(scheduleId)
+        it('should get sorted periods for schedule', function() {
+            periodFactory.getSortedPeriodsForSchedule(params, scheduleId)
             .then(function(response) {
                 data = response;
             });
             $rootScope.$apply();
 
-            expect(periodService.getBySchedule).toHaveBeenCalledWith(scheduleId);
-            data.forEach(function(period, index) {
-                if (index + 1 < data.length) {
-                    expect(period.startDate <= data[index + 1].startDate).toBe(true);
-                }
+            expect(periodService.query).toHaveBeenCalledWith({
+                page: 1,
+                size: 10,
+                processingScheduleId: scheduleId,
+                sort: 'startDate'
             });
+            data.content.forEach(function(period) {
+                expect(period.startDate instanceof Date).toBe(true);
+                expect(period.endDate instanceof Date).toBe(true);
+            });
+        });
+    });
+
+    describe('getNewStartDateForSchedule', function() {
+
+        var data,
+            scheduleId = 'schedule-id';
+
+        it('should get new start date for period', function() {
+            periodFactory.getNewStartDateForSchedule(scheduleId)
+            .then(function(response) {
+                data = response;
+            });
+            $rootScope.$apply();
+
+            expect(periodService.query).toHaveBeenCalledWith({
+                page: 0,
+                size: 1,
+                processingScheduleId: scheduleId,
+                sort: 'startDate,desc'
+            });
+            expect(data).toEqual(new Date('2017-12-13'));
+        });
+
+        it('should get new start date for period', function() {
+            periodService.query.andReturn($q.resolve({
+                content: []
+            }));
+
+            periodFactory.getNewStartDateForSchedule(scheduleId)
+            .then(function(response) {
+                data = response;
+            });
+            $rootScope.$apply();
+
+            expect(periodService.query).toHaveBeenCalledWith({
+                page: 0,
+                size: 1,
+                processingScheduleId: scheduleId,
+                sort: 'startDate,desc'
+            });
+            expect(data).toBe(undefined);
         });
     });
 });

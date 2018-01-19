@@ -28,20 +28,19 @@
 		.module('referencedata-period')
 	    .service('periodService', service);
 
-    service.$inject = ['$resource', 'referencedataUrlFactory'];
+    service.$inject = ['$resource', 'referencedataUrlFactory', 'dateUtils'];
 
-    function service($resource, referencedataUrlFactory) {
+    function service($resource, referencedataUrlFactory, dateUtils) {
 
         var resource = $resource(referencedataUrlFactory('/api/processingPeriods/:id'), {}, {
-            getBySchedule: {
+            query: {
                 method: 'GET',
-                url: referencedataUrlFactory('/api/processingPeriods/searchByScheduleAndDate'),
-                isArray: true
+                isArray: false
             }
         });
 
         this.get = get;
-        this.getBySchedule = getBySchedule;
+        this.query = query;
         this.create = create;
 
 		/**
@@ -63,19 +62,17 @@
 
         /**
          * @ngdoc method
-         * @name getBySchedule
+         * @name query
          * @methodOf referencedata-period.periodService
          *
          * @description
-         * Retrieves processing periods assigned to schedule from the server.
+         * Retrieves page of Processing Periods that are matching given parameters.
          *
-         * @param  {String}  scheduleId Schedule UUID
-         * @return {Promise}            List of Periods
+         * @param  {Object}  params search. pagination and sort parameters
+         * @return {Promise}        page of Processing Periods
          */
-        function getBySchedule(scheduleId) {
-            return resource.getBySchedule({
-				processingScheduleId: scheduleId
-			}).$promise;
+        function query(params) {
+            return resource.query(params).$promise;
         }
 
         /**
@@ -90,6 +87,8 @@
          * @return {Promise}        created Period
          */
         function create(period) {
+            period.startDate = dateUtils.toStringDate(period.startDate);
+            period.endDate = dateUtils.toStringDate(period.endDate);
             return resource.save(period).$promise;
         }
     }

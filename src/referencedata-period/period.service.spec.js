@@ -15,7 +15,7 @@
 
 describe('periodService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, periodService, PeriodDataBuilder,
+    var $rootScope, $httpBackend, referencedataUrlFactory, periodService, dateUtils, PeriodDataBuilder,
         periods;
 
     beforeEach(function() {
@@ -25,6 +25,7 @@ describe('periodService', function() {
             $httpBackend = $injector.get('$httpBackend');
             $rootScope = $injector.get('$rootScope');
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            dateUtils = $injector.get('dateUtils');
             periodService = $injector.get('periodService');
             PeriodDataBuilder = $injector.get('PeriodDataBuilder');
         });
@@ -54,34 +55,15 @@ describe('periodService', function() {
         });
     });
 
-    describe('getBySchedule', function() {
-
-        it('should get all processing periods for schedule', function() {
-            var data,
-                scheduleId = 'schedule-id';
-
-            $httpBackend.when('GET', referencedataUrlFactory('/api/processingPeriods/searchByScheduleAndDate?processingScheduleId=' + scheduleId))
-                .respond(200, periods);
-
-            periodService.getBySchedule(scheduleId).then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.length).toEqual(2);
-            expect(data[0].id).toBe(periods[0].id);
-            expect(data[1].id).toBe(periods[1].id);
-        });
-    });
-
     describe('create', function() {
 
         it('should create new processing period', function() {
-            var data;
+            var data,
+                periodCopy = angular.copy(periods[0]);
 
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/processingPeriods'), periods[0])
+            periodCopy.startDate = dateUtils.toStringDate(periodCopy.startDate);
+            periodCopy.endDate = dateUtils.toStringDate(periodCopy.endDate);
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/processingPeriods'), periodCopy)
                 .respond(200, periods[0]);
 
             periodService.create(periods[0]).then(function(response) {
@@ -91,6 +73,30 @@ describe('periodService', function() {
             $rootScope.$apply();
 
             expect(data.name).toEqual(periods[0].name);
+        });
+    });
+
+    describe('query', function() {
+
+        it('should get all periods and save them to storage', function() {
+            var data,
+                params = {
+                    page: 0
+                };
+
+            $httpBackend.expectGET(referencedataUrlFactory('/api/processingPeriods?page=' + params.page)).respond(200, {
+                content: periods
+            });
+
+            periodService.query(params).then(function(response) {
+                data = response.content;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data[0].id).toBe(periods[0].id);
+            expect(data[1].id).toBe(periods[1].id);
         });
     });
 

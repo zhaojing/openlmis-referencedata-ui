@@ -16,7 +16,7 @@
 describe('ProcessingScheduleEditController', function() {
 
     var $controller, $rootScope, $q, $state, confirmService, stateTrackerService, periodService, loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder, PeriodDataBuilder,
-        vm, processingSchedule, processingPeriods, confirmDeferred, saveDeferred, loadingDeferred;
+        vm, processingSchedule, processingPeriods, newStartDate, confirmDeferred, saveDeferred, loadingDeferred;
 
     beforeEach(function() {
         module('admin-processing-schedule-edit');
@@ -41,6 +41,7 @@ describe('ProcessingScheduleEditController', function() {
             new PeriodDataBuilder().build(),
             new PeriodDataBuilder().build()
         ];
+        newStartDate = processingPeriods[1].endDate;
 
         confirmDeferred = $q.defer();
         saveDeferred = $q.defer();
@@ -63,7 +64,8 @@ describe('ProcessingScheduleEditController', function() {
 
         vm = $controller('ProcessingScheduleEditController', {
             processingSchedule: processingSchedule,
-            processingPeriods: processingPeriods
+            processingPeriods: processingPeriods,
+            newStartDate: newStartDate
         });
     });
 
@@ -76,7 +78,7 @@ describe('ProcessingScheduleEditController', function() {
             expect(vm.processingSchedule).toEqual(processingSchedule);
             expect(vm.newPeriod).toEqual({
                 processingSchedule: processingSchedule,
-                startDate: new Date(newStartDate.setTime(newStartDate.getTime() + 86400000))
+                startDate: newStartDate
             });
             expect(vm.processingPeriods).toEqual(processingPeriods);
         });
