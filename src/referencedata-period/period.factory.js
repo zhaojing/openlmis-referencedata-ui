@@ -50,7 +50,6 @@
          * @return {Promise}            page of Processing Periods
          */
         function getSortedPeriodsForSchedule(params, scheduleId) {
-            params.sort = 'startDate';
             params.processingScheduleId = scheduleId;
 
             return periodService.query(params)

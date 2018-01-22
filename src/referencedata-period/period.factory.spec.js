@@ -59,8 +59,7 @@ describe('periodFactory', function() {
             expect(periodService.query).toHaveBeenCalledWith({
                 page: 1,
                 size: 10,
-                processingScheduleId: scheduleId,
-                sort: 'startDate'
+                processingScheduleId: scheduleId
             });
             data.content.forEach(function(period) {
                 expect(period.startDate instanceof Date).toBe(true);
