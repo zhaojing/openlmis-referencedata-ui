@@ -8,7 +8,7 @@
     "adminProcessingScheduleEdit.add": "Add",
     "adminProcessingScheduleEdit.cancel": "Cancel",
     "adminProcessingScheduleEdit.code": "Code",
-    "adminProcessingScheduleEdit.add.question": "Do you want to add the ${period} Processing Period",
+    "adminProcessingScheduleEdit.add.question": "Do you want to add the ${period} Processing Period?",
     "adminProcessingScheduleEdit.add.success": "Processing Period saved successfully",
     "adminProcessingScheduleEdit.add.fail": "Failed to save Processing Period",
     "adminProcessingScheduleEdit.noPeriodsAssigned": "No periods assigned to ${scheduleCode} Processing Schedule.",
