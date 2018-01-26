@@ -15,7 +15,7 @@
 
 describe('facility-programs.html template', function() {
 
-    var template, $rootScope, $timeout, $scope, messageService, programs, facility;
+    var template, $rootScope, $timeout, $scope, messageService, dateUtils;
 
     beforeEach(prepareSuite);
 
@@ -187,7 +187,7 @@ describe('facility-programs.html template', function() {
     function prepareSuite() {
         module('admin-facility-programs');
 
-        var $compile, $templateRequest, $controller;
+        var $compile, $templateRequest, $controller, $q;
 
         inject(function($injector) {
             $compile = $injector.get('$compile');
@@ -197,6 +197,7 @@ describe('facility-programs.html template', function() {
             $controller = $injector.get('$controller');
             $timeout = $injector.get('$timeout');
             messageService = $injector.get('messageService');
+            dateUtils = $injector.get('dateUtils');
         });
 
         $scope = $rootScope.$new();
@@ -208,6 +209,10 @@ describe('facility-programs.html template', function() {
             template = $compile(requested)($scope);
         });
         $rootScope.$apply();
+
+        spyOn(dateUtils, 'toDate').andCallFake(function(parameter) {
+            return parameter;
+        });
     }
 
 
