@@ -38,7 +38,6 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th>{{'adminProcessingScheduleEdit.code' | message}}</th>
                                 <th>{{'adminProcessingScheduleEdit.name' | message}}</th>
                                 <th>{{'adminProcessingScheduleEdit.description' | message}}</th>
                                 <th popover="{{'adminProcessingScheduleEdit.startDate.description' | message}}">
@@ -49,7 +48,6 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="period in vm.processingPeriods">
-                                <td>{{vm.processingSchedule.code}}</td>
                                 <td>{{period.name}}</td>
                                 <td>{{period.description}}</td>
                                 <td>{{period.startDate | openlmisDate}}</td>
