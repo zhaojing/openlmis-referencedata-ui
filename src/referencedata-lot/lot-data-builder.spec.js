@@ -26,6 +26,7 @@
     function LotDataBuilder(Lot) {
 
         LotDataBuilder.prototype.build = build;
+        LotDataBuilder.prototype.withId = withId;
         LotDataBuilder.prototype.withExpirationDate = withExpirationDate;
 
         return LotDataBuilder;
@@ -38,6 +39,11 @@
             this.expirationDate = '2017-05-02T05:59:51.993Z';
             this.manufactureDate = null;
             this.tradeItem = null;
+        }
+
+        function withId(id) {
+            this.id = id;
+            return this;
         }
 
         function withExpirationDate(newExpirationDate) {
