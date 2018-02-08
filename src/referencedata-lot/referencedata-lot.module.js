@@ -24,7 +24,8 @@
      * Responsible for providing lot info to other modules.
      */
     angular.module('referencedata-lot', [
-        'openlmis-i18n'
+        'openlmis-i18n',
+        'ngResource'
     ]);
 
 })();
