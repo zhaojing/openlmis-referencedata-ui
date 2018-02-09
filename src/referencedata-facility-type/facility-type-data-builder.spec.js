@@ -27,6 +27,8 @@
     function FacilityTypeDataBuilder(FacilityType) {
 
         FacilityTypeDataBuilder.prototype.build = build;
+        FacilityTypeDataBuilder.prototype.buildDistrictHospital = buildAsDistrictHospital;
+        FacilityTypeDataBuilder.prototype.buildDistrictStore = buildAsDistrictStore;
 
         return FacilityTypeDataBuilder;
 
@@ -37,6 +39,22 @@
             this.description = 'description';
             this.displayOrder = 2;
             this.active = true;
+        }
+
+        function buildAsDistrictHospital(){
+            this.id = '663b1d34-cc17-4d60-9619-e553e45aa441';
+            this.code = 'dist_hosp';
+            this.name = 'District Hospital';
+            this.displayOrder = 3;
+            return this;
+        }
+
+        function buildAsDistrictStore(){
+            this.id = '5fc213c6-1bd7-46f0-9883-57c05250ca90';
+            this.code = 'dist_store';
+            this.name = 'District Store';
+            this.displayOrder = 4;
+            return this;
         }
 
         function build() {
