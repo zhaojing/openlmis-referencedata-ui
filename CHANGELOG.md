@@ -19,7 +19,7 @@ Improvements:
 * [OLMIS-3805](https://openlmis.atlassian.net/browse/OLMIS-3805): Updated Roles UI to allow fulfillment roles to non-warehouses.
 * [OLMIS-3918](https://openlmis.atlassian.net/browse/OLMIS-3918): Added new flag (supportLocallyFulfilled) to the supported program object to match backend changes.
 * [OLMIS-3995](https://openlmis.atlassian.net/browse/OLMIS-3995): Extended LotDataBuilder with the withId method.
-* [OLMIS-4087](https://openlmis.atlassian.net/browse/OLMIS-4087): Added new methods (buildAsDistrictHospital, buildAsDistrictStore) to FacilityTypeDataBuilder.
+* [OLMIS-4087](https://openlmis.atlassian.net/browse/OLMIS-4087): Added new methods (buildAsDistrictHospital, buildAsDistrictStore) to FacilityTypeDataBuilder and updated facilityTypeService to support retrieving several types by ids.
 
 Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.

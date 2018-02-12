@@ -32,7 +32,7 @@ describe('openlmis.administration.facilities.facility.add state', function() {
     });
 
     it('should resolve facility types', function() {
-        facilityTypeService.getAll.andReturn($q.when(facilityTypes));
+        facilityTypeService.query.andReturn($q.when(facilityTypes));
 
         goToUrl('/administration/facilities/new/details');
 
@@ -122,7 +122,7 @@ describe('openlmis.administration.facilities.facility.add state', function() {
         spyOn(facilityService, 'search').andReturn($q.when({
             content: []
         }));
-        spyOn(facilityTypeService, 'getAll').andReturn($q.when([]));
+        spyOn(facilityTypeService, 'query').andReturn($q.when([]));
         spyOn(facilityOperatorService, 'getAll').andReturn($q.when([]));
     }
 

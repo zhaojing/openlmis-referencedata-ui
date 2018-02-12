@@ -35,7 +35,7 @@
     function service($resource, referencedataUrlFactory) {
 
             var resource = $resource(referencedataUrlFactory('/api/facilityTypes/:id'), {}, {
-                getAll: {
+                query: {
                     url: referencedataUrlFactory('/api/facilityTypes/'),
                     method: 'GET',
                     isArray: true
@@ -43,7 +43,7 @@
             });
 
             this.get = get;
-            this.getAll = getAll;
+            this.query = query;
 
             /**
              * @ngdoc method
@@ -68,12 +68,13 @@
              * @name getAll
              *
              * @description
-             * Retrieves all facility types.
+             * Retrieves all facility types by ids.
              *
+             * @param  {Object}  queryParams the search parameters
              * @return {Promise} Array of facility types
              */
-            function getAll() {
-                return resource.getAll().$promise;
+            function query(queryParams) {
+                return resource.query(queryParams).$promise;
             }
 
         }

@@ -39,7 +39,7 @@
 
         facilityTypesResolve.$inject = ['facilityTypeService'];
         function facilityTypesResolve(facilityTypeService) {
-            return facilityTypeService.getAll();
+            return facilityTypeService.query();
         }
 
         facilityOperatorsResolve.$inject = ['facilityOperatorService'];

@@ -57,7 +57,7 @@ describe('facilityTypeService', function() {
         });
     });
 
-    describe('getAll', function() {
+    describe('query', function() {
 
         it('should get all facility types', function() {
             var data;
@@ -65,7 +65,26 @@ describe('facilityTypeService', function() {
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes'))
                 .respond(200, [facilityTypeOne, facilityTypeTwo]);
 
-            facilityTypeService.getAll().then(function(response) {
+            facilityTypeService.query().then(function(response) {
+                data = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data[0].id).toBe(facilityTypeOne.id);
+            expect(data[1].id).toBe(facilityTypeTwo.id);
+        });
+
+        it('should get all facility types by ids', function() {
+            var data,
+                idOne = 'id-one',
+                idTwo = 'id-two';
+
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes?id=' + idOne + '&id=' + idTwo))
+                .respond(200, [facilityTypeOne, facilityTypeTwo]);
+
+            facilityTypeService.query({id: [idOne, idTwo]}).then(function(response) {
                 data = response;
             });
 

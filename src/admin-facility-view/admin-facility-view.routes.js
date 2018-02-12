@@ -39,7 +39,7 @@
                     return facilityService.get($stateParams.id);
                 },
                 facilityTypes: function(facilityTypeService) {
-                    return facilityTypeService.getAll();
+                    return facilityTypeService.query();
                 },
                 geographicZones: function($q, geographicZoneService) {
 					var deferred = $q.defer();
