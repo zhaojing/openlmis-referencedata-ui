@@ -33,7 +33,9 @@
         return FacilityTypeDataBuilder;
 
         function FacilityTypeDataBuilder() {
-            this.id = 'ac1d268b-ce10-455f-bf87-9c667da8f060';
+            FacilityTypeDataBuilder.instanceNumber = (FacilityTypeDataBuilder.instanceNumber || 0) + 1;
+
+            this.id = 'facility-type-id-' + FacilityTypeDataBuilder.instanceNumber;
             this.code = 'health_center';
             this.name = 'Health Center';
             this.description = 'description';
@@ -42,7 +44,6 @@
         }
 
         function buildAsDistrictHospital(){
-            this.id = '663b1d34-cc17-4d60-9619-e553e45aa441';
             this.code = 'dist_hosp';
             this.name = 'District Hospital';
             this.displayOrder = 3;
@@ -50,7 +51,6 @@
         }
 
         function buildAsDistrictStore(){
-            this.id = '5fc213c6-1bd7-46f0-9883-57c05250ca90';
             this.code = 'dist_store';
             this.name = 'District Store';
             this.displayOrder = 4;
