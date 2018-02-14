@@ -47,14 +47,14 @@
             this.code = 'dist_hosp';
             this.name = 'District Hospital';
             this.displayOrder = 3;
-            return this;
+            return this.build();
         }
 
         function buildAsDistrictStore(){
             this.code = 'dist_store';
             this.name = 'District Store';
             this.displayOrder = 4;
-            return this;
+            return this.build();
         }
 
         function build() {
