@@ -49,6 +49,10 @@ describe('facilityProgramCacheService', function() {
             {
                 id: 'program-2',
                 name: 'program-2-name'
+            },
+            {
+                id: 'program-3',
+                name: 'program-3-name'
             }
         ];
 
@@ -72,6 +76,11 @@ describe('facilityProgramCacheService', function() {
             {
                 right: 'right-1',
                 programId: 'program-2',
+                facilityId: 'facility-2'
+            },
+            {
+                right: 'right-1',
+                programId: 'program-3',
                 facilityId: 'facility-2'
             },
             {
@@ -146,8 +155,10 @@ describe('facilityProgramCacheService', function() {
 
     describe('getUserPrograms', function() {
 
-        it('should return all supervised programs for supervised facilities', function() {
-            expect(facilityProgramCacheService.getUserPrograms(true)).toEqual(programs);
+        it('should return filtered programs for supervised facilities', function() {
+            expect(facilityProgramCacheService.getUserPrograms(true).length).toEqual(2);
+            expect(facilityProgramCacheService.getUserPrograms(true)).toContain(programs[1]);
+            expect(facilityProgramCacheService.getUserPrograms(true)).toContain(programs[2]);
         });
 
         it('should return filtered programs for home facility', function() {

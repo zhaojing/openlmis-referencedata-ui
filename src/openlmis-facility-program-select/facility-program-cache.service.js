@@ -75,23 +75,28 @@
          * @return {Array}                user supervised programs
          */
         function getUserPrograms(isSupervised) {
+            var programIds = [];
             if (!isSupervised) {
-                var programIds = [];
                 permissions.forEach(function(permission) {
                     if (rights.indexOf(permission.right) !== -1 && homeFacility.id === permission.facilityId) {
                         programIds.push(permission.programId);
                     }
                 });
-
-                var result = [];
-                programs.forEach(function(program) {
-                    if (programIds.indexOf(program.id) !== -1) {
-                        result.push(program);
+            } else {
+                permissions.forEach(function(permission) {
+                    if (rights.indexOf(permission.right) !== -1 && homeFacility.id !== permission.facilityId) {
+                        programIds.push(permission.programId);
                     }
                 });
-                return result;
             }
-            return programs;
+
+            var result = [];
+            programs.forEach(function(program) {
+                if (programIds.indexOf(program.id) !== -1) {
+                    result.push(program);
+                }
+            });
+            return result;
         }
 
         /**

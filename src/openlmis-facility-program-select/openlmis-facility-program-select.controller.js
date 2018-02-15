@@ -51,11 +51,12 @@
             facilityProgramCacheService.loadData(vm.module)
             .then(function() {
                 vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
+                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(true);
                 vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
-                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
+                vm.programs = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
 
                 if ($stateParams.program) {
-                    vm.program = $filter('filter')(vm.supervisedPrograms,
+                    vm.program = $filter('filter')(vm.programs,
                         {
                             id: $stateParams.program
                         }
@@ -77,7 +78,7 @@
          */
         function updateForm() {
             vm.program = undefined;
-            vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
+            vm.programs = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
             vm.updateFacilities();
         }
 
