@@ -27,8 +27,11 @@
     function FacilityTypeDataBuilder(FacilityType) {
 
         FacilityTypeDataBuilder.prototype.build = build;
-        FacilityTypeDataBuilder.prototype.buildDistrictHospital = buildAsDistrictHospital;
-        FacilityTypeDataBuilder.prototype.buildDistrictStore = buildAsDistrictStore;
+        FacilityTypeDataBuilder.buildDistrictHospital = buildAsDistrictHospital;
+        FacilityTypeDataBuilder.buildDistrictStore = buildAsDistrictStore;
+        FacilityTypeDataBuilder.prototype.withName = withName;
+        FacilityTypeDataBuilder.prototype.withCode = withCode;
+        FacilityTypeDataBuilder.prototype.withDisplayOrder = withDisplayOrder;
 
         return FacilityTypeDataBuilder;
 
@@ -44,17 +47,34 @@
         }
 
         function buildAsDistrictHospital(){
-            this.code = 'dist_hosp';
-            this.name = 'District Hospital';
-            this.displayOrder = 3;
-            return this.build();
+            return new FacilityTypeDataBuilder()
+                .withCode('dist_hosp')
+                .withName('District Hospital')
+                .withDisplayOrder(3)
+                .build();
         }
 
         function buildAsDistrictStore(){
-            this.code = 'dist_store';
-            this.name = 'District Store';
-            this.displayOrder = 4;
-            return this.build();
+            return new FacilityTypeDataBuilder()
+                .withCode('dist_store')
+                .withName('District Store')
+                .withDisplayOrder(4)
+                .build();
+        }
+
+        function withName(name) {
+            this.name = name;
+            return this;
+        }
+
+        function withCode(code) {
+            this.code = code;
+            return this;
+        }
+
+        function withDisplayOrder(displayOrder) {
+            this.displayOrder = displayOrder;
+            return this;
         }
 
         function build() {
