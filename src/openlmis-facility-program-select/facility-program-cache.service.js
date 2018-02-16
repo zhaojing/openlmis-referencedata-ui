@@ -69,7 +69,7 @@
          * @name getUserPrograms
          *
          * @description
-         * Returns all cached user supervised programs.
+         * Returns all cached user programs.
          *
          * @param  {Boolean} isSupervised if programs are for supervised facilities
          * @return {Array}                user supervised programs
@@ -77,6 +77,10 @@
         function getUserPrograms(isSupervised) {
             var programIds = [];
             if (!isSupervised) {
+                if (!homeFacility) {
+                    return [];
+                }
+
                 permissions.forEach(function(permission) {
                     if (rights.indexOf(permission.right) !== -1 && homeFacility.id === permission.facilityId) {
                         programIds.push(permission.programId);
@@ -84,8 +88,10 @@
                 });
             } else {
                 permissions.forEach(function(permission) {
-                    if (rights.indexOf(permission.right) !== -1 && homeFacility.id !== permission.facilityId) {
-                        programIds.push(permission.programId);
+                    if (rights.indexOf(permission.right) !== -1) {
+                        if (!homeFacility || (homeFacility && homeFacility.id !== permission.facilityId)) {
+                            programIds.push(permission.programId);
+                        }
                     }
                 });
             }

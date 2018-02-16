@@ -16,7 +16,7 @@
 describe('facilityProgramCacheService', function() {
 
     var facilityProgramCacheService, $q, $rootScope, authorizationService, programService,
-        facilityService, currentUserService, permissionService,
+        facilityService, currentUserService, permissionService, referencedataUser,
         user, loadPromise, programs, facilities;
 
     beforeEach(function() {
@@ -37,7 +37,7 @@ describe('facilityProgramCacheService', function() {
             user_id: 'user-id'
         };
 
-        var referencedataUser = {
+        referencedataUser = {
             homeFacilityId: 'facility-1'
         };
 
@@ -155,14 +155,30 @@ describe('facilityProgramCacheService', function() {
 
     describe('getUserPrograms', function() {
 
-        it('should return filtered programs for supervised facilities', function() {
+        it('should return supervised programs if isSupervised is true', function() {
             expect(facilityProgramCacheService.getUserPrograms(true).length).toEqual(2);
             expect(facilityProgramCacheService.getUserPrograms(true)).toContain(programs[1]);
             expect(facilityProgramCacheService.getUserPrograms(true)).toContain(programs[2]);
         });
 
-        it('should return filtered programs for home facility', function() {
+        it('should return home facility programs if isSupervised is false', function() {
             expect(facilityProgramCacheService.getUserPrograms(false)).toEqual([programs[0]]);
+        });
+
+        it('should return supervised programs if isSupervised is true and user does not have a home facility', function() {
+            referencedataUser.homeFacilityId = null;
+            loadPromise = facilityProgramCacheService.loadData('module');
+            $rootScope.$apply();
+
+            expect(facilityProgramCacheService.getUserPrograms(true)).toEqual(programs);
+        });
+
+        it('should return an empty list if isSupervised is false and user does not have a home facility', function() {
+            referencedataUser.homeFacilityId = null;
+            loadPromise = facilityProgramCacheService.loadData('module');
+            $rootScope.$apply();
+
+            expect(facilityProgramCacheService.getUserPrograms(false)).toEqual([]);
         });
     });
 
