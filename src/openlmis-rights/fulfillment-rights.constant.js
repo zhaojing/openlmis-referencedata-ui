@@ -32,7 +32,9 @@
         return {
             ORDERS_EDIT: 'ORDERS_EDIT',
             ORDERS_VIEW: 'ORDERS_VIEW',
-            PODS_MANAGE: 'PODS_MANAGE'
+            PODS_MANAGE: 'PODS_MANAGE',
+            SHIPMENTS_EDIT: 'SHIPMENTS_EDIT',
+            SHIPMENTS_VIEW: 'SHIPMENTS_VIEW'
         };
     }
 
