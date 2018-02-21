@@ -27,19 +27,45 @@
 
         OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
         OrderableDataBuilder.prototype.withId = withId;
+        OrderableDataBuilder.prototype.withPrograms = withPrograms;
         OrderableDataBuilder.prototype.build = build;
+        OrderableDataBuilder.prototype.buildJson = buildJson;
 
         return OrderableDataBuilder;
 
         function OrderableDataBuilder() {
             OrderableDataBuilder.instanceNumber = (OrderableDataBuilder.instanceNumber || 0) + 1;
 
-            this.id = 'orderable-id-' + OrderableDataBuilder.instanceNumber;
-            this.productCode = 'C' + OrderableDataBuilder.instanceNumber;
-            this.fullProductName = 'Acetylsalicylic Acid';
+            var instanceNumber = OrderableDataBuilder.instanceNumber;
+            this.id = 'orderable-id-' + instanceNumber;
+            this.productCode = 'C' + instanceNumber;
+            this.fullProductName = 'Product ' + instanceNumber;;
             this.dispensable = {
-              dispensingUnit: ""
+                dispensingUnit: ''
             };
+            this.description = 'Product ' + instanceNumber + ' description';
+            this.netContent = instanceNumber + 1;
+            this.packRoundingThreshold = 2;
+            this.roundToZero = false;
+            this.identifiers = {};
+
+            this.programs = [{
+                programId: 'program-id-1' + instanceNumber,
+                orderableDisplayCategoryId: 'orderable-display-category-id-1' + instanceNumber,
+                orderableCategoryDisplayName: 'Category 1' + instanceNumber,
+                orderableCategoryDisplayOrder: 2,
+                fullSupply: true,
+                displayOrder: 6,
+                pricePerPack: 4.34
+            }, {
+                programId: 'program-id-2' + instanceNumber,
+                orderableDisplayCategoryId: 'orderable-display-category-id-2' + instanceNumber,
+                orderableCategoryDisplayName: 'Category 2' + instanceNumber,
+                orderableCategoryDisplayOrder: 1,
+                fullSupply: false,
+                displayOrder: 6,
+                pricePerPack: 20.77
+            }]
         }
 
         function withFullProductName(fullProductName) {
@@ -52,6 +78,11 @@
             return this;
         }
 
+        function withPrograms(programs) {
+            this.programs = programs;
+            return this;
+        }
+
         function build() {
             return new Orderable(
                 this.id,
@@ -59,6 +90,21 @@
                 this.fullProductName,
                 this.dispensable
             );
+        }
+
+        function buildJson() {
+            return {
+                id: this.id,
+                programs: this.programs,
+                roundToZero: this.roundToZero,
+                identifiers: this.identifiers,
+                productCode: this.productCode,
+                fullProductName: this.fullProductName,
+                dispensable: this.dispensable,
+                description: this.description,
+                netContent: this.netContent,
+                packRoundingThreshold: this.packRoundingThreshold
+            }
         }
 
     }
