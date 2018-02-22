@@ -34,7 +34,7 @@
         return LotRepositoryImpl;
 
         function LotRepositoryImpl() {
-            new OpenLMISRepositoryImpl(referencedataUrlFactory('/api/lots'));
+            return new OpenLMISRepositoryImpl(referencedataUrlFactory('/api/lots'));
         }
     }
 })();
