@@ -31,6 +31,10 @@
     OrderableRepositoryImpl.$inject = ['referencedataUrlFactory', 'OpenLMISRepositoryImpl'];
 
     function OrderableRepositoryImpl(referencedataUrlFactory, OpenLMISRepositoryImpl) {
-        return new OpenLMISRepositoryImpl(referencedataUrlFactory('api/orderables'));
+        return OrderableRepositoryImpl;
+
+        function OrderableRepositoryImpl() {
+            return new OpenLMISRepositoryImpl(referencedataUrlFactory('api/orderables'));
+        }
     }
 })();

@@ -31,6 +31,10 @@
     LotRepositoryImpl.$inject = ['referencedataUrlFactory', 'OpenLMISRepositoryImpl'];
 
     function LotRepositoryImpl(referencedataUrlFactory, OpenLMISRepositoryImpl) {
-        return new OpenLMISRepositoryImpl(referencedataUrlFactory('api/lots'));
+        return LotRepositoryImpl;
+
+        function LotRepositoryImpl() {
+            new OpenLMISRepositoryImpl(referencedataUrlFactory('api/lots'));
+        }
     }
 })();
