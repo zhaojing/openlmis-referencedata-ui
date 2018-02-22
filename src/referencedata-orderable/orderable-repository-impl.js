@@ -34,7 +34,7 @@
         return OrderableRepositoryImpl;
 
         function OrderableRepositoryImpl() {
-            return new OpenLMISRepositoryImpl(referencedataUrlFactory('api/orderables'));
+            return new OpenLMISRepositoryImpl(referencedataUrlFactory('/api/orderables'));
         }
     }
 })();
