@@ -224,16 +224,16 @@
          * @return {Promise} the promise resolving on the process completed
          */
         function processCreateUser() {
-            var loadingPromise = loadingModalService.open(true);
-            return createUser().then(function(savedUser) {
-                loadingPromise.then(function () {
-                    notificationService.success(vm.notification);
-                });
+            loadingModalService.open(true);
+            return createUser()
+            .then(function(savedUser) {
+                loadingModalService.close();
+                notificationService.success(vm.notification);
 
-                userPasswordModalFactory.createPassword(savedUser).finally(function () {
-                    goToUserList();
-                });
-            }, loadingModalService.close);
+                userPasswordModalFactory.createPassword(savedUser)
+                .finally(goToUserList);
+            })
+            .catch(loadingModalService.close);
         }
 
         /**
@@ -254,7 +254,7 @@
                     role: 'USER',
                     username: savedUser.username
                 }).then(function () {
-                  return savedUser;
+                    return savedUser;
                 });
             });
         }

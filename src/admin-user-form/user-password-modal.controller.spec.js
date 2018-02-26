@@ -84,10 +84,6 @@ describe('UserPasswordModalController', function() {
             expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.passwordSetSuccessfully');
         });
 
-        it('should close loading modal', function() {
-            expect(loadingModalService.close).toHaveBeenCalled();
-        });
-
         it('should close loading modal if reset password request fails', function() {
             expect(notificationService.success.callCount).toBe(1);
 
@@ -121,10 +117,6 @@ describe('UserPasswordModalController', function() {
 
         it('should sent reset email', function() {
             expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.passwordResetSuccessfully');
-        });
-
-        it('should close loading modal', function() {
-            expect(loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should close loading modal if sent reset email request fails', function() {

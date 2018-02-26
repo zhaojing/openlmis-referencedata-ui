@@ -35,7 +35,6 @@
 
     function controller(user, title, modalDeferred, authUserService, loadingModalService,
                         notificationService) {
-
         var vm = this;
 
         vm.$onInit = onInit;
@@ -90,12 +89,14 @@
         function createPassword() {
             var loadingPromise = loadingModalService.open(true);
 
-            return authUserService.resetPassword(vm.user.username, vm.user.newPassword).then(function() {
+            authUserService.resetPassword(vm.user.username, vm.user.newPassword)
+            .then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminUserForm.passwordSetSuccessfully');
                 });
                 modalDeferred.resolve();
-            }).finally(loadingModalService.close);
+            })
+            .catch(loadingModalService.close);
         }
 
         /**
@@ -110,11 +111,12 @@
             var loadingPromise = loadingModalService.open();
 
             authUserService.sendResetEmail(vm.user.email).then(function() {
-              loadingPromise.then(function() {
-                  notificationService.success('adminUserForm.passwordResetSuccessfully');
-              });
-              modalDeferred.resolve();
-            }).finally(loadingModalService.close);
+                loadingPromise.then(function() {
+                    notificationService.success('adminUserForm.passwordResetSuccessfully');
+                });
+                modalDeferred.resolve();
+            })
+            .catch(loadingModalService.close);
         }
     }
 })();
