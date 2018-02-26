@@ -1,42 +1,40 @@
 <h2 ng-if="!vm.updateMode">{{'adminUserForm.addUser' | message}}</h2>
 <h2 ng-if="vm.updateMode">{{'adminUserForm.editUser' | message: {username: vm.initialUsername} }}</h2>
-<section class="openlmis-table-container">
-    <form id="newUserForm" ng-submit="vm.saveUser()">
-        <label for="username">{{'adminUserForm.username' | message}}</label>
-        <input id="username" ng-model="vm.user.username" type="text" required/>
-        <label for="email">{{'adminUserForm.email' | message}}</label>
-        <input id="email" ng-model="vm.user.email" type="text" />
-        <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
-        <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
-        <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
-        <input id="lastName" ng-model="vm.user.lastName" type="text" required/>
-        <fieldset class="form-group">
-            <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
-            <label class="radio">
-                <input type="radio" ng-model="vm.user.loginRestricted"
-                    ng-value="true" required/>
-                {{'adminUserForm.yes' | message}}
-            </label>
-            <label class="radio">
-                <input type="radio" ng-model="vm.user.loginRestricted"
-                    ng-value="false" required/>
-                {{'adminUserForm.no' | message}}
-            </label>
-        </fieldset>
-        <fieldset class="form-group">
-            <label>
-                <input type="checkbox" ng-model="vm.user.verified" disabled/>
-                {{'adminUserForm.emailVerified' | message}}
-            </label>
-        </fieldset>
-        <label>{{'adminUserForm.homeFacility' | message}}</label>
-        <select id="homeFacility" ng-model="vm.user.homeFacility"
-            ng-options="facility.name for facility in vm.facilities track by facility.id"
-            ng-required="vm.user.homeFacility && vm.user.homeFacility.code"
-            no-auto-select="true">
-        </select>
-    </form>
-</section>
+<form id="newUserForm" ng-submit="vm.saveUser()">
+    <label for="username">{{'adminUserForm.username' | message}}</label>
+    <input id="username" ng-model="vm.user.username" type="text" required/>
+    <label for="email">{{'adminUserForm.email' | message}}</label>
+    <input id="email" ng-model="vm.user.email" type="text" />
+    <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
+    <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
+    <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
+    <input id="lastName" ng-model="vm.user.lastName" type="text" required/>
+    <fieldset class="form-group">
+        <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
+        <label class="radio">
+            <input type="radio" ng-model="vm.user.loginRestricted"
+                ng-value="true" required/>
+            {{'adminUserForm.yes' | message}}
+        </label>
+        <label class="radio">
+            <input type="radio" ng-model="vm.user.loginRestricted"
+                ng-value="false" required/>
+            {{'adminUserForm.no' | message}}
+        </label>
+    </fieldset>
+    <fieldset class="form-group">
+        <label>
+            <input type="checkbox" ng-model="vm.user.verified" disabled/>
+            {{'adminUserForm.emailVerified' | message}}
+        </label>
+    </fieldset>
+    <label>{{'adminUserForm.homeFacility' | message}}</label>
+    <select id="homeFacility" ng-model="vm.user.homeFacility"
+        ng-options="facility.name for facility in vm.facilities track by facility.id"
+        ng-required="vm.user.homeFacility && vm.user.homeFacility.code"
+        no-auto-select="true">
+    </select>
+</form>
 <div class="openlmis-toolbar">
     <button class="primary" form="newUserForm" type="submit">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
     <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
