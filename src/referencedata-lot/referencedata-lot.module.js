@@ -25,7 +25,8 @@
      */
     angular.module('referencedata-lot', [
         'openlmis-i18n',
-        'ngResource'
+        'ngResource',
+        'openlmis-repository'
     ]);
 
 })();
