@@ -21,9 +21,9 @@
         .module('referencedata-orderable')
         .factory('OrderableDataBuilder', OrderableDataBuilder);
 
-    OrderableDataBuilder.$inject = ['Orderable'];
+    OrderableDataBuilder.$inject = ['Orderable', 'ProgramOrderableDataBuilder'];
 
-    function OrderableDataBuilder(Orderable) {
+    function OrderableDataBuilder(Orderable, ProgramOrderableDataBuilder) {
 
         OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
         OrderableDataBuilder.prototype.withId = withId;
@@ -49,23 +49,15 @@
             this.roundToZero = false;
             this.identifiers = {};
 
-            this.programs = [{
-                programId: 'program-id-1' + instanceNumber,
-                orderableDisplayCategoryId: 'orderable-display-category-id-1' + instanceNumber,
-                orderableCategoryDisplayName: 'Category 1' + instanceNumber,
-                orderableCategoryDisplayOrder: 2,
-                fullSupply: true,
-                displayOrder: 6,
-                pricePerPack: 4.34
-            }, {
-                programId: 'program-id-2' + instanceNumber,
-                orderableDisplayCategoryId: 'orderable-display-category-id-2' + instanceNumber,
-                orderableCategoryDisplayName: 'Category 2' + instanceNumber,
-                orderableCategoryDisplayOrder: 1,
-                fullSupply: false,
-                displayOrder: 6,
-                pricePerPack: 20.77
-            }]
+            this.programs = [
+                new ProgramOrderableDataBuilder()
+                    .withFullSupply()
+                    .buildJson(),
+                new ProgramOrderableDataBuilder()
+                    .withOrderableCategoryDisplayOrder(1)
+                    .withPricePerPack(20.77)
+                    .buildJson()
+            ]
         }
 
         function withFullProductName(fullProductName) {
