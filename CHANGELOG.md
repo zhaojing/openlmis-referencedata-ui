@@ -28,6 +28,7 @@ Bug fixes:
 * [OLMIS-3468](https://openlmis.atlassian.net/browse/OLMIS-3468): Fixed a bug with missing permissions after a relog.
 * [OLMIS-3806](https://openlmis.atlassian.net/browse/OLMIS-3806): Fixed date picker to not change selected date
 * [OLMIS-3759](https://openlmis.atlassian.net/browse/OLMIS-3759): Fixed program facility select to disable "supervised facility" if none to supervise.
+* [OLMIS-4176](https://openlmis.atlassian.net/browse/OLMIS-4176): Fixed problems with loading modal on User Edit screen.
 
 
 5.2.2 / 2017-11-09
