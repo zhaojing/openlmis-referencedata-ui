@@ -29,7 +29,7 @@
         ProgramOrderableDataBuilder.prototype.withPricePerPack = withPricePerPack;
         ProgramOrderableDataBuilder.prototype.withProgramId = withProgramId;
         ProgramOrderableDataBuilder.prototype.withOrderableCategoryDisplayOrder = withOrderableCategoryDisplayOrder;
-        ProgramOrderableDataBuilder.prototype.orderableCategoryDisplayName = withOrderableCategoryDisplayName;
+        ProgramOrderableDataBuilder.prototype.withOrderableCategoryDisplayName = withOrderableCategoryDisplayName;
         ProgramOrderableDataBuilder.prototype.withOrderableDisplayCategoryId = withOrderableDisplayCategoryId;
         ProgramOrderableDataBuilder.prototype.buildJson = buildJson;
 
