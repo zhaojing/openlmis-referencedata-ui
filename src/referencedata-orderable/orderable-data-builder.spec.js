@@ -57,7 +57,7 @@
                     .withOrderableCategoryDisplayOrder(1)
                     .withPricePerPack(20.77)
                     .buildJson()
-            ]
+            ];
         }
 
         function withFullProductName(fullProductName) {
