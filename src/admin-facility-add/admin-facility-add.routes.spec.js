@@ -18,7 +18,7 @@ describe('openlmis.administration.facilities.facility.add state', function() {
     'use strict';
 
     var $state, $location, $rootScope, $q, geographicZoneService, facilityService, geographicZones,
-        facilities, $httpBackend, $templateCache, facilityOperatorService, openlmisModalService,
+        $templateCache, facilityOperatorService,
         facilityTypeService, facilityTypes, facilityOperators;
 
     beforeEach(prepareSuite);
@@ -36,7 +36,7 @@ describe('openlmis.administration.facilities.facility.add state', function() {
 
         goToUrl('/administration/facilities/new/details');
 
-        expect(getResolvedValue('facilityTypes')).toEqual(facilityTypes);
+        expect(getResolvedValue('facilityTypes')).toEqual(facilityTypes.content);
     });
 
     it('should resolve geographicZones', function() {
@@ -94,15 +94,12 @@ describe('openlmis.administration.facilities.facility.add state', function() {
     }
 
     function prepareTestData() {
-        facilities = [
-            createObjectWithId('facility-one'),
-            createObjectWithId('facility-two'),
-        ];
-
-        facilityTypes = [
-            createObjectWithId('facility-type-one'),
-            createObjectWithId('facility-type-two')
-        ];
+        facilityTypes = {
+            content: [
+                createObjectWithId('facility-type-one'),
+                createObjectWithId('facility-type-two')
+            ]
+        };
 
         geographicZones = [
             createObjectWithId('geographic-zone-one'),
@@ -128,11 +125,6 @@ describe('openlmis.administration.facilities.facility.add state', function() {
 
     function goToUrl(url) {
         $location.url(url);
-        $rootScope.$apply();
-    }
-
-    function goToState() {
-        $state.go.apply(this, arguments);
         $rootScope.$apply();
     }
 

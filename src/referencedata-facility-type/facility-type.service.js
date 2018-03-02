@@ -38,7 +38,7 @@
                 query: {
                     url: referencedataUrlFactory('/api/facilityTypes/'),
                     method: 'GET',
-                    isArray: true
+                    isArray: false
                 },
             });
 
@@ -71,7 +71,7 @@
              * Retrieves all facility types by ids.
              *
              * @param  {Object}  queryParams the search parameters
-             * @return {Promise} Array of facility types
+             * @return {Promise} Page of facility types
              */
             function query(queryParams) {
                 return resource.query(queryParams).$promise;

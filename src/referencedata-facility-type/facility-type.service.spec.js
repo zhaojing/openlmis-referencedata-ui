@@ -15,7 +15,8 @@
 
 describe('facilityTypeService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, facilityTypeOne, facilityTypeTwo;
+    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, FacilityTypeDataBuilder, PageDataBuilder,
+        facilityTypeOne, facilityTypeTwo;
 
     beforeEach(function() {
         module('referencedata-facility-type');
@@ -25,16 +26,12 @@ describe('facilityTypeService', function() {
             $rootScope = $injector.get('$rootScope');
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             facilityTypeService = $injector.get('facilityTypeService');
+            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        facilityTypeOne = {
-            id: '1',
-            name: 'facilityTypeOne'
-        };
-        facilityTypeTwo = {
-            id: '2',
-            name: 'facilityTypeTwo'
-        };
+        facilityTypeOne = new FacilityTypeDataBuilder().build();
+        facilityTypeTwo = new FacilityTypeDataBuilder().build();
     });
 
     describe('get', function() {
@@ -59,11 +56,17 @@ describe('facilityTypeService', function() {
 
     describe('query', function() {
 
+        var page;
+
+        beforeEach(function() {
+            page = new PageDataBuilder().withContent([facilityTypeOne, facilityTypeTwo]);
+        });
+
         it('should get all facility types', function() {
             var data;
 
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes'))
-                .respond(200, [facilityTypeOne, facilityTypeTwo]);
+                .respond(200, page);
 
             facilityTypeService.query().then(function(response) {
                 data = response;
@@ -72,8 +75,8 @@ describe('facilityTypeService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(data[0].id).toBe(facilityTypeOne.id);
-            expect(data[1].id).toBe(facilityTypeTwo.id);
+            expect(data.content[0].id).toBe(page.content[0].id);
+            expect(data.content[1].id).toBe(page.content[1].id);
         });
 
         it('should get all facility types by ids', function() {
@@ -82,7 +85,7 @@ describe('facilityTypeService', function() {
                 idTwo = 'id-two';
 
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes?id=' + idOne + '&id=' + idTwo))
-                .respond(200, [facilityTypeOne, facilityTypeTwo]);
+                .respond(200, page);
 
             facilityTypeService.query({id: [idOne, idTwo]}).then(function(response) {
                 data = response;
@@ -91,8 +94,8 @@ describe('facilityTypeService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(data[0].id).toBe(facilityTypeOne.id);
-            expect(data[1].id).toBe(facilityTypeTwo.id);
+            expect(data.content[0].id).toBe(page.content[0].id);
+            expect(data.content[1].id).toBe(page.content[1].id);
         });
     });
 
