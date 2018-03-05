@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('referencedata-facility-type')
         .factory('FacilityTypeDataBuilder', FacilityTypeDataBuilder);
@@ -27,11 +26,12 @@
     function FacilityTypeDataBuilder(FacilityType) {
 
         FacilityTypeDataBuilder.prototype.build = build;
-        FacilityTypeDataBuilder.buildDistrictHospital = buildAsDistrictHospital;
-        FacilityTypeDataBuilder.buildDistrictStore = buildAsDistrictStore;
+        FacilityTypeDataBuilder.prototype.buildDistrictHospital = buildAsDistrictHospital;
+        FacilityTypeDataBuilder.prototype.buildDistrictStore = buildAsDistrictStore;
         FacilityTypeDataBuilder.prototype.withName = withName;
         FacilityTypeDataBuilder.prototype.withCode = withCode;
         FacilityTypeDataBuilder.prototype.withDisplayOrder = withDisplayOrder;
+        FacilityTypeDataBuilder.prototype.withoutId = withoutId;
 
         return FacilityTypeDataBuilder;
 
@@ -74,6 +74,11 @@
 
         function withDisplayOrder(displayOrder) {
             this.displayOrder = displayOrder;
+            return this;
+        }
+
+        function withoutId() {
+            this.id = undefined;
             return this;
         }
 

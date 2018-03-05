@@ -99,6 +99,44 @@ describe('facilityTypeService', function() {
         });
     });
 
+    describe('save', function() {
+
+        var result;
+
+        it('should create facility type if id is not given', function() {
+            facilityTypeOne = new FacilityTypeDataBuilder().withoutId().build();
+
+            $httpBackend.expect(
+                'POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne
+            ).respond(200, facilityTypeOne);
+
+            facilityTypeService.save(facilityTypeOne).then(function(response) {
+                result = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(facilityTypeOne));
+        });
+
+        it('should update inventory item if it has ID', function() {
+            $httpBackend.expect(
+                'PUT', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id), facilityTypeOne
+            ).respond(200, facilityTypeOne);
+
+            facilityTypeService.save(facilityTypeOne).then(function(response) {
+                result = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(facilityTypeOne));
+        });
+
+    });
+
     afterEach(function() {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();

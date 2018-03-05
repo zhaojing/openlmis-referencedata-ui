@@ -36,14 +36,19 @@
 
             var resource = $resource(referencedataUrlFactory('/api/facilityTypes/:id'), {}, {
                 query: {
-                    url: referencedataUrlFactory('/api/facilityTypes/'),
+                    url: referencedataUrlFactory('/api/facilityTypes'),
                     method: 'GET',
                     isArray: false
+                },
+                update: {
+                    url: referencedataUrlFactory('/api/facilityTypes/:id'),
+                    method: 'PUT'
                 },
             });
 
             this.get = get;
             this.query = query;
+            this.save = save;
 
             /**
              * @ngdoc method
@@ -77,5 +82,24 @@
                 return resource.query(queryParams).$promise;
             }
 
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility-type.facilityTypeService
+             * @name save
+             *
+             * @description
+             * Saves Facility Type to the server.
+             * If Facility Type does not have id it will be creted, otherwise it will be saved with changes.
+             *
+             * @param  {Object}  queryParams the search parameters
+             * @return {Promise} Page of facility types
+             */
+            function save(facilityType) {
+                return facilityType.id ? 
+                    resource.update({
+                        id: facilityType.id
+                    }, facilityType).$promise :
+                    resource.save(facilityType).$promise;
+            }
         }
     })();
