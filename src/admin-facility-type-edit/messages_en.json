@@ -1,0 +1,17 @@
+{
+    "adminFacilityTypeEdit.editFacilityType.title": "Edit \"${facilityType}\" Facility Type",
+    "adminFacilityTypeEdit.createFacilityType.title": "Create Facility Type",
+    "adminFacilityTypeEdit.facilityTypeName": "Facility Type Name",
+    "adminFacilityTypeEdit.facilityTypeCode": "Facility Type Code",
+    "adminFacilityTypeEdit.facilityTypeDisplayOrder": "Facility Type Display Order",
+    "adminFacilityTypeEdit.active": "Active",
+    "adminFacilityTypeEdit.save": "Save",
+    "adminFacilityTypeEdit.create": "Create",
+    "adminFacilityTypeEdit.cancel": "Cancel",
+    "adminFacilityTypeEdit.save.question": "Do you want to save Facility Type?",
+    "adminFacilityTypeEdit.save.success": "Facility Type saved successfully",
+    "adminFacilityTypeEdit.save.failure": "Failed to save Facility Type",
+    "adminFacilityTypeEdit.create.question": "Do you want to create Facility Type?",
+    "adminFacilityTypeEdit.create.success": "Facility Type created successfully",
+    "adminFacilityTypeEdit.create.failure": "Failed to create Facility Type"
+}
