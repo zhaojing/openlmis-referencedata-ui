@@ -18,6 +18,7 @@
     "adminRoleForm.ordersView": "View orders",
     "adminRoleForm.passwordSetSuccessfully": "Password set successfully",
     "adminRoleForm.podsManage": "Manage proofs of delivery",
+    "adminRoleForm.podsView": "View proofs of delivery",
     "adminRoleForm.processingSchedulesManage": "Manage processing schedules",
     "adminRoleForm.productsManage": "Manage products",
     "adminRoleForm.reports.description": "Provides rights for viewing reports and editing their templates.",
