@@ -26,8 +26,8 @@
     function FacilityTypeDataBuilder(FacilityType) {
 
         FacilityTypeDataBuilder.prototype.build = build;
-        FacilityTypeDataBuilder.prototype.buildDistrictHospital = buildAsDistrictHospital;
-        FacilityTypeDataBuilder.prototype.buildDistrictStore = buildAsDistrictStore;
+        FacilityTypeDataBuilder.buildDistrictHospital = buildAsDistrictHospital;
+        FacilityTypeDataBuilder.buildDistrictStore = buildAsDistrictStore;
         FacilityTypeDataBuilder.prototype.withName = withName;
         FacilityTypeDataBuilder.prototype.withCode = withCode;
         FacilityTypeDataBuilder.prototype.withDisplayOrder = withDisplayOrder;
