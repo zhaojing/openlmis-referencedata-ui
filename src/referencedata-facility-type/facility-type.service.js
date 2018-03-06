@@ -48,7 +48,8 @@
 
             this.get = get;
             this.query = query;
-            this.save = save;
+            this.update = update;
+            this.create = create;
 
             /**
              * @ngdoc method
@@ -85,21 +86,33 @@
             /**
              * @ngdoc method
              * @methodOf referencedata-facility-type.facilityTypeService
-             * @name save
+             * @name update
              *
              * @description
-             * Saves Facility Type to the server.
-             * If Facility Type does not have id it will be creted, otherwise it will be saved with changes.
+             * Updates eixisting Facility Type.
              *
-             * @param  {Object}  queryParams the search parameters
-             * @return {Promise} Page of facility types
+             * @param  {Object}  facilityType facility type that will be saved
+             * @return {Promise}              updated facility type
              */
-            function save(facilityType) {
-                return facilityType.id ? 
-                    resource.update({
-                        id: facilityType.id
-                    }, facilityType).$promise :
-                    resource.save(facilityType).$promise;
+            function update(facilityType) {
+                return resource.update({
+                    id: facilityType.id
+                }, facilityType).$promise;
+            }
+
+            /**
+             * @ngdoc method
+             * @methodOf referencedata-facility-type.facilityTypeService
+             * @name create
+             *
+             * @description
+             * Creates new Facility Type.
+             *
+             * @param  {Object}  facilityType facility type that will be created
+             * @return {Promise}              created facility type
+             */
+            function create(facilityType) {
+                return resource.save(facilityType).$promise;
             }
         }
     })();

@@ -42,7 +42,8 @@ describe('facilityTypeService', function() {
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id))
                 .respond(200, facilityTypeOne);
 
-            facilityTypeService.get(facilityTypeOne.id).then(function(response) {
+            facilityTypeService.get(facilityTypeOne.id)
+            .then(function(response) {
                 data = response;
             });
 
@@ -68,7 +69,8 @@ describe('facilityTypeService', function() {
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes'))
                 .respond(200, page);
 
-            facilityTypeService.query().then(function(response) {
+            facilityTypeService.query()
+            .then(function(response) {
                 data = response;
             });
 
@@ -87,7 +89,8 @@ describe('facilityTypeService', function() {
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes?id=' + idOne + '&id=' + idTwo))
                 .respond(200, page);
 
-            facilityTypeService.query({id: [idOne, idTwo]}).then(function(response) {
+            facilityTypeService.query({id: [idOne, idTwo]})
+            .then(function(response) {
                 data = response;
             });
 
@@ -99,18 +102,18 @@ describe('facilityTypeService', function() {
         });
     });
 
-    describe('save', function() {
+    describe('create', function() {
 
         var result;
 
         it('should create facility type if id is not given', function() {
             facilityTypeOne = new FacilityTypeDataBuilder().withoutId().build();
 
-            $httpBackend.expect(
-                'POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne
-            ).respond(200, facilityTypeOne);
+            $httpBackend.expect('POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
+            .respond(200, facilityTypeOne);
 
-            facilityTypeService.save(facilityTypeOne).then(function(response) {
+            facilityTypeService.create(facilityTypeOne)
+            .then(function(response) {
                 result = response;
             });
 
@@ -120,12 +123,34 @@ describe('facilityTypeService', function() {
             expect(angular.toJson(result)).toEqual(angular.toJson(facilityTypeOne));
         });
 
-        it('should update inventory item if it has ID', function() {
-            $httpBackend.expect(
-                'PUT', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id), facilityTypeOne
-            ).respond(200, facilityTypeOne);
+        it('should not resolve promise if request fails', function() {
+            facilityTypeOne = new FacilityTypeDataBuilder().withoutId().build();
 
-            facilityTypeService.save(facilityTypeOne).then(function(response) {
+            $httpBackend.expect('POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
+            .respond(400);
+
+            facilityTypeService.create(facilityTypeOne)
+            .catch(function() {
+                result = 'fail';
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result).toEqual('fail');
+        });
+    });
+
+    describe('update', function() {
+
+        var result;
+
+        it('should update facility type', function() {
+            $httpBackend.expect('PUT', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id), facilityTypeOne)
+            .respond(200, facilityTypeOne);
+
+            facilityTypeService.update(facilityTypeOne)
+            .then(function(response) {
                 result = response;
             });
 
@@ -135,6 +160,20 @@ describe('facilityTypeService', function() {
             expect(angular.toJson(result)).toEqual(angular.toJson(facilityTypeOne));
         });
 
+        it('should not resolve promise if request fails', function() {
+            $httpBackend.expect('PUT', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id), facilityTypeOne)
+            .respond(400);
+
+            facilityTypeService.update(facilityTypeOne)
+            .catch(function() {
+                result = 'fail';
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result).toEqual('fail');
+        });
     });
 
     afterEach(function() {
