@@ -4,7 +4,7 @@
         {{'adminFacilityTypeList.addFacilityType' | message}}
     </button>
     <table>
-        <caption ng-if="!vm.facilityTypes || vm.facilityTypes.length === 0">
+        <caption ng-if="vm.facilityTypes.length === 0">
             {{'adminFacilityTypeList.noFacilityTypes' | message}}
         </caption>
         <thead>
