@@ -138,6 +138,18 @@ describe('UserRolesTabController', function() {
             expect(notificationService.error).toHaveBeenCalledWith('referencedataRoles.roleAlreadyAssigned');
         });
 
+        it('should add role without supervisory node if the same role with supervisory node already exists', function() {
+            var roleAssignmentsCount = user.roleAssignments.length;
+
+            vm.selectedRole = roles[0];
+            vm.selectedProgram = programs[0];
+            vm.selectedSupervisoryNode = undefined;
+
+            vm.addRole();
+
+            expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
+        });
+
         it('should display error notification if home facility role cannot be assigned', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
 

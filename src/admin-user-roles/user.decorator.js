@@ -111,9 +111,9 @@
             roleAssignments.forEach(function(existingRoleAssignment) {
                 alreadyExist = alreadyExist ||
                     (existingRoleAssignment.roleId === roleId &&
-                        (!programId || existingRoleAssignment.programId === programId) &&
-                        (!supervisoryNodeId || existingRoleAssignment.supervisoryNodeId === supervisoryNodeId) &&
-                        (!warehouseId || existingRoleAssignment.warehouseId === warehouseId));
+                        (!(programId || existingRoleAssignment.programId) || existingRoleAssignment.programId === programId) &&
+                        (!(supervisoryNodeId || existingRoleAssignment.supervisoryNodeId) || existingRoleAssignment.supervisoryNodeId === supervisoryNodeId) &&
+                        (!(warehouseId || existingRoleAssignment.warehouseId) || existingRoleAssignment.warehouseId === warehouseId));
             });
             return alreadyExist;
         }
