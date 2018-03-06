@@ -2,7 +2,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1>{{vm.editMode ? 'adminFacilityTypeEdit.editFacilityType.title' : 'adminFacilityTypeEdit.createFacilityType.title' | message:({facilityType: vm.facilityType.code})}}</h1>
+                <h1 ng-if="vm.editMode">{{'adminFacilityTypeEdit.editFacilityType.title' | message:({facilityType: vm.facilityType.code})}}</h1>
+                <h1 ng-if="!vm.editMode">{{'adminFacilityTypeEdit.createFacilityType.title' | message}}</h1>
             </div>
             <div class="modal-body">
                 <form id="edit-facility-type-form" ng-submit="vm.save()">

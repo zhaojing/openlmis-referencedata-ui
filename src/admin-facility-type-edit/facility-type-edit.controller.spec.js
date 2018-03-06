@@ -40,7 +40,8 @@ describe('FacilityTypeEditController', function() {
 
         spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
         spyOn(stateTrackerService, 'goToPreviousState').andReturn(true);
-        spyOn(facilityTypeService, 'save').andReturn(saveDeferred.promise);
+        spyOn(facilityTypeService, 'update').andReturn(saveDeferred.promise);
+        spyOn(facilityTypeService, 'create').andReturn(saveDeferred.promise);
         spyOn(loadingModalService, 'open').andReturn(true);
         spyOn(loadingModalService, 'close').andReturn(true);
         spyOn(notificationService, 'success');
@@ -74,58 +75,6 @@ describe('FacilityTypeEditController', function() {
 
     describe('save', function() {
 
-        beforeEach(function() {
-            vm.$onInit();
-        });
-
-        it('should prompt user to save period', function() {
-            vm.save();
-            expect(confirmService.confirm).toHaveBeenCalledWith(
-                'adminFacilityTypeEdit.save.question',
-                'adminFacilityTypeEdit.save'
-            );
-        });
-
-        it('should not save facility type if user does not confirm it', function() {
-            vm.save();
-
-            confirmDeferred.reject();
-            $rootScope.$apply();
-
-            expect(facilityTypeService.save).not.toHaveBeenCalled();
-        });
-
-        it('should save facility type and open loading modal after confirm', function() {
-            vm.save();
-
-            confirmDeferred.resolve();
-            $rootScope.$apply();
-
-            expect(facilityTypeService.save).toHaveBeenCalledWith(vm.facilityType);
-            expect(loadingModalService.open).toHaveBeenCalled();
-        });
-
-        it('should show notification if facility type was saveed successfully', function() {
-            vm.save();
-
-            confirmDeferred.resolve();
-            saveDeferred.resolve(facilityType);
-            $rootScope.$apply();
-
-            expect(notificationService.success).toHaveBeenCalledWith('adminFacilityTypeEdit.save.success');
-        });
-
-        it('should show notification if period save has failed', function() {
-            vm.save();
-
-            confirmDeferred.resolve();
-            saveDeferred.reject();
-            $rootScope.$apply();
-
-            expect(notificationService.error).toHaveBeenCalledWith('adminFacilityTypeEdit.save.failure');
-            expect(loadingModalService.close).toHaveBeenCalled();
-        });
-
         it('should reload state after successful save', function() {
             vm.save();
 
@@ -134,6 +83,120 @@ describe('FacilityTypeEditController', function() {
             $rootScope.$apply();
 
             expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
+        });
+
+        describe('while editing', function() {
+
+            beforeEach(function() {
+                vm.editMode = true;
+            });
+
+            it('should prompt user to save period', function() {
+                vm.save();
+                expect(confirmService.confirm).toHaveBeenCalledWith(
+                    'adminFacilityTypeEdit.save.question',
+                    'adminFacilityTypeEdit.save'
+                );
+            });
+
+            it('should not save facility type if user does not confirm it', function() {
+                vm.save();
+    
+                confirmDeferred.reject();
+                $rootScope.$apply();
+    
+                expect(facilityTypeService.update).not.toHaveBeenCalled();
+                expect(facilityTypeService.create).not.toHaveBeenCalled();
+            });
+    
+            it('should save facility type and open loading modal after confirm', function() {
+                vm.save();
+    
+                confirmDeferred.resolve();
+                $rootScope.$apply();
+    
+                expect(facilityTypeService.update).toHaveBeenCalledWith(vm.facilityType);
+                expect(facilityTypeService.create).not.toHaveBeenCalled();
+                expect(loadingModalService.open).toHaveBeenCalled();
+            });
+    
+            it('should show notification if facility type was saveed successfully', function() {
+                vm.save();
+    
+                confirmDeferred.resolve();
+                saveDeferred.resolve(facilityType);
+                $rootScope.$apply();
+    
+                expect(notificationService.success).toHaveBeenCalledWith('adminFacilityTypeEdit.save.success');
+            });
+    
+            it('should show notification if period save has failed', function() {
+                vm.save();
+    
+                confirmDeferred.resolve();
+                saveDeferred.reject();
+                $rootScope.$apply();
+    
+                expect(notificationService.error).toHaveBeenCalledWith('adminFacilityTypeEdit.save.failure');
+                expect(loadingModalService.close).toHaveBeenCalled();
+            });
+        });
+
+        describe('while creating', function() {
+
+            beforeEach(function() {
+                vm.editMode = false;
+            });
+
+            it('should prompt user to save period', function() {
+                vm.save();
+                expect(confirmService.confirm).toHaveBeenCalledWith(
+                    'adminFacilityTypeEdit.create.question',
+                    'adminFacilityTypeEdit.create'
+                );
+            });
+
+            it('should not save facility type if user does not confirm it', function() {
+                vm.save();
+    
+                confirmDeferred.reject();
+                $rootScope.$apply();
+    
+                expect(facilityTypeService.create).not.toHaveBeenCalled();
+                expect(facilityTypeService.update).not.toHaveBeenCalled();
+            });
+    
+            it('should save facility type and open loading modal after confirm', function() {
+                vm.save();
+    
+                confirmDeferred.resolve();
+                $rootScope.$apply();
+    
+                expect(facilityTypeService.create).toHaveBeenCalledWith(vm.facilityType);
+                expect(facilityTypeService.update).not.toHaveBeenCalled();
+                expect(loadingModalService.open).toHaveBeenCalled();
+            });
+    
+            it('should show notification if facility type was saveed successfully', function() {
+                vm.save();
+    
+                confirmDeferred.resolve();
+                saveDeferred.resolve(facilityType);
+                $rootScope.$apply();
+    
+                expect(notificationService.success).toHaveBeenCalledWith('adminFacilityTypeEdit.create.success');
+            });
+    
+            it('should show notification if period save has failed', function() {
+                vm.save();
+    
+                confirmDeferred.resolve();
+                saveDeferred.reject();
+                $rootScope.$apply();
+    
+                expect(notificationService.error).toHaveBeenCalledWith('adminFacilityTypeEdit.create.failure');
+                expect(loadingModalService.close).toHaveBeenCalled();
+            });
         });
     });
 

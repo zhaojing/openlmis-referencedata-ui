@@ -59,7 +59,7 @@
          * @type {boolean}
          *
          * @description
-         * Indicates if facility typeis already created.
+         * Indicates if facility type is already created.
          */
         vm.editMode = undefined;
 
@@ -91,7 +91,8 @@
             )
             .then(function() {
                 loadingModalService.open();
-                facilityTypeService.save(vm.facilityType)
+                var promise = vm.editMode ? facilityTypeService.update(vm.facilityType) : facilityTypeService.create(vm.facilityType);
+                promise
                 .then(function() {
                     notificationService.success(vm.editMode ? 'adminFacilityTypeEdit.save.success' : 'adminFacilityTypeEdit.create.success');
                     stateTrackerService.goToPreviousState();
