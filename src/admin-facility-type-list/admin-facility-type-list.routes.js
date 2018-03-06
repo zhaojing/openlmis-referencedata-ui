@@ -25,31 +25,31 @@
 
 	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.facilityTypes', {
-			showInNavigation: true,
-			label: 'adminFacilityTypeList.facilityTypes',
-			url: '/facilityTypes?page&size',
-			controller: 'FacilityTypeListController',
-			templateUrl: 'admin-facility-type-list/facility-type-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
-			resolve: {
-				facilityTypes: function(paginationService, facilityTypeService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
-						var params = angular.copy(stateParams),
-							page = stateParams.page,
-							size = stateParams.size;
+        $stateProvider.state('openlmis.administration.facilityTypes', {
+            showInNavigation: true,
+            label: 'adminFacilityTypeList.facilityTypes',
+            url: '/facilityTypes?page&size',
+            controller: 'FacilityTypeListController',
+            templateUrl: 'admin-facility-type-list/facility-type-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
+            resolve: {
+                facilityTypes: function(paginationService, facilityTypeService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var params = angular.copy(stateParams),
+                            page = stateParams.page,
+                            size = stateParams.size;
 
-						delete params.page;
-						delete params.size;
+                        delete params.page;
+                        delete params.size;
 
-						return facilityTypeService.query({
-							page: page,
-							size: size
-						}, params);
-					});
-				}
-			}
-		});
+                        return facilityTypeService.query({
+                            page: page,
+                            size: size
+                        }, params);
+                    });
+                }
+            }
+        });
 	}
 })();
