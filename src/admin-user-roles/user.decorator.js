@@ -104,38 +104,38 @@
                 throw new Error('referencedataRoles.roleAlreadyAssigned');
             }
         }
+    }
 
-        function isRoleAlreadyAssigned(roleAssignments, roleId, programId, supervisoryNodeId, warehouseId) {
-            var alreadyExist = false;
-            roleAssignments.forEach(function(existingRoleAssignment) {
-                alreadyExist = alreadyExist ||
-                    (existingRoleAssignment.roleId === roleId &&
-                        isRoleAssignmentDuplicated(programId, supervisoryNodeId, warehouseId, existingRoleAssignment));
-            });
-            return alreadyExist;
-        }
+    function isRoleAlreadyAssigned(roleAssignments, roleId, programId, supervisoryNodeId, warehouseId) {
+        var alreadyExist = false;
+        roleAssignments.forEach(function(existingRoleAssignment) {
+            alreadyExist = alreadyExist ||
+                (existingRoleAssignment.roleId === roleId &&
+                    isRoleAssignmentDuplicated(programId, supervisoryNodeId, warehouseId, existingRoleAssignment));
+        });
+        return alreadyExist;
+    }
 
-        function isRoleAssignmentValid(programId, supervisoryNodeId, warehouseId) {
-            return hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) ||
-                hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId);
-        }
+    function isRoleAssignmentValid(programId, supervisoryNodeId, warehouseId) {
+        return hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) ||
+            hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId);
+    }
 
-        function hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId) {
-            return !programId && supervisoryNodeId;
-        }
+    function hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId) {
+        return !programId && supervisoryNodeId;
+    }
 
-        function hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) {
-            return (programId || supervisoryNodeId) && warehouseId;
-        }
+    function hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) {
+        return (programId || supervisoryNodeId) && warehouseId;
+    }
 
-        function isRoleAssignmentDuplicated(programId, supervisoryNodeId, warehouseId, existingRoleAssignment) {
-            return hasFieldValue(existingRoleAssignment.programId, programId) &&
-                hasFieldValue(existingRoleAssignment.supervisoryNodeId, supervisoryNodeId) &&
-                hasFieldValue(existingRoleAssignment.warehouseId, warehouseId);
-        }
+    function isRoleAssignmentDuplicated(programId, supervisoryNodeId, warehouseId, existingRoleAssignment) {
+        return hasFieldValue(existingRoleAssignment.programId, programId) &&
+            hasFieldValue(existingRoleAssignment.supervisoryNodeId, supervisoryNodeId) &&
+            hasFieldValue(existingRoleAssignment.warehouseId, warehouseId);
+    }
 
-        function hasFieldValue(existingValue, newValue) {
-            return !(newValue || existingValue) || existingValue === newValue;
-        }
+    function hasFieldValue(existingValue, newValue) {
+        return !(newValue || existingValue) || existingValue === newValue;
     }
 })();
