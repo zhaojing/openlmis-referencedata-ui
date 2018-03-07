@@ -20,7 +20,6 @@
     "adminRoleForm.podsManage": "Manage proofs of delivery",
     "adminRoleForm.podsView": "View proofs of delivery",
     "adminRoleForm.processingSchedulesManage": "Manage processing schedules",
-    "adminRoleForm.productsManage": "Manage products",
     "adminRoleForm.reports.description": "Provides rights for viewing reports and editing their templates.",
     "adminRoleForm.reports.label": "Reporting",
     "adminRoleForm.reportsView": "View reports",
