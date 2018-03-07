@@ -31,6 +31,7 @@ Bug fixes:
 * [OLMIS-3759](https://openlmis.atlassian.net/browse/OLMIS-3759): Fixed program facility select to disable "supervised facility" if none to supervise.
 * [OLMIS-4176](https://openlmis.atlassian.net/browse/OLMIS-4176): Fixed problems with loading modal on User Edit screen.
 * [OLMIS-3599](https://openlmis.atlassian.net/browse/OLMIS-3599): Use ORDERABLES_MANAGE right instead of PRODUCTS_MANAGE right (it is not used on backend side)
+* [OLMIS-4227](https://openlmis.atlassian.net/browse/OLMIS-4227): Fixed checking if role is already assigned.
 
 
 5.2.2 / 2017-11-09
