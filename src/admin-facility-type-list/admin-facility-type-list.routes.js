@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
 	angular
 		.module('admin-facility-type-list')
