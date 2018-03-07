@@ -68,8 +68,12 @@ describe('FacilityTypeEditController', function() {
                 facilityType: undefined
             });
             vm.$onInit();
+            
             expect(vm.editMode).toEqual(false);
-            expect(vm.facilityType).toEqual({});
+            expect(vm.facilityType).toEqual({
+                displayOrder: 1,
+                active: true
+            });
         });
     });
 

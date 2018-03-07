@@ -72,7 +72,10 @@
          * Method that is executed on initiating FacilityTypeEditController.
          */
         function onInit() {
-            vm.facilityType = facilityType ? facilityType : {};
+            vm.facilityType = facilityType ? facilityType : {
+                displayOrder: 1,
+                active: true
+            };
             vm.editMode = facilityType ? true : false;
         }
 

@@ -37,6 +37,9 @@ describe('openlmis.administration.facilities.facility.add state', function() {
         goToUrl('/administration/facilities/new/details');
 
         expect(getResolvedValue('facilityTypes')).toEqual(facilityTypes.content);
+        expect(facilityTypeService.query).toHaveBeenCalledWith({
+            active: true
+        });
     });
 
     it('should resolve geographicZones', function() {

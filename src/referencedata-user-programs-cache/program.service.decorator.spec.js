@@ -55,7 +55,7 @@ describe('ProgramService getUserPrograms decorator', function() {
     it('should return a cached programs if available', function() {
         cache.search.andReturn(programs);
 
-        var results;
+        var result;
         programService.getUserPrograms(user.id).then(function(response) {
             result = response;
         });

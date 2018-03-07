@@ -12,9 +12,9 @@
                     <label for="name">{{'adminFacilityTypeEdit.facilityTypeName' | message}}</label>
                     <input type="text" id="name" ng-model="vm.facilityType.name" required></input>
                     <label for="displayOrder">{{'adminFacilityTypeEdit.facilityTypeDisplayOrder' | message}}</label>
-                    <input positive-integer id="displayOrder" ng-model="vm.facilityType.displayOrder"></input>
+                    <input positive-integer id="displayOrder" ng-model="vm.facilityType.displayOrder" required></input>
                     <label for="active">
-                        <input type="checkbox" ng-model="vm.facilityType.active" ng-value="true"/>
+                        <input type="checkbox" ng-model="vm.facilityType.active"/>
                         {{'adminFacilityTypeEdit.active' | message}}
                     </label>
                 </form>
