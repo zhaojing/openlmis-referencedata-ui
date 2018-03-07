@@ -44,13 +44,15 @@
          * @param  {String}  productCode                            the code of the orderable to be created
          * @param  {String}  fullProductName                        the name of the orderable to be created
          * @param  {Object}  dispensable                            the dispensable of the orderable to be created
+         * @param  {Object}  extraData                              the extra data
          * @return {Orderable}                                      the orderable object
          */
-        function Orderable(id, productCode, fullProductName, dispensable) {
+        function Orderable(id, productCode, fullProductName, dispensable, extraData) {
             this.id = id;
             this.productCode = productCode;
             this.fullProductName = fullProductName;
             this.dispensable = dispensable;
+            this.extraData = extraData;
         }
 
     }

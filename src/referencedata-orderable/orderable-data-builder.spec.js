@@ -28,6 +28,7 @@
         OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
         OrderableDataBuilder.prototype.withId = withId;
         OrderableDataBuilder.prototype.withPrograms = withPrograms;
+        OrderableDataBuilder.prototype.withExtraData = withExtraData;
         OrderableDataBuilder.prototype.build = build;
         OrderableDataBuilder.prototype.buildJson = buildJson;
 
@@ -75,12 +76,18 @@
             return this;
         }
 
+        function withExtraData(extraData) {
+            this.extraData = extraData;
+            return this;
+        }
+
         function build() {
             return new Orderable(
                 this.id,
                 this.productCode,
                 this.fullProductName,
-                this.dispensable
+                this.dispensable,
+                this.extraData
             );
         }
 
