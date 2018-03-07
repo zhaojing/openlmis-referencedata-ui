@@ -30,7 +30,7 @@
 			controller: 'ProductListController',
 			templateUrl: 'admin-product-list/product-list.html',
 			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.PRODUCTS_MANAGE],
+			accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
 			resolve: {
                 programs: function(programService) {
                     return programService.getAll();

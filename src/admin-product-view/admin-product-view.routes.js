@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.products.view', {
             label: 'adminProductView.orderableDetails',
             url: '/products/:id',
-            accessRights: [ADMINISTRATION_RIGHTS.PRODUCTS_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
             views: {
                 '@openlmis': {
                     controller: 'ProductViewController',
