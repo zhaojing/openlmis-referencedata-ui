@@ -63,7 +63,7 @@
         function addRoleAssignment(roleId, roleName, roleType, programId, programName,
                                     supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
             validateNewRoleAssignment(this, roleId, roleName, roleType, programId, programName,
-                                        supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName);
+                                        supervisoryNodeId, supervisoryNodeName, warehouseId);
             this.roleAssignments.push(
                 new RoleAssignment(
                     roleId,
@@ -95,9 +95,8 @@
         }
 
         function validateNewRoleAssignment(user, roleId, roleName, roleType, programId, programName,
-                                            supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
-            if (((programId || supervisoryNodeId) && (warehouseId)) ||
-                (!programId && supervisoryNodeId)) {
+                                            supervisoryNodeId, supervisoryNodeName, warehouseId) {
+            if (isRoleAssignmentValid(programId, supervisoryNodeId, warehouseId)) {
                 throw new Error('referencedataRoles.roleAssignmentInvalid');
             } else if (roleType === ROLE_TYPES.SUPERVISION && !supervisoryNodeId && !user.homeFacilityId) {
                 throw new Error('referencedataRoles.homeFacilityRoleInvalid');
@@ -111,11 +110,32 @@
             roleAssignments.forEach(function(existingRoleAssignment) {
                 alreadyExist = alreadyExist ||
                     (existingRoleAssignment.roleId === roleId &&
-                        (!(programId || existingRoleAssignment.programId) || existingRoleAssignment.programId === programId) &&
-                        (!(supervisoryNodeId || existingRoleAssignment.supervisoryNodeId) || existingRoleAssignment.supervisoryNodeId === supervisoryNodeId) &&
-                        (!(warehouseId || existingRoleAssignment.warehouseId) || existingRoleAssignment.warehouseId === warehouseId));
+                        isRoleAssignmentDuplicated(programId, supervisoryNodeId, warehouseId, existingRoleAssignment));
             });
             return alreadyExist;
+        }
+
+        function isRoleAssignmentValid(programId, supervisoryNodeId, warehouseId) {
+            return hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) ||
+                hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId);
+        }
+
+        function hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId) {
+            return !programId && supervisoryNodeId;
+        }
+
+        function hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) {
+            return (programId || supervisoryNodeId) && warehouseId;
+        }
+
+        function isRoleAssignmentDuplicated(programId, supervisoryNodeId, warehouseId, existingRoleAssignment) {
+            return hasFieldValue(existingRoleAssignment.programId, programId) &&
+                hasFieldValue(existingRoleAssignment.supervisoryNodeId, supervisoryNodeId) &&
+                hasFieldValue(existingRoleAssignment.warehouseId, warehouseId);
+        }
+
+        function hasFieldValue(existingValue, newValue) {
+            return !(newValue || existingValue) || existingValue === newValue;
         }
     }
 })();
