@@ -94,8 +94,7 @@
             )
             .then(function() {
                 loadingModalService.open();
-                var promise = vm.editMode ? facilityTypeService.update(vm.facilityType) : facilityTypeService.create(vm.facilityType);
-                promise
+                getSavePromise()
                 .then(function() {
                     notificationService.success(vm.editMode ? 'adminFacilityTypeEdit.save.success' : 'adminFacilityTypeEdit.create.success');
                     stateTrackerService.goToPreviousState();
@@ -105,6 +104,10 @@
                     notificationService.error(vm.editMode ? 'adminFacilityTypeEdit.save.failure' : 'adminFacilityTypeEdit.create.failure');
                 });
             });
+        }
+
+        function getSavePromise() {
+            return vm.editMode ? facilityTypeService.update(vm.facilityType) : facilityTypeService.create(vm.facilityType);
         }
     }
 })();

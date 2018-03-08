@@ -14,7 +14,7 @@
                     <label for="displayOrder">{{'adminFacilityTypeEdit.facilityTypeDisplayOrder' | message}}</label>
                     <input positive-integer id="displayOrder" ng-model="vm.facilityType.displayOrder" required></input>
                     <label for="active">
-                        <input type="checkbox" ng-model="vm.facilityType.active"/>
+                        <input id="active" type="checkbox" ng-model="vm.facilityType.active"/>
                         {{'adminFacilityTypeEdit.active' | message}}
                     </label>
                 </form>
