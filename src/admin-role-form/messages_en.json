@@ -10,7 +10,7 @@
     "adminRoleForm.generalAdmin.label": "Administration",
     "adminRoleForm.geographicZonesManage": "Manage geographic zones",
     "adminRoleForm.name": "Name",
-    "adminRoleForm.orderablesManage": "Manage orderable",
+    "adminRoleForm.orderablesManage": "Manage orderables",
     "adminRoleForm.orderFulfillment.description": "Provides rights for viewing, transferring, editing orders and managing proof of deliveries.",
     "adminRoleForm.orderFulfillment.label": "Fulfillment",
     "adminRoleForm.ordersEdit": "Edit orders",
