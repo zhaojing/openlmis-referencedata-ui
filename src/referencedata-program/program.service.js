@@ -58,6 +58,7 @@
             get: get,
             getAll: getAll,
             getUserPrograms: getUserPrograms,
+            getUserSupportedPrograms: getUserSupportedPrograms,
             update: update,
             create: create
         };
@@ -156,6 +157,21 @@
             .catch(function() {
                 return $q.reject();
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-program.programService
+         * @name getUserSupportedPrograms
+         *
+         * @description
+         * Retrieves programs for the given user.
+         *
+         * @param  {String}  userId User UUID
+         * @return {Promise}        Array of programs
+         */
+        function getUserSupportedPrograms(userId) {
+            return resource.getUserSupportedPrograms({userId: userId}).$promise;
         }
     }
 })();

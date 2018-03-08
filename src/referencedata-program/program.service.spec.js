@@ -15,7 +15,7 @@
 
 describe('programService', function() {
 
-    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, programService, program1, program2;
+    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, programService, program1, program2, ProgramDataBuilder;
 
     beforeEach(function() {
         module('referencedata-program', function($provide, $qProvider){
@@ -36,12 +36,13 @@ describe('programService', function() {
             });
         });
 
-        inject(function(_$httpBackend_, _$rootScope_, _$q_, _openlmisUrlFactory_, _programService_) {
+        inject(function(_$httpBackend_, _$rootScope_, _$q_, _openlmisUrlFactory_, _programService_, $injector) {
             $httpBackend = _$httpBackend_;
             $rootScope = _$rootScope_;
             $q = _$q_;
             openlmisUrlFactory = _openlmisUrlFactory_;
             programService = _programService_;
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
         program1 = {
@@ -223,6 +224,45 @@ describe('programService', function() {
             expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
             expect(resultSpy.mostRecentCall.args[0][0].id).toBe('example');
             $httpBackend.verifyNoOutstandingRequest();
+        });
+    });
+
+    describe('getSupportedUserPrograms', function() {
+        var usersProgramResponse;
+
+        beforeEach(function() {
+            var programs = [new ProgramDataBuilder().build()];
+            usersProgramResponse = $httpBackend
+                .when('GET', openlmisUrlFactory('api/users/userId/supportedPrograms'))
+                .respond(200, programs);
+        });
+
+        it('should get a list of all the users programs', function() {
+            var resultSpy = jasmine.createSpy('resultSpy');
+
+            programService.getUserSupportedPrograms('userId')
+            .then(resultSpy);
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+            expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
+            expect(resultSpy.mostRecentCall.args[0].length).toBe(1);
+        });
+
+        it('should reject promise on unsuccessful request', function() {
+            var resultSpy = jasmine.createSpy('resultSpy');
+            usersProgramResponse.respond(400);
+
+            programService.getUserSupportedPrograms('userId')
+            .catch(resultSpy);
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(resultSpy).toHaveBeenCalled();
+            expect(programsStorage.put).not.toHaveBeenCalled();
         });
     });
 
