@@ -33,6 +33,7 @@
             ORDERS_EDIT: 'ORDERS_EDIT',
             ORDERS_VIEW: 'ORDERS_VIEW',
             PODS_MANAGE: 'PODS_MANAGE',
+            PODS_VIEW: 'PODS_VIEW',
             SHIPMENTS_EDIT: 'SHIPMENTS_EDIT',
             SHIPMENTS_VIEW: 'SHIPMENTS_VIEW'
         };
