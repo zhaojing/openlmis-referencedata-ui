@@ -48,7 +48,7 @@
          * @param  {Object}  identifiers                            the identifiers
          * @return {Orderable}                                      the orderable object
          */
-        function Orderable(id, productCode, fullProductName, dispensable, extraData) {
+        function Orderable(id, productCode, fullProductName, dispensable, extraData, identifiers) {
             this.id = id;
             this.productCode = productCode;
             this.fullProductName = fullProductName;
