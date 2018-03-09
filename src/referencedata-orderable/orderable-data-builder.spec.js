@@ -29,6 +29,7 @@
         OrderableDataBuilder.prototype.withId = withId;
         OrderableDataBuilder.prototype.withPrograms = withPrograms;
         OrderableDataBuilder.prototype.withExtraData = withExtraData;
+        OrderableDataBuilder.prototype.withIdentifiers = withIdentifiers;
         OrderableDataBuilder.prototype.build = build;
         OrderableDataBuilder.prototype.buildJson = buildJson;
 
@@ -78,6 +79,11 @@
 
         function withExtraData(extraData) {
             this.extraData = extraData;
+            return this;
+        }
+
+        function withIdentifiers(identifiers) {
+            this.identifiers = identifiers;
             return this;
         }
 
