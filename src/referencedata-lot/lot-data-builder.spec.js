@@ -28,6 +28,7 @@
         LotDataBuilder.prototype.build = build;
         LotDataBuilder.prototype.withId = withId;
         LotDataBuilder.prototype.withExpirationDate = withExpirationDate;
+        LotDataBuilder.prototype.withTradeItemId = withTradeItemId;
 
         return LotDataBuilder;
 
@@ -38,7 +39,7 @@
             this.lotCode = 'L' + LotDataBuilder.instanceNumber;
             this.expirationDate = '2017-05-02T05:59:51.993Z';
             this.manufactureDate = null;
-            this.tradeItem = null;
+            this.tradeItemId = null;
         }
 
         function withId(id) {
@@ -51,13 +52,18 @@
             return this;
         }
 
+        function withTradeItemId(tradeItemId) {
+            this.tradeItemId = tradeItemId;
+            return this;
+        }
+
         function build() {
             return new Lot(
                 this.id,
                 this.lotCode,
                 this.expirationDate,
                 this.manufactureDate,
-                this.tradeItem,
+                this.tradeItemId,
                 true
             );
         }

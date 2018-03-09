@@ -44,16 +44,16 @@
          * @param  {String}  lotCode            the lot code
          * @param  {String}  expirationDate     the expiration date
          * @param  {String}  manufactureDate    the manufacture date
-         * @param  {Object}  tradeItem          the trade item
-         * @param  {Boolean}  active            true if active; otherwise false
+         * @param  {Object}  tradeItemId        the id of trade item
+         * @param  {Boolean} active             true if active; otherwise false
          * @return {Lot}                        the lot object
          */
-        function Lot(id, lotCode, expirationDate, manufactureDate, tradeItem, active) {
+        function Lot(id, lotCode, expirationDate, manufactureDate, tradeItemId, active) {
             this.id = id;
             this.lotCode = lotCode;
             this.expirationDate = expirationDate;
             this.manufactureDate = manufactureDate;
-            this.tradeItem = tradeItem;
+            this.tradeItemId = tradeItemId;
             this.active = active;
         }
 
