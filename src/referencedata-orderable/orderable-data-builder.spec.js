@@ -93,7 +93,8 @@
                 this.productCode,
                 this.fullProductName,
                 this.dispensable,
-                this.extraData
+                this.extraData,
+                this.identifiers
             );
         }
 
