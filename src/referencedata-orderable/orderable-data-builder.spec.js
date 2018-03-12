@@ -43,7 +43,7 @@
             this.productCode = 'C' + instanceNumber;
             this.fullProductName = 'Product ' + instanceNumber;;
             this.dispensable = {
-                dispensingUnit: ''
+                displayUnit: ''
             };
             this.description = 'Product ' + instanceNumber + ' description';
             this.netContent = instanceNumber + 1;
