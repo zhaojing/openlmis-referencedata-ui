@@ -30,6 +30,7 @@
         OrderableDataBuilder.prototype.withPrograms = withPrograms;
         OrderableDataBuilder.prototype.withExtraData = withExtraData;
         OrderableDataBuilder.prototype.withIdentifiers = withIdentifiers;
+        OrderableDataBuilder.prototype.withNetContent = withNetContent;
         OrderableDataBuilder.prototype.build = build;
         OrderableDataBuilder.prototype.buildJson = buildJson;
 
@@ -84,6 +85,11 @@
 
         function withIdentifiers(identifiers) {
             this.identifiers = identifiers;
+            return this;
+        }
+
+        function withNetContent(netContent) {
+            this.netContent = netContent;
             return this;
         }
 
