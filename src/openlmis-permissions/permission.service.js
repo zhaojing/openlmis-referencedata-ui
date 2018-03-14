@@ -138,7 +138,7 @@
                     }
                 })
                 .catch(function() {
-                    deferred.reject()
+                    deferred.reject();
                 });
 
             return deferred.promise;
@@ -162,8 +162,8 @@
         }
 
         function permissionMatchWithAnyProgram(permission, right, facilityId, programId) {
-            return permission.right === right
-                && permission.facilityId === facilityId
+            return permission.right === right && 
+                permission.facilityId === facilityId;
         }
 
         /**
