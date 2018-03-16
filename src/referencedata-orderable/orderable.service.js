@@ -35,8 +35,8 @@
 
         var resource = $resource(openlmisUrlFactory('/api/orderables/:id'), {}, {
                 'search': {
-                    url: openlmisUrlFactory('/api/orderables/search'),
-                    method: 'POST'
+                    url: openlmisUrlFactory('/api/orderables'),
+                    method: 'GET'
                 }
             });
 
@@ -81,7 +81,8 @@
          * @return {Promise}                  the page of orderables
          */
         function search(paginationParams, queryParams) {
-            return resource.search(paginationParams, queryParams).$promise;
+            var params = angular.merge({}, paginationParams, queryParams);
+            return resource.search(params).$promise;
         }
     }
 })();

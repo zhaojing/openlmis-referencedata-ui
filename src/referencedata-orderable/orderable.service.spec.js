@@ -81,15 +81,17 @@ describe('orderableService', function() {
             searchParams = {
                 code: 'some-code',
                 name: 'some-name',
-                description: 'some-description',
                 program: 'some-program-id'
             };
             paginationParams = {
                 page: 0,
                 size: 10,
             };
-            $httpBackend.when('POST', openlmisUrlFactory('/api/orderables/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size)).respond(200, {content: orderables});
+            $httpBackend.whenGET(openlmisUrlFactory('/api/orderables?' +
+                'page=' + paginationParams.page + '&size=' + paginationParams.size +
+                "&code=" + searchParams.code + "&name=" + searchParams.name +
+                "&program=" + searchParams.program))
+                .respond(200, {content: orderables});
         });
 
         it('should return promise', function() {
@@ -112,8 +114,10 @@ describe('orderableService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('POST', openlmisUrlFactory('/api/orderables/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size));
+            $httpBackend.expectGET(openlmisUrlFactory(openlmisUrlFactory('/api/orderables?' +
+                'page=' + paginationParams.page + '&size=' + paginationParams.size +
+                "&code=" + searchParams.code + "&name=" + searchParams.name +
+                "&program=" + searchParams.program)));
 
             orderableService.search(paginationParams, searchParams);
             $httpBackend.flush();
