@@ -26,6 +26,7 @@
     function OrderableDataBuilder(Orderable, ProgramOrderableDataBuilder) {
 
         OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
+        OrderableDataBuilder.prototype.withProductCode = withProductCode;
         OrderableDataBuilder.prototype.withId = withId;
         OrderableDataBuilder.prototype.withPrograms = withPrograms;
         OrderableDataBuilder.prototype.withExtraData = withExtraData;
@@ -90,6 +91,11 @@
 
         function withNetContent(netContent) {
             this.netContent = netContent;
+            return this;
+        }
+
+        function withProductCode(productCode) {
+            this.productCode = productCode;
             return this;
         }
 
