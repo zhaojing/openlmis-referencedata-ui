@@ -34,8 +34,7 @@
     ];
 
     function service(openlmisUrlFactory, $resource, localStorageFactory, userFactory) {
-        var offlineUserDetails = localStorageFactory('offlineUserDetails'),
-        resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
+        var resource = $resource(openlmisUrlFactory('/api/users/:id'), {}, {
             query: {
                 url: openlmisUrlFactory('/api/users'),
                 method: 'GET'

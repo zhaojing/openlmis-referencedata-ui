@@ -31,7 +31,7 @@
                 '@openlmis': {
                     controller: 'GeographicZoneViewController',
                     templateUrl: 'admin-geographic-zone-view/geographic-zone-view.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

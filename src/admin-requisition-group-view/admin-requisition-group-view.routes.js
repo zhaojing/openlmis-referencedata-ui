@@ -31,7 +31,7 @@
                 '@openlmis': {
                     controller: 'RequisitionGroupViewController',
                     templateUrl: 'admin-requisition-group-view/requisition-group-view.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

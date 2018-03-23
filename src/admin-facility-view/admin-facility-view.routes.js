@@ -31,7 +31,7 @@
                 '@openlmis': {
                     controller: 'FacilityViewController',
                     templateUrl: 'admin-facility-view/facility-view.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

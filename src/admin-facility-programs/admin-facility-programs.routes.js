@@ -24,14 +24,12 @@
     routes.$inject = ['modalStateProvider'];
 
     function routes(modalStateProvider) {
-        var dialog;
-
         modalStateProvider.state('openlmis.administration.facilities.facility.programs', {
             controller: 'FacilityProgramsController',
             controllerAs: 'vm',
             parentResolves: ['facility'],
             resolve: {
-                programs: programsResolve,
+                programs: programsResolve
             },
             templateUrl: 'admin-facility-programs/facility-programs.html',
             url: '/programs'

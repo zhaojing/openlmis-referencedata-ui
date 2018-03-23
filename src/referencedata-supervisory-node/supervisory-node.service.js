@@ -34,7 +34,7 @@
         var resource = $resource(referencedataUrlFactory('/api/supervisoryNodes/:id'), {}, {
             search: {
                 url: referencedataUrlFactory('/api/supervisoryNodes/search'),
-                method: 'POST',
+                method: 'POST'
             }
         });
 

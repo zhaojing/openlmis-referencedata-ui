@@ -31,7 +31,7 @@
                 '@openlmis': {
                     controller: 'SupervisoryNodeEditController',
                     templateUrl: 'admin-supervisory-node-edit/supervisory-node-edit.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {
@@ -42,7 +42,7 @@
                     return paginationService.registerList(null, $stateParams, function() {
                         return supervisoryNode.childNodes;
                     });
-                },
+                }
             }
         });
     }

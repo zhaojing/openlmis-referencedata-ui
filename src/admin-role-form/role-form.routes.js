@@ -57,7 +57,7 @@
                 '@openlmis': {
                     controller: 'RoleFormController',
                     templateUrl: 'admin-role-form/role-form.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             }
         });

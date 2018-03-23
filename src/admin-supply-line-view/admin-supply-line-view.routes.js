@@ -31,7 +31,7 @@
                 '@openlmis': {
                     controller: 'SupplyLineViewController',
                     templateUrl: 'admin-supply-line-view/supply-line-view.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

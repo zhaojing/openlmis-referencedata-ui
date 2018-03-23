@@ -31,7 +31,7 @@
                 '@openlmis': {
                     controller: 'ProductViewController',
                     templateUrl: 'admin-product-view/product-view.html',
-                    controllerAs: 'vm',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

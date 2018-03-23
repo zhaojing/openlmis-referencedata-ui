@@ -43,7 +43,7 @@
                 update: {
                     url: referencedataUrlFactory('/api/facilityTypes/:id'),
                     method: 'PUT'
-                },
+                }
             });
 
             this.get = get;
