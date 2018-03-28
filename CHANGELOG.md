@@ -22,6 +22,7 @@ Improvements:
 * [OLMIS-3995](https://openlmis.atlassian.net/browse/OLMIS-3995): Extended LotDataBuilder with the withId method.
 * [OLMIS-4087](https://openlmis.atlassian.net/browse/OLMIS-4087): Added new methods (buildAsDistrictHospital, buildAsDistrictStore) to FacilityTypeDataBuilder and updated facilityTypeService to support retrieving several types by ids.
 * [OLMIS-4118](https://openlmis.atlassian.net/browse/OLMIS-4118): Show display unit for Dispensable
+* [OLMIS-4384](https://openlmis.atlassian.net/browse/OLMIS-4384): Changed Supervisory Node Service to reflect endpoint refactor.
 
 Bug fixes:
 * [OLMIS-3501](https://openlmis.atlassian.net/browse/OLMIS-3501): Fixed caching home facility supervised programs.

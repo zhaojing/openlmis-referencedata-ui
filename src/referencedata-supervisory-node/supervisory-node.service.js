@@ -35,7 +35,7 @@
             query: {
                 url: referencedataUrlFactory('/api/supervisoryNodes'),
                 method: 'GET',
-                isArray: false,
+                isArray: false
             }
         });
 
