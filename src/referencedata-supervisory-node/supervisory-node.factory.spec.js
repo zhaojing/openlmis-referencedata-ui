@@ -19,7 +19,7 @@ describe('supervisoryNodeFactory', function() {
 
     beforeEach(function() {
         module('referencedata-supervisory-node', function($provide) {
-            supervisoryNodeService = jasmine.createSpyObj('supervisoryNodeService', ['getAll', 'get']);
+            supervisoryNodeService = jasmine.createSpyObj('supervisoryNodeService', ['query', 'get']);
             $provide.service('supervisoryNodeService', function() {
                 return supervisoryNodeService;
             });
@@ -79,7 +79,9 @@ describe('supervisoryNodeFactory', function() {
             }
         ];
 
-        supervisoryNodeService.getAll.andReturn($q.when(supervisoryNodes));
+        supervisoryNodeService.query.andReturn($q.when({
+            content: supervisoryNodes
+        }));
     });
 
     describe('getAllSupervisoryNodesWithDisplay', function() {

@@ -48,16 +48,13 @@
          * @return {Promise} supervisoryNodes array of supervisory nodes
          */
         function getAllSupervisoryNodesWithDisplay() {
-            var deferred = $q.defer();
-
-            supervisoryNodeService.getAll().then(function(supervisoryNodes) {
-                angular.forEach(supervisoryNodes, function(node) {
+            return supervisoryNodeService.query()
+            .then(function(supervisoryNodePage) {
+                supervisoryNodePage.content.forEach(function(node) {
                     node.$display = node.name + ' (' + node.facility.name + ')';
                 });
-                deferred.resolve(supervisoryNodes);
-            }, deferred.reject);
-
-            return deferred.promise;
+                return supervisoryNodePage.content;
+            });
         }
 
         /**

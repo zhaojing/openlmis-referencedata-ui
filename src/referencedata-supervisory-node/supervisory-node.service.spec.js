@@ -39,27 +39,6 @@ describe('supervisoryNodeService', function() {
         ];
     });
 
-    describe('get all', function() {
-
-        var data;
-
-        beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/supervisoryNodes'))
-                .respond(200, supervisoryNodes);
-        });
-
-        it('should get all roles', function() {
-            supervisoryNodeService.getAll().then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
-        });
-    });
-
     describe('get', function() {
 
         beforeEach(function() {
@@ -93,7 +72,7 @@ describe('supervisoryNodeService', function() {
         });
     });
 
-    describe('search', function() {
+    describe('query', function() {
 
         var page, size, name, url;
 
@@ -101,19 +80,18 @@ describe('supervisoryNodeService', function() {
             page = 0;
             size = 2;
             name = 'supervisoryNode';
-            url = referencedataUrlFactory('/api/supervisoryNodes/search?page=' + page + '&size=' + size);
+            url = referencedataUrlFactory('/api/supervisoryNodes?name=' + name + '&page=' + page + '&size=' + size);
 
-            $httpBackend.when('POST', url)
+            $httpBackend.when('GET', url)
                 .respond(200, {content: [supervisoryNodes[0], supervisoryNodes[1]]});
         });
 
         it('should make correct request', function() {
-            $httpBackend.expectPOST(url);
+            $httpBackend.expectGET(url);
 
-            supervisoryNodeService.search({
+            supervisoryNodeService.query({
                 page: page,
-                size: size
-            }, {
+                size: size, 
                 name: name
             });
             $httpBackend.flush();
@@ -122,10 +100,9 @@ describe('supervisoryNodeService', function() {
         it('should resolve to supervisory node` list', function() {
             var result;
 
-            supervisoryNodeService.search({
+            supervisoryNodeService.query({
                 page: page,
-                size: size
-            }, {
+                size: size, 
                 name: name
             }).then(function(paginatedObject) {
                 result = paginatedObject;

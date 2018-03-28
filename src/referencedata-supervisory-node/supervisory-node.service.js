@@ -32,15 +32,15 @@
 
     function service(referencedataUrlFactory, $resource) {
         var resource = $resource(referencedataUrlFactory('/api/supervisoryNodes/:id'), {}, {
-            search: {
-                url: referencedataUrlFactory('/api/supervisoryNodes/search'),
-                method: 'POST'
+            query: {
+                url: referencedataUrlFactory('/api/supervisoryNodes'),
+                method: 'GET',
+                isArray: false,
             }
         });
 
         this.get = get;
-        this.getAll = getAll;
-        this.search = search;
+        this.query = query;
 
         /**
          * @ngdoc method
@@ -62,31 +62,16 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-supervisory-node.supervisoryNodeService
-         * @name getAll
-         *
-         * @description
-         * Gets all supervisory nodes.
-         *
-         * @return {Promise} the array of all supervisory nodes
-         */
-        function getAll() {
-            return resource.query().$promise;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-supervisory-node.supervisoryNodeService
          * @name search
          *
          * @description
          * Searches supervisory nodes using given parameters.
          *
-         * @param  {Object}  paginationParams The pagination parameters
-         * @param  {Object}  queryParams      The search parameters
-         * @return {Promise}                  The requested page of filtered supervisory nodes
+         * @param  {Object}  params the query and pagination parameters
+         * @return {Promise}        the requested page of filtered supervisory nodes
          */
-        function search(paginationParams, queryParams) {
-            return resource.search(paginationParams, queryParams).$promise;
+        function query(params) {
+            return resource.query(params).$promise;
         }
     }
 })();
