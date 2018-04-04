@@ -32,12 +32,11 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.SUPPLY_LINES_MANAGE],
             resolve: {
-                warehouses: function($q, facilityService) {
+                supplyingFacilities: function($q, facilityService) {
                     var deferred = $q.defer();
 
-                    facilityService.search(null, {
-                        type: 'warehouse'
-                    }).then(function(response) {
+                    facilityService.search(null, {})
+                    .then(function(response) {
                         deferred.resolve(response.content);
                     }, deferred.reject);
 
@@ -48,7 +47,7 @@
                         var params = angular.copy(stateParams);
 
                         if (!params.sort) {
-                            params.sort = "supplyingFacility";
+                            params.sort = 'supplyingFacility';
                         }
 
                         return supplyLineService.search(params);

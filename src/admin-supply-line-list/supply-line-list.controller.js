@@ -28,9 +28,9 @@
         .module('admin-supply-line-list')
         .controller('SupplyLineListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'supplyLines', 'warehouses'];
+    controller.$inject = ['$state', '$stateParams', 'supplyLines', 'supplyingFacilities'];
 
-    function controller($state, $stateParams, supplyLines, warehouses) {
+    function controller($state, $stateParams, supplyLines, supplyingFacilities) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -50,13 +50,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-supply-line-list.controller:SupplyLineListController
-         * @name warehouses
+         * @name supplyingFacilities
          * @type {Array}
          *
          * @description
-         * Contains list of all warehouses.
+         * Contains list of all supplying facilities.
          */
-        vm.warehouses = undefined;
+        vm.supplyingFacilities = undefined;
 
         /**
          * @ngdoc property
@@ -79,7 +79,7 @@
          */
         function onInit() {
             vm.supplyLines = supplyLines;
-            vm.warehouses = warehouses;
+            vm.supplyingFacilities = supplyingFacilities;
             vm.supplyingFacility = $stateParams.supplyingFacility;
         }
 

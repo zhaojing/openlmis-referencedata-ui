@@ -4,7 +4,7 @@
         <fieldset class="form-group">
             <label for="supplyingFacility">{{'adminSupplyLineList.supplyingFacility' | message}}</label>
             <select id="supplyingFacility"
-                    ng-options="warehouse.code as warehouse.name for warehouse in vm.warehouses"
+                    ng-options="supplyingFacility.code as supplyingFacility.name for supplyingFacility in vm.supplyingFacilities"
                     ng-model="vm.supplyingFacility">
             </select>
         </fieldset>

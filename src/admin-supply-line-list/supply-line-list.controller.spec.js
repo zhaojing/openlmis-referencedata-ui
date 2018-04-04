@@ -15,8 +15,7 @@
 
 describe('SupplyLineListController', function () {
 
-    var $state, $controller,
-        vm, supplyLines, stateParams;
+    var $state, $controller, vm, supplyLines, stateParams, supplyingFacilities;
 
     beforeEach(function() {
         module('admin-supply-line-list');
@@ -26,7 +25,7 @@ describe('SupplyLineListController', function () {
             $state = $injector.get('$state');
         });
 
-        warehouses = [
+        supplyingFacilities = [
             {
                 name: 'facility-1',
                 id: 'facility-1-id',
@@ -54,12 +53,12 @@ describe('SupplyLineListController', function () {
         stateParams = {
             page: 0,
             size: 10,
-            supplyingFacility: warehouses[0].code
+            supplyingFacility: supplyingFacilities[0].code
         };
 
         vm = $controller('SupplyLineListController', {
             supplyLines: supplyLines,
-            warehouses: warehouses,
+            supplyingFacilities: supplyingFacilities,
             $stateParams: stateParams
         });
         vm.$onInit();
@@ -77,8 +76,8 @@ describe('SupplyLineListController', function () {
             expect(vm.supplyLines).toEqual(supplyLines);
         });
 
-        it('should expose warehouses array', function() {
-            expect(vm.warehouses).toEqual(warehouses);
+        it('should expose supplying facilities array', function() {
+            expect(vm.supplyingFacilities).toEqual(supplyingFacilities);
         });
 
         it('should expose supplying facility', function() {

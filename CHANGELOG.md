@@ -36,6 +36,7 @@ Bug fixes:
 * [OLMIS-4227](https://openlmis.atlassian.net/browse/OLMIS-4227): Fixed checking if role is already assigned.
 * [OLMIS-4281](https://openlmis.atlassian.net/browse/OLMIS-4281): Updated Orderable service to use new reference data API.
 * [OLMIS-4467](https://openlmis.atlassian.net/browse/OLMIS-4467): All facilities are cached upon login instead of only the active ones.
+* [OLMIS-4443](https://openlmis.atlassian.net/browse/OLMIS-4443): Supply Lines list will no allow filtering by all facilities type (instead of only warehouses)
 
 
 5.2.2 / 2017-11-09
