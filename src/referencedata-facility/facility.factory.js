@@ -45,7 +45,7 @@
                 getUserSupervisedFacilities: getUserSupervisedFacilities,
                 getAllUserFacilities: getAllUserFacilities,
                 searchAndOrderFacilities: searchAndOrderFacilities,
-                getActiveMinimalFacilities: getActiveMinimalFacilities
+                getAllMinimalFacilities: getAllMinimalFacilities
             };
 
 
@@ -264,15 +264,15 @@
             /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityFactory
-             * @name getActiveMinimalFacilities
+             * @name getAllMinimalFacilities
              *
              * @description
-             * Returns minimal representation of active facilities.
+             * Returns minimal representation of all facilities in the system.
              *
-             * @return {Promise}         the page of active facilities
+             * @return {Promise}         the page of facilities
              */
-            function getActiveMinimalFacilities() {
-                return facilityService.getAllMinimal({ active: true });
+            function getAllMinimalFacilities() {
+                return facilityService.getAllMinimal();
             }
         }
 

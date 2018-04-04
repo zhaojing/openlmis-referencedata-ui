@@ -34,7 +34,8 @@ Bug fixes:
 * [OLMIS-4176](https://openlmis.atlassian.net/browse/OLMIS-4176): Fixed problems with loading modal on User Edit screen.
 * [OLMIS-3599](https://openlmis.atlassian.net/browse/OLMIS-3599): Use ORDERABLES_MANAGE right instead of PRODUCTS_MANAGE right (it is not used on backend side)
 * [OLMIS-4227](https://openlmis.atlassian.net/browse/OLMIS-4227): Fixed checking if role is already assigned.
-* [OLMIS-4281](https://openlmis.atlassian.net/browse/OLMIS-4281): Updated Orderable service to use new reference data API
+* [OLMIS-4281](https://openlmis.atlassian.net/browse/OLMIS-4281): Updated Orderable service to use new reference data API.
+* [OLMIS-4467](https://openlmis.atlassian.net/browse/OLMIS-4467): All facilities are cached upon login instead of only the active ones.
 
 
 5.2.2 / 2017-11-09

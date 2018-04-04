@@ -46,7 +46,7 @@ describe('loginService facilities cache decorator', function() {
         var username, password, userInfo;
 
         beforeEach(function() {
-            spyOn(facilityFactory, 'getActiveMinimalFacilities');
+            spyOn(facilityFactory, 'getAllMinimalFacilities');
 
             username = 'validUsername';
             password = 'validPass';
@@ -75,13 +75,13 @@ describe('loginService facilities cache decorator', function() {
             $rootScope.$apply();
 
             expect(originalLoginSpy).toHaveBeenCalledWith(invalidUsername, invalidPassword);
-            expect(facilityFactory.getActiveMinimalFacilities).not.toHaveBeenCalled();
+            expect(facilityFactory.getAllMinimalFacilities).not.toHaveBeenCalled();
             expect(rejected).toBe(true);
         });
 
         it('should reject if service fails to fetch facilities', function() {
             originalLoginSpy.andReturn($q.resolve(userInfo));
-            facilityFactory.getActiveMinimalFacilities.andReturn($q.reject());
+            facilityFactory.getAllMinimalFacilities.andReturn($q.reject());
 
             var rejected;
             loginService.login(
@@ -94,13 +94,13 @@ describe('loginService facilities cache decorator', function() {
             $rootScope.$apply();
 
             expect(originalLoginSpy).toHaveBeenCalledWith(username, password);
-            expect(facilityFactory.getActiveMinimalFacilities).toHaveBeenCalled();
+            expect(facilityFactory.getAllMinimalFacilities).toHaveBeenCalled();
             expect(rejected).toEqual(true);
         });
 
         it('should resolve to the server response', function() {
             originalLoginSpy.andReturn($q.resolve(userInfo));
-            facilityFactory.getActiveMinimalFacilities.andReturn($q.resolve());
+            facilityFactory.getAllMinimalFacilities.andReturn($q.resolve());
 
             var result;
             loginService.login(
@@ -113,7 +113,7 @@ describe('loginService facilities cache decorator', function() {
             $rootScope.$apply();
 
             expect(originalLoginSpy).toHaveBeenCalledWith(username, password);
-            expect(facilityFactory.getActiveMinimalFacilities).toHaveBeenCalled();
+            expect(facilityFactory.getAllMinimalFacilities).toHaveBeenCalled();
             expect(result).toEqual(userInfo);
         });
 

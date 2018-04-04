@@ -52,13 +52,13 @@
          * @name login
          *
          * @description
-         * Runs facilityFactory.getActiveMinimalFacilities, which has been modified to store
+         * Runs facilityFactory.getAllMinimalFacilities, which has been modified to store
          * the received list in the browsers cache.
          */
         function login() {
             return originalLogin.apply($delegate, arguments)
             .then(function(response) {
-                return facilityFactory.getActiveMinimalFacilities()
+                return facilityFactory.getAllMinimalFacilities()
                 .then(function() {
                     return response;
                 });

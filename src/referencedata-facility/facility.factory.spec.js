@@ -189,7 +189,7 @@ describe('facilityFactory', function() {
         });
     });
 
-    describe('getActiveMinimalFacilities', function() {
+    describe('getAllMinimalFacilities', function() {
 
         beforeEach(function() {
             spyOn(facilityService, 'getAllMinimal').andReturn($q.when([
@@ -200,12 +200,12 @@ describe('facilityFactory', function() {
 
         it('should fetch active minimal facilities', function() {
             var minimalFacilities;
-            facilityFactory.getActiveMinimalFacilities().then(function (result) {
+            facilityFactory.getAllMinimalFacilities().then(function (result) {
                 minimalFacilities = result;
             });
             $rootScope.$apply();
 
-            expect(facilityService.getAllMinimal).toHaveBeenCalledWith({ active: true });
+            expect(facilityService.getAllMinimal).toHaveBeenCalled();
             expect(minimalFacilities.length).toEqual(2);
         });
     });
