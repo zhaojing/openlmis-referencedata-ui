@@ -45,7 +45,7 @@ describe('OrderableFulfillsResource', function() {
         );
     });
 
-    ddescribe('query', function() {
+    describe('query', function() {
 
         var params, responseOne, responseTwo, orderableFulfillsResource, $httpBackend, openlmisUrlFactory;
 
