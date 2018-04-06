@@ -18,7 +18,7 @@ describe('OrderableResource', function() {
     var OrderableResource, OpenlmisResourceMock, fulfillmentUrlFactory;
 
     beforeEach(function() {
-        module('shipment', function($provide) {
+        module('referencedata-orderable', function($provide) {
             OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
             $provide.factory('OpenlmisResource', function() {
