@@ -130,7 +130,7 @@ describe('OrderableFulfillsResource', function() {
             expect(rejected).toEqual(true);
         });
 
-        iit('should return merged responses if multiple requests were sent', function() {
+        it('should return merged responses if multiple requests were sent', function() {
             $httpBackend
                 .expectGET(openlmisUrlFactory('/api/orderableFulfills?some=paramOne'))
                 .respond(200, responseOne);
