@@ -15,7 +15,7 @@
 
 describe('OrderableResource', function() {
 
-    var OrderableResource, OpenlmisResourceMock, fulfillmentUrlFactory;
+    var OrderableResource, OpenlmisResourceMock;
 
     beforeEach(function() {
         module('referencedata-orderable', function($provide) {
@@ -27,7 +27,6 @@ describe('OrderableResource', function() {
         });
 
         inject(function($injector) {
-            fulfillmentUrlFactory = $injector.get('fulfillmentUrlFactory');
             OrderableResource = $injector.get('OrderableResource');
         });
     });
@@ -35,8 +34,6 @@ describe('OrderableResource', function() {
     it('should extend OpenlmisResource', function() {
         new OrderableResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith(
-            fulfillmentUrlFactory('/api/shipmentDrafts')
-        );
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith(('/api/orderables'));
     });
 });
