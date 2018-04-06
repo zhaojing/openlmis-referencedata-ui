@@ -28,16 +28,36 @@
         .module('referencedata-orderable-fulfills')
         .factory('OrderableFulfillsResource', OrderableFulfillsResource);
 
-    OrderableFulfillsResource.$inject = ['referencedataUrlFactory', 'OpenlmisResource', 'classExtender'];
+    OrderableFulfillsResource.$inject = ['referencedataUrlFactory', 'OpenlmisResource', 'classExtender', '$q'];
 
-    function OrderableFulfillsResource(referencedataUrlFactory, OpenlmisResource, classExtender) {
+    function OrderableFulfillsResource(referencedataUrlFactory, OpenlmisResource, classExtender, $q) {
 
         classExtender.extend(OrderableFulfillsResource, OpenlmisResource);
+
+        OrderableFulfillsResource.prototype.query = query;
 
         return OrderableFulfillsResource;
 
         function OrderableFulfillsResource() {
-            this.super(referencedataUrlFactory('/api/orderableFulfills'));
+            this.super('/api/orderableFulfills');
+        }
+
+        function query(params) {
+            var requests = [];
+            var resource = this.resource;
+            this.splitter.split(this.uri, params).forEach(function(params) {
+                requests.push(resource.query(params).$promise);
+            });
+
+            return $q.all(requests)
+            .then(function(responses) {
+                return responses.reduce(function(left, right) {
+                    Object.keys(right).forEach(function(key) {
+                        left[key] = right[key];
+                    });
+                    return left;
+                });
+            });
         }
     }
 })();
