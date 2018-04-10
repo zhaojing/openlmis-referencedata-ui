@@ -188,7 +188,7 @@
                 permission.facilityId === facilityId;
         }
 
-        function permissionMatchWithAnyProgramAndFacility(permission, right, facilityId, programId) {
+        function permissionMatchWithAnyProgramAndFacility(permission, right) {
             return permission.right === right;
         }
 
