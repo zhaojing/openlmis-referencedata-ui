@@ -55,7 +55,7 @@
 
         this.hasPermission = hasPermission;
         this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
-        this.hasPermissionWithAnyProgramAndFacility = hasPermissionWithAnyProgramAndFacility;
+        this.hasPermissionWithAnyProgramAndAnyFacility = hasPermissionWithAnyProgramAndAnyFacility;
         this.load = load;
         this.empty = empty;
         this.testPermission = testPermission;
@@ -119,8 +119,8 @@
          * If the permission object that is tested against doesn't have a
          * 'right' property, then it is immediately rejected.
          */
-        function hasPermissionWithAnyProgramAndFacility(userId, permission) {
-            return this.testPermission(userId, permission, permissionMatchWithAnyProgramAndFacility);
+        function hasPermissionWithAnyProgramAndAnyFacility(userId, permission) {
+            return this.testPermission(userId, permission, permissionMatchWithAnyProgramAndAnyFacility);
         }
 
         /**
@@ -188,7 +188,7 @@
                 permission.facilityId === facilityId;
         }
 
-        function permissionMatchWithAnyProgramAndFacility(permission, right) {
+        function permissionMatchWithAnyProgramAndAnyFacility(permission, right) {
             return permission.right === right;
         }
 

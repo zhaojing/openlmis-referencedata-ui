@@ -268,7 +268,7 @@ describe('openlmis-permissions.permissionService', function() {
 
         function checkPermission(permissionObj) {
             var success = false;
-            permissionService.hasPermissionWithAnyProgramAndFacility('userId', permissionObj)
+            permissionService.hasPermissionWithAnyProgramAndAnyFacility('userId', permissionObj)
                 .then(function() {
                     success = true;
                 });
@@ -286,15 +286,15 @@ describe('openlmis-permissions.permissionService', function() {
             })).toBe(false);
         });
 
-        it('will resolve promise if the argument matches a permission', function() {
-            // Not too strict, program and facility is ignored
+        it('will resolve promise if the argument matches a permission ignoring facility and program', function() {
             expect(checkPermission({
                 right: 'right',
                 programId: 'program-id',
                 facilityId: 'facility-id'
             })).toBe(true);
+        });
 
-            // Just right
+        it('will resolve promise if the argument matches a permission right', function() {
             expect(checkPermission({
                 right: 'right',
             })).toBe(true);
