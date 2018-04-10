@@ -256,4 +256,49 @@ describe('openlmis-permissions.permissionService', function() {
 
     });
 
+
+    describe('hasPermissionWithAnyProgramAndFacility', function() {
+        beforeEach(function () {
+            localStorageService.get.andReturn([{
+                right: 'right',
+                facilityId: 'facility-id',
+                programId: 'program-id'
+            }]);
+        });
+
+        function checkPermission(permissionObj) {
+            var success = false;
+            permissionService.hasPermissionWithAnyProgramAndFacility('userId', permissionObj)
+                .then(function() {
+                    success = true;
+                });
+            $rootScope.$apply();
+            return success;
+        }
+
+        it('will return FALSE if no arguments', function() {
+            expect(checkPermission({})).toBe(false);
+        });
+        it('will return FALSE if the right is not set', function(){
+            expect(checkPermission({
+                facilityId: 'facility-id',
+                programId: 'program-id'
+            })).toBe(false);
+        });
+
+        it('will resolve promise if the argument matches a permission', function() {
+            // Not too strict, program and facility is ignored
+            expect(checkPermission({
+                right: 'right',
+                programId: 'program-id',
+                facilityId: 'facility-id'
+            })).toBe(true);
+
+            // Just right
+            expect(checkPermission({
+                right: 'right',
+            })).toBe(true);
+        });
+    });
+
 });

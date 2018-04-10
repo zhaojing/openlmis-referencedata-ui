@@ -55,6 +55,7 @@
 
         this.hasPermission = hasPermission;
         this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
+        this.hasPermissionWithAnyProgramAndFacility = hasPermissionWithAnyProgramAndFacility;
         this.load = load;
         this.empty = empty;
         this.testPermission = testPermission;
@@ -99,6 +100,27 @@
          */
         function hasPermissionWithAnyProgram(userId, permission) {
             return this.testPermission(userId, permission, permissionMatchWithAnyProgram);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name hasPermissionWithAnyProgramAndFacility
+         *
+         * @param  {String} userId User to get test permission for
+         * @param  {Object} permission Object representing a permission
+         * @return {Promise} A promise that resolves a if there is a match
+         *
+         * @description
+         * The returned promise will resolve if the browser has a matching
+         * permission for any program and facility. If there is no permission that matches, 
+         * then the promise is rejected.
+         *
+         * If the permission object that is tested against doesn't have a
+         * 'right' property, then it is immediately rejected.
+         */
+        function hasPermissionWithAnyProgramAndFacility(userId, permission) {
+            return this.testPermission(userId, permission, permissionMatchWithAnyProgramAndFacility);
         }
 
         /**
@@ -164,6 +186,10 @@
         function permissionMatchWithAnyProgram(permission, right, facilityId, programId) {
             return permission.right === right && 
                 permission.facilityId === facilityId;
+        }
+
+        function permissionMatchWithAnyProgramAndFacility(permission, right, facilityId, programId) {
+            return permission.right === right;
         }
 
         /**
