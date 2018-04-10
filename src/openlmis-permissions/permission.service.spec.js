@@ -257,7 +257,7 @@ describe('openlmis-permissions.permissionService', function() {
     });
 
 
-    describe('hasPermissionWithAnyProgramAndFacility', function() {
+    describe('hasPermissionWithAnyProgramAndAnyFacility', function() {
         beforeEach(function () {
             localStorageService.get.andReturn([{
                 right: 'right',

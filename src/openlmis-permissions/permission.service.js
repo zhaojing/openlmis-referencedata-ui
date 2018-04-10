@@ -105,7 +105,7 @@
         /**
          * @ngdoc method
          * @methodOf openlmis-permissions.permissionService
-         * @name hasPermissionWithAnyProgramAndFacility
+         * @name hasPermissionWithAnyProgramAndAnyFacility
          *
          * @param  {String} userId User to get test permission for
          * @param  {Object} permission Object representing a permission
