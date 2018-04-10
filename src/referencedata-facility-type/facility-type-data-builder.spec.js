@@ -28,6 +28,7 @@
         FacilityTypeDataBuilder.prototype.build = build;
         FacilityTypeDataBuilder.buildDistrictHospital = buildAsDistrictHospital;
         FacilityTypeDataBuilder.buildDistrictStore = buildAsDistrictStore;
+        FacilityTypeDataBuilder.buildAsInactive = buildAsInactive;
         FacilityTypeDataBuilder.prototype.withName = withName;
         FacilityTypeDataBuilder.prototype.withCode = withCode;
         FacilityTypeDataBuilder.prototype.withDisplayOrder = withDisplayOrder;
@@ -60,6 +61,15 @@
                 .withCode('dist_store')
                 .withName('District Store')
                 .withDisplayOrder(4)
+                .build();
+        }
+
+        function buildAsInactive(){
+            return new FacilityTypeDataBuilder()
+                .withCode('inactive_type')
+                .withName('Inactive Type')
+                .withDisplayOrder(5)
+                .deactivated()
                 .build();
         }
 
