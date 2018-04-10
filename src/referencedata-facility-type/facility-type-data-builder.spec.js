@@ -32,6 +32,7 @@
         FacilityTypeDataBuilder.prototype.withCode = withCode;
         FacilityTypeDataBuilder.prototype.withDisplayOrder = withDisplayOrder;
         FacilityTypeDataBuilder.prototype.withoutId = withoutId;
+        FacilityTypeDataBuilder.prototype.deactivated = deactivated;
 
         return FacilityTypeDataBuilder;
 
@@ -79,6 +80,11 @@
 
         function withoutId() {
             this.id = undefined;
+            return this;
+        }
+
+        function deactivated() {
+            this.active = false;
             return this;
         }
 
