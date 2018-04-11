@@ -87,13 +87,10 @@
          * @return {Promise} resolves after password saves successfully on the server.
          */
         function createPassword() {
-            var loadingPromise = loadingModalService.open(true);
-
+            loadingModalService.open(true);
             return authUserService.resetPassword(vm.user.username, vm.user.newPassword)
             .then(function() {
-                loadingPromise.then(function() {
-                    notificationService.success('adminUserForm.passwordSetSuccessfully');
-                });
+                notificationService.success('adminUserForm.passwordSetSuccessfully');
                 modalDeferred.resolve();
             })
             .catch(function(error) {
