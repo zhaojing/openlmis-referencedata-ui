@@ -34,7 +34,7 @@
     ];
 
     function controller(user, title, modalDeferred, authUserService, loadingModalService,
-                        notificationService) {
+        notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -96,9 +96,9 @@
                 });
                 modalDeferred.resolve();
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 loadingModalService.close();
-                return error;                
+                return error;
             });
         }
 
