@@ -15,7 +15,8 @@
 
 describe('UserListController', function () {
 
-    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, userPasswordModalFactoryMock;
+    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, userPasswordModalFactoryMock,
+        stateParams, UserDataBuilder;
 
     beforeEach(function() {
         module('admin-user-list', function($provide) {
@@ -36,22 +37,13 @@ describe('UserListController', function () {
             $rootScope = $injector.get('$rootScope');
             $state = $injector.get('$state');
             $q = $injector.get('$q');
+            UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
         usersList = [
-            {
-                id: 1,
-                username: 'administrator'
-            },
-            {
-                id: 2,
-                username: 'user'
-            }
+            new UserDataBuilder().withUsername('administrator').build(),
+            new UserDataBuilder().withUsername('user').build()
         ];
-        stateParams = {
-            page: 0,
-            size: 10
-        };
 
         vm = $controller('UserListController', {
             users: usersList
@@ -59,6 +51,44 @@ describe('UserListController', function () {
 
         spyOn($state, 'reload').andReturn();
         spyOn($state, 'go').andReturn();
+    });
+
+    describe('onInit', function() {
+
+        beforeEach(function() {
+            stateParams = {
+                firstName: usersList[0].firstName,
+                lastName: usersList[0].lastName,
+                username: usersList[0].username,
+                email: usersList[0].email
+            };
+
+            vm = $controller('UserListController', {
+                users: usersList,
+                $stateParams: stateParams
+            });
+            vm.$onInit();
+        });
+
+        it('should expose users', function() {
+            expect(vm.users).toEqual(usersList);
+        });
+
+        it('should expose firstName', function() {
+            expect(vm.firstName).toEqual(usersList[0].firstName);
+        });
+
+        it('should expose firstName', function() {
+            expect(vm.lastName).toEqual(usersList[0].lastName);
+        });
+
+        it('should expose firstName', function() {
+            expect(vm.email).toEqual(usersList[0].email);
+        });
+
+        it('should expose firstName', function() {
+            expect(vm.username).toEqual(usersList[0].username);
+        });
     });
 
     it('should expose sort options', function() {
@@ -71,25 +101,21 @@ describe('UserListController', function () {
 
     describe('resetUserPassword', function() {
 
-        var modalDeferred, user;
+        var modalDeferred;
 
         beforeEach(function() {
-            user = {
-                username: 'username',
-                email: 'email'
-            };
             modalDeferred = $q.defer();
             userPasswordModalFactoryMock.resetPassword.andReturn(modalDeferred.promise);
         });
 
         it('should open user password modal', function() {
-            vm.resetUserPassword(user);
+            vm.resetUserPassword(usersList[0]);
 
-            expect(userPasswordModalFactoryMock.resetPassword).toHaveBeenCalledWith(user);
+            expect(userPasswordModalFactoryMock.resetPassword).toHaveBeenCalledWith(usersList[0]);
         });
 
         it('should reload state after password change was successful', function() {
-            vm.resetUserPassword(user);
+            vm.resetUserPassword(usersList[0]);
             modalDeferred.resolve();
             $rootScope.$apply();
 
@@ -97,7 +123,7 @@ describe('UserListController', function () {
         });
 
         it('should not reload state if password change was unsuccessful', function() {
-            vm.resetUserPassword(user);
+            vm.resetUserPassword(usersList[0]);
             modalDeferred.reject();
             $rootScope.$apply();
 

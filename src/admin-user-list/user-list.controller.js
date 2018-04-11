@@ -38,6 +38,7 @@
 
         vm.resetUserPassword = resetUserPassword;
         vm.search = search;
+        vm.$onInit = onInit;
 
         /**
          * @ngdoc property
@@ -48,7 +49,7 @@
          * @description
          * Holds user list.
          */
-        vm.users = users;
+        vm.users = undefined;
 
         /**
          * @ngdoc property
@@ -59,7 +60,7 @@
          * @description
          * Holds user first name filter value.
          */
-        vm.firstName = $stateParams.firstName;
+        vm.firstName = undefined;
 
         /**
          * @ngdoc property
@@ -70,7 +71,7 @@
          * @description
          * Holds user last name filter value.
          */
-        vm.lastName = $stateParams.lastName;
+        vm.lastName = undefined;
 
         /**
          * @ngdoc property
@@ -81,7 +82,7 @@
          * @description
          * Holds user email filter value.
          */
-        vm.email = $stateParams.email;
+        vm.email = undefined;
 
         /**
          * @ngdoc property
@@ -92,7 +93,7 @@
          * @description
          * Holds username filter value.
          */
-        vm.username = $stateParams.username;
+        vm.username = undefined;
 
         /**
          * @ngdoc property
@@ -108,6 +109,22 @@
             'lastName': 'adminUserList.lastName',
             'username': 'adminUserList.username'
         };
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-list.controller:UsersListController
+         * @name onInit
+         *
+         * @description
+         * Method that is executed on initiating UsersListController.
+         */
+        function onInit() {
+            vm.users = users;
+            vm.firstName = $stateParams.firstName;
+            vm.lastName = $stateParams.lastName;
+            vm.email = $stateParams.email;
+            vm.username = $stateParams.username;
+        }
 
         /**
          * @ngdoc method
