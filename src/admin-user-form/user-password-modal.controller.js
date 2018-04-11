@@ -89,14 +89,17 @@
         function createPassword() {
             var loadingPromise = loadingModalService.open(true);
 
-            authUserService.resetPassword(vm.user.username, vm.user.newPassword)
+            return authUserService.resetPassword(vm.user.username, vm.user.newPassword)
             .then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminUserForm.passwordSetSuccessfully');
                 });
                 modalDeferred.resolve();
             })
-            .catch(loadingModalService.close);
+            .catch(function (error) {
+                loadingModalService.close();
+                return error;                
+            });
         }
 
         /**

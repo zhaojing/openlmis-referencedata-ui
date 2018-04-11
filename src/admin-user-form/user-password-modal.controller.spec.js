@@ -97,6 +97,18 @@ describe('UserPasswordModalController', function() {
             expect(loadingModalService.close).toHaveBeenCalled();
             expect(notificationService.success.callCount).toBe(1);
         });
+
+        it('should return promise with api error if request fails', function() {
+            authUserService.resetPassword.andReturn($q.reject('api error'));
+
+            var error;
+            vm.createPassword().then(function(response) {
+                error = response;
+            });
+            $rootScope.$apply();
+
+            expect(error).toBe('api error');
+        });
     });
 
     describe('sendResetEmail', function() {
