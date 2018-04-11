@@ -40,9 +40,7 @@ describe('OrderableFulfillsResource', function() {
 
         new OrderableFulfillsResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith(
-            referencedataUrlFactory('/api/orderableFulfills')
-        );
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/orderableFulfills');
     });
 
     describe('query', function() {
