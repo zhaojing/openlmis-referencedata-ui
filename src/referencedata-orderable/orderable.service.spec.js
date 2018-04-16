@@ -114,10 +114,10 @@ describe('orderableService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expectGET(openlmisUrlFactory(openlmisUrlFactory('/api/orderables?' +
+            $httpBackend.expectGET(openlmisUrlFactory('/api/orderables?' +
                 'page=' + paginationParams.page + '&size=' + paginationParams.size +
                 "&code=" + searchParams.code + "&name=" + searchParams.name +
-                "&program=" + searchParams.program)));
+                "&program=" + searchParams.program));
 
             orderableService.search(paginationParams, searchParams);
             $httpBackend.flush();
