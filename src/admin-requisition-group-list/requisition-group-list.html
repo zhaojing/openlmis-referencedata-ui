@@ -28,6 +28,7 @@
         <thead>
             <tr>
                 <th>{{'adminRequisitionGroupList.requisitionGroupName' | message}}</th>
+                <th>{{'adminRequisitionGroupList.program' | message}}</th>
                 <th>{{'adminRequisitionGroupList.code' | message}}</th>
                 <th>{{'adminRequisitionGroupList.supervisoryNode' | message}}</th>
                 <th>{{'adminRequisitionGroupList.geographicZone' | message}}</th>
@@ -38,6 +39,10 @@
         <tbody>
             <tr ng-repeat="requisitionGroup in vm.requisitionGroups">
                 <td>{{requisitionGroup.name}}</td>
+                <td ng-if="requisitionGroup.requisitionGroupProgramSchedules.length > 1"
+                    popover-template="admin-requisition-group-list/requisition-group-programs-popover.html">
+                    {{'adminRequisitionGroupList.programs' | message: {'number': requisitionGroup.requisitionGroupProgramSchedules.length } }}</td>
+                <td ng-if="!(requisitionGroup.requisitionGroupProgramSchedules.length > 1)">{{requisitionGroup.requisitionGroupProgramSchedules[0].program.name}}</td>
                 <td>{{requisitionGroup.code}}</td>
                 <td>{{requisitionGroup.supervisoryNode.name}}</td>
                 <td>{{requisitionGroup.supervisoryNode.facility.geographicZone.name}}</td>
