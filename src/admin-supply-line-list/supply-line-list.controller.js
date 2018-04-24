@@ -91,7 +91,7 @@
         function onInit() {
             vm.supplyLines = supplyLines;
             vm.supplyingFacilities = supplyingFacilities;
-            vm.programs = programs
+            vm.programs = programs;
             vm.supplyingFacility = $stateParams.supplyingFacility;
             vm.program = $stateParams.program;
         }
