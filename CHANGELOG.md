@@ -1,3 +1,9 @@
+5.3.1 / WIP
+==================
+
+Improvements:
+* [OLMIS-2998](https://openlmis.atlassian.net/browse/OLMIS-2998): Added served facilities popover to supply line and allowed filtering by program
+
 5.3.0 / 2018-04-24
 ==================
 

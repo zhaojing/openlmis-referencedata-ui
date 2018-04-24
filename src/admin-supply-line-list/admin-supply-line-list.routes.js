@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.supplyLines', {
             showInNavigation: true,
             label: 'adminSupplyLineList.supplyLines',
-            url: '/supplyLines?supplyingFacility&page&size&sort',
+            url: '/supplyLines?supplyingFacility&program&page&size&sort',
             controller: 'SupplyLineListController',
             templateUrl: 'admin-supply-line-list/supply-line-list.html',
             controllerAs: 'vm',
@@ -41,6 +41,9 @@
                     }, deferred.reject);
 
                     return deferred.promise;
+                },
+                programs: function($q, programService) {
+                    return programService.getAll();
                 },
                 supplyLines: function($stateParams, supplyLineService, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {

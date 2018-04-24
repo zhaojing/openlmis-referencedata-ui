@@ -25,7 +25,10 @@
      */
     angular.module('referencedata-supply-line', [
         'ngResource',
-        'referencedata'
+        'referencedata',
+        'referencedata-program',
+        'referencedata-facility',
+        'referencedata-supervisory-node'
     ]);
 
 })();

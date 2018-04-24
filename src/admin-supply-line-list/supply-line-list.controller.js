@@ -28,9 +28,9 @@
         .module('admin-supply-line-list')
         .controller('SupplyLineListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'supplyLines', 'supplyingFacilities'];
+    controller.$inject = ['$state', '$stateParams', 'supplyLines', 'supplyingFacilities', 'programs'];
 
-    function controller($state, $stateParams, supplyLines, supplyingFacilities) {
+    function controller($state, $stateParams, supplyLines, supplyingFacilities, programs) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -61,6 +61,17 @@
         /**
          * @ngdoc property
          * @propertyOf admin-supply-line-list.controller:SupplyLineListController
+         * @name programs
+         * @type {Array}
+         *
+         * @description
+         * Contains list of all programs.
+         */
+        vm.programs = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-supply-line-list.controller:SupplyLineListController
          * @name supplyingFacility
          * @type {String}
          *
@@ -80,7 +91,9 @@
         function onInit() {
             vm.supplyLines = supplyLines;
             vm.supplyingFacilities = supplyingFacilities;
+            vm.programs = programs
             vm.supplyingFacility = $stateParams.supplyingFacility;
+            vm.program = $stateParams.program;
         }
 
         /**
@@ -95,6 +108,7 @@
             var stateParams = angular.copy($stateParams);
 
             stateParams.supplyingFacility = vm.supplyingFacility;
+            stateParams.program = vm.program;
 
             $state.go('openlmis.administration.supplyLines', stateParams, {
                 reload: true

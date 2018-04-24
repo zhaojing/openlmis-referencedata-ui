@@ -15,50 +15,44 @@
 
 describe('SupplyLineListController', function () {
 
-    var $state, $controller, vm, supplyLines, stateParams, supplyingFacilities;
+    var $state, $controller, vm, supplyLines, stateParams, supplyingFacilities, FacilityDataBuilder,
+        SupplyLineDataBuilder, ProgramDataBuilder, programs;
 
     beforeEach(function() {
         module('admin-supply-line-list');
+        module('referencedata-supply-line');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
             $state = $injector.get('$state');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
         supplyingFacilities = [
-            {
-                name: 'facility-1',
-                id: 'facility-1-id',
-                code: 'facility-1-code'
-            },
-            {
-
-                name: 'facility-2',
-                id: 'facility-2-id',
-                code: 'facility-2-code'
-            }
+            new FacilityDataBuilder().build(),
+            new FacilityDataBuilder().build()
         ];
         supplyLines = [
-            {
-                id: '1',
-                code: 'line-1-code',
-                name: 'supply-line-1'
-            },
-            {
-                id: '2',
-                code: 'line-2-code',
-                name: 'supply-line-2'
-            }
+            new SupplyLineDataBuilder().buildJson(),
+            new SupplyLineDataBuilder().buildJson()
+        ];
+        programs = [
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build()
         ];
         stateParams = {
             page: 0,
             size: 10,
-            supplyingFacility: supplyingFacilities[0].code
+            supplyingFacility: supplyingFacilities[0].code,
+            program: programs[0].code
         };
 
         vm = $controller('SupplyLineListController', {
             supplyLines: supplyLines,
             supplyingFacilities: supplyingFacilities,
+            programs: programs,
             $stateParams: stateParams
         });
         vm.$onInit();
@@ -83,12 +77,21 @@ describe('SupplyLineListController', function () {
         it('should expose supplying facility', function() {
             expect(vm.supplyingFacility).toEqual(stateParams.supplyingFacility);
         });
+
+        it('should expose programs array', function() {
+            expect(vm.programs).toEqual(programs);
+        });
+
+        it('should expose program', function() {
+            expect(vm.program).toEqual(stateParams.program);
+        });
     });
 
     describe('search', function() {
 
-        it('should set search params', function() {
+        it('should search by supplying facility', function() {
             vm.supplyingFacility = 'facility-code';
+            vm.program = undefined;
 
             vm.search();
 
@@ -96,6 +99,19 @@ describe('SupplyLineListController', function () {
                 page: stateParams.page,
                 size: stateParams.size,
                 supplyingFacility: vm.supplyingFacility
+            }, {reload: true});
+        });
+
+        it('should search by program', function() {
+            vm.program = 'program-code';
+            vm.supplyingFacility = undefined;
+
+            vm.search();
+
+            expect($state.go).toHaveBeenCalledWith('openlmis.administration.supplyLines', {
+                page: stateParams.page,
+                size: stateParams.size,
+                program: vm.program
             }, {reload: true});
         });
 
