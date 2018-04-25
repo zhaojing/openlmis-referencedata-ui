@@ -42,7 +42,7 @@
 
                     return deferred.promise;
                 },
-                programs: function($q, programService) {
+                programs: function(programService) {
                     return programService.getAll();
                 },
                 supplyLines: function($stateParams, supplyLineService, paginationService) {
