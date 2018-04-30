@@ -26,6 +26,9 @@
     function SupervisoryNodeDataBuilder(SupervisoryNode, FacilityDataBuilder) {
 
         SupervisoryNodeDataBuilder.prototype.build = build;
+        SupervisoryNodeDataBuilder.prototype.buildWithoutFacility = buildWithoutFacility;
+        SupervisoryNodeDataBuilder.prototype.addChildNode = addChildNode;
+        SupervisoryNodeDataBuilder.prototype.withFacility = withFacility;
 
         return SupervisoryNodeDataBuilder;
 
@@ -47,6 +50,26 @@
                 this.facility,
                 this.childNodes
             );
+        }
+
+        function buildWithoutFacility() {
+            return new SupervisoryNode(
+                this.id,
+                this.name,
+                this.code,
+                null,
+                this.childNodes
+            );
+        }
+
+        function addChildNode(node) {
+            this.childNodes.push(node);
+            return this;
+        }
+
+        function withFacility(facility) {
+            this.facility = facility;
+            return this;
         }
     }
 })();

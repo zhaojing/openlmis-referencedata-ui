@@ -51,7 +51,11 @@
             return supervisoryNodeService.query()
             .then(function(supervisoryNodePage) {
                 supervisoryNodePage.content.forEach(function(node) {
-                    node.$display = node.name + ' (' + node.facility.name + ')';
+                    if (node.facility) {
+                        node.$display = node.name + ' (' + node.facility.name + ')';
+                    } else {
+                        node.$display = node.name;
+                    }
                 });
                 return supervisoryNodePage.content;
             });

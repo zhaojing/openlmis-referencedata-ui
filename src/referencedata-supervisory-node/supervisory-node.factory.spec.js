@@ -15,7 +15,8 @@
 
 describe('supervisoryNodeFactory', function() {
 
-    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, facilityService, supervisoryNodes, facilities;
+    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, facilityService, 
+        supervisoryNodes, facilities, SupervisoryNodeDataBuilder;
 
     beforeEach(function() {
         module('referencedata-supervisory-node', function($provide) {
@@ -34,40 +35,9 @@ describe('supervisoryNodeFactory', function() {
             $rootScope = $injector.get('$rootScope');
             $q = $injector.get('$q');
             supervisoryNodeFactory = $injector.get('supervisoryNodeFactory');
+            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
         });
 
-        supervisoryNodes = [
-            {
-                id: '1',
-                code: 'SN1',
-                name: 'node-1',
-                facility: {
-                    name: 'facility-1',
-                    id: 'facility-id-1'
-                },
-                childNodes: [
-                    {
-                        id: '2',
-                        code: 'SN2',
-                        name: 'node-2',
-                        facility: {
-                            id: 'facility-id-2'
-                        },
-                        childNodes: []
-                    }
-                ]
-            },
-            {
-                id: '2',
-                code: 'SN2',
-                name: 'node-2',
-                facility: {
-                    name: 'facility-2',
-                    id: 'facility-id-2'
-                },
-                childNodes: []
-            }
-        ];
         facilities = [
             {
                 name: 'facility-1',
@@ -77,6 +47,12 @@ describe('supervisoryNodeFactory', function() {
                 name: 'facility-2',
                 id: 'facility-id-2'
             }
+        ];
+        var supervisoryNodeChild = new SupervisoryNodeDataBuilder().withFacility(facilities[1]).build();
+        supervisoryNodes = [
+            new SupervisoryNodeDataBuilder().addChildNode(supervisoryNodeChild).withFacility(facilities[0]).build(),
+            supervisoryNodeChild,
+            new SupervisoryNodeDataBuilder().buildWithoutFacility()
         ];
 
         supervisoryNodeService.query.andReturn($q.when({
@@ -97,6 +73,18 @@ describe('supervisoryNodeFactory', function() {
             expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
             expect(data[0].$display).toEqual(data[0].name + ' (' + data[0].facility.name + ')');
             expect(data[1].$display).toEqual(data[1].name + ' (' + data[1].facility.name + ')');
+        });
+
+        it('should get all when facility is null', function() {
+            var data;
+
+            supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay().then(function(response) {
+                data = response;
+            });
+            $rootScope.$apply();
+
+            expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
+            expect(data[2].$display).toEqual(data[2].name);
         });
     });
 
