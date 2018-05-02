@@ -75,7 +75,7 @@
         }
 
         function withId(id) {
-            this.name = id;
+            this.id = id;
             return this;
         }
 
