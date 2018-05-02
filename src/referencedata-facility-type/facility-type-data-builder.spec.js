@@ -29,6 +29,7 @@
         FacilityTypeDataBuilder.buildDistrictHospital = buildAsDistrictHospital;
         FacilityTypeDataBuilder.buildDistrictStore = buildAsDistrictStore;
         FacilityTypeDataBuilder.buildAsInactive = buildAsInactive;
+        FacilityTypeDataBuilder.prototype.withId = withId;
         FacilityTypeDataBuilder.prototype.withName = withName;
         FacilityTypeDataBuilder.prototype.withCode = withCode;
         FacilityTypeDataBuilder.prototype.withDisplayOrder = withDisplayOrder;
@@ -71,6 +72,11 @@
                 .withDisplayOrder(5)
                 .deactivated()
                 .build();
+        }
+
+        function withId(id) {
+            this.name = id;
+            return this;
         }
 
         function withName(name) {
