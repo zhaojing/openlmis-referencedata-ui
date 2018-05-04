@@ -10,13 +10,12 @@
     "adminProductView.description": "Description",
     "adminProductView.associatedPrograms": "Associated Programs",
     "adminProductView.noAssociatedPrograms": "No associated programs assigned.",
-    "adminProductView.programId": "Program ID",
-    "adminProductView.productId": "Product ID",
+    "adminProductView.programName": "Program Name",
     "adminProductView.active": "Active",
     "adminProductView.displayOrder": "Display Order",
     "adminProductView.dosesPerPatient": "Doses per Patient",
     "adminProductView.fullSupply": "Full Supply",
     "adminProductView.pricePerPack": "Price per Pack",
-    "adminProductView.orderableDisplayCategoryId": "OrderableDisplayCategoryID",
+    "adminProductView.orderableCategoryDisplayName": "Category",
     "adminProductView.cancel": "Cancel"
 }
