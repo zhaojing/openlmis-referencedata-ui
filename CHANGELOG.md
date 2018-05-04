@@ -8,7 +8,8 @@ Improvements:
 * [OLMIS-2998](https://openlmis.atlassian.net/browse/OLMIS-2998): Added served facilities popover to supply line and allowed filtering by program
 
 Bug fixes:
-* [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fix error on User Roles screen when Supervisory Node is without facility
+* [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility
+* [OLMIS-4402](https://openlmis.atlassian.net/browse/OLMIS-4402): Fixed column names for associated programs grid in Products view
 
 5.3.0 / 2018-04-24
 ==================
