@@ -34,8 +34,8 @@
         $provide.decorator('User', decorator);
     }
 
-    decorator.$inject = ['$delegate', 'RoleAssignment', 'ROLE_TYPES'];
-    function decorator($delegate, RoleAssignment, ROLE_TYPES) {
+    decorator.$inject = ['$delegate', 'RoleAssignment'];
+    function decorator($delegate, RoleAssignment) {
 
         $delegate.prototype.addRoleAssignment = addRoleAssignment;
         $delegate.prototype.removeRoleAssignment = removeRoleAssignment;
@@ -62,10 +62,11 @@
          */
         function addRoleAssignment(roleId, roleName, roleType, programId, programName,
                                     supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
-            validateNewRoleAssignment(this, roleId, roleName, roleType, programId, programName,
-                                        supervisoryNodeId, supervisoryNodeName, warehouseId);
+            validateRoleAssignment(this, roleId, roleName, roleType, programId, programName,
+                                   supervisoryNodeId, supervisoryNodeName, warehouseId);
             this.roleAssignments.push(
                 new RoleAssignment(
+                    this,
                     roleId,
                     warehouseId,
                     supervisoryNodeId,
@@ -94,12 +95,10 @@
             this.roleAssignments.splice(index, 1);
         }
 
-        function validateNewRoleAssignment(user, roleId, roleName, roleType, programId, programName,
+        function validateRoleAssignment(user, roleId, roleName, roleType, programId, programName,
                                             supervisoryNodeId, supervisoryNodeName, warehouseId) {
-            if (isRoleAssignmentValid(programId, supervisoryNodeId, warehouseId)) {
+            if (isRoleAssignmentInvalid(programId, supervisoryNodeId, warehouseId)) {
                 throw new Error('referencedataRoles.roleAssignmentInvalid');
-            } else if (roleType === ROLE_TYPES.SUPERVISION && !supervisoryNodeId && !user.homeFacilityId) {
-                throw new Error('referencedataRoles.homeFacilityRoleInvalid');
             } else if (isRoleAlreadyAssigned(user.roleAssignments, roleId, programId, supervisoryNodeId, warehouseId)) {
                 throw new Error('referencedataRoles.roleAlreadyAssigned');
             }
@@ -116,7 +115,7 @@
         return alreadyExist;
     }
 
-    function isRoleAssignmentValid(programId, supervisoryNodeId, warehouseId) {
+    function isRoleAssignmentInvalid(programId, supervisoryNodeId, warehouseId) {
         return hasRoleSupervisoryNodeOrProgramAndWarehouse(programId, supervisoryNodeId, warehouseId) ||
             hasRoleSupervisoryNodeWithoutProgram(programId, supervisoryNodeId);
     }

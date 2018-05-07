@@ -15,8 +15,10 @@
 
 describe('UserRolesTabController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, loadingModalService, confirmService, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder, SupervisoryNodeDataBuilder,
-        stateParams, vm, user, roles, supervisoryNodes, warehouses, programs;
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, notificationService, confirmService,
+        UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder,
+        SupervisoryNodeDataBuilder, stateParams, vm, user, roles, supervisoryNodes,
+        warehouses, programs;
 
     beforeEach(function() {
 
@@ -48,7 +50,7 @@ describe('UserRolesTabController', function() {
 
         supervisoryNodes = [
             new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build()
         ];
         warehouses = [
             new FacilityDataBuilder().build(),
@@ -150,7 +152,7 @@ describe('UserRolesTabController', function() {
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
         });
 
-        it('should display error notification if home facility role cannot be assigned', function() {
+        it('should allow to add home facility role if user has no home facility', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
 
             vm.selectedRole = roles[1];
@@ -159,8 +161,8 @@ describe('UserRolesTabController', function() {
 
             vm.addRole();
 
-            expect(user.roleAssignments.length).toEqual(roleAssignmentsCount);
-            expect(notificationService.error).toHaveBeenCalledWith('referencedataRoles.homeFacilityRoleInvalid');
+            expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
+            expect(notificationService.error).not.toHaveBeenCalledWith('referencedataRoles.homeFacilityRoleInvalid');
         });
 
         it('should add new supervision role assignment', function() {

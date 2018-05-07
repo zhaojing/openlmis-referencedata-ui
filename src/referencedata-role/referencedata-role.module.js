@@ -25,6 +25,7 @@
      */
     angular.module('referencedata-role', [
         'ngResource',
+        'referencedata-user',
         'openlmis-urls'
     ]);
 

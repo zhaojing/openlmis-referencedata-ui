@@ -2,7 +2,6 @@
     "adminUserRoles.updateSuccessful": "User roles updated successfully!",
     "adminUserRoles.updateFailed": "Failed to update user roles",
     "adminUserRoles.roleAlreadyAssigned": "This role is already assigned!",
-    "adminUserRoles.homeFacilityRoleInvalid": "User has no home facility assigned so home facility role cannot be assigned!",
     "adminUserRoles.editUserRoles": "Edit User Roles",
     "adminUserRoles.noRolesAssigned": "No roles assigned",
     "adminUserRoles.program": "Program",

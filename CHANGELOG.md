@@ -10,6 +10,9 @@ Improvements:
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility
 * [OLMIS-4402](https://openlmis.atlassian.net/browse/OLMIS-4402): Fixed column names for associated programs grid in Products view
+* [OLMIS-4422](https://openlmis.atlassian.net/browse/OLMIS-4422): Fixed problem with entering the user roles screen.
+  * if a user has no a home facility and some home facility roles, an error icon will be displayed next to those role assignments.
+  * a user has ability to add new home facility roles but if the user has no home facility, those assignments will be ignored.
 
 5.3.0 / 2018-04-24
 ==================

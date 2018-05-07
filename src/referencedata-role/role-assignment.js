@@ -28,7 +28,9 @@
         .module('referencedata-role')
         .factory('RoleAssignment', RoleAssignment);
 
-    function RoleAssignment() {
+    RoleAssignment.$inject = ['ROLE_TYPES'];
+
+    function RoleAssignment(ROLE_TYPES) {
 
         return RoleAssignment;
 
@@ -40,6 +42,7 @@
          * @description
          * Creates a new instance of the RoleAssignment class.
          *
+         * @param  {Object}  user                the user object.
          * @param  {String}  roleId              the UUID of the role
          * @param  {String}  warehouseId         the UUID of the warehouse for fulfillment role
          * @param  {String}  supervisoryNodeId   the UUID of the supervisory node for supervision role
@@ -51,8 +54,8 @@
          * @param  {String}  warehouseName       the UUID of the program for supervision role
          * @return {Object}                      the user role assignment object
          */
-        function RoleAssignment(roleId, warehouseId, supervisoryNodeId, programId, roleName, roleType,
-                                programName, supervisoryNodeName, warehouseName) {
+        function RoleAssignment(user, roleId, warehouseId, supervisoryNodeId, programId, roleName,
+                                roleType, programName, supervisoryNodeName, warehouseName) {
             this.roleId = roleId;
             this.warehouseId = warehouseId;
             this.supervisoryNodeId = supervisoryNodeId;
@@ -62,6 +65,17 @@
             this.programName = programName;
             this.supervisoryNodeName = supervisoryNodeName;
             this.warehouseName = warehouseName;
+            this.$errors = [];
+
+            validateRoleAssignment(this, user);
+        }
+
+        function validateRoleAssignment(assignment, user) {
+           if (assignment.type === ROLE_TYPES.SUPERVISION
+                   && !assignment.supervisoryNodeId
+                   && !user.homeFacilityId) {
+               assignment.$errors.push('referencedataRoles.homeFacilityRoleInvalid');
+           }
         }
     }
 })();

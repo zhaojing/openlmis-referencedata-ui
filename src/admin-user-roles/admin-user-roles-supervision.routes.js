@@ -42,6 +42,10 @@
                             return role.type === tab;
                         });
 
+                        filtered.hasErrors = filtered.filter(function(role) {
+                            return role.$errors && role.$errors.length;
+                        }).length > 0;
+
                         return filtered.sort(function(a, b) {
                             return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);
                         });

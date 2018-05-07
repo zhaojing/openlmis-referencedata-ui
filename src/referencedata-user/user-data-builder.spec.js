@@ -81,17 +81,19 @@
         }
 
         function withSupervisionRoleAssignment(roleId, supervisoryNodeId, programId) {
-            this.roleAssignments.push(new RoleAssignment(roleId, null, supervisoryNodeId, programId));
+            this.roleAssignments.push(
+                new RoleAssignment(this, roleId, null, supervisoryNodeId, programId)
+            );
             return this;
         }
 
         function withOrderFulfillmentRoleAssignment(roleId, warehouseId) {
-            this.roleAssignments.push(new RoleAssignment(roleId, warehouseId, null, null));
+            this.roleAssignments.push(new RoleAssignment(this, roleId, warehouseId, null, null));
             return this;
         }
 
         function withGeneralAdminRoleAssignment(roleId) {
-            this.roleAssignments.push(new RoleAssignment(roleId, null, null, null));
+            this.roleAssignments.push(new RoleAssignment(this, roleId, null, null, null));
             return this;
         }
     }
