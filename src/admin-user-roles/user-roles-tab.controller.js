@@ -157,6 +157,9 @@
             vm.selectedType = tab;
             vm.filteredRoleAssignments = filteredRoleAssignments;
             vm.filteredRoles = filteredRoles;
+            vm.filteredRoleAssignmentErrors = filteredRoleAssignments.filter(function(role) {
+                return role.$errors && role.$errors.length;
+            }).length > 0;
         }
 
         /**

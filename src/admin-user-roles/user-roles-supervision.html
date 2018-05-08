@@ -28,7 +28,7 @@
         </caption>
         <thead>
             <tr>
-                <th ng-if="vm.filteredRoleAssignments.hasErrors"></th>
+                <th ng-if="vm.filteredRoleAssignmentErrors"></th>
                 <th>{{'adminUserRoles.program' | message}}</th>
                 <th>{{'adminUserRoles.supervisoryNode' | message}}</th>
                 <th>{{'adminUserRoles.role' | message}}</th>
@@ -37,11 +37,11 @@
         </thead>
         <tbody>
             <tr ng-repeat="roleAssignment in vm.items | orderBy : '$name'">
-                <td ng-if="vm.filteredRoleAssignments.hasErrors && roleAssignment.$errors.length"
+                <td ng-if="vm.filteredRoleAssignmentErrors && roleAssignment.$errors.length"
                     popover-template="admin-user-roles/role-assignment-errors-popover.html">
                     <p></p>
                 </td>
-                <td ng-if="vm.filteredRoleAssignments.hasErrors && !roleAssignment.$errors.length"></td>
+                <td ng-if="vm.filteredRoleAssignmentErrors && !roleAssignment.$errors.length"></td>
                 <td>{{roleAssignment.programName}}</td>
                 <td>{{roleAssignment.supervisoryNodeName}}</td>
                 <td>{{roleAssignment.roleName}}</td>
