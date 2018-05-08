@@ -38,7 +38,7 @@
         <tbody>
             <tr ng-repeat="roleAssignment in vm.items | orderBy : '$name'">
                 <td ng-if="vm.filteredRoleAssignmentErrors"
-                    ng-class="{role-assignment-invalid: roleAssignment.$errors.length"
+                    ng-class="{role-assignment-invalid: roleAssignment.errors.length"
                     popover-template="admin-user-roles/role-assignment-errors-popover.html">
                 </td>
                 <td>{{roleAssignment.programName}}</td>

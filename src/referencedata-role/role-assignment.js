@@ -65,7 +65,7 @@
             this.programName = programName;
             this.supervisoryNodeName = supervisoryNodeName;
             this.warehouseName = warehouseName;
-            this.$errors = [];
+            this.errors = [];
 
             validateRoleAssignment(this, user);
         }
@@ -74,7 +74,7 @@
            if (assignment.type === ROLE_TYPES.SUPERVISION
                    && !assignment.supervisoryNodeId
                    && !user.homeFacilityId) {
-               assignment.$errors.push('referencedataRoles.homeFacilityRoleInvalid');
+               assignment.errors.push('referencedataRoles.homeFacilityRoleInvalid');
            }
         }
     }

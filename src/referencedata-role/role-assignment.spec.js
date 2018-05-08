@@ -36,7 +36,7 @@ describe('RoleAssignment', function() {
             null, ROLE_TYPES.SUPERVISION, null, null, null
         );
 
-        expect(assignment.$errors).toEqual([]);
+        expect(assignment.errors).toEqual([]);
     });
 
     it('should add error if home facility role is invalid', function () {
@@ -47,7 +47,7 @@ describe('RoleAssignment', function() {
             null, ROLE_TYPES.SUPERVISION, null, null, null
         );
 
-        expect(assignment.$errors).toEqual(['referencedataRoles.homeFacilityRoleInvalid']);
+        expect(assignment.errors).toEqual(['referencedataRoles.homeFacilityRoleInvalid']);
     });
 
 });
