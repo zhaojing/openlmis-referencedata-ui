@@ -119,6 +119,10 @@ describe('UserRolesTabController', function() {
         it('should set filteredRoles', function() {
             expect(vm.filteredRoles).toEqual(roles);
         });
+
+        it('should set filteredRoleAssignmentErrors', function() {
+            expect(vm.filteredRoleAssignmentErrors).toEqual(false);
+        });
     });
 
     describe('addRole', function() {
