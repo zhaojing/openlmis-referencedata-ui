@@ -30,24 +30,28 @@ describe('RoleAssignment', function() {
         user = new UserDataBuilder().build();
     });
 
-    it('should validate role assignment', function () {
-        assignment = new RoleAssignment(
-            user, null, null, 'supervisory-node-id', null,
-            null, ROLE_TYPES.SUPERVISION, null, null, null
-        );
+    describe('constructor', function() {
 
-        expect(assignment.errors).toEqual([]);
-    });
+        it('should validate role assignment', function () {
+            assignment = new RoleAssignment(
+                user, null, null, 'supervisory-node-id', null,
+                null, ROLE_TYPES.SUPERVISION, null, null, null
+            );
 
-    it('should add error if home facility role is invalid', function () {
-        delete user.homeFacilityId;
+            expect(assignment.errors).toEqual([]);
+        });
 
-        assignment = new RoleAssignment(
-            user, null, null, null, null,
-            null, ROLE_TYPES.SUPERVISION, null, null, null
-        );
+        it('should add error if home facility role is invalid', function () {
+            delete user.homeFacilityId;
 
-        expect(assignment.errors).toEqual(['referencedataRoles.homeFacilityRoleInvalid']);
+            assignment = new RoleAssignment(
+                user, null, null, null, null,
+                null, ROLE_TYPES.SUPERVISION, null, null, null
+            );
+
+            expect(assignment.errors).toEqual(['referencedataRoles.homeFacilityRoleInvalid']);
+        });
+
     });
 
 });
