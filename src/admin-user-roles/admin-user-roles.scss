@@ -1,12 +1,7 @@
-table > tbody > tr > td.has-popover > p {
-    padding-right: 1em !important;
+.role-assignment-invalid {
     @include icon("exclamation-circle");
-    &::before{
-        position: absolute;
-        top: 50%;
-        right: 0.5em;
-        transform: translateY(-50%);
+
+    &::before {
         color: $brand-danger;
-        border-left: none;
     }
 }
