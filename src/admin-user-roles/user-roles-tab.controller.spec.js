@@ -120,8 +120,17 @@ describe('UserRolesTabController', function() {
             expect(vm.filteredRoles).toEqual(roles);
         });
 
-        it('should set showErrorColumn', function() {
+        it('should set showErrorColumn to false if role assignments does not have errors', function() {
             expect(vm.showErrorColumn).toEqual(false);
+        });
+
+        it('should set showErrorColumn to true if role assignments have errors', function() {
+            vm.filteredRoleAssignments[0].errors = ['error'];
+
+            vm.$onInit();
+            $rootScope.$apply();
+
+            expect(vm.showErrorColumn).toEqual(true);
         });
     });
 
