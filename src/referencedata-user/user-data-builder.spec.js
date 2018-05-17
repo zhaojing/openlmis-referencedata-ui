@@ -31,6 +31,7 @@
         UserDataBuilder.prototype.withGeneralAdminRoleAssignment = withGeneralAdminRoleAssignment;
         UserDataBuilder.prototype.withId = withId;
         UserDataBuilder.prototype.withUsername = withUsername;
+        UserDataBuilder.prototype.withHomeFacilityId = withHomeFacilityId;
 
         return UserDataBuilder;
 
@@ -94,6 +95,11 @@
 
         function withGeneralAdminRoleAssignment(roleId) {
             this.roleAssignments.push(new RoleAssignment(this, roleId, null, null, null));
+            return this;
+        }
+
+        function withHomeFacilityId(homeFacilityId) {
+            this.homeFacilityId = homeFacilityId;
             return this;
         }
     }
