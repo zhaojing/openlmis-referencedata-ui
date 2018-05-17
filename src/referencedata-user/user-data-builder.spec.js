@@ -32,6 +32,7 @@
         UserDataBuilder.prototype.withId = withId;
         UserDataBuilder.prototype.withUsername = withUsername;
         UserDataBuilder.prototype.withHomeFacilityId = withHomeFacilityId;
+        UserDataBuilder.prototype.withoutHomeFacilityId = withoutHomeFacilityId;
 
         return UserDataBuilder;
 
@@ -100,6 +101,11 @@
 
         function withHomeFacilityId(homeFacilityId) {
             this.homeFacilityId = homeFacilityId;
+            return this;
+        }
+
+        function withoutHomeFacilityId() {
+            this.homeFacilityId = undefined;
             return this;
         }
     }
