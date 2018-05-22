@@ -28,8 +28,10 @@
         FacilityOperatorDataBuilder) {
 
         FacilityDataBuilder.prototype.build = build;
+        FacilityDataBuilder.prototype.buildJson = buildJson;
         FacilityDataBuilder.prototype.withName = withName;
         FacilityDataBuilder.prototype.withId = withId;
+        FacilityDataBuilder.prototype.withSupportedPrograms = withSupportedPrograms;
 
         return FacilityDataBuilder;
 
@@ -51,6 +53,7 @@
             this.openLmisAccessible = true;
             this.location = 'POINT(35.23962 -13.30037)';
             this.extraData = {};
+            this.supportedPrograms = [];
         }
 
         function withName(newName) {
@@ -63,23 +66,33 @@
             return this;
         }
 
+        function withSupportedPrograms(supportedPrograms) {
+            this.supportedPrograms = supportedPrograms;
+            return this;
+        }
+
         function build() {
-            return new Facility(
-                this.id,
-                this.name,
-                this.code,
-                this.description,
-                this.type,
-                this.operator,
-                this.active,
-                this.goLiveDate,
-                this.goDownDate,
-                this.comment,
-                this.enabled,
-                this.openLmisAccessible,
-                this.location,
-                this.extraData
-            );
+            return new Facility(this.buildJson());
+        }
+
+        function buildJson() {
+            return {
+                id: this.id,
+                name: this.name,
+                code: this.code,
+                description: this.description,
+                type: this.type,
+                operator: this.operator,
+                active: this.active,
+                goLiveDate: this.goLiveDate,
+                goDownDate: this.goDownDate,
+                comment: this.comment,
+                enabled: this.enabled,
+                openlmisAccessible: this.openLmisAccessible,
+                location: this.location,
+                extraData: this.extraData,
+                supportedPrograms: this.supportedPrograms
+            };
         }
     }
 })();

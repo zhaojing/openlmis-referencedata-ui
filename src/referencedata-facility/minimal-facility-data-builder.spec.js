@@ -49,10 +49,10 @@
         }
 
         function build() {
-            return new Facility(
-                this.id,
-                this.name
-            );
+            return new Facility({
+                id: this.id,
+                name: this.name
+            });
         }
     }
 })();

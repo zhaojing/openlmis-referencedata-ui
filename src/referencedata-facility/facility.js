@@ -40,40 +40,25 @@
          * @description
          * Creates a new instance of the Facility class.
          *
-         * @param  {String}  id                 the UUID of the facility to be created
-         * @param  {String}  name               the name of the facility to be created
-         * @param  {String}  code               the code of the facility to be created
-         * @param  {String}  description        the description of the facility to be created
-         * @param  {Object}  geographicZone     the geographicZone of the facility to be created
-         * @param  {Object}  type               the type of the facility to be created
-         * @param  {Object}  operator           the operator of the facility to be created
-         * @param  {Boolean} active             true if the facility to be created is active
-         * @param  {Date}    goLiveDate         the date when the facility goes life
-         * @param  {Date}    goDownDate         the date when the facility goes down
-         * @param  {String}  comment            the comment of the facility to be created
-         * @param  {Boolean} enabled            true if the facility to be created is enabled
-         * @param  {Boolean} openLmisAccessible true if the facility to be created is accessible
-         * @param  {Object}  location           the location of the facility to be created
-         * @param  {Object}  extraData          the extraData of the facility to be created
-         * @return {Object}                     the facility object
+         * @param  {Object}  json the json representation of the facility
          */
-        function Facility(id, name, code, description, geographicZone, type, operator, active,
-            goLiveDate, goDownDate, comment, enabled, openLmisAccessible, location, extraData) {
-            this.id = id;
-            this.name = name;
-            this.code = code;
-            this.description = description;
-            this.geographicZone = geographicZone;
-            this.type = type;
-            this.operator = operator;
-            this.active = active;
-            this.goLiveDate = goLiveDate;
-            this.goDownDate = goDownDate;
-            this.comment = comment;
-            this.enabled = enabled;
-            this.openLmisAccessible = openLmisAccessible;
-            this.location = location;
-            this.extraData = extraData;
+        function Facility(json) {
+            this.id = json.id;
+            this.name = json.name;
+            this.code = json.code;
+            this.description = json.description;
+            this.geographicZone = json.geographicZone;
+            this.type = json.type;
+            this.operator = json.operator;
+            this.active = json.active;
+            this.goLiveDate = json.goLiveDate;
+            this.goDownDate = json.goDownDate;
+            this.comment = json.comment;
+            this.enabled = json.enabled;
+            this.openLmisAccessible = json.openLmisAccessible;
+            this.location = json.location;
+            this.extraData = json.extraData;
+            this.supportedPrograms = json.supportedPrograms || [];
         }
 
     }
