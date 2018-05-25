@@ -1,15 +1,29 @@
-<div>
-    <h2>{{'openlmisUser.basicInformation' | message}}</h2>
-    <dl>
-        <dt>{{'openlmisUser.firstName' | message}}</dt>
-        <dd>{{vm.user.firstName}}<dd>
-    </dl>
-    <dl>
-        <dt>{{'openlmisUser.lastName' | message}}</dt>
-        <dd>{{vm.user.lastName}}<dd>
-    </dl>
-    <dl>
-        <dt>{{'openlmisUser.email' | message}}</dt>
-        <dd>{{vm.user.email}}<dd>
-    </dl>
-</div>
+<h2>{{'openlmisUser.basicInformation' | message}}</h2>
+<form id="user-profile">
+
+    <div class="form-group">
+        <label for="user-first-name">{{'openlmisUser.firstName' | message}}</label>
+        <input id="user-first-name" type="text" ng-model="vm.user.firstName" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="user-last-name">{{'openlmisUser.lastName' | message}}</label>
+        <input id="user-last-name" type="text" ng-model="vm.user.lastName" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="user-email">{{'openlmisUser.email' | message}}</label>
+        <input id="user-email" type="text" ng-model="vm.user.email" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="user-job-title">{{'openlmisUser.jobTitle' | message}}</label>
+        <p id="user-job-title" class="form-control-static">{{vm.user.jobTitle || "---"}}</p>
+    </div>
+
+    <div class="form-group">
+        <label for="user-phone-number">{{'openlmisUser.phoneNumber' | message}}</label>
+        <input id="user-phone-number" type="text" ng-model="vm.user.phoneNumber"/>
+    </div>
+
+</form>

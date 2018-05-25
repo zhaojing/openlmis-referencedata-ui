@@ -15,43 +15,34 @@
 
 describe('User', function() {
 
-    var SOME_ID = 'some-id',
-        LUSKY = 'lusky',
-        LUKE = 'Luke',
-        SKYWALKER = 'Skywalker',
-        LUSKY_AT_FAR_FAR_AWAY = 'lusky@farfar.away',
-        HOME_FACILITY_ID = 'home-facility-id',
-        CET = 'CET';
-
-    var User, user;
+    var User, user, json, UserDataBuilder;
 
     beforeEach(function() {
         module('referencedata-user');
 
         inject(function($injector) {
             User = $injector.get('User');
+            UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        user = new User(
-            SOME_ID, LUSKY, LUKE, SKYWALKER, LUSKY_AT_FAR_FAR_AWAY, CET, HOME_FACILITY_ID, true,
-            false, true, false, {}, []
-        );
+        json = new UserDataBuilder().buildJson();
+        user = new User(json);
     });
 
     it('constructor should set all properties', function() {
-        expect(user.id).toEqual(SOME_ID);
-        expect(user.username).toEqual(LUSKY);
-        expect(user.firstName).toEqual(LUKE);
-        expect(user.lastName).toEqual(SKYWALKER);
-        expect(user.timezone).toEqual(CET);
-        expect(user.email).toEqual(LUSKY_AT_FAR_FAR_AWAY);
-        expect(user.homeFacilityId).toEqual(HOME_FACILITY_ID);
-        expect(user.verified).toEqual(true);
-        expect(user.active).toEqual(false);
-        expect(user.loginRestricted).toEqual(true);
-        expect(user.allowNotify).toEqual(false);
-        expect(user.extraData).toEqual({});
-        expect(user.roleAssignments).toEqual([]);
+        expect(user.id).toEqual(json.id);
+        expect(user.username).toEqual(json.username);
+        expect(user.firstName).toEqual(json.firstName);
+        expect(user.lastName).toEqual(json.lastName);
+        expect(user.timezone).toEqual(json.timezone);
+        expect(user.email).toEqual(json.email);
+        expect(user.homeFacilityId).toEqual(json.homeFacilityId);
+        expect(user.verified).toEqual(json.verified);
+        expect(user.active).toEqual(json.active);
+        expect(user.loginRestricted).toEqual(json.loginRestricted);
+        expect(user.allowNotify).toEqual(json.allowNotify);
+        expect(user.extraData).toEqual(json.extraData);
+        expect(user.roleAssignments).toEqual(json.roleAssignments);
     });
 
     describe('fromJson', function() {

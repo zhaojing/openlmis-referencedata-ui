@@ -56,10 +56,8 @@
 
             return referencedataUserService.get(userId)
             .then(function(response) {
-                var user = new User(response.id, response.username, response.firstName, response.lastName,
-                    response.email, response.timezone, response.homeFacilityId,
-                    response.verified, response.active, response.loginRestricted, response.allowNotify,
-                    response.extraData, []);
+                var user = new User(response);
+                user.roleAssignments = [];
 
                 addInfoToRoleAssignments(user, response.roleAssignments, roles, programs, supervisoryNodes, warehouses);
 

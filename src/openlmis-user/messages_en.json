@@ -3,5 +3,7 @@
     "openlmisUser.firstName": "First name",
     "openlmisUser.lastName": "Last name",
     "openlmisUser.email": "Email",
+    "openlmisUser.jobTitle": "Job Title",
+    "openlmisUser.phoneNumber": "Phone Number",
     "openlmisUser.profile": "Profile"
 }

@@ -21,11 +21,12 @@
         .module('referencedata-user')
         .factory('UserDataBuilder', UserDataBuilder);
 
-    UserDataBuilder.$inject = ['userFactory', 'RoleAssignment'];
+    UserDataBuilder.$inject = ['User', 'RoleAssignment'];
 
-    function UserDataBuilder(userFactory,  RoleAssignment) {
+    function UserDataBuilder(User,  RoleAssignment) {
 
         UserDataBuilder.prototype.build = build;
+        UserDataBuilder.prototype.buildJson = buildJson;
         UserDataBuilder.prototype.withSupervisionRoleAssignment = withSupervisionRoleAssignment;
         UserDataBuilder.prototype.withOrderFulfillmentRoleAssignment = withOrderFulfillmentRoleAssignment;
         UserDataBuilder.prototype.withGeneralAdminRoleAssignment = withGeneralAdminRoleAssignment;
@@ -44,6 +45,8 @@
             this.firstName = 'Jack';
             this.lastName = 'Smith';
             this.email = 'jack.smith@opelmis.com';
+            this.jobTitle = "Junior Tester";
+            this.phoneNumber = "000-000-000";
             this.timezone = 'UTC';
             this.homeFacilityId = 'facility-id';
             this.verified = true;
@@ -52,24 +55,6 @@
             this.allowNotify = true;
             this.extraData = {};
             this.roleAssignments = [];
-        }
-
-        function build() {
-            return userFactory.buildUser(
-                this.id,
-                this.username,
-                this.firstName,
-                this.lastName,
-                this.email,
-                this.timezone,
-                this.homeFacilityId,
-                this.verified,
-                this.active,
-                this.loginRestricted,
-                this.allowNotify,
-                this.extraData,
-                this.roleAssignments
-            );
         }
 
         function withId(newId) {
@@ -107,6 +92,30 @@
         function withoutHomeFacilityId() {
             this.homeFacilityId = undefined;
             return this;
+        }
+
+        function build() {
+            return new User(this.buildJson());
+        }
+
+        function buildJson() {
+            return {
+                id: this.id,
+                username: this.username,
+                firstName: this.firstName,
+                lastName: this.lastName,
+                jobTitle: this.jobTitle,
+                phoneNumber: this.phoneNumber,
+                email: this.email,
+                timezone: this.timezone,
+                homeFacilityId: this.homeFacilityId,
+                verified: this.verified,
+                active: this.active,
+                loginRestricted: this.loginRestricted,
+                allowNotify: this.allowNotify,
+                extraData: this.extraData,
+                roleAssignments: this.roleAssignments
+            };
         }
     }
 })();

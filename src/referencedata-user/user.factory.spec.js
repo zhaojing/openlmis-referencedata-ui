@@ -34,31 +34,6 @@ describe('userFactory', function() {
         });
     });
 
-    describe('buildUser', function() {
-
-        it('should build user', function() {
-            var user = userFactory.buildUser(
-                SOME_ID, LUSKY, LUKE, SKYWALKER, LUSKY_AT_FAR_FAR_AWAY, CET, HOME_FACILITY_ID, true,
-                false, true, false, {}, []
-            );
-
-            expect(user.id).toEqual(SOME_ID);
-            expect(user.username).toEqual(LUSKY);
-            expect(user.firstName).toEqual(LUKE);
-            expect(user.lastName).toEqual(SKYWALKER);
-            expect(user.timezone).toEqual(CET);
-            expect(user.email).toEqual(LUSKY_AT_FAR_FAR_AWAY);
-            expect(user.homeFacilityId).toEqual(HOME_FACILITY_ID);
-            expect(user.verified).toEqual(true);
-            expect(user.active).toEqual(false);
-            expect(user.loginRestricted).toEqual(true);
-            expect(user.allowNotify).toEqual(false);
-            expect(user.extraData).toEqual({});
-            expect(user.roleAssignments).toEqual([]);
-        });
-
-    });
-
     describe('buildUserFromResponse', function() {
 
         it('should return undefined if undefined was passed', function() {

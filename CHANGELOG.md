@@ -7,6 +7,7 @@ New functionality added in a backwards-compatible manner:
 Improvements:
 * [OLMIS-2998](https://openlmis.atlassian.net/browse/OLMIS-2998): Added served facilities popover to supply line and allowed filtering by program
 * [OLMIS-4740](https://openlmis.atlassian.net/browse/OLMIS-4740): Added Jenkinsfile.
+* [OLMIS-4717](https://openlmis.atlassian.net/browse/OLMIS-4717): Support new user resource fields
 
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility

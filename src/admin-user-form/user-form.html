@@ -9,6 +9,10 @@
     <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
     <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
     <input id="lastName" ng-model="vm.user.lastName" type="text" required/>
+    <label for="jobTitle">{{'adminUserForm.jobTitle' | message}}</label>
+    <input id="jobTitle" ng-model="vm.user.jobTitle" type="text"/>
+    <label for="phoneNumber">{{'adminUserForm.phoneNumber' | message}}</label>
+    <input id="phoneNumber" ng-model="vm.user.phoneNumber" type="text"/>
     <fieldset class="form-group">
         <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
         <label class="radio">

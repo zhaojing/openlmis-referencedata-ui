@@ -33,44 +33,10 @@
 
     function userFactory(User) {
         var userFactory = {
-            buildUser: buildUser,
             buildUserFromJson: buildUserFromJson,
             buildUserFromResponse: buildUserFromResponse
         };
         return userFactory;
-
-        /**
-         * @ngdoc methodOf
-         * @methodOf referencedata-user.userFactory
-         * @name buildUser
-         *
-         * @description
-         * Builds an user based on the given properties.
-         *
-         * @param  {String}  id              the UUID of the user to be created
-         * @param  {String}  username        the username of the user to be created
-         * @param  {String}  firstName       the first name of the user to be created
-         * @param  {String}  lastName        the last name of the user to be created
-         * @param  {String}  email           the email of the user to be created
-         * @param  {String}  timezone        the timezone of the user to be created
-         * @param  {String}  homeFacilityId  the operator of the user to be created
-         * @param  {Boolean} verified        true if the user to be created is active
-         * @param  {Boolean} active          the date when the user goes life
-         * @param  {Boolean} loginRestricted the date when the user goes down
-         * @param  {Boolean} allowNotify     the comment of the user to be created
-         * @param  {Object}  extraData       true if the user to be created is enabled
-         * @param  {Array}   roleAssignments true if the user to be created is accessible
-         * @return {Object}                  the user object
-         */
-        function buildUser(id, username, firstName, lastName, email, timezone, homeFacilityId,
-                           verified, active, loginRestricted, allowNotify, extraData,
-                           roleAssignments) {
-
-            return new User(
-                id, username, firstName, lastName, email, timezone, homeFacilityId, verified,
-                active, loginRestricted, allowNotify, extraData, roleAssignments
-            );
-        }
 
         /**
          * @ngdoc methodOf
@@ -88,12 +54,7 @@
                 return undefined;
             }
 
-            return userFactory.buildUser(
-                response.id, response.username, response.firstName, response.lastName,
-                response.email, response.timezone, response.homeFacilityId, response.verified,
-                response.active, response.loginRestricted, response.allowNotify, response.extraData,
-                response.roleAssignments
-            );
+            return new User(response);
         }
 
         /**

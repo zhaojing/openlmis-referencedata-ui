@@ -42,36 +42,25 @@
          * @description
          * Creates a new instance of the User class.
          *
-         * @param  {String}  id              the UUID of the user to be created
-         * @param  {String}  username        the username of the user to be created
-         * @param  {String}  firstName       the first name of the user to be created
-         * @param  {String}  lastName        the last name of the user to be created
-         * @param  {String}  email           the email of the user to be created
-         * @param  {String}  timezone        the timezone of the user to be created
-         * @param  {String}  homeFacilityId  the operator of the user to be created
-         * @param  {Boolean} verified        true if the user to be created is active
-         * @param  {Boolean} active          the date when the user goes life
-         * @param  {Boolean} loginRestricted the date when the user goes down
-         * @param  {Boolean} allowNotify     the comment of the user to be created
-         * @param  {Object}  extraData       true if the user to be created is enabled
-         * @param  {Array}   roleAssignments true if the user to be created is accessible
+         * @param  {Object}                  json the json representation of the user
          * @return {Object}                  the user object
          */
-        function User(id, username, firstName, lastName, email, timezone, homeFacilityId,
-            verified, active, loginRestricted, allowNotify, extraData, roleAssignments) {
-            this.id = id;
-            this.username = username;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.email = email;
-            this.timezone = timezone;
-            this.homeFacilityId = homeFacilityId;
-            this.verified = verified;
-            this.active = active;
-            this.loginRestricted = loginRestricted;
-            this.allowNotify = allowNotify;
-            this.extraData = extraData;
-            this.roleAssignments = roleAssignments;
+        function User(json) {
+            this.id = json.id;
+            this.username = json.username;
+            this.firstName = json.firstName;
+            this.lastName = json.lastName;
+            this.jobTitle = json.jobTitle;
+            this.phoneNumber = json.phoneNumber;
+            this.email = json.email;
+            this.timezone = json.timezone;
+            this.homeFacilityId = json.homeFacilityId;
+            this.verified = json.verified;
+            this.active = json.active;
+            this.loginRestricted = json.loginRestricted;
+            this.allowNotify = json.allowNotify;
+            this.extraData = json.extraData;
+            this.roleAssignments = json.roleAssignments;
         }
 
         /**
