@@ -29,26 +29,49 @@ describe('User', function() {
         user = new User(json);
     });
 
-    it('constructor should set all properties', function() {
-        expect(user.id).toEqual(json.id);
-        expect(user.username).toEqual(json.username);
-        expect(user.firstName).toEqual(json.firstName);
-        expect(user.lastName).toEqual(json.lastName);
-        expect(user.timezone).toEqual(json.timezone);
-        expect(user.email).toEqual(json.email);
-        expect(user.homeFacilityId).toEqual(json.homeFacilityId);
-        expect(user.verified).toEqual(json.verified);
-        expect(user.active).toEqual(json.active);
-        expect(user.loginRestricted).toEqual(json.loginRestricted);
-        expect(user.allowNotify).toEqual(json.allowNotify);
-        expect(user.extraData).toEqual(json.extraData);
-        expect(user.roleAssignments).toEqual(json.roleAssignments);
+    describe("constructor", function () {
+
+      it('should set all properties', function() {
+          expect(user.id).toEqual(json.id);
+          expect(user.username).toEqual(json.username);
+          expect(user.firstName).toEqual(json.firstName);
+          expect(user.lastName).toEqual(json.lastName);
+          expect(user.timezone).toEqual(json.timezone);
+          expect(user.email).toEqual(json.email);
+          expect(user.homeFacilityId).toEqual(json.homeFacilityId);
+          expect(user.verified).toEqual(json.verified);
+          expect(user.active).toEqual(json.active);
+          expect(user.loginRestricted).toEqual(json.loginRestricted);
+          expect(user.allowNotify).toEqual(json.allowNotify);
+          expect(user.extraData).toEqual(json.extraData);
+          expect(user.roleAssignments).toEqual(json.roleAssignments);
+      });
+
     });
 
     describe('fromJson', function() {
 
         it('should serialize the user to JSON', function() {
             expect(user.toJson()).toEqual(angular.toJson(user));
+        });
+
+    });
+
+    describe("validate", function () {
+
+        it('should mark email as valid', function () {
+            user.email = "test@openlmis.org";
+            expect(user.validate()).toEqual(undefined);
+        });
+
+        it('should mark email as valid is field is empty', function () {
+            user.email = "";
+            expect(user.validate()).toEqual(undefined);
+        });
+
+        it('should mark email as invalid', function () {
+            user.email = "abc-abd";
+            expect(user.validate()).toEqual({ email: 'user.validation.email' });
         });
 
     });

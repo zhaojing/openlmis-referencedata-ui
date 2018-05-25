@@ -9,6 +9,7 @@ Improvements:
 * [OLMIS-4740](https://openlmis.atlassian.net/browse/OLMIS-4740): Added Jenkinsfile.
 * [OLMIS-4730](https://openlmis.atlassian.net/browse/OLMIS-4730): Support new user resource fields
   * Modified user profile screen to allow see and edit own profile
+  * Enable email validation
 
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility

@@ -17,6 +17,8 @@
 
     'use strict';
 
+    var EMAIL_REGEX = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
     /**
      * @ngdoc service
      * @name referencedata-user.User
@@ -31,6 +33,7 @@
     function User() {
 
         User.prototype.toJson = toJson;
+        User.prototype.validate = validate;
 
         return User;
 
@@ -75,6 +78,26 @@
          */
         function toJson() {
             return angular.toJson(this);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.User
+         * @name validate
+         *
+         * @description
+         * Validates the User and returns a map of errors if it is invalid.
+         *
+         * @return {Object} the map of errors if the User is invalid, undefined otherwise
+         */
+        function validate() {
+            var errors = {};
+
+            if (this.email && !EMAIL_REGEX.test(String(this.email).toLowerCase())) {
+                errors.email = "user.validation.email";
+            }
+
+            return angular.equals(errors, {}) ? undefined : errors;
         }
     }
 })();
