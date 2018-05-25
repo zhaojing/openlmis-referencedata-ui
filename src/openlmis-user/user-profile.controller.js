@@ -29,10 +29,12 @@
         .module('openlmis-user')
         .controller('UserProfileController', controller);
 
-    controller.$inject = ['user'];
+    controller.$inject = ['user', 'homeFacility'];
 
-    function controller(user) {
+    function controller(user, homeFacility) {
         var vm = this;
+
+        vm.$onInit = onInit;
 
         /**
          * @ngdoc property
@@ -43,7 +45,31 @@
          * @description
          * Contains user detailed info.
          */
-        vm.user = user;
+        vm.user = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-user.controller:UserProfileController
+         * @name homeFacility
+         * @type {Object}
+         *
+         * @description
+         * Contains user home facility detailed info.
+         */
+        vm.homeFacility = undefined;
+
+        /**
+         * @ngdoc method
+         * @propertyOf openlmis-user.controller:UserProfileController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method of the UserProfileController.
+         */
+        function onInit() {
+            vm.user = user;
+            vm.homeFacility = homeFacility;
+        }
     }
 
 })();

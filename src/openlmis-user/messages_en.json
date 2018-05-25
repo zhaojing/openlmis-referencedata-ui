@@ -4,6 +4,7 @@
     "openlmisUser.lastName": "Last name",
     "openlmisUser.email": "Email",
     "openlmisUser.jobTitle": "Job Title",
+    "openlmisUser.homeFacility": "Home Facility",
     "openlmisUser.phoneNumber": "Phone Number",
     "openlmisUser.profile": "Profile"
 }

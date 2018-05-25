@@ -34,6 +34,17 @@
             resolve: {
                 user: function (currentUserService) {
                     return currentUserService.getUserInfo();
+                },
+                homeFacility: function (user, facilityService) {
+                    if (!user.homeFacilityId) {
+                        return {};
+                    }
+
+                    return facilityService.getAllMinimal().then(function (facilities) {
+                        return facilities.find(function (facility) {
+                            return facility.id === user.homeFacilityId;
+                        });
+                    });
                 }
             }
         });

@@ -28,6 +28,7 @@
         'openlmis-local-storage',
         'openlmis-offline',
         'openlmis-urls',
+        'referencedata-facility',
         'ui.router'
     ]);
 

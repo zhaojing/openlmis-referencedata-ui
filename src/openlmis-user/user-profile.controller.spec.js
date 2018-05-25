@@ -16,7 +16,7 @@
 
 describe('UserProfileController', function() {
 
-    var vm, user;
+    var vm, user, homeFacility;
 
     beforeEach(module('openlmis-user'));
 
@@ -25,13 +25,29 @@ describe('UserProfileController', function() {
             firstName: 'Name',
             lastName: 'Surname',
             email: 'email@olmis.com'
-        }
+        };
 
-        vm = $controller('UserProfileController', {user:user});
+        homeFacility = {
+            name: 'some-test-name'
+        };
+
+        vm = $controller('UserProfileController', {user:user, homeFacility: homeFacility});
     }));
 
-    it('should set user profile', function() {
-        expect(user).toEqual(vm.user);
+    describe("onInit", function () {
+
+        beforeEach(function () {
+            vm.$onInit();
+        });
+
+        it('should set user profile', function() {
+            expect(user).toEqual(vm.user);
+        });
+
+        it('should set home facility profile', function() {
+            expect(homeFacility).toEqual(vm.homeFacility);
+        });
+
     });
 
 });
