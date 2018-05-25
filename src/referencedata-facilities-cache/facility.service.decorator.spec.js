@@ -71,4 +71,40 @@ describe('Facility service minimal decorator', function() {
         $httpBackend.verifyNoOutstandingRequest();
     }));
 
+    it('should find facility by id', function () {
+        cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+        var facility;
+        facilityService.getMinimal(1).then(function (result) {
+            facility = result;
+        });
+        $rootScope.$apply();
+
+        expect(facility.id).toEqual(1);
+    });
+
+    it('should not find facility if id is incorrect', function () {
+        cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
+        var facility;
+        facilityService.getMinimal(4).then(function (result) {
+            facility = result;
+        });
+        $rootScope.$apply();
+
+        expect(facility).toEqual(undefined);
+    });
+
+    it('should not find facility if list is empty', function () {
+        cache.getAll.andReturn([]);
+
+        var facility;
+        facilityService.getMinimal(1).then(function (result) {
+            facility = result;
+        });
+        $rootScope.$apply();
+
+        expect(facility).toEqual(undefined);
+    });
+
 });

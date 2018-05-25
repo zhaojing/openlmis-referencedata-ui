@@ -40,6 +40,7 @@
             minimalFacilitiesCache = localStorageFactory('referencedataMinimalFacilities');
 
             $delegate.getAllMinimal = cachedGetAllMinimal;
+            $delegate.getMinimal = getMinimal;
             $delegate.clearMinimalFacilitiesCache = clearCache;
 
         return $delegate;
@@ -81,6 +82,22 @@
          */
         function clearCache() {
             minimalFacilitiesCache.clearAll();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facilities-cache.facilityService
+         * @name getMinimal
+         *
+         * @description
+         * Gets a minimal representation of single facility by id field.
+         */
+        function getMinimal(id) {
+            return cachedGetAllMinimal().then(function (facilities) {
+                return facilities.filter(function (facility) {
+                    return facility.id === id;
+                })[0];
+            });
         }
     }
 

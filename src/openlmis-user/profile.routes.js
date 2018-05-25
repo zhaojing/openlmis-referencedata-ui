@@ -40,11 +40,7 @@
                         return {};
                     }
 
-                    return facilityService.getAllMinimal().then(function (facilities) {
-                        return facilities.find(function (facility) {
-                            return facility.id === user.homeFacilityId;
-                        });
-                    });
+                    return facilityService.getMinimal(user.homeFacilityId);
                 }
             }
         });
