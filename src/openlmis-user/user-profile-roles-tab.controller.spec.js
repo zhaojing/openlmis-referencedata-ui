@@ -14,26 +14,29 @@
  */
 
 
-describe('UserProfileController', function() {
+describe('UserProfileRolesTabController', function() {
 
-    var vm, user, homeFacility, $controller, ROLE_TYPES, UserDataBuilder, MinimalFacilityDataBuilder;
+    var vm, roleAssignments, $controller, ROLE_TYPES, UserDataBuilder, RoleDataBuilder;
 
     beforeEach(function() {
         module('openlmis-user');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
-            ROLE_TYPES = $injector.get('ROLE_TYPES');
             UserDataBuilder = $injector.get('UserDataBuilder');
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            RoleDataBuilder = $injector.get('RoleDataBuilder');
         });
 
-        user = new UserDataBuilder().build();
-        homeFacility = new MinimalFacilityDataBuilder().build();
+        var roles = [
+            new RoleDataBuilder().withSupervisionType().build()
+        ];
 
-        vm = $controller('UserProfileController', {
-            user: user,
-            homeFacility: homeFacility
+        roleAssignments = new UserDataBuilder()
+            .withGeneralAdminRoleAssignment(roles[0].id)
+            .build().roleAssignments;
+
+        vm = $controller('UserProfileRolesTabController', {
+            roleAssignments: roleAssignments
         });
     });
 
@@ -43,18 +46,9 @@ describe('UserProfileController', function() {
             vm.$onInit();
         });
 
-        it('should set user profile', function() {
-            expect(user).toEqual(vm.user);
+        it('should expose role assignments', function() {
+            expect(vm.roleAssignments).toEqual(roleAssignments);
         });
-
-        it('should set home facility profile', function() {
-            expect(homeFacility).toEqual(vm.homeFacility);
-        });
-
-        it('should expose role types', function() {
-            expect(vm.roleTypes).toEqual(ROLE_TYPES.getRoleTypes());
-        });
-
     });
 
 });

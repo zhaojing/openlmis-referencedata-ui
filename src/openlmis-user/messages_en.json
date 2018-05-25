@@ -7,5 +7,6 @@
     "openlmisUser.jobTitle": "Job Title",
     "openlmisUser.homeFacility": "Home Facility",
     "openlmisUser.phoneNumber": "Phone Number",
-    "openlmisUser.profile": "Profile"
+    "openlmisUser.profile": "Profile",
+    "openlmisUser.roleAssignments": "Role Assignments"
 }

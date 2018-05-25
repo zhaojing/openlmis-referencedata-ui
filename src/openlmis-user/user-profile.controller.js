@@ -29,12 +29,13 @@
         .module('openlmis-user')
         .controller('UserProfileController', controller);
 
-    controller.$inject = ['user', 'homeFacility'];
+    controller.$inject = ['user', 'homeFacility', 'ROLE_TYPES'];
 
-    function controller(user, homeFacility) {
+    function controller(user, homeFacility, ROLE_TYPES) {
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.getRoleTypeLabel = ROLE_TYPES.getLabel;
 
         /**
          * @ngdoc property
@@ -59,6 +60,17 @@
         vm.homeFacility = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf openlmis-user.controller:UserProfileController
+         * @type {Array}
+         * @name roleTypes
+         *
+         * @description
+         * The list of all role types.
+         */
+        vm.roleTypes = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf openlmis-user.controller:UserProfileController
          * @name $onInit
@@ -69,6 +81,7 @@
         function onInit() {
             vm.user = user;
             vm.homeFacility = homeFacility;
+            vm.roleTypes = ROLE_TYPES.getRoleTypes();
         }
     }
 
