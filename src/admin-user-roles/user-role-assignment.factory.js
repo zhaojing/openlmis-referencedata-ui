@@ -57,7 +57,6 @@
             return referencedataUserService.get(userId)
             .then(function(response) {
                 var user = new User(response);
-                user.roleAssignments = [];
 
                 addInfoToRoleAssignments(user, response.roleAssignments, roles, programs, supervisoryNodes, warehouses);
 
@@ -66,6 +65,8 @@
         }
 
         function addInfoToRoleAssignments(user, roleAssignments, roles, programs, supervisoryNodes, warehouses) {
+            user.roleAssignments = [];
+
             roleAssignments.forEach(function(roleAssignment) {
                 var filteredRoles = roles.filter(function(role) {
                         return role.id === roleAssignment.roleId;
