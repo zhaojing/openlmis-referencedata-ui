@@ -33,7 +33,6 @@
     function User(messageService) {
 
         User.prototype.toJson = toJson;
-        User.prototype.validate = validate;
 
         return User;
 
