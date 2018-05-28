@@ -28,9 +28,7 @@
         .module('referencedata-user')
         .factory('User', User);
 
-    User.$inject = ['messageService'];
-
-    function User(messageService) {
+    function User() {
 
         User.prototype.toJson = toJson;
 
