@@ -35,76 +35,84 @@ describe('Facility service minimal decorator', function() {
         $rootScope = _$rootScope_;
     }));
 
-    it('will return a cached list of minimal facilities if available', function() {
-        cache.getAll.andReturn([{}, {}, {}]);
+    describe("GetAllMinimal", function () {
 
-        var results = false;
-        facilityService.getAllMinimal().then(function(res) {
-            results = res;
+        it('will return a cached list of minimal facilities if available', function() {
+            cache.getAll.andReturn([{}, {}, {}]);
+
+            var results = false;
+            facilityService.getAllMinimal().then(function(res) {
+                results = res;
+            });
+            $rootScope.$apply(); // resolving promises
+
+            expect(results.length).toBe(3);
         });
-        $rootScope.$apply(); // resolving promises
 
-        expect(results.length).toBe(3);
+        it('will return original facilityService.getAllMinimal if no cache', inject(function($httpBackend, referencedataUrlFactory) {
+            var facilities = [{
+                uuid: 1,
+                name: 'example'
+            }];
+
+            $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities/minimal.*')))
+                .respond(200, {'content': facilities});
+
+            cache.getAll.andReturn([]);
+
+            var results;
+            facilityService.getAllMinimal().then(function(_results){
+                results = _results;
+            });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(results.length).toBe(1);
+
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+        }));
+
     });
 
-    it('will return original facilityService.getAllMinimal if no cache', inject(function($httpBackend, referencedataUrlFactory) {
-        var facilities = [{
-            uuid: 1,
-            name: 'example'
-        }];
+    describe("getMinimal", function () {
 
-        $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities/minimal.*')))
-            .respond(200, {'content': facilities});
+        it('should find facility by id', function () {
+            cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-        cache.getAll.andReturn([]);
+            var facility;
+            facilityService.getMinimal(1).then(function (result) {
+                facility = result;
+            });
+            $rootScope.$apply();
 
-        var results;
-        facilityService.getAllMinimal().then(function(_results){
-            results = _results;
+            expect(facility.id).toEqual(1);
         });
-        $httpBackend.flush();
-        $rootScope.$apply();
 
-        expect(results.length).toBe(1);
+        it('should not find facility if id is incorrect', function () {
+            cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
-    }));
+            var facility;
+            facilityService.getMinimal(4).then(function (result) {
+                facility = result;
+            });
+            $rootScope.$apply();
 
-    it('should find facility by id', function () {
-        cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
-
-        var facility;
-        facilityService.getMinimal(1).then(function (result) {
-            facility = result;
+            expect(facility).toEqual(undefined);
         });
-        $rootScope.$apply();
 
-        expect(facility.id).toEqual(1);
-    });
+        it('should not find facility if list is empty', function () {
+            cache.getAll.andReturn([]);
 
-    it('should not find facility if id is incorrect', function () {
-        cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
+            var facility;
+            facilityService.getMinimal(1).then(function (result) {
+                facility = result;
+            });
+            $rootScope.$apply();
 
-        var facility;
-        facilityService.getMinimal(4).then(function (result) {
-            facility = result;
+            expect(facility).toEqual(undefined);
         });
-        $rootScope.$apply();
 
-        expect(facility).toEqual(undefined);
-    });
-
-    it('should not find facility if list is empty', function () {
-        cache.getAll.andReturn([]);
-
-        var facility;
-        facilityService.getMinimal(1).then(function (result) {
-            facility = result;
-        });
-        $rootScope.$apply();
-
-        expect(facility).toEqual(undefined);
     });
 
 });
