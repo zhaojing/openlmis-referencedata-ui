@@ -29,6 +29,10 @@
         'openlmis-offline',
         'openlmis-urls',
         'referencedata-facility',
+        'referencedata-supervisory-node',
+        'referencedata-facilities-cache',
+        'admin-user-roles',
+        'openlmis-templates',
         'ui.router'
     ]);
 

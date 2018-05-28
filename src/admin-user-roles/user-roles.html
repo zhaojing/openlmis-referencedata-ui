@@ -1,14 +1,6 @@
 <h2>{{'adminUserRoles.editUserRoles' | message}}</h2>
 <h3>{{'adminUserRoles.user' | message}}: {{vm.user.username}}</h3>
-<nav class="user-roles">
-    <ul>
-        <li ng-repeat="type in vm.types" ui-sref-active="active" role="presentation">
-            <a ui-sref="openlmis.administration.users.roles.{{type}}({page: 0})" ui-sref-opts="{reload: 'openlmis.administration.users.roles.{{type}}'}">
-                {{vm.getRoleTypeLabel(type) | message}}
-            </a>
-        </li>
-    </ul>
-</nav>
+<ng-include src="'admin-user-roles/user-role-tabs.html'"></ng-include>
 <div ui-view=""></div>
 <div class="openlmis-toolbar">
     <input type="button" ng-click="vm.saveUserRoles()" class="primary" value="{{'adminUserRoles.saveUserRoles' | message}}"/>

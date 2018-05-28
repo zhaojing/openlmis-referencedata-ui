@@ -24,13 +24,5 @@
 
 </form>
 <h3>{{'openlmisUser.roleAssignments' | message}}</h3>
-<nav>
-    <ul>
-        <li ng-repeat="type in vm.roleTypes" ui-sref-active="active" role="presentation">
-            <a ui-sref=".{{type}}({page: 0})" ui-sref-opts="{reload: 'openlmis.profile.{{type}}'}">
-                {{vm.getRoleTypeLabel(type) | message}}
-            </a>
-        </li>
-    </ul>
-</nav>
+<ng-include src="'admin-user-roles/user-role-tabs.html'"></ng-include>
 <div ui-view=""></div>

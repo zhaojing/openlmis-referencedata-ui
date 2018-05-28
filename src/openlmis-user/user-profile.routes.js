@@ -55,7 +55,7 @@
                 },
                 homeFacility: function (user, facilityService) {
                     if (user.homeFacilityId) {
-                        facilityService.getMinimal(user.homeFacilityId);
+                        return facilityService.getMinimal(user.homeFacilityId);
                     }
                 }
             }

@@ -21,9 +21,9 @@
         .module('referencedata-user')
         .factory('UserDataBuilder', UserDataBuilder);
 
-    UserDataBuilder.$inject = ['User', 'RoleAssignment'];
+    UserDataBuilder.$inject = ['User', 'RoleAssignment', 'ROLE_TYPES'];
 
-    function UserDataBuilder(User,  RoleAssignment) {
+    function UserDataBuilder(User,  RoleAssignment, ROLE_TYPES) {
 
         UserDataBuilder.prototype.build = build;
         UserDataBuilder.prototype.buildJson = buildJson;
@@ -69,18 +69,22 @@
 
         function withSupervisionRoleAssignment(roleId, supervisoryNodeId, programId) {
             this.roleAssignments.push(
-                new RoleAssignment(this, roleId, null, supervisoryNodeId, programId)
+                new RoleAssignment(this, roleId, null, supervisoryNodeId, programId, null, ROLE_TYPES.SUPERVISION)
             );
             return this;
         }
 
         function withOrderFulfillmentRoleAssignment(roleId, warehouseId) {
-            this.roleAssignments.push(new RoleAssignment(this, roleId, warehouseId, null, null));
+            this.roleAssignments.push(
+                new RoleAssignment(this, roleId, warehouseId, null, null, null, ROLE_TYPES.ORDER_FULFILLMENT)
+            );
             return this;
         }
 
         function withGeneralAdminRoleAssignment(roleId) {
-            this.roleAssignments.push(new RoleAssignment(this, roleId, null, null, null));
+            this.roleAssignments.push(
+                new RoleAssignment(this, roleId, null, null, null, null, ROLE_TYPES.GENERAL_ADMIN)
+            );
             return this;
         }
 

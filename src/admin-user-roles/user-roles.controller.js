@@ -53,13 +53,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-roles.controller:UserRolesController
-         * @name types
+         * @name roleTypes
          * @type {Array}
          *
          * @description
          * List of all role types.
          */
-        vm.types = undefined;
+        vm.roleTypes = undefined;
 
         /**
          * @ngdoc method
@@ -71,7 +71,7 @@
          */
         function onInit() {
             vm.user = user;
-            vm.types = ROLE_TYPES.getRoleTypes();
+            vm.roleTypes = ROLE_TYPES.getRoleTypes();
         }
 
         /**

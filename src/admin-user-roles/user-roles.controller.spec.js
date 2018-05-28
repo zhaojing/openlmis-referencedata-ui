@@ -78,7 +78,7 @@ describe('UserRolesController', function() {
         });
 
         it('should set types', function() {
-            expect(vm.types).toEqual(ROLE_TYPES.getRoleTypes());
+            expect(vm.roleTypes).toEqual(ROLE_TYPES.getRoleTypes());
         });
     });
 
