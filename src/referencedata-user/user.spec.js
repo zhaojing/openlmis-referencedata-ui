@@ -15,7 +15,7 @@
 
 describe('User', function() {
 
-    var User, user, json, UserDataBuilder, messageService;
+    var User, user, json, UserDataBuilder;
 
     beforeEach(function() {
         module('referencedata-user');
@@ -23,18 +23,13 @@ describe('User', function() {
         inject(function($injector) {
             User = $injector.get('User');
             UserDataBuilder = $injector.get('UserDataBuilder');
-            messageService = $injector.get('messageService');
         });
 
         json = new UserDataBuilder().buildJson();
         user = new User(json);
-
-        spyOn(messageService, 'get').andCallFake(function(key) {
-            return key;
-        });
     });
 
-    describe("constructor", function () {
+    describe('constructor', function () {
 
       it('should set all properties', function() {
           expect(user.id).toEqual(json.id);
