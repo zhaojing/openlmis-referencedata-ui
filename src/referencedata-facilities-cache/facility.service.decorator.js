@@ -93,7 +93,7 @@
          * Gets a minimal representation of single facility by id field.
          *
          * @param  {String} facility ID
-         * @return {object} found facility object
+         * @return {Object} found facility object
          */
         function getMinimal(id) {
             return cachedGetAllMinimal().then(function (facilities) {
