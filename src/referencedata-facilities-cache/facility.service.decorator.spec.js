@@ -35,7 +35,7 @@ describe('Facility service minimal decorator', function() {
         $rootScope = _$rootScope_;
     }));
 
-    describe("GetAllMinimal", function () {
+    describe('GetAllMinimal', function () {
 
         it('will return a cached list of minimal facilities if available', function() {
             cache.getAll.andReturn([{}, {}, {}]);
@@ -75,7 +75,7 @@ describe('Facility service minimal decorator', function() {
 
     });
 
-    describe("getMinimal", function () {
+    describe('getMinimal', function () {
 
         it('should find facility by id', function () {
             cache.getAll.andReturn([{ id: 1 }, { id: 2 }, { id: 3 }]);
