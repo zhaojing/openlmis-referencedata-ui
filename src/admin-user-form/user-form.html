@@ -4,7 +4,7 @@
     <label for="username">{{'adminUserForm.username' | message}}</label>
     <input id="username" ng-model="vm.user.username" type="text" required/>
     <label for="email">{{'adminUserForm.email' | message}}</label>
-    <input id="email" ng-model="vm.user.email" type="text" openlmis-invalid="{{user.validate().email || message}}"/>
+    <input id="email" ng-model="vm.user.email" type="text" openlmis-invalid="{{vm.user.validate().email}}"/>
     <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
     <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
     <label for="lastName">{{'adminUserForm.lastName' | message}}</label>

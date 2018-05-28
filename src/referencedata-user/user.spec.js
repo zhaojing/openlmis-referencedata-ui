@@ -15,7 +15,7 @@
 
 describe('User', function() {
 
-    var User, user, json, UserDataBuilder;
+    var User, user, json, UserDataBuilder, messageService;
 
     beforeEach(function() {
         module('referencedata-user');
@@ -23,10 +23,15 @@ describe('User', function() {
         inject(function($injector) {
             User = $injector.get('User');
             UserDataBuilder = $injector.get('UserDataBuilder');
+            messageService = $injector.get('messageService');
         });
 
         json = new UserDataBuilder().buildJson();
         user = new User(json);
+
+        spyOn(messageService, 'get').andCallFake(function(key) {
+            return key;
+        });
     });
 
     describe("constructor", function () {
@@ -72,6 +77,7 @@ describe('User', function() {
         it('should mark email as invalid', function () {
             user.email = "abc-abd";
             expect(user.validate()).toEqual({ email: 'user.validation.email' });
+            expect(messageService.get).toHaveBeenCalledWith('user.validation.email');
         });
 
     });

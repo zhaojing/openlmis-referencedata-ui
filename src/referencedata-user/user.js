@@ -30,7 +30,9 @@
         .module('referencedata-user')
         .factory('User', User);
 
-    function User() {
+    User.$inject = ['messageService'];
+
+    function User(messageService) {
 
         User.prototype.toJson = toJson;
         User.prototype.validate = validate;
@@ -94,7 +96,7 @@
             var errors = {};
 
             if (this.email && !EMAIL_REGEX.test(String(this.email).toLowerCase())) {
-                errors.email = "user.validation.email";
+                errors.email = messageService.get("user.validation.email");
             }
 
             return angular.equals(errors, {}) ? undefined : errors;
