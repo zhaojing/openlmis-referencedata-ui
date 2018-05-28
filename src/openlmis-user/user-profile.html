@@ -17,7 +17,7 @@
     <input id="user-last-name" type="text" ng-model="vm.user.lastName" required/>
 
     <label for="user-email">{{'openlmisUser.email' | message}}</label>
-    <input id="user-email" type="text" ng-model="vm.user.email" openlmis-invalid="{{vm.user.validate().email}}"/>
+    <input id="user-email" type="email" ng-model="vm.user.email"/>
 
     <label for="user-phone-number">{{'openlmisUser.phoneNumber' | message}}</label>
     <input id="user-phone-number" type="text" ng-model="vm.user.phoneNumber"/>

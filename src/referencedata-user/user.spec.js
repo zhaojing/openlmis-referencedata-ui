@@ -62,24 +62,4 @@ describe('User', function() {
 
     });
 
-    describe("validate", function () {
-
-        it('should mark email as valid', function () {
-            user.email = "test@openlmis.org";
-            expect(user.validate()).toEqual(undefined);
-        });
-
-        it('should mark email as valid is field is empty', function () {
-            user.email = "";
-            expect(user.validate()).toEqual(undefined);
-        });
-
-        it('should mark email as invalid', function () {
-            user.email = "abc-abd";
-            expect(user.validate()).toEqual({ email: 'user.validation.email' });
-            expect(messageService.get).toHaveBeenCalledWith('user.validation.email');
-        });
-
-    });
-
 });
