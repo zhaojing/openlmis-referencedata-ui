@@ -76,13 +76,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-form.controller:UserPasswordModalController
-         * @name selectedOption
-         * @type {String}
+         * @name isEmailResetSelected
+         * @type {Boolean}
          *
          * @description
-         * The selected option.
+         * true if user selects sending email reset mail; otherwise false.
          */
-        vm.selectedOption = undefined;
+        vm.isEmailResetSelected = undefined;
 
         /**
          * @ngdoc method
@@ -96,7 +96,7 @@
             vm.user = user;
             vm.title = title;
             vm.hideCancel = hideCancel;
-            vm.selectedOption = vm.user.email ? 'SEND_EMAIL' : 'RESET_PASSWORD';
+            vm.isEmailResetSelected = !!vm.user.email;
         }
 
         /**
@@ -110,9 +110,9 @@
         function updatePassword() {
             loadingModalService.open();
 
-            if(vm.selectedOption === 'SEND_EMAIL') {
+            if(vm.isEmailResetSelected) {
                 sendResetEmail();
-            } else if (vm.selectedOption === 'RESET_PASSWORD') {
+            } else {
                 resetPassword();
             }
         }

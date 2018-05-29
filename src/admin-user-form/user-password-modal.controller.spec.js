@@ -72,14 +72,15 @@ describe('UserPasswordModalController', function() {
             expect(vm.hideCancel).toBe(false);
         });
 
-        it('should set selectedOption as send email if user has email', function() {
-            expect(vm.selectedOption).toBe('SEND_EMAIL');
+        it('should set isEmailResetSelected as true if user has email', function() {
+            expect(vm.isEmailResetSelected).toBe(true);
         });
 
-        it('should set selectedOption as reset password if user has no email', function() {
+        it('should set isEmailResetSelected as false if user has no email', function() {
             delete user.email;
             vm.$onInit();
-            expect(vm.selectedOption).toBe('RESET_PASSWORD');
+
+            expect(vm.isEmailResetSelected).toBe(false);
         });
 
     });
@@ -90,7 +91,7 @@ describe('UserPasswordModalController', function() {
 
             beforeEach(function() {
                 authUserService.resetPassword.andReturn($q.when(true));
-                vm.selectedOption = 'RESET_PASSWORD';
+                vm.isEmailResetSelected = false;
                 vm.updatePassword();
                 $rootScope.$apply();
             });
@@ -113,7 +114,6 @@ describe('UserPasswordModalController', function() {
                 var deferred = $q.defer();
 
                 authUserService.resetPassword.andReturn(deferred.promise);
-                vm.selectedOption = 'RESET_PASSWORD';
                 vm.updatePassword();
                 deferred.reject();
                 $rootScope.$apply();
@@ -128,7 +128,7 @@ describe('UserPasswordModalController', function() {
 
             beforeEach(function() {
                 authUserService.sendResetEmail.andReturn($q.when(true));
-                vm.selectedOption = 'SEND_EMAIL';
+                vm.isEmailResetSelected = true;
                 vm.updatePassword();
                 $rootScope.$apply();
             });
@@ -151,7 +151,6 @@ describe('UserPasswordModalController', function() {
                 var deferred = $q.defer();
 
                 authUserService.sendResetEmail.andReturn(deferred.promise);
-                vm.selectedOption = 'SEND_EMAIL';
                 vm.updatePassword();
                 deferred.reject();
                 $rootScope.$apply();
