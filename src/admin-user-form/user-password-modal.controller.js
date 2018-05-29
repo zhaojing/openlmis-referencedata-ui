@@ -29,12 +29,12 @@
         .controller('UserPasswordModalController', controller);
 
     controller.$inject = [
-        'user', 'title', 'modalDeferred', 'authUserService', 'loadingModalService',
+        'user', 'title', 'hideCancel', 'modalDeferred', 'authUserService', 'loadingModalService',
         'notificationService', 'USER_PASSWORD_OPTIONS'
     ];
 
-    function controller(user, title, modalDeferred, authUserService, loadingModalService,
-        notificationService, USER_PASSWORD_OPTIONS) {
+    function controller(user, title, hideCancel, modalDeferred, authUserService,
+        loadingModalService, notificationService, USER_PASSWORD_OPTIONS) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -64,6 +64,17 @@
          * The modal title.
          */
         vm.title = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserPasswordModalController
+         * @name hideCancel
+         * @type {boolean}
+         *
+         * @description
+         * True if cancel button should be hidden; otherwise false.
+         */
+        vm.hideCancel = undefined;
 
         /**
          * @ngdoc property
@@ -98,6 +109,7 @@
         function onInit() {
             vm.user = user;
             vm.title = title;
+            vm.hideCancel = hideCancel;
             vm.selectedOption = vm.user.email
                 ? USER_PASSWORD_OPTIONS.SEND_EMAIL
                 : USER_PASSWORD_OPTIONS.RESET_PASSWORD;

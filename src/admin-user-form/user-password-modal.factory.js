@@ -31,14 +31,14 @@
         };
 
         function createPassword(user) {
-            return open(user, 'adminUserForm.createPassword');
+            return open(user, 'adminUserForm.createPassword', true);
         }
 
         function resetPassword(user) {
-            return open(user, 'adminUserForm.resetPassword');
+            return open(user, 'adminUserForm.resetPassword', false);
         }
 
-        function open(user, title) {
+        function open(user, title, hideCancel) {
             var persistent = {
                 user: {
                     username: user.username,
@@ -58,6 +58,9 @@
                     },
                     title: function() {
                         return title;
+                    },
+                    hideCancel: function() {
+                        return hideCancel;
                     }
                 }
             }).promise.finally(function() {

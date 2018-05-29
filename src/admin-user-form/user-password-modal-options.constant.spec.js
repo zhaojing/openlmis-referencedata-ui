@@ -34,7 +34,7 @@ describe('USER_PASSWORD_OPTIONS', function() {
 
             expect(
                 USER_PASSWORD_OPTIONS.getLabel('RESET_PASSWORD')
-            ).toEqual('adminUserForm.resetPassword');
+            ).toEqual('adminUserForm.setPasswordManually');
         });
 
         it('should throw exception for invalid role type', function() {

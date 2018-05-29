@@ -83,7 +83,8 @@ describe('user-password-modal.html template', function() {
         vm = $controller('UserPasswordModalController', {
             user: user,
             modalDeferred: $q.defer(),
-            title: 'adminUserForm.createPassword'
+            title: 'adminUserForm.createPassword',
+            hideCancel: false
         });
 
         vm.$onInit();

@@ -49,7 +49,8 @@ describe('UserPasswordModalController', function() {
         vm = $controller('UserPasswordModalController', {
             user: user,
             modalDeferred: modalDeferred,
-            title: 'adminUserForm.createPassword'
+            title: 'adminUserForm.createPassword',
+            hideCancel: false
         });
         vm.$onInit();
     });
@@ -74,6 +75,10 @@ describe('UserPasswordModalController', function() {
 
         it('should set title', function() {
             expect(vm.title).toBe('adminUserForm.createPassword');
+        });
+
+        it('should set hideCancel', function() {
+            expect(vm.hideCancel).toBe(false);
         });
 
         it('should set selectedOption as send email if user has email', function() {

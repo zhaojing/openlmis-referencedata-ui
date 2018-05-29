@@ -37,7 +37,7 @@
         },
         labels = {
             SEND_EMAIL: 'adminUserForm.sendResetEmail',
-            RESET_PASSWORD: 'adminUserForm.resetPassword'
+            RESET_PASSWORD: 'adminUserForm.setPasswordManually'
         };
 
         return USER_PASSWORD_OPTIONS;
