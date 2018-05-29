@@ -26,3 +26,7 @@
 <h3>{{'openlmisUser.roleAssignments' | message}}</h3>
 <ng-include src="'admin-user-roles/user-role-tabs.html'"></ng-include>
 <div ui-view=""></div>
+<div class="openlmis-toolbar">
+    <input type="button" ng-click="vm.restoreProfile()" value="{{'openlmisUser.cancel' | message}}">
+    <input type="button" ng-click="vm.updateProfile()" value="{{'openlmisUser.updateProfile' | message}}" class="primary">
+</div>

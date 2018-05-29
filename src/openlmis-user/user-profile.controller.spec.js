@@ -16,20 +16,40 @@
 
 describe('UserProfileController', function() {
 
-    var vm, user, homeFacility, $controller, ROLE_TYPES, UserDataBuilder, MinimalFacilityDataBuilder;
+    var vm, user, homeFacility, $controller, ROLE_TYPES, $q, UserDataBuilder,
+        MinimalFacilityDataBuilder, loadingModalService, referencedataUserService,
+        notificationService, getUserDeferred, saveUserDeferred, $rootScope;
 
     beforeEach(function() {
         module('openlmis-user');
 
         inject(function($injector) {
             $controller = $injector.get('$controller');
+            $q = $injector.get('$q');
+            $rootScope = $injector.get('$rootScope');
+
             ROLE_TYPES = $injector.get('ROLE_TYPES');
+
             UserDataBuilder = $injector.get('UserDataBuilder');
             MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+
+            loadingModalService = $injector.get('loadingModalService');
+            referencedataUserService = $injector.get('referencedataUserService');
+            notificationService = $injector.get('notificationService');
         });
 
         user = new UserDataBuilder().build();
         homeFacility = new MinimalFacilityDataBuilder().build();
+
+        getUserDeferred = $q.defer();
+        saveUserDeferred = $q.defer();
+
+        spyOn(loadingModalService, 'open').andReturn(true);
+        spyOn(loadingModalService, 'close').andReturn(true);
+        spyOn(referencedataUserService, 'saveUser').andReturn(saveUserDeferred.promise);
+        spyOn(referencedataUserService, 'get').andReturn(getUserDeferred.promise);
+        spyOn(notificationService, 'success');
+        spyOn(notificationService, 'error');
 
         vm = $controller('UserProfileController', {
             user: user,
@@ -53,6 +73,68 @@ describe('UserProfileController', function() {
 
         it('should expose role types', function() {
             expect(vm.roleTypes).toEqual(ROLE_TYPES.getRoleTypes());
+        });
+
+    });
+
+    describe('updateProfile', function () {
+
+        beforeEach(function () {
+            vm.$onInit();
+            vm.updateProfile();
+        });
+
+        it('should update profile and display notification', function() {
+            saveUserDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(notificationService.success).toHaveBeenCalledWith('openlmisUser.updateProfile.updateSuccessful');
+            expect(notificationService.error).not.toHaveBeenCalled();
+        });
+
+        it('should not update profile and inform about error', function() {
+            saveUserDeferred.reject();
+            $rootScope.$apply();
+
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(notificationService.error).toHaveBeenCalledWith('openlmisUser.updateProfile.updateFailed');
+        });
+
+        afterEach(function () {
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
+            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+    });
+
+    describe('restoreProfile', function () {
+
+        beforeEach(function () {
+            vm.$onInit();
+            vm.restoreProfile();
+        });
+
+        it('should restore profile and display notification', function() {
+            getUserDeferred.resolve();
+            $rootScope.$apply();
+
+            expect(notificationService.success).toHaveBeenCalledWith('openlmisUser.cancel.restoreSuccessful');
+            expect(notificationService.error).not.toHaveBeenCalled();
+        });
+
+        it('should not update profile and inform about error', function() {
+            getUserDeferred.reject();
+            $rootScope.$apply();
+
+            expect(notificationService.success).not.toHaveBeenCalled();
+            expect(notificationService.error).toHaveBeenCalledWith('openlmisUser.cancel.restoreFailed');
+        });
+
+        afterEach(function () {
+            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(referencedataUserService.get).toHaveBeenCalledWith(user.id);
+            expect(loadingModalService.close).toHaveBeenCalled();
         });
 
     });

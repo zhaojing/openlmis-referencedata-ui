@@ -28,12 +28,14 @@
         'openlmis-local-storage',
         'openlmis-offline',
         'openlmis-urls',
+        'referencedata-user',
         'referencedata-facility',
         'referencedata-supervisory-node',
         'referencedata-facilities-cache',
         'admin-user-roles',
         'openlmis-templates',
-        'ui.router'
+        'ui.router',
+        'openlmis-modal'
     ]);
 
 })();

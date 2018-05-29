@@ -29,13 +29,19 @@
         .module('openlmis-user')
         .controller('UserProfileController', controller);
 
-    controller.$inject = ['user', 'homeFacility', 'ROLE_TYPES'];
+    controller.$inject = [
+        'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'referencedataUserService',
+        'notificationService'
+    ];
 
-    function controller(user, homeFacility, ROLE_TYPES) {
+    function controller(user, homeFacility, ROLE_TYPES, loadingModalService,
+                        referencedataUserService, notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getRoleTypeLabel = ROLE_TYPES.getLabel;
+        vm.updateProfile = updateProfile;
+        vm.restoreProfile = restoreProfile;
 
         /**
          * @ngdoc property
@@ -82,6 +88,48 @@
             vm.user = user;
             vm.homeFacility = homeFacility;
             vm.roleTypes = ROLE_TYPES.getRoleTypes();
+        }
+
+        /**
+         * @ngdoc method
+         * @propertyOf openlmis-user.controller:UserProfileController
+         * @name updateProfile
+         *
+         * @description
+         * Updates user profile.
+         */
+        function updateProfile() {
+            loadingModalService.open();
+
+            return referencedataUserService.saveUser(vm.user)
+            .then(function() {
+                notificationService.success('openlmisUser.updateProfile.updateSuccessful');
+            })
+            .catch(function() {
+                notificationService.error('openlmisUser.updateProfile.updateFailed');
+            })
+            .finally(loadingModalService.close);
+        }
+
+        /**
+         * @ngdoc method
+         * @propertyOf openlmis-user.controller:UserProfileController
+         * @name restoreProfile
+         *
+         * @description
+         * Restore user profile.
+         */
+        function restoreProfile() {
+            loadingModalService.open();
+
+            return referencedataUserService.get(vm.user.id)
+            .then(function() {
+                notificationService.success('openlmisUser.cancel.restoreSuccessful');
+            })
+            .catch(function() {
+                notificationService.error('openlmisUser.cancel.restoreFailed');
+            })
+            .finally(loadingModalService.close);
         }
     }
 
