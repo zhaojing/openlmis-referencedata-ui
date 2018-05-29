@@ -30,18 +30,20 @@
         .controller('UserProfileController', controller);
 
     controller.$inject = [
-        'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'referencedataUserService',
-        'notificationService'
+        'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'referencedataUserService', 'notificationService',
+        'userPasswordModalFactory', 'loginService', '$rootScope', '$state'
     ];
 
-    function controller(user, homeFacility, ROLE_TYPES, loadingModalService,
-                        referencedataUserService, notificationService) {
+    function controller(user, homeFacility, ROLE_TYPES, loadingModalService, referencedataUserService,
+                        notificationService, userPasswordModalFactory, loginService, $rootScope, $state) {
+
         var vm = this;
 
         vm.$onInit = onInit;
         vm.getRoleTypeLabel = ROLE_TYPES.getLabel;
         vm.updateProfile = updateProfile;
         vm.restoreProfile = restoreProfile;
+        vm.changePassword = changePassword;
 
         /**
          * @ngdoc property
@@ -131,6 +133,28 @@
             })
             .finally(loadingModalService.close);
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-user.controller:UserProfileController
+         * @name changePassword
+         *
+         * @description
+         * Open password management modal allowing user to send a password reset link or change the password. After
+         * successful action is taken the modal is closed and the user is logged out. User is brought back to the
+         * user profile page if the modal is dismissed.
+         */
+        function changePassword() {
+            userPasswordModalFactory.resetPassword(user)
+            .then(function() {
+                loginService.logout()
+                .then(function() {
+                    $rootScope.$emit('openlmis-auth.logout');
+                    $state.go('auth.login');
+                });
+            });
+        }
+
     }
 
 })();

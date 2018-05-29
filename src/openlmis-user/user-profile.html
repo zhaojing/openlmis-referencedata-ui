@@ -27,6 +27,9 @@
 <ng-include src="'admin-user-roles/user-role-tabs.html'"></ng-include>
 <div ui-view=""></div>
 <div class="openlmis-toolbar">
-    <input type="button" ng-click="vm.restoreProfile()" value="{{'openlmisUser.cancel' | message}}">
-    <input type="button" ng-click="vm.updateProfile()" value="{{'openlmisUser.updateProfile' | message}}" class="primary">
+    <input type="button" ng-click="vm.restoreProfile()" value="{{'openlmisUser.cancel' | message}}"/>
+    <div class="button-group primary">
+        <input type="button" ng-click="vm.changePassword()" value="{{'openlmisUser.changePassword' | message}}"/>
+        <input type="button" ng-click="vm.updateProfile()" value="{{'openlmisUser.updateProfile' | message}}" class="primary"/>
+    </div>
 </div>

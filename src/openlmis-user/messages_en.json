@@ -14,5 +14,6 @@
     "openlmisUser.cancel.restoreFailed": "Failed to restore basic information",
     "openlmisUser.updateProfile": "Update Profile",
     "openlmisUser.updateProfile.updateSuccessful": "Basic information updated successfully!",
-    "openlmisUser.updateProfile.updateFailed": "Failed to update basic information"
+    "openlmisUser.updateProfile.updateFailed": "Failed to update basic information",
+    "openlmisUser.changePassword": "Change Password"
 }
