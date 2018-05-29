@@ -21,6 +21,13 @@ describe('user-password-modal.html template', function() {
 
     describe('Show password checkbox', function() {
 
+        beforeEach(function() {
+
+            vm.isEmailResetSelected = false;
+            $rootScope.$apply();
+
+        });
+
         it('should change input type', function() {
             var input = template.find("#newPassword");
 
@@ -40,17 +47,17 @@ describe('user-password-modal.html template', function() {
 
     describe('SendResetEmail', function () {
 
-        it('should enable option if user has email', function() {
+        it('should show option if user has email', function() {
             var button = template.find("#send-email-radio");
-            expect(button.is(':disabled')).toEqual(false);
+            expect(button.length).toEqual(1);
         });
 
-        it('should disable option if user has no email', function() {
+        it('should hide option if user has no email', function() {
             delete vm.user.email;
             $rootScope.$apply();
 
             var button = template.find("#send-email-radio");
-            expect(button.is(':disabled')).toEqual(true);
+            expect(button.length).toEqual(0);
         });
 
     });
