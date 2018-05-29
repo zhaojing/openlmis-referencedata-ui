@@ -30,18 +30,15 @@
 
     controller.$inject = [
         'user', 'title', 'hideCancel', 'modalDeferred', 'authUserService', 'loadingModalService',
-        'notificationService', 'USER_PASSWORD_OPTIONS'
+        'notificationService'
     ];
 
     function controller(user, title, hideCancel, modalDeferred, authUserService,
-        loadingModalService, notificationService, USER_PASSWORD_OPTIONS) {
+        loadingModalService, notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.submitForm = submitForm;
-        vm.isResetPasswordOption = isResetPasswordOption;
-        vm.canSelectOption = canSelectOption;
-        vm.getLabel = USER_PASSWORD_OPTIONS.getLabel;
 
         /**
          * @ngdoc property
@@ -88,17 +85,6 @@
         vm.selectedOption = undefined;
 
         /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserPasswordModalController
-         * @name options
-         * @type {Array}
-         *
-         * @description
-         * The available options.
-         */
-        vm.options = undefined;
-
-        /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserPasswordModalController
          * @name $onInit
@@ -110,44 +96,7 @@
             vm.user = user;
             vm.title = title;
             vm.hideCancel = hideCancel;
-            vm.selectedOption = vm.user.email
-                ? USER_PASSWORD_OPTIONS.SEND_EMAIL
-                : USER_PASSWORD_OPTIONS.RESET_PASSWORD;
-            vm.options = USER_PASSWORD_OPTIONS.getOptions();
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserPasswordModalController
-         * @name isResetPasswordSelected
-         *
-         * @description
-         * Check if user selects reset password option.
-         *
-         * @param  {String}  one of available user password options
-         * @return {Boolean} true if user selects reset password option; otherwise false.
-         */
-        function isResetPasswordOption(option) {
-            return option === USER_PASSWORD_OPTIONS.RESET_PASSWORD;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserPasswordModalController
-         * @name canSelectOption
-         *
-         * @description
-         * Check if user can select reset password option.
-         *
-         * @param  {String}  one of available user password options
-         * @return {Boolean} true if user can select an option; otherwise false.
-         */
-        function canSelectOption(option) {
-            if(option === USER_PASSWORD_OPTIONS.SEND_EMAIL) {
-                return !!vm.user.email;
-            }
-
-            return true;
+            vm.selectedOption = vm.user.email ? 'SEND_EMAIL' : 'RESET_PASSWORD';
         }
 
         /**
@@ -161,9 +110,9 @@
         function submitForm() {
             loadingModalService.open();
 
-            if(vm.selectedOption === USER_PASSWORD_OPTIONS.SEND_EMAIL) {
+            if(vm.selectedOption === 'SEND_EMAIL') {
                 sendResetEmail();
-            } else if (vm.selectedOption === USER_PASSWORD_OPTIONS.RESET_PASSWORD) {
+            } else if (vm.selectedOption === 'RESET_PASSWORD') {
                 resetPassword();
             }
         }

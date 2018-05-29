@@ -16,7 +16,7 @@
 describe('UserPasswordModalController', function() {
 
     var $controller, $q, $rootScope, authUserService, loadingModalService, notificationService,
-        vm, user, modalDeferred, USER_PASSWORD_OPTIONS;
+        vm, user, modalDeferred;
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
@@ -32,7 +32,6 @@ describe('UserPasswordModalController', function() {
             $rootScope = $injector.get('$rootScope');
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
-            USER_PASSWORD_OPTIONS = $injector.get('USER_PASSWORD_OPTIONS');
         });
 
         spyOn(loadingModalService, 'open').andReturn($q.when(true));
@@ -61,14 +60,6 @@ describe('UserPasswordModalController', function() {
             expect(angular.isFunction(vm.submitForm)).toBe(true);
         });
 
-        it('should expose isResetPasswordOption method', function() {
-            expect(angular.isFunction(vm.isResetPasswordOption)).toBe(true);
-        });
-
-        it('should expose canSelectOption method', function() {
-            expect(angular.isFunction(vm.canSelectOption)).toBe(true);
-        });
-
         it('should set user', function() {
             expect(vm.user).toBe(user);
         });
@@ -82,45 +73,13 @@ describe('UserPasswordModalController', function() {
         });
 
         it('should set selectedOption as send email if user has email', function() {
-            expect(vm.selectedOption).toBe(USER_PASSWORD_OPTIONS.SEND_EMAIL);
+            expect(vm.selectedOption).toBe('SEND_EMAIL');
         });
 
         it('should set selectedOption as reset password if user has no email', function() {
             delete user.email;
             vm.$onInit();
-            expect(vm.selectedOption).toBe(USER_PASSWORD_OPTIONS.RESET_PASSWORD);
-        });
-
-        it('should set options', function() {
-            expect(vm.options).toEqual(USER_PASSWORD_OPTIONS.getOptions());
-        });
-    });
-
-    describe('isResetPasswordOption', function() {
-
-        it('should return true if user selected reset password option', function() {
-            expect(vm.isResetPasswordOption(USER_PASSWORD_OPTIONS.RESET_PASSWORD)).toBe(true);
-        });
-
-        it('should return false if user selected other option', function() {
-            expect(vm.isResetPasswordOption(USER_PASSWORD_OPTIONS.SEND_EMAIL)).toBe(false);
-        });
-
-    });
-
-    describe('canSelectOption', function() {
-
-        it('should return true if user has email and want to select send email option', function() {
-            expect(vm.canSelectOption(USER_PASSWORD_OPTIONS.SEND_EMAIL)).toBe(true);
-        });
-
-        it('should return false if user has email and want to select send email option', function() {
-            delete vm.user.email;
-            expect(vm.canSelectOption(USER_PASSWORD_OPTIONS.SEND_EMAIL)).toBe(false);
-        });
-
-        it('should return true if user selected other option', function() {
-            expect(vm.canSelectOption(USER_PASSWORD_OPTIONS.RESET_PASSWORD)).toBe(true);
+            expect(vm.selectedOption).toBe('RESET_PASSWORD');
         });
 
     });
@@ -131,7 +90,7 @@ describe('UserPasswordModalController', function() {
 
             beforeEach(function() {
                 authUserService.resetPassword.andReturn($q.when(true));
-                vm.selectedOption = USER_PASSWORD_OPTIONS.RESET_PASSWORD;
+                vm.selectedOption = 'RESET_PASSWORD';
                 vm.submitForm();
                 $rootScope.$apply();
             });
@@ -154,7 +113,7 @@ describe('UserPasswordModalController', function() {
                 var deferred = $q.defer();
 
                 authUserService.resetPassword.andReturn(deferred.promise);
-                vm.selectedOption = USER_PASSWORD_OPTIONS.RESET_PASSWORD;
+                vm.selectedOption = 'RESET_PASSWORD';
                 vm.submitForm();
                 deferred.reject();
                 $rootScope.$apply();
@@ -169,7 +128,7 @@ describe('UserPasswordModalController', function() {
 
             beforeEach(function() {
                 authUserService.sendResetEmail.andReturn($q.when(true));
-                vm.selectedOption = USER_PASSWORD_OPTIONS.SEND_EMAIL;
+                vm.selectedOption = 'SEND_EMAIL';
                 vm.submitForm();
                 $rootScope.$apply();
             });
@@ -192,7 +151,7 @@ describe('UserPasswordModalController', function() {
                 var deferred = $q.defer();
 
                 authUserService.sendResetEmail.andReturn(deferred.promise);
-                vm.selectedOption = USER_PASSWORD_OPTIONS.SEND_EMAIL;
+                vm.selectedOption = 'SEND_EMAIL';
                 vm.submitForm();
                 deferred.reject();
                 $rootScope.$apply();

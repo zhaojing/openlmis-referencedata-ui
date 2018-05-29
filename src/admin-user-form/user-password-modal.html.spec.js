@@ -41,7 +41,7 @@ describe('user-password-modal.html template', function() {
     describe('SendResetEmail', function () {
 
         it('should enable option if user has email', function() {
-            var button = template.find("#option-0");
+            var button = template.find("#send-email-radio");
             expect(button.is(':disabled')).toEqual(false);
         });
 
@@ -49,7 +49,7 @@ describe('user-password-modal.html template', function() {
             delete vm.user.email;
             $rootScope.$apply();
 
-            var button = template.find("#option-0");
+            var button = template.find("#send-email-radio");
             expect(button.is(':disabled')).toEqual(true);
         });
 
