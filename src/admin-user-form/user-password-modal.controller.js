@@ -38,7 +38,7 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.submitForm = submitForm;
+        vm.updatePassword = updatePassword;
 
         /**
          * @ngdoc property
@@ -102,12 +102,12 @@
         /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserPasswordModalController
-         * @name submitForm
+         * @name updatePassword
          *
          * @description
          * submit user password modal. Depends on the selected option other actions are taken.
          */
-        function submitForm() {
+        function updatePassword() {
             loadingModalService.open();
 
             if(vm.selectedOption === 'SEND_EMAIL') {

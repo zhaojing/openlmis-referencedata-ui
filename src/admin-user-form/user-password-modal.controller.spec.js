@@ -56,8 +56,8 @@ describe('UserPasswordModalController', function() {
 
     describe('onInit', function() {
 
-        it('should expose submitForm method', function() {
-            expect(angular.isFunction(vm.submitForm)).toBe(true);
+        it('should expose updatePassword method', function() {
+            expect(angular.isFunction(vm.updatePassword)).toBe(true);
         });
 
         it('should set user', function() {
@@ -84,14 +84,14 @@ describe('UserPasswordModalController', function() {
 
     });
 
-    describe('submitForm', function() {
+    describe('updatePassword', function() {
 
         describe('resetPassword', function() {
 
             beforeEach(function() {
                 authUserService.resetPassword.andReturn($q.when(true));
                 vm.selectedOption = 'RESET_PASSWORD';
-                vm.submitForm();
+                vm.updatePassword();
                 $rootScope.$apply();
             });
 
@@ -114,7 +114,7 @@ describe('UserPasswordModalController', function() {
 
                 authUserService.resetPassword.andReturn(deferred.promise);
                 vm.selectedOption = 'RESET_PASSWORD';
-                vm.submitForm();
+                vm.updatePassword();
                 deferred.reject();
                 $rootScope.$apply();
 
@@ -129,7 +129,7 @@ describe('UserPasswordModalController', function() {
             beforeEach(function() {
                 authUserService.sendResetEmail.andReturn($q.when(true));
                 vm.selectedOption = 'SEND_EMAIL';
-                vm.submitForm();
+                vm.updatePassword();
                 $rootScope.$apply();
             });
 
@@ -152,7 +152,7 @@ describe('UserPasswordModalController', function() {
 
                 authUserService.sendResetEmail.andReturn(deferred.promise);
                 vm.selectedOption = 'SEND_EMAIL';
-                vm.submitForm();
+                vm.updatePassword();
                 deferred.reject();
                 $rootScope.$apply();
 
