@@ -61,16 +61,16 @@
             }
         });
 
-        addStateForRoleType(ROLE_TYPES.ORDER_FULFILLMENT, '/fulfillment', 'user-profile-roles-fulfillment.html');
-        addStateForRoleType(ROLE_TYPES.SUPERVISION, '/supervision', 'user-profile-roles-supervision.html');
-        addStateForRoleType(ROLE_TYPES.GENERAL_ADMIN, '/admin', 'user-profile-roles-tab.html');
-        addStateForRoleType(ROLE_TYPES.REPORTS, '/reports', 'user-profile-roles-tab.html');
+        addStateForRoleType(ROLE_TYPES.ORDER_FULFILLMENT, '/fulfillment', 'user-roles-fulfillment.html');
+        addStateForRoleType(ROLE_TYPES.SUPERVISION, '/supervision', 'user-roles-supervision.html');
+        addStateForRoleType(ROLE_TYPES.GENERAL_ADMIN, '/admin', 'user-roles-tab.html');
+        addStateForRoleType(ROLE_TYPES.REPORTS, '/reports', 'user-roles-tab.html');
 
         function addStateForRoleType(type, url, templateFile) {
             $stateProvider.state('openlmis.profile.' + type, {
                 url: url,
                 controller: 'UserProfileRolesTabController',
-                templateUrl: 'openlmis-user/' + templateFile,
+                templateUrl: 'admin-user-roles/' + templateFile,
                 controllerAs: 'vm',
                 resolve: {
                     tab: function() {

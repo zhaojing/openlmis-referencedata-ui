@@ -184,7 +184,7 @@ describe('openlmis.profile', function() {
         it('should use template', function() {
             goToUrl('/profile/supervision');
 
-            expect($templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile-roles-supervision.html');
+            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-supervision.html');
         });
 
         it('should resolve tab', function() {
@@ -217,7 +217,7 @@ describe('openlmis.profile', function() {
         it('should use template', function() {
             goToUrl('/profile/fulfillment');
 
-            expect($templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile-roles-fulfillment.html');
+            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-fulfillment.html');
         });
 
         it('should resolve tab', function() {
@@ -250,7 +250,7 @@ describe('openlmis.profile', function() {
         it('should use template', function() {
             goToUrl('/profile/reports');
 
-            expect($templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile-roles-tab.html');
+            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
         });
 
         it('should resolve tab', function() {
@@ -280,7 +280,7 @@ describe('openlmis.profile', function() {
         it('should use template', function() {
             goToUrl('/profile/admin');
 
-            expect($templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile-roles-tab.html');
+            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
         });
 
         it('should resolve tab', function() {

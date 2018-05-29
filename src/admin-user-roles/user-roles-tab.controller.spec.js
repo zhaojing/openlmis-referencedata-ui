@@ -83,7 +83,7 @@ describe('UserRolesTabController', function() {
             supervisoryNodes: supervisoryNodes,
             warehouses: warehouses,
             programs: programs,
-            filteredRoleAssignments: [user.roleAssignments[0]],
+            roleAssignments: [user.roleAssignments[0]],
             tab: ROLE_TYPES.SUPERVISION
         });
 
@@ -111,9 +111,9 @@ describe('UserRolesTabController', function() {
             expect(vm.selectedType).toEqual(ROLE_TYPES.SUPERVISION);
         });
 
-        it('should set filteredRoleAssignments', function() {
-            expect(vm.filteredRoleAssignments.length).toBe(1);
-            expect(vm.filteredRoleAssignments[0]).toEqual(user.roleAssignments[0]);
+        it('should set roleAssignments', function() {
+            expect(vm.roleAssignments.length).toBe(1);
+            expect(vm.roleAssignments[0]).toEqual(user.roleAssignments[0]);
         });
 
         it('should set filteredRoles', function() {
@@ -125,12 +125,16 @@ describe('UserRolesTabController', function() {
         });
 
         it('should set showErrorColumn to true if role assignments have errors', function() {
-            vm.filteredRoleAssignments[0].errors = ['error'];
+            vm.roleAssignments[0].errors = ['error'];
 
             vm.$onInit();
             $rootScope.$apply();
 
             expect(vm.showErrorColumn).toEqual(true);
+        });
+
+        it('should set editable to false', function() {
+            expect(vm.editable).toEqual(true);
         });
     });
 

@@ -36,7 +36,7 @@
                 tab: function(ROLE_TYPES) {
                     return ROLE_TYPES.SUPERVISION;
                 },
-                filteredRoleAssignments: function(paginationService, $stateParams, user, tab) {
+                roleAssignments: function(paginationService, $stateParams, user, tab) {
                     return paginationService.registerList(null, $stateParams, function() {
                         var filtered = user.roleAssignments.filter(function(role) {
                             return role.type === tab;

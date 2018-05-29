@@ -1,4 +1,4 @@
-<form class="form-inline" ng-submit="vm.addRole()" reload-form>
+<form class="form-inline" ng-if="vm.editable" ng-submit="vm.addRole()" reload-form>
     <div class="form-group">
         <label for="program">{{'adminUserRoles.program' | message}}</label>
         <select id="program" ng-model="vm.selectedProgram"
@@ -23,7 +23,7 @@
 </form>
 <section class="openlmis-table-container">
     <table>
-        <caption ng-if="!vm.filteredRoleAssignments || vm.filteredRoleAssignments.length === 0">
+        <caption ng-if="!vm.roleAssignments || vm.roleAssignments.length === 0">
             {{'adminUserRoles.noRolesAssigned' | message}}
         </caption>
         <thead>
@@ -32,7 +32,7 @@
                 <th>{{'adminUserRoles.program' | message}}</th>
                 <th>{{'adminUserRoles.supervisoryNode' | message}}</th>
                 <th>{{'adminUserRoles.role' | message}}</th>
-                <th>{{'adminUserRoles.actions' | message}}</th>
+                <th ng-if="vm.editable">{{'adminUserRoles.actions' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -45,13 +45,13 @@
                 <td>{{roleAssignment.programName}}</td>
                 <td>{{roleAssignment.supervisoryNodeName}}</td>
                 <td>{{roleAssignment.roleName}}</td>
-                <td>
+                <td ng-if="vm.editable">
                     <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole.label' | message}}</button>
                 </td>
             </tr>
         </tbody>
     </table>
     <openlmis-pagination
-        list="vm.filteredRoleAssignments"
+        list="vm.roleAssignments"
         paged-list="vm.items"/>
 </section>

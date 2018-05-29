@@ -30,11 +30,11 @@
 
     controller.$inject = [
         'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab',
-        '$state', 'notificationService', 'confirmService', 'filteredRoleAssignments', 'filteredRoles'
+        '$state', 'notificationService', 'confirmService', 'roleAssignments', 'filteredRoles'
     ];
 
     function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab,
-                        $state, notificationService, confirmService, filteredRoleAssignments, filteredRoles) {
+                        $state, notificationService, confirmService, roleAssignments, filteredRoles) {
 
         var vm = this;
 
@@ -143,6 +143,17 @@
         vm.selectedWarehouse = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-roles.controller:UserRolesTabController
+         * @name editable
+         * @type {boolean}
+         *
+         * @description
+         * Flag defining whether the roles can be edited.
+         */
+        vm.editable = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-roles.controller:UserRolesTabController
          * @name $onInit
@@ -155,9 +166,10 @@
             vm.warehouses = warehouses;
             vm.programs = programs;
             vm.selectedType = tab;
-            vm.filteredRoleAssignments = filteredRoleAssignments;
+            vm.roleAssignments = roleAssignments;
             vm.filteredRoles = filteredRoles;
-            vm.showErrorColumn = filteredRoleAssignments.filter(function(role) {
+            vm.editable = true;
+            vm.showErrorColumn = roleAssignments.filter(function(role) {
                 return role.errors && role.errors.length;
             }).length > 0;
         }
