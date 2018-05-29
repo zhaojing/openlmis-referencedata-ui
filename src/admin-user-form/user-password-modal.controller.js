@@ -30,16 +30,18 @@
 
     controller.$inject = [
         'user', 'title', 'modalDeferred', 'authUserService', 'loadingModalService',
-        'notificationService'
+        'notificationService', 'USER_PASSWORD_OPTIONS'
     ];
 
     function controller(user, title, modalDeferred, authUserService, loadingModalService,
-        notificationService) {
+        notificationService, USER_PASSWORD_OPTIONS) {
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.createPassword = createPassword;
-        vm.sendResetEmail = sendResetEmail;
+        vm.submitForm = submitForm;
+        vm.isResetPasswordOption = isResetPasswordOption;
+        vm.canSelectOption = canSelectOption;
+        vm.getLabel = USER_PASSWORD_OPTIONS.getLabel;
 
         /**
          * @ngdoc property
@@ -64,6 +66,28 @@
         vm.title = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserPasswordModalController
+         * @name selectedOption
+         * @type {String}
+         *
+         * @description
+         * The selected option.
+         */
+        vm.selectedOption = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserPasswordModalController
+         * @name options
+         * @type {Array}
+         *
+         * @description
+         * The available options.
+         */
+        vm.options = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserPasswordModalController
          * @name $onInit
@@ -74,49 +98,82 @@
         function onInit() {
             vm.user = user;
             vm.title = title;
+            vm.selectedOption = vm.user.email
+                ? USER_PASSWORD_OPTIONS.SEND_EMAIL
+                : USER_PASSWORD_OPTIONS.RESET_PASSWORD;
+            vm.options = USER_PASSWORD_OPTIONS.getOptions();
         }
 
         /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserPasswordModalController
-         * @name createPassword
+         * @name isResetPasswordSelected
          *
          * @description
-         * Saves password for given user in auth service.
+         * Check if user selects reset password option.
          *
-         * @return {Promise} resolves after password saves successfully on the server.
+         * @param  {String}  one of available user password options
+         * @return {Boolean} true if user selects reset password option; otherwise false.
          */
-        function createPassword() {
-            loadingModalService.open(true);
-            return authUserService.resetPassword(vm.user.username, vm.user.newPassword)
+        function isResetPasswordOption(option) {
+            return option === USER_PASSWORD_OPTIONS.RESET_PASSWORD;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserPasswordModalController
+         * @name canSelectOption
+         *
+         * @description
+         * Check if user can select reset password option.
+         *
+         * @param  {String}  one of available user password options
+         * @return {Boolean} true if user can select an option; otherwise false.
+         */
+        function canSelectOption(option) {
+            if(option === USER_PASSWORD_OPTIONS.SEND_EMAIL) {
+                return !!vm.user.email;
+            }
+
+            return true;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserPasswordModalController
+         * @name submitForm
+         *
+         * @description
+         * submit user password modal. Depends on the selected option other actions are taken.
+         */
+        function submitForm() {
+            loadingModalService.open();
+
+            if(vm.selectedOption === USER_PASSWORD_OPTIONS.SEND_EMAIL) {
+                sendResetEmail();
+            } else if (vm.selectedOption === USER_PASSWORD_OPTIONS.RESET_PASSWORD) {
+                resetPassword();
+            }
+        }
+
+        function resetPassword() {
+            authUserService.resetPassword(vm.user.username, vm.user.newPassword)
             .then(function() {
                 notificationService.success('adminUserForm.passwordSetSuccessfully');
                 modalDeferred.resolve();
             })
-            .catch(function(error) {
-                loadingModalService.close();
-                return error;
-            });
+            .finally(loadingModalService.close);
         }
 
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserPasswordModalController
-         * @name sendResetEmail
-         *
-         * @description
-         * Requests sending reset password token to email address for given user.
-         */
         function sendResetEmail() {
-            var loadingPromise = loadingModalService.open();
+            loadingModalService.open();
 
-            authUserService.sendResetEmail(vm.user.email).then(function() {
-                loadingPromise.then(function() {
+            authUserService.sendResetEmail(vm.user.email)
+            .then(function() {
                     notificationService.success('adminUserForm.passwordResetSuccessfully');
-                });
                 modalDeferred.resolve();
             })
-            .catch(loadingModalService.close);
+            .finally(loadingModalService.close);
         }
     }
 })();

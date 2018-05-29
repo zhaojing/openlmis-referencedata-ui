@@ -22,7 +22,7 @@ describe('user-password-modal.html template', function() {
     describe('Show password checkbox', function() {
 
         it('should change input type', function() {
-            var input = template.find("#password");
+            var input = template.find("#newPassword");
 
             expect(input.attr('type')).toEqual('password');
 
@@ -40,16 +40,16 @@ describe('user-password-modal.html template', function() {
 
     describe('SendResetEmail', function () {
 
-        it('should enable button if user has email', function() {
-            var button = template.find("#sendResetEmailButton");
+        it('should enable option if user has email', function() {
+            var button = template.find("#option-0");
             expect(button.is(':disabled')).toEqual(false);
         });
 
-        it('should disable button if user has no email', function() {
+        it('should disable option if user has no email', function() {
             delete vm.user.email;
             $rootScope.$apply();
 
-            var button = template.find("#sendResetEmailButton");
+            var button = template.find("#option-0");
             expect(button.is(':disabled')).toEqual(true);
         });
 
