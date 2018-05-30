@@ -57,6 +57,9 @@
          */
         function onInit() {
             vm.roleAssignments = roleAssignments;
+            vm.showErrorColumn = roleAssignments.filter(function(role) {
+                return role.errors && role.errors.length;
+            }).length > 0;
         }
     }
 })();

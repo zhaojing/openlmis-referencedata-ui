@@ -16,7 +16,7 @@
 
 describe('UserProfileRolesTabController', function() {
 
-    var vm, roleAssignments, $controller, ROLE_TYPES, UserDataBuilder, RoleDataBuilder;
+    var vm, roleAssignments, $controller, ROLE_TYPES, UserDataBuilder, RoleDataBuilder, $rootScope;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -25,6 +25,7 @@ describe('UserProfileRolesTabController', function() {
             $controller = $injector.get('$controller');
             UserDataBuilder = $injector.get('UserDataBuilder');
             RoleDataBuilder = $injector.get('RoleDataBuilder');
+            $rootScope = $injector.get('$rootScope');
         });
 
         var roles = [
@@ -48,6 +49,19 @@ describe('UserProfileRolesTabController', function() {
 
         it('should expose role assignments', function() {
             expect(vm.roleAssignments).toEqual(roleAssignments);
+        });
+
+        it('should set showErrorColumn to false if role assignments does not have errors', function() {
+            expect(vm.showErrorColumn).toEqual(false);
+        });
+
+        it('should set showErrorColumn to true if role assignments have errors', function() {
+            vm.roleAssignments[0].errors = ['error'];
+
+            vm.$onInit();
+            $rootScope.$apply();
+
+            expect(vm.showErrorColumn).toEqual(true);
         });
     });
 
