@@ -1,8 +1,8 @@
 {
-    "openlmisUser.basicInformation": "Basic information",
+    "openlmisUser.basicInformation": "Basic Information",
     "openlmisUser.username": "Username",
-    "openlmisUser.firstName": "First name",
-    "openlmisUser.lastName": "Last name",
+    "openlmisUser.firstName": "First Name",
+    "openlmisUser.lastName": "Last Name",
     "openlmisUser.email": "Email",
     "openlmisUser.jobTitle": "Job Title",
     "openlmisUser.homeFacility": "Home Facility",
