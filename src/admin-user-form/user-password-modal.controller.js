@@ -108,33 +108,36 @@
          * submit user password modal. Depends on the selected option other actions are taken.
          */
         function updatePassword() {
+            var actionPromise;
+
             loadingModalService.open();
 
             if(vm.isEmailResetSelected) {
-                sendResetEmail();
+                actionPromise = sendResetEmail();
             } else {
-                resetPassword();
+                actionPromise = resetPassword();
             }
+
+            return actionPromise
+            .finally(loadingModalService.close);
         }
 
         function resetPassword() {
-            authUserService.resetPassword(vm.user.username, vm.user.newPassword)
+            return authUserService.resetPassword(vm.user.username, vm.user.newPassword)
             .then(function() {
                 notificationService.success('adminUserForm.passwordSetSuccessfully');
                 modalDeferred.resolve();
-            })
-            .finally(loadingModalService.close);
+            });
         }
 
         function sendResetEmail() {
             loadingModalService.open();
 
-            authUserService.sendResetEmail(vm.user.email)
+            return authUserService.sendResetEmail(vm.user.email)
             .then(function() {
-                    notificationService.success('adminUserForm.passwordResetSuccessfully');
+                notificationService.success('adminUserForm.passwordResetSuccessfully');
                 modalDeferred.resolve();
-            })
-            .finally(loadingModalService.close);
+            });
         }
     }
 })();
