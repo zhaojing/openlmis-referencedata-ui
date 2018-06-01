@@ -123,15 +123,8 @@
          */
         function restoreProfile() {
             loadingModalService.open();
-
-            return referencedataUserService.get(vm.user.id)
-            .then(function() {
-                notificationService.success('openlmisUser.cancel.restoreSuccessful');
-            })
-            .catch(function() {
-                notificationService.error('openlmisUser.cancel.restoreFailed');
-            })
-            .finally(loadingModalService.close);
+            $state.reload();
+            notificationService.success('openlmisUser.cancel.restoreSuccessful');
         }
 
         /**

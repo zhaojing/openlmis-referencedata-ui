@@ -57,6 +57,7 @@ describe('UserProfileController', function() {
         spyOn($rootScope, '$emit');
         spyOn(loginService, 'logout');
         spyOn($state, 'go');
+        spyOn($state, 'reload').andReturn();
 
         vm = $controller('UserProfileController', {
             user: user,
@@ -122,26 +123,16 @@ describe('UserProfileController', function() {
             vm.restoreProfile();
         });
 
-        it('should restore profile and display notification', function() {
-            getUserDeferred.resolve();
-            $rootScope.$apply();
-
-            expect(notificationService.success).toHaveBeenCalledWith('openlmisUser.cancel.restoreSuccessful');
-            expect(notificationService.error).not.toHaveBeenCalled();
-        });
-
-        it('should not update profile and inform about error', function() {
-            getUserDeferred.reject();
-            $rootScope.$apply();
-
-            expect(notificationService.success).not.toHaveBeenCalled();
-            expect(notificationService.error).toHaveBeenCalledWith('openlmisUser.cancel.restoreFailed');
-        });
-
-        afterEach(function() {
+        it('should open loading modal', function() {
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(referencedataUserService.get).toHaveBeenCalledWith(user.id);
-            expect(loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should reload the state', function() {
+            expect($state.reload).toHaveBeenCalled();
+        });
+
+        it('should show a notification', function() {
+            expect(notificationService.success).toHaveBeenCalledWith('openlmisUser.cancel.restoreSuccessful');
         });
 
     });
