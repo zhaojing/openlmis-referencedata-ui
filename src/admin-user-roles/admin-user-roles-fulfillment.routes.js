@@ -27,7 +27,7 @@
 
         $stateProvider.state('openlmis.administration.users.roles.' + ROLE_TYPES.ORDER_FULFILLMENT, {
             label: ROLE_TYPES.getLabel(ROLE_TYPES.ORDER_FULFILLMENT),
-            url: '/fulfillment',
+            url: '/fulfillment?page&size',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             controller: 'UserRolesTabController',
             templateUrl: 'admin-user-roles/user-roles-fulfillment.html',

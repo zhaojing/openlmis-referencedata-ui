@@ -26,7 +26,7 @@
 		$stateProvider.state('openlmis.administration.processingSchedules', {
 			showInNavigation: true,
 			label: 'adminProcessingScheduleList.processingSchedules',
-			url: '/processingSchedules?page&size',
+			url: '/processingSchedules?schedulesPage&schedulesSize',
 			controller: 'ProcessingScheduleListController',
 			templateUrl: 'admin-processing-schedule-list/processing-schedule-list.html',
 			controllerAs: 'vm',
@@ -45,6 +45,9 @@
 							page: page,
 							size: size
 						}, params);
+					}, {
+						customPageParamName: 'schedulesPage',
+						customSizeParamName: 'schedulesSize'
 					});
 				}
 			}

@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.supervisoryNodes', {
             showInNavigation: true,
             label: 'adminSupervisoryNodeList.supervisoryNodes',
-            url: '/supervisoryNodes?name&zoneId&page&size',
+            url: '/supervisoryNodes?name&zoneId&nodesPage&nodesSize',
             controller: 'SupervisoryNodeListController',
             templateUrl: 'admin-supervisory-node-list/supervisory-node-list.html',
             controllerAs: 'vm',
@@ -35,6 +35,9 @@
                 supervisoryNodes: function(paginationService, supervisoryNodeService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         return supervisoryNodeService.query(stateParams);
+                    }, {
+                        customPageParamName: 'nodesPage',
+                        customSizeParamName: 'nodesSize'
                     });
                 },
                 geographicZones: function($q, geographicZoneService) {

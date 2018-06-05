@@ -27,7 +27,7 @@
 
         $stateProvider.state('openlmis.administration.users.roles.' + ROLE_TYPES.SUPERVISION, {
             label: ROLE_TYPES.getLabel(ROLE_TYPES.SUPERVISION),
-            url: '/supervision',
+            url: '/supervision?page&size',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             controller: 'UserRolesTabController',
             templateUrl: 'admin-user-roles/user-roles-supervision.html',

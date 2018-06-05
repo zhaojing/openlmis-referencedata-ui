@@ -27,7 +27,7 @@
 
         $stateProvider.state('openlmis.administration.users.roles.' + ROLE_TYPES.GENERAL_ADMIN, {
             label: ROLE_TYPES.getLabel(ROLE_TYPES.GENERAL_ADMIN),
-            url: '/admin',
+            url: '/admin?page&size',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             controller: 'UserRolesTabController',
             templateUrl: 'admin-user-roles/user-roles-tab.html',

@@ -28,7 +28,7 @@
             controller: 'ProcessingScheduleEditController',
             controllerAs: 'vm',
             templateUrl: 'admin-processing-schedule-edit/processing-schedule-edit.html',
-            url: '/:id',
+            url: '/:id?page&size',
             resolve: {
                 processingSchedule: function($stateParams, processingScheduleService) {
                     return processingScheduleService.get($stateParams.id);

@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.users', {
             showInNavigation: true,
             label: 'adminUserList.users.label',
-            url: '/users?firstName&lastName&email&page&size&username&sort',
+            url: '/users?firstName&lastName&email&usersPage&usersSize&username&sort',
             params: {
                 sort: 'username'
             },
@@ -38,6 +38,9 @@
                 users: function(paginationService, referencedataUserService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         return referencedataUserService.search(stateParams);
+                    }, {
+                        customPageParamName: 'usersPage',
+                        customSizeParamName: 'usersSize'
                     });
                 }
             }
