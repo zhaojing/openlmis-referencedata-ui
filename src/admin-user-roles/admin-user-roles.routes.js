@@ -19,9 +19,9 @@
 
     angular.module('admin-user-roles').config(routes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS', 'ROLE_TYPES'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS, ROLE_TYPES) {
 
         $stateProvider.state('openlmis.administration.users.roles', {
             abstract: true,
@@ -53,5 +53,35 @@
                 }
             }
         });
+
+        addStateForRoleType(ROLE_TYPES.SUPERVISION, '/supervision?page&size', 'user-roles-supervision.html');
+        addStateForRoleType(ROLE_TYPES.ORDER_FULFILLMENT, '/fulfillment?page&size', 'user-roles-fulfillment.html');
+        addStateForRoleType(ROLE_TYPES.GENERAL_ADMIN, '/admin?page&size', 'user-roles-tab.html');
+        addStateForRoleType(ROLE_TYPES.REPORTS, '/reports?page&size', 'user-roles-tab.html');
+
+        function addStateForRoleType(type, url, templateFile) {
+            $stateProvider.state('openlmis.administration.users.roles.' + type, {
+                label: ROLE_TYPES.getLabel(type),
+                url: url,
+                controller: 'UserRolesTabController',
+                templateUrl: 'admin-user-roles/' + templateFile,
+                controllerAs: 'vm',
+                resolve: {
+                    tab: function() {
+                        return type;
+                    },
+                    roleAssignments: function(paginationService, $stateParams, user, tab) {
+                        return paginationService.registerList(null, $stateParams, function() {
+                            return user.getRoleAssignments(tab);
+                        });
+                    },
+                    filteredRoles: function(roles, tab) {
+                        return roles.filter(function(role) {
+                            return role.type === tab;
+                        });
+                    }
+                }
+            });
+        }
     }
 })();

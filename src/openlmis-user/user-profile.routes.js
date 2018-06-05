@@ -76,20 +76,12 @@
                     tab: function() {
                         return type;
                     },
-                    roleAssignments: getRoleAssignments
+                    roleAssignments: function(paginationService, $stateParams, user, tab) {
+                        return paginationService.registerList(null, $stateParams, function() {
+                            return user.getRoleAssignments(tab);
+                        });
+                    }
                 }
-            });
-        }
-
-        function getRoleAssignments(paginationService, $stateParams, user, tab) {
-            return paginationService.registerList(null, $stateParams, function() {
-                var filtered = user.roleAssignments.filter(function(role) {
-                    return role.type === tab;
-                });
-
-                return filtered.sort(function(a, b) {
-                    return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);
-                });
             });
         }
 

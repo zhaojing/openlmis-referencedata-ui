@@ -15,7 +15,8 @@
 
 describe('User', function() {
 
-    var User, user, json, UserDataBuilder;
+    var User, user, json, UserDataBuilder, ROLE_TYPES, supervisionRoleAssignment,
+        orderFulfillmentRoleAssignment, generalAdminRoleAssignment;
 
     beforeEach(function() {
         module('referencedata-user');
@@ -23,9 +24,18 @@ describe('User', function() {
         inject(function($injector) {
             User = $injector.get('User');
             UserDataBuilder = $injector.get('UserDataBuilder');
+            ROLE_TYPES = $injector.get('ROLE_TYPES');
         });
 
-        json = new UserDataBuilder().buildJson();
+        json = new UserDataBuilder()
+            .withSupervisionRoleAssignment('1', '1', '1')
+            .withOrderFulfillmentRoleAssignment('2', '2')
+            .withGeneralAdminRoleAssignment('3')
+            .buildJson();
+        supervisionRoleAssignment = json.roleAssignments[0];
+        orderFulfillmentRoleAssignment = json.roleAssignments[1];
+        generalAdminRoleAssignment = json.roleAssignments[2];
+
         user = new User(json);
     });
 
@@ -53,6 +63,24 @@ describe('User', function() {
 
         it('should serialize the user to JSON', function() {
             expect(user.toJson()).toEqual(angular.toJson(user));
+        });
+
+    });
+
+    describe('getRoleAssignments', function () {
+
+        it('should get all role assignments if type is not provided', function () {
+            expect(user.getRoleAssignments()).toEqual(json.roleAssignments);
+        });
+
+        it('should get zero role assignments if type is incorrect', function () {
+            expect(user.getRoleAssignments('abc')).toEqual([]);
+        });
+
+        it('should get role assignments by type', function () {
+            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION)).toEqual([supervisionRoleAssignment]);
+            expect(user.getRoleAssignments(ROLE_TYPES.ORDER_FULFILLMENT)).toEqual([orderFulfillmentRoleAssignment]);
+            expect(user.getRoleAssignments(ROLE_TYPES.GENERAL_ADMIN)).toEqual([generalAdminRoleAssignment]);
         });
 
     });
