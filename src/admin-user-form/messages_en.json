@@ -22,7 +22,7 @@
     "adminUserForm.cancel": "Cancel",
     "adminUserForm.createPassword": "Create Password",
     "adminUserForm.resetPassword": "Reset Password",
-    "adminUserForm.setPasswordManually": "Set Password manually",
+    "adminUserForm.resetPasswordManually": "Reset Password manually",
     "adminUserForm.sendResetEmail": "Send Reset Password email",
     "adminUserForm.password": "Password",
     "adminUserForm.homeFacility": "Home facility",
