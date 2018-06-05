@@ -22,6 +22,7 @@ Bug fixes:
 * [OLMIS-4422](https://openlmis.atlassian.net/browse/OLMIS-4422): Fixed problem with entering the user roles screen.
   * if a user has no a home facility and some home facility roles, an error icon will be displayed next to those role assignments.
   * a user has ability to add new home facility roles but if the user has no home facility, those assignments will be ignored.
+* [OLMIS-3675](https://openlmis.atlassian.net/browse/OLMIS-3675): Fixed pagination problems for nested views.
 
 5.3.0 / 2018-04-24
 ==================
