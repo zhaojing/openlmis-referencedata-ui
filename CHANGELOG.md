@@ -16,6 +16,7 @@ Improvements:
   * user has two options to select: sending reset email or set password manually
   * if user has no email, the send email option is disabled
 * [OLMIS-3795](https://openlmis.atlassian.net/browse/OLMIS-3795): Remove code duplication from admin-user-roles routes
+* [OLMIS-4795](https://openlmis.atlassian.net/browse/OLMIS-4795): Updated dev-ui to version 8.
 
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility
