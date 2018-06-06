@@ -1,5 +1,5 @@
 <h2>{{'openlmisUser.basicInformation' | message}}</h2>
-<form id="user-profile">
+<form id="user-profile-form" ng-submit="vm.updateProfile()">
 
     <label for="user-username">{{'openlmisUser.username' | message}}</label>
     <input id="user-username" type="text" ng-model="vm.user.username" disabled/>
@@ -27,9 +27,9 @@
 <ng-include src="'admin-user-roles/user-role-tabs.html'"></ng-include>
 <div ui-view=""></div>
 <div class="openlmis-toolbar">
-    <input type="button" ng-click="vm.restoreProfile()" value="{{'openlmisUser.cancel' | message}}"/>
+    <button ng-click="vm.restoreProfile()">{{'openlmisUser.cancel' | message}}</button>
     <div class="button-group primary">
-        <input type="button" ng-click="vm.changePassword()" value="{{'openlmisUser.changePassword' | message}}"/>
-        <input type="button" ng-click="vm.updateProfile()" value="{{'openlmisUser.updateProfile' | message}}" class="primary"/>
+        <button ng-click="vm.changePassword()">{{'openlmisUser.changePassword' | message}}</button>
+        <button class="primary" form="user-profile-form">{{'openlmisUser.updateProfile' | message}}</button>
     </div>
 </div>
