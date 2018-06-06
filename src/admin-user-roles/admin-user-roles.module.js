@@ -33,7 +33,9 @@
         'referencedata-role',
         'referencedata-supervisory-node',
         'referencedata-user',
-        'ui.router'
+        'ui.router',
+        'admin-user-list',
+        'openlmis-admin'
     ]);
 
 })();
