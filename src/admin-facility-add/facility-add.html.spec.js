@@ -82,15 +82,6 @@ describe('Add Facility page', function() {
 
     });
 
-    describe('Operational Date selection', function() {
-
-        it('should use openlmis-datepicker', function() {
-            expect(template.find('[input-id=\'operational-date\']').is('openlmis-datepicker'))
-                .toBe(true);
-        });
-
-    });
-
     describe('Geographic Zone selection', function() {
 
         var select;
