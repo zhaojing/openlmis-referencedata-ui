@@ -8,10 +8,7 @@
     </div>
     <div class="form-group">
         <label for="startDate">{{'adminFacilityView.startDate' | message}}</label>
-        <openlmis-datepicker input-id="startDate"
-            value="vm.selectedStartDate"
-            required="true">
-        </openlmis-datepicker>
+        <input id="startDate" type="date" ng-model="vm.selectedStartDate" required/>
     </div>
     <button type="submit" class="add">{{'adminFacilityView.add' | message}}</button>
 </form>
@@ -32,11 +29,7 @@
             <tr ng-repeat="program in vm.facilityWithPrograms.supportedPrograms">
                 <td>{{program.name}}</td>
                 <td><input type="checkbox" ng-model="program.supportActive"/></td>
-                <td>
-                    <openlmis-datepicker input-id="programStartDate"
-                        value="program.supportStartDate">
-                    </openlmis-datepicker>
-                </td>
+                <td><input id="programStartDate" type="date" ng-model="program.supportStartDate"/></td>
                 <td><input type="checkbox" ng-model="program.supportLocallyFulfilled"/></td>
             </tr>
         </tbody>

@@ -13,10 +13,7 @@
     </select>
 
     <label for="operationalDate">{{'adminFacilityView.operationalDate' | message}}</label>
-    <openlmis-datepicker input-id="operationalDate"
-        value="vm.facilityDetails.goLiveDate"
-        required="true">
-    </openlmis-datepicker>
+    <input id="operationalDate" type="date" ng-model="vm.facilityDetails.goLiveDate" required/>
     <p class="note">{{'adminFacilityView.operationalDate.description' | message}}</p>
 
     <label for="geographicZone">{{'adminFacilityView.geographicZone' | message}}</label>

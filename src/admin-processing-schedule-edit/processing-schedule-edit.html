@@ -17,17 +17,15 @@
                     </div>
                     <div class="form-group">
                         <label for="start-date">{{'adminProcessingScheduleEdit.startDate' | message}}</label>
-                        <openlmis-datepicker
+                        <input id="start-date" type="date"
                             max-date="vm.newPeriod.endDate"
-                            input-id="start-date"
-                            value="vm.newPeriod.startDate"
-                            required="true"
-                            disabled="vm.processingPeriods && vm.processingPeriods.length > 0">
-                        </openlmis-datepicker>
+                            ng-model="vm.newPeriod.startDate"
+                            disabled="vm.processingPeriods && vm.processingPeriods.length > 0"
+                            required/>
                     </div>
                     <div class="form-group">
                         <label for="end-date">{{'adminProcessingScheduleEdit.endDate' | message}}</label>
-                        <openlmis-datepicker min-date="vm.newPeriod.startDate" input-id="end-date" value="vm.newPeriod.endDate" required="true"></openlmis-datepicker>
+                        <input id="end-date" type="date" min-date="vm.newPeriod.startDate" ng-model="vm.newPeriod.endDate" required/>
                     </div>
                     <button class="add" type="submit">{{'adminProcessingScheduleEdit.add' | message}}</button>
                 </form>
