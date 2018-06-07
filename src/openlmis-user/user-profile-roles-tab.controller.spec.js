@@ -16,7 +16,8 @@
 
 describe('UserProfileRolesTabController', function() {
 
-    var vm, roleAssignments, $controller, ROLE_TYPES, UserDataBuilder, RoleDataBuilder, $rootScope;
+    var vm, roleAssignments, $controller, ROLE_TYPES, UserDataBuilder, RoleDataBuilder, $rootScope,
+        roleRightsMap;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -32,12 +33,16 @@ describe('UserProfileRolesTabController', function() {
             new RoleDataBuilder().withSupervisionType().build()
         ];
 
+        roleRightsMap = {};
+        roleRightsMap[roles[0].id] = roles[0].rights;
+
         roleAssignments = new UserDataBuilder()
             .withGeneralAdminRoleAssignment(roles[0].id)
             .build().roleAssignments;
 
         vm = $controller('UserProfileRolesTabController', {
-            roleAssignments: roleAssignments
+            roleAssignments: roleAssignments,
+            roleRightsMap: roleRightsMap
         });
     });
 
@@ -62,6 +67,13 @@ describe('UserProfileRolesTabController', function() {
             $rootScope.$apply();
 
             expect(vm.showErrorColumn).toEqual(true);
+        });
+
+        it('should expose roleRightsMap', function() {
+            vm.$onInit();
+            $rootScope.$apply();
+
+            expect(vm.roleRightsMap).toEqual(roleRightsMap);
         });
     });
 

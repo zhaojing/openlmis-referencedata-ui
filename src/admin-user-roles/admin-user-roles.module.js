@@ -35,7 +35,8 @@
         'referencedata-user',
         'ui.router',
         'admin-user-list',
-        'openlmis-admin'
+        'openlmis-admin',
+        'admin-role-form'
     ]);
 
 })();

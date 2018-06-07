@@ -15,10 +15,9 @@
 
 describe('UserRolesTabController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, notificationService, confirmService,
-        UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder,
-        SupervisoryNodeDataBuilder, stateParams, vm, user, roles, supervisoryNodes,
-        warehouses, programs;
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, notificationService, confirmService, roleRightsMap,
+        UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder, SupervisoryNodeDataBuilder,
+        stateParams, vm, user, roles, supervisoryNodes, warehouses, programs;
 
     beforeEach(function() {
 
@@ -76,6 +75,10 @@ describe('UserRolesTabController', function() {
             size: 10
         };
 
+        roleRightsMap = {};
+        roleRightsMap[roles[0].id] = roles[0].rights;
+        roleRightsMap[roles[1].id] = roles[1].rights;
+
         vm = $controller('UserRolesTabController', {
             $stateParams: stateParams,
             user: user,
@@ -84,7 +87,8 @@ describe('UserRolesTabController', function() {
             warehouses: warehouses,
             programs: programs,
             roleAssignments: [user.roleAssignments[0]],
-            tab: ROLE_TYPES.SUPERVISION
+            tab: ROLE_TYPES.SUPERVISION,
+            roleRightsMap: roleRightsMap
         });
 
         vm.$onInit();
@@ -135,6 +139,13 @@ describe('UserRolesTabController', function() {
 
         it('should set editable to false', function() {
             expect(vm.editable).toEqual(true);
+        });
+
+        it('should expose roleRightsMap', function() {
+            vm.$onInit();
+            $rootScope.$apply();
+
+            expect(vm.roleRightsMap).toEqual(roleRightsMap);
         });
     });
 

@@ -28,13 +28,14 @@
         .module('openlmis-user')
         .controller('UserProfileRolesTabController', controller);
 
-    controller.$inject = ['roleAssignments'];
+    controller.$inject = ['roleAssignments', 'roleRightsMap', 'typeNameFactory'];
 
-    function controller(roleAssignments) {
+    function controller(roleAssignments, roleRightsMap, typeNameFactory) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.getMessage = typeNameFactory.getMessage;
 
         /**
          * @ngdoc property
@@ -60,6 +61,7 @@
             vm.showErrorColumn = roleAssignments.filter(function(role) {
                 return role.errors && role.errors.length;
             }).length > 0;
+            vm.roleRightsMap = roleRightsMap;
         }
     }
 })();

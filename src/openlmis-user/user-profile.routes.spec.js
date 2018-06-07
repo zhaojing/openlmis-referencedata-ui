@@ -169,6 +169,18 @@ describe('openlmis.profile', function() {
             expect(getResolvedValue('homeFacility')).toBeUndefined();
         });
 
+        it('should resolve home roleRightsMap', function() {
+            goToUrl('/profile');
+
+            var roleRightsMap = getResolvedValue('roleRightsMap');
+            expect(roleRightsMap[roles[0].id]).toEqual(roles[0].rights);
+            expect(roleRightsMap[roles[1].id]).toEqual(roles[1].rights);
+            expect(roleRightsMap[roles[2].id]).toEqual(roles[2].rights);
+            expect(roleRightsMap[roles[3].id]).toEqual(roles[3].rights);
+            expect(roleRightsMap[roles[4].id]).toEqual(roles[4].rights);
+            expect(roleRightsMap[roles[5].id]).toEqual(roles[5].rights);
+        });
+
     });
 
     describe('.supervision state', function() {

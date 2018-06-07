@@ -14,13 +14,18 @@
         </caption>
         <thead>
             <tr>
-                <th>{{'adminUserRoles.role' | message}}</th>
+                <th popover="{{'adminUserRoles.hoveringOverRolesWillRevealRightsAssignedToThen' | message}}">
+                    {{'adminUserRoles.role' | message}}
+                </th>
                 <th ng-if="vm.editable">{{'adminUserRoles.actions' | message}}</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="roleAssignment in vm.items | orderBy : '$name'">
-                <td>{{roleAssignment.roleName}}</td>
+                <td popover-template="admin-user-roles/user-role-right-popover.html"
+                    popover-title="{{'adminUserRoles.assignedRights' | message}}">
+                    {{roleAssignment.roleName}}
+                </td>
                 <td ng-if="vm.editable">
                     <button class="danger" ng-click="vm.removeRole(roleAssignment)">{{'adminUserRoles.removeRole.label' | message}}</button>
                 </td>

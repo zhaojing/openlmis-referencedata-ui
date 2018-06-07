@@ -57,6 +57,12 @@
                     if (user.homeFacilityId) {
                         return facilityService.getMinimal(user.homeFacilityId);
                     }
+                },
+                roleRightsMap: function(roles) {
+                    return roles.reduce(function(roleMap, role) {
+                        roleMap[role.id] = role.rights;
+                        return roleMap;
+                    }, {});
                 }
             }
         });

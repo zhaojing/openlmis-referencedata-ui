@@ -164,6 +164,18 @@ describe('openlmis.administration.users.roles', function() {
             ]);
         });
 
+        it('should resolve home roleRightsMap', function() {
+            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+
+            var roleRightsMap = getResolvedValue('roleRightsMap');
+            expect(roleRightsMap[roles[0].id]).toEqual(roles[0].rights);
+            expect(roleRightsMap[roles[1].id]).toEqual(roles[1].rights);
+            expect(roleRightsMap[roles[2].id]).toEqual(roles[2].rights);
+            expect(roleRightsMap[roles[3].id]).toEqual(roles[3].rights);
+            expect(roleRightsMap[roles[4].id]).toEqual(roles[4].rights);
+            expect(roleRightsMap[roles[5].id]).toEqual(roles[5].rights);
+        });
+
     });
 
     describe('.fulfillment state', function() {

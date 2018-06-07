@@ -29,18 +29,19 @@
         .controller('UserRolesTabController', controller);
 
     controller.$inject = [
-        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab',
-        '$state', 'notificationService', 'confirmService', 'roleAssignments', 'filteredRoles'
+        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', 'typeNameFactory',
+        '$state', 'notificationService', 'confirmService', 'roleAssignments', 'filteredRoles', 'roleRightsMap'
     ];
 
-    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab,
-                        $state, notificationService, confirmService, roleAssignments, filteredRoles) {
+    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, typeNameFactory,
+                        $state, notificationService, confirmService, roleAssignments, filteredRoles, roleRightsMap) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.removeRole = removeRole;
         vm.addRole = addRole;
+        vm.getMessage = typeNameFactory.getMessage;
 
         /**
          * @ngdoc property
@@ -172,6 +173,7 @@
             vm.showErrorColumn = roleAssignments.filter(function(role) {
                 return role.errors && role.errors.length;
             }).length > 0;
+            vm.roleRightsMap = roleRightsMap;
         }
 
         /**

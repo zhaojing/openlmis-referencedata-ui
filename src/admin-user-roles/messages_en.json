@@ -14,5 +14,7 @@
     "adminUserRoles.removeRole.question": "Selected role assignments will be removed. Do you want to continue?",
     "adminUserRoles.saveUserRoles": "Save User Roles",
     "adminUserRoles.cancel": "Cancel",
-    "adminUserRoles.user": "User"
+    "adminUserRoles.user": "User",
+    "adminUserRoles.assignedRights": "Assigned Rights",
+    "adminUserRoles.hoveringOverRolesWillRevealRightsAssignedToThen": "Hovering over roles will reveal rights assigned to them"
 }
