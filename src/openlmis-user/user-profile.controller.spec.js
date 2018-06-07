@@ -18,7 +18,7 @@ describe('UserProfileController', function() {
 
     var vm, user, homeFacility, $controller, ROLE_TYPES, $q, UserDataBuilder, userPasswordModalFactory, $state,
         MinimalFacilityDataBuilder, loadingModalService, referencedataUserService, loginService, notificationService,
-        getUserDeferred, saveUserDeferred, $rootScope;
+        getUserDeferred, saveUserDeferred, $rootScope, alertService;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -37,6 +37,7 @@ describe('UserProfileController', function() {
             referencedataUserService = $injector.get('referencedataUserService');
             notificationService = $injector.get('notificationService');
             userPasswordModalFactory = $injector.get('userPasswordModalFactory');
+            alertService = $injector.get('alertService');
             loginService = $injector.get('loginService');
             $state = $injector.get('$state');
         });
@@ -58,6 +59,7 @@ describe('UserProfileController', function() {
         spyOn(loginService, 'logout');
         spyOn($state, 'go');
         spyOn($state, 'reload').andReturn();
+        spyOn(alertService, 'info');
 
         vm = $controller('UserProfileController', {
             user: user,
@@ -142,6 +144,7 @@ describe('UserProfileController', function() {
         beforeEach(function() {
             userPasswordModalFactory.resetPassword.andReturn($q.resolve());
             loginService.logout.andReturn($q.resolve());
+            alertService.info.andReturn($q.resolve());
         });
 
         it('should do nothing if modal was dismissed', function() {
@@ -151,6 +154,7 @@ describe('UserProfileController', function() {
             $rootScope.$apply();
 
             expect(userPasswordModalFactory.resetPassword).toHaveBeenCalledWith(user);
+            expect(alertService.info).not.toHaveBeenCalled();
             expect($rootScope.$emit).not.toHaveBeenCalled();
             expect(loginService.logout).not.toHaveBeenCalled();
             expect($state.go).not.toHaveBeenCalled();
@@ -164,8 +168,27 @@ describe('UserProfileController', function() {
 
             expect(userPasswordModalFactory.resetPassword).toHaveBeenCalledWith(user);
             expect(loginService.logout).toHaveBeenCalled();
+            expect(alertService.info).not.toHaveBeenCalled();
             expect($rootScope.$emit).not.toHaveBeenCalled();
             expect($state.go).not.toHaveBeenCalled();
+        });
+
+        it('should show alert after changing password ', function() {
+            alertService.info.andReturn($q.reject());
+
+            vm.changePassword();
+            $rootScope.$apply();
+
+            expect(userPasswordModalFactory.resetPassword).toHaveBeenCalledWith(user);
+            expect(loginService.logout).toHaveBeenCalled();
+            expect(alertService.info).toHaveBeenCalledWith({
+                title: 'openlmisUser.passwordResetAlert.title',
+                message: 'openlmisUser.passwordResetAlert.message',
+                buttonLabel: 'openlmisUser.passwordResetAlert.label'
+            });
+            expect($rootScope.$emit).not.toHaveBeenCalled();
+            expect($state.go).not.toHaveBeenCalled();
+            
         });
 
         it('should log user out after successfully changing password', function() {
@@ -174,6 +197,11 @@ describe('UserProfileController', function() {
 
             expect(userPasswordModalFactory.resetPassword).toHaveBeenCalledWith(user);
             expect(loginService.logout).toHaveBeenCalled();
+            expect(alertService.info).toHaveBeenCalledWith({
+                title: 'openlmisUser.passwordResetAlert.title',
+                message: 'openlmisUser.passwordResetAlert.message',
+                buttonLabel: 'openlmisUser.passwordResetAlert.label'
+            });
             expect($rootScope.$emit).toHaveBeenCalledWith('openlmis-auth.logout');
             expect($state.go).toHaveBeenCalledWith('auth.login');
         });

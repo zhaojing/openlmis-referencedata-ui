@@ -31,11 +31,11 @@
 
     controller.$inject = [
         'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'referencedataUserService', 'notificationService',
-        'userPasswordModalFactory', 'loginService', '$rootScope', '$state'
+        'userPasswordModalFactory', 'loginService', '$rootScope', '$state', 'alertService'
     ];
 
     function controller(user, homeFacility, ROLE_TYPES, loadingModalService, referencedataUserService,
-                        notificationService, userPasswordModalFactory, loginService, $rootScope, $state) {
+                        notificationService, userPasswordModalFactory, loginService, $rootScope, $state, alertService) {
 
         var vm = this;
 
@@ -141,6 +141,13 @@
             userPasswordModalFactory.resetPassword(user)
             .then(function() {
                 loginService.logout()
+                .then(function() {
+                    return alertService.info({
+                        title: 'openlmisUser.passwordResetAlert.title',
+                        message: 'openlmisUser.passwordResetAlert.message',
+                        buttonLabel: 'openlmisUser.passwordResetAlert.label'
+                    });
+                })
                 .then(function() {
                     $rootScope.$emit('openlmis-auth.logout');
                     $state.go('auth.login');

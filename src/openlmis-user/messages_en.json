@@ -15,5 +15,8 @@
     "openlmisUser.updateProfile": "Update Profile",
     "openlmisUser.updateProfile.updateSuccessful": "Basic information updated successfully",
     "openlmisUser.updateProfile.updateFailed": "Failed to update basic information",
-    "openlmisUser.changePassword": "Change Password"
+    "openlmisUser.changePassword": "Change Password",
+    "openlmisUser.passwordResetAlert.title": "Password reset successfully",
+    "openlmisUser.passwordResetAlert.message": "You will now be logged out",
+    "openlmisUser.passwordResetAlert.label": "Logout"
 }
