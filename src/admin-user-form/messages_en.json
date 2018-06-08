@@ -23,6 +23,7 @@
     "adminUserForm.createPassword": "Create Password",
     "adminUserForm.resetPassword": "Reset Password",
     "adminUserForm.resetPasswordManually": "Reset Password manually",
+    "adminUserForm.passwordRequirements": "A password must contain at least 8 characters and 1 number.",
     "adminUserForm.sendResetEmail": "Send Reset Password email",
     "adminUserForm.password": "Password",
     "adminUserForm.homeFacility": "Home facility",
