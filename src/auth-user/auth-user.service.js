@@ -43,12 +43,17 @@
                 sendResetEmail: {
                     method: 'POST',
                     url: openlmisUrlFactory('/api/users/auth/forgotPassword')
+                },
+                sendVerificationEmail: {
+                    method: 'POST',
+                    url: openlmisUrlFactory('/api/users/auth/verifyEmail')
                 }
             });
 
         this.saveUser = saveUser;
         this.resetPassword = resetPassword;
         this.sendResetEmail = sendResetEmail;
+        this.sendVerificationEmail = sendVerificationEmail;
 
         /**
          * @ngdoc method
@@ -75,6 +80,12 @@
         function sendResetEmail(email) {
             return resource.sendResetEmail({
                 email: email
+            }, undefined).$promise;
+        }
+
+        function sendVerificationEmail(userId) {
+            return resource.sendVerificationEmail({
+                userId: userId
             }, undefined).$promise;
         }
     }

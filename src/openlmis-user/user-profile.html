@@ -19,6 +19,13 @@
     <label for="user-email">{{'openlmisUser.email' | message}}</label>
     <input id="user-email" type="email" ng-model="vm.user.email"/>
 
+    <fieldset class="form-group">
+        <label>
+            <input type="checkbox" ng-model="vm.user.verified" disabled/>
+            {{'openlmisUser.emailVerified' | message}}
+        </label>
+    </fieldset>
+
     <label for="user-phone-number">{{'openlmisUser.phoneNumber' | message}}</label>
     <input id="user-phone-number" type="text" ng-model="vm.user.phoneNumber"/>
 
@@ -29,6 +36,7 @@
 <div class="openlmis-toolbar">
     <button ng-click="vm.restoreProfile()">{{'openlmisUser.cancel' | message}}</button>
     <div class="button-group primary">
+        <button ng-if="vm.user.email && !vm.user.verified" ng-click="vm.sendVerificationEmail()">{{ 'openlmisUser.sendVerificationEmail' | message }}</button>
         <button ng-click="vm.changePassword()">{{'openlmisUser.changePassword' | message}}</button>
         <button class="primary" form="user-profile-form">{{'openlmisUser.updateProfile' | message}}</button>
     </div>

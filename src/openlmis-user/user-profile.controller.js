@@ -31,11 +31,12 @@
 
     controller.$inject = [
         'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'referencedataUserService', 'notificationService',
-        'userPasswordModalFactory', 'loginService', '$rootScope', '$state', 'alertService'
+        'userPasswordModalFactory', 'loginService', '$rootScope', '$state', 'alertService', 'authUserService'
     ];
 
     function controller(user, homeFacility, ROLE_TYPES, loadingModalService, referencedataUserService,
-                        notificationService, userPasswordModalFactory, loginService, $rootScope, $state, alertService) {
+                        notificationService, userPasswordModalFactory, loginService, $rootScope, $state,
+                        alertService, authUserService) {
 
         var vm = this;
 
@@ -44,6 +45,7 @@
         vm.updateProfile = updateProfile;
         vm.restoreProfile = restoreProfile;
         vm.changePassword = changePassword;
+        vm.sendVerificationEmail = sendVerificationEmail;
 
         /**
          * @ngdoc property
@@ -152,6 +154,21 @@
                     $rootScope.$emit('openlmis-auth.logout');
                     $state.go('auth.login');
                 });
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-user.controller:UserProfileController
+         * @name sendVerificationEmail
+         *
+         * @description
+         * Send a verification email to a user.
+         */
+        function sendVerificationEmail() {
+            return authUserService.sendVerificationEmail(vm.user.id)
+            .then(function() {
+                notificationService.success('openlmisUser.sendVerificationEmail.success');
             });
         }
 

@@ -29,5 +29,7 @@
     "adminUserForm.removeHomeFacility.confirmation": "${facility} is no longer ${username}'s home facility.\n\nDo you want to remove ${username}'s roles for ${facility}?",
     "adminUserForm.removeHomeFacility.keepRoles": "Keep Roles",
     "adminUserForm.removeHomeFacility.removeRoles": "Remove Roles",
-    "adminUserForm.showPassword": "Show password"
+    "adminUserForm.showPassword": "Show password",
+    "adminUserForm.sendVerificationEmail": "Send verification email",
+    "adminUserForm.sendVerificationEmail.success": "Verification email has been sent successfully!"
 }

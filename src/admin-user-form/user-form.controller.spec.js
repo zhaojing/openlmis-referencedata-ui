@@ -25,7 +25,7 @@ describe('UserFormController', function() {
                 return referencedataUserService;
             });
 
-            authUserService = jasmine.createSpyObj('authUserService', ['saveUser']);
+            authUserService = jasmine.createSpyObj('authUserService', ['saveUser', 'sendVerificationEmail']);
             $provide.service('authUserService', function() {
                 return authUserService;
             });
@@ -359,4 +359,18 @@ describe('UserFormController', function() {
             expect(vm.user.roleAssignments[0].programId).toBe(undefined);
         });
     });
+
+    describe('sendVerificationEmail', function() {
+
+        it('should send verification email', function () {
+            authUserService.sendVerificationEmail.andReturn($q.when(true));
+            vm.sendVerificationEmail();
+            $rootScope.$apply();
+
+            expect(authUserService.sendVerificationEmail).toHaveBeenCalledWith(vm.user.id);
+            expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.sendVerificationEmail.success');
+        });
+
+    });
+
 });

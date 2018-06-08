@@ -35,7 +35,8 @@
         'admin-user-roles',
         'openlmis-templates',
         'ui.router',
-        'openlmis-modal'
+        'openlmis-modal',
+        'auth-user'
     ]);
 
 })();

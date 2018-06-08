@@ -18,5 +18,8 @@
     "openlmisUser.changePassword": "Change Password",
     "openlmisUser.passwordResetAlert.title": "Password reset successfully",
     "openlmisUser.passwordResetAlert.message": "You will now be logged out",
-    "openlmisUser.passwordResetAlert.label": "Logout"
+    "openlmisUser.passwordResetAlert.label": "Logout",
+    "openlmisUser.emailVerified": "Email verified",
+    "openlmisUser.sendVerificationEmail": "Send verification email",
+    "openlmisUser.sendVerificationEmail.success": "Verification email has been sent successfully!"
 }

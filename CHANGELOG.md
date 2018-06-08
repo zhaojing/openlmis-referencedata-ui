@@ -5,6 +5,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-2245](https://openlmis.atlassian.net/browse/OLMIS-2245): Added Users number column to Role List screen.
 * [OLMIS-4732](https://openlmis.atlassian.net/browse/OLMIS-4732): Added role assignments tables to the User Profile screen.
 * [OLMIS-4731](https://openlmis.atlassian.net/browse/OLMIS-4731): Added Change Password button on the User profile screen.
+* [OLMIS-4833](https://openlmis.atlassian.net/browse/OLMIS-4833): Added Send Verification Email button on the user update and profile screens.
 
 Improvements:
 * [OLMIS-2998](https://openlmis.atlassian.net/browse/OLMIS-2998): Added served facilities popover to supply line and allowed filtering by program

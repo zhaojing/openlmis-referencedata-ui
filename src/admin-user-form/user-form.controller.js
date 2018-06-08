@@ -41,6 +41,7 @@
         vm.$onInit = onInit;
         vm.saveUser = saveUser;
         vm.removeHomeFacility = removeHomeFacility;
+        vm.sendVerificationEmail = sendVerificationEmail;
 
         /**
          * @ngdoc property
@@ -155,7 +156,7 @@
             }
 
             if (vm.updateMode) {
-                if (vm.initialHomeFacility && vm.initialHomeFacility != vm.user.homeFacility) {
+                if (vm.initialHomeFacility && vm.initialHomeFacility !== vm.user.homeFacility) {
                     return removeHomeFacilityRightsConfirmation().then(function() {
                         return processUpdateUser(true);
                     }, function() {
@@ -276,7 +277,7 @@
                     'facility': vm.initialHomeFacility.name,
                     'username': vm.user.username
                 }
-            }
+            };
 
             return confirmService.confirmDestroy(
                 message,
@@ -299,6 +300,21 @@
                 vm.user.homeFacility = undefined;
                 vm.user.homeFacilityId = undefined;
                 vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-form.controller:UserFormController
+         * @name sendVerificationEmail
+         *
+         * @description
+         * Send a verification email to a user.
+         */
+        function sendVerificationEmail() {
+            return authUserService.sendVerificationEmail(vm.user.id)
+            .then(function() {
+                notificationService.success('adminUserForm.sendVerificationEmail.success');
             });
         }
 

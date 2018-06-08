@@ -18,7 +18,7 @@ describe('UserProfileController', function() {
 
     var vm, user, homeFacility, $controller, ROLE_TYPES, $q, UserDataBuilder, userPasswordModalFactory, $state,
         MinimalFacilityDataBuilder, loadingModalService, referencedataUserService, loginService, notificationService,
-        getUserDeferred, saveUserDeferred, $rootScope, alertService;
+        getUserDeferred, saveUserDeferred, $rootScope, alertService, authUserService;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -40,6 +40,7 @@ describe('UserProfileController', function() {
             alertService = $injector.get('alertService');
             loginService = $injector.get('loginService');
             $state = $injector.get('$state');
+            authUserService = $injector.get('authUserService');
         });
 
         user = new UserDataBuilder().build();
@@ -60,6 +61,7 @@ describe('UserProfileController', function() {
         spyOn($state, 'go');
         spyOn($state, 'reload').andReturn();
         spyOn(alertService, 'info');
+        spyOn(authUserService, 'sendVerificationEmail').andReturn($q.when(true));
 
         vm = $controller('UserProfileController', {
             user: user,
@@ -204,6 +206,21 @@ describe('UserProfileController', function() {
             });
             expect($rootScope.$emit).toHaveBeenCalledWith('openlmis-auth.logout');
             expect($state.go).toHaveBeenCalledWith('auth.login');
+        });
+
+    });
+
+    describe('sendVerificationEmail', function() {
+
+        beforeEach(function() {
+            vm.$onInit();
+            vm.sendVerificationEmail();
+            $rootScope.$apply();
+        });
+
+        it('should send verification email', function () {
+            expect(authUserService.sendVerificationEmail).toHaveBeenCalledWith(vm.user.id);
+            expect(notificationService.success).toHaveBeenCalledWith('openlmisUser.sendVerificationEmail.success');
         });
 
     });

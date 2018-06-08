@@ -40,6 +40,9 @@
     </select>
 </form>
 <div class="openlmis-toolbar">
-    <button class="primary" form="newUserForm" type="submit">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
     <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
+    <div class="button-group primary">
+        <button class="primary" form="newUserForm" type="submit">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
+        <button ng-if="vm.updateMode && vm.user.email && !vm.user.verified" ng-click="vm.sendVerificationEmail()">{{ 'adminUserForm.sendVerificationEmail' | message }}</button>
+    </div>
 </div>
