@@ -30,13 +30,14 @@
         .controller('UserProfileController', controller);
 
     controller.$inject = [
-        'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'referencedataUserService', 'notificationService',
-        'userPasswordModalFactory', 'loginService', '$rootScope', '$state', 'alertService', 'authUserService'
+        'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'notificationService',
+        'userPasswordModalFactory', 'loginService', '$rootScope', '$state', 'alertService',
+        'authUserService'
     ];
 
-    function controller(user, homeFacility, ROLE_TYPES, loadingModalService, referencedataUserService,
-                        notificationService, userPasswordModalFactory, loginService, $rootScope, $state,
-                        alertService, authUserService) {
+    function controller(user, homeFacility, ROLE_TYPES, loadingModalService, notificationService,
+                        userPasswordModalFactory, loginService, $rootScope, $state, alertService,
+                        authUserService) {
 
         var vm = this;
 
@@ -90,6 +91,7 @@
          */
         function onInit() {
             vm.user = user;
+            vm.user.enabled = true;
             vm.homeFacility = homeFacility;
             vm.roleTypes = ROLE_TYPES.getRoleTypes();
         }
@@ -105,7 +107,7 @@
         function updateProfile() {
             loadingModalService.open();
 
-            return referencedataUserService.saveUser(vm.user)
+            return authUserService.saveUser(vm.user)
             .then(function() {
                 notificationService.success('openlmisUser.updateProfile.updateSuccessful');
             })

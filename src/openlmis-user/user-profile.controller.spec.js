@@ -51,7 +51,7 @@ describe('UserProfileController', function() {
 
         spyOn(loadingModalService, 'open').andReturn(true);
         spyOn(loadingModalService, 'close').andReturn(true);
-        spyOn(referencedataUserService, 'saveUser').andReturn(saveUserDeferred.promise);
+        spyOn(authUserService, 'saveUser').andReturn(saveUserDeferred.promise);
         spyOn(referencedataUserService, 'get').andReturn(getUserDeferred.promise);
         spyOn(notificationService, 'success');
         spyOn(notificationService, 'error');
@@ -114,7 +114,7 @@ describe('UserProfileController', function() {
 
         afterEach(function() {
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
+            expect(authUserService.saveUser).toHaveBeenCalledWith(user);
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 
