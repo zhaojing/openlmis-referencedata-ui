@@ -19,6 +19,7 @@ Improvements:
 * [OLMIS-3795](https://openlmis.atlassian.net/browse/OLMIS-3795): Remove code duplication from admin-user-roles routes
 * [OLMIS-4795](https://openlmis.atlassian.net/browse/OLMIS-4795): Updated dev-ui to version 8.
 * [OLMIS-4813](https://openlmis.atlassian.net/browse/OLMIS-4813): Updated datepickers to use the new syntax.
+* [OLMIS-4896](https://openlmis.atlassian.net/browse/OLMIS-4896): Handle new version of auth user endpoint
 
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility

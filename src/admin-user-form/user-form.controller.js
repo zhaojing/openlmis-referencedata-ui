@@ -29,12 +29,12 @@
         .controller('UserFormController', controller);
 
         controller.$inject = [
-            'user', 'facilities', 'referencedataUserService', 'loadingModalService', 'confirmService',
-            '$filter', '$state', 'notificationService', 'userPasswordModalFactory', 'authUserService'
+            'user', 'facilities', 'loadingModalService', 'confirmService', '$filter', '$state',
+            'notificationService', 'userPasswordModalFactory', 'authUserService'
         ];
 
-        function controller(user, facilities, referencedataUserService, loadingModalService, confirmService,
-                            $filter, $state, notificationService, userPasswordModalFactory, authUserService) {
+        function controller(user, facilities, loadingModalService, confirmService, $filter, $state,
+                            notificationService, userPasswordModalFactory, authUserService) {
 
         var vm = this;
 
@@ -122,6 +122,8 @@
             vm.user = user ? user : {
                 loginRestricted: false
             };
+            vm.user.enabled = true;
+
             if (user) {
                 angular.forEach(facilities, function(result) {
                     if (result.id === vm.user.homeFacilityId) {
@@ -168,20 +170,6 @@
             } else {
                 return processCreateUser();
             }
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name saveUserData
-         *
-         * @description
-         * Updates the user data.
-         *
-         * @return {Promise} the promise resolving to the updated user
-         */
-        function saveUserData() {
-            return referencedataUserService.saveUser(vm.user);
         }
 
         /**
@@ -248,16 +236,7 @@
          * @return {Promise} the promise resolving to the updated user
          */
         function createUser() {
-            return saveUserData().then(function(savedUser) {
-                return authUserService.saveUser({
-                    enabled: true,
-                    referenceDataUserId: savedUser.id,
-                    role: 'USER',
-                    username: savedUser.username
-                }).then(function () {
-                    return savedUser;
-                });
-            });
+            return authUserService.saveUser(vm.user);
         }
 
         /**

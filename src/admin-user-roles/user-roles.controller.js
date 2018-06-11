@@ -28,9 +28,9 @@
         .module('admin-user-roles')
         .controller('UserRolesController', controller);
 
-    controller.$inject = ['user', 'referencedataUserService', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'];
+    controller.$inject = ['user', 'authUserService', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'];
 
-    function controller(user, referencedataUserService, loadingModalService, $state, notificationService, ROLE_TYPES) {
+    function controller(user, authUserService, loadingModalService, $state, notificationService, ROLE_TYPES) {
 
         var vm = this;
 
@@ -71,6 +71,8 @@
          */
         function onInit() {
             vm.user = user;
+            vm.user.enabled = true;
+
             vm.roleTypes = ROLE_TYPES.getRoleTypes();
         }
 
@@ -85,7 +87,7 @@
         function saveUserRoles() {
             var loadingPromise = loadingModalService.open(true);
 
-            return referencedataUserService.saveUser(vm.user).then(function() {
+            return authUserService.saveUser(vm.user).then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminUserRoles.updateSuccessful');
                 });

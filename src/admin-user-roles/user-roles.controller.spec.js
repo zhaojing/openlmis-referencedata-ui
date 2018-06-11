@@ -15,16 +15,16 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, referencedataUserService, notificationService, loadingModalService, UserDataBuilder,
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, authUserService, notificationService, loadingModalService, UserDataBuilder,
         vm, user;
 
     beforeEach(function() {
 
         module('admin-user-roles', function($provide) {
 
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['saveUser']);
-            $provide.service('referencedataUserService', function() {
-                return referencedataUserService;
+            authUserService = jasmine.createSpyObj('authUserService', ['saveUser']);
+            $provide.service('authUserService', function() {
+                return authUserService;
             });
 
             notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
@@ -85,7 +85,7 @@ describe('UserRolesController', function() {
     describe('saveUser', function() {
 
         beforeEach(function() {
-            referencedataUserService.saveUser.andReturn($q.when(true));
+            authUserService.saveUser.andReturn($q.when(true));
             loadingModalService.open.andReturn($q.when(true));
             vm.saveUserRoles();
         });
@@ -94,8 +94,8 @@ describe('UserRolesController', function() {
             expect(loadingModalService.open).toHaveBeenCalledWith(true);
         });
 
-        it('should call referencedataUserService', function() {
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
+        it('should call authUserService', function() {
+            expect(authUserService.saveUser).toHaveBeenCalledWith(user);
         });
 
         it('should show success notification', function() {
@@ -120,7 +120,7 @@ describe('UserRolesController', function() {
             deferred.reject();
 
             $rootScope.$apply();
-            referencedataUserService.saveUser.andReturn(deferred.promise);
+            authUserService.saveUser.andReturn(deferred.promise);
             vm.saveUserRoles();
             $rootScope.$apply();
 

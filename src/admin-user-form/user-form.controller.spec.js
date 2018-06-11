@@ -15,16 +15,11 @@
 
 describe('UserFormController', function() {
 
-    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, referencedataUserService, authUserService, userPasswordModalFactoryMock, confirmService,
+    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, authUserService, userPasswordModalFactoryMock, confirmService,
         vm, user, facilities;
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
-            referencedataUserService = jasmine.createSpyObj('referencedataUserService', ['saveUser']);
-            $provide.service('referencedataUserService', function() {
-                return referencedataUserService;
-            });
-
             authUserService = jasmine.createSpyObj('authUserService', ['saveUser', 'sendVerificationEmail']);
             $provide.service('authUserService', function() {
                 return authUserService;
@@ -134,7 +129,7 @@ describe('UserFormController', function() {
 
         beforeEach(function() {
             deferred = $q.defer();
-            referencedataUserService.saveUser.andReturn($q.when(user));
+            user.enabled = true;
             authUserService.saveUser.andReturn(deferred.promise);
         });
 
@@ -143,33 +138,19 @@ describe('UserFormController', function() {
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
-        it('should call referencedataUserService', function() {
+        it('should call authUserService', function() {
             vm.saveUser();
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
-        });
-
-        it('should call referencedataUserService with changes', function() {
-            vm.user.username = 'newUserName';
-            user.username = 'newUserName';
-
-            vm.saveUser();
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(user);
+            expect(authUserService.saveUser).toHaveBeenCalledWith(user);
         });
 
         it('should call authUserService with changes', function() {
             vm.user.username = 'newUserName';
             user.username = 'newUserName';
-            var authUser = {
-                enabled: true,
-                referenceDataUserId: user.id,
-                role: 'USER',
-                username: user.username
-            };
 
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(authUserService.saveUser).toHaveBeenCalledWith(authUser);
+            expect(authUserService.saveUser).toHaveBeenCalledWith(user);
         });
 
         it('should show notification', function() {
@@ -233,7 +214,7 @@ describe('UserFormController', function() {
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(vm.user);
+            expect(authUserService.saveUser).toHaveBeenCalledWith(vm.user);
             expect(vm.user.roleAssignments.length).toBe(2);
         });
 
@@ -246,14 +227,13 @@ describe('UserFormController', function() {
             confirmService.confirmDestroy.andReturn(confirmDeferred.promise);
             confirmDeferred.resolve();
 
-            referencedataUserService.saveUser.andReturn($q.when(user));
-            authUserService.saveUser.andReturn(saveDeferred.promise);
+            authUserService.saveUser.andReturn($q.when(user));
             saveDeferred.resolve();
 
             vm.saveUser();
             $rootScope.$apply();
 
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(vm.user);
+            expect(authUserService.saveUser).toHaveBeenCalledWith(vm.user);
             expect(vm.user.roleAssignments.length).toBe(1);
         });
 
@@ -265,7 +245,6 @@ describe('UserFormController', function() {
 
         beforeEach(function() {
             deferred = $q.defer();
-            referencedataUserService.saveUser.andReturn(deferred.promise);
             authUserService.saveUser.andReturn($q.when(user));
             userPasswordModalFactoryMock.createPassword.andReturn($q.when(user));
 
@@ -281,28 +260,15 @@ describe('UserFormController', function() {
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
-        it('should call referencedataUserService', function() {
+        it('should call authUserService', function() {
             vm.saveUser();
-            expect(referencedataUserService.saveUser).toHaveBeenCalled();
+            expect(authUserService.saveUser).toHaveBeenCalled();
         });
 
-        it('should call referencedataUserService with changes', function() {
+        it('should call authUserService with changes', function() {
             vm.user.username = 'newUserName';
             vm.saveUser();
-            expect(referencedataUserService.saveUser).toHaveBeenCalledWith(vm.user);
-        });
-
-        it('should call authUserService', function() {
-            deferred.resolve(user);
-            vm.saveUser();
-            $rootScope.$apply();
-
-            expect(authUserService.saveUser).toHaveBeenCalledWith({
-                enabled: true,
-                referenceDataUserId: user.id,
-                role: 'USER',
-                username: user.username
-            });
+            expect(authUserService.saveUser).toHaveBeenCalledWith(vm.user);
         });
 
         it('should call userPasswordModalFactory', function() {
