@@ -13,31 +13,32 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('right filter', function() {
 
-    'use strict';
+    var rightFilter, $filter, messageService;
 
-    /**
-     * @module admin-user-roles
-     *
-     * @description
-     * Provides add/remove user roles screen.
-     */
-    angular.module('admin-user-roles', [
-        'mgcrea.ngStrap.tab',
-        'openlmis-modal',
-        'openlmis-pagination',
-        'openlmis-rights',
-        'referencedata-facility',
-        'referencedata-program',
-        'referencedata-role',
-        'referencedata-supervisory-node',
-        'referencedata-user',
-        'ui.router',
-        'admin-user-list',
-        'openlmis-admin',
-        'admin-role-form',
-        'openlmis-object-utils'
-    ]);
+    beforeEach(function() {
+        module('admin-role-form');
 
-})();
+        inject(function($injector) {
+            $filter = $injector.get('$filter');
+            messageService = $injector.get('messageService');
+        });
+
+        rightFilter = $filter('right');
+
+        spyOn(messageService, 'get');
+    });
+
+    it('should return undefined for undefined', function() {
+        expect(rightFilter()).toBeUndefined();
+    });
+
+    it('should return translated message for ', function() {
+        messageService.get.andReturn('Right Name');
+
+        expect(rightFilter('RIGHT_NAME')).toEqual('Right Name');
+        expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.rightName');
+    });
+
+});

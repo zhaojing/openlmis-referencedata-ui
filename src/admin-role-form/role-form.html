@@ -2,7 +2,7 @@
 <form id="newRoleForm" ng-submit="vm.saveRole()">
     <label>
         <span>{{'adminRoleForm.roleType' | message}}</span>
-        <span>{{vm.getLabel(vm.type)}}</span>
+        <span>{{vm.type | roleType}}</span>
     </label>
     <label for="roleName">{{'adminRoleForm.name' | message}}</label>
     <input id="roleName" class="form-control" ng-model="vm.role.name" required/>
@@ -12,7 +12,7 @@
         <legend>Rights</legend>
         <label ng-repeat="right in vm.rights" class="checkbox">
            <input type="checkbox" ng-model="right.checked" ng-required="vm.isNoneSelected()"/>
-           {{vm.getMessage(right.name)}}
+           {{right.name | right}}
         </label>
     </fieldset>
 </form>

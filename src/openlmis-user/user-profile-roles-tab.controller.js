@@ -28,14 +28,13 @@
         .module('openlmis-user')
         .controller('UserProfileRolesTabController', controller);
 
-    controller.$inject = ['roleAssignments', 'roleRightsMap', 'typeNameFactory'];
+    controller.$inject = ['roleAssignments', 'roleRightsMap'];
 
-    function controller(roleAssignments, roleRightsMap, typeNameFactory) {
+    function controller(roleAssignments, roleRightsMap) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.getMessage = typeNameFactory.getMessage;
 
         /**
          * @ngdoc property

@@ -21,6 +21,8 @@ Improvements:
 * [OLMIS-4813](https://openlmis.atlassian.net/browse/OLMIS-4813): Updated datepickers to use the new syntax.
 * [OLMIS-4896](https://openlmis.atlassian.net/browse/OLMIS-4896): Handle new version of auth user endpoint
 * [OLMIS-4813](https://openlmis.atlassian.net/browse/OLMIS-4813): Updated ui-components to version 6.0.0.
+* [OLMIS-4830](https://openlmis.atlassian.net/browse/OLMIS-4830): Added popover with the list of rights when hover over role on the User Roles and User Profile screens.
+  * Reworked typeNameFactory into right and roleType filters.
 
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility
@@ -29,7 +31,7 @@ Bug fixes:
   * if a user has no a home facility and some home facility roles, an error icon will be displayed next to those role assignments.
   * a user has ability to add new home facility roles but if the user has no home facility, those assignments will be ignored.
 * [OLMIS-3675](https://openlmis.atlassian.net/browse/OLMIS-3675): Fixed pagination problems for nested views.
-* [OLMIS-4830](https://openlmis.atlassian.net/browse/OLMIS-4830): Added popover with the list of rights when hover over role on the User Roles and User Profile screens.
+
 
 5.3.0 / 2018-04-24
 ==================

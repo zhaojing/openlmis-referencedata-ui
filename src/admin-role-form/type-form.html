@@ -3,10 +3,10 @@
 <dl class="type-form">
     <dt ng-repeat-start="(type, rights) in vm.types">
         <button ui-sref="^.createUpdate({type: type})">
-            {{vm.getLabel(type) | message}}
+            {{type | roleType}}
         </button>
     </dt>
     <dd ng-repeat-end>
-        {{vm.getDescription(type) | message}}
+        {{type | roleType:true}}
     </dd>
 </dl>

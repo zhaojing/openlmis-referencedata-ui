@@ -18,42 +18,40 @@
     'use strict';
 
     /**
-     * @ngdoc controller
-     * @name admin-role-list.controller:RoleListController
+     * @ngdoc filter
+     * @name admin-role-form.filter:camelCase
      *
      * @description
-     * Controller for managing roles list screen.
+     * Parses the given string into a camel case one.
+     *
+     * @param   {Object} string the string to be formatted
+     * @return  {String}        the formated string
+     *
+     * @example
+     * ```
+     * <td>{{string | camelCase}}</td>
+     * ```
      */
     angular
-        .module('admin-role-list')
-        .controller('RoleListController', controller);
+        .module('admin-role-form')
+        .filter('camelCase', camelCaseFilter);
 
-    controller.$inject = ['roles'];
+    function camelCaseFilter() {
+        return function(string) {
+            if (!string) {
+                return undefined;
+            }
 
-    function controller(roles) {
-        var vm = this;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-role-list.controller:RoleListController
-         * @name roles
-         * @type {Array}
-         *
-         * @description
-         * Array of all roles.
-         */
-        vm.roles = roles;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-role-list.controller:RoleListController
-         * @name rolesPage
-         * @type {Array}
-         *
-         * @description
-         * Holds current page of roles.
-         */
-        vm.rolesPage = undefined;
+            var message = '';
+            angular.forEach(string.toLowerCase().split('_'), function(part, id) {
+                if (id) {
+                    message += part.charAt(0).toUpperCase() + part.slice(1);
+                } else {
+                    message += part;
+                }
+            });
+            return message;
+        };
     }
 
 })();

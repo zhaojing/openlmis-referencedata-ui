@@ -28,19 +28,17 @@
         .controller('RoleFormController', controller);
 
     controller.$inject = [
-        '$q', '$filter', '$state', 'role', 'type', 'rights', 'referencedataRoleService',
-        'typeNameFactory', 'loadingModalService', 'notificationService', 'confirmService'
+        '$q', '$filter', '$state', 'role', 'type', 'rights', 'referencedataRoleService', 'loadingModalService',
+        'notificationService', 'confirmService'
     ];
 
-    function controller($q, $filter, $state, role, type, rights, referencedataRoleService,
-        typeNameFactory, loadingModalService, notificationService, confirmService) {
+    function controller($q, $filter, $state, role, type, rights, referencedataRoleService, loadingModalService,
+                        notificationService, confirmService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.saveRole = saveRole;
-        vm.getLabel = typeNameFactory.getLabel;
-        vm.getMessage = typeNameFactory.getMessage;
         vm.isNoneSelected = isNoneSelected;
 
         /**

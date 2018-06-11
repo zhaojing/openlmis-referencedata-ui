@@ -14,7 +14,7 @@
         <tbody>
         <tr ng-repeat="role in vm.rolesPage">
             <td>{{role.name}}</td>
-            <td>{{vm.getLabel(role.rights[0].type)}}</td>
+            <td>{{role.rights[0].type | roleType}}</td>
             <td>{{role.description}}</td>
             <td>{{role.count}}</td>
             <td>

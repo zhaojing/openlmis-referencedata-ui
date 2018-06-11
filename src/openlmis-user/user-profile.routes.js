@@ -47,13 +47,13 @@
                 user: function(userRoleAssignmentFactory, userId, roles, programs, supervisoryNodes, warehouses) {
                     return userRoleAssignmentFactory.getUser(userId, roles, programs, supervisoryNodes, warehouses);
                 },
-                userId: function (currentUserService) {
+                userId: function(currentUserService) {
                     return currentUserService.getUserInfo()
-                    .then(function(user) {
-                        return user.id;
-                    });
+                        .then(function(user) {
+                            return user.id;
+                        });
                 },
-                homeFacility: function (user, facilityService) {
+                homeFacility: function(user, facilityService) {
                     if (user.homeFacilityId) {
                         return facilityService.getMinimal(user.homeFacilityId);
                     }

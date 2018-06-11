@@ -27,14 +27,12 @@
         .module('admin-role-form')
         .controller('TypeFormController', controller);
 
-    controller.$inject = ['$state', 'types', 'typeNameFactory'];
+    controller.$inject = ['$state', 'types'];
 
-    function controller($state, types, typeNameFactory) {
+    function controller($state, types) {
         var vm = this;
 
         vm.selectType = selectType;
-        vm.getLabel = typeNameFactory.getLabel;
-        vm.getDescription = typeNameFactory.getDescription;
 
         /**
          * @ngdoc property

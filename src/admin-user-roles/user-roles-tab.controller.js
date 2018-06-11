@@ -29,19 +29,18 @@
         .controller('UserRolesTabController', controller);
 
     controller.$inject = [
-        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', 'typeNameFactory',
-        '$state', 'notificationService', 'confirmService', 'roleAssignments', 'filteredRoles', 'roleRightsMap'
+        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', '$state',
+        'notificationService', 'confirmService', 'roleAssignments', 'filteredRoles', 'roleRightsMap'
     ];
 
-    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, typeNameFactory,
-                        $state, notificationService, confirmService, roleAssignments, filteredRoles, roleRightsMap) {
+    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, $state,
+                        notificationService, confirmService, roleAssignments, filteredRoles, roleRightsMap) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.removeRole = removeRole;
         vm.addRole = addRole;
-        vm.getMessage = typeNameFactory.getMessage;
 
         /**
          * @ngdoc property
@@ -197,8 +196,7 @@
                     vm.selectedWarehouse ? vm.selectedWarehouse.name : undefined);
                 reloadState();
                 return $q.resolve();
-            }
-            catch (error) {
+            } catch (error) {
                 notificationService.error(error.message);
                 return $q.reject();
             }
@@ -216,16 +214,16 @@
          */
         function removeRole(roleAssignment) {
             confirmService.confirmDestroy('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label')
-            .then(function() {
-                user.removeRoleAssignment(roleAssignment);
-                reloadState();
-            });
+                .then(function() {
+                    user.removeRoleAssignment(roleAssignment);
+                    reloadState();
+                });
         }
 
         function reloadState() {
             $state.go('openlmis.administration.users.roles.' + tab, $stateParams, {
-				reload: 'openlmis.administration.users.roles.' + tab
-			});
+                reload: 'openlmis.administration.users.roles.' + tab
+            });
         }
     }
 })();

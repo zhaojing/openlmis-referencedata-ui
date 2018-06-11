@@ -18,42 +18,38 @@
     'use strict';
 
     /**
-     * @ngdoc controller
-     * @name admin-role-list.controller:RoleListController
+     * @ngdoc filter
+     * @name admin-role-form.filter:right
      *
      * @description
-     * Controller for managing roles list screen.
+     * Parses the given right name into more user-friendly string.
+     *
+     * @param   {Object} rightName the right name to be formatted
+     * @return  {String}           the formated right name
+     *
+     * @example
+     * In the HTML:
+     * ```
+     * <td>{{right.name | right}}</td>
+     * ```
+     * In the JS:
+     * ```
+     * $filter('right')(right.name);
+     * ```
      */
     angular
-        .module('admin-role-list')
-        .controller('RoleListController', controller);
+        .module('admin-role-form')
+        .filter('right', roleRightFilter);
 
-    controller.$inject = ['roles'];
+    roleRightFilter.$inject = ['messageService', '$filter'];
 
-    function controller(roles) {
-        var vm = this;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-role-list.controller:RoleListController
-         * @name roles
-         * @type {Array}
-         *
-         * @description
-         * Array of all roles.
-         */
-        vm.roles = roles;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-role-list.controller:RoleListController
-         * @name rolesPage
-         * @type {Array}
-         *
-         * @description
-         * Holds current page of roles.
-         */
-        vm.rolesPage = undefined;
+    function roleRightFilter(messageService, $filter) {
+        return function(rightName) {
+            if (!rightName) {
+                return undefined;
+            }
+            return messageService.get('adminRoleForm.' + $filter('camelCase')(rightName));
+        };
     }
 
 })();

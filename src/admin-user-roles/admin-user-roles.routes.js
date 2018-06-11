@@ -42,13 +42,11 @@
                     return facilityService.getAllMinimal();
                 },
                 user: function(userRoleAssignmentFactory, $stateParams, roles, programs, supervisoryNodes, warehouses) {
-                    return userRoleAssignmentFactory.getUser($stateParams.id, roles, programs, supervisoryNodes, warehouses);
+                    return userRoleAssignmentFactory.getUser($stateParams.id, roles, programs, supervisoryNodes,
+                        warehouses);
                 },
-                roleRightsMap: function(roles) {
-                    return roles.reduce(function(roleMap, role) {
-                        roleMap[role.id] = role.rights;
-                        return roleMap;
-                    }, {});
+                roleRightsMap: function(roles, ObjectMapper) {
+                    return new ObjectMapper().map(roles, 'rights');
                 }
             },
             views: {
