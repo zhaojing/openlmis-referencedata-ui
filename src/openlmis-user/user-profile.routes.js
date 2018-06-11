@@ -58,11 +58,8 @@
                         return facilityService.getMinimal(user.homeFacilityId);
                     }
                 },
-                roleRightsMap: function(roles) {
-                    return roles.reduce(function(roleMap, role) {
-                        roleMap[role.id] = role.rights;
-                        return roleMap;
-                    }, {});
+                roleRightsMap: function(roles, ObjectMapper) {
+                    return new ObjectMapper().map(roles, 'rights');
                 }
             }
         });

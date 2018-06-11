@@ -28,8 +28,13 @@
      * @return  {String}        the formated string
      *
      * @example
+     * In the HTML:
      * ```
      * <td>{{string | camelCase}}</td>
+     * ```
+     * In the JS:
+     * ```
+     * $filter('camelCase')(string);
      * ```
      */
     angular
