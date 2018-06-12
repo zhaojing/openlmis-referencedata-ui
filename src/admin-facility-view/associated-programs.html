@@ -12,7 +12,7 @@
     </div>
     <button type="submit" class="add">{{'adminFacilityView.add' | message}}</button>
 </form>
-<section class="openlmis-table-container">
+<form id="associatedPrograms" class="openlmis-table-container" ng-submit="vm.saveFacilitySupportedPrograms()">
     <table>
         <caption ng-if="!vm.facilityWithPrograms.supportedPrograms || vm.facilityWithPrograms.supportedPrograms.length === 0">
             {{'adminFacilityView.noAssociatedPrograms' | message: {facility: vm.facility.name} }}
@@ -34,8 +34,8 @@
             </tr>
         </tbody>
     </table>
-</section>
+</form>
 <div class="button-group">
-    <button class="primary" ng-click="vm.saveFacilitySupportedPrograms()">{{'adminFacilityView.savePrograms' | message}}</button>
+    <button class="primary" form="associatedPrograms" type="submit">{{'adminFacilityView.savePrograms' | message}}</button>
     <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
 </div>
