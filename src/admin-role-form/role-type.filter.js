@@ -24,9 +24,9 @@
      * @description
      * Parses the given role type name into more user-friendly string.
      *
-     * @param   {Object} roleType        the role type name to be formatted
-     * @param   {Object} showDescription flag defining whether description should be shown instead of the label
-     * @return  {String}                 the formated role type name or description
+     * @param   {String}  roleType        the role type name to be formatted
+     * @param   {boolean} showDescription flag defining whether description should be shown instead of the label
+     * @return  {String}                  the formated role type name or description
      *
      * @example
      * In the HTML:
@@ -46,21 +46,17 @@
         .module('admin-role-form')
         .filter('roleType', roleRightFilter);
 
-    roleRightFilter.$inject = ['messageService', '$filter'];
+    roleRightFilter.$inject = ['messageService', '$filter', 'ROLE_TYPES'];
 
-    function roleRightFilter(messageService, $filter) {
+    function roleRightFilter(messageService, $filter, ROLE_TYPES) {
         return function(roleType, showDescription) {
-            if (!roleType) {
-                return undefined;
-            }
-            var key = 'adminRoleForm.' + $filter('camelCase')(roleType) + '.';
+            var label = ROLE_TYPES.getLabel(roleType);
+
             if (showDescription) {
-                key += 'description';
-            } else {
-                key += 'label';
+                return messageService.get('adminRoleForm.' + $filter('camelCase')(roleType) + 'Description');
             }
 
-            return messageService.get(key);
+            return messageService.get(label);
         };
     }
 

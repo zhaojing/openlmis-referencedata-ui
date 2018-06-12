@@ -22,7 +22,7 @@
      * @name admin-role-form.filter:camelCase
      *
      * @description
-     * Parses the given string into a camel case one.
+     * Parses the given all caps snake case string into a camel case one.
      *
      * @param   {Object} string the string to be formatted
      * @return  {String}        the formated string
@@ -30,11 +30,11 @@
      * @example
      * In the HTML:
      * ```
-     * <td>{{string | camelCase}}</td>
+     * <td>{{'ALL_CAPS_SNAKE_CASE' | camelCase}}</td>
      * ```
      * In the JS:
      * ```
-     * $filter('camelCase')(string);
+     * $filter('camelCase')('ALL_CAPS_SNAKE_CASE');
      * ```
      */
     angular

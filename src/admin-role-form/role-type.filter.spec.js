@@ -30,22 +30,24 @@ describe('role type filter', function() {
         spyOn(messageService, 'get');
     });
 
-    it('should return undefined for undefined', function() {
-        expect(roleTypeFilter()).toBeUndefined();
+    it('should throw exception for undefined', function() {
+        expect(function() {
+            roleTypeFilter()
+        }).toThrow('"undefined" is not a valid role type');
     });
 
     it('should return translated role name', function() {
-        messageService.get.andReturn('Role Type Name');
+        messageService.get.andReturn('Administration');
 
-        expect(roleTypeFilter('ROLE_TYPE')).toEqual('Role Type Name');
-        expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.roleType.label');
+        expect(roleTypeFilter('GENERAL_ADMIN')).toEqual('Administration');
+        expect(messageService.get).toHaveBeenCalledWith('referencedataRoles.administration');
     });
 
     it('should return translated role description if flag is set', function() {
         messageService.get.andReturn('Role Type Description');
 
-        expect(roleTypeFilter('ROLE_TYPE', true)).toEqual('Role Type Description');
-        expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.roleType.description');
+        expect(roleTypeFilter('GENERAL_ADMIN', true)).toEqual('Role Type Description');
+        expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.generalAdminDescription');
     });
 
 });
