@@ -32,12 +32,12 @@
     controller.$inject = [
         'user', 'homeFacility', 'ROLE_TYPES', 'loadingModalService', 'notificationService',
         'userPasswordModalFactory', 'loginService', '$rootScope', '$state', 'alertService',
-        'authUserService'
+        'authUserService', 'pendingVerificationEmail'
     ];
 
     function controller(user, homeFacility, ROLE_TYPES, loadingModalService, notificationService,
                         userPasswordModalFactory, loginService, $rootScope, $state, alertService,
-                        authUserService) {
+                        authUserService, pendingVerificationEmail) {
 
         var vm = this;
 
@@ -82,6 +82,17 @@
         vm.roleTypes = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf openlmis-user.controller:UserProfileController
+         * @name pendingEmailVerificationToken
+         * @type {String}
+         *
+         * @description
+         * Represents pending email verification.
+         */
+        vm.pendingVerificationEmail = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf openlmis-user.controller:UserProfileController
          * @name $onInit
@@ -94,6 +105,7 @@
             vm.user.enabled = true;
             vm.homeFacility = homeFacility;
             vm.roleTypes = ROLE_TYPES.getRoleTypes();
+            vm.pendingVerificationEmail = pendingVerificationEmail;
         }
 
         /**
@@ -114,7 +126,9 @@
             .catch(function() {
                 notificationService.error('openlmisUser.updateProfile.updateFailed');
             })
-            .finally(loadingModalService.close);
+            .finally(function () {
+                $state.reload();
+            });
         }
 
         /**

@@ -1,0 +1,7 @@
+.pending-email-verification {
+    @include icon-only("exclamation-circle");
+
+    &::before {
+        color: $brand-info;
+    }
+}

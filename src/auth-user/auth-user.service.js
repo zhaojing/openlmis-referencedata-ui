@@ -47,6 +47,10 @@
                 sendVerificationEmail: {
                     method: 'POST',
                     url: openlmisUrlFactory('/api/users/auth/verifyEmail')
+                },
+                getVerificationEmail: {
+                    method: 'GET',
+                    url: openlmisUrlFactory('/api/users/auth/verifyEmail')
                 }
             });
 
@@ -54,6 +58,7 @@
         this.resetPassword = resetPassword;
         this.sendResetEmail = sendResetEmail;
         this.sendVerificationEmail = sendVerificationEmail;
+        this.getVerificationEmail = getVerificationEmail;
 
         /**
          * @ngdoc method
@@ -87,6 +92,15 @@
             return resource.sendVerificationEmail({
                 userId: userId
             }, undefined).$promise;
+        }
+
+        function getVerificationEmail(userId) {
+            return resource
+            .getVerificationEmail({ userId: userId}, undefined)
+            .$promise
+            .then(function (response) {
+                return angular.equals(response, {}) ? undefined : response;
+            });
         }
     }
 })();

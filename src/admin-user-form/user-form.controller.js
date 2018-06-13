@@ -29,12 +29,14 @@
         .controller('UserFormController', controller);
 
         controller.$inject = [
-            'user', 'facilities', 'loadingModalService', 'confirmService', '$filter', '$state',
-            'notificationService', 'userPasswordModalFactory', 'authUserService'
+            'user', 'facilities', 'pendingVerificationEmail', 'loadingModalService',
+            'confirmService', '$filter', '$state', 'notificationService',
+            'userPasswordModalFactory', 'authUserService'
         ];
 
-        function controller(user, facilities, loadingModalService, confirmService, $filter, $state,
-                            notificationService, userPasswordModalFactory, authUserService) {
+        function controller(user, facilities, pendingVerificationEmail, loadingModalService,
+                            confirmService, $filter, $state, notificationService,
+                            userPasswordModalFactory, authUserService) {
 
         var vm = this;
 
@@ -110,6 +112,17 @@
         vm.initialUsername = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-user-form.controller:UserFormController
+         * @name pendingEmailVerificationToken
+         * @type {String}
+         *
+         * @description
+         * Represents pending email verification.
+         */
+        vm.pendingVerificationEmail = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserFormController
          * @name $onInit
@@ -137,6 +150,8 @@
             vm.initialHomeFacility = user ? vm.user.homeFacility : undefined;
             vm.notification = 'adminUserForm.user' + (vm.updateMode ? 'Updated' : 'Created') + 'Successfully';
             vm.facilities = facilities;
+
+            vm.pendingVerificationEmail = pendingVerificationEmail;
         }
 
         /**

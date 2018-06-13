@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('facilityTypeService', function() {
+describe('authUserService', function() {
 
     var OK_RESPONSE = 'ok';
 
@@ -133,6 +133,28 @@ describe('facilityTypeService', function() {
             $rootScope.$apply();
 
             expect(data).toEqual(OK_RESPONSE);
+        });
+    });
+
+    describe('getVerificationEmail', function() {
+
+        it('should get pending verification email', function() {
+            var token = { email: 'example@test.org' };
+            var data;
+
+            $httpBackend
+                .expectGET(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .respond(200, token);
+
+            authUserService.getVerificationEmail(user.id)
+            .then(function(response) {
+                data = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data.email).toEqual(token.email);
         });
     });
 

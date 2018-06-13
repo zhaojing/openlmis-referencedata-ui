@@ -18,7 +18,7 @@ describe('openlmis.profile', function() {
     var $location, $rootScope, RoleDataBuilder, roles, referencedataRoleFactory, ProgramDataBuilder, programs, $state,
         SupervisoryNodeDataBuilder, supervisoryNodes, programService, supervisoryNodeFactory, $q, warehouses,
         MinimalFacilityDataBuilder, facilityService, homeFacility, user, UserDataBuilder, currentUserService,
-        userRoleAssignmentFactory, $templateCache, ROLE_TYPES;
+        userRoleAssignmentFactory, $templateCache, ROLE_TYPES, pendingVerificationEmail, authUserService;
 
     beforeEach(function() {
         module('openlmis-main-state');
@@ -42,6 +42,7 @@ describe('openlmis.profile', function() {
             userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
             $templateCache = $injector.get('$templateCache');
             ROLE_TYPES = $injector.get('ROLE_TYPES');
+            authUserService = $injector.get('authUserService');
         });
 
         roles = [
@@ -80,6 +81,10 @@ describe('openlmis.profile', function() {
             .withGeneralAdminRoleAssignment(roles[5].id)
             .build();
 
+        pendingVerificationEmail = {
+            email: "example@test.org"
+        };
+
         spyOn(supervisoryNodeFactory, 'getAllSupervisoryNodesWithDisplay').andReturn($q.resolve(supervisoryNodes));
         spyOn(referencedataRoleFactory, 'getAllWithType').andReturn($q.resolve(roles));
         spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve(warehouses));
@@ -88,6 +93,7 @@ describe('openlmis.profile', function() {
         spyOn(programService, 'getAll').andReturn($q.resolve(programs));
         spyOn(userRoleAssignmentFactory, 'getUser').andReturn($q.resolve(user));
         spyOn($templateCache, 'get').andCallThrough();
+        spyOn(authUserService, 'getVerificationEmail').andReturn($q.resolve(pendingVerificationEmail));
     });
 
     describe('state', function() {
@@ -179,6 +185,12 @@ describe('openlmis.profile', function() {
             expect(roleRightsMap[roles[3].id]).toEqual(roles[3].rights);
             expect(roleRightsMap[roles[4].id]).toEqual(roles[4].rights);
             expect(roleRightsMap[roles[5].id]).toEqual(roles[5].rights);
+        });
+
+        it('should resolve pending verification email', function() {
+            goToUrl('/profile');
+
+            expect(getResolvedValue('pendingVerificationEmail')).toEqual(pendingVerificationEmail);
         });
 
     });

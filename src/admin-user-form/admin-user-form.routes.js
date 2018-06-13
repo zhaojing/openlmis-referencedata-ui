@@ -15,36 +15,43 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-user-form').config(routes);
+    angular.module('admin-user-form').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.users.form', {
-			label: 'adminUserForm.addEditUser',
-			url: '/form/:id',
-			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
-			resolve: {
-				facilities: function(facilityService) {
-					return facilityService.getAllMinimal();
-				},
-				user: function(referencedataUserService, $stateParams) {
+        $stateProvider.state('openlmis.administration.users.form', {
+            label: 'adminUserForm.addEditUser',
+            url: '/form/:id',
+            accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
+            resolve: {
+                facilities: function(facilityService) {
+                    return facilityService.getAllMinimal();
+                },
+                user: function(referencedataUserService, $stateParams) {
                     if($stateParams.id) {
-						return referencedataUserService.get($stateParams.id);
-					}
+                        return referencedataUserService.get($stateParams.id);
+                    }
                     return undefined;
-				}
-			},
-			views: {
+                },
+                pendingVerificationEmail: function(user, authUserService) {
+                    if (user) {
+                        return authUserService.getVerificationEmail(user.id);
+                    }
+
+                    return undefined;
+                }
+            },
+            views: {
                 '@openlmis': {
                     controller: 'UserFormController',
                     templateUrl: 'admin-user-form/user-form.html',
                     controllerAs: 'vm'
                 }
             }
-		});
-	}
+        });
+    }
 })();

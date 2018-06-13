@@ -18,7 +18,7 @@ describe('UserProfileController', function() {
 
     var vm, user, homeFacility, $controller, ROLE_TYPES, $q, UserDataBuilder, userPasswordModalFactory, $state,
         MinimalFacilityDataBuilder, loadingModalService, referencedataUserService, loginService, notificationService,
-        getUserDeferred, saveUserDeferred, $rootScope, alertService, authUserService;
+        getUserDeferred, saveUserDeferred, $rootScope, alertService, authUserService, pendingVerificationEmail;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -46,6 +46,10 @@ describe('UserProfileController', function() {
         user = new UserDataBuilder().build();
         homeFacility = new MinimalFacilityDataBuilder().build();
 
+        pendingVerificationEmail = {
+            email: "example@test.org"
+        };
+
         getUserDeferred = $q.defer();
         saveUserDeferred = $q.defer();
 
@@ -65,7 +69,8 @@ describe('UserProfileController', function() {
 
         vm = $controller('UserProfileController', {
             user: user,
-            homeFacility: homeFacility
+            homeFacility: homeFacility,
+            pendingVerificationEmail: pendingVerificationEmail
         });
     });
 
@@ -85,6 +90,10 @@ describe('UserProfileController', function() {
 
         it('should expose role types', function() {
             expect(vm.roleTypes).toEqual(ROLE_TYPES.getRoleTypes());
+        });
+
+        it('should expose pendingVerificationEmail', function() {
+            expect(vm.pendingVerificationEmail).toEqual(pendingVerificationEmail);
         });
 
     });
@@ -115,7 +124,6 @@ describe('UserProfileController', function() {
         afterEach(function() {
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(authUserService.saveUser).toHaveBeenCalledWith(user);
-            expect(loadingModalService.close).toHaveBeenCalled();
         });
 
     });

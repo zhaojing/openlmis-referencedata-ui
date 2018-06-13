@@ -16,7 +16,7 @@
 describe('UserFormController', function() {
 
     var $state, $controller, $q, $rootScope, loadingModalService, notificationService, authUserService, userPasswordModalFactoryMock, confirmService,
-        vm, user, facilities;
+        vm, user, facilities, pendingVerificationEmail;
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
@@ -77,9 +77,14 @@ describe('UserFormController', function() {
             ]
         };
 
+        pendingVerificationEmail = {
+            email: "example@test.org"
+        };
+
         vm = $controller('UserFormController', {
             user: user,
-            facilities: facilities
+            facilities: facilities,
+            pendingVerificationEmail: pendingVerificationEmail
         });
         vm.$onInit();
     });
@@ -113,13 +118,18 @@ describe('UserFormController', function() {
         it('should set updateMode if there is no user passed to controller', function() {
             vm = $controller('UserFormController', {
                 user: undefined,
-                facilities: facilities
+                facilities: facilities,
+                pendingVerificationEmail: pendingVerificationEmail
             });
             vm.$onInit();
 
             expect(vm.updateMode).toBe(false);
             expect(vm.user.loginRestricted).toBe(false);
             expect(vm.notification).toBe('adminUserForm.userCreatedSuccessfully');
+        });
+
+        it('should set pendingVerificationEmail', function() {
+            expect(vm.pendingVerificationEmail).toBe(pendingVerificationEmail);
         });
     });
 
@@ -250,7 +260,8 @@ describe('UserFormController', function() {
 
             vm = $controller('UserFormController', {
                 user: undefined,
-                facilities: facilities
+                facilities: facilities,
+                pendingVerificationEmail: pendingVerificationEmail
             });
             vm.$onInit();
         });

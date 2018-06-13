@@ -23,6 +23,11 @@
         <label>
             <input type="checkbox" ng-model="vm.user.verified" disabled/>
             {{'openlmisUser.emailVerified' | message}}
+            <span ng-if="vm.pendingVerificationEmail"
+                  class="pending-email-verification"
+                  popover
+                  popover-template="admin-user-form/pending-email-verification-popover.html">
+            </span>
         </label>
     </fieldset>
 

@@ -5,6 +5,17 @@
     <input id="username" ng-model="vm.user.username" type="text" required/>
     <label for="email">{{'adminUserForm.email' | message}}</label>
     <input id="email" ng-model="vm.user.email" type="email"/>
+    <fieldset class="form-group">
+        <label>
+            <input type="checkbox" ng-model="vm.user.verified" disabled/>
+            {{'adminUserForm.emailVerified' | message}}
+            <span ng-if="vm.pendingVerificationEmail"
+                  class="pending-email-verification"
+                  popover
+                  popover-template="admin-user-form/pending-email-verification-popover.html">
+            </span>
+        </label>
+    </fieldset>
     <label for="firstName">{{'adminUserForm.firstName' | message}}</label>
     <input id="firstName" ng-model="vm.user.firstName" type="text" required/>
     <label for="lastName">{{'adminUserForm.lastName' | message}}</label>
@@ -24,12 +35,6 @@
             <input type="radio" ng-model="vm.user.loginRestricted"
                 ng-value="false" required/>
             {{'adminUserForm.no' | message}}
-        </label>
-    </fieldset>
-    <fieldset class="form-group">
-        <label>
-            <input type="checkbox" ng-model="vm.user.verified" disabled/>
-            {{'adminUserForm.emailVerified' | message}}
         </label>
     </fieldset>
     <label>{{'adminUserForm.homeFacility' | message}}</label>
