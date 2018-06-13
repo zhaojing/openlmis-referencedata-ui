@@ -158,7 +158,7 @@
          * Saves facility details and redirects to facility list screen.
          */
         function saveFacilityDetails() {
-            saveFacility(vm.facilityDetails);
+            return saveFacility(vm.facilityDetails);
         }
 
         /**
@@ -170,23 +170,22 @@
          * Saves facility supported programs and redirects to facility list screen.
          */
         function saveFacilitySupportedPrograms() {
-            saveFacility(vm.facilityWithPrograms);
+            return saveFacility(vm.facilityWithPrograms);
         }
 
 
         function saveFacility(editedFacility) {
-            var loadingPromise = loadingModalService.open();
+            loadingModalService.open();
 
-            facilityService.save(editedFacility)
+            return facilityService.save(editedFacility)
             .then(function() {
-                loadingPromise.then(function() {
-                    notificationService.success('adminFacilityView.saveFacility.success');
-                });
+                notificationService.success('adminFacilityView.saveFacility.success');
                 goToFacilityList();
             })
-            .catch(function() {
+            .catch(function(error) {
                 loadingModalService.close();
                 notificationService.error('adminFacilityView.saveFacility.fail');
+                return error;
             });
         }
 

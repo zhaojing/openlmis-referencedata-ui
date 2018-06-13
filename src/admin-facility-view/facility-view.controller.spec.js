@@ -192,5 +192,35 @@ describe('FacilityViewController', function () {
             $rootScope.$apply();
             expect(notificationService.success).toHaveBeenCalledWith('adminFacilityView.saveFacility.success');
         });
+
+        it('should return promise', function() {
+            facilitySavePromise.resolve(vm.facility);
+            loadingModalPromise.resolve();
+
+            var resolved;
+            vm.saveFacilityDetails().then(function() {
+                resolved = true;
+            });
+            $rootScope.$apply();
+
+            expect(resolved).toBe(true);
+        });
+    });
+
+    describe('saveFacilitySupportedPrograms', function() {
+    
+        it('should return promise', function() {
+            facilitySavePromise.resolve(vm.facility);
+            loadingModalPromise.resolve();
+
+            var resolved;
+            vm.saveFacilitySupportedPrograms().then(function() {
+                resolved = true;
+            });
+            $rootScope.$apply();
+
+            expect(resolved).toBe(true);
+        });
+    
     });
 });
