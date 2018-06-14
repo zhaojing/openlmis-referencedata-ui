@@ -140,12 +140,13 @@
          * @return  {Promise}           the promise resolving to the get pending verification
          */
         function getVerificationEmail(userId) {
-            return resource
-            .getVerificationEmail({ userId: userId}, undefined)
-            .$promise
-            .then(function (response) {
-                return angular.equals(response, {}) ? undefined : response;
-            });
+            return resource.getVerificationEmail({
+                userId: userId
+            }, undefined)
+                .$promise
+                .then(function (response) {
+                    return angular.equals(response, {}) ? undefined : response;
+                });
         }
     }
 })();
