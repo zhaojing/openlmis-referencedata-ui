@@ -75,6 +75,18 @@
             return resource.saveUser(undefined, user).$promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf auth-user.authUserService
+         * @name resetPassword
+         *
+         * @description
+         * Resets password for the given user.
+         *
+         * @param   {String}    username     the username of user for which the password should be changed
+         * @param   {String}    newPassword  the new password for the user
+         * @return  {Promise}                the promise resolving to the reset password
+         */
         function resetPassword(username, newPassword) {
             return resource.resetPassword(undefined, {
                 username: username,
@@ -82,18 +94,51 @@
             }).$promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf auth-user.authUserService
+         * @name sendResetEmail
+         *
+         * @description
+         * Sends a reset password to the given user.
+         *
+         * @param   {String}    email   the email address on which the reset email should be sent
+         * @return  {Promise}           the promise resolving to the send reset email
+         */
         function sendResetEmail(email) {
             return resource.sendResetEmail({
                 email: email
             }, undefined).$promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf auth-user.authUserService
+         * @name sendVerificationEmail
+         *
+         * @description
+         * Sends verification email to the given user.
+         *
+         * @param   {String}    userId  the ID of the user
+         * @return  {Promise}           the promise resolving to the send verification email
+         */
         function sendVerificationEmail(userId) {
             return resource.sendVerificationEmail({
                 userId: userId
             }, undefined).$promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf auth-user.authUserService
+         * @name getVerificationEmail
+         *
+         * @description
+         * Gets pending verification for the given user.
+         *
+         * @param   {String}    userId  the ID of the user
+         * @return  {Promise}           the promise resolving to the get pending verification
+         */
         function getVerificationEmail(userId) {
             return resource
             .getVerificationEmail({ userId: userId}, undefined)

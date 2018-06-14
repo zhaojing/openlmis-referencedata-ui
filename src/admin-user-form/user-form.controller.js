@@ -115,7 +115,7 @@
          * @ngdoc property
          * @propertyOf admin-user-form.controller:UserFormController
          * @name pendingEmailVerificationToken
-         * @type {String}
+         * @type {Object}
          *
          * @description
          * Represents pending email verification.
