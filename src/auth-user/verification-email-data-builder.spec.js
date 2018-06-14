@@ -21,17 +21,19 @@
         .module('auth-user')
         .factory('VerificationEmailDataBuilder', VerificationEmailDataBuilder);
 
-    function VerificationEmailDataBuilder() {
+    VerificationEmailDataBuilder.$inject = ['VerificationEmail'];
 
-        UserDataBuilder.prototype.build = build;
-        UserDataBuilder.prototype.buildJson = buildJson;
+    function VerificationEmailDataBuilder(VerificationEmail) {
+
+        VerificationEmailDataBuilder.prototype.build = build;
+        VerificationEmailDataBuilder.prototype.buildJson = buildJson;
 
         return VerificationEmailDataBuilder;
 
         function VerificationEmailDataBuilder() {
             VerificationEmailDataBuilder.instanceNumber = (VerificationEmailDataBuilder.instanceNumber || 0) + 1;
 
-            this.emailAddress = 'example' + UserDataBuilder.instanceNumber + '@test.org';
+            this.emailAddress = 'example' + VerificationEmailDataBuilder.instanceNumber + '@test.org';
             this.expiryDate = '2018-06-14';
         }
 

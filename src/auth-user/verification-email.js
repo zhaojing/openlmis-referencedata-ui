@@ -30,7 +30,7 @@
 
     function VerificationEmail() {
 
-        User.prototype.toJson = toJson;
+        VerificationEmail.prototype.toJson = toJson;
 
         return VerificationEmail;
 
