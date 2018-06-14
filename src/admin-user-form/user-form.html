@@ -6,7 +6,7 @@
     <label for="email">{{'adminUserForm.email' | message}}</label>
     <input id="email" ng-model="vm.user.email" type="email"/>
     <p class="note" ng-if="vm.pendingVerificationEmail">
-        {{ 'adminUserForm.pendingVerificationEmail.info' | message: {email: vm.pendingVerificationEmail.email} }}
+        {{ 'adminUserForm.pendingVerificationEmail.info' | message: {email: vm.pendingVerificationEmail.emailAddress} }}
     </p>
     <fieldset class="form-group">
         <label>
@@ -46,6 +46,6 @@
     <button ui-sref="^">{{'adminUserForm.cancel' | message}}</button>
     <div class="button-group primary">
         <button class="primary" form="newUserForm" type="submit">{{(vm.updateMode ? 'adminUserForm.updateUser' : 'adminUserForm.createUser') | message}}</button>
-        <button ng-if="vm.updateMode && vm.user.email && !vm.user.verified" ng-click="vm.sendVerificationEmail()">{{ 'adminUserForm.sendVerificationEmail' | message }}</button>
+        <button ng-if="vm.updateMode && vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{ 'adminUserForm.sendVerificationEmail' | message }}</button>
     </div>
 </div>

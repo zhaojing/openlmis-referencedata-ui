@@ -19,7 +19,7 @@
     <label for="user-email">{{'openlmisUser.email' | message}}</label>
     <input id="user-email" type="email" ng-model="vm.user.email"/>
     <p class="note" ng-if="vm.pendingVerificationEmail">
-        {{ 'openlmisUser.pendingVerificationEmail.info' | message: {email: vm.pendingVerificationEmail.email} }}
+        {{ 'openlmisUser.pendingVerificationEmail.info' | message: {email: vm.pendingVerificationEmail.emailAddress} }}
     </p>
 
     <fieldset class="form-group">
@@ -39,7 +39,7 @@
 <div class="openlmis-toolbar">
     <button ng-click="vm.restoreProfile()">{{'openlmisUser.cancel' | message}}</button>
     <div class="button-group primary">
-        <button ng-if="vm.user.email && !vm.user.verified" ng-click="vm.sendVerificationEmail()">{{ 'openlmisUser.sendVerificationEmail' | message }}</button>
+        <button ng-if="vm.pendingVerificationEmail" ng-click="vm.sendVerificationEmail()">{{ 'openlmisUser.sendVerificationEmail' | message }}</button>
         <button ng-click="vm.changePassword()">{{'openlmisUser.changePassword' | message}}</button>
         <button class="primary" form="user-profile-form">{{'openlmisUser.updateProfile' | message}}</button>
     </div>
