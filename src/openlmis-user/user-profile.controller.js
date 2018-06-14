@@ -121,13 +121,12 @@
 
             return authUserService.saveUser(vm.user)
             .then(function() {
+                $state.reload();
                 notificationService.success('openlmisUser.updateProfile.updateSuccessful');
             })
             .catch(function() {
                 notificationService.error('openlmisUser.updateProfile.updateFailed');
-            })
-            .finally(function () {
-                $state.reload();
+                loadingModalService.close();
             });
         }
 

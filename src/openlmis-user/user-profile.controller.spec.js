@@ -119,6 +119,7 @@ describe('UserProfileController', function() {
 
             expect(notificationService.success).not.toHaveBeenCalled();
             expect(notificationService.error).toHaveBeenCalledWith('openlmisUser.updateProfile.updateFailed');
+            expect(loadingModalService.close).toHaveBeenCalled();
         });
 
         afterEach(function() {
