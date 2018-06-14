@@ -176,6 +176,23 @@ describe('authUserService', function() {
 
             expect(data).toEqual(undefined);
         });
+
+        it('should reject if the requests fails', function() {
+            $httpBackend
+                .expectGET(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .respond(500);
+
+            var rejected;
+            authUserService.getVerificationEmail(user.id)
+                .catch(function() {
+                    rejected = true;
+                });
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(rejected).toEqual(true);
+        });
+
     });
 
     afterEach(function() {
