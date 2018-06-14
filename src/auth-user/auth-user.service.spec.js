@@ -17,7 +17,8 @@ describe('authUserService', function() {
 
     var OK_RESPONSE = 'ok';
 
-    var $rootScope, $httpBackend, openlmisUrlFactory, authUserService, UserDataBuilder, user;
+    var $rootScope, $httpBackend, openlmisUrlFactory, authUserService, UserDataBuilder, user,
+        VerificationEmailDataBuilder;
 
     beforeEach(function() {
         module('auth-user');
@@ -29,6 +30,7 @@ describe('authUserService', function() {
             openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             authUserService = $injector.get('authUserService');
             UserDataBuilder = $injector.get('UserDataBuilder');
+            VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
         });
 
         user = new UserDataBuilder().build();
@@ -139,7 +141,7 @@ describe('authUserService', function() {
     describe('getVerificationEmail', function() {
 
         it('should get pending verification email', function() {
-            var token = { email: 'example@test.org' };
+            var token = new VerificationEmailDataBuilder().build();
             var data;
 
             $httpBackend
@@ -155,6 +157,24 @@ describe('authUserService', function() {
             $rootScope.$apply();
 
             expect(data.email).toEqual(token.email);
+        });
+
+        it ('should handle empty response', function() {
+            var data;
+
+            $httpBackend
+                .expectGET(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .respond(200);
+
+            authUserService.getVerificationEmail(user.id)
+            .then(function(response) {
+                data = response;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(data).toEqual(undefined);
         });
     });
 
