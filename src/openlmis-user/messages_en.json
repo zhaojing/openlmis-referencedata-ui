@@ -21,5 +21,6 @@
     "openlmisUser.passwordResetAlert.label": "Log out",
     "openlmisUser.emailVerified": "Email verified",
     "openlmisUser.sendVerificationEmail": "Send verification email",
-    "openlmisUser.sendVerificationEmail.success": "Verification email has been sent successfully!"
+    "openlmisUser.sendVerificationEmail.success": "Verification email has been sent successfully!",
+    "openlmisUser.pendingVerificationEmail.info": "The email address has been changed to ${email} and is pending verification"
 }

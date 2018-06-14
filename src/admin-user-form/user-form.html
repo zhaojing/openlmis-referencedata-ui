@@ -5,15 +5,13 @@
     <input id="username" ng-model="vm.user.username" type="text" required/>
     <label for="email">{{'adminUserForm.email' | message}}</label>
     <input id="email" ng-model="vm.user.email" type="email"/>
+    <p class="note" ng-if="vm.pendingVerificationEmail">
+        {{ 'adminUserForm.pendingVerificationEmail.info' | message: {email: vm.pendingVerificationEmail.email} }}
+    </p>
     <fieldset class="form-group">
         <label>
             <input type="checkbox" ng-model="vm.user.verified" disabled/>
             {{'adminUserForm.emailVerified' | message}}
-            <span ng-if="vm.pendingVerificationEmail"
-                  class="pending-email-verification"
-                  popover
-                  popover-template="admin-user-form/pending-email-verification-popover.html">
-            </span>
         </label>
     </fieldset>
     <label for="firstName">{{'adminUserForm.firstName' | message}}</label>

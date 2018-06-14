@@ -18,16 +18,14 @@
 
     <label for="user-email">{{'openlmisUser.email' | message}}</label>
     <input id="user-email" type="email" ng-model="vm.user.email"/>
+    <p class="note" ng-if="vm.pendingVerificationEmail">
+        {{ 'openlmisUser.pendingVerificationEmail.info' | message: {email: vm.pendingVerificationEmail.email} }}
+    </p>
 
     <fieldset class="form-group">
         <label>
             <input type="checkbox" ng-model="vm.user.verified" disabled/>
             {{'openlmisUser.emailVerified' | message}}
-            <span ng-if="vm.pendingVerificationEmail"
-                  class="pending-email-verification"
-                  popover
-                  popover-template="admin-user-form/pending-email-verification-popover.html">
-            </span>
         </label>
     </fieldset>
 
