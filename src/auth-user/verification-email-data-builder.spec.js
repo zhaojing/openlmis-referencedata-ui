@@ -21,12 +21,9 @@
         .module('auth-user')
         .factory('VerificationEmailDataBuilder', VerificationEmailDataBuilder);
 
-    VerificationEmailDataBuilder.$inject = ['VerificationEmail'];
-
-    function VerificationEmailDataBuilder(VerificationEmail) {
+    function VerificationEmailDataBuilder() {
 
         VerificationEmailDataBuilder.prototype.build = build;
-        VerificationEmailDataBuilder.prototype.buildJson = buildJson;
 
         return VerificationEmailDataBuilder;
 
@@ -38,10 +35,6 @@
         }
 
         function build() {
-            return new VerificationEmail(this.buildJson());
-        }
-
-        function buildJson() {
             return {
                 emailAddress: this.emailAddress,
                 expiryDate: this.expiryDate
