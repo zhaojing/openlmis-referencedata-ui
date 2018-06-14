@@ -16,7 +16,7 @@
 describe('UserFormController', function() {
 
     var $state, $controller, $q, $rootScope, loadingModalService, notificationService, authUserService, userPasswordModalFactoryMock, confirmService,
-        vm, user, facilities, pendingVerificationEmail;
+        vm, user, facilities, pendingVerificationEmail, VerificationEmailDataBuilder;
 
     beforeEach(function() {
         module('admin-user-form', function($provide) {
@@ -43,6 +43,7 @@ describe('UserFormController', function() {
             $rootScope = $injector.get('$rootScope');
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
+            VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
         });
 
         spyOn($state, 'go');
@@ -77,9 +78,7 @@ describe('UserFormController', function() {
             ]
         };
 
-        pendingVerificationEmail = {
-            email: "example@test.org"
-        };
+        pendingVerificationEmail = new VerificationEmailDataBuilder().build();
 
         vm = $controller('UserFormController', {
             user: user,
