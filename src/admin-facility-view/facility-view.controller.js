@@ -40,7 +40,8 @@
 
         vm.$onInit = onInit;
         vm.goToFacilityList = goToFacilityList;
-        vm.saveFacilityDetails = saveFacilityDetails
+        vm.saveFacilityDetails = saveFacilityDetails;
+        vm.saveFacilityWithPrograms = saveFacilityWithPrograms;
         vm.addProgram = addProgram;
         vm.isProgramNotAssigned = isProgramNotAssigned;
 
@@ -134,7 +135,7 @@
 
             vm.facilityWithPrograms.supportedPrograms.filter(function(supportedProgram) {
                 vm.programs = vm.programs.filter(function(program) {
-                    return supportedProgram.id != program.id;
+                    return supportedProgram.id !== program.id;
                 });
             });
         }
@@ -163,6 +164,22 @@
          */
         function saveFacilityDetails() {
             doSave(
+                vm.facilityDetails,
+                'adminFacilityView.saveFacility.success',
+                'adminFacilityView.saveFacility.fail'
+            );
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name saveFacilityWithPrograms
+         *
+         * @description
+         * Saves facility with supported programs and redirects to facility list screen.
+         */
+        function saveFacilityWithPrograms() {
+            doSave(
                 vm.facilityWithPrograms,
                 'adminFacilityView.saveFacility.success',
                 'adminFacilityView.saveFacility.fail'
@@ -181,7 +198,7 @@
             var supportedProgram = angular.copy(vm.selectedProgram);
 
             vm.programs = vm.programs.filter(function(program) {
-                return supportedProgram.id != program.id;
+                return supportedProgram.id !== program.id;
             });
 
             supportedProgram.supportStartDate = vm.selectedStartDate;

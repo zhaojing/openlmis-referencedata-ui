@@ -109,6 +109,17 @@ describe('FacilityViewController', function () {
         it('should expose program list', function() {
             expect(vm.programs).toEqual(programs);
         });
+
+        it('should expose supported programs list', function() {
+            expect(vm.facilityWithPrograms.supportedPrograms).toEqual([]);
+        });
+
+        it('should expose supported programs list as empty list if undefined', function() {
+            vm.facility.supportedPrograms = undefined;
+            vm.$onInit();
+
+            expect(vm.facilityWithPrograms.supportedPrograms).toEqual([]);
+        });
     });
 
     describe('goToFacilityList', function() {

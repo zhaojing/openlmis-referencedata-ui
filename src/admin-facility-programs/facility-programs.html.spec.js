@@ -135,9 +135,9 @@ describe('facility-programs.html template', function() {
             form = template.find('#associatedPrograms');
         });
 
-        it('should call vm.saveFacilityDetails on submit', function() {
-            $scope.vm.saveFacilityDetails =
-                jasmine.createSpy('saveFacilityDetails');
+        it('should call vm.saveFacilityWithPrograms on submit', function() {
+            $scope.vm.saveFacilityWithPrograms =
+                jasmine.createSpy('saveFacilityWithPrograms');
             $scope.vm.facilityWithPrograms = {
                 supportedPrograms: [{
                     supportStartDate: new Date('08/10/2017')
@@ -150,7 +150,7 @@ describe('facility-programs.html template', function() {
             form.triggerHandler('submit');
             $rootScope.$apply();
 
-            expect($scope.vm.saveFacilityDetails).toHaveBeenCalled();
+            expect($scope.vm.saveFacilityWithPrograms).toHaveBeenCalled();
         });
 
     });
