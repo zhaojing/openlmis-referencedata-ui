@@ -71,31 +71,34 @@
          * Saves the facility and takes user back to the previous state.
          */
         function save() {
-            var confirmMessage = messageService.get('adminFacilityAdd.doYouWantToAddPrograms', {
-                facility: vm.facility.name
-            });
+            return doSave().then(function(response) {
+                var confirmMessage = messageService.get('adminFacilityAdd.doYouWantToAddPrograms', {
+                    facility: response.name
+                });
 
-            confirmService.confirm(
-                confirmMessage,
-                'adminFacilityAdd.addPrograms',
-                'adminFacilityAdd.cancel'
-            ).then(function() {
-                $state.go('openlmis.administration.facilities.facility.programs', {
-                    facility: vm.facility
-                });
-            }, function() {
-                var loadingPromise = loadingModalService.open();
-                facilityService.save(vm.facility).then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success('adminFacilityAdd.facilityHasBeenSaved');
+                confirmService.confirm(
+                    confirmMessage,
+                    'adminFacilityAdd.addPrograms',
+                    'adminFacilityAdd.cancel'
+                ).then(function() {
+                    $state.go('openlmis.administration.facilities.facility.programs', {
+                        facility: response
                     });
-                    stateTrackerService.goToPreviousState();
-                }).catch(function() {
-                    loadingPromise.then(function() {
-                        notificationService.error('adminFacilityAdd.failedToSaveFacility');
-                    });
-                    loadingModalService.close();
                 });
+            });
+        }
+
+        function doSave() {
+            loadingModalService.open();
+            return facilityService.save(vm.facility)
+            .then(function(facility) {
+                notificationService.success('adminFacilityAdd.facilityHasBeenSaved');
+                stateTrackerService.goToPreviousState();
+                return facility;
+            })
+            .catch(function() {
+                notificationService.error('adminFacilityAdd.failedToSaveFacility');
+                loadingModalService.close();
             });
         }
     }

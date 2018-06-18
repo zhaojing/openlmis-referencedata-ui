@@ -7,42 +7,11 @@
                 </h1>
             </div>
             <div class="modal-body">
-                <form id="add-program-form" class="form-inline" ng-submit="vm.addProgram()" reload-form>
-                    <div class="form-group">
-                        <label for="program">{{'adminFacilityPrograms.program' | message}}</label>
-                        <select id="program" ng-model="vm.program" ng-options="program.name for program in vm.programs | filter:vm.isNotAssigned()" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="start-date">{{'adminFacilityPrograms.startDate' | message}}</label>
-                        <input id="start-date" type="date" ng-model="vm.startDate" required/>
-                    </div>
-                    <button class="add" type="submit">{{'adminFacilityPrograms.add' | message}}</button>
-                </form>
-                <form class="openlmis-table-container" id="assign-programs-form" ng-submit="vm.save()">
-                    <table>
-                        <caption ng-if="!vm.facility.supportedPrograms || vm.facility.supportedPrograms.length === 0">
-                            {{'adminFacilityPrograms.noProgramsAreAssociatedWith' | message:({facility: vm.facility.name})}}
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th>{{'adminFacilityPrograms.program' | message}}</th>
-                                <th>{{'adminFacilityPrograms.active' | message}}</th>
-                                <th popover="{{'adminFacilityPrograms.startDate.description' | message}}">{{'adminFacilityPrograms.startDate' | message}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="program in vm.facility.supportedPrograms">
-                                <td>{{program.name}}</td>
-                                <td ><input type="checkbox" ng-model="program.supportActive"/></td>
-                                <td><input type="date" ng-model="program.supportStartDate" required/></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                <ng-include src="'admin-facility-view/associated-programs.html'"></ng-include>
             </div>
             <div class="modal-footer">
-                <button id="cancel" ng-click="vm.cancel()">{{'adminFacilityPrograms.cancel' | message}}</button>
-                <button id="save" class="primary" form="assign-programs-form">{{'adminFacilityPrograms.save' | message}}</button>
+                <button id="cancel" ng-click="vm.goToFacilityList()">{{'adminFacilityPrograms.cancel' | message}}</button>
+                <button id="save" class="primary" form="associatedPrograms">{{'adminFacilityPrograms.save' | message}}</button>
             </div>
         </div>
     </div>

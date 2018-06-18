@@ -15,7 +15,7 @@
 
 describe('openlmis.administration.facilities.facility.programs state', function() {
 
-    var state, $state, openlmisModalService, dialogSpy, facility, $q, $rootScope, programService;
+    var state, $state, openlmisModalService, dialogSpy, $q, $rootScope, programService, programs;
 
     beforeEach(prepareSuite);
 
@@ -42,8 +42,8 @@ describe('openlmis.administration.facilities.facility.programs state', function(
         expect(state.controllerAs).toEqual('vm');
     });
 
-    it('should expose FacilityProgramsController', function() {
-        expect(state.controller).toEqual('FacilityProgramsController');
+    it('should expose FacilityViewController', function() {
+        expect(state.controller).toEqual('FacilityViewController');
     });
 
     function prepareSuite() {
@@ -53,6 +53,7 @@ describe('openlmis.administration.facilities.facility.programs state', function(
             });
         });
         module('admin-facility-programs');
+        module('admin-facility-view');
 
         inject(function($injector) {
             $state = $injector.get('$state');
@@ -67,10 +68,6 @@ describe('openlmis.administration.facilities.facility.programs state', function(
     }
 
     function prepareTestData() {
-        facility = {
-            id: 'some-facility-id'
-        };
-
         programs = [{
             id: "dce17f2e-af3e-40ad-8e00-3496adef44c3"
         }, {

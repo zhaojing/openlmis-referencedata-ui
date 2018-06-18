@@ -138,7 +138,7 @@ describe('OpenlmisFacilityProgramSelectController', function() {
         it('should get supervised programs', function() {
             vm.isSupervised = true;
             vm.module = 'module';
-            vm.program = programs[1];
+            vm.program = supervisedPrograms[1];
 
             vm.updateFacilities();
 

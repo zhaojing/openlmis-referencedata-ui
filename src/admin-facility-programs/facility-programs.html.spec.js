@@ -71,7 +71,7 @@ describe('facility-programs.html template', function() {
                 .prop('selected', 'selected')
                 .trigger('change');
 
-            expect($scope.vm.program).toEqual($scope.vm.programs[0]);
+            expect($scope.vm.selectedProgram).toEqual($scope.vm.programs[0]);
         });
 
     });
@@ -86,7 +86,7 @@ describe('facility-programs.html template', function() {
         });
 
         it('should require program', function() {
-            $scope.vm.program = undefined;
+            $scope.vm.selectedProgram = undefined;
             $rootScope.$apply();
 
             form.triggerHandler('submit');
@@ -96,7 +96,7 @@ describe('facility-programs.html template', function() {
         });
 
         it('should require start date', function() {
-            $scope.vm.startDate = undefined;
+            $scope.vm.selectedStartDate = undefined;
             $rootScope.$apply();
 
             form.triggerHandler('submit');
@@ -108,10 +108,10 @@ describe('facility-programs.html template', function() {
         it('should call $scope.vm.addProgram on click', function() {
             $scope.vm.addProgram = jasmine.createSpy('addProgram');
 
-            $scope.vm.program = {
+            $scope.vm.selectedProgram = {
                 id: 'some-programs-id'
             };
-            $scope.vm.startDate = new Date('08/10/2017');
+            $scope.vm.selectedStartDate = new Date('08/10/2017');
 
             $rootScope.$apply();
             form.triggerHandler('submit');
@@ -127,18 +127,18 @@ describe('facility-programs.html template', function() {
     });
 
 
-    describe('assign-programs-form', function() {
+    describe('associatedPrograms form', function() {
 
-        var form, formCtrl;
+        var form;
 
         beforeEach(function() {
-            form = template.find('#assign-programs-form');
-            formCtrl = form.controller('form');
+            form = template.find('#associatedPrograms');
         });
 
-        it('should call vm.save on submit', function() {
-            $scope.vm.save = jasmine.createSpy('save');
-            $scope.vm.facility = {
+        it('should call vm.saveFacilityDetails on submit', function() {
+            $scope.vm.saveFacilityDetails =
+                jasmine.createSpy('saveFacilityDetails');
+            $scope.vm.facilityWithPrograms = {
                 supportedPrograms: [{
                     supportStartDate: new Date('08/10/2017')
                 }, {
@@ -150,51 +150,34 @@ describe('facility-programs.html template', function() {
             form.triggerHandler('submit');
             $rootScope.$apply();
 
-            expect($scope.vm.save).toHaveBeenCalled();
-        });
-
-        it('should require all start dates', function() {
-            $scope.vm.facility = {
-                supportedPrograms: [{
-                    supportStartDate: undefined
-                }, {
-                    supportStartDate: new Date('08/10/2017')
-                }]
-            };
-            $rootScope.$apply();
-
-            form.triggerHandler('submit');
-            $rootScope.$apply();
-
-            expect(formCtrl.$invalid).toBe(true);
+            expect($scope.vm.saveFacilityDetails).toHaveBeenCalled();
         });
 
     });
 
     describe('Cancel button', function() {
 
-        it('should call $scope.vm.cancel method', function() {
-            $scope.vm.cancel = jasmine.createSpy('cancel');
+        it('should move to the facility list page', function() {
+            $scope.vm.goToFacilityList = jasmine.createSpy('cancel');
 
             template.find('#cancel').click();
             $timeout.flush();
 
-            expect($scope.vm.cancel).toHaveBeenCalled();
+            expect($scope.vm.goToFacilityList).toHaveBeenCalled();
         });
 
     });
 
     function prepareSuite() {
         module('admin-facility-programs');
+        module('admin-facility-view');
 
-        var $compile, $templateRequest, $controller, $q;
+        var $compile, $templateRequest;
 
         inject(function($injector) {
             $compile = $injector.get('$compile');
             $rootScope = $injector.get('$rootScope');
             $templateRequest = $injector.get('$templateRequest');
-            $q = $injector.get('$q');
-            $controller = $injector.get('$controller');
             $timeout = $injector.get('$timeout');
             messageService = $injector.get('messageService');
             dateUtils = $injector.get('dateUtils');

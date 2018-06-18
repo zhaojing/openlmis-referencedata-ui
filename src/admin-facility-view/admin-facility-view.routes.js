@@ -47,17 +47,17 @@
                     });
                 },
                 geographicZones: function($q, geographicZoneService) {
-					var deferred = $q.defer();
+					          var deferred = $q.defer();
 
-					geographicZoneService.getAll().then(function(response) {
-						deferred.resolve(response.content);
-					}, deferred.reject);
+					          geographicZoneService.getAll().then(function(response) {
+						            deferred.resolve(response.content);
+					          }, deferred.reject);
 
-					return deferred.promise;
-				},
+					          return deferred.promise;
+				        },
                 facilityOperators: function(facilityOperatorService) {
-				    return facilityOperatorService.getAll();
-				},
+				            return facilityOperatorService.getAll();
+				        },
                 programs: function(programService) {
                     return programService.getAll();
                 }

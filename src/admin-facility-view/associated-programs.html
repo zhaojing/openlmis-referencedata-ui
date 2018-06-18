@@ -1,4 +1,4 @@
-<form class="form-inline" ng-submit="vm.addProgram()" reload-form>
+<form id="add-program-form" class="form-inline" ng-submit="vm.addProgram()" reload-form>
     <div class="form-group">
         <label for="program">{{'adminFacilityView.program' | message}}</label>
         <select id="program" ng-model="vm.selectedProgram"
@@ -7,12 +7,12 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="startDate">{{'adminFacilityView.startDate' | message}}</label>
-        <input id="startDate" type="date" ng-model="vm.selectedStartDate" required/>
+        <label for="start-date">{{'adminFacilityView.startDate' | message}}</label>
+        <input id="start-date" type="date" ng-model="vm.selectedStartDate" required/>
     </div>
     <button type="submit" class="add">{{'adminFacilityView.add' | message}}</button>
 </form>
-<form id="associatedPrograms" class="openlmis-table-container" ng-submit="vm.saveFacilitySupportedPrograms()">
+<form id="associatedPrograms" class="openlmis-table-container" ng-submit="vm.saveFacilityDetails()">
     <table>
         <caption ng-if="!vm.facilityWithPrograms.supportedPrograms || vm.facilityWithPrograms.supportedPrograms.length === 0">
             {{'adminFacilityView.noAssociatedPrograms' | message: {facility: vm.facility.name} }}
@@ -29,13 +29,9 @@
             <tr ng-repeat="program in vm.facilityWithPrograms.supportedPrograms">
                 <td>{{program.name}}</td>
                 <td><input type="checkbox" ng-model="program.supportActive"/></td>
-                <td><input id="programStartDate" type="date" ng-model="program.supportStartDate"/></td>
+                <td><input type="date" ng-model="program.supportStartDate"/></td>
                 <td><input type="checkbox" ng-model="program.supportLocallyFulfilled"/></td>
             </tr>
         </tbody>
     </table>
 </form>
-<div class="button-group">
-    <button class="primary" form="associatedPrograms" type="submit">{{'adminFacilityView.savePrograms' | message}}</button>
-    <button ui-sref="openlmis.administration.facilities" ui-sref-opts="{reload: true}">{{'adminFacilityView.cancel' | message}}</button>
-</div>

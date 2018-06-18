@@ -41,8 +41,8 @@
         vm.$onInit = onInit;
         vm.goToFacilityList = goToFacilityList;
         vm.saveFacilityDetails = saveFacilityDetails
-        vm.saveFacilitySupportedPrograms = saveFacilitySupportedPrograms;
         vm.addProgram = addProgram;
+        vm.isProgramNotAssigned = isProgramNotAssigned;
 
         /**
          * @ngdoc property
@@ -128,7 +128,11 @@
             vm.programs = programs;
             vm.selectedTab = 0;
 
-            angular.forEach(vm.facilityWithPrograms.supportedPrograms, function(supportedProgram) {
+            if (!vm.facilityWithPrograms.supportedPrograms) {
+                vm.facilityWithPrograms.supportedPrograms = [];
+            }
+
+            vm.facilityWithPrograms.supportedPrograms.filter(function(supportedProgram) {
                 vm.programs = vm.programs.filter(function(program) {
                     return supportedProgram.id != program.id;
                 });
@@ -144,7 +148,7 @@
          * Redirects to facility list screen.
          */
         function goToFacilityList() {
-            $state.go('^', {}, {
+            $state.go('openlmis.administration.facilities', {}, {
                 reload: true
             });
         }
@@ -158,35 +162,11 @@
          * Saves facility details and redirects to facility list screen.
          */
         function saveFacilityDetails() {
-            return saveFacility(vm.facilityDetails);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-facility-list.controller:FacilityListController
-         * @name saveFacilitySupportedPrograms
-         *
-         * @description
-         * Saves facility supported programs and redirects to facility list screen.
-         */
-        function saveFacilitySupportedPrograms() {
-            return saveFacility(vm.facilityWithPrograms);
-        }
-
-
-        function saveFacility(editedFacility) {
-            loadingModalService.open();
-
-            return facilityService.save(editedFacility)
-            .then(function() {
-                notificationService.success('adminFacilityView.saveFacility.success');
-                goToFacilityList();
-            })
-            .catch(function(error) {
-                loadingModalService.close();
-                notificationService.error('adminFacilityView.saveFacility.fail');
-                return error;
-            });
+            doSave(
+                vm.facilityWithPrograms,
+                'adminFacilityView.saveFacility.success',
+                'adminFacilityView.saveFacility.fail'
+            );
         }
 
         /**
@@ -213,6 +193,37 @@
             vm.facilityWithPrograms.supportedPrograms.push(supportedProgram);
 
             return $q.when();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name isProgramNotAssigned
+         * @private
+         *
+         * @description
+         * Check if the given programs is already assigned to the facility.
+         *
+         * @param   {Object}    program the program to be checked
+         * @return  {Boolean}           true if the program is already assigned, false otherwise
+         */
+        function isProgramNotAssigned() {
+            return vm.facilityWithPrograms.supportedPrograms.filter(function(result) {
+                return result.id === vm.selectedProgram.id;
+            }).length === 0;
+        }
+
+        function doSave(facility, successMessage, errorMessage) {
+            loadingModalService.open();
+            return facilityService.save(facility).then(function(facility) {
+                notificationService.success(successMessage);
+                goToFacilityList();
+                return $q.resolve(facility);
+            }).catch(function() {
+                notificationService.error(errorMessage);
+                loadingModalService.close();
+                return $q.reject();
+            });
         }
     }
 })();

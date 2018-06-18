@@ -29,7 +29,8 @@
         'openlmis-modal-state',
         'ui.router',
         'openlmis-templates',
-        'openlmis-form'
+        'openlmis-form',
+        'admin-facility-view'
     ]);
 
 })();

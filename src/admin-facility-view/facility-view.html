@@ -6,6 +6,10 @@
         </li>
         <li bs-pane data-title="{{'adminFacilityView.associatedPrograms' | message}}">
             <ng-include src="'admin-facility-view/associated-programs.html'"></ng-include>
+            <div class="button-group">
+                <button class="primary" form="associatedPrograms" type="submit">{{'adminFacilityView.savePrograms' | message}}</button>
+                <button ng-click="vm.goToFacilityList()">{{'adminFacilityView.cancel' | message}}</button>
+            </div>
         </li>
     </ul>
 </nav>

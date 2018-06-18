@@ -25,21 +25,37 @@
 
     function routes(modalStateProvider) {
         modalStateProvider.state('openlmis.administration.facilities.facility.programs', {
-            controller: 'FacilityProgramsController',
+            controller: 'FacilityViewController',
             controllerAs: 'vm',
             parentResolves: ['facility'],
-            resolve: {
-                programs: programsResolve
-            },
             templateUrl: 'admin-facility-programs/facility-programs.html',
-            url: '/programs'
+            url: '/programs',
+            resolve: {
+                facilityTypes: function(facilityTypeService) {
+                    return facilityTypeService.query({
+                        active: true
+                    })
+                    .then(function(response) {
+                        return response.content;
+                    });
+                },
+                geographicZones: function($q, geographicZoneService) {
+					          var deferred = $q.defer();
+
+					          geographicZoneService.getAll().then(function(response) {
+						            deferred.resolve(response.content);
+					          }, deferred.reject);
+
+					          return deferred.promise;
+				        },
+                facilityOperators: function(facilityOperatorService) {
+				            return facilityOperatorService.getAll();
+				        },
+                programs: function(programService) {
+                    return programService.getAll();
+                }
+            }
         });
-
-        programsResolve.$inject = ['programService'];
-        function programsResolve(programService) {
-            return programService.getAll();
-        }
-
     }
 
 })();

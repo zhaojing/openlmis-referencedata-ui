@@ -24,6 +24,7 @@ Improvements:
 * [OLMIS-4813](https://openlmis.atlassian.net/browse/OLMIS-4813): Updated ui-components to version 6.0.0.
 * [OLMIS-4830](https://openlmis.atlassian.net/browse/OLMIS-4830): Added popover with the list of rights when hover over role on the User Roles and User Profile screens.
   * Reworked typeNameFactory into right and roleType filters.
+* [OLMIS-3240](https://openlmis.atlassian.net/browse/OLMIS-3240): Removed duplications in admin-facility modules.
 
 Bug fixes:
 * [OLMIS-4613](https://openlmis.atlassian.net/browse/OLMIS-4613): Fixed error on User Roles screen when Supervisory Node is without facility

@@ -15,10 +15,11 @@
 
 describe('FacilityAddController', function() {
 
-    var vm, $rootScope, $scope, facility, facilityTypes, geographicZones,
-        facilityOperators, confirmService, confirmDeferred, facilityService, stateTrackerService,
-        saveDeferred, $state, loadingModalService, loadingDeferred, notificationService,
-        messageService;
+    var vm, $rootScope, facility, facilityTypes, geographicZones, facilityOperators, confirmService,
+        confirmDeferred, facilityService, stateTrackerService, saveDeferred, $state, $q,
+        loadingModalService, loadingDeferred, notificationService, messageService,
+        FacilityTypeDataBuilder, GeographicZoneDataBuilder, FacilityOperatorDataBuilder,
+        FacilityDataBuilder;
 
     beforeEach(prepareSuite);
 
@@ -65,32 +66,16 @@ describe('FacilityAddController', function() {
 
     describe('save', function() {
 
-        beforeEach(function() {
-            vm.facility.code = 'FC01';
-            vm.facility.name = 'Some Facility';
-            vm.facility.type = facilityTypes[0];
-            vm.facility.geographicZone = geographicZones[0];
-            vm.facility.description = 'Some Description';
-            vm.facility.operator = facilityOperators[0];
-        });
-
         it('should prompt user to add programs', function() {
+            facilityService.save.andReturn($q.when(facility));
             vm.save();
+            $rootScope.$apply();
 
             expect(confirmService.confirm).toHaveBeenCalledWith(
-                'Do you want to add programs to Some Facility?',
+                'Do you want to add programs to Assumane, Lichinga Cidade?',
                 'adminFacilityAdd.addPrograms',
                 'adminFacilityAdd.cancel'
             );
-        });
-
-        it('should not save facility unless user refuses to add programs', function() {
-            vm.save();
-
-            confirmDeferred.reject();
-            $rootScope.$apply();
-
-            expect(facilityService.save).toHaveBeenCalledWith(vm.facility);
         });
 
         it('should open loading modal if user refuses to add programs', function() {
@@ -127,6 +112,7 @@ describe('FacilityAddController', function() {
         });
 
         it('should take to the user to add programs page if user agrees to it', function() {
+            facilityService.save.andReturn($q.when(facility));
             vm.save();
 
             confirmDeferred.resolve();
@@ -134,7 +120,7 @@ describe('FacilityAddController', function() {
 
             expect($state.go).toHaveBeenCalledWith(
                 'openlmis.administration.facilities.facility.programs', {
-                    facility: vm.facility
+                    facility: facility
                 }
             );
         });
@@ -157,43 +143,30 @@ describe('FacilityAddController', function() {
             loadingModalService = $injector.get('loadingModalService');
             notificationService = $injector.get('notificationService');
             messageService = $injector.get('messageService');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
         });
 
-        facility = {
-            id: 'some-facility-id',
-            enabled: true,
-            active: true
-        };
+        facility = new FacilityDataBuilder().withoutId().build();
 
-        facilityTypes = [{
-            id: 'e2faaa9e-4b2d-4212-bb60-fd62970b2113',
-            name: 'Warehouse'
-        }, {
-            id: 'ac1d268b-ce10-455f-bf87-9c667da8f060',
-            name: 'Health Center'
-        }, {
-            id: '663b1d34-cc17-4d60-9619-e553e45aa441',
-            name: 'District Hospital'
-        }];
+        facilityTypes = [
+            new FacilityTypeDataBuilder().build(),
+            new FacilityTypeDataBuilder().build(),
+            new FacilityTypeDataBuilder().build()
+        ];
 
-        geographicZones = [{
-            name: 'Malawi',
-            id: '4e471242-da63-436c-8157-ade3e615c848'
-        }, {
-            name: 'Central Region',
-            id: '58d51132-de7d-49f6-ba8d-fd2b5673c3ff'
-        }, {
-            name: 'Northern Region',
-            id: '3daa08a2-69d4-40e8-8af1-e08e894f6b19'
-        }];
+        geographicZones = [
+            new GeographicZoneDataBuilder().build(),
+            new GeographicZoneDataBuilder().build(),
+            new GeographicZoneDataBuilder().build()
+        ];
 
-        facilityOperators = [{
-            "id": "9456c3e9-c4a6-4a28-9e08-47ceb16a4121",
-            "name": "Ministry of Health"
-        }, {
-            "id": "1074353d-7364-4618-a127-708d7303a231",
-            "name": "Doctors Without Borders"
-        }];
+        facilityOperators = [
+            new FacilityOperatorDataBuilder().build(),
+            new FacilityOperatorDataBuilder().build(),
+        ];
 
         confirmDeferred = $q.defer();
         saveDeferred = $q.defer();

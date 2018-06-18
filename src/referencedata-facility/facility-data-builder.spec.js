@@ -32,6 +32,8 @@
         FacilityDataBuilder.prototype.withName = withName;
         FacilityDataBuilder.prototype.withId = withId;
         FacilityDataBuilder.prototype.withSupportedPrograms = withSupportedPrograms;
+        FacilityDataBuilder.prototype.withFacilityType = withFacilityType;
+        FacilityDataBuilder.prototype.withoutId = withoutId;
 
         return FacilityDataBuilder;
 
@@ -63,6 +65,16 @@
 
         function withId(newId) {
             this.id = newId;
+            return this;
+        }
+
+        function withoutId() {
+            this.id = undefined;
+            return this;
+        }
+
+        function withFacilityType(newType) {
+            this.type = newType;
             return this;
         }
 
