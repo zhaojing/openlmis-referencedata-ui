@@ -203,33 +203,4 @@ describe('FacilityViewController', function () {
         });
 
     });
-
-    describe('isProgramNotAssigned', function() {
-
-        beforeEach(function() {
-            vm.facilityWithPrograms = {};
-            vm.selectedProgram = { id: 'some-program-id' };
-        });
-
-        it('should return false if program is already assigned', function() {
-            vm.facilityWithPrograms.supportedPrograms = [{
-                id: 'some-program-id'
-            }];
-
-            var result = vm.isProgramNotAssigned();
-
-            expect(result).toBe(false);
-        });
-
-        it('should return true if program is not yet assigned', function() {
-            vm.facilityWithPrograms.supportedPrograms = [{
-                id: 'some-other-program-id'
-            }];
-
-            var result = vm.isProgramNotAssigned();
-
-            expect(result).toBe(true);
-        });
-    
-    });
 });

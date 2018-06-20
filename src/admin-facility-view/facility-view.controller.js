@@ -43,7 +43,6 @@
         vm.saveFacilityDetails = saveFacilityDetails;
         vm.saveFacilityWithPrograms = saveFacilityWithPrograms;
         vm.addProgram = addProgram;
-        vm.isProgramNotAssigned = isProgramNotAssigned;
 
         /**
          * @ngdoc property
@@ -142,7 +141,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-facility-list.controller:FacilityListController
+         * @methodOf admin-facility-view.controller:FacilityViewController
          * @name goToFacilityList
          *
          * @description
@@ -156,7 +155,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-facility-list.controller:FacilityListController
+         * @methodOf admin-facility-view.controller:FacilityViewController
          * @name saveFacilityDetails
          *
          * @description
@@ -172,7 +171,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-facility-list.controller:FacilityListController
+         * @methodOf admin-facility-view.controller:FacilityViewController
          * @name saveFacilityWithPrograms
          *
          * @description
@@ -188,7 +187,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-facility-list.controller:FacilityListController
+         * @methodOf admin-facility-view.controller:FacilityViewController
          * @name addProgram
          *
          * @description
@@ -210,24 +209,6 @@
             vm.facilityWithPrograms.supportedPrograms.push(supportedProgram);
 
             return $q.when();
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-facility-list.controller:FacilityListController
-         * @name isProgramNotAssigned
-         * @private
-         *
-         * @description
-         * Check if the given programs is already assigned to the facility.
-         *
-         * @param   {Object}    program the program to be checked
-         * @return  {Boolean}           true if the program is already assigned, false otherwise
-         */
-        function isProgramNotAssigned() {
-            return vm.facilityWithPrograms.supportedPrograms.filter(function(result) {
-                return result.id === vm.selectedProgram.id;
-            }).length === 0;
         }
 
         function doSave(facility, successMessage, errorMessage) {
