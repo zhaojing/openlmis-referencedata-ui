@@ -54,9 +54,9 @@ describe('authUserService', function() {
                 });
 
             authUserService.saveUser(user)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -83,9 +83,9 @@ describe('authUserService', function() {
                 });
 
             authUserService.resetPassword(user.username, 'password')
-            .then(function() {
-                data = OK_RESPONSE;
-            });
+                .then(function() {
+                    data = OK_RESPONSE;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -105,9 +105,9 @@ describe('authUserService', function() {
                 .respond(200);
 
             authUserService.sendResetEmail(user.email)
-            .then(function() {
-                data = OK_RESPONSE;
-            });
+                .then(function() {
+                    data = OK_RESPONSE;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -123,13 +123,13 @@ describe('authUserService', function() {
             var data;
 
             $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .expectPOST(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
                 .respond(200);
 
             authUserService.sendVerificationEmail(user.id)
-            .then(function() {
-                data = OK_RESPONSE;
-            });
+                .then(function() {
+                    data = OK_RESPONSE;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -145,13 +145,13 @@ describe('authUserService', function() {
             var data;
 
             $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
                 .respond(200, token);
 
             authUserService.getVerificationEmail(user.id)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -159,17 +159,17 @@ describe('authUserService', function() {
             expect(data.email).toEqual(token.email);
         });
 
-        it ('should handle empty response', function() {
+        it('should handle empty response', function() {
             var data;
 
             $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
                 .respond(200);
 
             authUserService.getVerificationEmail(user.id)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -179,7 +179,7 @@ describe('authUserService', function() {
 
         it('should reject if the requests fails', function() {
             $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users/auth/verifyEmail?userId=' + user.id))
+                .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
                 .respond(500);
 
             var rejected;

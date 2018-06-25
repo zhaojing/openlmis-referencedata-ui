@@ -12,7 +12,7 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
-(function(){
+(function() {
 
     'use strict';
 
@@ -33,26 +33,26 @@
 
     function service(openlmisUrlFactory, $resource) {
         var resource = $resource(openlmisUrlFactory('/api/users/auth'), {}, {
-                saveUser: {
-                    method: 'POST'
-                },
-                resetPassword: {
-                    method: 'POST',
-                    url: openlmisUrlFactory('/api/users/auth/passwordReset')
-                },
-                sendResetEmail: {
-                    method: 'POST',
-                    url: openlmisUrlFactory('/api/users/auth/forgotPassword')
-                },
-                sendVerificationEmail: {
-                    method: 'POST',
-                    url: openlmisUrlFactory('/api/users/auth/verifyEmail')
-                },
-                getVerificationEmail: {
-                    method: 'GET',
-                    url: openlmisUrlFactory('/api/users/auth/verifyEmail')
-                }
-            });
+            saveUser: {
+                method: 'POST'
+            },
+            resetPassword: {
+                method: 'POST',
+                url: openlmisUrlFactory('/api/users/auth/passwordReset')
+            },
+            sendResetEmail: {
+                method: 'POST',
+                url: openlmisUrlFactory('/api/users/auth/forgotPassword')
+            },
+            sendVerificationEmail: {
+                method: 'POST',
+                url: openlmisUrlFactory('/api/userContactDetails/:userId/verifications')
+            },
+            getVerificationEmail: {
+                method: 'GET',
+                url: openlmisUrlFactory('/api/userContactDetails/:userId/verifications')
+            }
+        });
 
         this.saveUser = saveUser;
         this.resetPassword = resetPassword;
@@ -125,7 +125,7 @@
         function sendVerificationEmail(userId) {
             return resource.sendVerificationEmail({
                 userId: userId
-            }, undefined).$promise;
+            }, {}).$promise;
         }
 
         /**
@@ -142,9 +142,9 @@
         function getVerificationEmail(userId) {
             return resource.getVerificationEmail({
                 userId: userId
-            }, undefined)
+            })
                 .$promise
-                .then(function (response) {
+                .then(function(response) {
                     return angular.equals(response, {}) ? undefined : response;
                 });
         }
