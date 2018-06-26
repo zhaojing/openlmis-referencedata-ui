@@ -15,7 +15,10 @@
 
 describe('openlmis.administration.facilities.facility.programs state', function() {
 
-    var state, $state, openlmisModalService, dialogSpy, $q, $rootScope, programService, programs;
+    var state, $state, openlmisModalService, dialogSpy, $q, $rootScope, programService, programs,
+        facilityOperatorService, facilityOperators, geographicZoneService, facilityTypeService,
+        facilityTypes, geographicZones, ProgramDataBuilder, FacilityOperatorDataBuilder,
+        FacilityTypeDataBuilder, GeographicZoneDataBuilder;
 
     beforeEach(prepareSuite);
 
@@ -32,6 +35,39 @@ describe('openlmis.administration.facilities.facility.programs state', function(
         $rootScope.$apply();
 
         expect(result).toEqual(programs);
+    });
+
+    it('should resolve facilityOperators', function() {
+        var result;
+
+        state.resolve.facilityOperators(facilityOperatorService).then(function(facilityOperators) {
+            result = facilityOperators;
+        });
+        $rootScope.$apply();
+
+        expect(result).toEqual(facilityOperators);
+    });
+
+    it('should resolve geographicZones', function() {
+        var result;
+
+        state.resolve.geographicZones($q, geographicZoneService).then(function(geographicZones) {
+            result = geographicZones;
+        });
+        $rootScope.$apply();
+
+        expect(result).toEqual(geographicZones);
+    });
+
+    it('should resolve facilityTypes', function() {
+        var result;
+
+        state.resolve.facilityTypes(facilityTypeService).then(function(facilityTypes) {
+            result = facilityTypes;
+        });
+        $rootScope.$apply();
+
+        expect(result).toEqual(facilityTypes);
     });
 
     it('should use facility-programs.html template', function() {
@@ -61,6 +97,13 @@ describe('openlmis.administration.facilities.facility.programs state', function(
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             programService = $injector.get('programService');
+            facilityOperatorService = $injector.get('facilityOperatorService');
+            geographicZoneService = $injector.get('geographicZoneService');
+            facilityTypeService = $injector.get('facilityTypeService');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
+            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
         });
 
         prepareTestData();
@@ -68,13 +111,29 @@ describe('openlmis.administration.facilities.facility.programs state', function(
     }
 
     function prepareTestData() {
-        programs = [{
-            id: "dce17f2e-af3e-40ad-8e00-3496adef44c3"
-        }, {
-            id: "10845cb9-d365-4aaa-badd-b4fa39c6a26a"
-        }, {
-            id: "66032ea8-b69b-4102-a1eb-844e57143187"
-        }];
+        programs = [
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build()
+        ];
+
+        facilityTypes = [
+            new FacilityTypeDataBuilder().build(),
+            new FacilityTypeDataBuilder().build(),
+            new FacilityTypeDataBuilder().build()
+        ];
+
+        facilityOperators = [
+            new FacilityOperatorDataBuilder().build(),
+            new FacilityOperatorDataBuilder().build(),
+            new FacilityOperatorDataBuilder().build()
+        ];
+
+        geographicZones = [
+            new GeographicZoneDataBuilder().build(),
+            new GeographicZoneDataBuilder().build(),
+            new GeographicZoneDataBuilder().build()
+        ];
 
         dialogSpy = jasmine.createSpyObj('dialog', ['hide']);
 
@@ -84,6 +143,13 @@ describe('openlmis.administration.facilities.facility.programs state', function(
     function prepareSpies() {
         spyOn(openlmisModalService, 'createDialog').andReturn(dialogSpy);
         spyOn(programService, 'getAll').andReturn($q.when(programs));
+        spyOn(facilityOperatorService, 'getAll').andReturn($q.when(facilityOperators));
+        spyOn(facilityTypeService, 'query').andReturn($q.when({
+            content: facilityTypes
+        }));
+        spyOn(geographicZoneService, 'getAll').andReturn($q.when({
+            content: geographicZones
+        }));
     }
 
 });

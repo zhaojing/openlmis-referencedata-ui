@@ -31,6 +31,12 @@
             templateUrl: 'admin-facility-programs/facility-programs.html',
             url: '/programs',
             resolve: {
+                facilityOperators: function(facilityOperatorService) {
+                    return facilityOperatorService.getAll();
+                },
+                programs: function(programService) {
+                    return programService.getAll();
+                },
                 facilityTypes: function(facilityTypeService) {
                     return facilityTypeService.query({
                         active: true
@@ -47,12 +53,6 @@
                     }, deferred.reject);
 
                     return deferred.promise;
-                },
-                facilityOperators: function(facilityOperatorService) {
-                    return facilityOperatorService.getAll();
-                },
-                programs: function(programService) {
-                    return programService.getAll();
                 }
             }
         });
