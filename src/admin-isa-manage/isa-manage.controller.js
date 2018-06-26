@@ -84,30 +84,28 @@
         function upload() {
             vm.invalidMessage = undefined;
 
-            if (!vm.file) {
-                notificationService.error('adminIsaManage.fileIsNotSelected');
-            } else {
+            if (vm.file) {
                 var loadingPromise = loadingModalService.open();
                 isaService.upload(vm.file)
-                .then(function(data) {
-                    var message = messageService.get(
-                        'adminIsaManage.uploadSuccess',
-                        {
-                            amount: data.amount
-                        }
-                    );
-                    loadingPromise.then(function () {
-                        notificationService.success(message);
-                    });
+                    .then(function(data) {
+                        var message = messageService.get('adminIsaManage.uploadSuccess',
+                            {
+                                amount: data.amount
+                            });
+                        loadingPromise.then(function() {
+                            notificationService.success(message);
+                        });
 
-                    $state.reload();
-                })
-                .catch(function(error) {
-                    notificationService.error('adminIsaManage.uploadFailed');
-                    vm.invalidMessage = error ? error.data.message : undefined;
-                    vm.file = undefined;
-                    loadingModalService.close();
-                });
+                        $state.reload();
+                    })
+                    .catch(function(error) {
+                        notificationService.error('adminIsaManage.uploadFailed');
+                        vm.invalidMessage = error ? error.data.message : undefined;
+                        vm.file = undefined;
+                        loadingModalService.close();
+                    });
+            } else {
+                notificationService.error('adminIsaManage.fileIsNotSelected');
             }
         }
     }

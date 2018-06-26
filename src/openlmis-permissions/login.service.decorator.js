@@ -60,13 +60,13 @@
          */
         function login() {
             return originalLogin.apply($delegate, arguments)
-            .then(function(response) {
-                return userRightsFactory.buildRights(response.userId)
-                .then(function(rights) {
-                    authorizationService.setRights(rights);
-                    return response;
+                .then(function(response) {
+                    return userRightsFactory.buildRights(response.userId)
+                        .then(function(rights) {
+                            authorizationService.setRights(rights);
+                            return response;
+                        });
                 });
-            });
         }
 
         /**
@@ -81,7 +81,7 @@
          */
         function logout() {
             return originalLogout.apply($delegate, arguments)
-            .then(authorizationService.clearRights);
+                .then(authorizationService.clearRights);
         }
     }
 })();

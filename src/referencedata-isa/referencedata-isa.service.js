@@ -33,14 +33,14 @@
     function service($resource, referencedataUrlFactory) {
 
         var resource = $resource(referencedataUrlFactory('/api/idealStockAmounts/:id'), {}, {
-                'upload': {
-                    url: referencedataUrlFactory('/api/idealStockAmounts?format=csv'),
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': undefined
-                    }
+            upload: {
+                url: referencedataUrlFactory('/api/idealStockAmounts?format=csv'),
+                method: 'POST',
+                headers: {
+                    'Content-Type': undefined
                 }
-            });
+            }
+        });
 
         return {
             getDownloadUrl: getDownloadUrl,

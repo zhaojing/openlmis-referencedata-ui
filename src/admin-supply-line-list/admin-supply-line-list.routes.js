@@ -36,9 +36,9 @@
                     var deferred = $q.defer();
 
                     facilityService.search(null, {})
-                    .then(function(response) {
-                        deferred.resolve(response.content);
-                    }, deferred.reject);
+                        .then(function(response) {
+                            deferred.resolve(response.content);
+                        }, deferred.reject);
 
                     return deferred.promise;
                 },

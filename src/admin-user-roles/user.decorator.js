@@ -61,22 +61,19 @@
          * @param {String} warehouseName       the name of the warehouse that will be assigned with role
          */
         function addRoleAssignment(roleId, roleName, roleType, programId, programName,
-                                    supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
+                                   supervisoryNodeId, supervisoryNodeName, warehouseId, warehouseName) {
             validateRoleAssignment(this, roleId, roleName, roleType, programId, programName,
-                                   supervisoryNodeId, supervisoryNodeName, warehouseId);
-            this.roleAssignments.push(
-                new RoleAssignment(
-                    this,
-                    roleId,
-                    warehouseId,
-                    supervisoryNodeId,
-                    programId,
-                    roleName,
-                    roleType,
-                    programName,
-                    supervisoryNodeName,
-                    warehouseName
-                ));
+                supervisoryNodeId, supervisoryNodeName, warehouseId);
+            this.roleAssignments.push(new RoleAssignment(this,
+                roleId,
+                warehouseId,
+                supervisoryNodeId,
+                programId,
+                roleName,
+                roleType,
+                programName,
+                supervisoryNodeName,
+                warehouseName));
         }
 
         /**
@@ -91,12 +88,14 @@
          */
         function removeRoleAssignment(roleAssignment) {
             var index = this.roleAssignments.indexOf(roleAssignment);
-            if (index < 0) return;
+            if (index < 0) {
+                return;
+            }
             this.roleAssignments.splice(index, 1);
         }
 
         function validateRoleAssignment(user, roleId, roleName, roleType, programId, programName,
-                                            supervisoryNodeId, supervisoryNodeName, warehouseId) {
+                                        supervisoryNodeId, supervisoryNodeName, warehouseId) {
             if (isRoleAssignmentInvalid(programId, supervisoryNodeId, warehouseId)) {
                 throw new Error('referencedataRoles.roleAssignmentInvalid');
             } else if (isRoleAlreadyAssigned(user.roleAssignments, roleId, programId, supervisoryNodeId, warehouseId)) {

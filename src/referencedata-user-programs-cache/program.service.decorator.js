@@ -37,7 +37,7 @@
     function decorator($delegate, localStorageFactory) {
         var userProgramsCache = localStorageFactory('userPrograms');
 
-            $delegate.clearUserProgramsCache = clearCache;
+        $delegate.clearUserProgramsCache = clearCache;
 
         return $delegate;
 

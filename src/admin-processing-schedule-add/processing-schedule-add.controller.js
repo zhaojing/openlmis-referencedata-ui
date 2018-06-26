@@ -22,7 +22,8 @@
      * @name admin-processing-schedule-add.controller:ProcessingScheduleAddController
      *
      * @description
-     * Provides methods for Add Processing Schedule modal. Allows returning to previous states and saving Processing Schedule.
+     * Provides methods for Add Processing Schedule modal. Allows returning to previous states and saving Processing
+     * Schedule.
      */
     angular
         .module('admin-processing-schedule-add')
@@ -34,7 +35,7 @@
     ];
 
     function ProcessingScheduleAddController(confirmService, processingScheduleService, stateTrackerService,
-                        loadingModalService, notificationService, messageService) {
+                                             loadingModalService, notificationService, messageService) {
         var vm = this;
 
         vm.save = save;
@@ -64,21 +65,21 @@
                 processingSchedule: vm.processingSchedule.name
             });
 
-            confirmService.confirm(
-                confirmMessage,
-                'adminProcessingScheduleAdd.save'
-            ).then(function() {
-                var loadingPromise = loadingModalService.open();
-                processingScheduleService.create(vm.processingSchedule).then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success('adminProcessingScheduleAdd.save.success');
-                    });
-                    stateTrackerService.goToPreviousState('openlmis.administration.processingSchedules');
-                }).catch(function() {
-                    loadingModalService.close();
-                    notificationService.error('adminProcessingScheduleAdd.save.fail');
+            confirmService.confirm(confirmMessage, 'adminProcessingScheduleAdd.save')
+                .then(function() {
+                    var loadingPromise = loadingModalService.open();
+                    processingScheduleService.create(vm.processingSchedule)
+                        .then(function() {
+                            loadingPromise.then(function() {
+                                notificationService.success('adminProcessingScheduleAdd.save.success');
+                            });
+                            stateTrackerService.goToPreviousState('openlmis.administration.processingSchedules');
+                        })
+                        .catch(function() {
+                            loadingModalService.close();
+                            notificationService.error('adminProcessingScheduleAdd.save.fail');
+                        });
                 });
-            });
         }
     }
 

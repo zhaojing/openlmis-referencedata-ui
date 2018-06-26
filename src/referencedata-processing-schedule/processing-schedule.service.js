@@ -33,12 +33,12 @@
     function service($resource, referencedataUrlFactory) {
 
         var resource = $resource(referencedataUrlFactory('/api/processingSchedules/:id'), {}, {
-                query: {
-                    url: referencedataUrlFactory('/api/processingSchedules'),
-                    method: 'GET',
-                    isArray: false
-                }
-            });
+            query: {
+                url: referencedataUrlFactory('/api/processingSchedules'),
+                method: 'GET',
+                isArray: false
+            }
+        });
 
         this.get = get;
         this.query = query;
@@ -56,7 +56,9 @@
          * @return {Promise}    Processing Schedule promise
          */
         function get(id) {
-            return resource.get({id: id}).$promise;
+            return resource.get({
+                id: id
+            }).$promise;
         }
 
         /**

@@ -30,19 +30,19 @@
 
     function types() {
         var ROLE_TYPES = {
-            SUPERVISION: 'SUPERVISION',
-            ORDER_FULFILLMENT: 'ORDER_FULFILLMENT',
-            REPORTS: 'REPORTS',
-            GENERAL_ADMIN: 'GENERAL_ADMIN',
-            getLabel: getLabel,
-            getRoleTypes: getRoleTypes
-        },
-        labels = {
-            SUPERVISION: 'referencedataRoles.supervision',
-            ORDER_FULFILLMENT: 'referencedataRoles.fulfillment',
-            REPORTS: 'referencedataRoles.reports',
-            GENERAL_ADMIN: 'referencedataRoles.administration'
-        };
+                SUPERVISION: 'SUPERVISION',
+                ORDER_FULFILLMENT: 'ORDER_FULFILLMENT',
+                REPORTS: 'REPORTS',
+                GENERAL_ADMIN: 'GENERAL_ADMIN',
+                getLabel: getLabel,
+                getRoleTypes: getRoleTypes
+            },
+            labels = {
+                SUPERVISION: 'referencedataRoles.supervision',
+                ORDER_FULFILLMENT: 'referencedataRoles.fulfillment',
+                REPORTS: 'referencedataRoles.reports',
+                GENERAL_ADMIN: 'referencedataRoles.administration'
+            };
 
         return ROLE_TYPES;
 

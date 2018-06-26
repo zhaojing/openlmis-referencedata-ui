@@ -76,7 +76,14 @@
          */
         function getUserPrograms(isSupervised) {
             var programIds = [];
-            if (!isSupervised) {
+            if (isSupervised) {
+                permissions.forEach(function(permission) {
+                    if (rights.indexOf(permission.right) !== -1 &&
+                        (!homeFacility || (homeFacility && homeFacility.id !== permission.facilityId))) {
+                        programIds.push(permission.programId);
+                    }
+                });
+            } else {
                 if (!homeFacility) {
                     return [];
                 }
@@ -84,14 +91,6 @@
                 permissions.forEach(function(permission) {
                     if (rights.indexOf(permission.right) !== -1 && homeFacility.id === permission.facilityId) {
                         programIds.push(permission.programId);
-                    }
-                });
-            } else {
-                permissions.forEach(function(permission) {
-                    if (rights.indexOf(permission.right) !== -1) {
-                        if (!homeFacility || (homeFacility && homeFacility.id !== permission.facilityId)) {
-                            programIds.push(permission.programId);
-                        }
                     }
                 });
             }
@@ -170,16 +169,16 @@
                 permissionService.load(userId),
                 currentUserService.getUserInfo()
             ])
-            .then(function(responses) {
-                facilities = responses[0];
-                programs = responses[1];
-                permissions = responses[2];
+                .then(function(responses) {
+                    facilities = responses[0];
+                    programs = responses[1];
+                    permissions = responses[2];
 
-                loadRights(moduleName);
+                    loadRights(moduleName);
 
-                var currentUserDetails = responses[3];
-                homeFacility = getFacilityById(currentUserDetails.homeFacilityId);
-            });
+                    var currentUserDetails = responses[3];
+                    homeFacility = getFacilityById(currentUserDetails.homeFacilityId);
+                });
         }
 
         function getFacilityById(id) {

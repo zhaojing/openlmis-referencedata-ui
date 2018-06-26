@@ -20,7 +20,9 @@
     angular.module('referencedata-user-programs-cache')
         .run(initUserProgramCacheService);
 
-    initUserProgramCacheService.$inject = ['$q', '$rootScope', 'programService', 'authorizationService', 'loadingService'];
+    initUserProgramCacheService.$inject = [
+        '$q', '$rootScope', 'programService', 'authorizationService', 'loadingService'
+    ];
 
     function initUserProgramCacheService($q, $rootScope, programService) {
 

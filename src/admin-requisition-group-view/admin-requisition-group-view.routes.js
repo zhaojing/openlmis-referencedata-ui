@@ -40,7 +40,9 @@
                 },
                 memberFacilities: function($stateParams, paginationService, requisitionGroup, facilityFactory) {
                     return paginationService.registerList(null, $stateParams, function() {
-                        return facilityFactory.searchAndOrderFacilities(requisitionGroup.memberFacilities, $stateParams.facilityName, 'name');
+                        return facilityFactory.searchAndOrderFacilities(
+                            requisitionGroup.memberFacilities, $stateParams.facilityName, 'name'
+                        );
                     });
                 }
             }

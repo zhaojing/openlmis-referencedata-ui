@@ -103,9 +103,9 @@
          * Holds options for sorting user list.
          */
         vm.options = {
-            'firstName': 'adminUserList.firstName',
-            'lastName': 'adminUserList.lastName',
-            'username': 'adminUserList.username'
+            firstName: 'adminUserList.firstName',
+            lastName: 'adminUserList.lastName',
+            username: 'adminUserList.username'
         };
 
         /**

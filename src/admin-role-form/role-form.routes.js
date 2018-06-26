@@ -30,8 +30,12 @@
                     return $stateParams.roleId ? referencedataRoleService.get($stateParams.roleId) : undefined;
                 },
                 type: function(role, $state, $stateParams) {
-                    if (role) return role.rights[0].type;
-                    if ($stateParams.type) return $stateParams.type;
+                    if (role) {
+                        return role.rights[0].type;
+                    }
+                    if ($stateParams.type) {
+                        return $stateParams.type;
+                    }
                     $state.go('openlmis.administration.roles.selectType');
                 },
                 rights: function($q, $filter, role, type, referencedataRightService) {

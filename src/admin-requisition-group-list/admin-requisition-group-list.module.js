@@ -21,7 +21,8 @@
      * @module admin-requisition-group-list
      *
      * @description
-     * Provides base admin requisition group state and controller for retrieving list of requisition groups from the OpenLMIS server.
+     * Provides base admin requisition group state and controller for retrieving list of requisition groups from the
+     * OpenLMIS server.
      */
     angular.module('admin-requisition-group-list', [
         'openlmis-pagination',

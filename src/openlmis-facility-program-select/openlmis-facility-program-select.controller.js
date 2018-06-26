@@ -49,22 +49,21 @@
          */
         function onInit() {
             facilityProgramCacheService.loadData(vm.module)
-            .then(function() {
-                vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
-                vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(true);
-                vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
-                vm.programs = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
+                .then(function() {
+                    vm.homeFacility = facilityProgramCacheService.getUserHomeFacility();
+                    vm.supervisedPrograms = facilityProgramCacheService.getUserPrograms(true);
+                    vm.isSupervised = $stateParams.supervised === 'true' || !vm.homeFacility;
+                    vm.programs = facilityProgramCacheService.getUserPrograms(vm.isSupervised);
 
-                if ($stateParams.program) {
-                    vm.program = $filter('filter')(vm.programs,
-                        {
-                            id: $stateParams.program
-                        }
-                    )[0];
-                }
+                    if ($stateParams.program) {
+                        vm.program = $filter('filter')(vm.programs,
+                            {
+                                id: $stateParams.program
+                            })[0];
+                    }
 
-                vm.updateFacilities(true);
-            });
+                    vm.updateFacilities(true);
+                });
         }
 
         /**
@@ -97,17 +96,16 @@
             if (!vm.isSupervised) {
                 vm.facilities = [vm.homeFacility];
                 vm.facility = vm.facilities[0];
-            } else if (!vm.program) {
-                vm.facilities = [];
-            } else {
+            } else if (vm.program) {
                 vm.facilities = facilityProgramCacheService.getSupervisedFacilities(vm.program.id);
                 if (isInit) {
                     vm.facility = $filter('filter')(vm.facilities,
                         {
                             id: $stateParams.facility
-                        }
-                    )[0];
+                        })[0];
                 }
+            } else {
+                vm.facilities = [];
             }
         }
     }

@@ -53,13 +53,13 @@
             params.processingScheduleId = scheduleId;
 
             return periodService.query(params)
-            .then(function(page) {
-                page.content.forEach(function(period) {
-                    period.startDate = dateUtils.toDate(period.startDate);
-                    period.endDate = dateUtils.toDate(period.endDate);
+                .then(function(page) {
+                    page.content.forEach(function(period) {
+                        period.startDate = dateUtils.toDate(period.startDate);
+                        period.endDate = dateUtils.toDate(period.endDate);
+                    });
+                    return page;
                 });
-                return page;
-            });
         }
 
         /**
@@ -81,13 +81,13 @@
                 sort: 'startDate,desc',
                 processingScheduleId: scheduleId
             })
-            .then(function(page) {
-                if (page.content && page.content.length > 0) {
-                    var lastEndDate = dateUtils.toDate(page.content[0].endDate);
-                    return dateUtils.addDaysToDate(lastEndDate, 1);
-                }
-                return undefined;
-            });
+                .then(function(page) {
+                    if (page.content && page.content.length > 0) {
+                        var lastEndDate = dateUtils.toDate(page.content[0].endDate);
+                        return dateUtils.addDaysToDate(lastEndDate, 1);
+                    }
+                    return undefined;
+                });
         }
     }
 })();

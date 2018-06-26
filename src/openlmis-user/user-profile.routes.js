@@ -61,7 +61,7 @@
                 roleRightsMap: function(roles, ObjectMapper) {
                     return new ObjectMapper().map(roles, 'rights');
                 },
-                pendingVerificationEmail: function (userId, authUserService) {
+                pendingVerificationEmail: function(userId, authUserService) {
                     return authUserService.getVerificationEmail(userId);
                 }
             }

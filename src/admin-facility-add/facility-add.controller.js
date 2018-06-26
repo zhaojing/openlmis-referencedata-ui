@@ -76,11 +76,9 @@
                     facility: response.name
                 });
 
-                confirmService.confirm(
-                    confirmMessage,
+                confirmService.confirm(confirmMessage,
                     'adminFacilityAdd.addPrograms',
-                    'adminFacilityAdd.cancel'
-                ).then(function() {
+                    'adminFacilityAdd.cancel').then(function() {
                     $state.go('openlmis.administration.facilities.facility.programs', {
                         facility: response
                     });
@@ -91,15 +89,15 @@
         function doSave() {
             loadingModalService.open();
             return facilityService.save(vm.facility)
-            .then(function(facility) {
-                notificationService.success('adminFacilityAdd.facilityHasBeenSaved');
-                stateTrackerService.goToPreviousState();
-                return facility;
-            })
-            .catch(function() {
-                notificationService.error('adminFacilityAdd.failedToSaveFacility');
-                loadingModalService.close();
-            });
+                .then(function(facility) {
+                    notificationService.success('adminFacilityAdd.facilityHasBeenSaved');
+                    stateTrackerService.goToPreviousState();
+                    return facility;
+                })
+                .catch(function() {
+                    notificationService.error('adminFacilityAdd.failedToSaveFacility');
+                    loadingModalService.close();
+                });
         }
     }
 

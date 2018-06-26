@@ -54,13 +54,13 @@
          */
         function login() {
             return originalLogin.apply($delegate, arguments)
-            .then(function(response) {
-                return currencyService.getCurrencySettings()
-                .catch(currencyService.getCurrencySettingsFromConfig)
-                .then(function() {
-                    return response;
+                .then(function(response) {
+                    return currencyService.getCurrencySettings()
+                        .catch(currencyService.getCurrencySettingsFromConfig)
+                        .then(function() {
+                            return response;
+                        });
                 });
-            });
         }
     }
 })();

@@ -22,7 +22,8 @@
     * @name admin-processing-schedule-edit.controller:ProcessingScheduleEditController
     *
     * @description
-    * Provides methods for Edit Processing Schedule modal. Allows returning to previous states and editing Processing Schedule.
+    * Provides methods for Edit Processing Schedule modal. Allows returning to previous states and editing Processing
+    * Schedule.
     */
     angular
         .module('admin-processing-schedule-edit')
@@ -33,8 +34,9 @@
         '$state', 'loadingModalService', 'notificationService', 'messageService', 'newStartDate'
     ];
 
-    function ProcessingScheduleEditController(processingSchedule, processingPeriods, confirmService, periodService, stateTrackerService,
-                                            $state, loadingModalService, notificationService, messageService, newStartDate) {
+    function ProcessingScheduleEditController(processingSchedule, processingPeriods, confirmService, periodService,
+                                              stateTrackerService, $state, loadingModalService, notificationService,
+                                              messageService, newStartDate) {
 
         var vm = this;
 
@@ -107,20 +109,19 @@
                 period: vm.newPeriod.name
             });
 
-            confirmService.confirm(
-                confirmMessage,
-                'adminProcessingScheduleEdit.add'
-            ).then(function() {
+            confirmService.confirm(confirmMessage,
+                'adminProcessingScheduleEdit.add').then(function() {
                 var loadingPromise = loadingModalService.open();
                 periodService.create(vm.newPeriod).then(function() {
                     loadingPromise.then(function() {
                         notificationService.success('adminProcessingScheduleEdit.add.success');
                     });
                     $state.reload('openlmis.administration.processingSchedules.edit');
-                }).catch(function() {
-                    loadingModalService.close();
-                    notificationService.error('adminProcessingScheduleEdit.add.fail');
-                });
+                })
+                    .catch(function() {
+                        loadingModalService.close();
+                        notificationService.error('adminProcessingScheduleEdit.add.fail');
+                    });
             });
         }
     }

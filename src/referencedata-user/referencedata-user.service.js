@@ -13,8 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
-(function(){
+(function() {
 
     'use strict';
 
@@ -67,10 +66,12 @@
          * @return {Promise}    the user info
          */
         function get(id) {
-            return resource.get({id: id}).$promise
-            .then(function(response) {
-                return userFactory.buildUserFromResponse(response);
-            });
+            return resource.get({
+                id: id
+            }).$promise
+                .then(function(response) {
+                    return userFactory.buildUserFromResponse(response);
+                });
         }
 
         /**
@@ -107,11 +108,11 @@
          */
         function search(params) {
             var paginationParams = {
-                page: params.page,
-                size: params.size,
-                sort: params.sort
-            },
-            queryParams = angular.copy(params);
+                    page: params.page,
+                    size: params.size,
+                    sort: params.sort
+                },
+                queryParams = angular.copy(params);
 
             delete queryParams.page;
             delete queryParams.size;

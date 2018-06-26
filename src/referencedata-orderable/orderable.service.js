@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 (function() {
 
     'use strict';
@@ -31,14 +30,14 @@
 
     service.$inject = ['openlmisUrlFactory', '$resource'];
 
-    function service(openlmisUrlFactory, $resource){
+    function service(openlmisUrlFactory, $resource) {
 
         var resource = $resource(openlmisUrlFactory('/api/orderables/:id'), {}, {
-                'search': {
-                    url: openlmisUrlFactory('/api/orderables'),
-                    method: 'GET'
-                }
-            });
+            search: {
+                url: openlmisUrlFactory('/api/orderables'),
+                method: 'GET'
+            }
+        });
 
         return {
             get: get,
@@ -57,7 +56,9 @@
          * @return {Promise}    orderable info
          */
         function get(id) {
-            return resource.get({id: id}).$promise;
+            return resource.get({
+                id: id
+            }).$promise;
         }
 
         /**

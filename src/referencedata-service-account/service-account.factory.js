@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+(function() {
 
     'use strict';
 
@@ -50,9 +50,9 @@
         function create() {
             return apiKeysService.create().then(function(apiKey) {
                 return serviceAccountService.create(apiKey.token)
-                .then(function() {
-                    return apiKey;
-                });
+                    .then(function() {
+                        return apiKey;
+                    });
             });
         }
 
@@ -69,9 +69,9 @@
          */
         function remove(token) {
             return serviceAccountService.remove(token)
-            .then(function() {
-                return apiKeysService.remove(token);
-            });
+                .then(function() {
+                    return apiKeysService.remove(token);
+                });
         }
     }
 })();

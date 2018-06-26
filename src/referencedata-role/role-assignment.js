@@ -71,11 +71,11 @@
         }
 
         function validateRoleAssignment(assignment, user) {
-           if (assignment.type === ROLE_TYPES.SUPERVISION
+            if (assignment.type === ROLE_TYPES.SUPERVISION
                    && !assignment.supervisoryNodeId
                    && !user.homeFacilityId) {
-               assignment.errors.push('referencedataRoles.homeFacilityRoleInvalid');
-           }
+                assignment.errors.push('referencedataRoles.homeFacilityRoleInvalid');
+            }
         }
     }
 })();

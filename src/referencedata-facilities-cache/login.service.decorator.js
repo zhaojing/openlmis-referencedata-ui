@@ -57,12 +57,12 @@
          */
         function login() {
             return originalLogin.apply($delegate, arguments)
-            .then(function(response) {
-                return facilityFactory.getAllMinimalFacilities()
-                .then(function() {
-                    return response;
+                .then(function(response) {
+                    return facilityFactory.getAllMinimalFacilities()
+                        .then(function() {
+                            return response;
+                        });
                 });
-            });
         }
 
         /**
@@ -75,7 +75,7 @@
          */
         function logout() {
             return originalLogout.apply($delegate, arguments)
-            .then(facilityService.clearMinimalFacilitiesCache);
+                .then(facilityService.clearMinimalFacilitiesCache);
         }
     }
 })();

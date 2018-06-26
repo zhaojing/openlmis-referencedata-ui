@@ -34,7 +34,7 @@
     ];
 
     function controller($q, $state, facility, facilityTypes, geographicZones, facilityOperators,
-        programs, facilityService, loadingModalService, notificationService) {
+                        programs, facilityService, loadingModalService, notificationService) {
 
         var vm = this;
 
@@ -162,11 +162,9 @@
          * Saves facility details and redirects to facility list screen.
          */
         function saveFacilityDetails() {
-            doSave(
-                vm.facilityDetails,
+            doSave(vm.facilityDetails,
                 'adminFacilityView.saveFacility.success',
-                'adminFacilityView.saveFacility.fail'
-            );
+                'adminFacilityView.saveFacility.fail');
         }
 
         /**
@@ -178,11 +176,9 @@
          * Saves facility with supported programs and redirects to facility list screen.
          */
         function saveFacilityWithPrograms() {
-            doSave(
-                vm.facilityWithPrograms,
+            doSave(vm.facilityWithPrograms,
                 'adminFacilityView.saveFacility.success',
-                'adminFacilityView.saveFacility.fail'
-            );
+                'adminFacilityView.saveFacility.fail');
         }
 
         /**
@@ -217,11 +213,12 @@
                 notificationService.success(successMessage);
                 goToFacilityList();
                 return $q.resolve(facility);
-            }).catch(function() {
-                notificationService.error(errorMessage);
-                loadingModalService.close();
-                return $q.reject();
-            });
+            })
+                .catch(function() {
+                    notificationService.error(errorMessage);
+                    loadingModalService.close();
+                    return $q.reject();
+                });
         }
     }
 })();

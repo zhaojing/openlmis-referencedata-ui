@@ -28,15 +28,15 @@
         .module('admin-user-form')
         .controller('UserFormController', controller);
 
-        controller.$inject = [
-            'user', 'facilities', 'pendingVerificationEmail', 'loadingModalService',
-            'confirmService', '$filter', '$state', 'notificationService',
-            'userPasswordModalFactory', 'authUserService'
-        ];
+    controller.$inject = [
+        'user', 'facilities', 'pendingVerificationEmail', 'loadingModalService',
+        'confirmService', '$filter', '$state', 'notificationService',
+        'userPasswordModalFactory', 'authUserService'
+    ];
 
-        function controller(user, facilities, pendingVerificationEmail, loadingModalService,
-                            confirmService, $filter, $state, notificationService,
-                            userPasswordModalFactory, authUserService) {
+    function controller(user, facilities, pendingVerificationEmail, loadingModalService,
+                        confirmService, $filter, $state, notificationService,
+                        userPasswordModalFactory, authUserService) {
 
         var vm = this;
 
@@ -179,12 +179,12 @@
                     }, function() {
                         return processUpdateUser(false);
                     });
-                } else {
-                    return processUpdateUser(false);
                 }
-            } else {
-                return processCreateUser();
+                return processUpdateUser(false);
+
             }
+            return processCreateUser();
+
         }
 
         /**
@@ -230,14 +230,14 @@
         function processCreateUser() {
             loadingModalService.open(true);
             return createUser()
-            .then(function(savedUser) {
-                loadingModalService.close();
-                notificationService.success(vm.notification);
+                .then(function(savedUser) {
+                    loadingModalService.close();
+                    notificationService.success(vm.notification);
 
-                userPasswordModalFactory.createPassword(savedUser)
-                .finally(goToUserList);
-            })
-            .catch(loadingModalService.close);
+                    userPasswordModalFactory.createPassword(savedUser)
+                        .finally(goToUserList);
+                })
+                .catch(loadingModalService.close);
         }
 
         /**
@@ -266,18 +266,16 @@
          */
         function removeHomeFacilityRightsConfirmation() {
             var message = {
-                'messageKey': 'adminUserForm.removeHomeFacility.confirmation',
-                'messageParams': {
-                    'facility': vm.initialHomeFacility.name,
-                    'username': vm.user.username
+                messageKey: 'adminUserForm.removeHomeFacility.confirmation',
+                messageParams: {
+                    facility: vm.initialHomeFacility.name,
+                    username: vm.user.username
                 }
             };
 
-            return confirmService.confirmDestroy(
-                message,
+            return confirmService.confirmDestroy(message,
                 'adminUserForm.removeHomeFacility.removeRoles',
-                'adminUserForm.removeHomeFacility.keepRoles'
-            );
+                'adminUserForm.removeHomeFacility.keepRoles');
         }
 
         /**
@@ -290,7 +288,10 @@
          * After confirmation removes home facility and all role assignments for home facility.
          */
         function removeHomeFacility() {
-            confirmService.confirmDestroy('adminUserForm.removeHomeFacility.question', 'adminUserForm.removeHomeFacility.label').then(function() {
+            confirmService.confirmDestroy(
+                'adminUserForm.removeHomeFacility.question',
+                'adminUserForm.removeHomeFacility.label'
+            ).then(function() {
                 vm.user.homeFacility = undefined;
                 vm.user.homeFacilityId = undefined;
                 vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
@@ -307,9 +308,9 @@
          */
         function sendVerificationEmail() {
             return authUserService.sendVerificationEmail(vm.user.id)
-            .then(function() {
-                notificationService.success('adminUserForm.sendVerificationEmail.success');
-            });
+                .then(function() {
+                    notificationService.success('adminUserForm.sendVerificationEmail.success');
+                });
         }
 
         function goToUserList() {

@@ -46,7 +46,7 @@
                         var params = angular.copy(stateParams);
 
                         if (!params.sort) {
-                            params.sort = "name";
+                            params.sort = 'name';
                         }
 
                         return geographicZoneService.search(params);

@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 (function() {
 
     'use strict';
@@ -120,14 +119,14 @@
             loadingModalService.open();
 
             return authUserService.saveUser(vm.user)
-            .then(function() {
-                $state.reload();
-                notificationService.success('openlmisUser.updateProfile.updateSuccessful');
-            })
-            .catch(function() {
-                notificationService.error('openlmisUser.updateProfile.updateFailed');
-                loadingModalService.close();
-            });
+                .then(function() {
+                    $state.reload();
+                    notificationService.success('openlmisUser.updateProfile.updateSuccessful');
+                })
+                .catch(function() {
+                    notificationService.error('openlmisUser.updateProfile.updateFailed');
+                    loadingModalService.close();
+                });
         }
 
         /**
@@ -156,20 +155,20 @@
          */
         function changePassword() {
             userPasswordModalFactory.resetPassword(user)
-            .then(function() {
-                loginService.logout()
                 .then(function() {
-                    return alertService.info({
-                        title: 'openlmisUser.passwordResetAlert.title',
-                        message: 'openlmisUser.passwordResetAlert.message',
-                        buttonLabel: 'openlmisUser.passwordResetAlert.label'
-                    });
-                })
-                .then(function() {
-                    $rootScope.$emit('openlmis-auth.logout');
-                    $state.go('auth.login');
+                    loginService.logout()
+                        .then(function() {
+                            return alertService.info({
+                                title: 'openlmisUser.passwordResetAlert.title',
+                                message: 'openlmisUser.passwordResetAlert.message',
+                                buttonLabel: 'openlmisUser.passwordResetAlert.label'
+                            });
+                        })
+                        .then(function() {
+                            $rootScope.$emit('openlmis-auth.logout');
+                            $state.go('auth.login');
+                        });
                 });
-            });
         }
 
         /**
@@ -182,9 +181,9 @@
          */
         function sendVerificationEmail() {
             return authUserService.sendVerificationEmail(vm.user.id)
-            .then(function() {
-                notificationService.success('openlmisUser.sendVerificationEmail.success');
-            });
+                .then(function() {
+                    notificationService.success('openlmisUser.sendVerificationEmail.success');
+                });
         }
 
     }

@@ -49,16 +49,16 @@
          */
         function getAllSupervisoryNodesWithDisplay() {
             return supervisoryNodeService.query()
-            .then(function(supervisoryNodePage) {
-                supervisoryNodePage.content.forEach(function(node) {
-                    if (node.facility) {
-                        node.$display = node.name + ' (' + node.facility.name + ')';
-                    } else {
-                        node.$display = node.name;
-                    }
+                .then(function(supervisoryNodePage) {
+                    supervisoryNodePage.content.forEach(function(node) {
+                        if (node.facility) {
+                            node.$display = node.name + ' (' + node.facility.name + ')';
+                        } else {
+                            node.$display = node.name;
+                        }
+                    });
+                    return supervisoryNodePage.content;
                 });
-                return supervisoryNodePage.content;
-            });
         }
 
         /**
@@ -86,7 +86,7 @@
                     var filtered = $filter('filter')(facilities, {
                         id: node.facility.id
                     });
-                    if(filtered && filtered.length > 0) {
+                    if (filtered && filtered.length > 0) {
                         node.$facility = filtered[0];
                     }
                 });

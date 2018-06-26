@@ -42,9 +42,9 @@
             return facilityTypeService.query({
                 active: true
             })
-            .then(function(response) {
-                return response.content;
-            });
+                .then(function(response) {
+                    return response.content;
+                });
         }
 
         facilityOperatorsResolve.$inject = ['facilityOperatorService'];

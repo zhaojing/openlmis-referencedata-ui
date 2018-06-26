@@ -25,8 +25,8 @@
      * Responsible for retrieving all facility information from server.
      */
     angular
-    .module('referencedata-facility')
-    .service('facilityService', service);
+        .module('referencedata-facility')
+        .service('facilityService', service);
 
     service.$inject = [
         '$q', '$resource', 'referencedataUrlFactory', 'offlineService',
@@ -34,9 +34,9 @@
     ];
 
     function service($q, $resource, referencedataUrlFactory, offlineService,
-        localStorageFactory, permissionService) {
+                     localStorageFactory, permissionService) {
 
-            var facilitiesOffline = localStorageFactory('facilities'),
+        var facilitiesOffline = localStorageFactory('facilities'),
             resource = $resource(referencedataUrlFactory('/api/facilities/:id'), {}, {
                 query: {
                     url: referencedataUrlFactory('/api/facilities/'),
@@ -66,16 +66,16 @@
                 }
             });
 
-            this.get = get;
-            this.query = query;
-            this.getAllMinimal = getAllMinimal;
-            this.getUserFacilitiesForRight = getUserFacilitiesForRight;
-            this.getUserSupervisedFacilities = getUserSupervisedFacilities;
-            this.getFulfillmentFacilities = getFulfillmentFacilities;
-            this.search = search;
-            this.save = save;
+        this.get = get;
+        this.query = query;
+        this.getAllMinimal = getAllMinimal;
+        this.getUserFacilitiesForRight = getUserFacilitiesForRight;
+        this.getUserSupervisedFacilities = getUserSupervisedFacilities;
+        this.getFulfillmentFacilities = getFulfillmentFacilities;
+        this.search = search;
+        this.save = save;
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name get
@@ -87,26 +87,28 @@
              * @param  {String}  facilityId Facility UUID
              * @return {Promise}            facility promise
              */
-            function get(facilityId) {
-                var facility,
+        function get(facilityId) {
+            var facility,
                 deferred = $q.defer();
 
-                if(offlineService.isOffline()) {
-                    facility = facilitiesOffline.getBy('id', facilityId);
-                    facility ? deferred.resolve(facility) : deferred.reject();
-                } else {
-                    resource.get({id: facilityId}, function(data) {
-                        facilitiesOffline.put(data);
-                        deferred.resolve(data);
-                    }, function() {
-                        deferred.reject();
-                    });
-                }
-
-                return deferred.promise;
+            if (offlineService.isOffline()) {
+                facility = facilitiesOffline.getBy('id', facilityId);
+                facility ? deferred.resolve(facility) : deferred.reject();
+            } else {
+                resource.get({
+                    id: facilityId
+                }, function(data) {
+                    facilitiesOffline.put(data);
+                    deferred.resolve(data);
+                }, function() {
+                    deferred.reject();
+                });
             }
 
-            /**
+            return deferred.promise;
+        }
+
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name query
@@ -119,26 +121,26 @@
              * @param  {String}  queryParams      the search parameters
              * @return {Promise} Array of facilities
              */
-            function query(queryParams) {
-                var deferred = $q.defer();
+        function query(queryParams) {
+            var deferred = $q.defer();
 
-                if(offlineService.isOffline()) {
-                    deferred.resolve(facilitiesOffline.getAll());
-                } else {
-                    resource.query(queryParams, function(facilities) {
-                        angular.forEach(facilities, function(facility) {
-                            facilitiesOffline.put(facility);
-                        });
-                        deferred.resolve(facilities);
-                    }, function() {
-                        deferred.reject();
+            if (offlineService.isOffline()) {
+                deferred.resolve(facilitiesOffline.getAll());
+            } else {
+                resource.query(queryParams, function(facilities) {
+                    angular.forEach(facilities, function(facility) {
+                        facilitiesOffline.put(facility);
                     });
-                }
-
-                return deferred.promise;
+                    deferred.resolve(facilities);
+                }, function() {
+                    deferred.reject();
+                });
             }
 
-            /**
+            return deferred.promise;
+        }
+
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name search
@@ -150,11 +152,11 @@
              * @param  {Object}  queryParams      the search parameters
              * @return {Promise}                  the requested page of filtered facilities.
              */
-            function search(paginationParams, queryParams) {
-                return resource.search(paginationParams, queryParams).$promise;
-            }
+        function search(paginationParams, queryParams) {
+            return resource.search(paginationParams, queryParams).$promise;
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name getUserSupervisedFacilities
@@ -169,37 +171,37 @@
              * @param  {String}  rightId   Right UUID
              * @return {Promise}           supervised facilities for user
              */
-            function getUserSupervisedFacilities(userId, programId, rightId) {
-                var deferred = $q.defer();
-                if(offlineService.isOffline()) {
-                    var facilities = facilitiesOffline.search({
-                        userIdOffline: userId,
-                        programIdOffline: programId,
-                        rightIdOffline: rightId
+        function getUserSupervisedFacilities(userId, programId, rightId) {
+            var deferred = $q.defer();
+            if (offlineService.isOffline()) {
+                var facilities = facilitiesOffline.search({
+                    userIdOffline: userId,
+                    programIdOffline: programId,
+                    rightIdOffline: rightId
+                });
+                deferred.resolve(facilities);
+            } else {
+                resource.getUserSupervisedFacilities({
+                    userId: userId,
+                    programId: programId,
+                    rightId: rightId
+                }, function(response) {
+                    angular.forEach(response, function(facility) {
+                        var storageFacility = angular.copy(facility);
+                        storageFacility.userIdOffline = userId;
+                        storageFacility.programIdOffline = programId;
+                        storageFacility.rightIdOffline = rightId;
+                        facilitiesOffline.put(storageFacility);
                     });
-                    deferred.resolve(facilities);
-                } else {
-                    resource.getUserSupervisedFacilities({
-                        userId: userId,
-                        programId: programId,
-                        rightId: rightId
-                    }, function(response) {
-                        angular.forEach(response, function(facility) {
-                            var storageFacility = angular.copy(facility);
-                            storageFacility.userIdOffline = userId;
-                            storageFacility.programIdOffline = programId;
-                            storageFacility.rightIdOffline = rightId;
-                            facilitiesOffline.put(storageFacility);
-                        });
-                        deferred.resolve(response);
-                    }, function() {
-                        deferred.reject();
-                    });
-                }
-                return deferred.promise;
+                    deferred.resolve(response);
+                }, function() {
+                    deferred.reject();
+                });
             }
+            return deferred.promise;
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name save
@@ -210,16 +212,16 @@
              * @param   {Object}    facility    the facility to be saveDeferred
              * @return  {Promise}               the saved facility
              */
-            function save(facility) {
-                if (facility.id) {
-                    return resource.update({
-                        id: facility.id
-                    }, facility).$promise;
-                }
-                return resource.save(null, facility).$promise;
+        function save(facility) {
+            if (facility.id) {
+                return resource.update({
+                    id: facility.id
+                }, facility).$promise;
             }
+            return resource.save(null, facility).$promise;
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name getFulfillmentFacilities
@@ -230,12 +232,11 @@
              * @param  {Object}  params the request params with userId and right id
              * @return {Promise}        fulfillment facilities for given user and right
              */
-            function getFulfillmentFacilities(params) {
-                return resource.getFulfillmentFacilities(params).$promise;
-            }
+        function getFulfillmentFacilities(params) {
+            return resource.getFulfillmentFacilities(params).$promise;
+        }
 
-
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name getUserFacilitiesForRight
@@ -248,38 +249,38 @@
              * @param  {String}  right  The right name that we are checking
              * @return {Promise}        An array of matching facilities.
              */
-            function getUserFacilitiesForRight(userId, right) {
-                if(!userId || !right) {
-                    return $q.reject();
-                }
-                return $q.all({
-                    permissions: permissionService.load(userId),
-                    minimalFacilities: this.getAllMinimal()
-                })
+        function getUserFacilitiesForRight(userId, right) {
+            if (!userId || !right) {
+                return $q.reject();
+            }
+            return $q.all({
+                permissions: permissionService.load(userId),
+                minimalFacilities: this.getAllMinimal()
+            })
                 .then(function(results) {
                     var permissions = results.permissions,
                         minimalFacilities = results.minimalFacilities,
                         facilityHash = {};
 
                     permissions.forEach(function(permission) {
-                        if(permission.right === right) {
-                            if(!facilityHash[permission.facilityId]) {
+                        if (permission.right === right) {
+                            if (!facilityHash[permission.facilityId]) {
                                 facilityHash[permission.facilityId] = {
                                     id: permission.facilityId,
                                     supportedPrograms: []
                                 };
                             }
 
-                            if(permission.programId) {
+                            if (permission.programId) {
                                 facilityHash[permission.facilityId].supportedPrograms.push({
-                                    id:permission.programId
+                                    id: permission.programId
                                 });
                             }
                         }
                     });
 
                     minimalFacilities.forEach(function(facility) {
-                        if(facilityHash[facility.id]) {
+                        if (facilityHash[facility.id]) {
                             _.extend(facilityHash[facility.id], facility);
                         }
                     });
@@ -293,9 +294,9 @@
 
                     return _.sortBy(facilities, 'name');
                 });
-            }
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility.facilityService
              * @name getAllMinimal
@@ -306,14 +307,14 @@
              * @param  {Object}  paginationParams the pagination params: page, size, sort
              * @return {Promise} Array of facilities with minimal representation
              */
-            function getAllMinimal(paginationParams) {
-                var params = (paginationParams) ? paginationParams : {};
-                if (!params.hasOwnProperty('sort')) {
-                    params.sort = 'name';
-                }
-                return resource.getAllMinimal(params).$promise.then(function(response) {
-                    return response.content;
-                });
+        function getAllMinimal(paginationParams) {
+            var params = (paginationParams) ? paginationParams : {};
+            if (!params.hasOwnProperty('sort')) {
+                params.sort = 'name';
             }
+            return resource.getAllMinimal(params).$promise.then(function(response) {
+                return response.content;
+            });
         }
-    })();
+    }
+})();

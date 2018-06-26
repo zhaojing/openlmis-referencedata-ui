@@ -46,9 +46,11 @@
          * @param  {String}  description                            the description of the program to be created
          * @param  {Boolean} active                                 true if the program is active
          * @param  {Boolean} periodsSkippable                       true if the period is the program can be skipped
-         * @param  {Boolean} skipAuthorization                      true if this program does not go through authorization step
+         * @param  {Boolean} skipAuthorization                      true if this program does not go through
+         *                                                          authorization step
          * @param  {Boolean} showNonFullSupplyTab                   true if non full supply tab should be shown
-         * @param  {Boolean} enableDatePhysicalStockCountCompleted  true if date physical stock count completed is enabled
+         * @param  {Boolean} enableDatePhysicalStockCountCompleted  true if date physical stock count completed is
+         *                                                          enabled
          * @return {Object}                                         the program object
          */
         function Program(id, code, name, description, active, periodsSkippable, skipAuthorization,

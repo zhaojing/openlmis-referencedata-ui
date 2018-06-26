@@ -50,14 +50,14 @@
             });
 
             return $q.all(requests)
-            .then(function(responses) {
-                return responses.reduce(function(left, right) {
-                    Object.keys(right).forEach(function(key) {
-                        left[key] = right[key];
+                .then(function(responses) {
+                    return responses.reduce(function(left, right) {
+                        Object.keys(right).forEach(function(key) {
+                            left[key] = right[key];
+                        });
+                        return left;
                     });
-                    return left;
                 });
-            });
         }
     }
 })();

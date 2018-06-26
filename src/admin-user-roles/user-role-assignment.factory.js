@@ -55,13 +55,14 @@
         function getUser(userId, roles, programs, supervisoryNodes, warehouses) {
 
             return referencedataUserService.get(userId)
-            .then(function(response) {
-                var user = new User(response);
+                .then(function(response) {
+                    var user = new User(response);
 
-                addInfoToRoleAssignments(user, response.roleAssignments, roles, programs, supervisoryNodes, warehouses);
+                    addInfoToRoleAssignments(user, response.roleAssignments, roles, programs, supervisoryNodes,
+                        warehouses);
 
-                return user;
-            });
+                    return user;
+                });
         }
 
         function addInfoToRoleAssignments(user, roleAssignments, roles, programs, supervisoryNodes, warehouses) {

@@ -142,11 +142,11 @@
          * 'right' property, then it is immediately rejected.
          */
         function testPermission(userId, permission, permissionMatchFn) {
-            if(!permission) {
+            if (!permission) {
                 return $q.reject();
             }
 
-            if(!permission.hasOwnProperty('right')) {
+            if (!permission.hasOwnProperty('right')) {
                 return $q.reject();
             }
 
@@ -154,7 +154,7 @@
 
             this.load(userId)
                 .then(function(permissionsList) {
-                    if(testPermissions(permissionsList, permission, permissionMatchFn)) {
+                    if (testPermissions(permissionsList, permission, permissionMatchFn)) {
                         deferred.resolve();
                     } else {
                         deferred.reject();
@@ -169,8 +169,9 @@
 
         function testPermissions(permissionsList, permission, permissionMatchFn) {
             var i = 0;
-            for(i; i < permissionsList.length; i++) {
-                if(permissionMatchFn(permissionsList[i], permission.right, permission.facilityId, permission.programId)) {
+            for (i; i < permissionsList.length; i++) {
+                if (permissionMatchFn(permissionsList[i], permission.right, permission.facilityId,
+                    permission.programId)) {
                     return true;
                 }
             }
@@ -211,23 +212,23 @@
          * - The user isn't authenticated
          */
         function load(userId) {
-            if(!userId) {
+            if (!userId) {
                 savedUserId = undefined;
                 this.empty();
                 return $q.reject();
             }
 
-            if(userId !== savedUserId) {
+            if (userId !== savedUserId) {
                 savedUserId = userId;
                 this.empty();
             }
 
             return getCachedPermissions()
-            .catch(function() {
-                return getPermissionStringsFromServer(userId)
-                .then(parsePermissionStrings)
-                .then(savePermissions);
-            });
+                .catch(function() {
+                    return getPermissionStringsFromServer(userId)
+                        .then(parsePermissionStrings)
+                        .then(savePermissions);
+                });
         }
 
         function parsePermissionStrings(permissionStrings) {
@@ -242,30 +243,30 @@
         }
 
         function getPermissionStringsFromServer(userId) {
-            if(!userId) {
+            if (!userId) {
                 return $q.reject();
             }
 
             var deferred = $q.defer();
 
             $http.get(openlmisUrlFactory('/api/users/' + userId + '/permissionStrings'))
-            .then(function(response) {
-                deferred.resolve(response.data);
-            })
-            .catch(function() {
-                deferred.reject();
-            });
+                .then(function(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function() {
+                    deferred.reject();
+                });
 
             return deferred.promise;
         }
 
         function getCachedPermissions() {
             var permissions = angular.fromJson(localStorageService.get('permissions'));
-            if(permissions && Array.isArray(permissions)) {
+            if (permissions && Array.isArray(permissions)) {
                 return $q.resolve(permissions);
-            } else {
-                return $q.reject();
             }
+            return $q.reject();
+
         }
 
         function savePermissions(permissions) {

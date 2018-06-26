@@ -75,7 +75,9 @@
          * @return {Promise}    Program info
          */
         function get(id) {
-            return resource.get({id: id}).$promise;
+            return resource.get({
+                id: id
+            }).$promise;
         }
 
         /**
@@ -145,18 +147,20 @@
                 return $q.resolve(cachedPrograms);
             }
 
-            return resource.getUserPrograms({userId: userId})
-            .$promise
-            .then(function(programs) {
-                programs.forEach(function(program) {
-                    program.userIdOffline = userId;
-                    userProgramsCache.put(program);
-                });
-                return programs;
+            return resource.getUserPrograms({
+                userId: userId
             })
-            .catch(function() {
-                return $q.reject();
-            });
+                .$promise
+                .then(function(programs) {
+                    programs.forEach(function(program) {
+                        program.userIdOffline = userId;
+                        userProgramsCache.put(program);
+                    });
+                    return programs;
+                })
+                .catch(function() {
+                    return $q.reject();
+                });
         }
 
         /**
@@ -171,7 +175,9 @@
          * @return {Promise}        Array of programs
          */
         function getUserSupportedPrograms(userId) {
-            return resource.getUserSupportedPrograms({userId: userId}).$promise;
+            return resource.getUserSupportedPrograms({
+                userId: userId
+            }).$promise;
         }
     }
 })();

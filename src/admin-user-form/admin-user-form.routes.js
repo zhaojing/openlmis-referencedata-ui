@@ -32,7 +32,7 @@
                     return facilityService.getAllMinimal();
                 },
                 user: function(referencedataUserService, $stateParams) {
-                    if($stateParams.id) {
+                    if ($stateParams.id) {
                         return referencedataUserService.get($stateParams.id);
                     }
                     return undefined;

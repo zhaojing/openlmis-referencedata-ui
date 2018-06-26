@@ -34,7 +34,7 @@
     ];
 
     function controller(user, title, hideCancel, modalDeferred, authUserService,
-        loadingModalService, notificationService) {
+                        loadingModalService, notificationService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -112,32 +112,32 @@
 
             loadingModalService.open();
 
-            if(vm.isEmailResetSelected) {
+            if (vm.isEmailResetSelected) {
                 actionPromise = sendResetEmail();
             } else {
                 actionPromise = resetPassword();
             }
 
             return actionPromise
-            .finally(loadingModalService.close);
+                .finally(loadingModalService.close);
         }
 
         function resetPassword() {
             return authUserService.resetPassword(vm.user.username, vm.user.newPassword)
-            .then(function() {
-                notificationService.success('adminUserForm.passwordSetSuccessfully');
-                modalDeferred.resolve();
-            });
+                .then(function() {
+                    notificationService.success('adminUserForm.passwordSetSuccessfully');
+                    modalDeferred.resolve();
+                });
         }
 
         function sendResetEmail() {
             loadingModalService.open();
 
             return authUserService.sendResetEmail(vm.user.email)
-            .then(function() {
-                notificationService.success('adminUserForm.passwordResetSuccessfully');
-                modalDeferred.resolve();
-            });
+                .then(function() {
+                    notificationService.success('adminUserForm.passwordResetSuccessfully');
+                    modalDeferred.resolve();
+                });
         }
     }
 })();

@@ -34,24 +34,24 @@
 
     function service($resource, referencedataUrlFactory) {
 
-            var resource = $resource(referencedataUrlFactory('/api/facilityTypes/:id'), {}, {
-                query: {
-                    url: referencedataUrlFactory('/api/facilityTypes'),
-                    method: 'GET',
-                    isArray: false
-                },
-                update: {
-                    url: referencedataUrlFactory('/api/facilityTypes/:id'),
-                    method: 'PUT'
-                }
-            });
+        var resource = $resource(referencedataUrlFactory('/api/facilityTypes/:id'), {}, {
+            query: {
+                url: referencedataUrlFactory('/api/facilityTypes'),
+                method: 'GET',
+                isArray: false
+            },
+            update: {
+                url: referencedataUrlFactory('/api/facilityTypes/:id'),
+                method: 'PUT'
+            }
+        });
 
-            this.get = get;
-            this.query = query;
-            this.update = update;
-            this.create = create;
+        this.get = get;
+        this.query = query;
+        this.update = update;
+        this.create = create;
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility-type.facilityTypeService
              * @name get
@@ -62,13 +62,13 @@
              * @param  {String}  facilityTypeId facilityType UUID
              * @return {Promise}                facilityType promise
              */
-            function get(facilityTypeId) {
-                return resource.get({
-                    id: facilityTypeId
-                }).$promise;
-            }
+        function get(facilityTypeId) {
+            return resource.get({
+                id: facilityTypeId
+            }).$promise;
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility-type.facilityTypeService
              * @name getAll
@@ -79,11 +79,11 @@
              * @param  {Object}  queryParams the search parameters
              * @return {Promise} Page of facility types
              */
-            function query(queryParams) {
-                return resource.query(queryParams).$promise;
-            }
+        function query(queryParams) {
+            return resource.query(queryParams).$promise;
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility-type.facilityTypeService
              * @name update
@@ -94,13 +94,13 @@
              * @param  {Object}  facilityType facility type that will be saved
              * @return {Promise}              updated facility type
              */
-            function update(facilityType) {
-                return resource.update({
-                    id: facilityType.id
-                }, facilityType).$promise;
-            }
+        function update(facilityType) {
+            return resource.update({
+                id: facilityType.id
+            }, facilityType).$promise;
+        }
 
-            /**
+        /**
              * @ngdoc method
              * @methodOf referencedata-facility-type.facilityTypeService
              * @name create
@@ -111,8 +111,8 @@
              * @param  {Object}  facilityType facility type that will be created
              * @return {Promise}              created facility type
              */
-            function create(facilityType) {
-                return resource.save(facilityType).$promise;
-            }
+        function create(facilityType) {
+            return resource.save(facilityType).$promise;
         }
-    })();
+    }
+})();

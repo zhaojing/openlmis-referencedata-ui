@@ -56,7 +56,7 @@
                         var filtered = $filter('filter')(programs, {
                             id: programOrderable.programId
                         });
-                        if(filtered && filtered.length > 0) {
+                        if (filtered && filtered.length > 0) {
                             programOrderable.$program = filtered[0];
                         }
                     });

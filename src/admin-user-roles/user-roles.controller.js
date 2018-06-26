@@ -28,7 +28,9 @@
         .module('admin-user-roles')
         .controller('UserRolesController', controller);
 
-    controller.$inject = ['user', 'authUserService', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'];
+    controller.$inject = [
+        'user', 'authUserService', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'
+    ];
 
     function controller(user, authUserService, loadingModalService, $state, notificationService, ROLE_TYPES) {
 
@@ -94,7 +96,8 @@
                 goToUserList();
             }, function() {
                 notificationService.error('adminUserRoles.updateFailed');
-            }).finally(loadingModalService.close);
+            })
+                .finally(loadingModalService.close);
         }
 
         /**

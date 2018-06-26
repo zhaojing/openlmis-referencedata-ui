@@ -52,7 +52,7 @@
          * @return {Object}                         the geographic zone object
          */
         function GeographicZone(id, code, name, level, catchmentPopulation, latitude, longitude,
-            boundary, parent) {
+                                boundary, parent) {
             this.id = id;
             this.code = code;
             this.name = name;

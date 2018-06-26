@@ -39,9 +39,9 @@
         var originalGetAllMinimal = $delegate.getAllMinimal,
             minimalFacilitiesCache = localStorageFactory('referencedataMinimalFacilities');
 
-            $delegate.getAllMinimal = cachedGetAllMinimal;
-            $delegate.getMinimal = getMinimal;
-            $delegate.clearMinimalFacilitiesCache = clearCache;
+        $delegate.getAllMinimal = cachedGetAllMinimal;
+        $delegate.getMinimal = getMinimal;
+        $delegate.clearMinimalFacilitiesCache = clearCache;
 
         return $delegate;
 
@@ -58,10 +58,10 @@
         function cachedGetAllMinimal() {
             var cachedFacilities = minimalFacilitiesCache.getAll();
 
-            if(cachedFacilities.length > 0) {
+            if (cachedFacilities.length > 0) {
                 return $q.resolve(cachedFacilities);
-            } else {
-                return originalGetAllMinimal.apply($delegate, arguments)
+            }
+            return originalGetAllMinimal.apply($delegate, arguments)
                 .then(function(facilities) {
                     facilities.forEach(function(facility) {
                         minimalFacilitiesCache.put(facility);
@@ -69,7 +69,7 @@
 
                     return facilities;
                 });
-            }
+
         }
 
         /**
@@ -96,13 +96,12 @@
          * @return {Object} found facility object
          */
         function getMinimal(id) {
-            return cachedGetAllMinimal().then(function (facilities) {
-                return facilities.filter(function (facility) {
+            return cachedGetAllMinimal().then(function(facilities) {
+                return facilities.filter(function(facility) {
                     return facility.id === id;
                 })[0];
             });
         }
     }
-
 
 })();

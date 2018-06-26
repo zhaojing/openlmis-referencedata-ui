@@ -56,12 +56,12 @@
          */
         function login() {
             return originalLogin.apply($delegate, arguments)
-            .then(function(response) {
-                return currentUserService.getUserInfo()
-                .then(function() {
-                    return response;
+                .then(function(response) {
+                    return currentUserService.getUserInfo()
+                        .then(function() {
+                            return response;
+                        });
                 });
-            });
         }
 
         /**
@@ -74,7 +74,7 @@
          */
         function logout() {
             return originalLogout.apply($delegate, arguments)
-            .then(currentUserService.clearCache);
+                .then(currentUserService.clearCache);
         }
     }
 })();

@@ -76,7 +76,7 @@
                 displayOrder: 1,
                 active: true
             };
-            vm.editMode = facilityType ? true : false;
+            vm.editMode = !!facilityType;
         }
 
         /**
@@ -87,27 +87,31 @@
          * @description
          * Saves the Facility Type after confirm.
          */
-        function save() {           
+        function save() {
             confirmService.confirm(
                 vm.editMode ? 'adminFacilityTypeEdit.save.question' : 'adminFacilityTypeEdit.create.question',
                 vm.editMode ? 'adminFacilityTypeEdit.save' : 'adminFacilityTypeEdit.create'
-            )
-            .then(function() {
+            ).then(function() {
                 loadingModalService.open();
                 getSavePromise()
-                .then(function() {
-                    notificationService.success(vm.editMode ? 'adminFacilityTypeEdit.save.success' : 'adminFacilityTypeEdit.create.success');
-                    stateTrackerService.goToPreviousState();
-                })
-                .catch(function() {
-                    loadingModalService.close();
-                    notificationService.error(vm.editMode ? 'adminFacilityTypeEdit.save.failure' : 'adminFacilityTypeEdit.create.failure');
-                });
+                    .then(function() {
+                        notificationService.success(vm.editMode ?
+                            'adminFacilityTypeEdit.save.success' : 'adminFacilityTypeEdit.create.success');
+                        stateTrackerService.goToPreviousState();
+                    })
+                    .catch(function() {
+                        loadingModalService.close();
+                        notificationService.error(
+                            vm.editMode ? 'adminFacilityTypeEdit.save.failure' : 'adminFacilityTypeEdit.create.failure'
+                        );
+                    });
             });
         }
 
         function getSavePromise() {
-            return vm.editMode ? facilityTypeService.update(vm.facilityType) : facilityTypeService.create(vm.facilityType);
+            return vm.editMode ?
+                facilityTypeService.update(vm.facilityType) :
+                facilityTypeService.create(vm.facilityType);
         }
     }
 })();

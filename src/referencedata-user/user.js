@@ -91,12 +91,12 @@
          */
         function getRoleAssignments(type) {
             return this.roleAssignments
-            .filter(function(role) {
-                return !type || role.type === type;
-            })
-            .sort(function(a, b) {
-                return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);
-            });
+                .filter(function(role) {
+                    return !type || role.type === type;
+                })
+                .sort(function(a, b) {
+                    return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);
+                });
         }
     }
 })();

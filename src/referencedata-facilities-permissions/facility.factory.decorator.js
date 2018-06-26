@@ -22,7 +22,8 @@
      * @name referencedata-facilities-permissions.facilityFactory
      *
      * @description
-     * Decorates the facility factory with method for getting supervised facilities based on permission strings and on right.
+     * Decorates the facility factory with method for getting supervised facilities based on permission strings and on
+     * right.
      */
     angular.module('referencedata-facilities-permissions')
         .config(config);
@@ -58,22 +59,22 @@
                 permissionService.load(user.user_id),
                 facilityService.getAllMinimal()
             ])
-            .then(function(responses) {
-                var permissionStrings = responses[0],
-                    minimalFacilities = responses[1];
+                .then(function(responses) {
+                    var permissionStrings = responses[0],
+                        minimalFacilities = responses[1];
 
-                var filteredPermissionStrings = permissionStrings.filter(function(permissionString) {
-                    return rights.indexOf(permissionString.right) >= 0;
-                });
+                    var filteredPermissionStrings = permissionStrings.filter(function(permissionString) {
+                        return rights.indexOf(permissionString.right) >= 0;
+                    });
 
-                var facilityIds = filteredPermissionStrings.map(function(permissionString) {
-                    return permissionString.facilityId;
-                });
+                    var facilityIds = filteredPermissionStrings.map(function(permissionString) {
+                        return permissionString.facilityId;
+                    });
 
-                return minimalFacilities.filter(function(facility) {
-                    return facilityIds.indexOf(facility.id) >= 0;
+                    return minimalFacilities.filter(function(facility) {
+                        return facilityIds.indexOf(facility.id) >= 0;
+                    });
                 });
-            });
         }
     }
 })();

@@ -65,10 +65,10 @@
             }
 
             return referencedataUserService.get(authUser.user_id)
-            .then(function (refUser) {
-                localStorageService.add(CURRENT_USER, refUser.toJson());
-                return refUser;
-            });
+                .then(function(refUser) {
+                    localStorageService.add(CURRENT_USER, refUser.toJson());
+                    return refUser;
+                });
         }
 
         /**

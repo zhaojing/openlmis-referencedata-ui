@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+(function() {
 
     'use strict';
 
@@ -63,23 +63,23 @@
         function buildRights(userId) {
             var deferred = $q.defer();
 
-            if(!userId) {
+            if (!userId) {
                 return $q.reject();
             }
 
             permissionService.load(userId)
-            .then(buildRightsObject)
-            .then(function(rights) {
-                return addProgramCodeToRights(userId, rights);
-            })
-            .then(function(rights) {
-                var rightsArray = [];
-                Object.keys(rights).forEach(function(key) {
-                    rightsArray.push(rights[key]);
-                });
-                deferred.resolve(rightsArray);
-            })
-            .catch(deferred.reject);
+                .then(buildRightsObject)
+                .then(function(rights) {
+                    return addProgramCodeToRights(userId, rights);
+                })
+                .then(function(rights) {
+                    var rightsArray = [];
+                    Object.keys(rights).forEach(function(key) {
+                        rightsArray.push(rights[key]);
+                    });
+                    deferred.resolve(rightsArray);
+                })
+                .catch(deferred.reject);
 
             return deferred.promise;
         }
@@ -100,7 +100,7 @@
             var rights = {};
 
             function getRight(permission) {
-                if(!rights.hasOwnProperty(permission.right)){
+                if (!rights.hasOwnProperty(permission.right)) {
                     rights[permission.right] = {
                         name: permission.right,
                         programIds: [],
@@ -115,12 +115,12 @@
             permissions.forEach(function(permission) {
                 var right = getRight(permission);
 
-                if(permission.programId && right.programIds.indexOf(permission.programId) === -1) {
+                if (permission.programId && right.programIds.indexOf(permission.programId) === -1) {
                     right.programIds.push(permission.programId);
                     right.isDirect = false;
                 }
 
-                if(permission.facilityId && right.facilityIds.indexOf(permission.facilityId) === -1) {
+                if (permission.facilityId && right.facilityIds.indexOf(permission.facilityId) === -1) {
                     right.facilityIds.push(permission.facilityId);
                     right.isDirect = false;
                 }
@@ -146,20 +146,20 @@
             var deferred = $q.defer();
 
             programService.getUserPrograms(userId)
-            .then(function(programs) {
-                var programsHash = {};
-                programs.forEach(function(program) {
-                    programsHash[program.id] = program.code;
-                });
-                return $q.resolve(programsHash);
-            })
-            .then(function(programsHash) {
-                Object.keys(rights).forEach(function(key) {
-                    addProgramCodes(rights[key], programsHash);
-                });
+                .then(function(programs) {
+                    var programsHash = {};
+                    programs.forEach(function(program) {
+                        programsHash[program.id] = program.code;
+                    });
+                    return $q.resolve(programsHash);
+                })
+                .then(function(programsHash) {
+                    Object.keys(rights).forEach(function(key) {
+                        addProgramCodes(rights[key], programsHash);
+                    });
 
-                deferred.resolve(rights);
-            });
+                    deferred.resolve(rights);
+                });
 
             return deferred.promise;
         }
@@ -167,7 +167,7 @@
         function addProgramCodes(right, programsHash) {
             right.programCodes = [];
             right.programIds.forEach(function(programId) {
-                if(programsHash[programId]) {
+                if (programsHash[programId]) {
                     right.programCodes.push(programsHash[programId]);
                 }
             });

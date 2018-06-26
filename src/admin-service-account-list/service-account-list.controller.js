@@ -28,9 +28,13 @@
         .module('admin-service-account-list')
         .controller('ServiceAccountListController', controller);
 
-    controller.$inject = ['$state', 'serviceAccounts', 'serviceAccountFactory', 'confirmService', 'loadingModalService', 'notificationService', 'messageService'];
+    controller.$inject = [
+        '$state', 'serviceAccounts', 'serviceAccountFactory', 'confirmService', 'loadingModalService',
+        'notificationService', 'messageService'
+    ];
 
-    function controller($state, serviceAccounts, serviceAccountFactory, confirmService, loadingModalService, notificationService, messageService) {
+    function controller($state, serviceAccounts, serviceAccountFactory, confirmService, loadingModalService,
+                        notificationService, messageService) {
 
         var vm = this;
 
@@ -71,23 +75,23 @@
          */
         function add() {
             confirmService.confirm('adminServiceAccount.add.question', 'adminServiceAccount.add')
-            .then(function() {
-                var loadingPromise = loadingModalService.open();
-                serviceAccountFactory.create()
-                .then(function(response) {
-                    var successMessage = messageService.get('adminServiceAccount.add.success', {
-                        key: response.token
-                    });
-                    loadingPromise.then(function() {
-                        notificationService.success(successMessage);
-                    });
-                    $state.reload();
-                })
-                .catch(function() {
-                    notificationService.error('adminServiceAccount.add.failure');
-                    loadingModalService.close();
+                .then(function() {
+                    var loadingPromise = loadingModalService.open();
+                    serviceAccountFactory.create()
+                        .then(function(response) {
+                            var successMessage = messageService.get('adminServiceAccount.add.success', {
+                                key: response.token
+                            });
+                            loadingPromise.then(function() {
+                                notificationService.success(successMessage);
+                            });
+                            $state.reload();
+                        })
+                        .catch(function() {
+                            notificationService.error('adminServiceAccount.add.failure');
+                            loadingModalService.close();
+                        });
                 });
-            });
         }
 
         /**
@@ -111,20 +115,20 @@
                     key: token
                 });
             confirmService.confirm(questionMessage, 'adminServiceAccount.delete')
-            .then(function() {
-                var loadingPromise = loadingModalService.open();
-                serviceAccountFactory.remove(token)
                 .then(function() {
-                    loadingPromise.then(function() {
-                        notificationService.success(successMessage);
-                    });
-                    $state.reload();
-                })
-                .catch(function() {
-                    notificationService.error(failureMessage);
-                    loadingModalService.close();
+                    var loadingPromise = loadingModalService.open();
+                    serviceAccountFactory.remove(token)
+                        .then(function() {
+                            loadingPromise.then(function() {
+                                notificationService.success(successMessage);
+                            });
+                            $state.reload();
+                        })
+                        .catch(function() {
+                            notificationService.error(failureMessage);
+                            loadingModalService.close();
+                        });
                 });
-            });
         }
     }
 })();

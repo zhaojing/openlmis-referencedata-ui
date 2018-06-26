@@ -34,7 +34,7 @@
 
         var referencedataUrl = '@@REFERENCEDATA_SERVICE_URL';
 
-        if (referencedataUrl.substr(0, 2) == '@@') {
+        if (referencedataUrl.substr(0, 2) === '@@') {
             referencedataUrl = '';
         }
 
