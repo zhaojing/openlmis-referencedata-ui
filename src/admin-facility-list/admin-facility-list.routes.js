@@ -15,48 +15,48 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-facility-list').config(routes);
+    angular.module('admin-facility-list').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.facilities', {
-			showInNavigation: true,
-			label: 'adminFacilityList.facilities',
-			url: '/facilities?name&zoneId&page&size',
-			controller: 'FacilityListController',
-			templateUrl: 'admin-facility-list/facility-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
-			resolve: {
-				facilities: function(paginationService, facilityService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
-						var params = angular.copy(stateParams),
-							page = stateParams.page,
-							size = stateParams.size;
+        $stateProvider.state('openlmis.administration.facilities', {
+            showInNavigation: true,
+            label: 'adminFacilityList.facilities',
+            url: '/facilities?name&zoneId&page&size',
+            controller: 'FacilityListController',
+            templateUrl: 'admin-facility-list/facility-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.FACILITIES_MANAGE],
+            resolve: {
+                facilities: function(paginationService, facilityService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var params = angular.copy(stateParams),
+                            page = stateParams.page,
+                            size = stateParams.size;
 
-						delete params.page;
-						delete params.size;
+                        delete params.page;
+                        delete params.size;
 
-						return facilityService.search({
-							page: page,
-							size: size
-						}, params);
-					});
-				},
-				geographicZones: function($q, geographicZoneService) {
-					var deferred = $q.defer();
+                        return facilityService.search({
+                            page: page,
+                            size: size
+                        }, params);
+                    });
+                },
+                geographicZones: function($q, geographicZoneService) {
+                    var deferred = $q.defer();
 
-					geographicZoneService.getAll().then(function(response) {
-						deferred.resolve(response.content);
-					}, deferred.reject);
+                    geographicZoneService.getAll().then(function(response) {
+                        deferred.resolve(response.content);
+                    }, deferred.reject);
 
-					return deferred.promise;
-				}
-			}
-		});
-	}
+                    return deferred.promise;
+                }
+            }
+        });
+    }
 })();

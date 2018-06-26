@@ -45,7 +45,7 @@
                     newPassword: undefined,
                     email: user.email
                 }
-            }
+            };
 
             return openlmisModalService.createDialog({
                 controller: 'UserPasswordModalController',

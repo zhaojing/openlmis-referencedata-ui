@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+(function() {
 
     'use strict';
 
@@ -30,23 +30,23 @@
 
     service.$inject = ['openlmisUrlFactory', '$resource', '$q', 'offlineService', 'localStorageFactory'];
 
-    function service(openlmisUrlFactory, $resource, $q, offlineService, localStorageFactory){
+    function service(openlmisUrlFactory, $resource, $q, offlineService, localStorageFactory) {
 
         var resource = $resource(openlmisUrlFactory('/api/programs/:id'), {}, {
-                'getAll': {
+                getAll: {
                     url: openlmisUrlFactory('/api/programs'),
                     method: 'GET',
                     isArray: true
                 },
-                'getUserPrograms': {
+                getUserPrograms: {
                     url: openlmisUrlFactory('api/users/:userId/programs'),
                     method: 'GET',
                     isArray: true
                 },
-                'update': {
+                update: {
                     method: 'PUT'
                 },
-                'getUserSupportedPrograms': {
+                getUserSupportedPrograms: {
                     url: openlmisUrlFactory('api/users/:userId/supportedPrograms'),
                     method: 'GET',
                     isArray: true
@@ -142,7 +142,7 @@
             });
 
             if (cachedPrograms && cachedPrograms.length) {
-                return $q.resolve(cachedPrograms)
+                return $q.resolve(cachedPrograms);
             }
 
             return resource.getUserPrograms({userId: userId})

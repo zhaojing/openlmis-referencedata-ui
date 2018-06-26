@@ -15,18 +15,18 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	/**
+    /**
      * @ngdoc service
      * @name referencedata-period.periodService
      *
      * @description
      * Responsible for retrieving all processing period information from the server.
      */
-	angular
-		.module('referencedata-period')
-	    .service('periodService', service);
+    angular
+        .module('referencedata-period')
+        .service('periodService', service);
 
     service.$inject = ['$resource', 'referencedataUrlFactory', 'dateUtils'];
 
@@ -43,7 +43,7 @@
         this.query = query;
         this.create = create;
 
-		/**
+        /**
          * @ngdoc method
          * @name get
          * @methodOf referencedata-period.periodService
@@ -56,8 +56,8 @@
          */
         function get(periodId) {
             return resource.get({
-				id: periodId
-			}).$promise;
+                id: periodId
+            }).$promise;
         }
 
         /**

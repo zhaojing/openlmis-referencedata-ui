@@ -15,42 +15,42 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-product-list').config(routes);
+    angular.module('admin-product-list').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.products', {
-			showInNavigation: true,
-			label: 'adminProductList.products',
-			url: '/products?code&name&description&program&page&size',
-			controller: 'ProductListController',
-			templateUrl: 'admin-product-list/product-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
-			resolve: {
+        $stateProvider.state('openlmis.administration.products', {
+            showInNavigation: true,
+            label: 'adminProductList.products',
+            url: '/products?code&name&description&program&page&size',
+            controller: 'ProductListController',
+            templateUrl: 'admin-product-list/product-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
+            resolve: {
                 programs: function(programService) {
                     return programService.getAll();
                 },
-				products: function(paginationService, orderableService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
+                products: function(paginationService, orderableService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
-							page = stateParams.page,
-							size = stateParams.size;
+                            page = stateParams.page,
+                            size = stateParams.size;
 
-						delete params.page;
-						delete params.size;
+                        delete params.page;
+                        delete params.size;
 
-						return orderableService.search({
-							page: page,
-							size: size
-						}, params);
-					});
-				}
-			}
-		});
-	}
+                        return orderableService.search({
+                            page: page,
+                            size: size
+                        }, params);
+                    });
+                }
+            }
+        });
+    }
 })();

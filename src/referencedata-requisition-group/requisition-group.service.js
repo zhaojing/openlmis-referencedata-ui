@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function(){
+(function() {
 
     'use strict';
 
@@ -28,21 +28,21 @@
         .module('referencedata-requisition-group')
         .factory('requisitionGroupService', service);
 
-    service.$inject = ['referencedataUrlFactory', '$resource', '$q'];
+    service.$inject = ['referencedataUrlFactory', '$resource'];
 
-    function service(referencedataUrlFactory, $resource, $q){
+    function service(referencedataUrlFactory, $resource) {
 
         var resource = $resource(referencedataUrlFactory('/api/requisitionGroups/:id'), {}, {
-                'getAll': {
-                    url: referencedataUrlFactory('/api/requisitionGroups'),
-                    method: 'GET',
-                    isArray: true
-                },
-                'search': {
-                    url: referencedataUrlFactory('/api/requisitionGroups/search'),
-                    method: 'POST'
-                }
-            });
+            getAll: {
+                url: referencedataUrlFactory('/api/requisitionGroups'),
+                method: 'GET',
+                isArray: true
+            },
+            search: {
+                url: referencedataUrlFactory('/api/requisitionGroups/search'),
+                method: 'POST'
+            }
+        });
 
         return {
             get: get,

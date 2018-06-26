@@ -51,7 +51,8 @@
     service.$inject = ['$q', '$http', 'openlmisUrlFactory', 'localStorageService', 'Permission'];
 
     function service($q, $http, openlmisUrlFactory, localStorageService, Permission) {
-        var savedUserId;  // Used in service.load
+        // Used in service.load
+        var savedUserId;
 
         this.hasPermission = hasPermission;
         this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
@@ -183,9 +184,8 @@
                 && permission.programId === programId;
         }
 
-        function permissionMatchWithAnyProgram(permission, right, facilityId, programId) {
-            return permission.right === right && 
-                permission.facilityId === facilityId;
+        function permissionMatchWithAnyProgram(permission, right, facilityId) {
+            return permission.right === right && permission.facilityId === facilityId;
         }
 
         function permissionMatchWithAnyProgramAndAnyFacility(permission, right) {

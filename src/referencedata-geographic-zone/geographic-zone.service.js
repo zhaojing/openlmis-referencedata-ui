@@ -73,7 +73,7 @@
          * Gets all geographic zones.
          *
          * @param  {Object}  paginationParams the pagination params: page and size
-         * @return {Promise} 			      the paginated object of all geographic zones
+         * @return {Promise}                   the paginated object of all geographic zones
          */
         function getAll(paginationParams) {
             return resource.getAll(paginationParams).$promise;

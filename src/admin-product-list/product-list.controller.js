@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,14 +24,14 @@
      * @description
      * Controller for managing product list screen.
      */
-	angular
-		.module('admin-product-list')
-		.controller('ProductListController', controller);
+    angular
+        .module('admin-product-list')
+        .controller('ProductListController', controller);
 
-	controller.$inject = ['$state', '$stateParams', 'products', 'programs'];
+    controller.$inject = ['$state', '$stateParams', 'products', 'programs'];
 
-	function controller($state, $stateParams, products, programs) {
-		var vm = this;
+    function controller($state, $stateParams, products, programs) {
+        var vm = this;
 
         vm.$onInit = onInit;
         vm.search = search;
@@ -45,7 +45,7 @@
          * @description
          * Contains filtered products.
          */
-		vm.products = undefined;
+        vm.products = undefined;
 
         /**
          * @ngdoc property
@@ -56,7 +56,7 @@
          * @description
          * Contains list of all programs.
          */
-		vm.programs = undefined;
+        vm.programs = undefined;
 
         /**
          * @ngdoc property
@@ -67,7 +67,7 @@
          * @description
          * Contains code param for searching products.
          */
-		vm.code = undefined;
+        vm.code = undefined;
 
         /**
          * @ngdoc property
@@ -78,7 +78,7 @@
          * @description
          * Contains name param for searching products.
          */
-		vm.name = undefined;
+        vm.name = undefined;
 
         /**
          * @ngdoc property
@@ -100,14 +100,14 @@
          * Method that is executed on initiating ProductListController.
          */
         function onInit() {
-			vm.products = products;
-			vm.programs = programs;
+            vm.products = products;
+            vm.programs = programs;
             vm.code = $stateParams.code;
-    		vm.name = $stateParams.name;
+            vm.name = $stateParams.name;
             vm.program = $stateParams.program;
         }
 
-		/**
+        /**
          * @ngdoc method
          * @methodOf admin-product-list.controller:ProductListController
          * @name search
@@ -115,17 +115,17 @@
          * @description
          * Reloads page with new search parameters.
          */
-		function search() {
-			var stateParams = angular.copy($stateParams);
+        function search() {
+            var stateParams = angular.copy($stateParams);
 
-			stateParams.code = vm.code;
-			stateParams.name = vm.name;
+            stateParams.code = vm.code;
+            stateParams.name = vm.name;
             stateParams.program = vm.program;
 
-			$state.go('openlmis.administration.products', stateParams, {
-				reload: true
-			});
-		}
-	}
+            $state.go('openlmis.administration.products', stateParams, {
+                reload: true
+            });
+        }
+    }
 
 })();

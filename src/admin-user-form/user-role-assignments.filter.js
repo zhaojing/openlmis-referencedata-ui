@@ -38,17 +38,20 @@
 
     function filter() {
         return function(input) {
-            if(!angular.isArray(input)) return input;
+            if (!angular.isArray(input)) {
+                return input;
+            }
 
             var roleAssignments = [];
 
             angular.forEach(input, function(roleAssignment) {
-                if(!(roleAssignment.programId && !roleAssignment.supervisoryNodeId))
+                if (!(roleAssignment.programId && !roleAssignment.supervisoryNodeId)) {
                     roleAssignments.push(roleAssignment);
+                }
             });
 
             return roleAssignments;
-        }
+        };
     }
 
 })();

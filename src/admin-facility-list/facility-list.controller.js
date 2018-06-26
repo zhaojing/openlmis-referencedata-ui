@@ -15,7 +15,7 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
     /**
      * @ngdoc controller
@@ -24,23 +24,23 @@
      * @description
      * Controller for managing facility list screen.
      */
-	angular
-		.module('admin-facility-list')
-		.controller('FacilityListController', controller);
+    angular
+        .module('admin-facility-list')
+        .controller('FacilityListController', controller);
 
-	controller.$inject = [
+    controller.$inject = [
         '$state', '$stateParams', 'facilities', 'geographicZones'
-	];
+    ];
 
-	function controller($state, $stateParams, facilities, geographicZones) {
+    function controller($state, $stateParams, facilities, geographicZones) {
 
-		var vm = this;
+        var vm = this;
 
         vm.$onInit = onInit;
         vm.search = search;
-		vm.goToAddFacilityPage = goToAddFacilityPage;
+        vm.goToAddFacilityPage = goToAddFacilityPage;
 
-		/**
+        /**
          * @ngdoc property
          * @propertyOf admin-facility-list.controller:FacilityListController
          * @name facilities
@@ -51,7 +51,7 @@
          */
         vm.facilities = undefined;
 
-		/**
+        /**
          * @ngdoc property
          * @propertyOf admin-facility-list.controller:FacilityListController
          * @name geographicZones
@@ -93,8 +93,8 @@
          * Method that is executed on initiating FacilityListController.
          */
         function onInit() {
-			vm.facilities = facilities;
-			vm.geographicZones = geographicZones;
+            vm.facilities = facilities;
+            vm.geographicZones = geographicZones;
             vm.facilityName = $stateParams.name;
             vm.geographicZone = $stateParams.zoneId;
         }
@@ -107,28 +107,28 @@
          * @description
          * Reloads page with new search parameters.
          */
-		function search() {
-			var stateParams = angular.copy($stateParams);
+        function search() {
+            var stateParams = angular.copy($stateParams);
 
-			stateParams.name = vm.facilityName;
-			stateParams.zoneId = vm.geographicZone;
+            stateParams.name = vm.facilityName;
+            stateParams.zoneId = vm.geographicZone;
 
-			$state.go('openlmis.administration.facilities', stateParams, {
-				reload: true
-			});
-		}
+            $state.go('openlmis.administration.facilities', stateParams, {
+                reload: true
+            });
+        }
 
-		/**
-		 * @ngdoc method
-		 * @methodOf admin-facility-list.controller:FacilityListController
-		 * @name goToAddFacilityPage
-		 *
-		 * @description
-		 * Takes the user to the add facility page.
-		 */
-		function goToAddFacilityPage() {
-		    $state.go('openlmis.administration.facilities.facility.add');
-		}
-	}
+        /**
+         * @ngdoc method
+         * @methodOf admin-facility-list.controller:FacilityListController
+         * @name goToAddFacilityPage
+         *
+         * @description
+         * Takes the user to the add facility page.
+         */
+        function goToAddFacilityPage() {
+            $state.go('openlmis.administration.facilities.facility.add');
+        }
+    }
 
 })();

@@ -15,42 +15,42 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('admin-processing-schedule-list').config(routes);
+    angular.module('admin-processing-schedule-list').config(routes);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-		$stateProvider.state('openlmis.administration.processingSchedules', {
-			showInNavigation: true,
-			label: 'adminProcessingScheduleList.processingSchedules',
-			url: '/processingSchedules?schedulesPage&schedulesSize',
-			controller: 'ProcessingScheduleListController',
-			templateUrl: 'admin-processing-schedule-list/processing-schedule-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.PROCESSING_SCHEDULES_MANAGE],
-			resolve: {
-				processingSchedules: function(paginationService, processingScheduleService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
-						var params = angular.copy(stateParams),
-							page = stateParams.page,
-							size = stateParams.size;
+        $stateProvider.state('openlmis.administration.processingSchedules', {
+            showInNavigation: true,
+            label: 'adminProcessingScheduleList.processingSchedules',
+            url: '/processingSchedules?schedulesPage&schedulesSize',
+            controller: 'ProcessingScheduleListController',
+            templateUrl: 'admin-processing-schedule-list/processing-schedule-list.html',
+            controllerAs: 'vm',
+            accessRights: [ADMINISTRATION_RIGHTS.PROCESSING_SCHEDULES_MANAGE],
+            resolve: {
+                processingSchedules: function(paginationService, processingScheduleService, $stateParams) {
+                    return paginationService.registerUrl($stateParams, function(stateParams) {
+                        var params = angular.copy(stateParams),
+                            page = stateParams.page,
+                            size = stateParams.size;
 
-						delete params.page;
-						delete params.size;
+                        delete params.page;
+                        delete params.size;
 
-						return processingScheduleService.query({
-							page: page,
-							size: size
-						}, params);
-					}, {
-						customPageParamName: 'schedulesPage',
-						customSizeParamName: 'schedulesSize'
-					});
-				}
-			}
-		});
-	}
+                        return processingScheduleService.query({
+                            page: page,
+                            size: size
+                        }, params);
+                    }, {
+                        customPageParamName: 'schedulesPage',
+                        customSizeParamName: 'schedulesSize'
+                    });
+                }
+            }
+        });
+    }
 })();

@@ -16,15 +16,15 @@
 
 (function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module('openlmis-admin').config(routes);
+    angular.module('openlmis-admin').config(routes);
 
-	routes.$inject = ['$stateProvider'];
+    routes.$inject = ['$stateProvider'];
 
-	function routes($stateProvider) {
+    function routes($stateProvider) {
 
-		$stateProvider.state('openlmis.administration', {
+        $stateProvider.state('openlmis.administration', {
             abstract: true,
             showInNavigation: true,
             priority: -999,
@@ -32,6 +32,6 @@
             url: '/administration',
             template: '<div ui-view></div>'
         });
-	}
+    }
 
 })();

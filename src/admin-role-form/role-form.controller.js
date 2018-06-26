@@ -147,7 +147,7 @@
         function createRole() {
             var loadingPromise = loadingModalService.open();
 
-            return referencedataRoleService.create(vm.role).then(function(role) {
+            return referencedataRoleService.create(vm.role).then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminRoleForm.roleCreatedSuccessfully');
                 });

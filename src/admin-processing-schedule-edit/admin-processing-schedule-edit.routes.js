@@ -37,8 +37,8 @@
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
                         delete params.id;
-						return periodFactory.getSortedPeriodsForSchedule(params, $stateParams.id);
-					});
+                        return periodFactory.getSortedPeriodsForSchedule(params, $stateParams.id);
+                    });
                 },
                 newStartDate: function(periodFactory, $stateParams) {
                     return periodFactory.getNewStartDateForSchedule($stateParams.id);

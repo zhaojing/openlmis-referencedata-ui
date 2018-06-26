@@ -28,11 +28,9 @@
         .module('admin-user-list')
         .controller('UserListController', controller);
 
-    controller.$inject = [
-        '$state', '$stateParams', 'users', 'confirmService', 'userPasswordModalFactory', 'messageService'
-    ];
+    controller.$inject = ['$state', '$stateParams', 'users', 'confirmService', 'userPasswordModalFactory'];
 
-    function controller($state, $stateParams, users, confirmService, userPasswordModalFactory, messageService) {
+    function controller($state, $stateParams, users, confirmService, userPasswordModalFactory) {
 
         var vm = this;
 
@@ -134,7 +132,7 @@
          * @description
          * Opens a modal for entering new user password.
          *
-         * @param {String} username	the username of the user
+         * @param {String} username    the username of the user
          */
         function resetUserPassword(user) {
             userPasswordModalFactory.resetPassword(user).then(function() {
