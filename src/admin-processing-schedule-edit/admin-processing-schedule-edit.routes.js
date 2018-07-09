@@ -37,6 +37,8 @@
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
                         delete params.id;
+                        delete params.schedulesPage;
+                        delete params.schedulesSize;
                         return periodFactory.getSortedPeriodsForSchedule(params, $stateParams.id);
                     });
                 },
