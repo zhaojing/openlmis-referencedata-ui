@@ -15,17 +15,24 @@
 
 describe('userRoleAssignmentFactory', function() {
 
-    var $q, $rootScope, userRoleAssignmentFactory, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder, FacilityDataBuilder, SupervisoryNodeDataBuilder,
-        roles, programs, supervisoryNodes, warehouses, user;
+    var $q, $rootScope, userRoleAssignmentFactory, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder,
+        FacilityDataBuilder, SupervisoryNodeDataBuilder, roles, programs, supervisoryNodes, warehouses, user,
+        userRepositoryMock;
 
     beforeEach(function() {
-        module('admin-user-roles');
+        module('admin-user-roles', function($provide) {
+            userRepositoryMock = jasmine.createSpyObj('userRepository', ['get']);
+            $provide.factory('UserRepository', function() {
+                return function() {
+                    return userRepositoryMock;
+                };
+            });
+        });
 
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
-            referencedataUserService = $injector.get('referencedataUserService');
 
             UserDataBuilder = $injector.get('UserDataBuilder');
             RoleDataBuilder = $injector.get('RoleDataBuilder');
@@ -47,9 +54,24 @@ describe('userRoleAssignmentFactory', function() {
             new ProgramDataBuilder().build()
         ];
         roles = [
-            new RoleDataBuilder().withSupervisionType().withRight({type: 'type-1'}).build(),
-            new RoleDataBuilder().withGeneralAdminType().withRight({type: 'type-2'}).build(),
-            new RoleDataBuilder().withOrderFulfillmentType().withRight({type: 'type-3'}).build()
+            new RoleDataBuilder()
+                .withSupervisionType()
+                .withRight({
+                    type: 'type-1'
+                })
+                .build(),
+            new RoleDataBuilder()
+                .withGeneralAdminType()
+                .withRight({
+                    type: 'type-2'
+                })
+                .build(),
+            new RoleDataBuilder()
+                .withOrderFulfillmentType()
+                .withRight({
+                    type: 'type-3'
+                })
+                .build()
         ];
 
         user = new UserDataBuilder()
@@ -64,10 +86,11 @@ describe('userRoleAssignmentFactory', function() {
         var resultUser;
 
         beforeEach(function() {
-            spyOn(referencedataUserService, 'get').andReturn($q.resolve(user));
-            userRoleAssignmentFactory.getUser(user.id, roles, programs, supervisoryNodes, warehouses).then(function(response) {
-                resultUser = response;
-            });
+            userRepositoryMock.get.andReturn($q.resolve(user));
+            userRoleAssignmentFactory.getUser(user.id, roles, programs, supervisoryNodes, warehouses)
+                .then(function(response) {
+                    resultUser = response;
+                });
             $rootScope.$apply();
         });
 
@@ -76,7 +99,7 @@ describe('userRoleAssignmentFactory', function() {
         });
 
         it('should call referencedataUserService', function() {
-            expect(referencedataUserService.get).toHaveBeenCalledWith(user.id);
+            expect(userRepositoryMock.get).toHaveBeenCalledWith(user.id);
         });
 
         it('should set type properties for all assignments', function() {

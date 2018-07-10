@@ -31,9 +31,9 @@
                 facilities: function(facilityService) {
                     return facilityService.getAllMinimal();
                 },
-                user: function(referencedataUserService, $stateParams) {
+                user: function(UserRepository, $stateParams) {
                     if ($stateParams.id) {
-                        return referencedataUserService.get($stateParams.id);
+                        return new UserRepository().get($stateParams.id);
                     }
                     return undefined;
                 },

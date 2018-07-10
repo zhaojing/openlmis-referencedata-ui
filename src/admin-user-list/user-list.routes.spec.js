@@ -15,20 +15,27 @@
 
 describe('openlmis.administration.users state', function() {
 
-    var $state, $q, referencedataUserService, paginationService, ADMINISTRATION_RIGHTS,
-        state, users, params, usersPage;
+    var $state, $q, UserRepository, paginationService, ADMINISTRATION_RIGHTS, userRepositoryMock, state, users, params,
+        usersPage, $rootScope;
 
     beforeEach(function() {
-        module('admin-user-list');
-        module('openlmis-admin');
         module('openlmis-main-state');
+        module('openlmis-admin');
+        module('admin-user-list', function($provide) {
+            userRepositoryMock = jasmine.createSpyObj('userRepository', ['query']);
+            $provide.factory('UserRepository', function() {
+                return function() {
+                    return userRepositoryMock;
+                };
+            });
+        });
 
         inject(function($injector) {
             $state = $injector.get('$state');
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
             ADMINISTRATION_RIGHTS = $injector.get('ADMINISTRATION_RIGHTS');
-            referencedataUserService = $injector.get('referencedataUserService');
+            UserRepository = $injector.get('UserRepository');
             paginationService = $injector.get('paginationService');
         });
 
@@ -52,19 +59,19 @@ describe('openlmis.administration.users state', function() {
             last: true,
             totalElements: 2,
             totalPages: 1,
-            sort: "username",
+            sort: 'username',
             first: true,
             numberOfElements: 2,
             size: 10,
             number: 0
         };
 
-        spyOn(referencedataUserService, 'search').andReturn($q.when({
+        userRepositoryMock.query.andReturn($q.when({
             content: users,
             last: true,
             totalElements: 2,
             totalPages: 1,
-            sort: "username",
+            sort: 'username',
             first: true,
             numberOfElements: 2,
             size: 10,
@@ -83,14 +90,14 @@ describe('openlmis.administration.users state', function() {
             }
         });
 
-        state.resolve.users(paginationService, referencedataUserService, params).then(function(userList) {
+        state.resolve.users(paginationService, UserRepository, params).then(function(userList) {
             result = userList;
         });
         $rootScope.$apply();
 
         expect(result).toEqual(usersPage);
         expect(result.content).toEqual(users);
-        expect(referencedataUserService.search).toHaveBeenCalledWith(params);
+        expect(userRepositoryMock.query).toHaveBeenCalledWith(params);
         expect(paginationService.registerUrl).toHaveBeenCalled();
     });
 

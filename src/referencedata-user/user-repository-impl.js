@@ -17,21 +17,31 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-user
-     *
-     * @description
-     * Provides user information from server.
-     */
-    angular.module('referencedata-user', [
-        'ngResource',
-        'openlmis-local-storage',
-        'openlmis-loading',
-        'openlmis-urls',
-        'referencedata-role',
-        'openlmis-login',
-        'openlmis-repository',
-        'openlmis-class-extender'
-    ]);
+    angular
+        .module('referencedata-user')
+        .factory('UserRepositoryImpl', UserRepositoryImpl);
+
+    UserRepositoryImpl.inject = ['ReferenceDataUserResource'];
+
+    function UserRepositoryImpl(ReferenceDataUserResource) {
+
+        UserRepositoryImpl.prototype.get = get;
+        UserRepositoryImpl.prototype.query = query;
+
+        return UserRepositoryImpl;
+
+        function get(id) {
+            return this.referenceDataUserResource.get(id);
+        }
+
+        function query(params) {
+            return this.referenceDataUserResource.query(params);
+        }
+
+        function UserRepositoryImpl() {
+            this.referenceDataUserResource = new ReferenceDataUserResource();
+        }
+
+    }
 
 })();

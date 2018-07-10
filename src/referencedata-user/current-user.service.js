@@ -28,15 +28,12 @@
         .module('referencedata-user')
         .service('currentUserService', currentUserInfo);
 
-    currentUserInfo.$inject = [
-        '$q', 'referencedataUserService', 'localStorageService', 'authorizationService',
-        'userFactory'
-    ];
+    currentUserInfo.$inject = ['$q', 'UserRepository', 'localStorageService', 'authorizationService', 'User'];
 
-    function currentUserInfo($q, referencedataUserService, localStorageService,
-                             authorizationService, userFactory) {
+    function currentUserInfo($q, UserRepository, localStorageService, authorizationService, User) {
 
-        var CURRENT_USER = 'currentUser';
+        var CURRENT_USER = 'currentUser',
+            userRepository = new UserRepository();
 
         this.getUserInfo = getUserInfo;
         this.clearCache = clearCache;
@@ -61,10 +58,10 @@
 
             var cachedUserAsJson = localStorageService.get(CURRENT_USER);
             if (cachedUserAsJson) {
-                return $q.resolve(userFactory.buildUserFromJson(cachedUserAsJson));
+                return $q.resolve(new User(angular.fromJson(cachedUserAsJson)));
             }
 
-            return referencedataUserService.get(authUser.user_id)
+            return userRepository.get(authUser.user_id)
                 .then(function(refUser) {
                     localStorageService.add(CURRENT_USER, refUser.toJson());
                     return refUser;

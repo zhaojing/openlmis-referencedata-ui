@@ -18,20 +18,27 @@
     'use strict';
 
     /**
-     * @module referencedata-user
+     * @ngdoc service
+     * @name referencedata-user.ReferenceDataUserResource
      *
      * @description
-     * Provides user information from server.
+     * Implementation of the ReferenceDataUserResource interface. Communicates with the REST API of the
+     * OpenLMIS server.
      */
-    angular.module('referencedata-user', [
-        'ngResource',
-        'openlmis-local-storage',
-        'openlmis-loading',
-        'openlmis-urls',
-        'referencedata-role',
-        'openlmis-login',
-        'openlmis-repository',
-        'openlmis-class-extender'
-    ]);
+    angular
+        .module('referencedata-user')
+        .factory('ReferenceDataUserResource', ReferenceDataUserResource);
 
+    ReferenceDataUserResource.$inject = ['openlmisUrlFactory', 'OpenlmisResource', 'classExtender'];
+
+    function ReferenceDataUserResource(openlmisUrlFactory, OpenlmisResource, classExtender) {
+
+        classExtender.extend(ReferenceDataUserResource, OpenlmisResource);
+
+        return ReferenceDataUserResource;
+
+        function ReferenceDataUserResource() {
+            this.super('/api/users');
+        }
+    }
 })();

@@ -28,9 +28,9 @@
         .module('admin-user-roles')
         .factory('userRoleAssignmentFactory', factory);
 
-    factory.$inject = ['$filter', 'referencedataUserService', 'User'];
+    factory.$inject = ['$filter', 'UserRepository', 'User'];
 
-    function factory($filter, referencedataUserService, User) {
+    function factory($filter, UserRepository, User) {
 
         return {
             getUser: getUser
@@ -54,7 +54,7 @@
          */
         function getUser(userId, roles, programs, supervisoryNodes, warehouses) {
 
-            return referencedataUserService.get(userId)
+            return new UserRepository().get(userId)
                 .then(function(response) {
                     var user = new User(response);
 

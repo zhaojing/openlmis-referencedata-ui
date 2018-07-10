@@ -35,9 +35,9 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
             resolve: {
-                users: function(paginationService, referencedataUserService, $stateParams) {
+                users: function(paginationService, UserRepository, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return referencedataUserService.search(stateParams);
+                        return new UserRepository().query(stateParams);
                     }, {
                         customPageParamName: 'usersPage',
                         customSizeParamName: 'usersSize'

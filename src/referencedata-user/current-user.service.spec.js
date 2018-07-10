@@ -17,14 +17,20 @@ describe('currentUserService', function() {
 
     var CURRENT_USER = 'currentUser';
 
-    var $q, user, cachedUser, authUser, localStorageService, referencedataUserService, $rootScope,
-        currentUserService, authorizationService, UserDataBuilder, AuthUserDataBuilder;
+    var $q, user, cachedUser, authUser, localStorageService, $rootScope, currentUserService, authorizationService,
+        userRepositoryMock, UserDataBuilder, AuthUserDataBuilder;
 
     beforeEach(function() {
-        module('referencedata-user');
+        module('referencedata-user', function($provide) {
+            userRepositoryMock = jasmine.createSpyObj('userRepository', ['get']);
+            $provide.factory('UserRepository', function() {
+                return function() {
+                    return userRepositoryMock;
+                };
+            });
+        });
 
         inject(function($injector) {
-            referencedataUserService = $injector.get('referencedataUserService');
             currentUserService = $injector.get('currentUserService');
             authorizationService = $injector.get('authorizationService');
             $rootScope = $injector.get('$rootScope');
@@ -46,7 +52,6 @@ describe('currentUserService', function() {
             .build();
 
         spyOn(authorizationService, 'getUser');
-        spyOn(referencedataUserService, 'get');
         spyOn(localStorageService, 'get');
     });
 
@@ -55,29 +60,29 @@ describe('currentUserService', function() {
         it('should reject promise if user is not logged in', function() {
             var rejected;
             currentUserService.getUserInfo()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
             expect(localStorageService.get).not.toHaveBeenCalled();
-            expect(referencedataUserService.get).not.toHaveBeenCalled();
+            expect(userRepositoryMock.get).not.toHaveBeenCalled();
         });
 
         it('should reject promise if user is logged in but no details are cached and they does not exist on the server', function() {
             authorizationService.getUser.andReturn(authUser);
-            referencedataUserService.get.andReturn($q.reject());
+            userRepositoryMock.get.andReturn($q.reject());
 
             var rejected;
             currentUserService.getUserInfo()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(referencedataUserService.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(userRepositoryMock.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
         it('should return cached user if available', function() {
@@ -92,12 +97,12 @@ describe('currentUserService', function() {
 
             expect(result).toEqual(cachedUser);
             expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
-            expect(referencedataUserService.get).not.toHaveBeenCalledWith();
+            expect(userRepositoryMock.get).not.toHaveBeenCalledWith();
         });
 
         it('should fetch user from the server if none is cached', function() {
             authorizationService.getUser.andReturn(authUser);
-            referencedataUserService.get.andReturn($q.resolve(user));
+            userRepositoryMock.get.andReturn($q.resolve(user));
 
             var result;
             currentUserService.getUserInfo().then(function(response) {
@@ -107,12 +112,12 @@ describe('currentUserService', function() {
 
             expect(result).toEqual(user);
             expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
-            expect(referencedataUserService.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(userRepositoryMock.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
         it('should reject promise if object returned by service is not an User', function() {
             authorizationService.getUser.andReturn(authUser);
-            referencedataUserService.get.andReturn($q.resolve({
+            userRepositoryMock.get.andReturn($q.resolve({
                 not: 'an',
                 instance: 'of',
                 user: 'class'
@@ -120,13 +125,13 @@ describe('currentUserService', function() {
 
             var rejected;
             currentUserService.getUserInfo()
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(referencedataUserService.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(userRepositoryMock.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
     });
