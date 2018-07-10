@@ -5,6 +5,8 @@
     "adminProcessingScheduleEdit.description": "Description",
     "adminProcessingScheduleEdit.startDate": "Start Date",
     "adminProcessingScheduleEdit.endDate": "End Date",
+    "adminProcessingScheduleEdit.requisitionSettings": "Requisition Settings",
+    "adminProcessingScheduleEdit.reportOnly": "Report Only",
     "adminProcessingScheduleEdit.add": "Add",
     "adminProcessingScheduleEdit.cancel": "Cancel",
     "adminProcessingScheduleEdit.code": "Code",
