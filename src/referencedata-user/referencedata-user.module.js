@@ -31,7 +31,8 @@
         'referencedata-role',
         'openlmis-login',
         'openlmis-repository',
-        'openlmis-class-extender'
+        'openlmis-class-extender',
+        'auth-user'
     ]);
 
 })();

@@ -21,9 +21,9 @@
         .module('referencedata-user')
         .factory('UserDataBuilder', UserDataBuilder);
 
-    UserDataBuilder.$inject = ['User', 'RoleAssignment', 'ROLE_TYPES'];
+    UserDataBuilder.$inject = ['User', 'RoleAssignment', 'ROLE_TYPES', 'UserRepository'];
 
-    function UserDataBuilder(User,  RoleAssignment, ROLE_TYPES) {
+    function UserDataBuilder(User,  RoleAssignment, ROLE_TYPES, UserRepository) {
 
         UserDataBuilder.prototype.build = build;
         UserDataBuilder.prototype.buildJson = buildJson;
@@ -55,6 +55,7 @@
             this.allowNotify = true;
             this.extraData = {};
             this.roleAssignments = [];
+            this.repository = new UserRepository();
         }
 
         function withId(newId) {
@@ -99,7 +100,7 @@
         }
 
         function build() {
-            return new User(this.buildJson());
+            return new User(this.buildJson(), this.repository);
         }
 
         function buildJson() {

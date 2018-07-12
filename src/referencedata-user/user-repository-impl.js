@@ -36,7 +36,8 @@
             var authUserResource = this.authUserResource,
                 userContactDetailsResource = this.userContactDetailsResource;
 
-            return this.referenceDataUserResource.update(user.getBasicInformation())
+            return this.referenceDataUserResource
+                .update(user.getBasicInformation())
                 .then(function(referenceDataUser) {
                     user.id = referenceDataUser.id;
                     return $q.all([

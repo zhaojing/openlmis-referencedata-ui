@@ -80,17 +80,6 @@
         /**
          * @ngdoc property
          * @propertyOf admin-user-form.controller:UserFormController
-         * @name user
-         * @type {String}
-         *
-         * @description
-         * Message to be displayed when user is created/updated successfully.
-         */
-        vm.notification = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf admin-user-form.controller:UserFormController
          * @name initialHomeFacility
          * @type {String}
          *
@@ -150,6 +139,7 @@
          *
          * @return {Promise} the promise resolving to the created/updated user
          */
+        // TODO add tests
         function saveUser() {
             vm.user.homeFacilityId = vm.homeFacility ? vm.homeFacility.id : undefined;
 

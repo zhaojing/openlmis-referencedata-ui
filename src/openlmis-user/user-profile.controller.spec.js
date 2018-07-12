@@ -17,8 +17,8 @@
 describe('UserProfileController', function() {
 
     var vm, user, homeFacility, $controller, ROLE_TYPES, $q, UserDataBuilder, userPasswordModalFactory, $state,
-        MinimalFacilityDataBuilder, loadingModalService, referencedataUserService, loginService, notificationService,
-        getUserDeferred, saveUserDeferred, $rootScope, alertService, authUserService, pendingVerificationEmail;
+        MinimalFacilityDataBuilder, loadingModalService, loginService, notificationService, saveUserDeferred,
+        $rootScope, alertService, authUserService, pendingVerificationEmail;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -27,14 +27,10 @@ describe('UserProfileController', function() {
             $controller = $injector.get('$controller');
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
-
             ROLE_TYPES = $injector.get('ROLE_TYPES');
-
             UserDataBuilder = $injector.get('UserDataBuilder');
             MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-
             loadingModalService = $injector.get('loadingModalService');
-            referencedataUserService = $injector.get('referencedataUserService');
             notificationService = $injector.get('notificationService');
             userPasswordModalFactory = $injector.get('userPasswordModalFactory');
             alertService = $injector.get('alertService');
@@ -47,16 +43,14 @@ describe('UserProfileController', function() {
         homeFacility = new MinimalFacilityDataBuilder().build();
 
         pendingVerificationEmail = {
-            email: "example@test.org"
+            email: 'example@test.org'
         };
 
-        getUserDeferred = $q.defer();
         saveUserDeferred = $q.defer();
 
         spyOn(loadingModalService, 'open').andReturn(true);
         spyOn(loadingModalService, 'close').andReturn(true);
-        spyOn(authUserService, 'saveUser').andReturn(saveUserDeferred.promise);
-        spyOn(referencedataUserService, 'get').andReturn(getUserDeferred.promise);
+        spyOn(user, 'save').andReturn(saveUserDeferred.promise);
         spyOn(notificationService, 'success');
         spyOn(notificationService, 'error');
         spyOn(userPasswordModalFactory, 'resetPassword');
@@ -124,7 +118,7 @@ describe('UserProfileController', function() {
 
         afterEach(function() {
             expect(loadingModalService.open).toHaveBeenCalled();
-            expect(authUserService.saveUser).toHaveBeenCalledWith(user);
+            expect(user.save).toHaveBeenCalledWith();
         });
 
     });
