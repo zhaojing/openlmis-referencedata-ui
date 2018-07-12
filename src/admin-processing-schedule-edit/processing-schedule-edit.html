@@ -7,30 +7,28 @@
             <div class="modal-body">
                 <p>{{'adminProcessingScheduleEdit.addProcessingPeriod.description' | message}}</p>
                 <form id="add-processing-period-form" ng-submit="vm.add()">
-                    <div class="form-group">
-                        <label for="name">{{'adminProcessingScheduleEdit.name' | message}}</label>
-                        <input type="text" id="name" ng-model="vm.newPeriod.name" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="description">{{'adminProcessingScheduleEdit.description' | message}}</label>
-                        <input type="text" id="description" ng-model="vm.newPeriod.description" />
-                    </div>
-                    <div class="form-group">
-                        <label for="start-date">{{'adminProcessingScheduleEdit.startDate' | message}}</label>
-                        <input id="start-date" type="date"
-                            max-date="vm.newPeriod.endDate"
-                            ng-model="vm.newPeriod.startDate"
-                            ng-disabled="vm.processingPeriods && vm.processingPeriods.length > 0"
-                            required/>
-                    </div>
-                    <div class="form-group">
-                        <label for="end-date">{{'adminProcessingScheduleEdit.endDate' | message}}</label>
-                        <input id="end-date" type="date" min-date="vm.newPeriod.startDate" ng-model="vm.newPeriod.endDate" required/>
-                    </div>
-                    <div class="form-group">
-                        <label>{{'adminProcessingScheduleEdit.requisitionSettings' | message}}</label>
-                        <label class="checkbox"><input id="report-only" type="checkbox" ng-model="vm.newPeriod.extraData.reportOnly" /> {{'adminProcessingScheduleEdit.reportOnly' | message}}</label>
-                    </div>
+                    <label for="name">{{'adminProcessingScheduleEdit.name' | message}}</label>
+                    <input type="text" id="name" ng-model="vm.newPeriod.name" required />
+
+                    <label for="description">{{'adminProcessingScheduleEdit.description' | message}}</label>
+                    <input type="text" id="description" ng-model="vm.newPeriod.description" />
+
+                    <label for="start-date">{{'adminProcessingScheduleEdit.startDate' | message}}</label>
+                    <input id="start-date" type="date"
+                        max-date="vm.newPeriod.endDate"
+                        ng-model="vm.newPeriod.startDate"
+                        ng-disabled="vm.processingPeriods && vm.processingPeriods.length > 0"
+                        required/>
+
+                    <label for="end-date">{{'adminProcessingScheduleEdit.endDate' | message}}</label>
+                    <input id="end-date" type="date" min-date="vm.newPeriod.startDate" ng-model="vm.newPeriod.endDate" required/>
+
+                    <label>{{'adminProcessingScheduleEdit.requisitionSettings' | message}}</label>
+                    <label class="checkbox">
+                        <input id="report-only" type="checkbox" ng-model="vm.newPeriod.extraData.reportOnly" />
+                        {{'adminProcessingScheduleEdit.reportOnly' | message}}
+                    </label>
+
                     <button class="add" type="submit">{{'adminProcessingScheduleEdit.add' | message}}</button>
                 </form>
                 <section class="openlmis-table-container">
@@ -56,7 +54,7 @@
                                 <td>{{period.startDate | openlmisDate}}</td>
                                 <td>{{period.endDate | openlmisDate}}</td>
                                 <td>
-                                    <i ng-class="{'icon-ok': period.extraData.reportOnly}"></i>
+                                    <i ng-class="{'is-report-only': period.extraData.reportOnly}"></i>
                                 </td>
                             </tr>
                         </tbody>

@@ -1,3 +1,7 @@
 .edit-schedule-modal form.form-inline {
     flex-wrap: wrap;
 }
+
+.is-report-only {
+    @extend .icon-ok;
+}
