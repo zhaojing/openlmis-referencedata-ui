@@ -15,9 +15,9 @@
 
 describe('UserFormController', function() {
 
-    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, authUserService,
-        userPasswordModalFactoryMock, confirmService, vm, user, facilities, pendingVerificationEmail,
-        VerificationEmailDataBuilder, UserDataBuilder, FacilityDataBuilder;
+    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, authUserService, confirmService,
+        vm, user, facilities, pendingVerificationEmail, VerificationEmailDataBuilder, UserDataBuilder,
+        FacilityDataBuilder;
 
     beforeEach(function() {
         module('admin-user-form');
@@ -33,23 +33,29 @@ describe('UserFormController', function() {
             UserDataBuilder = $injector.get('UserDataBuilder');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             authUserService = $injector.get('authUserService');
+            confirmService = $injector.get('confirmService');
         });
-
-        spyOn($state, 'go');
-        spyOn(loadingModalService, 'open').andReturn($q.when(true));
-        spyOn(loadingModalService, 'close').andReturn();
-        spyOn(notificationService, 'success').andReturn();
-        spyOn(authUserService, 'sendVerificationEmail').andReturn();
 
         facilities = [
             new FacilityDataBuilder().build(),
             new FacilityDataBuilder().build()
         ];
+
         user = new UserDataBuilder()
             .withUsername('random-user')
+            .withHomeFacilityId(facilities[0].id)
             .build();
 
         pendingVerificationEmail = new VerificationEmailDataBuilder().build();
+
+        spyOn($state, 'go');
+        spyOn(loadingModalService, 'open').andReturn($q.when(true));
+        spyOn(loadingModalService, 'close').andReturn();
+        spyOn(notificationService, 'success').andReturn();
+        spyOn(user, 'removeHomeFacilityRights');
+        spyOn(user, 'save').andReturn();
+        spyOn(authUserService, 'sendVerificationEmail').andReturn();
+        spyOn(confirmService, 'confirmDestroy').andReturn();
 
         vm = $controller('UserFormController', {
             user: user,
@@ -100,11 +106,70 @@ describe('UserFormController', function() {
     });
 
     describe('saveUser', function() {
-        //TODO add tests
-    });
 
-    describe('removeHomeFacilityRightsConfirmation', function() {
-        //TODO add tests
+        beforeEach(function() {
+            vm.$onInit();
+
+            confirmService.confirmDestroy.andReturn($q.resolve());
+        });
+
+        it('should update homeFacilityId', function() {
+            vm.homeFacility = facilities[1];
+
+            vm.saveUser();
+
+            expect(user.homeFacilityId).toEqual(vm.homeFacility.id);
+        });
+
+        it('should clear homeFacilityId', function() {
+            vm.homeFacility = undefined;
+
+            vm.saveUser();
+
+            expect(user.homeFacilityId).toBeUndefined();
+        });
+
+        it('should not ask to clear home facility rights if facility has not changed', function() {
+            vm.saveUser();
+
+            expect(confirmService.confirmDestroy).not.toHaveBeenCalled();
+        });
+
+        it('should save user', function() {
+            vm.saveUser();
+
+            expect(user.save).toHaveBeenCalled();
+        });
+
+        it('should ask to remove home facility rights if home facility changed', function() {
+            vm.homeFacility = facilities[1];
+
+            vm.saveUser();
+
+            expect(confirmService.confirmDestroy).toHaveBeenCalled();
+        });
+
+        it('should save user with home facility rights after dismissing confirmation modal', function() {
+            confirmService.confirmDestroy.andReturn($q.reject());
+            vm.homeFacility = facilities[1];
+
+            vm.saveUser();
+            $rootScope.$apply();
+
+            expect(user.save).toHaveBeenCalled();
+            expect(user.removeHomeFacilityRights).not.toHaveBeenCalled();
+        });
+
+        it('should remove home facility right after confirmation', function() {
+            vm.homeFacility = facilities[1];
+
+            vm.saveUser();
+            $rootScope.$apply();
+
+            expect(user.save).toHaveBeenCalled();
+            expect(user.removeHomeFacilityRights).toHaveBeenCalled();
+        });
+
     });
 
     describe('sendVerificationEmail', function() {

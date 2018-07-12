@@ -139,15 +139,17 @@
          *
          * @return {Promise} the promise resolving to the created/updated user
          */
-        // TODO add tests
         function saveUser() {
             vm.user.homeFacilityId = vm.homeFacility ? vm.homeFacility.id : undefined;
 
             if (hasHomeFacilityChanged()) {
-                return removeHomeFacilityRightsConfirmation().then(function() {
-                    vm.user.removeHomeFacilityRights();
-                    vm.user.save();
-                });
+                return removeHomeFacilityRightsConfirmation()
+                    .then(function() {
+                        vm.user.removeHomeFacilityRights();
+                    })
+                    .finally(function() {
+                        return vm.user.save();
+                    });
             }
             return vm.user.save();
 
@@ -201,7 +203,7 @@
         }
 
         function hasHomeFacilityChanged() {
-            return vm.initialHomeFacility && vm.initialHomeFacility !== vm.user.homeFacility;
+            return vm.initialHomeFacility && vm.initialHomeFacility !== vm.homeFacility;
         }
     }
 })();
