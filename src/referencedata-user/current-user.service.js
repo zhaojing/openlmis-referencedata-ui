@@ -58,7 +58,7 @@
 
             var cachedUserAsJson = localStorageService.get(CURRENT_USER);
             if (cachedUserAsJson) {
-                return $q.resolve(new User(angular.fromJson(cachedUserAsJson)));
+                return $q.resolve(new User(angular.fromJson(cachedUserAsJson), new UserRepository()));
             }
 
             return userRepository.get(authUser.user_id)

@@ -118,7 +118,7 @@
         function updateProfile() {
             loadingModalService.open();
 
-            return authUserService.saveUser(vm.user)
+            return vm.user.save()
                 .then(function() {
                     $state.reload();
                     notificationService.success('openlmisUser.updateProfile.updateSuccessful');

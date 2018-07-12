@@ -29,16 +29,29 @@
         .module('referencedata-user')
         .factory('ReferenceDataUserResource', ReferenceDataUserResource);
 
-    ReferenceDataUserResource.$inject = ['openlmisUrlFactory', 'OpenlmisResource', 'classExtender'];
+    ReferenceDataUserResource.$inject = [
+        'openlmisUrlFactory', 'OpenlmisResource', 'classExtender', '$resource'
+    ];
 
-    function ReferenceDataUserResource(openlmisUrlFactory, OpenlmisResource, classExtender) {
+    function ReferenceDataUserResource(openlmisUrlFactory, OpenlmisResource, classExtender, $resource) {
 
         classExtender.extend(ReferenceDataUserResource, OpenlmisResource);
 
         return ReferenceDataUserResource;
 
         function ReferenceDataUserResource() {
-            this.super('/api/users');
+            var resourceUrl = openlmisUrlFactory('/api/users');
+            this.super(resourceUrl);
+            this.resource = $resource(resourceUrl + '/:id', {}, {
+                query: {
+                    url: resourceUrl,
+                    isArray: false
+                },
+                update: {
+                    url: resourceUrl,
+                    method: 'PUT'
+                }
+            });
         }
     }
 })();

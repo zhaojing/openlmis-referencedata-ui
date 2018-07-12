@@ -31,14 +31,11 @@
                 facilities: function(facilityService) {
                     return facilityService.getAllMinimal();
                 },
-                user: function(UserRepository, $stateParams) {
-                    if ($stateParams.id) {
-                        return new UserRepository().get($stateParams.id);
-                    }
-                    return undefined;
+                user: function(UserService, $stateParams) {
+                    return new UserService().get($stateParams.id);
                 },
                 pendingVerificationEmail: function(user, authUserService) {
-                    if (user) {
+                    if (user.id) {
                         return authUserService.getVerificationEmail(user.id);
                     }
 

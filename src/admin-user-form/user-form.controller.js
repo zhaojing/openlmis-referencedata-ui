@@ -29,12 +29,12 @@
         .controller('UserFormController', controller);
 
     controller.$inject = [
-        'user', 'facilities', 'pendingVerificationEmail', 'loadingModalService',
+        'user', 'facilities', 'pendingVerificationEmail', 'loadingModalService', 'UserRepository',
         'confirmService', '$filter', '$state', 'notificationService',
         'userPasswordModalFactory', 'authUserService'
     ];
 
-    function controller(user, facilities, pendingVerificationEmail, loadingModalService,
+    function controller(user, facilities, pendingVerificationEmail, loadingModalService, UserRepository,
                         confirmService, $filter, $state, notificationService,
                         userPasswordModalFactory, authUserService) {
 
@@ -42,7 +42,6 @@
 
         vm.$onInit = onInit;
         vm.saveUser = saveUser;
-        vm.removeHomeFacility = removeHomeFacility;
         vm.sendVerificationEmail = sendVerificationEmail;
 
         /**
@@ -131,26 +130,12 @@
          * Initialization method of the UserFormModalController.
          */
         function onInit() {
-            vm.updateMode = !!user;
-            vm.user = user ? user : {
-                loginRestricted: false
-            };
-            vm.user.enabled = true;
-
-            if (user) {
-                angular.forEach(facilities, function(result) {
-                    if (result.id === vm.user.homeFacilityId) {
-                        vm.user.homeFacility = result;
-                    }
-                });
-
-                vm.initialUsername = vm.user.username;
-            }
-
-            vm.initialHomeFacility = user ? vm.user.homeFacility : undefined;
-            vm.notification = 'adminUserForm.user' + (vm.updateMode ? 'Updated' : 'Created') + 'Successfully';
+            vm.user = user;
+            vm.updateMode = !!user.id;
+            vm.initialUsername = vm.user.username;
+            vm.homeFacility = getHomeFacility();
+            vm.initialHomeFacility = vm.homeFacility;
             vm.facilities = facilities;
-
             vm.pendingVerificationEmail = pendingVerificationEmail;
         }
 
@@ -166,92 +151,16 @@
          * @return {Promise} the promise resolving to the created/updated user
          */
         function saveUser() {
-            if (vm.user.homeFacility) {
-                vm.user.homeFacilityId = vm.user.homeFacility.id;
-            } else {
-                vm.user.homeFacilityId = undefined;
-            }
+            vm.user.homeFacilityId = vm.homeFacility ? vm.homeFacility.id : undefined;
 
-            if (vm.updateMode) {
-                if (vm.initialHomeFacility && vm.initialHomeFacility !== vm.user.homeFacility) {
-                    return removeHomeFacilityRightsConfirmation().then(function() {
-                        return processUpdateUser(true);
-                    }, function() {
-                        return processUpdateUser(false);
-                    });
-                }
-                return processUpdateUser(false);
-
-            }
-            return processCreateUser();
-
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name processUpdateUser
-         *
-         * @description
-         * Processes the user update workflow, along with displaying the loading modal.
-         *
-         * @param  {Boolean} removeFacilityRights indicates if user home facility rights should be removed
-         * @return {Promise} the promise resolving on the process completed
-         */
-        function processUpdateUser(removeFacilityRights) {
-            var loadingPromise = loadingModalService.open(true);
-            var savePromise = createUser();
-
-            if (removeFacilityRights) {
-                savePromise = savePromise.then(function() {
-                    vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
-                    return createUser();
+            if (hasHomeFacilityChanged()) {
+                return removeHomeFacilityRightsConfirmation().then(function() {
+                    vm.user.removeHomeFacilityRights();
+                    vm.user.save();
                 });
             }
+            return vm.user.save();
 
-            return savePromise.then(function() {
-                loadingPromise.then(function() {
-                    notificationService.success(vm.notification);
-                });
-                goToUserList();
-            }, loadingModalService.close);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name processCreateUser
-         *
-         * @description
-         * Processes the user creation workflow, along with displaying the loading modal.
-         *
-         * @return {Promise} the promise resolving on the process completed
-         */
-        function processCreateUser() {
-            loadingModalService.open(true);
-            return createUser()
-                .then(function(savedUser) {
-                    loadingModalService.close();
-                    notificationService.success(vm.notification);
-
-                    userPasswordModalFactory.createPassword(savedUser)
-                        .finally(goToUserList);
-                })
-                .catch(loadingModalService.close);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
-         * @name createUser
-         *
-         * @description
-         * Saves user data in both reference-data and auth services.
-         *
-         * @return {Promise} the promise resolving to the updated user
-         */
-        function createUser() {
-            return authUserService.saveUser(vm.user);
         }
 
         /**
@@ -281,26 +190,6 @@
         /**
          * @ngdoc method
          * @methodOf admin-user-form.controller:UserFormController
-         * @name removeHomeFacility
-         *
-         * @description
-         * Displays confirm modal for deleting home facility.
-         * After confirmation removes home facility and all role assignments for home facility.
-         */
-        function removeHomeFacility() {
-            confirmService.confirmDestroy(
-                'adminUserForm.removeHomeFacility.question',
-                'adminUserForm.removeHomeFacility.label'
-            ).then(function() {
-                vm.user.homeFacility = undefined;
-                vm.user.homeFacilityId = undefined;
-                vm.user.roleAssignments = $filter('userRoleAssignments')(vm.user.roleAssignments);
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-user-form.controller:UserFormController
          * @name sendVerificationEmail
          *
          * @description
@@ -313,10 +202,16 @@
                 });
         }
 
-        function goToUserList() {
-            $state.go('^', {}, {
-                reload: true
+        function getHomeFacility() {
+            var filtered = facilities.filter(function(facility) {
+                return facility.id === vm.user.homeFacilityId;
             });
+
+            return filtered.length ? filtered[0] : undefined;
+        }
+
+        function hasHomeFacilityChanged() {
+            return vm.initialHomeFacility && vm.initialHomeFacility !== vm.user.homeFacility;
         }
     }
 })();

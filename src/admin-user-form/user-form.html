@@ -36,7 +36,7 @@
         </label>
     </fieldset>
     <label>{{'adminUserForm.homeFacility' | message}}</label>
-    <select id="homeFacility" ng-model="vm.user.homeFacility"
+    <select id="homeFacility" ng-model="vm.homeFacility"
         ng-options="facility.name for facility in vm.facilities track by facility.id"
         ng-required="vm.user.homeFacility && vm.user.homeFacility.code"
         no-auto-select="true">

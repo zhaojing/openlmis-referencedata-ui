@@ -32,6 +32,12 @@
 
         User.prototype.toJson = toJson;
         User.prototype.getRoleAssignments = getRoleAssignments;
+        User.prototype.getBasicInformation = getBasicInformation;
+        User.prototype.getContactDetails = getContactDetails;
+        User.prototype.getAuthDetails = getAuthDetails;
+        User.prototype.isNewUser = isNewUser;
+        User.prototype.removeHomeFacilityRights = removeHomeFacilityRights;
+        User.prototype.save = save;
 
         return User;
 
@@ -46,22 +52,30 @@
          * @param  {Object}                  json the json representation of the user
          * @return {Object}                  the user object
          */
-        function User(json) {
-            this.id = json.id;
-            this.username = json.username;
-            this.firstName = json.firstName;
-            this.lastName = json.lastName;
-            this.jobTitle = json.jobTitle;
-            this.phoneNumber = json.phoneNumber;
-            this.email = json.email;
-            this.timezone = json.timezone;
-            this.homeFacilityId = json.homeFacilityId;
-            this.verified = json.verified;
-            this.active = json.active;
-            this.loginRestricted = json.loginRestricted;
-            this.allowNotify = json.allowNotify;
-            this.extraData = json.extraData;
-            this.roleAssignments = json.roleAssignments;
+        function User(json, repository) {
+            if (json) {
+                this.id = json.id;
+                this.username = json.username;
+                this.firstName = json.firstName;
+                this.lastName = json.lastName;
+                this.jobTitle = json.jobTitle;
+                this.phoneNumber = json.phoneNumber;
+                this.email = json.email;
+                this.timezone = json.timezone;
+                this.homeFacilityId = json.homeFacilityId;
+                this.verified = json.verified;
+                this.active = json.active;
+                this.loginRestricted = json.loginRestricted;
+                this.allowNotify = json.allowNotify;
+                this.extraData = json.extraData;
+                this.enabled = json.enabled;
+                this.roleAssignments = json.roleAssignments;
+            } else {
+                this.loginRestricted = false;
+            }
+
+            this.enabled = true;
+            this.repository = repository;
         }
 
         /**
@@ -97,6 +111,59 @@
                 .sort(function(a, b) {
                     return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);
                 });
+        }
+
+        function save() {
+            if (this.id) {
+                return this.repository.update(this);
+            }
+            return this.repository.create(this);
+        }
+
+        function getBasicInformation() {
+            return {
+                id: this.id,
+                username: this.username,
+                firstName: this.firstName,
+                lastName: this.lastName,
+                jobTitle: this.jobTitle,
+                timezone: this.timezone,
+                homeFacilityId: this.homeFacilityId,
+                active: this.active,
+                loginRestricted: this.loginRestricted,
+                extraData: this.extraData,
+                roleAssignments: this.roleAssignments
+            };
+        }
+
+        function getContactDetails() {
+            return {
+                referenceDataUserId: this.id,
+                phoneNumber: this.phoneNumber,
+                allowNotify: this.allowNotify,
+                emailDetails: {
+                    emailVerified: this.verified,
+                    email: this.email
+                }
+            };
+        }
+
+        function getAuthDetails() {
+            return {
+                id: this.id,
+                username: this.username,
+                enabled: this.enabled
+            };
+        }
+
+        function isNewUser() {
+            return !this.id;
+        }
+
+        function removeHomeFacilityRights() {
+            this.roleAssignments = this.roleAssignments.filter(function(roleAssignment) {
+                return !(roleAssignment.programId && !roleAssignment.supervisoryNodeId);
+            });
         }
     }
 })();

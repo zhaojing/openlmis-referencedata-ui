@@ -12,21 +12,35 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
     /**
-     * @module auth-user
+     * @ngdoc service
+     * @name shipment.UserContactDetailsResource
      *
      * @description
-     * Provides service for communicating with the auth user endpoint.
+     * Implementation of the UserContactDetailsResource interface. Communicates with the REST API of the OpenLMIS
+     * server.
      */
-    angular.module('auth-user', [
-        'ngResource',
-        'openlmis-urls',
-        'openlmis-repository',
-        'openlmis-class-extender'
-    ]);
+    angular
+        .module('auth-user')
+        .factory('UserContactDetailsResource', UserContactDetailsResource);
 
+    UserContactDetailsResource.$inject = ['openlmisUrlFactory', 'OpenlmisResource', 'classExtender'];
+
+    function UserContactDetailsResource(openlmisUrlFactory, OpenlmisResource, classExtender) {
+
+        classExtender.extend(UserContactDetailsResource, OpenlmisResource);
+
+        return UserContactDetailsResource;
+
+        function UserContactDetailsResource() {
+            this.super('/api/userContactDetails', {
+                idParam: 'referenceDataUserId'
+            });
+        }
+    }
 })();
