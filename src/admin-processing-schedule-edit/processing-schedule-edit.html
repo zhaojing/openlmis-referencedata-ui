@@ -54,7 +54,7 @@
                                 <td>{{period.startDate | openlmisDate}}</td>
                                 <td>{{period.endDate | openlmisDate}}</td>
                                 <td>
-                                    <i ng-class="{'is-report-only': period.extraData.reportOnly}"></i>
+                                    <i ng-class="{'is-report-only': period.extraData.reportOnly == 'true'}"></i>
                                 </td>
                             </tr>
                         </tbody>
