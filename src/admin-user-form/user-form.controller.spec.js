@@ -103,6 +103,14 @@ describe('UserFormController', function() {
 
             expect(vm.pendingVerificationEmail).toBe(pendingVerificationEmail);
         });
+
+        it('should not set home facility if user does not have one', function() {
+            user.homeFacilityId = undefined;
+
+            vm.$onInit();
+
+            expect(vm.homeFacility).toBeUndefined();
+        });
     });
 
     describe('saveUser', function() {
