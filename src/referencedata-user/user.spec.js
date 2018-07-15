@@ -15,8 +15,8 @@
 
 describe('User', function() {
 
-    var User, user, json, UserDataBuilder, ROLE_TYPES, supervisionRoleAssignment,
-        orderFulfillmentRoleAssignment, generalAdminRoleAssignment;
+    var User, user, json, UserDataBuilder, ROLE_TYPES, supervisionRoleAssignment, orderFulfillmentRoleAssignment,
+        generalAdminRoleAssignment, UserRepository, userRepository;
 
     beforeEach(function() {
         module('referencedata-user');
@@ -25,37 +25,51 @@ describe('User', function() {
             User = $injector.get('User');
             UserDataBuilder = $injector.get('UserDataBuilder');
             ROLE_TYPES = $injector.get('ROLE_TYPES');
+            UserRepository = $injector.get('UserRepository');
         });
+
+        userRepository = new UserRepository();
 
         json = new UserDataBuilder()
             .withSupervisionRoleAssignment('1', '1', '1')
             .withOrderFulfillmentRoleAssignment('2', '2')
             .withGeneralAdminRoleAssignment('3')
             .buildJson();
+
         supervisionRoleAssignment = json.roleAssignments[0];
         orderFulfillmentRoleAssignment = json.roleAssignments[1];
         generalAdminRoleAssignment = json.roleAssignments[2];
 
-        user = new User(json);
+        user = new User(json, userRepository);
+
+        spyOn(userRepository, 'create');
+        spyOn(userRepository, 'update');
     });
 
-    describe('constructor', function () {
+    describe('constructor', function() {
 
-      it('should set all properties', function() {
-          expect(user.id).toEqual(json.id);
-          expect(user.username).toEqual(json.username);
-          expect(user.firstName).toEqual(json.firstName);
-          expect(user.lastName).toEqual(json.lastName);
-          expect(user.timezone).toEqual(json.timezone);
-          expect(user.email).toEqual(json.email);
-          expect(user.homeFacilityId).toEqual(json.homeFacilityId);
-          expect(user.verified).toEqual(json.verified);
-          expect(user.active).toEqual(json.active);
-          expect(user.loginRestricted).toEqual(json.loginRestricted);
-          expect(user.allowNotify).toEqual(json.allowNotify);
-          expect(user.extraData).toEqual(json.extraData);
-          expect(user.roleAssignments).toEqual(json.roleAssignments);
-      });
+        it('should set all properties', function() {
+            expect(user.id).toEqual(json.id);
+            expect(user.username).toEqual(json.username);
+            expect(user.firstName).toEqual(json.firstName);
+            expect(user.lastName).toEqual(json.lastName);
+            expect(user.timezone).toEqual(json.timezone);
+            expect(user.email).toEqual(json.email);
+            expect(user.homeFacilityId).toEqual(json.homeFacilityId);
+            expect(user.verified).toEqual(json.verified);
+            expect(user.active).toEqual(json.active);
+            expect(user.loginRestricted).toEqual(json.loginRestricted);
+            expect(user.allowNotify).toEqual(json.allowNotify);
+            expect(user.extraData).toEqual(json.extraData);
+            expect(user.roleAssignments).toEqual(json.roleAssignments);
+            expect(user.repository).toEqual(userRepository);
+        });
+
+        it('should default login restricted to false', function() {
+            user = new User();
+
+            expect(user.loginRestricted).toEqual(false);
+        });
 
     });
 
@@ -67,20 +81,117 @@ describe('User', function() {
 
     });
 
-    describe('getRoleAssignments', function () {
+    describe('getRoleAssignments', function() {
 
-        it('should get all role assignments if type is not provided', function () {
+        it('should get all role assignments if type is not provided', function() {
             expect(user.getRoleAssignments()).toEqual(json.roleAssignments);
         });
 
-        it('should get zero role assignments if type is incorrect', function () {
+        it('should get zero role assignments if type is incorrect', function() {
             expect(user.getRoleAssignments('abc')).toEqual([]);
         });
 
-        it('should get role assignments by type', function () {
+        it('should get role assignments by type', function() {
             expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION)).toEqual([supervisionRoleAssignment]);
             expect(user.getRoleAssignments(ROLE_TYPES.ORDER_FULFILLMENT)).toEqual([orderFulfillmentRoleAssignment]);
             expect(user.getRoleAssignments(ROLE_TYPES.GENERAL_ADMIN)).toEqual([generalAdminRoleAssignment]);
+        });
+
+    });
+
+    describe('save', function() {
+
+        it('should update the user if it exists', function() {
+            user.save();
+
+            expect(userRepository.update).toHaveBeenCalledWith(user);
+            expect(userRepository.create).not.toHaveBeenCalled();
+        });
+
+        it('should create new user if it does not exist', function() {
+            user.id = undefined;
+
+            user.save();
+
+            expect(userRepository.create).toHaveBeenCalledWith(user);
+            expect(userRepository.update).not.toHaveBeenCalled();
+        });
+
+    });
+
+    describe('getBasicInformation', function() {
+
+        it('should return basic information about the user', function() {
+            expect(user.getBasicInformation()).toEqual({
+                id: user.id,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                jobTitle: user.jobTitle,
+                timezone: user.timezone,
+                homeFacilityId: user.homeFacilityId,
+                active: user.active,
+                loginRestricted: user.loginRestricted,
+                extraData: user.extraData,
+                roleAssignments: user.roleAssignments
+            });
+        });
+
+    });
+
+    describe('getContactDetails', function() {
+
+        it('should return user contact details', function() {
+            expect(user.getContactDetails()).toEqual({
+                referenceDataUserId: user.id,
+                phoneNumber: user.phoneNumber,
+                allowNotify: user.allowNotify,
+                emailDetails: {
+                    emailVerified: user.verified,
+                    email: user.email
+                }
+            });
+        });
+
+    });
+
+    describe('getAuthDetails', function() {
+
+        it('should return user authentication details', function() {
+            expect(user.getAuthDetails()).toEqual({
+                id: user.id,
+                username: user.username,
+                enabled: user.enabled
+            });
+        });
+
+    });
+
+    describe('isNewUser', function() {
+
+        it('should return false if user has id', function() {
+            expect(user.isNewUser()).toEqual(false);
+        });
+
+        it('should return true if user has no id', function() {
+            user.id = undefined;
+
+            expect(user.isNewUser()).toEqual(true);
+        });
+
+    });
+
+    describe('removeHomeFacilityRights', function() {
+
+        it('should remove rights with program id and without supervisory node id', function() {
+            supervisionRoleAssignment.supervisoryNodeId = undefined;
+
+            user.removeHomeFacilityRights();
+
+            expect(user.roleAssignments).toEqual([
+                orderFulfillmentRoleAssignment,
+                generalAdminRoleAssignment
+            ]);
         });
 
     });
