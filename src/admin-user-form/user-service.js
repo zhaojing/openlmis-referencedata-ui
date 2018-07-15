@@ -59,7 +59,8 @@
 
             user.save = function() {
                 var newUser = !user.id,
-                    successMessage = 'adminUserForm.user' + (newUser ? 'Created' : 'Updated') + 'Successfully';
+                    successMessage = 'adminUserForm.user' + (newUser ? 'Created' : 'Updated') + 'Successfully',
+                    errorMessage = 'adminUserForm.failedTo' + (newUser ? 'Create' : 'Update') + 'User';
 
                 loadingModalService.open();
                 return originalSave.apply(this, arguments)
@@ -82,7 +83,11 @@
                         });
                         return user;
                     })
-                    .catch(loadingModalService.close);
+                    .catch(function(error) {
+                        notificationService.error(errorMessage);
+                        loadingModalService.close();
+                        return $q.reject(error);
+                    });
             };
         }
     }

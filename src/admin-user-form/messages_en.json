@@ -33,5 +33,7 @@
     "adminUserForm.showPassword": "Show password",
     "adminUserForm.sendVerificationEmail": "Send verification email",
     "adminUserForm.sendVerificationEmail.success": "Verification email has been sent successfully",
-    "adminUserForm.pendingVerificationEmail.info": "The email address has been changed to ${email} and is pending verification"
+    "adminUserForm.pendingVerificationEmail.info": "The email address has been changed to ${email} and is pending verification",
+    "adminUserForm.failedToUpdateUser": "Failed to update user",
+    "adminUserForm.failedToCreateUser": "Failed to create user"
 }
