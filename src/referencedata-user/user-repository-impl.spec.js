@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('UserRepositoryImpl', function() {
+describe('UserRepositoryImpl', function() {
 
     var userRepositoryImpl, UserRepositoryImpl, UserDataBuilder, referenceDataUserResourceMock, authUserResourceMock,
         userContactDetailsResourceMock, userDataBuilder, $q, $rootScope, user, userBuilders, expected, PageDataBuilder,
