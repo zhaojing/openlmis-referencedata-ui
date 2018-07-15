@@ -75,7 +75,7 @@
 
         function query(params) {
             var referenceDataUserResource = this.referenceDataUserResource;
-            if (params.email) {
+            if (params && params.email) {
                 return this.userContactDetailsResource.query({
                     email: params.email
                 }).then(function(userContactDetailsPage) {

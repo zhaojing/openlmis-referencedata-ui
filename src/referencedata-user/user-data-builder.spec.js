@@ -27,6 +27,9 @@
 
         UserDataBuilder.prototype.build = build;
         UserDataBuilder.prototype.buildJson = buildJson;
+        UserDataBuilder.prototype.buildAuthUserJson = buildAuthUserJson;
+        UserDataBuilder.prototype.buildReferenceDataUserJson = buildReferenceDataUserJson;
+        UserDataBuilder.prototype.buildUserContactDetailsJson = buildUserContactDetailsJson;
         UserDataBuilder.prototype.withSupervisionRoleAssignment = withSupervisionRoleAssignment;
         UserDataBuilder.prototype.withOrderFulfillmentRoleAssignment = withOrderFulfillmentRoleAssignment;
         UserDataBuilder.prototype.withGeneralAdminRoleAssignment = withGeneralAdminRoleAssignment;
@@ -34,6 +37,7 @@
         UserDataBuilder.prototype.withUsername = withUsername;
         UserDataBuilder.prototype.withHomeFacilityId = withHomeFacilityId;
         UserDataBuilder.prototype.withoutHomeFacilityId = withoutHomeFacilityId;
+        UserDataBuilder.prototype.asNew = asNew;
 
         return UserDataBuilder;
 
@@ -99,6 +103,11 @@
             return this;
         }
 
+        function asNew() {
+            this.id = undefined;
+            return this;
+        }
+
         function build() {
             return new User(this.buildJson(), this.repository);
         }
@@ -120,6 +129,42 @@
                 allowNotify: this.allowNotify,
                 extraData: this.extraData,
                 roleAssignments: this.roleAssignments
+            };
+        }
+
+        function buildReferenceDataUserJson() {
+            return {
+                id: this.id,
+                username: this.username,
+                firstName: this.firstName,
+                lastName: this.lastName,
+                jobTitle: this.jobTitle,
+                timezone: this.timezone,
+                homeFacilityId: this.homeFacilityId,
+                active: this.active,
+                loginRestricted: this.loginRestricted,
+                extraData: this.extraData,
+                roleAssignments: this.roleAssignments
+            };
+        }
+
+        function buildAuthUserJson() {
+            return {
+                id: this.id,
+                username: this.username,
+                enabled: this.enabled
+            };
+        }
+
+        function buildUserContactDetailsJson() {
+            return {
+                referenceDataUserId: this.id,
+                phoneNumber: this.phoneNumber,
+                allowNotify: this.allowNotify,
+                emailDetails: {
+                    emailVerified: this.verified,
+                    email: this.email
+                }
             };
         }
     }
