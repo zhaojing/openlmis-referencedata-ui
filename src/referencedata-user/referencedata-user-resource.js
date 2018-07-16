@@ -29,12 +29,14 @@
         .factory('ReferenceDataUserResource', ReferenceDataUserResource);
 
     ReferenceDataUserResource.$inject = [
-        'openlmisUrlFactory', 'OpenlmisResource', 'classExtender', '$resource'
+        'openlmisUrlFactory', 'OpenlmisResource', 'classExtender', '$resource', '$q'
     ];
 
-    function ReferenceDataUserResource(openlmisUrlFactory, OpenlmisResource, classExtender, $resource) {
+    function ReferenceDataUserResource(openlmisUrlFactory, OpenlmisResource, classExtender, $resource, $q) {
 
         classExtender.extend(ReferenceDataUserResource, OpenlmisResource);
+
+        ReferenceDataUserResource.prototype.update = update;
 
         return ReferenceDataUserResource;
 
@@ -52,5 +54,25 @@
                 }
             });
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.ReferenceDataUserResource
+         * @name update
+         *
+         * @description
+         * Saves the given user on the OpenLMIS server. Uses PUT method.
+         *
+         * @param  {Object}  user the user to be saved on the server
+         * @return {Promise}      the promise resolving to the server response, rejected if request fails or user is
+         *                        undefined
+         */
+        function update(user) {
+            if (user) {
+                return this.resource.update(undefined, user).$promise;
+            }
+            return $q.reject();
+        }
+
     }
 })();
