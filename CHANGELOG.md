@@ -8,6 +8,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-4833](https://openlmis.atlassian.net/browse/OLMIS-4833): Added Send Verification Email button on the user update and profile screens.
   * Added visual indication when there is pending verification
 * [OLMIS-4980](https://openlmis.atlassian.net/browse/OLMIS-4980): Added Report Only flag to add processing period in edit processing schedule modal.
+* [OLMIS-4835](https://openlmis.atlassian.net/browse/OLMIS-4835): Added ability to opt-out from notifications 
 
 Improvements:
 * [OLMIS-2998](https://openlmis.atlassian.net/browse/OLMIS-2998): Added served facilities popover to supply line and allowed filtering by program

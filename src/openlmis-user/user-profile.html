@@ -28,6 +28,14 @@
             {{'openlmisUser.emailVerified' | message}}
         </label>
     </fieldset>
+    <fieldset class="form-group">
+        <label>
+            <input type="checkbox" ng-model="vm.user.allowNotify" ng-disabled="!vm.user.email || !vm.user.verified"/>
+            {{'openlmisUser.allowNotifications' | message}}
+        </label>
+    </fieldset>
+    <p class="note">{{'openlmisUser.allowNotifications.description.checked' | message}}</p>
+    <p class="note">{{'openlmisUser.allowNotifications.description.unchecked' | message}}</p>
 
     <label for="user-phone-number">{{'openlmisUser.phoneNumber' | message}}</label>
     <input id="user-phone-number" type="text" ng-model="vm.user.phoneNumber"/>
