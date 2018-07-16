@@ -15,18 +15,11 @@
 
 describe('UserService', function() {
 
-    var userService, UserService, User, user, userRepositoryMock, $rootScope, UserDataBuilder, $q, loadingModalService,
-        notificationService, userPasswordModalFactory, $state;
+    var userService, UserService, User, user, $rootScope, UserDataBuilder, $q, loadingModalService, notificationService,
+        userPasswordModalFactory, $state, UserRepository;
 
     beforeEach(function() {
-        module('admin-user-form', function($provide) {
-            userRepositoryMock = jasmine.createSpyObj('userRepository', ['get']);
-            $provide.factory('UserRepository', function() {
-                return function() {
-                    return userRepositoryMock;
-                };
-            });
-        });
+        module('admin-user-form');
 
         inject(function($injector) {
             $q = $injector.get('$q');
@@ -34,6 +27,7 @@ describe('UserService', function() {
             $state = $injector.get('$state');
             $rootScope = $injector.get('$rootScope');
             UserService = $injector.get('UserService');
+            UserRepository = $injector.get('UserRepository');
             UserDataBuilder = $injector.get('UserDataBuilder');
             notificationService = $injector.get('notificationService');
             loadingModalService = $injector.get('loadingModalService');
@@ -43,7 +37,7 @@ describe('UserService', function() {
         userService = new UserService();
         user = new UserDataBuilder().build();
 
-        userRepositoryMock.get.andReturn($q.resolve(user));
+        spyOn(UserRepository.prototype, 'get').andReturn($q.resolve(user));
 
         spyOn(user, 'save');
         spyOn($state, 'go');
@@ -65,14 +59,14 @@ describe('UserService', function() {
             $rootScope.$apply();
 
             expect(result instanceof User).toBe(true);
-            expect(userRepositoryMock.get).not.toHaveBeenCalled();
+            expect(UserRepository.prototype.get).not.toHaveBeenCalled();
         });
 
         it('should fetch user', function() {
             userService.get(user.id);
             $rootScope.$apply();
 
-            expect(userRepositoryMock.get).toHaveBeenCalledWith(user.id);
+            expect(UserRepository.prototype.get).toHaveBeenCalledWith(user.id);
         });
 
         it('should decorate save', function() {

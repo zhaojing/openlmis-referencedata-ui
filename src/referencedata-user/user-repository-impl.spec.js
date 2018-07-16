@@ -15,38 +15,12 @@
 
 describe('UserRepositoryImpl', function() {
 
-    var userRepositoryImpl, UserRepositoryImpl, UserDataBuilder, referenceDataUserResourceMock, authUserResourceMock,
-        userContactDetailsResourceMock, userDataBuilder, $q, $rootScope, user, userBuilders, expected, PageDataBuilder,
-        page;
+    var userRepositoryImpl, UserRepositoryImpl, UserDataBuilder, userDataBuilder, $q, $rootScope, user, userBuilders,
+        expected, PageDataBuilder, ReferenceDataUserResource, AuthUserResource, UserContactDetailsResource;
 
     beforeEach(function() {
         module('openlmis-pagination');
-        module('referencedata-user', function($provide) {
-            referenceDataUserResourceMock = jasmine.createSpyObj('referenceDataUserResource', [
-                'update', 'get', 'query'
-            ]);
-            $provide.factory('ReferenceDataUserResource', function() {
-                return function() {
-                    return referenceDataUserResourceMock;
-                };
-            });
-
-            authUserResourceMock = jasmine.createSpyObj('authUserResource', ['create']);
-            $provide.factory('AuthUserResource', function() {
-                return function() {
-                    return authUserResourceMock;
-                };
-            });
-
-            userContactDetailsResourceMock = jasmine.createSpyObj('userContactDetailsResource', [
-                'update', 'get', 'query'
-            ]);
-            $provide.factory('UserContactDetailsResource', function() {
-                return function() {
-                    return userContactDetailsResourceMock;
-                };
-            });
-        });
+        module('referencedata-user');
 
         inject(function($injector) {
             $q = $injector.get('$q');
@@ -54,6 +28,9 @@ describe('UserRepositoryImpl', function() {
             UserDataBuilder = $injector.get('UserDataBuilder');
             UserRepositoryImpl = $injector.get('UserRepositoryImpl');
             PageDataBuilder = $injector.get('PageDataBuilder');
+            ReferenceDataUserResource = $injector.get('ReferenceDataUserResource');
+            AuthUserResource = $injector.get('AuthUserResource');
+            UserContactDetailsResource = $injector.get('UserContactDetailsResource');
         });
 
         userDataBuilder = new UserDataBuilder().asNew();
@@ -70,13 +47,19 @@ describe('UserRepositoryImpl', function() {
         userDataBuilder.withId('some-id');
         expected = userDataBuilder.build();
 
-        authUserResourceMock.create.andReturn($q.resolve(userDataBuilder.buildAuthUserJson()));
+        spyOn(AuthUserResource.prototype, 'create').andReturn($q.resolve(userDataBuilder.buildAuthUserJson()));
 
-        referenceDataUserResourceMock.update.andReturn($q.resolve(userDataBuilder.buildReferenceDataUserJson()));
-        referenceDataUserResourceMock.get.andReturn($q.resolve(userDataBuilder.buildReferenceDataUserJson()));
+        spyOn(ReferenceDataUserResource.prototype, 'query');
+        spyOn(ReferenceDataUserResource.prototype, 'update')
+            .andReturn($q.resolve(userDataBuilder.buildReferenceDataUserJson()));
+        spyOn(ReferenceDataUserResource.prototype, 'get')
+            .andReturn($q.resolve(userDataBuilder.buildReferenceDataUserJson()));
 
-        userContactDetailsResourceMock.update.andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
-        userContactDetailsResourceMock.get.andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
+        spyOn(UserContactDetailsResource.prototype, 'query');
+        spyOn(UserContactDetailsResource.prototype, 'update')
+            .andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
+        spyOn(UserContactDetailsResource.prototype, 'get')
+            .andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
 
         userRepositoryImpl = new UserRepositoryImpl();
     });
@@ -85,19 +68,19 @@ describe('UserRepositoryImpl', function() {
 
         it('should create reference data user before creating contact and auth details', function() {
             var referenceDataUserUpdateDeferred = $q.defer();
-            referenceDataUserResourceMock.update.andReturn(referenceDataUserUpdateDeferred.promise);
+            ReferenceDataUserResource.prototype.update.andReturn(referenceDataUserUpdateDeferred.promise);
 
             userRepositoryImpl.create(user);
 
-            expect(referenceDataUserResourceMock.update).toHaveBeenCalledWith(user.getBasicInformation());
-            expect(authUserResourceMock.create).not.toHaveBeenCalled();
-            expect(userContactDetailsResourceMock.update).not.toHaveBeenCalled();
+            expect(ReferenceDataUserResource.prototype.update).toHaveBeenCalledWith(user.getBasicInformation());
+            expect(AuthUserResource.prototype.create).not.toHaveBeenCalled();
+            expect(UserContactDetailsResource.prototype.update).not.toHaveBeenCalled();
 
             referenceDataUserUpdateDeferred.resolve(userDataBuilder.buildReferenceDataUserJson());
             $rootScope.$apply();
 
-            expect(authUserResourceMock.create).toHaveBeenCalledWith(expected.getAuthDetails());
-            expect(userContactDetailsResourceMock.update).toHaveBeenCalledWith(expected.getContactDetails());
+            expect(AuthUserResource.prototype.create).toHaveBeenCalledWith(expected.getAuthDetails());
+            expect(UserContactDetailsResource.prototype.update).toHaveBeenCalledWith(expected.getContactDetails());
         });
 
         it('should return user json', function() {
@@ -112,7 +95,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if reference data user creation failed', function() {
-            referenceDataUserResourceMock.update.andReturn($q.reject());
+            ReferenceDataUserResource.prototype.update.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.create(user)
@@ -125,7 +108,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if auth data user creation failed', function() {
-            authUserResourceMock.create.andReturn($q.reject());
+            AuthUserResource.prototype.create.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.create(user)
@@ -138,7 +121,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if reference data user creation failed', function() {
-            userContactDetailsResourceMock.update.andReturn($q.reject());
+            UserContactDetailsResource.prototype.update.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.create(user)
@@ -167,12 +150,12 @@ describe('UserRepositoryImpl', function() {
             $rootScope.$apply();
 
             expect(result).toEqual(userDataBuilder.buildJson());
-            expect(referenceDataUserResourceMock.update).toHaveBeenCalledWith(expected.getBasicInformation());
-            expect(userContactDetailsResourceMock.update).toHaveBeenCalledWith(expected.getContactDetails());
+            expect(ReferenceDataUserResource.prototype.update).toHaveBeenCalledWith(expected.getBasicInformation());
+            expect(UserContactDetailsResource.prototype.update).toHaveBeenCalledWith(expected.getContactDetails());
         });
 
         it('should reject if reference data user creation failed', function() {
-            referenceDataUserResourceMock.update.andReturn($q.reject());
+            ReferenceDataUserResource.prototype.update.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.update(user)
@@ -185,7 +168,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if reference data user creation failed', function() {
-            userContactDetailsResourceMock.update.andReturn($q.reject());
+            UserContactDetailsResource.prototype.update.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.update(user)
@@ -214,12 +197,12 @@ describe('UserRepositoryImpl', function() {
             $rootScope.$apply();
 
             expect(result).toEqual(userDataBuilder.buildJson());
-            expect(referenceDataUserResourceMock.get).toHaveBeenCalledWith(user.id);
-            expect(userContactDetailsResourceMock.get).toHaveBeenCalledWith(user.id);
+            expect(ReferenceDataUserResource.prototype.get).toHaveBeenCalledWith(user.id);
+            expect(UserContactDetailsResource.prototype.get).toHaveBeenCalledWith(user.id);
         });
 
         it('should reject if reference data user creation failed', function() {
-            referenceDataUserResourceMock.get.andReturn($q.reject());
+            ReferenceDataUserResource.prototype.get.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.get(user.id)
@@ -232,7 +215,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if reference data user creation failed', function() {
-            userContactDetailsResourceMock.get.andReturn($q.reject());
+            UserContactDetailsResource.prototype.get.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.get(user.id)
@@ -249,7 +232,7 @@ describe('UserRepositoryImpl', function() {
     describe('query', function() {
 
         beforeEach(function() {
-            referenceDataUserResourceMock.query.andReturn($q.resolve(
+            ReferenceDataUserResource.prototype.query.andReturn($q.resolve(
                 new PageDataBuilder()
                     .withContent([
                         userBuilders[0].buildReferenceDataUserJson(),
@@ -259,7 +242,7 @@ describe('UserRepositoryImpl', function() {
                     .build()
             ));
 
-            userContactDetailsResourceMock.query.andReturn($q.resolve(
+            UserContactDetailsResource.prototype.query.andReturn($q.resolve(
                 new PageDataBuilder()
                     .withContent([
                         userBuilders[0].buildUserContactDetailsJson(),
@@ -271,7 +254,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should fetch user contact details first if searching by email', function() {
-            referenceDataUserResourceMock.query.andReturn($q.resolve(
+            ReferenceDataUserResource.prototype.query.andReturn($q.resolve(
                 new PageDataBuilder()
                     .withContent([
                         userBuilders[0].buildReferenceDataUserJson(),
@@ -295,10 +278,10 @@ describe('UserRepositoryImpl', function() {
                 userBuilders[0].buildJson(),
                 userBuilders[1].buildJson()
             ]);
-            expect(userContactDetailsResourceMock.query).toHaveBeenCalledWith({
+            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com'
             });
-            expect(referenceDataUserResourceMock.query).toHaveBeenCalledWith({
+            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com',
                 username: 'user',
                 id: [
@@ -310,7 +293,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should not call reference data if there are no matching contact details', function() {
-            userContactDetailsResourceMock.query.andReturn($q.resolve(new PageDataBuilder().build()));
+            UserContactDetailsResource.prototype.query.andReturn($q.resolve(new PageDataBuilder().build()));
 
             var result,
                 params = {
@@ -324,10 +307,10 @@ describe('UserRepositoryImpl', function() {
             $rootScope.$apply();
 
             expect(result.content).toEqual([]);
-            expect(userContactDetailsResourceMock.query).toHaveBeenCalledWith({
+            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com'
             });
-            expect(referenceDataUserResourceMock.query).not.toHaveBeenCalled();
+            expect(ReferenceDataUserResource.prototype.query).not.toHaveBeenCalled();
         });
 
         it('should fetch referencedata user first if email is not specified', function() {
@@ -346,10 +329,10 @@ describe('UserRepositoryImpl', function() {
                 userBuilders[1].buildJson(),
                 userBuilders[2].buildJson()
             ]);
-            expect(referenceDataUserResourceMock.query).toHaveBeenCalledWith({
+            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
-            expect(userContactDetailsResourceMock.query).toHaveBeenCalledWith({
+            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 id: [
                     userBuilders[0].id,
                     userBuilders[1].id,
@@ -359,7 +342,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should not call notification if there are no matching users', function() {
-            referenceDataUserResourceMock.query.andReturn($q.resolve(new PageDataBuilder().build()));
+            ReferenceDataUserResource.prototype.query.andReturn($q.resolve(new PageDataBuilder().build()));
 
             var result,
                 params = {
@@ -372,14 +355,14 @@ describe('UserRepositoryImpl', function() {
             $rootScope.$apply();
 
             expect(result.content).toEqual([]);
-            expect(referenceDataUserResourceMock.query).toHaveBeenCalledWith({
+            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
-            expect(userContactDetailsResourceMock.query).not.toHaveBeenCalled();
+            expect(UserContactDetailsResource.prototype.query).not.toHaveBeenCalled();
         });
 
         it('should reference data user if there is no contact details', function() {
-            userContactDetailsResourceMock.query.andReturn($q.resolve(
+            UserContactDetailsResource.prototype.query.andReturn($q.resolve(
                 new PageDataBuilder()
                     .withContent([
                         userBuilders[0].buildUserContactDetailsJson(),
@@ -403,10 +386,10 @@ describe('UserRepositoryImpl', function() {
                 userBuilders[1].buildJson(),
                 userBuilders[2].buildReferenceDataUserJson()
             ]);
-            expect(referenceDataUserResourceMock.query).toHaveBeenCalledWith({
+            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
-            expect(userContactDetailsResourceMock.query).toHaveBeenCalledWith({
+            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 id: [
                     userBuilders[0].id,
                     userBuilders[1].id,
@@ -416,7 +399,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if reference data rejects', function() {
-            referenceDataUserResourceMock.query.andReturn($q.reject());
+            ReferenceDataUserResource.prototype.query.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.query()
@@ -429,7 +412,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if notification rejects', function() {
-            userContactDetailsResourceMock.query.andReturn($q.reject());
+            UserContactDetailsResource.prototype.query.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.query()

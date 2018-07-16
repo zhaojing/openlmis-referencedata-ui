@@ -18,17 +18,10 @@ describe('currentUserService', function() {
     var CURRENT_USER = 'currentUser';
 
     var $q, user, cachedUser, authUser, localStorageService, $rootScope, currentUserService, authorizationService,
-        userRepositoryMock, UserDataBuilder, AuthUserDataBuilder;
+        UserRepository, UserDataBuilder, AuthUserDataBuilder;
 
     beforeEach(function() {
-        module('referencedata-user', function($provide) {
-            userRepositoryMock = jasmine.createSpyObj('userRepository', ['get']);
-            $provide.factory('UserRepository', function() {
-                return function() {
-                    return userRepositoryMock;
-                };
-            });
-        });
+        module('referencedata-user');
 
         inject(function($injector) {
             currentUserService = $injector.get('currentUserService');
@@ -38,6 +31,7 @@ describe('currentUserService', function() {
             UserDataBuilder = $injector.get('UserDataBuilder');
             AuthUserDataBuilder = $injector.get('AuthUserDataBuilder');
             localStorageService = $injector.get('localStorageService');
+            UserRepository = $injector.get('UserRepository');
         });
 
         authUser = new AuthUserDataBuilder().build();
@@ -53,6 +47,7 @@ describe('currentUserService', function() {
 
         spyOn(authorizationService, 'getUser');
         spyOn(localStorageService, 'get');
+        spyOn(UserRepository.prototype, 'get');
     });
 
     describe('getUserInfo', function() {
@@ -67,12 +62,12 @@ describe('currentUserService', function() {
 
             expect(rejected).toBe(true);
             expect(localStorageService.get).not.toHaveBeenCalled();
-            expect(userRepositoryMock.get).not.toHaveBeenCalled();
+            expect(UserRepository.prototype.get).not.toHaveBeenCalled();
         });
 
         it('should reject promise if user is logged in but no details are cached and they does not exist on the server', function() {
             authorizationService.getUser.andReturn(authUser);
-            userRepositoryMock.get.andReturn($q.reject());
+            UserRepository.prototype.get.andReturn($q.reject());
 
             var rejected;
             currentUserService.getUserInfo()
@@ -82,7 +77,7 @@ describe('currentUserService', function() {
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(userRepositoryMock.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
         it('should return cached user if available', function() {
@@ -95,14 +90,14 @@ describe('currentUserService', function() {
             });
             $rootScope.$apply();
 
-            expect(result).toEqual(cachedUser);
+            expect(angular.toJson(result)).toEqual(angular.toJson(cachedUser));
             expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
-            expect(userRepositoryMock.get).not.toHaveBeenCalledWith();
+            expect(UserRepository.prototype.get).not.toHaveBeenCalledWith();
         });
 
         it('should fetch user from the server if none is cached', function() {
             authorizationService.getUser.andReturn(authUser);
-            userRepositoryMock.get.andReturn($q.resolve(user));
+            UserRepository.prototype.get.andReturn($q.resolve(user));
 
             var result;
             currentUserService.getUserInfo().then(function(response) {
@@ -112,12 +107,12 @@ describe('currentUserService', function() {
 
             expect(result).toEqual(user);
             expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
-            expect(userRepositoryMock.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
         it('should reject promise if object returned by service is not an User', function() {
             authorizationService.getUser.andReturn(authUser);
-            userRepositoryMock.get.andReturn($q.resolve({
+            UserRepository.prototype.get.andReturn($q.resolve({
                 not: 'an',
                 instance: 'of',
                 user: 'class'
@@ -131,7 +126,7 @@ describe('currentUserService', function() {
             $rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(userRepositoryMock.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
         });
 
     });
