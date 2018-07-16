@@ -43,7 +43,7 @@
          * @constructor
          * 
          * @description
-         * Creates an instance of the UserRepository. If no implementation is given a default one will be use.
+         * Creates an instance of the UserRepository. If no implementation is given a default one will be used.
          * The default implementation is an instance of the UserRepositoryImpl class.
          * 
          * @param {Object} impl the implementation to be used by the repository, defaults to UserRepositoryImpl

@@ -22,8 +22,7 @@
      * @name referencedata-user.ReferenceDataUserResource
      *
      * @description
-     * Implementation of the ReferenceDataUserResource interface. Communicates with the REST API of the
-     * OpenLMIS server.
+     * Communicates with the reference data User REST API of the OpenLMIS server.
      */
     angular
         .module('referencedata-user')

@@ -17,6 +17,14 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name referencedata-user.UserRepositoryImpl
+     *
+     * @description
+     * Default implementation of the UserRepository interface. Responsible for combining server responses into single
+     * object to be passed to the User class constructor.
+     */
     angular
         .module('referencedata-user')
         .factory('UserRepositoryImpl', UserRepositoryImpl);
@@ -32,6 +40,33 @@
 
         return UserRepositoryImpl;
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.UserRepositoryImpl
+         * @name UserRepositoryImpl
+         * @constructor
+         *
+         * @description
+         * Creates an object of the UserRepositoryImpl class and initiates all required dependencies.
+         */
+        function UserRepositoryImpl() {
+            this.referenceDataUserResource = new ReferenceDataUserResource();
+            this.userContactDetailsResource = new UserContactDetailsResource();
+            this.authUserResource = new AuthUserResource();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.UserRepositoryImpl
+         * @name create
+         *
+         * @description
+         * Creates a new user on the OpenLMIS server.
+         *
+         * @param  {User}    user the instance of the User class
+         * @return {Promise}      the promise resolving to combined JSON which can be used for creating instance of the
+         *                        User class
+         */
         function create(user) {
             var authUserResource = this.authUserResource,
                 userContactDetailsResource = this.userContactDetailsResource;
@@ -49,6 +84,18 @@
                 });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.UserRepositoryImpl
+         * @name update
+         *
+         * @description
+         * Updates the user on the OpenLMIS server.
+         *
+         * @param  {User}    user the instance of the User class
+         * @return {Promise}      the promise resolving to combined JSON which can be used for creating instance of the
+         *                        User class
+         */
         function update(user) {
             return $q.all([
                 this.referenceDataUserResource.update(user.getBasicInformation()),
@@ -61,6 +108,18 @@
             });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.UserRepositoryImpl
+         * @name get
+         *
+         * @description
+         * Retrieves the user with the given ID from the OpenLMIS server.
+         *
+         * @param  {User}    user the instance of the User class
+         * @return {Promise}      the promise resolving to combined JSON which can be used for creating instance of the
+         *                        User class
+         */
         function get(id) {
             return $q.all([
                 this.referenceDataUserResource.get(id),
@@ -73,6 +132,18 @@
             });
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.UserRepositoryImpl
+         * @name query
+         *
+         * @description
+         * Retrieves the users matching the given parameters from the OpenLMIS server.
+         *
+         * @param  {User}    params the parameters to search with
+         * @return {Promise}        the promise resolving to a page of combined JSON which can be used for creating
+         *                          instances of the User class
+         */
         function query(params) {
             var referenceDataUserResource = this.referenceDataUserResource;
             if (params && params.email) {
@@ -110,12 +181,6 @@
                     }
                     return referenceDataUserPage;
                 });
-        }
-
-        function UserRepositoryImpl() {
-            this.referenceDataUserResource = new ReferenceDataUserResource();
-            this.userContactDetailsResource = new UserContactDetailsResource();
-            this.authUserResource = new AuthUserResource();
         }
 
         function combinePages(referenceDataUserPage, userContactDetailsPage) {
