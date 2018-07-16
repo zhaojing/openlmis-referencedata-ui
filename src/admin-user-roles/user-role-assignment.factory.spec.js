@@ -17,21 +17,15 @@ describe('userRoleAssignmentFactory', function() {
 
     var $q, $rootScope, userRoleAssignmentFactory, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder,
         FacilityDataBuilder, SupervisoryNodeDataBuilder, roles, programs, supervisoryNodes, warehouses, user,
-        userRepositoryMock;
+        UserRepository;
 
     beforeEach(function() {
-        module('admin-user-roles', function($provide) {
-            userRepositoryMock = jasmine.createSpyObj('userRepository', ['get']);
-            $provide.factory('UserRepository', function() {
-                return function() {
-                    return userRepositoryMock;
-                };
-            });
-        });
+        module('admin-user-roles');
 
         inject(function($injector) {
             $q = $injector.get('$q');
             $rootScope = $injector.get('$rootScope');
+            UserRepository = $injector.get('UserRepository');
             userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
 
             UserDataBuilder = $injector.get('UserDataBuilder');
@@ -79,6 +73,8 @@ describe('userRoleAssignmentFactory', function() {
             .withGeneralAdminRoleAssignment(roles[1].id)
             .withOrderFulfillmentRoleAssignment(roles[2].id, warehouses[0].id)
             .build();
+
+        spyOn(UserRepository.prototype, 'get');
     });
 
     describe('getUser', function() {
@@ -86,7 +82,7 @@ describe('userRoleAssignmentFactory', function() {
         var resultUser;
 
         beforeEach(function() {
-            userRepositoryMock.get.andReturn($q.resolve(user));
+            UserRepository.prototype.get.andReturn($q.resolve(user));
             userRoleAssignmentFactory.getUser(user.id, roles, programs, supervisoryNodes, warehouses)
                 .then(function(response) {
                     resultUser = response;
@@ -99,7 +95,7 @@ describe('userRoleAssignmentFactory', function() {
         });
 
         it('should call referencedataUserService', function() {
-            expect(userRepositoryMock.get).toHaveBeenCalledWith(user.id);
+            expect(UserRepository.prototype.get).toHaveBeenCalledWith(user.id);
         });
 
         it('should set type properties for all assignments', function() {
