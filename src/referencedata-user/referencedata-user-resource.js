@@ -40,6 +40,15 @@
 
         return ReferenceDataUserResource;
 
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-user.ReferenceDataUserResource
+         * @name ReferenceDataUserResource
+         * @constructor
+         *
+         * @description
+         * Creates an object of the ReferenceDataUserResource class and initiates all required dependencies.
+         */
         function ReferenceDataUserResource() {
             var resourceUrl = openlmisUrlFactory('/api/users');
             this.super(resourceUrl);

@@ -63,7 +63,7 @@
          * @description
          * Creates a new user on the OpenLMIS server.
          *
-         * @param  {User}    user the instance of the User class
+         * @param  {Object}  user the instance of the User class
          * @return {Promise}      the promise resolving to combined JSON which can be used for creating instance of the
          *                        User class
          */
@@ -92,7 +92,7 @@
          * @description
          * Updates the user on the OpenLMIS server.
          *
-         * @param  {User}    user the instance of the User class
+         * @param  {Object}  user the instance of the User class
          * @return {Promise}      the promise resolving to combined JSON which can be used for creating instance of the
          *                        User class
          */
@@ -116,9 +116,9 @@
          * @description
          * Retrieves the user with the given ID from the OpenLMIS server.
          *
-         * @param  {User}    user the instance of the User class
-         * @return {Promise}      the promise resolving to combined JSON which can be used for creating instance of the
-         *                        User class
+         * @param  {String}  id the id of the user
+         * @return {Promise}    the promise resolving to combined JSON which can be used for creating instance of the
+         *                      User class
          */
         function get(id) {
             return $q.all([
@@ -140,7 +140,7 @@
          * @description
          * Retrieves the users matching the given parameters from the OpenLMIS server.
          *
-         * @param  {User}    params the parameters to search with
+         * @param  {Object}  params the parameters to search with
          * @return {Promise}        the promise resolving to a page of combined JSON which can be used for creating
          *                          instances of the User class
          */
