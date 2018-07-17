@@ -29,6 +29,7 @@
         LotDataBuilder.prototype.withId = withId;
         LotDataBuilder.prototype.withExpirationDate = withExpirationDate;
         LotDataBuilder.prototype.withTradeItemId = withTradeItemId;
+        LotDataBuilder.prototype.withoutExpirationDate = withoutExpirationDate;
 
         return LotDataBuilder;
 
@@ -50,6 +51,10 @@
         function withExpirationDate(newExpirationDate) {
             this.expirationDate = newExpirationDate;
             return this;
+        }
+
+        function withoutExpirationDate() {
+            return this.withExpirationDate(undefined);
         }
 
         function withTradeItemId(tradeItemId) {
