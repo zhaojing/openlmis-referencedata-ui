@@ -71,6 +71,12 @@ describe('User', function() {
             expect(user.loginRestricted).toEqual(false);
         });
 
+        it('should default active to true', function() {
+            user = new User();
+
+            expect(user.active).toEqual(true);
+        });
+
     });
 
     describe('fromJson', function() {

@@ -74,6 +74,7 @@
                 this.loginRestricted = false;
             }
 
+            this.active = true;
             this.enabled = true;
             this.repository = repository;
         }
