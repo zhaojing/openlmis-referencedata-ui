@@ -15,7 +15,7 @@
 
 describe('AuthUserResource', function() {
 
-    var AuthUserResource, OpenlmisResourceMock, openlmisUrlFactory;
+    var AuthUserResource, OpenlmisResourceMock;
 
     beforeEach(function() {
         module('auth-user', function($provide) {
@@ -27,7 +27,6 @@ describe('AuthUserResource', function() {
         });
 
         inject(function($injector) {
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             AuthUserResource = $injector.get('AuthUserResource');
         });
     });
@@ -35,8 +34,6 @@ describe('AuthUserResource', function() {
     it('should extend OpenlmisResource', function() {
         new AuthUserResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith(
-            openlmisUrlFactory('/api/users/auth')
-        );
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/users/auth');
     });
 });

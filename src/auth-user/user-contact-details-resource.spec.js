@@ -15,7 +15,7 @@
 
 describe('UserContactDetailsResource', function() {
 
-    var UserContactDetailsResource, OpenlmisResourceMock, openlmisUrlFactory;
+    var UserContactDetailsResource, OpenlmisResourceMock;
 
     beforeEach(function() {
         module('auth-user', function($provide) {
@@ -27,7 +27,6 @@ describe('UserContactDetailsResource', function() {
         });
 
         inject(function($injector) {
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             UserContactDetailsResource = $injector.get('UserContactDetailsResource');
         });
     });
@@ -36,7 +35,7 @@ describe('UserContactDetailsResource', function() {
         new UserContactDetailsResource();
 
         expect(OpenlmisResourceMock).toHaveBeenCalledWith(
-            openlmisUrlFactory('/api/userContactDetails'),
+            '/api/userContactDetails',
             {
                 idParam: 'referenceDataUserId'
             }
