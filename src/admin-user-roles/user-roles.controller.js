@@ -28,11 +28,9 @@
         .module('admin-user-roles')
         .controller('UserRolesController', controller);
 
-    controller.$inject = [
-        'user', 'authUserService', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'
-    ];
+    controller.$inject = ['user', 'loadingModalService', '$state', 'notificationService', 'ROLE_TYPES'];
 
-    function controller(user, authUserService, loadingModalService, $state, notificationService, ROLE_TYPES) {
+    function controller(user, loadingModalService, $state, notificationService, ROLE_TYPES) {
 
         var vm = this;
 
