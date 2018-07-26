@@ -15,18 +15,12 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, authUserService, notificationService, loadingModalService, UserDataBuilder,
+    var $state, $q, $controller, $rootScope, ROLE_TYPES, notificationService, loadingModalService, UserDataBuilder,
         vm, user;
 
     beforeEach(function() {
 
         module('admin-user-roles', function($provide) {
-
-            authUserService = jasmine.createSpyObj('authUserService', ['saveUser']);
-            $provide.service('authUserService', function() {
-                return authUserService;
-            });
-
             notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
             $provide.service('notificationService', function() {
                 return notificationService;
@@ -61,6 +55,7 @@ describe('UserRolesController', function() {
         $rootScope.$apply();
 
         spyOn($state, 'go').andReturn();
+        spyOn(user, 'save');
     });
 
     describe('on init', function() {
@@ -85,7 +80,7 @@ describe('UserRolesController', function() {
     describe('saveUser', function() {
 
         beforeEach(function() {
-            authUserService.saveUser.andReturn($q.when(true));
+            user.save.andReturn($q.when(true));
             loadingModalService.open.andReturn($q.when(true));
             vm.saveUserRoles();
         });
@@ -94,8 +89,8 @@ describe('UserRolesController', function() {
             expect(loadingModalService.open).toHaveBeenCalledWith(true);
         });
 
-        it('should call authUserService', function() {
-            expect(authUserService.saveUser).toHaveBeenCalledWith(user);
+        it('should save user', function() {
+            expect(user.save).toHaveBeenCalled();
         });
 
         it('should show success notification', function() {
@@ -106,8 +101,8 @@ describe('UserRolesController', function() {
         it('should redirect to users list', function() {
             $rootScope.$apply();
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
-                    reload: true
-                });
+                reload: true
+            });
         });
 
         it('should close loading modal', function() {
@@ -120,7 +115,7 @@ describe('UserRolesController', function() {
             deferred.reject();
 
             $rootScope.$apply();
-            authUserService.saveUser.andReturn(deferred.promise);
+            user.save.andReturn(deferred.promise);
             vm.saveUserRoles();
             $rootScope.$apply();
 

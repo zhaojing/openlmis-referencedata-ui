@@ -89,7 +89,7 @@
         function saveUserRoles() {
             var loadingPromise = loadingModalService.open(true);
 
-            return authUserService.saveUser(vm.user).then(function() {
+            return vm.user.save().then(function() {
                 loadingPromise.then(function() {
                     notificationService.success('adminUserRoles.updateSuccessful');
                 });
