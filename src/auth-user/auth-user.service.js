@@ -28,10 +28,10 @@
         .service('authUserService', service);
 
     service.$inject = [
-        'openlmisUrlFactory', '$resource'
+        'openlmisUrlFactory', '$resource', '$q'
     ];
 
-    function service(openlmisUrlFactory, $resource) {
+    function service(openlmisUrlFactory, $resource, $q) {
         var resource = $resource(openlmisUrlFactory('/api/users/auth'), {}, {
             saveUser: {
                 method: 'POST'
@@ -136,14 +136,16 @@
          * @description
          * Gets pending verification for the given user.
          *
-         * @param   {String}    userId  the ID of the user
-         * @return  {Promise}           the promise resolving to the get pending verification
+         * @param   {String}    user  the user to fetch the verification email for
+         * @return  {Promise}         the promise resolving to the get pending verification
          */
-        function getVerificationEmail(userId) {
+        function getVerificationEmail(user) {
+            if (!user || !user.hasContactDetails) {
+                return $q.resolve();
+            }
             return resource.getVerificationEmail({
-                userId: userId
-            })
-                .$promise
+                userId: user.id
+            }).$promise
                 .then(function(response) {
                     return angular.equals(response, {}) ? undefined : response;
                 });
