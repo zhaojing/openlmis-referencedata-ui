@@ -123,12 +123,10 @@
         function get(id) {
             return $q.all([
                 this.referenceDataUserResource.get(id),
-                this.userContactDetailsResource.query({
-                    id: [id]
-                })
+                this.userContactDetailsResource.get(id)
             ]).then(function(responses) {
                 var referenceDataUser = responses[0],
-                    userContactDetails = responses[1].content.length ? responses[1].content[0] : undefined;
+                    userContactDetails = responses[1];
 
                 return combineResponses(referenceDataUser, userContactDetails);
             });
@@ -201,7 +199,6 @@
                 referenceDataUser.email = userContactDetails.emailDetails.email;
                 referenceDataUser.verified = userContactDetails.emailDetails.emailVerified;
                 referenceDataUser.allowNotify = userContactDetails.allowNotify;
-                referenceDataUser.hasContactDetails = true;
             }
 
             return referenceDataUser;

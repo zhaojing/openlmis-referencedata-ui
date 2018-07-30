@@ -148,7 +148,7 @@ describe('authUserService', function() {
                 .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
                 .respond(200, token);
 
-            authUserService.getVerificationEmail(user)
+            authUserService.getVerificationEmail(user.id)
                 .then(function(response) {
                     data = response;
                 });
@@ -166,7 +166,7 @@ describe('authUserService', function() {
                 .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
                 .respond(200);
 
-            authUserService.getVerificationEmail(user)
+            authUserService.getVerificationEmail(user.id)
                 .then(function(response) {
                     data = response;
                 });
@@ -183,7 +183,7 @@ describe('authUserService', function() {
                 .respond(500);
 
             var rejected;
-            authUserService.getVerificationEmail(user)
+            authUserService.getVerificationEmail(user.id)
                 .catch(function() {
                     rejected = true;
                 });
@@ -191,22 +191,6 @@ describe('authUserService', function() {
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);
-        });
-
-        it('should return undefined if user contact details does not exist', function() {
-            user = new UserDataBuilder()
-                .withoutContactDetails()
-                .build();
-
-            var succeeded;
-            authUserService.getVerificationEmail(user)
-                .then(function(response) {
-                    expect(response).toBeUndefined();
-                    succeeded = true;
-                });
-            $rootScope.$apply();
-
-            expect(succeeded).toEqual(true);
         });
 
     });

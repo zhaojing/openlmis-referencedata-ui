@@ -35,7 +35,11 @@
                     return new UserService().get($stateParams.id);
                 },
                 pendingVerificationEmail: function(user, authUserService) {
-                    return authUserService.getVerificationEmail(user);
+                    if (user.id) {
+                        return authUserService.getVerificationEmail(user.id);
+                    }
+
+                    return undefined;
                 }
             },
             views: {

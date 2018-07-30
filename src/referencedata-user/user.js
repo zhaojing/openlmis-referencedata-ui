@@ -70,7 +70,6 @@
                 this.extraData = json.extraData;
                 this.enabled = json.enabled;
                 this.roleAssignments = json.roleAssignments;
-                this.hasContactDetails = json.hasContactDetails;
             } else {
                 this.loginRestricted = false;
             }

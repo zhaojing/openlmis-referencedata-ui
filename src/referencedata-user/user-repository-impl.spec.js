@@ -58,6 +58,8 @@ describe('UserRepositoryImpl', function() {
         spyOn(UserContactDetailsResource.prototype, 'query');
         spyOn(UserContactDetailsResource.prototype, 'update')
             .andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
+        spyOn(UserContactDetailsResource.prototype, 'get')
+            .andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
 
         userRepositoryImpl = new UserRepositoryImpl();
     });
@@ -184,11 +186,6 @@ describe('UserRepositoryImpl', function() {
 
         beforeEach(function() {
             user = userDataBuilder.build();
-            UserContactDetailsResource.prototype.query.andReturn($q.resolve(
-                new PageDataBuilder()
-                    .withContent([userDataBuilder.buildUserContactDetailsJson()])
-                    .build()
-            ));
         });
 
         it('should return user json', function() {
@@ -201,9 +198,7 @@ describe('UserRepositoryImpl', function() {
 
             expect(result).toEqual(userDataBuilder.buildJson());
             expect(ReferenceDataUserResource.prototype.get).toHaveBeenCalledWith(user.id);
-            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
-                id: [user.id]
-            });
+            expect(UserContactDetailsResource.prototype.get).toHaveBeenCalledWith(user.id);
         });
 
         it('should reject if reference data user creation failed', function() {
@@ -220,7 +215,7 @@ describe('UserRepositoryImpl', function() {
         });
 
         it('should reject if reference data user creation failed', function() {
-            UserContactDetailsResource.prototype.query.andReturn($q.reject());
+            UserContactDetailsResource.prototype.get.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.get(user.id)
@@ -230,23 +225,6 @@ describe('UserRepositoryImpl', function() {
             $rootScope.$apply();
 
             expect(rejected).toEqual(true);
-        });
-
-        it('should return user without contact details if they does not exist', function() {
-            UserContactDetailsResource.prototype.query.andReturn($q.resolve(new PageDataBuilder().build()));
-
-            var result;
-            userRepositoryImpl.get(user.id)
-                .then(function(user) {
-                    result = user;
-                });
-            $rootScope.$apply();
-
-            expect(result).toEqual(
-                userDataBuilder
-                    .withoutContactDetails()
-                    .buildJson()
-            );
         });
 
     });

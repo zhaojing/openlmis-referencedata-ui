@@ -38,7 +38,6 @@
         UserDataBuilder.prototype.withHomeFacilityId = withHomeFacilityId;
         UserDataBuilder.prototype.withoutHomeFacilityId = withoutHomeFacilityId;
         UserDataBuilder.prototype.asNew = asNew;
-        UserDataBuilder.prototype.withoutContactDetails = withoutContactDetails;
 
         return UserDataBuilder;
 
@@ -60,7 +59,6 @@
             this.allowNotify = true;
             this.extraData = {};
             this.roleAssignments = [];
-            this.hasContactDetails = true;
             this.repository = new UserRepository();
         }
 
@@ -110,16 +108,6 @@
             return this;
         }
 
-        function withoutContactDetails() {
-            this.email = undefined;
-            this.phoneNumber = undefined;
-            this.verified = undefined;
-            this.phoneNumber = undefined;
-            this.allowNotify = undefined;
-            this.hasContactDetails = undefined;
-            return this;
-        }
-
         function build() {
             return new User(this.buildJson(), this.repository);
         }
@@ -140,8 +128,7 @@
                 loginRestricted: this.loginRestricted,
                 allowNotify: this.allowNotify,
                 extraData: this.extraData,
-                roleAssignments: this.roleAssignments,
-                hasContactDetails: this.hasContactDetails
+                roleAssignments: this.roleAssignments
             };
         }
 
