@@ -29,7 +29,8 @@
         'openlmis-rights',
         'referencedata-facility',
         'referencedata-user',
-        'ui.router'
+        'ui.router',
+        'admin-user-list'
     ]);
 
 })();
