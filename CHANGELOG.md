@@ -1,5 +1,5 @@
 5.4.0 / WIP
-==================
+===========
 
 New functionality added in a backwards-compatible manner:
 * [OLMIS-2245](https://openlmis.atlassian.net/browse/OLMIS-2245): Added Users number column to Role List screen.
