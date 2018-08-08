@@ -109,35 +109,29 @@
         }
 
         /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name query
-             *
-             * @description
-             * Retrieves all facilities that match given params or all facilities when no params provided.
-             * When user is offline it gets facilities from offline storage.
-             * If user is online it stores all facilities into offline storage.
-             *
-             * @param  {String}  queryParams      the search parameters
-             * @return {Promise} Array of facilities
-             */
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name query
+         *
+         * @description
+         * Retrieves all facilities that match given params or all facilities when no params provided.
+         * When user is offline it gets facilities from offline storage.
+         * If user is online it stores all facilities into offline storage.
+         *
+         * @param  {String}  queryParams      the search parameters
+         * @return {Promise} Array of facilities
+         */
         function query(queryParams) {
-            var deferred = $q.defer();
-
             if (offlineService.isOffline()) {
-                deferred.resolve(facilitiesOffline.getAll());
-            } else {
-                resource.query(queryParams, function(facilities) {
-                    angular.forEach(facilities, function(facility) {
+                return $q.resolve(facilitiesOffline.getAll());
+            }
+            return resource.query(queryParams).$promise
+                .then(function(facilities) {
+                    facilities.forEach(function(facility) {
                         facilitiesOffline.put(facility);
                     });
-                    deferred.resolve(facilities);
-                }, function() {
-                    deferred.reject();
+                    return facilities;
                 });
-            }
-
-            return deferred.promise;
         }
 
         /**

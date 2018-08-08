@@ -73,28 +73,23 @@
          * @return {Promise}    Array of role assignments
          */
         function getSupervisoryNode(id) {
-            var deferred = $q.defer();
-
-            $q.all([
+            return $q.all([
                 supervisoryNodeService.get(id),
-                facilityService.query()
-            ]).then(function(responses) {
-                var supervisoryNode =  responses[0],
-                    facilities = responses[1];
-
-                angular.forEach(supervisoryNode.childNodes, function(node) {
-                    var filtered = $filter('filter')(facilities, {
-                        id: node.facility.id
+                facilityService.getAllMinimal()
+            ])
+                .then(function(responses) {
+                    var supervisoryNode = responses[0],
+                        facilities = responses[1];
+                    supervisoryNode.childNodes.forEach(function(node) {
+                        var filtered = facilities.filter(function(facility) {
+                            return facility.id === node.facility.id;
+                        });
+                        if (filtered && filtered.length > 0) {
+                            node.$facility = filtered[0];
+                        }
                     });
-                    if (filtered && filtered.length > 0) {
-                        node.$facility = filtered[0];
-                    }
+                    return supervisoryNode;
                 });
-
-                deferred.resolve(supervisoryNode);
-            }, deferred.reject);
-
-            return deferred.promise;
         }
     }
 })();
