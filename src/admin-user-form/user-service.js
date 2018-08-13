@@ -58,7 +58,7 @@
             var originalSave = user.save;
 
             user.save = function() {
-                var newUser = !user.id,
+                var newUser = user.isNewUser,
                     successMessage = 'adminUserForm.user' + (newUser ? 'Created' : 'Updated') + 'Successfully',
                     errorMessage = 'adminUserForm.failedTo' + (newUser ? 'Create' : 'Update') + 'User';
 

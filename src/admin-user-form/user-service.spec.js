@@ -114,7 +114,7 @@ describe('UserService', function() {
         });
 
         it('should show notification after creating user', function() {
-            decoratedUser.id = undefined;
+            decoratedUser.isNewUser = true;
 
             decoratedUser.save();
             $rootScope.$apply();
@@ -123,7 +123,7 @@ describe('UserService', function() {
         });
 
         it('should open password modal after creating new user', function() {
-            decoratedUser.id = undefined;
+            decoratedUser.isNewUser = true;
 
             decoratedUser.save();
             $rootScope.$apply();
@@ -173,7 +173,7 @@ describe('UserService', function() {
         });
 
         it('should show notification if creation fails', function() {
-            decoratedUser.id = undefined;
+            decoratedUser.isNewUser = true;
             originalSave.andReturn($q.reject());
 
             decoratedUser.save();

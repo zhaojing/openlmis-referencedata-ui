@@ -63,6 +63,7 @@ describe('User', function() {
             expect(user.extraData).toEqual(json.extraData);
             expect(user.roleAssignments).toEqual(json.roleAssignments);
             expect(user.repository).toEqual(userRepository);
+            expect(user.isNewUser).toEqual(false);
         });
 
         it('should default login restricted to false', function() {
@@ -75,6 +76,12 @@ describe('User', function() {
             user = new User();
 
             expect(user.active).toEqual(true);
+        });
+
+        it('should return true if user has no id', function() {
+            user = new User();
+
+            expect(user.isNewUser).toEqual(true);
         });
 
     });
@@ -169,20 +176,6 @@ describe('User', function() {
                 username: user.username,
                 enabled: user.enabled
             });
-        });
-
-    });
-
-    describe('isNewUser', function() {
-
-        it('should return false if user has id', function() {
-            expect(user.isNewUser()).toEqual(false);
-        });
-
-        it('should return true if user has no id', function() {
-            user.id = undefined;
-
-            expect(user.isNewUser()).toEqual(true);
         });
 
     });

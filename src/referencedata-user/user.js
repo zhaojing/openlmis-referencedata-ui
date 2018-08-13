@@ -35,7 +35,7 @@
         User.prototype.getBasicInformation = getBasicInformation;
         User.prototype.getContactDetails = getContactDetails;
         User.prototype.getAuthDetails = getAuthDetails;
-        User.prototype.isNewUser = isNewUser;
+        //User.prototype.isNewUser = isNewUser;
         User.prototype.removeHomeFacilityRights = removeHomeFacilityRights;
         User.prototype.save = save;
 
@@ -77,6 +77,7 @@
             this.active = true;
             this.enabled = true;
             this.repository = repository;
+            this.isNewUser = !this.id;
         }
 
         /**
@@ -155,10 +156,6 @@
                 username: this.username,
                 enabled: this.enabled
             };
-        }
-
-        function isNewUser() {
-            return !this.id;
         }
 
         function removeHomeFacilityRights() {
