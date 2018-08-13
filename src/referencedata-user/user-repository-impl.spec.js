@@ -150,11 +150,12 @@ describe('UserRepositoryImpl', function() {
             $rootScope.$apply();
 
             expect(result).toEqual(userDataBuilder.buildJson());
+            expect(AuthUserResource.prototype.create).toHaveBeenCalledWith(expected.getAuthDetails());
             expect(ReferenceDataUserResource.prototype.update).toHaveBeenCalledWith(expected.getBasicInformation());
             expect(UserContactDetailsResource.prototype.update).toHaveBeenCalledWith(expected.getContactDetails());
         });
 
-        it('should reject if reference data user creation failed', function() {
+        it('should reject if reference data user update failed', function() {
             ReferenceDataUserResource.prototype.update.andReturn($q.reject());
 
             var rejected;
@@ -167,8 +168,21 @@ describe('UserRepositoryImpl', function() {
             expect(rejected).toEqual(true);
         });
 
-        it('should reject if reference data user creation failed', function() {
+        it('should reject if reference data user update failed', function() {
             UserContactDetailsResource.prototype.update.andReturn($q.reject());
+
+            var rejected;
+            userRepositoryImpl.update(user)
+                .catch(function() {
+                    rejected = true;
+                });
+            $rootScope.$apply();
+
+            expect(rejected).toEqual(true);
+        });
+
+        it('should reject if auth data user update failed', function() {
+            AuthUserResource.prototype.create.andReturn($q.reject());
 
             var rejected;
             userRepositoryImpl.update(user)

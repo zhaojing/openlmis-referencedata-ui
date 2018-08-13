@@ -99,7 +99,8 @@
         function update(user) {
             return $q.all([
                 this.referenceDataUserResource.update(user.getBasicInformation()),
-                this.userContactDetailsResource.update(user.getContactDetails())
+                this.userContactDetailsResource.update(user.getContactDetails()),
+                this.authUserResource.create(user.getAuthDetails())
             ]).then(function(responses) {
                 var referenceDataUser = responses[0],
                     userContactDetails = responses[1];
