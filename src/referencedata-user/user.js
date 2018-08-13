@@ -35,7 +35,6 @@
         User.prototype.getBasicInformation = getBasicInformation;
         User.prototype.getContactDetails = getContactDetails;
         User.prototype.getAuthDetails = getAuthDetails;
-        //User.prototype.isNewUser = isNewUser;
         User.prototype.removeHomeFacilityRights = removeHomeFacilityRights;
         User.prototype.save = save;
 
