@@ -1,3 +1,9 @@
+5.4.1 / WIP
+==================
+
+Improvements:
+* [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.
+
 5.4.0 / 2018-08-16
 ==================
 

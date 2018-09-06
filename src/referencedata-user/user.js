@@ -104,10 +104,12 @@
          * @param {String} type      the role assignment types
          * @return {Array}           the list of role assignment with the given type.
          */
-        function getRoleAssignments(type) {
+        function getRoleAssignments(type, supervisoryNodeId, programId) {
             return this.roleAssignments
                 .filter(function(role) {
-                    return !type || role.type === type;
+                    return (!type || role.type === type)
+                        && (!supervisoryNodeId || role.supervisoryNodeId === supervisoryNodeId)
+                        && (!programId || role.programId === programId);
                 })
                 .sort(function(a, b) {
                     return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);

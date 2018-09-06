@@ -15,7 +15,7 @@
 
 describe('User', function() {
 
-    var User, user, json, UserDataBuilder, ROLE_TYPES, supervisionRoleAssignment, orderFulfillmentRoleAssignment,
+    var User, user, json, UserDataBuilder, ROLE_TYPES, supervisionRoleAssignments, orderFulfillmentRoleAssignment,
         generalAdminRoleAssignment, UserRepository, userRepository;
 
     beforeEach(function() {
@@ -32,13 +32,15 @@ describe('User', function() {
 
         json = new UserDataBuilder()
             .withSupervisionRoleAssignment('1', '1', '1')
+            .withSupervisionRoleAssignment('2', '2', '1')
+            .withSupervisionRoleAssignment('3', '1', '2')
             .withOrderFulfillmentRoleAssignment('2', '2')
             .withGeneralAdminRoleAssignment('3')
             .buildJson();
 
-        supervisionRoleAssignment = json.roleAssignments[0];
-        orderFulfillmentRoleAssignment = json.roleAssignments[1];
-        generalAdminRoleAssignment = json.roleAssignments[2];
+        supervisionRoleAssignments = [json.roleAssignments[0], json.roleAssignments[1], json.roleAssignments[2]];
+        orderFulfillmentRoleAssignment = json.roleAssignments[3];
+        generalAdminRoleAssignment = json.roleAssignments[4];
 
         user = new User(json, userRepository);
 
@@ -105,9 +107,17 @@ describe('User', function() {
         });
 
         it('should get role assignments by type', function() {
-            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION)).toEqual([supervisionRoleAssignment]);
+            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION)).toEqual(supervisionRoleAssignments);
             expect(user.getRoleAssignments(ROLE_TYPES.ORDER_FULFILLMENT)).toEqual([orderFulfillmentRoleAssignment]);
             expect(user.getRoleAssignments(ROLE_TYPES.GENERAL_ADMIN)).toEqual([generalAdminRoleAssignment]);
+        });
+
+        it('should get supervision role assignments by supervisoryNodeId', function() {
+            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION, '1')).toEqual([supervisionRoleAssignments[0], supervisionRoleAssignments[2]]);
+        });
+
+        it('should get supervision role assignments by supervisoryNodeId and programId', function() {
+            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION, '1', '1')).toEqual([supervisionRoleAssignments[0]]);
         });
 
     });
@@ -183,7 +193,9 @@ describe('User', function() {
     describe('removeHomeFacilityRights', function() {
 
         it('should remove rights with program id and without supervisory node id', function() {
-            supervisionRoleAssignment.supervisoryNodeId = undefined;
+            supervisionRoleAssignments[0].supervisoryNodeId = undefined;
+            supervisionRoleAssignments[1].supervisoryNodeId = undefined;
+            supervisionRoleAssignments[2].supervisoryNodeId = undefined;
 
             user.removeHomeFacilityRights();
 
