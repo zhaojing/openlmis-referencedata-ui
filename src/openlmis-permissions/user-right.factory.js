@@ -29,9 +29,9 @@
         .module('openlmis-permissions')
         .factory('userRightsFactory', factory);
 
-    factory.$inject = ['$q', 'permissionService', 'programService'];
+    factory.$inject = ['$q', 'permissionService'];
 
-    function factory($q, permissionService, programService) {
+    function factory($q, permissionService) {
 
         return {
             buildRights: buildRights
@@ -69,9 +69,6 @@
 
             permissionService.load(userId)
                 .then(buildRightsObject)
-                .then(function(rights) {
-                    return addProgramCodeToRights(userId, rights);
-                })
                 .then(function(rights) {
                     var rightsArray = [];
                     Object.keys(rights).forEach(function(key) {
@@ -127,50 +124,6 @@
             });
 
             return rights;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-permissions.userRightsFactory
-         * @name  addProgramCodeToRights
-         *
-         * @param  {Array} userId The user id we want programs for
-         * @param  {Array} rights List of rights
-         * @return {Promise}      Resolves to rights with program codes
-         *
-         * @description
-         * If successful, the returned promise is returned back into the rights
-         * with programCodes loaded.
-         */
-        function addProgramCodeToRights(userId, rights) {
-            var deferred = $q.defer();
-
-            programService.getUserPrograms(userId)
-                .then(function(programs) {
-                    var programsHash = {};
-                    programs.forEach(function(program) {
-                        programsHash[program.id] = program.code;
-                    });
-                    return $q.resolve(programsHash);
-                })
-                .then(function(programsHash) {
-                    Object.keys(rights).forEach(function(key) {
-                        addProgramCodes(rights[key], programsHash);
-                    });
-
-                    deferred.resolve(rights);
-                });
-
-            return deferred.promise;
-        }
-
-        function addProgramCodes(right, programsHash) {
-            right.programCodes = [];
-            right.programIds.forEach(function(programId) {
-                if (programsHash[programId]) {
-                    right.programCodes.push(programsHash[programId]);
-                }
-            });
         }
     }
 })();
