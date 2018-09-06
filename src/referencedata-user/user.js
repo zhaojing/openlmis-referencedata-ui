@@ -107,13 +107,17 @@
         function getRoleAssignments(type, supervisoryNodeId, programId) {
             return this.roleAssignments
                 .filter(function(role) {
-                    return (!type || role.type === type)
-                        && (!supervisoryNodeId || role.supervisoryNodeId === supervisoryNodeId)
-                        && (!programId || role.programId === programId);
+                    return isFieldHasValue('type', role, type)
+                        && isFieldHasValue('supervisoryNodeId', role, supervisoryNodeId)
+                        && isFieldHasValue('programId', role, programId);
                 })
                 .sort(function(a, b) {
                     return (a.roleName > b.roleName) ? 1 : ((b.roleName > a.roleName) ? -1 : 0);
                 });
+        }
+
+        function isFieldHasValue(field, role, value) {
+            return !value || role[field] === value;
         }
 
         function save() {
