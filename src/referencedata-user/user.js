@@ -101,8 +101,10 @@
          * @description
          * Gets role assignments by type.
          *
-         * @param {String} type      the role assignment types
-         * @return {Array}           the list of role assignment with the given type.
+         * @param {String} type                 the role assignment types
+         * @param {String} supervisoryNodeId    the UUID of supervisory node
+         * @param {String} programId            the UUID of program
+         * @return {Array}                      the list of role assignments that match passed parameters.
          */
         function getRoleAssignments(type, supervisoryNodeId, programId) {
             return this.roleAssignments
