@@ -192,6 +192,26 @@ describe('Facility service minimal decorator', function() {
             expect(originalGetAllMinimalSpy).not.toHaveBeenCalled();
         });
 
+        it('should re-fetch the data after re-logging', function() {
+            facilityService.cacheAllMinimal();
+            $rootScope.$apply();
+
+            originalGetAllMinimalSpy.reset();
+
+            facilityService.clearMinimalFacilitiesCache();
+            $rootScope.$apply();
+
+            var success;
+            facilityService.cacheAllMinimal()
+                .then(function() {
+                    success = true;
+                });
+            $rootScope.$apply();
+
+            expect(success).toBe(true);
+            expect(originalGetAllMinimalSpy).toHaveBeenCalled();
+        });
+
     });
 
     describe('getAllMinimal', function() {
@@ -265,6 +285,8 @@ describe('Facility service minimal decorator', function() {
     describe('clearMinimalFacilitiesCache', function() {
 
         it('should clear the database', function() {
+            LocalDatabase.prototype.removeAll.andReturn($q.resolve());
+
             facilityService.clearMinimalFacilitiesCache();
 
             expect(LocalDatabase.prototype.removeAll).toHaveBeenCalled();
