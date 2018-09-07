@@ -87,13 +87,7 @@
             if (!promise) {
                 promise = originalGetAllMinimal.apply($delegate, arguments)
                     .then(function(facilities) {
-                        return minimalFacilitiesDatabase.removeAll()
-                            .then(function() {
-                                return facilities;
-                            });
-                    })
-                    .then(function(facilities) {
-                        return minimalFacilitiesDatabase.putAll(facilities);
+                        return refreshDb(facilities, minimalFacilitiesDatabase);
                     })
                     .then(function() {
                         cached = true;
@@ -140,6 +134,13 @@
                     return minimalFacilitiesDatabase.get(id);
                 });
         }
+    }
+
+    function refreshDb(facilities, minimalFacilitiesDatabase) {
+        return minimalFacilitiesDatabase.removeAll()
+            .then(function() {
+                return minimalFacilitiesDatabase.putAll(facilities);
+            });
     }
 
 })();
