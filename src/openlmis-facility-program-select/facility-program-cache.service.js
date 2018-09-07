@@ -165,7 +165,7 @@
 
             return $q.all([
                 facilityService.getAllMinimal(),
-                programService.getUserPrograms(),
+                programService.getUserPrograms(userId),
                 permissionService.load(userId),
                 currentUserService.getUserInfo()
             ])
