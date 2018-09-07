@@ -17,18 +17,25 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-facilities-cache
-     *
-     * @description
-     * Caches minimal facility details to store offline.
-     */
-    angular.module('referencedata-facilities-cache', [
-        'openlmis-local-storage',
-        'referencedata-facility',
-        'openlmis-loading',
-        'openlmis-login',
-        'openlmis-database'
-    ]);
+    angular
+        .module('openlmis-permissions')
+        .run(routes);
+
+    routes.$inject = ['loginService', 'userRightsFactory', 'authorizationService'];
+
+    function routes(loginService, userRightsFactory, authorizationService) {
+
+        loginService.registerPostLoginAction(function(user) {
+            return userRightsFactory.buildRights(user.userId)
+                .then(function(rights) {
+                    authorizationService.setRights(rights);
+                });
+        });
+
+        loginService.registerPostLogoutAction(function() {
+            return authorizationService.clearRights();
+        });
+
+    }
 
 })();
