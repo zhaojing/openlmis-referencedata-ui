@@ -115,7 +115,11 @@
          * Deletes any facilities stored in the user's browser cache.
          */
         function clearCache() {
-            return minimalFacilitiesDatabase.removeAll();
+            return minimalFacilitiesDatabase.removeAll()
+                .then(function() {
+                    promise = undefined;
+                    cached = false;
+                });
         }
 
         /**
