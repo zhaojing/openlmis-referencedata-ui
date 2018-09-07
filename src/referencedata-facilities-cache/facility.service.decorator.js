@@ -25,8 +25,7 @@
      * Decorates methods to the facilityService, making it so the minimal
      * facility list is loaded once.
      */
-    angular
-        .module('referencedata-facilities-cache')
+    angular.module('referencedata-facilities-cache')
         .config(config);
 
     config.$inject = ['$provide'];
@@ -35,16 +34,12 @@
         $provide.decorator('facilityService', decorator);
     }
 
-    decorator.$inject = ['$delegate', '$q', 'LocalDatabase'];
-
-    function decorator($delegate, $q, LocalDatabase) {
+    decorator.$inject = ['$delegate', '$q', 'localStorageFactory'];
+    function decorator($delegate, $q, localStorageFactory) {
         var originalGetAllMinimal = $delegate.getAllMinimal,
-            minimalFacilitiesDatabase = new LocalDatabase('minimalFacilities'),
-            cached = false,
-            promise;
+            minimalFacilitiesCache = localStorageFactory('referencedataMinimalFacilities');
 
-        $delegate.cacheAllMinimal = cacheAllMinimal;
-        $delegate.getAllMinimal = getAllMinimal;
+        $delegate.getAllMinimal = cachedGetAllMinimal;
         $delegate.getMinimal = getMinimal;
         $delegate.clearMinimalFacilitiesCache = clearCache;
 
@@ -56,66 +51,37 @@
          * @name getAllMinimal
          *
          * @description
-         * Gets a minimal representation of all facilities from the referencedata service, which is then stored and only
-         * retrieved from the user's browser. Calling this method will cache all the minimal facility representations
-         * if they are not already cached.
+         * Gets a minimal representation of all facilities from the
+         * referencedata service, which is then stored and only retrieved from
+         * the user's browser.
          */
-        function getAllMinimal() {
-            return this.cacheAllMinimal()
-                .then(function() {
-                    return minimalFacilitiesDatabase.getAll();
-                });
-        }
+        function cachedGetAllMinimal() {
+            var cachedFacilities = minimalFacilitiesCache.getAll();
 
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-facilities-cache.facilityService
-         * @name getAllMinimal
-         *
-         * @description
-         * Caches all the minimal facility representations if they are not already cached. Resolves immediately if they
-         * are already cached. If caching fails, calling this method again will reattempt caching. 
-         * 
-         * @return {Promise}  the promise resolved when caching is done, it does not resolve to a list of cached
-         *                    minimal facilities
-         */
-        function cacheAllMinimal() {
-            if (cached) {
-                return $q.resolve();
+            if (cachedFacilities.length > 0) {
+                return $q.resolve(cachedFacilities);
             }
-
-            if (!promise) {
-                promise = originalGetAllMinimal.apply($delegate, arguments)
-                    .then(function(facilities) {
-                        return minimalFacilitiesDatabase.removeAll()
-                            .then(function() {
-                                return facilities;
-                            });
-                    })
-                    .then(function(facilities) {
-                        return minimalFacilitiesDatabase.putAll(facilities);
-                    })
-                    .then(function() {
-                        cached = true;
-                    })
-                    .finally(function() {
-                        promise = undefined;
+            return originalGetAllMinimal.apply($delegate, arguments)
+                .then(function(facilities) {
+                    facilities.forEach(function(facility) {
+                        minimalFacilitiesCache.put(facility);
                     });
-            }
 
-            return promise;
+                    return facilities;
+                });
+
         }
 
         /**
          * @ngdoc method
          * @methodOf referencedata-facilities-cache.facilityService
-         * @name clearMinimalFacilitiesDatabase
+         * @name clearMinimalFacilitiesCache
          *
          * @description
          * Deletes any facilities stored in the user's browser cache.
          */
         function clearCache() {
-            return minimalFacilitiesDatabase.removeAll();
+            minimalFacilitiesCache.clearAll();
         }
 
         /**
@@ -124,17 +90,17 @@
          * @name getMinimal
          *
          * @description
-         * Gets a minimal representation of single facility by id field. Calling this method will cache all the minimal
-         * facility representations if they are not already cached.
+         * Gets a minimal representation of single facility by id field.
          *
          * @param  {String} facility ID
          * @return {Object} found facility object
          */
         function getMinimal(id) {
-            return this.cacheAllMinimal()
-                .then(function() {
-                    return minimalFacilitiesDatabase.get(id);
-                });
+            return cachedGetAllMinimal().then(function(facilities) {
+                return facilities.filter(function(facility) {
+                    return facility.id === id;
+                })[0];
+            });
         }
     }
 

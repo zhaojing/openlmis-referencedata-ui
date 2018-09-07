@@ -3,9 +3,6 @@
 
 Improvements:
 * [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.
-* [OLMIS-5235](https://openlmis.atlassian.net/browse/OLMIS-5235): Improved performance of login:
-** Made the requests when login concurrent (where possible).
-** Minimal Facilities are now cached in the LocalDatabase instead of the LocalStorage.
 
 5.4.0 / 2018-08-16
 ==================
