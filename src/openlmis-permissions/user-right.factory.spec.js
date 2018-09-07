@@ -15,7 +15,7 @@
 
 describe('userRightsFactory', function() {
 
-    var $rootScope, $q, rights, userRightsFactory, permissionService, programService;
+    var $rootScope, $q, rights, userRightsFactory, permissionService;
 
     beforeEach(module('openlmis-permissions'));
 
@@ -26,27 +26,20 @@ describe('userRightsFactory', function() {
         permissionService = $injector.get('permissionService');
         spyOn(permissionService, 'load').andReturn($q.resolve(makePermissions()));
 
-        programService = $injector.get('programService');
-        spyOn(programService, 'getUserPrograms').andReturn($q.resolve(makePrograms()));
-
         userRightsFactory = $injector.get('userRightsFactory');
     }));
 
     beforeEach(function() {
         userRightsFactory.buildRights('userId')
-        .then(function(builtRights) {
-            rights = builtRights;
-        });
+            .then(function(builtRights) {
+                rights = builtRights;
+            });
 
         $rootScope.$apply();
     });
 
     it('should get permissions for userId', function() {
         expect(permissionService.load).toHaveBeenCalledWith('userId');
-    });
-
-    it('should get all programs for userId', function() {
-        expect(programService.getUserPrograms).toHaveBeenCalledWith('userId');
     });
 
     it('should not duplicate rights', function() {
@@ -57,12 +50,6 @@ describe('userRightsFactory', function() {
         expect(rights[0].programIds.length).toBe(2);
         expect(rights[0].programIds[0]).toBe('program1');
         expect(rights[0].programIds[1]).toBe('program2');
-    });
-
-    it('should group program codes', function() {
-        expect(rights[0].programCodes.length).toBe(2);
-        expect(rights[0].programCodes[0]).toBe('p1');
-        expect(rights[0].programCodes[1]).toBe('p2');
     });
 
     it('should group facilities', function() {
@@ -97,16 +84,6 @@ describe('userRightsFactory', function() {
             facilityId: 'facility-2'
         }, {
             right: 'DIRECT_RIGHT'
-        }];
-    }
-
-    function makePrograms() {
-        return [{
-            id: 'program1',
-            code: 'p1'
-        }, {
-            id: 'program2',
-            code: 'p2'
         }];
     }
 });
