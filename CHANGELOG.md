@@ -7,6 +7,9 @@ Improvements:
 ** Made the requests when login concurrent (where possible).
 ** Minimal Facilities are now cached in the LocalDatabase instead of the LocalStorage.
 
+Bug fixes:
+* [OLMIS-5235](https://openlmis.atlassian.net/browse/OLMIS-5235): FacilityProgramCacheService will now pass user ID when fetching user programs.
+
 5.4.0 / 2018-08-16
 ==================
 

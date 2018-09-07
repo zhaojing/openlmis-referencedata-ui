@@ -116,7 +116,7 @@ describe('facilityProgramCacheService', function() {
         });
 
         it('should call programService', function() {
-            expect(programService.getUserPrograms).toHaveBeenCalled();
+            expect(programService.getUserPrograms).toHaveBeenCalledWith(user.user_id);
         });
 
         it('should call permissionService', function() {
