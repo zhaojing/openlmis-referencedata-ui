@@ -51,9 +51,9 @@ describe('periodFactory', function() {
 
         it('should get sorted periods for schedule', function() {
             periodFactory.getSortedPeriodsForSchedule(params, scheduleId)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
             $rootScope.$apply();
 
             expect(periodService.query).toHaveBeenCalledWith({
@@ -75,9 +75,9 @@ describe('periodFactory', function() {
 
         it('should get new start date for period', function() {
             periodFactory.getNewStartDateForSchedule(scheduleId)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
             $rootScope.$apply();
 
             expect(periodService.query).toHaveBeenCalledWith({
@@ -95,9 +95,9 @@ describe('periodFactory', function() {
             }));
 
             periodFactory.getNewStartDateForSchedule(scheduleId)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
             $rootScope.$apply();
 
             expect(periodService.query).toHaveBeenCalledWith({

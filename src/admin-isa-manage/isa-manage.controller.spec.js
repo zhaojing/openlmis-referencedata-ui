@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('IsaManageController', function () {
+describe('IsaManageController', function() {
 
     var $controller, $state, $rootScope, $q, isaService, notificationService, messageService, loadingModalService,
         file, vm;
@@ -57,7 +57,7 @@ describe('IsaManageController', function () {
     describe('getExportUrl', function() {
 
         it('should call isaService and return download url', function() {
-            var downloadUrl = "some-domain/download";
+            var downloadUrl = 'some-domain/download';
             spyOn(isaService, 'getDownloadUrl').andReturn(downloadUrl);
 
             var result = vm.getExportUrl();
@@ -96,7 +96,8 @@ describe('IsaManageController', function () {
             expect(messageService.get).toHaveBeenCalledWith(
                 'adminIsaManage.uploadSuccess', {
                     amount: response.amount
-                });
+                }
+            );
             expect(isaService.upload).toHaveBeenCalledWith(file);
             expect(notificationService.success).toHaveBeenCalledWith(message);
             expect($state.reload).toHaveBeenCalled();

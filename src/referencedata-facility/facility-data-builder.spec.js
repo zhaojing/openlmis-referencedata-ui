@@ -25,7 +25,7 @@
         'FacilityOperatorDataBuilder'];
 
     function FacilityDataBuilder(Facility, GeographicZoneDataBuilder, FacilityTypeDataBuilder,
-        FacilityOperatorDataBuilder) {
+                                 FacilityOperatorDataBuilder) {
 
         FacilityDataBuilder.prototype.build = build;
         FacilityDataBuilder.prototype.buildJson = buildJson;

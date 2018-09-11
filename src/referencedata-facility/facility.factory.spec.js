@@ -19,7 +19,7 @@ describe('facilityFactory', function() {
         authorizationService, currentUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS,
         FacilityDataBuilder, MinimalFacilityDataBuilder, ProgramDataBuilder;
 
-    beforeEach(function () {
+    beforeEach(function() {
         module('referencedata-facility');
 
         inject(function($injector) {
@@ -46,12 +46,20 @@ describe('facilityFactory', function() {
     });
 
     beforeEach(function() {
-        facility1 = new FacilityDataBuilder().withId('1').withName('facility1').build();
-        facility2 = new FacilityDataBuilder().withId('2').withName('facility2').build();
+        facility1 = new FacilityDataBuilder().withId('1')
+            .withName('facility1')
+            .build();
+        facility2 = new FacilityDataBuilder().withId('2')
+            .withName('facility2')
+            .build();
 
         userPrograms = [
-            new ProgramDataBuilder().withId('1').withName('program1').build(),
-            new ProgramDataBuilder().withId('2').withName('program2').build()
+            new ProgramDataBuilder().withId('1')
+                .withName('program1')
+                .build(),
+            new ProgramDataBuilder().withId('2')
+                .withName('program2')
+                .build()
         ];
     });
 
@@ -59,7 +67,9 @@ describe('facilityFactory', function() {
         var data,
             userId = '1';
 
-        authorizationService.getRightByName.andReturn({id: '1'});
+        authorizationService.getRightByName.andReturn({
+            id: '1'
+        });
         programService.getUserPrograms.andCallFake(function() {
             return $q.when(userPrograms);
         });
@@ -96,8 +106,12 @@ describe('facilityFactory', function() {
             ];
 
             facilityService.getUserFacilitiesForRight.andCallFake(function(userId, right) {
-                if (right === FULFILLMENT_RIGHTS.ORDERS_VIEW) return $q.when(ordersViewFacilities);
-                if (right === FULFILLMENT_RIGHTS.PODS_MANAGE) return $q.when(podsManageFacilities);
+                if (right === FULFILLMENT_RIGHTS.ORDERS_VIEW) {
+                    return $q.when(ordersViewFacilities);
+                }
+                if (right === FULFILLMENT_RIGHTS.PODS_MANAGE) {
+                    return $q.when(podsManageFacilities);
+                }
             });
 
             programService.getUserPrograms.andCallFake(function() {
@@ -108,13 +122,15 @@ describe('facilityFactory', function() {
         it('should fetch facilities for ORDERS_VIEW right', function() {
             facilityFactory.getSupplyingFacilities(userId);
 
-            expect(facilityService.getUserFacilitiesForRight).toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.ORDERS_VIEW);
+            expect(facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.ORDERS_VIEW);
         });
 
         it('should fetch facilities for PODS_MANAGE right', function() {
             facilityFactory.getSupplyingFacilities(userId);
 
-            expect(facilityService.getUserFacilitiesForRight).toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.PODS_MANAGE);
+            expect(facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.PODS_MANAGE);
         });
 
         it('should fetch programs for current user', function() {
@@ -142,7 +158,7 @@ describe('facilityFactory', function() {
     describe('getUserHomeFacility', function() {
 
         beforeEach(inject(function($injector) {
-            currentUserService = $injector.get('currentUserService')
+            currentUserService = $injector.get('currentUserService');
             spyOn(currentUserService, 'getUserInfo')
                 .andReturn($q.resolve({
                     homeFacilityId: 'home-facility-id'
@@ -151,11 +167,13 @@ describe('facilityFactory', function() {
 
         it('should fetch home facility for the current user', function() {
             facilityService.get.andCallFake(function() {
-                return { name: 'Home Facility'};
+                return {
+                    name: 'Home Facility'
+                };
             });
 
             var homeFacility;
-            facilityFactory.getUserHomeFacility().then(function (result) {
+            facilityFactory.getUserHomeFacility().then(function(result) {
                 homeFacility = result;
             });
             $rootScope.$apply();
@@ -167,13 +185,15 @@ describe('facilityFactory', function() {
     });
 
     describe('getUserSupervisedFacilities', function() {
-        var userId ='user-id',
+        var userId = 'user-id',
             rightId = 'right-id';
 
         beforeEach(function() {
             authorizationService.getRightByName.andCallFake(function(rightName) {
                 if (rightName === REQUISITION_RIGHTS.REQUISITION_CREATE) {
-                    return {id: rightId};
+                    return {
+                        id: rightId
+                    };
                 }
             });
         });
@@ -182,7 +202,8 @@ describe('facilityFactory', function() {
             facilityFactory.getUserSupervisedFacilities(
                 userId,
                 userPrograms[0],
-                REQUISITION_RIGHTS.REQUISITION_CREATE);
+                REQUISITION_RIGHTS.REQUISITION_CREATE
+            );
 
             expect(facilityService.getUserSupervisedFacilities)
                 .toHaveBeenCalledWith(userId, userPrograms[0], rightId);
@@ -193,14 +214,18 @@ describe('facilityFactory', function() {
 
         beforeEach(function() {
             spyOn(facilityService, 'getAllMinimal').andReturn($q.when([
-                new MinimalFacilityDataBuilder().withId('1').withName('facility1').build(),
-                new MinimalFacilityDataBuilder().withId('2').withName('facility2').build()
+                new MinimalFacilityDataBuilder().withId('1')
+                    .withName('facility1')
+                    .build(),
+                new MinimalFacilityDataBuilder().withId('2')
+                    .withName('facility2')
+                    .build()
             ]));
         });
 
         it('should fetch active minimal facilities', function() {
             var minimalFacilities;
-            facilityFactory.getAllMinimalFacilities().then(function (result) {
+            facilityFactory.getAllMinimalFacilities().then(function(result) {
                 minimalFacilities = result;
             });
             $rootScope.$apply();
@@ -279,7 +304,9 @@ describe('facilityFactory', function() {
                 createFacility('facility-two', 'Facility Two')
             ];
 
-            facilities[0].supportedPrograms.push({id:'program1'});
+            facilities[0].supportedPrograms.push({
+                id: 'program1'
+            });
 
             facilityService.getUserFacilitiesForRight.andReturn($q.resolve(facilities));
 
@@ -293,16 +320,17 @@ describe('facilityFactory', function() {
         it('should get list of facilities for REQUISITION_VIEW right', function() {
             facilityFactory.getAllUserFacilities(userId);
 
-            expect(facilityService.getUserFacilitiesForRight).toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
+            expect(facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
         });
 
         it('should resolve to set of facilities', function() {
             var returnedFacilities;
 
             facilityFactory.getAllUserFacilities(userId)
-            .then(function(facilities) {
-                returnedFacilities = facilities;
-            });
+                .then(function(facilities) {
+                    returnedFacilities = facilities;
+                });
 
             $rootScope.$apply();
 
@@ -314,9 +342,9 @@ describe('facilityFactory', function() {
             var returnedFacilities;
 
             facilityFactory.getAllUserFacilities(userId)
-            .then(function(facilities) {
-                returnedFacilities = facilities;
-            });
+                .then(function(facilities) {
+                    returnedFacilities = facilities;
+                });
 
             $rootScope.$apply();
 

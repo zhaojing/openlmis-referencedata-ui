@@ -61,7 +61,7 @@ describe('referencedataRoleService', function() {
 
         beforeEach(function() {
             referencedataRoleFactory.getAllWithType().then(function(response) {
-                data = response
+                data = response;
             });
             $rootScope.$apply();
         });

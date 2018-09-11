@@ -15,11 +15,11 @@
 
 describe('facilityService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, facilityService, offlineService,
-        facilitiesStorage, facilityOne, facilityTwo, $q;
+    var $rootScope, $httpBackend, referencedataUrlFactory, facilityService, offlineService, facilitiesStorage,
+        facilityOne, facilityTwo;
 
     beforeEach(function() {
-        module('referencedata-facility', function($provide){
+        module('referencedata-facility', function($provide) {
 
             facilitiesStorage = jasmine.createSpyObj('facilitiesStorage', ['getBy', 'getAll', 'put', 'search']);
             var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function() {
@@ -34,7 +34,7 @@ describe('facilityService', function() {
             offlineService.checkConnection.andCallFake(function() {
                 return {
                     finally: function() {}
-                }
+                };
             });
 
             $provide.service('offlineService', function() {
@@ -44,7 +44,6 @@ describe('facilityService', function() {
         });
 
         inject(function($injector) {
-            $q = $injector.get('$q');
             $httpBackend = $injector.get('$httpBackend');
             $rootScope = $injector.get('$rootScope');
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
@@ -83,7 +82,8 @@ describe('facilityService', function() {
             var data,
                 spy = jasmine.createSpy();
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/' + facilityOne.id)).respond(200, facilityOne);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/' + facilityOne.id))
+                .respond(200, facilityOne);
             facilitiesStorage.put.andCallFake(spy);
 
             offlineService.isOffline.andReturn(false);
@@ -123,7 +123,8 @@ describe('facilityService', function() {
             var data,
                 spy = jasmine.createSpy();
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities')).respond(200, [facilityOne, facilityTwo]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities'))
+                .respond(200, [facilityOne, facilityTwo]);
             facilitiesStorage.put.andCallFake(spy);
 
             offlineService.isOffline.andReturn(false);
@@ -143,8 +144,8 @@ describe('facilityService', function() {
         it('should get all facilities by id and save them to storage', function() {
             var data,
                 spy = jasmine.createSpy(),
-                idOne = "id-one",
-                idTwo = "id-two";
+                idOne = 'id-one',
+                idTwo = 'id-two';
 
             $httpBackend
                 .when('GET', referencedataUrlFactory('/api/facilities?id=' + idOne + '&id=' + idTwo))
@@ -153,7 +154,9 @@ describe('facilityService', function() {
 
             offlineService.isOffline.andReturn(false);
 
-            facilityService.query({id: [idOne, idTwo]}).then(function(response) {
+            facilityService.query({
+                id: [idOne, idTwo]
+            }).then(function(response) {
                 data = response;
             });
 
@@ -172,7 +175,9 @@ describe('facilityService', function() {
             var data;
 
             $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities/minimal.*')))
-                .respond(200, {'content': [facilityOne, facilityTwo]});
+                .respond(200, {
+                    content: [facilityOne, facilityTwo]
+                });
 
             facilityService.getAllMinimal().then(function(response) {
                 data = response;
@@ -187,7 +192,9 @@ describe('facilityService', function() {
 
         it('should add sort=name pagination parameter if none provided', function() {
             $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities/minimal.*')))
-                .respond(200, {'content': [facilityOne, facilityTwo]});
+                .respond(200, {
+                    content: [facilityOne, facilityTwo]
+                });
 
             $httpBackend.expectGET(referencedataUrlFactory('/api/facilities/minimal?sort=name'));
 
@@ -223,7 +230,13 @@ describe('facilityService', function() {
                 programId = '2',
                 rightId = '3';
 
-            $httpBackend.when('GET', referencedataUrlFactory('api/users/' + userId + '/supervisedFacilities?programId=' + programId + '&rightId=' + rightId)).respond(200, [facilityOne, facilityTwo]);
+            $httpBackend.when(
+                'GET',
+                referencedataUrlFactory(
+                    'api/users/' + userId + '/supervisedFacilities?programId=' + programId + '&rightId=' + rightId
+                )
+            )
+                .respond(200, [facilityOne, facilityTwo]);
 
             offlineService.isOffline.andReturn(false);
 
@@ -289,7 +302,9 @@ describe('facilityService', function() {
             url = referencedataUrlFactory('/api/facilities/search?page=' + page + '&size=' + size);
 
             $httpBackend.when('POST', url)
-                .respond(200, {content: [facilityOne, facilityTwo]});
+                .respond(200, {
+                    content: [facilityOne, facilityTwo]
+                });
         });
 
         it('should make correct request', function() {
@@ -390,7 +405,7 @@ describe('facilityService', function() {
             var resultSpy = jasmine.createSpy('spy');
 
             facilityService.getUserFacilitiesForRight()
-            .catch(resultSpy);
+                .catch(resultSpy);
 
             $rootScope.$apply();
 
@@ -401,7 +416,7 @@ describe('facilityService', function() {
             var resultSpy = jasmine.createSpy('spy');
 
             facilityService.getUserFacilitiesForRight('userId')
-            .catch(resultSpy);
+                .catch(resultSpy);
 
             $rootScope.$apply();
 
@@ -420,9 +435,9 @@ describe('facilityService', function() {
             var results;
 
             facilityService.getUserFacilitiesForRight('userId', 'example')
-            .then(function(facilities) {
-                results = facilities;
-            });
+                .then(function(facilities) {
+                    results = facilities;
+                });
             $rootScope.$apply();
 
             expect(results.length).toBe(2);
@@ -430,9 +445,9 @@ describe('facilityService', function() {
 
             results = undefined;
             facilityService.getUserFacilitiesForRight('userId', 'test')
-            .then(function(facilities) {
-                results = facilities;
-            });
+                .then(function(facilities) {
+                    results = facilities;
+                });
             $rootScope.$apply();
 
             expect(results.length).toBe(1);
@@ -442,9 +457,10 @@ describe('facilityService', function() {
         it('will sort the returned facilities alphebetically by name', function() {
             var results;
 
-            facilityTwo.name = "Another Facility"; // This name should make facility 2 first
+            // This name should make facility 2 first
+            facilityTwo.name = 'Another Facility';
             facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
-                results = facilities
+                results = facilities;
             });
             $rootScope.$apply();
 
@@ -456,7 +472,7 @@ describe('facilityService', function() {
             var results;
 
             facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
-                results = facilities
+                results = facilities;
             });
             $rootScope.$apply();
 

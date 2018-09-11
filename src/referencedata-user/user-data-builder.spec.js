@@ -49,8 +49,8 @@
             this.firstName = 'Jack';
             this.lastName = 'Smith';
             this.email = 'jack.smith@opelmis.com';
-            this.jobTitle = "Junior Tester";
-            this.phoneNumber = "000-000-000";
+            this.jobTitle = 'Junior Tester';
+            this.phoneNumber = '000-000-000';
             this.timezone = 'UTC';
             this.homeFacilityId = 'facility-id';
             this.verified = true;

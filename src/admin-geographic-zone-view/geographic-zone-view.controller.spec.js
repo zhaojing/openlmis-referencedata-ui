@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('GeographicZoneViewController', function () {
+describe('GeographicZoneViewController', function() {
 
     var $controller,
         vm, geographicZone;

@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('UserListController', function () {
+describe('UserListController', function() {
 
     var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, userPasswordModalFactoryMock,
         stateParams, UserDataBuilder;
@@ -41,8 +41,10 @@ describe('UserListController', function () {
         });
 
         usersList = [
-            new UserDataBuilder().withUsername('administrator').build(),
-            new UserDataBuilder().withUsername('user').build()
+            new UserDataBuilder().withUsername('administrator')
+                .build(),
+            new UserDataBuilder().withUsername('user')
+                .build()
         ];
 
         vm = $controller('UserListController', {
@@ -93,9 +95,9 @@ describe('UserListController', function () {
 
     it('should expose sort options', function() {
         expect(vm.options).toEqual({
-            'firstName': 'adminUserList.firstName',
-            'lastName': 'adminUserList.lastName',
-            'username': 'adminUserList.username'
+            firstName: 'adminUserList.firstName',
+            lastName: 'adminUserList.lastName',
+            username: 'adminUserList.username'
         });
     });
 
@@ -143,7 +145,9 @@ describe('UserListController', function () {
                 firstName: undefined,
                 email: undefined,
                 username: undefined
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set firstName param', function() {
@@ -156,7 +160,9 @@ describe('UserListController', function () {
                 firstName: vm.firstName,
                 email: undefined,
                 username: undefined
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set email param', function() {
@@ -169,7 +175,9 @@ describe('UserListController', function () {
                 firstName: undefined,
                 email: vm.email,
                 username: undefined
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set username param', function() {
@@ -182,9 +190,10 @@ describe('UserListController', function () {
                 firstName: undefined,
                 email: undefined,
                 username: vm.username
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
-
 
         it('should call state go method', function() {
             vm.search();

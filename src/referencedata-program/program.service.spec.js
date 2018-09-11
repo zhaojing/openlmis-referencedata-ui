@@ -15,10 +15,11 @@
 
 describe('programService', function() {
 
-    var $rootScope, $httpBackend, $q, openlmisUrlFactory, offlineService, programsStorage, programService, program1, program2, ProgramDataBuilder;
+    var $rootScope, $httpBackend, openlmisUrlFactory, offlineService, programsStorage, programService, program1,
+        program2, ProgramDataBuilder;
 
     beforeEach(function() {
-        module('referencedata-program', function($provide, $qProvider){
+        module('referencedata-program', function($provide) {
             programsStorage = jasmine.createSpyObj('programsStorage', ['getBy', 'getAll', 'put', 'search']);
             var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function() {
                 return programsStorage;
@@ -29,7 +30,7 @@ describe('programService', function() {
 
             offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
             offlineService.checkConnection.andReturn({
-                'finally': function() {}
+                finally: function() {}
             });
             $provide.service('offlineService', function() {
                 return offlineService;
@@ -39,7 +40,6 @@ describe('programService', function() {
         inject(function(_$httpBackend_, _$rootScope_, _$q_, _openlmisUrlFactory_, _programService_, $injector) {
             $httpBackend = _$httpBackend_;
             $rootScope = _$rootScope_;
-            $q = _$q_;
             openlmisUrlFactory = _openlmisUrlFactory_;
             programService = _programService_;
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
@@ -59,7 +59,7 @@ describe('programService', function() {
         var data;
 
         $httpBackend.when('GET', openlmisUrlFactory('/api/programs/' + program1.id))
-        .respond(200, program1);
+            .respond(200, program1);
 
         programService.get(program1.id).then(function(response) {
             data = response;
@@ -76,7 +76,7 @@ describe('programService', function() {
         var data;
 
         $httpBackend.when('GET', openlmisUrlFactory('/api/programs'))
-        .respond(200, [program1, program2]);
+            .respond(200, [program1, program2]);
 
         programService.getAll().then(function(response) {
             data = response;
@@ -111,7 +111,8 @@ describe('programService', function() {
         var data,
             userId = '1';
 
-        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/programs')).respond(200, [program1, program2]);
+        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/programs'))
+            .respond(200, [program1, program2]);
 
         offlineService.isOffline.andReturn(false);
 
@@ -163,9 +164,11 @@ describe('programService', function() {
         var usersProgramResponse;
 
         beforeEach(function() {
-            var programs = [{id:'test'}];
+            var programs = [{
+                id: 'test'
+            }];
             usersProgramResponse = $httpBackend.when('GET', openlmisUrlFactory('api/users/userId/programs'))
-            .respond(200, programs);
+                .respond(200, programs);
 
             programsStorage.search.andReturn([]);
         });
@@ -174,7 +177,7 @@ describe('programService', function() {
             var resultSpy = jasmine.createSpy('resultSpy');
 
             programService.getUserPrograms('userId')
-            .then(resultSpy);
+                .then(resultSpy);
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -201,7 +204,7 @@ describe('programService', function() {
             usersProgramResponse.respond(400);
 
             programService.getUserPrograms('userId')
-            .catch(resultSpy);
+                .catch(resultSpy);
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -213,10 +216,12 @@ describe('programService', function() {
         it('will return a cached response instead of making another request', function() {
             var resultSpy = jasmine.createSpy('resultSpy');
 
-            programsStorage.search.andReturn([{id:'example'}]);
+            programsStorage.search.andReturn([{
+                id: 'example'
+            }]);
 
             programService.getUserPrograms('userId')
-            .then(resultSpy);
+                .then(resultSpy);
 
             $rootScope.$apply();
 
@@ -241,7 +246,7 @@ describe('programService', function() {
             var resultSpy = jasmine.createSpy('resultSpy');
 
             programService.getUserSupportedPrograms('userId')
-            .then(resultSpy);
+                .then(resultSpy);
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -256,7 +261,7 @@ describe('programService', function() {
             usersProgramResponse.respond(400);
 
             programService.getUserSupportedPrograms('userId')
-            .catch(resultSpy);
+                .catch(resultSpy);
 
             $httpBackend.flush();
             $rootScope.$apply();

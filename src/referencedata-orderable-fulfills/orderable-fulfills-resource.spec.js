@@ -15,7 +15,7 @@
 
 describe('OrderableFulfillsResource', function() {
 
-    var OrderableFulfillsResource, OpenlmisResourceMock, referencedataUrlFactory, parameterSplitterMock;
+    var OrderableFulfillsResource, OpenlmisResourceMock, parameterSplitterMock;
 
     it('should extend OpenlmisResource', function() {
         module('referencedata-orderable-fulfills', function($provide) {
@@ -34,7 +34,6 @@ describe('OrderableFulfillsResource', function() {
         });
 
         inject(function($injector) {
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             OrderableFulfillsResource = $injector.get('OrderableFulfillsResource');
         });
 
@@ -58,7 +57,6 @@ describe('OrderableFulfillsResource', function() {
             });
 
             inject(function($injector) {
-                referencedataUrlFactory = $injector.get('referencedataUrlFactory');
                 OrderableFulfillsResource = $injector.get('OrderableFulfillsResource');
                 $httpBackend = $injector.get('$httpBackend');
                 openlmisUrlFactory = $injector.get('openlmisUrlFactory');
@@ -101,9 +99,9 @@ describe('OrderableFulfillsResource', function() {
 
             var result;
             orderableFulfillsResource.query(params)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $httpBackend.flush();
 
             expect(angular.toJson(result)).toEqual(angular.toJson(responseOne));
@@ -120,9 +118,9 @@ describe('OrderableFulfillsResource', function() {
 
             var rejected;
             orderableFulfillsResource.query(params)
-            .catch(function() {
-                rejected = true;
-            });
+                .catch(function() {
+                    rejected = true;
+                });
             $httpBackend.flush();
 
             expect(rejected).toEqual(true);
@@ -139,9 +137,9 @@ describe('OrderableFulfillsResource', function() {
 
             var result;
             orderableFulfillsResource.query(params)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
             $httpBackend.flush();
 
             expect(angular.toJson(result)).toEqual(angular.toJson({

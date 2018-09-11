@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('referencedata-geographic-zone')
         .factory('GeographicZoneDataBuilder', GeographicZoneDataBuilder);

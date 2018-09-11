@@ -65,20 +65,21 @@ describe('currentUserService', function() {
             expect(UserRepository.prototype.get).not.toHaveBeenCalled();
         });
 
-        it('should reject promise if user is logged in but no details are cached and they does not exist on the server', function() {
-            authorizationService.getUser.andReturn(authUser);
-            UserRepository.prototype.get.andReturn($q.reject());
+        it('should reject promise if user is logged in but no details are cached and they does not exist on the server',
+            function() {
+                authorizationService.getUser.andReturn(authUser);
+                UserRepository.prototype.get.andReturn($q.reject());
 
-            var rejected;
-            currentUserService.getUserInfo()
-                .catch(function() {
-                    rejected = true;
-                });
-            $rootScope.$apply();
+                var rejected;
+                currentUserService.getUserInfo()
+                    .catch(function() {
+                        rejected = true;
+                    });
+                $rootScope.$apply();
 
-            expect(rejected).toBe(true);
-            expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
-        });
+                expect(rejected).toBe(true);
+                expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
+            });
 
         it('should return cached user if available', function() {
             authorizationService.getUser.andReturn(authUser);

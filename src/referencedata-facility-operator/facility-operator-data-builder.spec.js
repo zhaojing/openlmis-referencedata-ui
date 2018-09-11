@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('referencedata-facility-operator')
         .factory('FacilityOperatorDataBuilder', FacilityOperatorDataBuilder);

@@ -43,7 +43,7 @@ describe('orderableFactory', function() {
             },
             {
                 id: '2',
-                name: 'program-2',
+                name: 'program-2'
             }
         ];
         orderable = {

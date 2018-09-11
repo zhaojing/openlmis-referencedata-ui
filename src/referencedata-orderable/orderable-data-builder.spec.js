@@ -43,7 +43,7 @@
             var instanceNumber = OrderableDataBuilder.instanceNumber;
             this.id = 'orderable-id-' + instanceNumber;
             this.productCode = 'C' + instanceNumber;
-            this.fullProductName = 'Product ' + instanceNumber;;
+            this.fullProductName = 'Product ' + instanceNumber;
             this.dispensable = {
                 displayUnit: ''
             };
@@ -122,7 +122,7 @@
                 description: this.description,
                 netContent: this.netContent,
                 packRoundingThreshold: this.packRoundingThreshold
-            }
+            };
         }
 
     }

@@ -42,7 +42,8 @@ describe('supervisoryNodeService', function() {
     describe('get', function() {
 
         beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id)).respond(200, supervisoryNodes[0]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id))
+                .respond(200, supervisoryNodes[0]);
         });
 
         it('should return promise', function() {
@@ -83,7 +84,9 @@ describe('supervisoryNodeService', function() {
             url = referencedataUrlFactory('/api/supervisoryNodes?name=' + name + '&page=' + page + '&size=' + size);
 
             $httpBackend.when('GET', url)
-                .respond(200, {content: [supervisoryNodes[0], supervisoryNodes[1]]});
+                .respond(200, {
+                    content: [supervisoryNodes[0], supervisoryNodes[1]]
+                });
         });
 
         it('should make correct request', function() {
@@ -91,7 +94,7 @@ describe('supervisoryNodeService', function() {
 
             supervisoryNodeService.query({
                 page: page,
-                size: size, 
+                size: size,
                 name: name
             });
             $httpBackend.flush();
@@ -102,7 +105,7 @@ describe('supervisoryNodeService', function() {
 
             supervisoryNodeService.query({
                 page: page,
-                size: size, 
+                size: size,
                 name: name
             }).then(function(paginatedObject) {
                 result = paginatedObject;

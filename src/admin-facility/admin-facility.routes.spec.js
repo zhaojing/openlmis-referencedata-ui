@@ -17,8 +17,7 @@ describe('openlmis.administration.facilities.facility state', function() {
 
     'use strict';
 
-    var $state, $location, $rootScope, $q, geographicZoneService, facilityService, geographicZones,
-        facilities, $httpBackend, $templateCache;
+    var $state, $location, $rootScope, $q, geographicZoneService, facilityService, facilities;
 
     beforeEach(prepareSuite);
 
@@ -61,17 +60,9 @@ describe('openlmis.administration.facilities.facility state', function() {
         geographicZoneService = $injector.get('geographicZoneService');
         facilityService = $injector.get('facilityService');
         $q = $injector.get('$q');
-        $httpBackend = $injector.get('$httpBackend');
-        $templateCache = $injector.get('$templateCache');
     }
 
     function prepareTestData() {
-        geographicZones = [{
-            id: 'zone-one'
-        }, {
-            id: 'zone-two'
-        }];
-
         facilities = [{
             name: 'Facility One',
             id: 'facility-one'

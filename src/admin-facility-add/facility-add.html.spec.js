@@ -244,18 +244,17 @@ describe('Add Facility page', function() {
             template.find('#cancel').click();
             $rootScope.$apply();
 
-            expect(vm.save)
+            expect(vm.save);
         });
 
     });
 
     function prepareSuite() {
-        var $controller, $compile, $templateRequest;
+        var $compile, $templateRequest;
 
         module('admin-facility-add');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
             $compile = $injector.get('$compile');
             $templateRequest = $injector.get('$templateRequest');
             $rootScope = $injector.get('$rootScope');
@@ -288,11 +287,11 @@ describe('Add Facility page', function() {
         }];
 
         facilityOperators = [{
-            "id": "9456c3e9-c4a6-4a28-9e08-47ceb16a4121",
-            "name": "Ministry of Health"
+            id: '9456c3e9-c4a6-4a28-9e08-47ceb16a4121',
+            name: 'Ministry of Health'
         }, {
-            "id": "1074353d-7364-4618-a127-708d7303a231",
-            "name": "Doctors Without Borders"
+            id: '1074353d-7364-4618-a127-708d7303a231',
+            name: 'Doctors Without Borders'
         }];
 
         $scope = $rootScope.$new();

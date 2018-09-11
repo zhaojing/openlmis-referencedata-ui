@@ -15,8 +15,9 @@
 
 describe('ProcessingScheduleEditController', function() {
 
-    var $controller, $rootScope, $q, $state, confirmService, stateTrackerService, periodService, loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder, PeriodDataBuilder,
-        vm, processingSchedule, processingPeriods, newStartDate, confirmDeferred, saveDeferred, loadingDeferred;
+    var $controller, $rootScope, $q, $state, confirmService, stateTrackerService, periodService, loadingModalService,
+        notificationService, messageService, ProcessingScheduleDataBuilder, PeriodDataBuilder, vm, processingSchedule,
+        processingPeriods, newStartDate, confirmDeferred, saveDeferred, loadingDeferred;
 
     beforeEach(function() {
         module('admin-processing-schedule-edit');

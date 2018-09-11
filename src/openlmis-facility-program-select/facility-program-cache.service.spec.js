@@ -34,6 +34,7 @@ describe('facilityProgramCacheService', function() {
         });
 
         user = {
+            //eslint-disable-next-line camelcase
             user_id: 'user-id'
         };
 
@@ -133,12 +134,12 @@ describe('facilityProgramCacheService', function() {
             currentUserService.getUserInfo.andReturn($q.reject());
 
             facilityProgramCacheService.loadData()
-            .then(function() {
-                result = 'resolved';
-            })
-            .catch(function() {
-                result = 'rejected';
-            });
+                .then(function() {
+                    result = 'resolved';
+                })
+                .catch(function() {
+                    result = 'rejected';
+                });
             $rootScope.$apply();
 
             expect(currentUserService.getUserInfo).toHaveBeenCalled();
@@ -165,13 +166,14 @@ describe('facilityProgramCacheService', function() {
             expect(facilityProgramCacheService.getUserPrograms(false)).toEqual([programs[0]]);
         });
 
-        it('should return supervised programs if isSupervised is true and user does not have a home facility', function() {
-            referencedataUser.homeFacilityId = null;
-            loadPromise = facilityProgramCacheService.loadData('module');
-            $rootScope.$apply();
+        it('should return supervised programs if isSupervised is true and user does not have a home facility',
+            function() {
+                referencedataUser.homeFacilityId = null;
+                loadPromise = facilityProgramCacheService.loadData('module');
+                $rootScope.$apply();
 
-            expect(facilityProgramCacheService.getUserPrograms(true)).toEqual(programs);
-        });
+                expect(facilityProgramCacheService.getUserPrograms(true)).toEqual(programs);
+            });
 
         it('should return an empty list if isSupervised is false and user does not have a home facility', function() {
             referencedataUser.homeFacilityId = null;

@@ -38,7 +38,7 @@ describe('openlmis-permissions.permissionService', function() {
 
         $httpBackend = _$httpBackend_;
         $httpBackend.when('GET', openlmisUrlFactory('/api/users/userId/permissionStrings'))
-        .respond(permissionStrings);
+            .respond(permissionStrings);
 
     }));
 
@@ -53,9 +53,9 @@ describe('openlmis-permissions.permissionService', function() {
 
         var failed = false;
         permissionService.load()
-        .catch(function(){
-            failed = true;
-        });
+            .catch(function() {
+                failed = true;
+            });
 
         $rootScope.$apply();
 
@@ -66,9 +66,9 @@ describe('openlmis-permissions.permissionService', function() {
     it('gets permission strings from the server, and saves them locally', function() {
         var permissions;
         permissionService.load('userId')
-        .then(function(response) {
-            permissions = response;
-        });
+            .then(function(response) {
+                permissions = response;
+            });
 
         $httpBackend.flush();
         $rootScope.$apply();
@@ -82,9 +82,9 @@ describe('openlmis-permissions.permissionService', function() {
     it('correctly parses permission strings from the server', function() {
         var permissions;
         permissionService.load('userId')
-        .then(function(response) {
-            permissions = response;
-        });
+            .then(function(response) {
+                permissions = response;
+            });
 
         $httpBackend.flush();
         $rootScope.$apply();
@@ -101,13 +101,15 @@ describe('openlmis-permissions.permissionService', function() {
     });
 
     it('will return cached permissions, if they are available', function() {
-        localStorageService.get.andReturn([{right:'example'}]);
+        localStorageService.get.andReturn([{
+            right: 'example'
+        }]);
 
         var permissions;
         permissionService.load('userId')
-        .then(function(response) {
-            permissions = response;
-        });
+            .then(function(response) {
+                permissions = response;
+            });
 
         $rootScope.$apply();
 
@@ -120,7 +122,7 @@ describe('openlmis-permissions.permissionService', function() {
     describe('hasPermission', function() {
         beforeEach(function() {
             localStorageService.get.andReturn([{
-                right:'example',
+                right: 'example',
                 facilityId: 'facility-id'
             }]);
         });
@@ -129,9 +131,9 @@ describe('openlmis-permissions.permissionService', function() {
             var success = false;
 
             permissionService.hasPermission('userId', permissionObj)
-            .then(function() {
-                success = true;
-            });
+                .then(function() {
+                    success = true;
+                });
 
             $rootScope.$apply();
             return success;
@@ -141,7 +143,7 @@ describe('openlmis-permissions.permissionService', function() {
             expect(checkPermission({})).toBe(false);
         });
 
-        it('will return FALSE if the right is not set', function(){
+        it('will return FALSE if the right is not set', function() {
             expect(checkPermission({
                 facilityId: 'facility-id'
             })).toBe(false);
@@ -172,7 +174,7 @@ describe('openlmis-permissions.permissionService', function() {
             })).toBe(true);
         });
 
-        it('will reject promise if the argument is missing program', function () {
+        it('will reject promise if the argument is missing program', function() {
             localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
@@ -188,7 +190,7 @@ describe('openlmis-permissions.permissionService', function() {
     });
 
     describe('hasPermissionWithAnyProgram', function() {
-        beforeEach(function () {
+        beforeEach(function() {
             localStorageService.get.andReturn([{
                 right: 'example',
                 facilityId: 'facility-id'
@@ -210,7 +212,7 @@ describe('openlmis-permissions.permissionService', function() {
         it('will return FALSE if no arguments', function() {
             expect(checkPermission({})).toBe(false);
         });
-        it('will return FALSE if the right is not set', function(){
+        it('will return FALSE if the right is not set', function() {
             expect(checkPermission({
                 facilityId: 'facility-id'
             })).toBe(false);
@@ -241,7 +243,7 @@ describe('openlmis-permissions.permissionService', function() {
             })).toBe(true);
         });
 
-        it('will resolve promise if the argument is missing program', function () {
+        it('will resolve promise if the argument is missing program', function() {
             localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
@@ -256,9 +258,8 @@ describe('openlmis-permissions.permissionService', function() {
 
     });
 
-
     describe('hasPermissionWithAnyProgramAndAnyFacility', function() {
-        beforeEach(function () {
+        beforeEach(function() {
             localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
@@ -279,7 +280,7 @@ describe('openlmis-permissions.permissionService', function() {
         it('will return FALSE if no arguments', function() {
             expect(checkPermission({})).toBe(false);
         });
-        it('will return FALSE if the right is not set', function(){
+        it('will return FALSE if the right is not set', function() {
             expect(checkPermission({
                 facilityId: 'facility-id',
                 programId: 'program-id'
@@ -296,7 +297,7 @@ describe('openlmis-permissions.permissionService', function() {
 
         it('will resolve promise if the argument matches a permission right', function() {
             expect(checkPermission({
-                right: 'right',
+                right: 'right'
             })).toBe(true);
         });
     });

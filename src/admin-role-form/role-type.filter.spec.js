@@ -32,7 +32,7 @@ describe('role type filter', function() {
 
     it('should throw exception for undefined', function() {
         expect(function() {
-            roleTypeFilter()
+            roleTypeFilter();
         }).toThrow('"undefined" is not a valid role type');
     });
 

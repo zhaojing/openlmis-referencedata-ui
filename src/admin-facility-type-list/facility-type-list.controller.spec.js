@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('FacilityTypeListController', function () {
+describe('FacilityTypeListController', function() {
 
     var $controller, FacilityTypeDataBuilder,
         vm, facilityTypes;

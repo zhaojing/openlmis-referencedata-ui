@@ -14,23 +14,16 @@
  */
 
 describe('user programs cache run', function() {
-    var programService, $rootScope, loadingService, authorizationService,
-        user;
+
+    var programService, $rootScope;
 
     beforeEach(function() {
         module('referencedata-user-programs-cache');
 
         inject(function($injector) {
             programService = $injector.get('programService');
-            loadingService = $injector.get('loadingService');
-            authorizationService = $injector.get('authorizationService');
             $rootScope = $injector.get('$rootScope');
         });
-
-        user = {
-            user_id: 'user-id',
-            username: 'some-user'
-        };
     });
 
     it('should clear user programs cache on logout', function() {

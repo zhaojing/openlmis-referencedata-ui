@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('RequisitionGroupViewController', function () {
+describe('RequisitionGroupViewController', function() {
 
     var $state, $controller,
         vm, requisitionGroup, memberFacilities, stateParams;
@@ -43,8 +43,8 @@ describe('RequisitionGroupViewController', function () {
             size: 10,
             id: 'group-id',
             tab: 0,
-            facilityName: 'facility',
-        }
+            facilityName: 'facility'
+        };
 
         vm = $controller('RequisitionGroupViewController', {
             requisitionGroup: requisitionGroup,
@@ -92,7 +92,9 @@ describe('RequisitionGroupViewController', function () {
                 id: stateParams.id,
                 tab: 1,
                 facilityName: 'some-name'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

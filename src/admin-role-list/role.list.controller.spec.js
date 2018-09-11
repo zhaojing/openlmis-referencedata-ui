@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('RoleListController', function () {
+describe('RoleListController', function() {
 
     var vm, $controller, rolesList;
 
@@ -47,7 +47,7 @@ describe('RoleListController', function () {
         });
 
         it('should set roles page as undefined', function() {
-           expect(vm.rolesPage).toBe(undefined);
+            expect(vm.rolesPage).toBe(undefined);
         });
 
     });

@@ -42,7 +42,8 @@ describe('requisitionGroupService', function() {
     describe('get', function() {
 
         beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/requisitionGroups/' + requisitionGroups[0].id)).respond(200, requisitionGroups[0]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/requisitionGroups/' + requisitionGroups[0].id))
+                .respond(200, requisitionGroups[0]);
         });
 
         it('should return promise', function() {
@@ -117,10 +118,12 @@ describe('requisitionGroupService', function() {
             };
             paginationParams = {
                 page: 0,
-                size: 10,
+                size: 10
             };
             $httpBackend.when('POST', referencedataUrlFactory('/api/requisitionGroups/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size)).respond(200, {content: requisitionGroups});
+                paginationParams.page + '&size=' + paginationParams.size)).respond(200, {
+                content: requisitionGroups
+            });
         });
 
         it('should return promise', function() {

@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProcessingScheduleListController', function () {
+describe('ProcessingScheduleListController', function() {
 
     var $controller, ProcessingScheduleDataBuilder,
         vm, processingSchedules;

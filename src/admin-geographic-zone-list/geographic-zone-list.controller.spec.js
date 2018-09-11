@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('GeographicZoneListController', function () {
+describe('GeographicZoneListController', function() {
 
     var $state, $controller,
         vm, geographicZones, stateParams;
@@ -91,7 +91,9 @@ describe('GeographicZoneListController', function () {
                 size: stateParams.size,
                 parent: 'some-zone',
                 name: 'some-name'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

@@ -149,7 +149,8 @@ describe('FacilityAddController', function() {
             FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
         });
 
-        facility = new FacilityDataBuilder().withoutId().build();
+        facility = new FacilityDataBuilder().withoutId()
+            .build();
 
         facilityTypes = [
             new FacilityTypeDataBuilder().build(),
@@ -165,7 +166,7 @@ describe('FacilityAddController', function() {
 
         facilityOperators = [
             new FacilityOperatorDataBuilder().build(),
-            new FacilityOperatorDataBuilder().build(),
+            new FacilityOperatorDataBuilder().build()
         ];
 
         confirmDeferred = $q.defer();

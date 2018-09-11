@@ -42,7 +42,8 @@ describe('orderableService', function() {
     describe('get', function() {
 
         beforeEach(function() {
-            $httpBackend.when('GET', openlmisUrlFactory('/api/orderables/' + orderables[0].id)).respond(200, orderables[0]);
+            $httpBackend.when('GET', openlmisUrlFactory('/api/orderables/' + orderables[0].id))
+                .respond(200, orderables[0]);
         });
 
         it('should return promise', function() {
@@ -85,13 +86,15 @@ describe('orderableService', function() {
             };
             paginationParams = {
                 page: 0,
-                size: 10,
+                size: 10
             };
             $httpBackend.whenGET(openlmisUrlFactory('/api/orderables?' +
                 'page=' + paginationParams.page + '&size=' + paginationParams.size +
-                "&code=" + searchParams.code + "&name=" + searchParams.name +
-                "&program=" + searchParams.program))
-                .respond(200, {content: orderables});
+                '&code=' + searchParams.code + '&name=' + searchParams.name +
+                '&program=' + searchParams.program))
+                .respond(200, {
+                    content: orderables
+                });
         });
 
         it('should return promise', function() {
@@ -116,8 +119,8 @@ describe('orderableService', function() {
         it('should make a proper request', function() {
             $httpBackend.expectGET(openlmisUrlFactory('/api/orderables?' +
                 'page=' + paginationParams.page + '&size=' + paginationParams.size +
-                "&code=" + searchParams.code + "&name=" + searchParams.name +
-                "&program=" + searchParams.program));
+                '&code=' + searchParams.code + '&name=' + searchParams.name +
+                '&program=' + searchParams.program));
 
             orderableService.search(paginationParams, searchParams);
             $httpBackend.flush();

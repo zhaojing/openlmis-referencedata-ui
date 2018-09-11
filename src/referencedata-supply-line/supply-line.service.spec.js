@@ -61,10 +61,9 @@ describe('supplyLineService', function() {
 
     describe('get', function() {
 
-        var data;
-
         beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/supplyLines/' + supplyLines[0].id)).respond(200, supplyLines[0]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/supplyLines/' + supplyLines[0].id))
+                .respond(200, supplyLines[0]);
         });
 
         it('should return promise', function() {
@@ -111,17 +110,17 @@ describe('supplyLineService', function() {
             };
             $httpBackend.when('POST', referencedataUrlFactory('/api/supplyLines/search?page=' +
                 params.page + '&size=' + params.size + '&sort=' + params.sort)).respond(function(method, url, body) {
-                    var parsedBody = JSON.parse(body);
-                    if (parsedBody.program === params.program &&
+                var parsedBody = JSON.parse(body);
+                if (parsedBody.program === params.program &&
                         parsedBody.supervisoryNode === params.supervisoryNode &&
                         parsedBody.supplyFacility === params.supplyFacility) {
-                        return [200, {
-                            content: supplyLines
-                        }];
-                    } else {
-                        return [400];
-                    }
-                });
+                    return [200, {
+                        content: supplyLines
+                    }];
+                }
+                return [400];
+
+            });
         });
 
         it('should return promise', function() {

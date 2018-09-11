@@ -15,8 +15,9 @@
 
 describe('ProcessingScheduleAddController', function() {
 
-    var $controller, $rootScope, $q, confirmService, processingScheduleService, stateTrackerService, loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder,
-        vm, processingSchedule, confirmDeferred, saveDeferred, loadingDeferred;
+    var $controller, $rootScope, $q, confirmService, processingScheduleService, stateTrackerService,
+        loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder, vm, processingSchedule,
+        confirmDeferred, saveDeferred, loadingDeferred;
 
     beforeEach(function() {
         module('admin-processing-schedule-add');
@@ -126,7 +127,8 @@ describe('ProcessingScheduleAddController', function() {
             saveDeferred.resolve(processingSchedule);
             $rootScope.$apply();
 
-            expect(stateTrackerService.goToPreviousState).toHaveBeenCalledWith('openlmis.administration.processingSchedules');
+            expect(stateTrackerService.goToPreviousState)
+                .toHaveBeenCalledWith('openlmis.administration.processingSchedules');
         });
     });
 

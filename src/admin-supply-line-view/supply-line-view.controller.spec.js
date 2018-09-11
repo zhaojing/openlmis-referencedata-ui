@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('SupplyLineViewController', function () {
+describe('SupplyLineViewController', function() {
 
     var $controller,
         vm, supplyLine;

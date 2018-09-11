@@ -15,7 +15,7 @@
 
 describe('facility-list.html template', function() {
 
-    var template, vm, $timeout, $state;
+    var template, vm, $timeout, $state, $rootScope;
 
     beforeEach(prepareSuite);
 

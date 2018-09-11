@@ -13,11 +13,9 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 describe('UserProfileRolesTabController', function() {
 
-    var vm, roleAssignments, $controller, ROLE_TYPES, UserDataBuilder, RoleDataBuilder, $rootScope,
-        roleRightsMap;
+    var vm, roleAssignments, $controller, UserDataBuilder, RoleDataBuilder, $rootScope, roleRightsMap;
 
     beforeEach(function() {
         module('openlmis-user');
@@ -30,7 +28,8 @@ describe('UserProfileRolesTabController', function() {
         });
 
         var roles = [
-            new RoleDataBuilder().withSupervisionType().build()
+            new RoleDataBuilder().withSupervisionType()
+                .build()
         ];
 
         roleRightsMap = {};
@@ -46,9 +45,9 @@ describe('UserProfileRolesTabController', function() {
         });
     });
 
-    describe('onInit', function () {
+    describe('onInit', function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
             vm.$onInit();
         });
 

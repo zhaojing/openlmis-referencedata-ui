@@ -21,9 +21,9 @@
         .module('referencedata-orderable')
         .factory('ProgramOrderableDataBuilder', ProgramOrderableDataBuilder);
 
-    ProgramOrderableDataBuilder.$inject = ['Orderable'];
+    ProgramOrderableDataBuilder.$inject = [];
 
-    function ProgramOrderableDataBuilder(Orderable) {
+    function ProgramOrderableDataBuilder() {
 
         ProgramOrderableDataBuilder.prototype.withFullSupply = withFullSupply;
         ProgramOrderableDataBuilder.prototype.withPricePerPack = withPricePerPack;
@@ -39,7 +39,8 @@
             ProgramOrderableDataBuilder.instanceNumber = (ProgramOrderableDataBuilder.instanceNumber || 0) + 1;
 
             this.programId = 'program-id-' + ProgramOrderableDataBuilder.instanceNumber;
-            this.orderableDisplayCategoryId = 'orderable-display-category-id-' + ProgramOrderableDataBuilder.instanceNumber;
+            this.orderableDisplayCategoryId = 'orderable-display-category-id-' +
+                ProgramOrderableDataBuilder.instanceNumber;
             this.orderableCategoryDisplayName = 'Category ' + ProgramOrderableDataBuilder.instanceNumber;
             this.orderableCategoryDisplayOrder = 2;
             this.fullSupply = false;

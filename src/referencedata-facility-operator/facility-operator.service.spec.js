@@ -52,15 +52,15 @@ describe('facilityOperatorService', function() {
         });
 
         facilityOperators = [{
-            id: "9456c3e9-c4a6-4a28-9e08-47ceb16a4121",
-            code: "moh",
-            name: "Ministry of Health",
+            id: '9456c3e9-c4a6-4a28-9e08-47ceb16a4121',
+            code: 'moh',
+            name: 'Ministry of Health',
             description: null,
             displayOrder: 1
         }, {
-            id: "1074353d-7364-4618-a127-708d7303a231",
-            code: "dwb",
-            name: "Doctors Without Borders",
+            id: '1074353d-7364-4618-a127-708d7303a231',
+            code: 'dwb',
+            name: 'Doctors Without Borders',
             description: null,
             displayOrder: 2
         }];

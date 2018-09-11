@@ -15,8 +15,8 @@
 
 describe('facilityTypeService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, FacilityTypeDataBuilder, PageDataBuilder,
-        facilityTypeOne, facilityTypeTwo;
+    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, FacilityTypeDataBuilder,
+        PageDataBuilder, facilityTypeOne, facilityTypeTwo;
 
     beforeEach(function() {
         module('referencedata-facility-type');
@@ -43,9 +43,9 @@ describe('facilityTypeService', function() {
                 .respond(200, facilityTypeOne);
 
             facilityTypeService.get(facilityTypeOne.id)
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -70,9 +70,9 @@ describe('facilityTypeService', function() {
                 .respond(200, page);
 
             facilityTypeService.query()
-            .then(function(response) {
-                data = response;
-            });
+                .then(function(response) {
+                    data = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -89,10 +89,12 @@ describe('facilityTypeService', function() {
             $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes?id=' + idOne + '&id=' + idTwo))
                 .respond(200, page);
 
-            facilityTypeService.query({id: [idOne, idTwo]})
-            .then(function(response) {
-                data = response;
-            });
+            facilityTypeService.query({
+                id: [idOne, idTwo]
+            })
+                .then(function(response) {
+                    data = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -107,15 +109,16 @@ describe('facilityTypeService', function() {
         var result;
 
         it('should create facility type if id is not given', function() {
-            facilityTypeOne = new FacilityTypeDataBuilder().withoutId().build();
+            facilityTypeOne = new FacilityTypeDataBuilder().withoutId()
+                .build();
 
             $httpBackend.expect('POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
-            .respond(200, facilityTypeOne);
+                .respond(200, facilityTypeOne);
 
             facilityTypeService.create(facilityTypeOne)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -124,15 +127,16 @@ describe('facilityTypeService', function() {
         });
 
         it('should not resolve promise if request fails', function() {
-            facilityTypeOne = new FacilityTypeDataBuilder().withoutId().build();
+            facilityTypeOne = new FacilityTypeDataBuilder().withoutId()
+                .build();
 
             $httpBackend.expect('POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
-            .respond(400);
+                .respond(400);
 
             facilityTypeService.create(facilityTypeOne)
-            .catch(function() {
-                result = 'fail';
-            });
+                .catch(function() {
+                    result = 'fail';
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -146,13 +150,17 @@ describe('facilityTypeService', function() {
         var result;
 
         it('should update facility type', function() {
-            $httpBackend.expect('PUT', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id), facilityTypeOne)
-            .respond(200, facilityTypeOne);
+            $httpBackend.expect(
+                'PUT',
+                referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id),
+                facilityTypeOne
+            )
+                .respond(200, facilityTypeOne);
 
             facilityTypeService.update(facilityTypeOne)
-            .then(function(response) {
-                result = response;
-            });
+                .then(function(response) {
+                    result = response;
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();
@@ -161,13 +169,17 @@ describe('facilityTypeService', function() {
         });
 
         it('should not resolve promise if request fails', function() {
-            $httpBackend.expect('PUT', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id), facilityTypeOne)
-            .respond(400);
+            $httpBackend.expect(
+                'PUT',
+                referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id),
+                facilityTypeOne
+            )
+                .respond(400);
 
             facilityTypeService.update(facilityTypeOne)
-            .catch(function() {
-                result = 'fail';
-            });
+                .catch(function() {
+                    result = 'fail';
+                });
 
             $httpBackend.flush();
             $rootScope.$apply();

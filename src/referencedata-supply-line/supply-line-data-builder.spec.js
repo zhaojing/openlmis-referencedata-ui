@@ -25,7 +25,7 @@
         'ProgramDataBuilder'];
 
     function SupplyLineDataBuilder(SupervisoryNodeDataBuilder, FacilityDataBuilder,
-        ProgramDataBuilder) {
+                                   ProgramDataBuilder) {
 
         SupplyLineDataBuilder.prototype.buildJson = buildJson;
 
@@ -48,7 +48,7 @@
                 description: this.description,
                 facility: this.facility,
                 program: this.program
-            }
+            };
         }
     }
 })();

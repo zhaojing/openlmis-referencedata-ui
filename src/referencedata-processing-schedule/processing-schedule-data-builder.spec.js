@@ -17,7 +17,6 @@
 
     'use strict';
 
-
     angular
         .module('referencedata-processing-schedule')
         .factory('ProcessingScheduleDataBuilder', ProcessingScheduleDataBuilder);

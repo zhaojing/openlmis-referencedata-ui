@@ -15,7 +15,7 @@
 
 describe('isaService', function() {
 
-    var referencedataUrlFactory, $httpBackend, isaService;
+    var referencedataUrlFactory, $httpBackend, isaService, $rootScope;
 
     beforeEach(function() {
         module('referencedata-isa', function($provide) {
@@ -31,6 +31,7 @@ describe('isaService', function() {
             referencedataUrlFactory = $injector.get('referencedataUrlFactory');
             isaService = $injector.get('isaService');
             $httpBackend = $injector.get('$httpBackend');
+            $rootScope = $injector.get('$rootScope');
         });
     });
 
@@ -40,7 +41,7 @@ describe('isaService', function() {
             expect(angular.isFunction(isaService.getDownloadUrl)).toBe(true);
         });
 
-        it('should call referencedataUrlFactory', function(){
+        it('should call referencedataUrlFactory', function() {
             var result = isaService.getDownloadUrl();
 
             expect(result).toEqual('/api/idealStockAmounts?format=csv');

@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('SupplyLineListController', function () {
+describe('SupplyLineListController', function() {
 
     var $state, $controller, vm, supplyLines, stateParams, supplyingFacilities, FacilityDataBuilder,
         SupplyLineDataBuilder, ProgramDataBuilder, programs;
@@ -99,7 +99,9 @@ describe('SupplyLineListController', function () {
                 page: stateParams.page,
                 size: stateParams.size,
                 supplyingFacility: vm.supplyingFacility
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should search by program', function() {
@@ -112,7 +114,9 @@ describe('SupplyLineListController', function () {
                 page: stateParams.page,
                 size: stateParams.size,
                 program: vm.program
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

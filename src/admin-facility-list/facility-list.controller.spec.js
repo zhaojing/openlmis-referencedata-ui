@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('FacilityListController', function () {
+describe('FacilityListController', function() {
 
     var $state, $controller,
         vm, geographicZones, facilities, stateParams;
@@ -88,7 +88,9 @@ describe('FacilityListController', function () {
                 size: stateParams.size,
                 name: 'lastName',
                 zoneId: stateParams.zoneId
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set firstName param', function() {
@@ -101,7 +103,9 @@ describe('FacilityListController', function () {
                 size: stateParams.size,
                 name: stateParams.name,
                 zoneId: 'some-id'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

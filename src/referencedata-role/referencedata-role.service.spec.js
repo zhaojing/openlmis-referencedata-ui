@@ -62,7 +62,7 @@ describe('referencedataRoleService', function() {
 
     describe('get', function() {
 
-        var data, roleId, role;
+        var roleId, role;
 
         beforeEach(function() {
             roleId = 'some-role-id';
@@ -106,7 +106,7 @@ describe('referencedataRoleService', function() {
 
     describe('create', function() {
 
-        var data, roleId, role;
+        var role;
 
         beforeEach(function() {
 
@@ -147,7 +147,7 @@ describe('referencedataRoleService', function() {
 
     describe('update', function() {
 
-        var data, roleId, role;
+        var roleId, role;
 
         beforeEach(function() {
             roleId = 'some-role-id';

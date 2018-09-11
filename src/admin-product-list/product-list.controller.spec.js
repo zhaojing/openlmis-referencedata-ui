@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProductListController', function () {
+describe('ProductListController', function() {
 
     var $state, $controller,
         vm, products, programs, stateParams;
@@ -29,7 +29,7 @@ describe('ProductListController', function () {
         programs = [
             {
                 id: 'program-id-1',
-                name: 'program-1',
+                name: 'program-1'
             },
             {
                 id: 'program-id-2',
@@ -119,7 +119,9 @@ describe('ProductListController', function () {
                 code: 'some-code',
                 name: stateParams.name,
                 program: stateParams.program
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set name param', function() {
@@ -133,7 +135,9 @@ describe('ProductListController', function () {
                 code: stateParams.code,
                 name: 'some-name',
                 program: stateParams.program
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set name description', function() {
@@ -147,7 +151,9 @@ describe('ProductListController', function () {
                 code: stateParams.code,
                 name: stateParams.name,
                 program: 'some-program'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

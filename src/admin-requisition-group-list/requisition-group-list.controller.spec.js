@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('RequisitionGroupListController', function () {
+describe('RequisitionGroupListController', function() {
 
     var $state, $controller,
         vm, requisitionGroups, programs, geographicZones, stateParams;
@@ -125,7 +125,9 @@ describe('RequisitionGroupListController', function () {
                 zone: 'some-zone',
                 name: 'some-name',
                 program: 'some-program'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

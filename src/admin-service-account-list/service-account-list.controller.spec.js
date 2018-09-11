@@ -13,10 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ServiceAccountListController', function () {
+describe('ServiceAccountListController', function() {
 
-    var $q, $rootScope, $state, $controller, serviceAccountFactory, confirmService, loadingModalService, notificationService, messageService, ServiceAccountBuilder,
-        vm, serviceAccounts;
+    var $q, $rootScope, $state, $controller, serviceAccountFactory, confirmService, loadingModalService,
+        notificationService, messageService, ServiceAccountBuilder, vm, serviceAccounts;
 
     beforeEach(function() {
 
@@ -71,7 +71,8 @@ describe('ServiceAccountListController', function () {
             vm.add();
             $rootScope.$apply();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
+            expect(confirmService.confirm)
+                .toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.create).toHaveBeenCalled();
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.add.success');
@@ -84,7 +85,8 @@ describe('ServiceAccountListController', function () {
             vm.add();
             $rootScope.$apply();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
+            expect(confirmService.confirm)
+                .toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
             expect(loadingModalService.open).not.toHaveBeenCalled();
             expect(serviceAccountFactory.create).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -98,7 +100,8 @@ describe('ServiceAccountListController', function () {
             vm.add();
             $rootScope.$apply();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
+            expect(confirmService.confirm)
+                .toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.create).toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -114,7 +117,8 @@ describe('ServiceAccountListController', function () {
             vm.remove('token');
             $rootScope.$apply();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
+            expect(confirmService.confirm)
+                .toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.delete.success');
@@ -127,7 +131,8 @@ describe('ServiceAccountListController', function () {
             vm.remove('token');
             $rootScope.$apply();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
+            expect(confirmService.confirm)
+                .toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).not.toHaveBeenCalled();
             expect(serviceAccountFactory.remove).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -141,7 +146,8 @@ describe('ServiceAccountListController', function () {
             vm.remove('token');
             $rootScope.$apply();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
+            expect(confirmService.confirm)
+                .toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).not.toHaveBeenCalled();

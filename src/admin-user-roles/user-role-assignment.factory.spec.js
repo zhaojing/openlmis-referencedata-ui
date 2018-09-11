@@ -37,7 +37,7 @@ describe('userRoleAssignmentFactory', function() {
 
         supervisoryNodes = [
             new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build()
         ];
         warehouses = [
             new FacilityDataBuilder().build(),

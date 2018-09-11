@@ -15,8 +15,8 @@
 
 describe('facilityFactory', function() {
 
-    var $rootScope, $q, permissionService, facilityService, authorizationService, facilityFactory, CCE_RIGHTS, MinimalFacilityDataBuilder, PermissionDataBuilder,
-        minimalFacilities, permissions;
+    var $rootScope, $q, permissionService, facilityService, authorizationService, facilityFactory, CCE_RIGHTS,
+        MinimalFacilityDataBuilder, PermissionDataBuilder, minimalFacilities, permissions;
 
     beforeEach(function() {
         module('referencedata-facilities-permissions');
@@ -42,18 +42,23 @@ describe('facilityFactory', function() {
         ];
 
         permissions = [
-            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_VIEW).withFacilityId(minimalFacilities[0].id).build(),
-            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_VIEW).withFacilityId(minimalFacilities[1].id).build(),
-            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_EDIT).withFacilityId(minimalFacilities[2].id).build()
+            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_VIEW)
+                .withFacilityId(minimalFacilities[0].id)
+                .build(),
+            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_VIEW)
+                .withFacilityId(minimalFacilities[1].id)
+                .build(),
+            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_EDIT)
+                .withFacilityId(minimalFacilities[2].id)
+                .build()
         ];
     });
 
     describe('getSupervisedFacilitiesBasedOnRights', function() {
 
-        var userId, requisitionCreateFacilities, requisitionAuthorizeFacilities;
-
         beforeEach(function() {
             spyOn(authorizationService, 'getUser').andReturn({
+                //eslint-disable-next-line camelcase
                 user_id: 'user-id'
             });
 
@@ -65,18 +70,20 @@ describe('facilityFactory', function() {
         it('should filter facilities', function() {
             var result;
 
-            facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_VIEW]).then(function(facilities) {
-                result = facilities;
-            });
+            facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_VIEW])
+                .then(function(facilities) {
+                    result = facilities;
+                });
             $rootScope.$apply();
 
             expect(result.length).toBe(2);
             expect(result.indexOf(minimalFacilities[0]) >= 0).toBe(true);
             expect(result.indexOf(minimalFacilities[1]) >= 0).toBe(true);
 
-            facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_EDIT]).then(function(facilities) {
-                result = facilities;
-            });
+            facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_EDIT])
+                .then(function(facilities) {
+                    result = facilities;
+                });
             $rootScope.$apply();
 
             expect(result.length).toBe(1);

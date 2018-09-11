@@ -82,7 +82,7 @@ describe('openlmis.profile', function() {
             .build();
 
         pendingVerificationEmail = {
-            email: "example@test.org"
+            email: 'example@test.org'
         };
 
         spyOn(supervisoryNodeFactory, 'getAllSupervisoryNodesWithDisplay').andReturn($q.resolve(supervisoryNodes));

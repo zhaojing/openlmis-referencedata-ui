@@ -43,7 +43,7 @@
                 token: this.token,
                 createdBy: this.createdBy,
                 createdDate: this.createdDate
-            }
+            };
         }
 
         function withToken(token) {

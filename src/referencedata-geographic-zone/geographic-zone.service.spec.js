@@ -48,7 +48,12 @@ describe('geographicZoneService', function() {
             };
 
         beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/geographicZones?page=' + paginationParams.page + '&size=' + paginationParams.size))
+            $httpBackend.when(
+                'GET',
+                referencedataUrlFactory(
+                    '/api/geographicZones?page=' + paginationParams.page + '&size=' + paginationParams.size
+                )
+            )
                 .respond(200, {
                     content: geographicZones
                 });
@@ -62,16 +67,17 @@ describe('geographicZoneService', function() {
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(angular.toJson(data)).toEqual(angular.toJson({content: geographicZones}));
+            expect(angular.toJson(data)).toEqual(angular.toJson({
+                content: geographicZones
+            }));
         });
     });
 
     describe('get', function() {
 
-        var data;
-
         beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/geographicZones/' + geographicZones[0].id)).respond(200, geographicZones[0]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/geographicZones/' + geographicZones[0].id))
+                .respond(200, geographicZones[0]);
         });
 
         it('should return promise', function() {
@@ -117,15 +123,15 @@ describe('geographicZoneService', function() {
             };
             $httpBackend.when('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
                 params.page + '&size=' + params.size + '&sort=' + params.sort)).respond(function(method, url, body) {
-                    var parsedBody = JSON.parse(body);
-                    if (parsedBody.code === params.code && parsedBody.name === params.name) {
-                        return [200, {
-                            content: geographicZones
-                        }];
-                    } else {
-                        return [400];
-                    }
-                });
+                var parsedBody = JSON.parse(body);
+                if (parsedBody.code === params.code && parsedBody.name === params.name) {
+                    return [200, {
+                        content: geographicZones
+                    }];
+                }
+                return [400];
+
+            });
         });
 
         it('should return promise', function() {

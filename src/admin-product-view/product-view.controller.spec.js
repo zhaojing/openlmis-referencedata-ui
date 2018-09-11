@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProductViewController', function () {
+describe('ProductViewController', function() {
 
     var $state, $controller,
         vm, product;

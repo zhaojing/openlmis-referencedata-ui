@@ -19,9 +19,9 @@ describe('RoleAssignment', function() {
 
     var user, assignment, RoleAssignment, UserDataBuilder, ROLE_TYPES;
 
-    beforeEach(function () {
+    beforeEach(function() {
         module('referencedata-role');
-        inject(function ($injector) {
+        inject(function($injector) {
             RoleAssignment = $injector.get('RoleAssignment');
             UserDataBuilder = $injector.get('UserDataBuilder');
             ROLE_TYPES = $injector.get('ROLE_TYPES');
@@ -32,7 +32,7 @@ describe('RoleAssignment', function() {
 
     describe('constructor', function() {
 
-        it('should validate role assignment', function () {
+        it('should validate role assignment', function() {
             assignment = new RoleAssignment(
                 user, null, null, 'supervisory-node-id', null,
                 null, ROLE_TYPES.SUPERVISION, null, null, null
@@ -41,7 +41,7 @@ describe('RoleAssignment', function() {
             expect(assignment.errors).toEqual([]);
         });
 
-        it('should add error if home facility role is invalid', function () {
+        it('should add error if home facility role is invalid', function() {
             delete user.homeFacilityId;
 
             assignment = new RoleAssignment(

@@ -15,7 +15,7 @@
 
 describe('supervisoryNodeFactory', function() {
 
-    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, facilityService, 
+    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, facilityService,
         supervisoryNodes, facilities, SupervisoryNodeDataBuilder;
 
     beforeEach(function() {
@@ -48,9 +48,12 @@ describe('supervisoryNodeFactory', function() {
                 id: 'facility-id-2'
             }
         ];
-        var supervisoryNodeChild = new SupervisoryNodeDataBuilder().withFacility(facilities[1]).build();
+        var supervisoryNodeChild = new SupervisoryNodeDataBuilder().withFacility(facilities[1])
+            .build();
         supervisoryNodes = [
-            new SupervisoryNodeDataBuilder().addChildNode(supervisoryNodeChild).withFacility(facilities[0]).build(),
+            new SupervisoryNodeDataBuilder().addChildNode(supervisoryNodeChild)
+                .withFacility(facilities[0])
+                .build(),
             supervisoryNodeChild,
             new SupervisoryNodeDataBuilder().buildWithoutFacility()
         ];

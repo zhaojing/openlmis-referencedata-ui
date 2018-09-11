@@ -15,8 +15,8 @@
 
 describe('FacilityTypeEditController', function() {
 
-    var $controller, $rootScope, $q, confirmService, stateTrackerService, facilityTypeService, loadingModalService, notificationService, FacilityTypeDataBuilder,
-        vm, facilityType, confirmDeferred, saveDeferred;
+    var $controller, $rootScope, $q, confirmService, stateTrackerService, facilityTypeService, loadingModalService,
+        notificationService, FacilityTypeDataBuilder, vm, facilityType, confirmDeferred, saveDeferred;
 
     beforeEach(function() {
         module('admin-facility-type-edit');
@@ -68,7 +68,7 @@ describe('FacilityTypeEditController', function() {
                 facilityType: undefined
             });
             vm.$onInit();
-            
+
             expect(vm.editMode).toEqual(false);
             expect(vm.facilityType).toEqual({
                 displayOrder: 1,
@@ -105,42 +105,42 @@ describe('FacilityTypeEditController', function() {
 
             it('should not save facility type if user does not confirm it', function() {
                 vm.save();
-    
+
                 confirmDeferred.reject();
                 $rootScope.$apply();
-    
+
                 expect(facilityTypeService.update).not.toHaveBeenCalled();
                 expect(facilityTypeService.create).not.toHaveBeenCalled();
             });
-    
+
             it('should save facility type and open loading modal after confirm', function() {
                 vm.save();
-    
+
                 confirmDeferred.resolve();
                 $rootScope.$apply();
-    
+
                 expect(facilityTypeService.update).toHaveBeenCalledWith(vm.facilityType);
                 expect(facilityTypeService.create).not.toHaveBeenCalled();
                 expect(loadingModalService.open).toHaveBeenCalled();
             });
-    
+
             it('should show notification if facility type was saveed successfully', function() {
                 vm.save();
-    
+
                 confirmDeferred.resolve();
                 saveDeferred.resolve(facilityType);
                 $rootScope.$apply();
-    
+
                 expect(notificationService.success).toHaveBeenCalledWith('adminFacilityTypeEdit.save.success');
             });
-    
+
             it('should show notification if period save has failed', function() {
                 vm.save();
-    
+
                 confirmDeferred.resolve();
                 saveDeferred.reject();
                 $rootScope.$apply();
-    
+
                 expect(notificationService.error).toHaveBeenCalledWith('adminFacilityTypeEdit.save.failure');
                 expect(loadingModalService.close).toHaveBeenCalled();
             });
@@ -162,42 +162,42 @@ describe('FacilityTypeEditController', function() {
 
             it('should not save facility type if user does not confirm it', function() {
                 vm.save();
-    
+
                 confirmDeferred.reject();
                 $rootScope.$apply();
-    
+
                 expect(facilityTypeService.create).not.toHaveBeenCalled();
                 expect(facilityTypeService.update).not.toHaveBeenCalled();
             });
-    
+
             it('should save facility type and open loading modal after confirm', function() {
                 vm.save();
-    
+
                 confirmDeferred.resolve();
                 $rootScope.$apply();
-    
+
                 expect(facilityTypeService.create).toHaveBeenCalledWith(vm.facilityType);
                 expect(facilityTypeService.update).not.toHaveBeenCalled();
                 expect(loadingModalService.open).toHaveBeenCalled();
             });
-    
+
             it('should show notification if facility type was saveed successfully', function() {
                 vm.save();
-    
+
                 confirmDeferred.resolve();
                 saveDeferred.resolve(facilityType);
                 $rootScope.$apply();
-    
+
                 expect(notificationService.success).toHaveBeenCalledWith('adminFacilityTypeEdit.create.success');
             });
-    
+
             it('should show notification if period save has failed', function() {
                 vm.save();
-    
+
                 confirmDeferred.resolve();
                 saveDeferred.reject();
                 $rootScope.$apply();
-    
+
                 expect(notificationService.error).toHaveBeenCalledWith('adminFacilityTypeEdit.create.failure');
                 expect(loadingModalService.close).toHaveBeenCalled();
             });

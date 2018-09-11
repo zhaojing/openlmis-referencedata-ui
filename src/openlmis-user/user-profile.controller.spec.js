@@ -13,7 +13,6 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 describe('UserProfileController', function() {
 
     var vm, user, homeFacility, $controller, ROLE_TYPES, $q, UserDataBuilder, userPasswordModalFactory, $state,
@@ -193,7 +192,7 @@ describe('UserProfileController', function() {
             });
             expect($rootScope.$emit).not.toHaveBeenCalled();
             expect($state.go).not.toHaveBeenCalled();
-            
+
         });
 
         it('should log user out after successfully changing password', function() {
@@ -221,7 +220,7 @@ describe('UserProfileController', function() {
             $rootScope.$apply();
         });
 
-        it('should send verification email', function () {
+        it('should send verification email', function() {
             expect(authUserService.sendVerificationEmail).toHaveBeenCalledWith(vm.user.id);
             expect(notificationService.success).toHaveBeenCalledWith('openlmisUser.sendVerificationEmail.success');
         });

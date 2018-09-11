@@ -71,7 +71,8 @@ describe('serviceAccountService', function() {
     describe('remove', function() {
 
         beforeEach(function() {
-            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts/' + serviceAccounts[0].token)).respond(204);
+            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts/' + serviceAccounts[0].token))
+                .respond(204);
         });
 
         it('should return promise', function() {

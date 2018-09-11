@@ -67,7 +67,7 @@ describe('ProgramService getUserPrograms decorator', function() {
 
     it('should send original request if there is no user programs cached', function() {
         $httpBackend.when('GET', openlmisUrlFactory('api/users/' + user.id + '/programs'))
-        .respond(200, programs);
+            .respond(200, programs);
 
         cache.search.andReturn(undefined);
 

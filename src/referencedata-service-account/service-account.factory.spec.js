@@ -15,8 +15,8 @@
 
 describe('serviceAccountFactory', function() {
 
-    var $q, $rootScope, serviceAccountService, serviceAccountFactory, apiKeysService, ServiceAccountBuilder, ApiKeyBuilder,
-        serviceAccount, apiKey;
+    var $q, $rootScope, serviceAccountService, serviceAccountFactory, apiKeysService, ServiceAccountBuilder,
+        ApiKeyBuilder, serviceAccount, apiKey;
 
     beforeEach(function() {
         module('referencedata-service-account');
@@ -32,7 +32,8 @@ describe('serviceAccountFactory', function() {
         });
 
         apiKey = new ApiKeyBuilder().build();
-        serviceAccount = new ServiceAccountBuilder().withToken(apiKey.token).build()
+        serviceAccount = new ServiceAccountBuilder().withToken(apiKey.token)
+            .build();
     });
 
     describe('create', function() {

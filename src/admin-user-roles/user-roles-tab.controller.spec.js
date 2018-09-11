@@ -61,8 +61,10 @@ describe('UserRolesTabController', function() {
         ];
 
         roles = [
-            new RoleDataBuilder().withSupervisionType().build(),
-            new RoleDataBuilder().withSupervisionType().build()
+            new RoleDataBuilder().withSupervisionType()
+                .build(),
+            new RoleDataBuilder().withSupervisionType()
+                .build()
         ];
 
         user = new UserDataBuilder()
@@ -168,17 +170,18 @@ describe('UserRolesTabController', function() {
             expect(notificationService.error).toHaveBeenCalledWith('referencedataRoles.roleAlreadyAssigned');
         });
 
-        it('should add role without supervisory node if the same role with supervisory node already exists', function() {
-            var roleAssignmentsCount = user.roleAssignments.length;
+        it('should add role without supervisory node if the same role with supervisory node already exists',
+            function() {
+                var roleAssignmentsCount = user.roleAssignments.length;
 
-            vm.selectedRole = roles[0];
-            vm.selectedProgram = programs[0];
-            vm.selectedSupervisoryNode = undefined;
+                vm.selectedRole = roles[0];
+                vm.selectedProgram = programs[0];
+                vm.selectedSupervisoryNode = undefined;
 
-            vm.addRole();
+                vm.addRole();
 
-            expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
-        });
+                expect(user.roleAssignments.length).toEqual(roleAssignmentsCount + 1);
+            });
 
         it('should allow to add home facility role if user has no home facility', function() {
             var roleAssignmentsCount = user.roleAssignments.length;
@@ -207,7 +210,8 @@ describe('UserRolesTabController', function() {
             expect(user.roleAssignments[roleAssignmentsCount].roleId).toEqual(roles[1].id);
             expect(user.roleAssignments[roleAssignmentsCount].roleName).toEqual(roles[1].name);
             expect(user.roleAssignments[roleAssignmentsCount].programName).toEqual(programs[1].name);
-            expect(user.roleAssignments[roleAssignmentsCount].supervisoryNodeName).toEqual(supervisoryNodes[1].$display);
+            expect(user.roleAssignments[roleAssignmentsCount].supervisoryNodeName)
+                .toEqual(supervisoryNodes[1].$display);
         });
     });
 
@@ -222,7 +226,8 @@ describe('UserRolesTabController', function() {
 
         it('should show confirm modal', function() {
             vm.removeRole(user.roleAssignments[0]);
-            expect(confirmService.confirmDestroy).toHaveBeenCalledWith('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label');
+            expect(confirmService.confirmDestroy)
+                .toHaveBeenCalledWith('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label');
         });
 
         it('should remove role assignment if it exists', function() {

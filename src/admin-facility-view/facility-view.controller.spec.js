@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('FacilityViewController', function () {
+describe('FacilityViewController', function() {
 
     var $q, $rootScope, $state, $controller, loadingModalService, notificationService,
         facilityService, loadingModalPromise, vm, facility, facilityTypes, geographicZones,
@@ -68,7 +68,8 @@ describe('FacilityViewController', function () {
             new ProgramDataBuilder().build()
         ];
 
-        facility = new FacilityDataBuilder().withFacilityType(facilityTypes[0]).build();
+        facility = new FacilityDataBuilder().withFacilityType(facilityTypes[0])
+            .build();
 
         vm = $controller('FacilityViewController', {
             facility: facility,
@@ -186,10 +187,10 @@ describe('FacilityViewController', function () {
             vm.addProgram();
 
             expect(vm.facilityWithPrograms.supportedPrograms[0])
-            .toEqual(angular.extend({}, program, {
-                supportStartDate: new Date('08/10/2017'),
-                supportActive: true
-            }));
+                .toEqual(angular.extend({}, program, {
+                    supportStartDate: new Date('08/10/2017'),
+                    supportActive: true
+                }));
         });
 
         it('should clear selections', function() {

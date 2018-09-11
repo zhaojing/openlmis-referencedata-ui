@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('SupervisoryNodeListController', function () {
+describe('SupervisoryNodeListController', function() {
 
     var $state, $controller,
         vm, geographicZones, supervisoryNodes, stateParams;
@@ -89,7 +89,9 @@ describe('SupervisoryNodeListController', function () {
                 size: stateParams.size,
                 name: 'name',
                 zoneId: stateParams.zoneId
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should set firstName param', function() {
@@ -102,7 +104,9 @@ describe('SupervisoryNodeListController', function () {
                 size: stateParams.size,
                 name: stateParams.name,
                 zoneId: 'some-id'
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         });
 
         it('should call state go method', function() {

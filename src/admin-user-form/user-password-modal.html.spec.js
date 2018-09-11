@@ -15,7 +15,7 @@
 
 describe('user-password-modal.html template', function() {
 
-    var template, vm, $q, $timeout, $state, user;
+    var template, vm, $q, $timeout, $state, user, $rootScope;
 
     beforeEach(prepareSuite);
 
@@ -29,7 +29,7 @@ describe('user-password-modal.html template', function() {
         });
 
         it('should change input type', function() {
-            var input = template.find("#newPassword");
+            var input = template.find('#newPassword');
 
             expect(input.attr('type')).toEqual('password');
 
@@ -45,10 +45,10 @@ describe('user-password-modal.html template', function() {
 
     });
 
-    describe('SendResetEmail', function () {
+    describe('SendResetEmail', function() {
 
         it('should show option if user has email', function() {
-            var button = template.find("#send-email-radio");
+            var button = template.find('#send-email-radio');
             expect(button.length).toEqual(1);
         });
 
@@ -56,7 +56,7 @@ describe('user-password-modal.html template', function() {
             delete vm.user.email;
             $rootScope.$apply();
 
-            var button = template.find("#send-email-radio");
+            var button = template.find('#send-email-radio');
             expect(button.length).toEqual(0);
         });
 

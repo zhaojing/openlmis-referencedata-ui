@@ -113,7 +113,8 @@ describe('User', function() {
         });
 
         it('should get supervision role assignments by supervisoryNodeId', function() {
-            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION, '1')).toEqual([supervisionRoleAssignments[0], supervisionRoleAssignments[2]]);
+            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION, '1')).
+                toEqual([supervisionRoleAssignments[0], supervisionRoleAssignments[2]]);
         });
 
         it('should get supervision role assignments by supervisoryNodeId and programId', function() {

@@ -49,7 +49,7 @@
             this.active = true;
         }
 
-        function buildAsDistrictHospital(){
+        function buildAsDistrictHospital() {
             return new FacilityTypeDataBuilder()
                 .withCode('dist_hosp')
                 .withName('District Hospital')
@@ -57,7 +57,7 @@
                 .build();
         }
 
-        function buildAsDistrictStore(){
+        function buildAsDistrictStore() {
             return new FacilityTypeDataBuilder()
                 .withCode('dist_store')
                 .withName('District Store')
@@ -65,7 +65,7 @@
                 .build();
         }
 
-        function buildAsInactive(){
+        function buildAsInactive() {
             return new FacilityTypeDataBuilder()
                 .withCode('inactive_type')
                 .withName('Inactive Type')
