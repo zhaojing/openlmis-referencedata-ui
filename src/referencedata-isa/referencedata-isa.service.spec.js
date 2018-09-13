@@ -80,7 +80,7 @@ describe('isaService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/idealStockAmounts?format=csv'));
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/idealStockAmounts?format=csv'));
 
             isaService.upload(file);
             $httpBackend.flush();

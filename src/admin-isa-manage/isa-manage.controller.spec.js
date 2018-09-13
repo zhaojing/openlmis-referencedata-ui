@@ -98,6 +98,7 @@ describe('IsaManageController', function() {
                     amount: response.amount
                 }
             );
+
             expect(isaService.upload).toHaveBeenCalledWith(file);
             expect(notificationService.success).toHaveBeenCalledWith(message);
             expect($state.reload).toHaveBeenCalled();

@@ -93,10 +93,6 @@ describe('RequisitionGroupListController', function() {
             expect(vm.programs).toEqual(programs);
         });
 
-        it('should expose programs array', function() {
-            expect(vm.programs).toEqual(programs);
-        });
-
         it('should expose name', function() {
             expect(vm.name).toEqual(stateParams.name);
         });
@@ -132,6 +128,7 @@ describe('RequisitionGroupListController', function() {
 
         it('should call state go method', function() {
             vm.search();
+
             expect($state.go).toHaveBeenCalled();
         });
     });

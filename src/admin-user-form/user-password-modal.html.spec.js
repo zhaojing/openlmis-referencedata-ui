@@ -49,6 +49,7 @@ describe('user-password-modal.html template', function() {
 
         it('should show option if user has email', function() {
             var button = template.find('#send-email-radio');
+
             expect(button.length).toEqual(1);
         });
 
@@ -57,6 +58,7 @@ describe('user-password-modal.html template', function() {
             $rootScope.$apply();
 
             var button = template.find('#send-email-radio');
+
             expect(button.length).toEqual(0);
         });
 

@@ -75,6 +75,7 @@ describe('serviceAccountFactory', function() {
 
         it('should return promise', function() {
             var result = serviceAccountService.remove(token);
+
             expect(result.then).not.toBeUndefined();
         });
 

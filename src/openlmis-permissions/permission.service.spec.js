@@ -212,6 +212,7 @@ describe('openlmis-permissions.permissionService', function() {
         it('will return FALSE if no arguments', function() {
             expect(checkPermission({})).toBe(false);
         });
+
         it('will return FALSE if the right is not set', function() {
             expect(checkPermission({
                 facilityId: 'facility-id'
@@ -280,6 +281,7 @@ describe('openlmis-permissions.permissionService', function() {
         it('will return FALSE if no arguments', function() {
             expect(checkPermission({})).toBe(false);
         });
+
         it('will return FALSE if the right is not set', function() {
             expect(checkPermission({
                 facilityId: 'facility-id',

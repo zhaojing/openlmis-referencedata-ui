@@ -77,8 +77,8 @@ describe('facilityFactory', function() {
             $rootScope.$apply();
 
             expect(result.length).toBe(2);
-            expect(result.indexOf(minimalFacilities[0]) >= 0).toBe(true);
-            expect(result.indexOf(minimalFacilities[1]) >= 0).toBe(true);
+            expect(result.indexOf(minimalFacilities[0])).toBeGreaterThan(-1);
+            expect(result.indexOf(minimalFacilities[1])).toBeGreaterThan(-1);
 
             facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_EDIT])
                 .then(function(facilities) {
@@ -87,7 +87,7 @@ describe('facilityFactory', function() {
             $rootScope.$apply();
 
             expect(result.length).toBe(1);
-            expect(result.indexOf(minimalFacilities[2]) >= 0).toBe(true);
+            expect(result.indexOf(minimalFacilities[2])).toBeGreaterThan(-1);
         });
     });
 });

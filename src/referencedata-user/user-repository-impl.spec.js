@@ -120,7 +120,7 @@ describe('UserRepositoryImpl', function() {
             expect(rejected).toEqual(true);
         });
 
-        it('should reject if reference data user creation failed', function() {
+        it('should reject if user contact details creation failed', function() {
             UserContactDetailsResource.prototype.update.andReturn($q.reject());
 
             var rejected;
@@ -168,7 +168,7 @@ describe('UserRepositoryImpl', function() {
             expect(rejected).toEqual(true);
         });
 
-        it('should reject if reference data user update failed', function() {
+        it('should reject if user contact details update failed', function() {
             UserContactDetailsResource.prototype.update.andReturn($q.reject());
 
             var rejected;
@@ -228,7 +228,7 @@ describe('UserRepositoryImpl', function() {
             expect(rejected).toEqual(true);
         });
 
-        it('should reject if reference data user creation failed', function() {
+        it('should reject if user contact details creation failed', function() {
             UserContactDetailsResource.prototype.get.andReturn($q.reject());
 
             var rejected;
@@ -292,9 +292,11 @@ describe('UserRepositoryImpl', function() {
                 userBuilders[0].buildJson(),
                 userBuilders[1].buildJson()
             ]);
+
             expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com'
             });
+
             expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com',
                 username: 'user',
@@ -324,6 +326,7 @@ describe('UserRepositoryImpl', function() {
             expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com'
             });
+
             expect(ReferenceDataUserResource.prototype.query).not.toHaveBeenCalled();
         });
 
@@ -343,9 +346,11 @@ describe('UserRepositoryImpl', function() {
                 userBuilders[1].buildJson(),
                 userBuilders[2].buildJson()
             ]);
+
             expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
+
             expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 id: [
                     userBuilders[0].id,
@@ -372,6 +377,7 @@ describe('UserRepositoryImpl', function() {
             expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
+
             expect(UserContactDetailsResource.prototype.query).not.toHaveBeenCalled();
         });
 
@@ -400,9 +406,11 @@ describe('UserRepositoryImpl', function() {
                 userBuilders[1].buildJson(),
                 userBuilders[2].buildReferenceDataUserJson()
             ]);
+
             expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
+
             expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 id: [
                     userBuilders[0].id,

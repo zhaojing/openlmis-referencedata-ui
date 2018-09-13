@@ -73,6 +73,7 @@ describe('ServiceAccountListController', function() {
 
             expect(confirmService.confirm)
                 .toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.create).toHaveBeenCalled();
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.add.success');
@@ -87,6 +88,7 @@ describe('ServiceAccountListController', function() {
 
             expect(confirmService.confirm)
                 .toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
+
             expect(loadingModalService.open).not.toHaveBeenCalled();
             expect(serviceAccountFactory.create).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -102,6 +104,7 @@ describe('ServiceAccountListController', function() {
 
             expect(confirmService.confirm)
                 .toHaveBeenCalledWith('adminServiceAccount.add.question', 'adminServiceAccount.add');
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.create).toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -119,6 +122,7 @@ describe('ServiceAccountListController', function() {
 
             expect(confirmService.confirm)
                 .toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).toHaveBeenCalledWith('adminServiceAccount.delete.success');
@@ -133,6 +137,7 @@ describe('ServiceAccountListController', function() {
 
             expect(confirmService.confirm)
                 .toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
+
             expect(loadingModalService.open).not.toHaveBeenCalled();
             expect(serviceAccountFactory.remove).not.toHaveBeenCalled();
             expect(notificationService.success).not.toHaveBeenCalled();
@@ -148,6 +153,7 @@ describe('ServiceAccountListController', function() {
 
             expect(confirmService.confirm)
                 .toHaveBeenCalledWith('adminServiceAccount.delete.question', 'adminServiceAccount.delete');
+
             expect(loadingModalService.open).toHaveBeenCalled();
             expect(serviceAccountFactory.remove).toHaveBeenCalledWith('token');
             expect(notificationService.success).not.toHaveBeenCalled();

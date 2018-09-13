@@ -179,6 +179,7 @@ describe('openlmis.profile', function() {
             goToUrl('/profile');
 
             var roleRightsMap = getResolvedValue('roleRightsMap');
+
             expect(roleRightsMap[roles[0].id]).toEqual(roles[0].rights);
             expect(roleRightsMap[roles[1].id]).toEqual(roles[1].rights);
             expect(roleRightsMap[roles[2].id]).toEqual(roles[2].rights);

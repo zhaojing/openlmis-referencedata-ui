@@ -136,6 +136,7 @@ describe('ProcessingScheduleAddController', function() {
 
         it('should redirect to Processing Period screen', function() {
             vm.goToPreviousState();
+
             expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });

@@ -158,6 +158,7 @@ describe('ProductListController', function() {
 
         it('should call state go method', function() {
             vm.search();
+
             expect($state.go).toHaveBeenCalled();
         });
     });

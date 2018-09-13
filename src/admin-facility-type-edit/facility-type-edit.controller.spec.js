@@ -63,7 +63,7 @@ describe('FacilityTypeEditController', function() {
             expect(vm.editMode).toEqual(true);
         });
 
-        it('should expose resolved fields', function() {
+        it('should expose default field values', function() {
             vm = $controller('FacilityTypeEditController', {
                 facilityType: undefined
             });
@@ -97,6 +97,7 @@ describe('FacilityTypeEditController', function() {
 
             it('should prompt user to save period', function() {
                 vm.save();
+
                 expect(confirmService.confirm).toHaveBeenCalledWith(
                     'adminFacilityTypeEdit.save.question',
                     'adminFacilityTypeEdit.save'
@@ -154,6 +155,7 @@ describe('FacilityTypeEditController', function() {
 
             it('should prompt user to save period', function() {
                 vm.save();
+
                 expect(confirmService.confirm).toHaveBeenCalledWith(
                     'adminFacilityTypeEdit.create.question',
                     'adminFacilityTypeEdit.create'
@@ -208,6 +210,7 @@ describe('FacilityTypeEditController', function() {
 
         it('should redirect to Facility Type List screen', function() {
             vm.goToPreviousState();
+
             expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });

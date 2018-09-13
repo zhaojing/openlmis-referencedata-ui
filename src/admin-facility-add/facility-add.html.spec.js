@@ -51,9 +51,9 @@ describe('Add Facility page', function() {
         it('should show facility type names as options', function() {
             var html = select.html();
 
-            expect(html.indexOf('Warehouse') > -1).toBe(true);
-            expect(html.indexOf('Health Center') > -1).toBe(true);
-            expect(html.indexOf('District Hospital') > -1).toBe(true);
+            expect(html.indexOf('Warehouse')).toBeGreaterThan(-1);
+            expect(html.indexOf('Health Center')).toBeGreaterThan(-1);
+            expect(html.indexOf('District Hospital')).toBeGreaterThan(-1);
         });
 
         it('should assign whole object', function() {
@@ -97,9 +97,9 @@ describe('Add Facility page', function() {
         it('should show facility type names as options', function() {
             var html = select.html();
 
-            expect(html.indexOf('Malawi') > -1).toBe(true);
-            expect(html.indexOf('Central Region') > -1).toBe(true);
-            expect(html.indexOf('Northern Region') > -1).toBe(true);
+            expect(html.indexOf('Malawi')).toBeGreaterThan(-1);
+            expect(html.indexOf('Central Region')).toBeGreaterThan(-1);
+            expect(html.indexOf('Northern Region')).toBeGreaterThan(-1);
         });
 
         it('should assign whole object', function() {
@@ -127,8 +127,8 @@ describe('Add Facility page', function() {
         it('should show facility type names as options', function() {
             var html = select.html();
 
-            expect(html.indexOf('Ministry of Health') > -1).toBe(true);
-            expect(html.indexOf('Doctors Without Borders') > -1).toBe(true);
+            expect(html.indexOf('Ministry of Health')).toBeGreaterThan(-1);
+            expect(html.indexOf('Doctors Without Borders')).toBeGreaterThan(-1);
         });
 
         it('should assign whole object', function() {
@@ -244,7 +244,7 @@ describe('Add Facility page', function() {
             template.find('#cancel').click();
             $rootScope.$apply();
 
-            expect(vm.save);
+            expect(vm.save).not.toHaveBeenCalled();
         });
 
     });

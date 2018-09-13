@@ -66,7 +66,7 @@ describe('requisitionGroupService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', referencedataUrlFactory('/api/requisitionGroups/' + requisitionGroups[0].id));
+            $httpBackend.expectGET(referencedataUrlFactory('/api/requisitionGroups/' + requisitionGroups[0].id));
 
             requisitionGroupService.get(requisitionGroups[0].id);
             $httpBackend.flush();
@@ -99,7 +99,7 @@ describe('requisitionGroupService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', referencedataUrlFactory('/api/requisitionGroups'));
+            $httpBackend.expectGET(referencedataUrlFactory('/api/requisitionGroups'));
 
             requisitionGroupService.getAll(requisitionGroups[0].id);
             $httpBackend.flush();
@@ -146,7 +146,7 @@ describe('requisitionGroupService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/requisitionGroups/search?page=' +
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/requisitionGroups/search?page=' +
                 paginationParams.page + '&size=' + paginationParams.size));
 
             requisitionGroupService.search(paginationParams, searchParams);

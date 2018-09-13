@@ -112,7 +112,7 @@ describe('facilityTypeService', function() {
             facilityTypeOne = new FacilityTypeDataBuilder().withoutId()
                 .build();
 
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
                 .respond(200, facilityTypeOne);
 
             facilityTypeService.create(facilityTypeOne)
@@ -130,7 +130,7 @@ describe('facilityTypeService', function() {
             facilityTypeOne = new FacilityTypeDataBuilder().withoutId()
                 .build();
 
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
                 .respond(400);
 
             facilityTypeService.create(facilityTypeOne)

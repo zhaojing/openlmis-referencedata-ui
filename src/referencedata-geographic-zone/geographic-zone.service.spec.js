@@ -101,7 +101,7 @@ describe('geographicZoneService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', referencedataUrlFactory('/api/geographicZones/' + geographicZones[0].id));
+            $httpBackend.expectGET(referencedataUrlFactory('/api/geographicZones/' + geographicZones[0].id));
 
             geographicZoneService.get(geographicZones[0].id);
             $httpBackend.flush();
@@ -154,7 +154,7 @@ describe('geographicZoneService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/geographicZones/search?page=' +
                 params.page + '&size=' + params.size + '&sort=' + params.sort));
 
             geographicZoneService.search(params);

@@ -66,7 +66,7 @@ describe('orderableService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', openlmisUrlFactory('/api/orderables/' + orderables[0].id));
+            $httpBackend.expectGET(openlmisUrlFactory('/api/orderables/' + orderables[0].id));
 
             orderableService.get(orderables[0].id);
             $httpBackend.flush();

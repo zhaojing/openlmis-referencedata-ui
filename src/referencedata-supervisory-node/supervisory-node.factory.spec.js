@@ -100,16 +100,19 @@ describe('supervisoryNodeFactory', function() {
 
         it('should return promise', function() {
             var result = supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
+
             expect(angular.isFunction(result.then)).toBe(true);
         });
 
         it('should call supervisoryNodeService', function() {
             supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
+
             expect(supervisoryNodeService.get).toHaveBeenCalledWith(supervisoryNodes[0].id);
         });
 
         it('should call facilityService', function() {
             supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
+
             expect(facilityService.getAllMinimal).toHaveBeenCalled();
         });
 

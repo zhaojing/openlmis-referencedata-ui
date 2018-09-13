@@ -95,11 +95,13 @@ describe('UserRolesController', function() {
 
         it('should show success notification', function() {
             $rootScope.$apply();
+
             expect(notificationService.success).toHaveBeenCalledWith('adminUserRoles.updateSuccessful');
         });
 
         it('should redirect to users list', function() {
             $rootScope.$apply();
+
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
                 reload: true
             });
@@ -107,6 +109,7 @@ describe('UserRolesController', function() {
 
         it('should close loading modal', function() {
             $rootScope.$apply();
+
             expect(loadingModalService.close).toHaveBeenCalled();
         });
 

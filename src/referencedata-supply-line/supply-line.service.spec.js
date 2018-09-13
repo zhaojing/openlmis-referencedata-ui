@@ -87,7 +87,7 @@ describe('supplyLineService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', referencedataUrlFactory('/api/supplyLines/' + supplyLines[0].id));
+            $httpBackend.expectGET(referencedataUrlFactory('/api/supplyLines/' + supplyLines[0].id));
 
             supplyLineService.get(supplyLines[0].id);
             $httpBackend.flush();
@@ -143,7 +143,7 @@ describe('supplyLineService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('POST', referencedataUrlFactory('/api/supplyLines/search?page=' +
+            $httpBackend.expectPOST(referencedataUrlFactory('/api/supplyLines/search?page=' +
                 params.page + '&size=' + params.size + '&sort=' + params.sort));
 
             supplyLineService.search(params);

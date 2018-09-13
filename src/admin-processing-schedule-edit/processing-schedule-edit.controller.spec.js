@@ -76,11 +76,13 @@ describe('ProcessingScheduleEditController', function() {
             var newStartDate = angular.copy(processingPeriods[processingPeriods.length - 1].endDate);
 
             vm.$onInit();
+
             expect(vm.processingSchedule).toEqual(processingSchedule);
             expect(vm.newPeriod).toEqual({
                 processingSchedule: processingSchedule,
                 startDate: newStartDate
             });
+
             expect(vm.processingPeriods).toEqual(processingPeriods);
         });
     });
@@ -159,6 +161,7 @@ describe('ProcessingScheduleEditController', function() {
 
         it('should redirect to Processing Period screen', function() {
             vm.goToPreviousState();
+
             expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });

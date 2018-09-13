@@ -226,6 +226,7 @@ describe('UserRolesTabController', function() {
 
         it('should show confirm modal', function() {
             vm.removeRole(user.roleAssignments[0]);
+
             expect(confirmService.confirmDestroy)
                 .toHaveBeenCalledWith('adminUserRoles.removeRole.question', 'adminUserRoles.removeRole.label');
         });
@@ -233,12 +234,14 @@ describe('UserRolesTabController', function() {
         it('should remove role assignment if it exists', function() {
             vm.removeRole(user.roleAssignments[0]);
             $rootScope.$apply();
+
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount - 1);
         });
 
         it('should not remove role assignment if it does not exists', function() {
             vm.removeRole('roleAssignment');
             $rootScope.$apply();
+
             expect(user.roleAssignments.length).toEqual(roleAssignmentsCount);
         });
     });

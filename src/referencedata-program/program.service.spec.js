@@ -144,22 +144,6 @@ describe('programService', function() {
         expect(data.id).toEqual(program2.id);
     });
 
-    it('should save program', function() {
-        var data;
-
-        $httpBackend.when('PUT', openlmisUrlFactory('/api/programs/' + program1.id))
-            .respond(200, program2);
-
-        programService.update(program1).then(function(response) {
-            data = response;
-        });
-
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(data.id).toEqual(program2.id);
-    });
-
     describe('getUserPrograms', function() {
         var usersProgramResponse;
 

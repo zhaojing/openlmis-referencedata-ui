@@ -66,7 +66,7 @@ describe('supervisoryNodeService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', referencedataUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id));
+            $httpBackend.expectGET(referencedataUrlFactory('/api/supervisoryNodes/' + supervisoryNodes[0].id));
 
             supervisoryNodeService.get(supervisoryNodes[0].id);
             $httpBackend.flush();

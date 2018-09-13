@@ -190,6 +190,7 @@ describe('UserProfileController', function() {
                 message: 'openlmisUser.passwordResetAlert.message',
                 buttonLabel: 'openlmisUser.passwordResetAlert.label'
             });
+
             expect($rootScope.$emit).not.toHaveBeenCalled();
             expect($state.go).not.toHaveBeenCalled();
 
@@ -206,6 +207,7 @@ describe('UserProfileController', function() {
                 message: 'openlmisUser.passwordResetAlert.message',
                 buttonLabel: 'openlmisUser.passwordResetAlert.label'
             });
+
             expect($rootScope.$emit).toHaveBeenCalledWith('openlmis-auth.logout');
             expect($state.go).toHaveBeenCalledWith('auth.login');
         });

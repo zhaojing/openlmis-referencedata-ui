@@ -86,10 +86,11 @@ describe('periodFactory', function() {
                 processingScheduleId: scheduleId,
                 sort: 'startDate,desc'
             });
+
             expect(data).toEqual(new Date('2017-12-13'));
         });
 
-        it('should get new start date for period', function() {
+        it('should resolve to undefined if there is no period', function() {
             periodService.query.andReturn($q.resolve({
                 content: []
             }));
@@ -106,6 +107,7 @@ describe('periodFactory', function() {
                 processingScheduleId: scheduleId,
                 sort: 'startDate,desc'
             });
+
             expect(data).toBe(undefined);
         });
     });

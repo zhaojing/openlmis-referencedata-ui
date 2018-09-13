@@ -155,7 +155,7 @@ describe('openlmis.administration.users.roles', function() {
             expect(getResolvedValue('tab')).toEqual(ROLE_TYPES.SUPERVISION);
         });
 
-        it('should resolve programs', function() {
+        it('should resolve roleAssignments', function() {
             goToUrl('/administration/users/' + user.id + '/roles/supervision');
 
             expect(getResolvedValue('roleAssignments')).toEqual([
@@ -168,6 +168,7 @@ describe('openlmis.administration.users.roles', function() {
             goToUrl('/administration/users/' + user.id + '/roles/supervision');
 
             var roleRightsMap = getResolvedValue('roleRightsMap');
+
             expect(roleRightsMap[roles[0].id]).toEqual(roles[0].rights);
             expect(roleRightsMap[roles[1].id]).toEqual(roles[1].rights);
             expect(roleRightsMap[roles[2].id]).toEqual(roles[2].rights);

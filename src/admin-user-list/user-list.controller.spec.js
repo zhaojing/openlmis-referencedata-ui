@@ -80,15 +80,15 @@ describe('UserListController', function() {
             expect(vm.firstName).toEqual(usersList[0].firstName);
         });
 
-        it('should expose firstName', function() {
+        it('should expose lastName', function() {
             expect(vm.lastName).toEqual(usersList[0].lastName);
         });
 
-        it('should expose firstName', function() {
+        it('should expose email', function() {
             expect(vm.email).toEqual(usersList[0].email);
         });
 
-        it('should expose firstName', function() {
+        it('should expose username', function() {
             expect(vm.username).toEqual(usersList[0].username);
         });
     });
@@ -197,6 +197,7 @@ describe('UserListController', function() {
 
         it('should call state go method', function() {
             vm.search();
+
             expect($state.go).toHaveBeenCalled();
         });
     });

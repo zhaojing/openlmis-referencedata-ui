@@ -127,6 +127,7 @@ describe('FacilityViewController', function() {
 
         it('should call state go with correct params', function() {
             vm.goToFacilityList();
+
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {}, {
                 reload: true
             });
@@ -138,12 +139,14 @@ describe('FacilityViewController', function() {
         it('should open loading modal', function() {
             vm.saveFacilityDetails();
             $rootScope.$apply();
+
             expect(loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should call facilityService save method', function() {
             vm.saveFacilityDetails();
             $rootScope.$apply();
+
             expect(facilityService.save).toHaveBeenCalledWith(vm.facility);
         });
 
@@ -159,6 +162,7 @@ describe('FacilityViewController', function() {
         it('should go to facility list after successful save', function() {
             vm.saveFacilityDetails();
             $rootScope.$apply();
+
             expect($state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {}, {
                 reload: true
             });
@@ -167,6 +171,7 @@ describe('FacilityViewController', function() {
         it('should show success notification after successful save', function() {
             vm.saveFacilityDetails();
             $rootScope.$apply();
+
             expect(notificationService.success).toHaveBeenCalledWith('adminFacilityView.saveFacility.success');
         });
     });
@@ -199,8 +204,8 @@ describe('FacilityViewController', function() {
 
             vm.addProgram();
 
-            vm.selectedProgram = undefined;
-            vm.selectedStartDate = undefined;
+            expect(vm.selectedProgram).toBe(null);
+            expect(vm.selectedStartDate).toBe(null);
         });
 
     });

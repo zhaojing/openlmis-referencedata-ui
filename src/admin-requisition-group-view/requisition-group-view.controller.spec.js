@@ -99,6 +99,7 @@ describe('RequisitionGroupViewController', function() {
 
         it('should call state go method', function() {
             vm.searchForFacilities();
+
             expect($state.go).toHaveBeenCalled();
         });
     });

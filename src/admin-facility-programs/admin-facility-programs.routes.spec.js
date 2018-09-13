@@ -23,7 +23,7 @@ describe('openlmis.administration.facilities.facility.programs state', function(
     beforeEach(prepareSuite);
 
     it('should expect facility from parent state', function() {
-        expect(state.parentResolves.indexOf('facility') > -1).toBe(true);
+        expect(state.parentResolves.indexOf('facility')).toBeGreaterThan(-1);
     });
 
     it('should resolve programs', function() {

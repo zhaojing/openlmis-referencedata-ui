@@ -56,7 +56,7 @@ describe('SupervisoryNodeEditController', function() {
             expect(vm.supervisoryNode).toEqual(supervisoryNode);
         });
 
-        it('should expose supervisoryNode', function() {
+        it('should expose childNodes', function() {
             expect(vm.childNodes).toEqual(childNodes);
         });
     });

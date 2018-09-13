@@ -96,7 +96,7 @@ describe('referencedataRoleService', function() {
         });
 
         it('should make a proper request', function() {
-            $httpBackend.expect('GET', openlmisUrlFactory('/api/roles/' + roleId));
+            $httpBackend.expectGET(openlmisUrlFactory('/api/roles/' + roleId));
 
             referencedataRoleService.get(roleId);
             $httpBackend.flush();
