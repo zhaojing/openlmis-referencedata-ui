@@ -28,7 +28,7 @@
             label: 'adminUserList.users.label',
             url: '/users?firstName&lastName&email&usersPage&usersSize&username&sort',
             params: {
-                sort: 'username'
+                sort: ['username']
             },
             controller: 'UserListController',
             templateUrl: 'admin-user-list/user-list.html',

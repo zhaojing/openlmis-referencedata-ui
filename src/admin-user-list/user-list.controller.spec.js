@@ -95,9 +95,9 @@ describe('UserListController', function() {
 
     it('should expose sort options', function() {
         expect(vm.options).toEqual({
-            firstName: 'adminUserList.firstName',
-            lastName: 'adminUserList.lastName',
-            username: 'adminUserList.username'
+            'adminUserList.firstName': ['firstName'],
+            'adminUserList.lastName': ['lastName'],
+            'adminUserList.username': ['username']
         });
     });
 
