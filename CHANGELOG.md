@@ -1,12 +1,18 @@
-5.4.1 / WIP
+5.4.2 / WIP
 ==================
 
 Improvements:
 * [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.
+* [OLMIS-5409](https://openlmis.atlassian.net/browse/OLMIS-5409): Updated ui-components to version 7.0.0.
+* [OLMIS-3696](https://openlmis.atlassian.net/browse/OLMIS-3696): Added dependency and development dependency locking.
+
+5.4.1 / 2018-10-01
+==================
+
+Improvements:
 * [OLMIS-5235](https://openlmis.atlassian.net/browse/OLMIS-5235): Improved performance of login:
 ** Made the requests when login concurrent (where possible).
 ** Minimal Facilities are now cached in the LocalDatabase instead of the LocalStorage.
-* [OLMIS-5409](https://openlmis.atlassian.net/browse/OLMIS-5409): Updated ui-components to version 7.0.0.
 
 Bug fixes:
 * [OLMIS-5235](https://openlmis.atlassian.net/browse/OLMIS-5235): FacilityProgramCacheService will now pass user ID when fetching user programs.
