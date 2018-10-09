@@ -127,6 +127,7 @@
             vm.facilityOperators = facilityOperators;
             vm.programs = programs;
             vm.selectedTab = 0;
+            vm.managedExternally = facility.isManagedExternally();
 
             if (!vm.facilityWithPrograms.supportedPrograms) {
                 vm.facilityWithPrograms.supportedPrograms = [];

@@ -35,8 +35,8 @@
                 }
             },
             resolve: {
-                facility: function(facilityService, $stateParams) {
-                    return facilityService.get($stateParams.id);
+                facility: function(FacilityRepository, $stateParams) {
+                    return new FacilityRepository().get($stateParams.id);
                 },
                 facilityTypes: function(facilityTypeService) {
                     return facilityTypeService.query({

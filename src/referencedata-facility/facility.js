@@ -30,6 +30,8 @@
 
     function Facility() {
 
+        Facility.prototype.isManagedExternally = isManagedExternally;
+
         return Facility;
 
         /**
@@ -59,6 +61,10 @@
             this.location = json.location;
             this.extraData = json.extraData;
             this.supportedPrograms = json.supportedPrograms || [];
+        }
+
+        function isManagedExternally() {
+            return !!this.extraData && String(this.extraData.isManagedExternally) === 'true';
         }
 
     }
