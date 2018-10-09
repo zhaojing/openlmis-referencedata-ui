@@ -7,6 +7,9 @@ Improvements:
 * [OLMIS-3696](https://openlmis.atlassian.net/browse/OLMIS-3696): Added dependency and development dependency locking.
 * [OLMIS-5415](https://openlmis.atlassian.net/browse/OLMIS-5415): Disabled edit of some fields for externally managed facilities.
 
+Bug fixes:
+* [OLMIS-4403](https://openlmis.atlassian.net/browse/OLMIS-4403): Fix to appropriately show rights status under a give role
+
 5.4.1 / 2018-10-01
 ==================
 

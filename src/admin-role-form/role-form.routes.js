@@ -43,8 +43,8 @@
 
                     referencedataRightService.search(undefined, type).then(function(rights) {
                         angular.forEach(rights, function(right) {
-                            right.checked = role && $filter('filter')(role.rights, {
-                                name: right.name
+                            right.checked = role && _.filter(role.rights, function(roleRight) {
+                                return right.name === roleRight.name;
                             }).length > 0;
                         });
                         deferred.resolve(rights);
