@@ -1,9 +1,9 @@
 <form id="facility-edit=form" name="facilityEdit" ng-submit="vm.saveFacilityDetails()">
     <label for="facilityName">{{'adminFacilityView.facilityName' | message}}</label>
-    <input class="form-control" id="facilityName" ng-model="vm.facilityDetails.name" ng-disabled="vm.managedExternally" required/>
+    <input class="form-control" id="facilityName" ng-model="vm.facilityDetails.name" required/>
 
     <label for="facilityCode">{{'adminFacilityView.facilityCode' | message}}</label>
-    <input class="form-control" id="facilityCode" ng-model="vm.facilityDetails.code" ng-disabled="vm.managedExternally" required/>
+    <input class="form-control" id="facilityCode" ng-model="vm.facilityDetails.code" required/>
 
     <label for="facilityType">{{'adminFacilityView.facilityType' | message}}</label>
     <select id="facilityType"
@@ -17,14 +17,14 @@
     <p class="note">{{'adminFacilityView.operationalDate.description' | message}}</p>
 
     <label for="geographicZone">{{'adminFacilityView.geographicZone' | message}}</label>
-    <select id="geographicZone" ng-disabled="vm.managedExternally"
+    <select id="geographicZone"
         ng-model="vm.facilityDetails.geographicZone"
         ng-options="geographicZone as geographicZone.name for geographicZone in vm.geographicZones track by geographicZone.id"
         required>
     </select>
 
     <label for="facilityActive" class="checkbox">
-       <input id="facilityActive" type="checkbox" ng-model="vm.facilityDetails.active" ng-disabled="vm.managedExternally" />
+       <input id="facilityActive" type="checkbox" ng-model="vm.facilityDetails.active"/>
        {{'adminFacilityView.activeFacility' | message}}
     </label>
     <p class="note">{{'adminFacilityView.activeFacility.description' | message}}</p>
@@ -37,7 +37,7 @@
     <p class="note">{{'adminFacilityView.enabled.description.unchecked' | message}}</p>
 
     <label for="description">{{'adminFacilityView.description' | message}}</label>
-    <textarea id="description" ng-model="vm.facilityDetails.description" ng-disabled="vm.managedExternally"></textarea>
+    <textarea id="description" ng-model="vm.facilityDetails.description"></textarea>
 
     <label for="facilityOperator">{{'adminFacilityView.operatedBy' | message}}</label>
     <select id="facilityOperator"
