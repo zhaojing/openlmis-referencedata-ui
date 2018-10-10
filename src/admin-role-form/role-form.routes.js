@@ -38,12 +38,12 @@
                     }
                     $state.go('openlmis.administration.roles.selectType');
                 },
-                rights: function($q, $filter, role, type, referencedataRightService) {
+                rights: function($q, role, type, referencedataRightService) {
                     var deferred = $q.defer();
 
                     referencedataRightService.search(undefined, type).then(function(rights) {
                         angular.forEach(rights, function(right) {
-                            right.checked = role && _.filter(role.rights, function(roleRight) {
+                            right.checked = role && role.rights.filter(function(roleRight) {
                                 return right.name === roleRight.name;
                             }).length > 0;
                         });
