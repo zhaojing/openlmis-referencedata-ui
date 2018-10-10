@@ -121,6 +121,14 @@ describe('FacilityViewController', function() {
 
             expect(vm.facilityWithPrograms.supportedPrograms).toEqual([]);
         });
+
+        it('should expose managedExternally flag', function() {
+            spyOn(facility, 'isManagedExternally').andReturn(true);
+
+            vm.$onInit();
+
+            expect(vm.managedExternally).toBe(true);
+        });
     });
 
     describe('goToFacilityList', function() {

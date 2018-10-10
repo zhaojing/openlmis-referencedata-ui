@@ -34,6 +34,9 @@
         FacilityDataBuilder.prototype.withSupportedPrograms = withSupportedPrograms;
         FacilityDataBuilder.prototype.withFacilityType = withFacilityType;
         FacilityDataBuilder.prototype.withoutId = withoutId;
+        FacilityDataBuilder.prototype.withoutExtraData = withoutExtraData;
+        FacilityDataBuilder.prototype.managedExternally = managedExternally;
+        FacilityDataBuilder.prototype.withExtraData = withExtraData;
 
         return FacilityDataBuilder;
 
@@ -85,6 +88,20 @@
 
         function build() {
             return new Facility(this.buildJson());
+        }
+
+        function withExtraData(extraData) {
+            this.extraData = extraData;
+            return this;
+        }
+
+        function withoutExtraData() {
+            return this.withExtraData();
+        }
+
+        function managedExternally() {
+            this.extraData.isManagedExternally = true;
+            return this;
         }
 
         function buildJson() {
