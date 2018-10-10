@@ -65,13 +65,13 @@
 
         /**
          * @ngdoc method
-         * @methodOf referencedata.Facility
+         * @methodOf referencedata-facility.Facility
          * @name isManagedExternally
          * 
          * @description
          * Tells whether facility is managed by some external system (ex. FHIR).
          * 
-         * @return  true if facility is managed externally, false otherwise
+         * @return {boolean}  true if facility is managed externally, false otherwise
          */
         function isManagedExternally() {
             return !!this.extraData && String(this.extraData.isManagedExternally) === 'true';
