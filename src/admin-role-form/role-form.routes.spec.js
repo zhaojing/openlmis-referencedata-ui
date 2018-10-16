@@ -15,70 +15,50 @@
 
 describe('openlmis.administration.roles state', function() {
 
-    var $state, $q, state, $rootScope, referencedataRightService, role, type, right, expectedRight;
-
     beforeEach(function() {
-        module('openlmis-main-state');
         module('openlmis-admin');
         module('admin-role-list');
         module('admin-role-form');
 
         inject(function($injector) {
-            $state = $injector.get('$state');
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            referencedataRightService = $injector.get('referencedataRightService');
+            this.$state = $injector.get('$state');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataRightService = $injector.get('referencedataRightService');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.RightDataBuilder = $injector.get('RightDataBuilder');
         });
 
-        role = {
-            description: 'sys admin',
-            rights: [
-                {
-                    name: 'right1'
-                }
-            ]
-        };
+        this.role =  new this.RoleDataBuilder()
+            .withRight(new this.RightDataBuilder().withName('right1')
+                .build())
+            .build();
 
-        right = [
-            {
-                name: 'right1',
-                checked: true
-            },
-            {
-                name: 'right2',
-                checked: true
-            }
+        this.rights = [
+            new this.RightDataBuilder().withName('right1')
+                .build(),
+            new this.RightDataBuilder().withName('right2')
+                .build()
         ];
 
-        expectedRight = [
-            {
-                name: 'right1',
-                checked: true
-            },
-            {
-                name: 'right2',
-                checked: false
-            }
-        ];
+        this.type = 'type';
 
-        type = 'type';
+        spyOn(this.referencedataRightService, 'search').andReturn(this.$q.when(this.rights));
 
-        spyOn(referencedataRightService, 'search').andReturn($q.when(right));
-
-        state = $state.get('openlmis.administration.roles.createUpdate');
+        this.state = this.$state.get('openlmis.administration.roles.createUpdate');
     });
 
-    it('should flag `checked` property to false is right is not in role', function() {
+    it('should set `checked` property to false if right is not in role', function() {
         var result;
 
-        state.resolve.rights($q, role, type, referencedataRightService).then(function(right) {
+        this.state.resolve.rights(this.$q, this.role, this.type, this.referencedataRightService).then(function(right) {
             result = right;
         });
 
-        $rootScope.$apply();
+        this.$rootScope.$apply();
 
-        expect(result[0].checked).toEqual(expectedRight[0].checked);
-        expect(result[1].checked).toEqual(expectedRight[1].checked);
+        expect(result[0].checked).toEqual(true);
+        expect(result[1].checked).toEqual(false);
 
     });
 
