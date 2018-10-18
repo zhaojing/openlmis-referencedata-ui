@@ -129,6 +129,16 @@ describe('FacilityViewController', function() {
 
             expect(vm.managedExternally).toBe(true);
         });
+
+        it('should expose original facility name', function() {
+            vm.$onInit();
+
+            expect(vm.originalFacilityName).toEqual(facility.name);
+
+            vm.facility.name += ' (Edited)';
+
+            expect(vm.originalFacilityName).not.toBe(vm.facility.name);
+        });
     });
 
     describe('goToFacilityList', function() {

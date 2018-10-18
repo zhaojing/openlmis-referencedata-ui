@@ -6,32 +6,7 @@
             </div>
             <div class="modal-body">
                 <form id="add-facility-form" ng-submit="vm.save()">
-                    <label for="facility-name">{{'adminFacilityAdd.facilityName' | message}}</label>
-                    <input id="facility-name" type="text" ng-model="vm.facility.name" required/>
-                    <label for="facility-code">{{'adminFacilityAdd.facilityCode' | message}}</label>
-                    <input id="facility-code" type="text" ng-model="vm.facility.code" required/>
-                    <label for="facility-type">{{'adminFacilityAdd.facilityType' | message}}</label>
-                    <select id="facility-type" ng-model="vm.facility.type" ng-options="type.name for type in vm.facilityTypes" required></select>
-                    <label for="operational-date">{{'adminFacilityAdd.operationalDate' | message}}</label>
-                    <input id="operational-date" type="date" ng-model="vm.facility.goLiveDate"/>
-                    <p class="note">{{'adminFacilityAdd.operationalDate.description' | message}}</p>
-                    <label class="checkbox" for="active-facility">
-                		<input id="active-facility" type="checkbox" ng-model="vm.facility.active"/>
-                		{{'adminFacilityAdd.activeFacility' | message}}
-                	</label>
-                    <p class="note">{{'adminFacilityAdd.activeFacility.description' | message}}</p>
-                    <label class="checkbox" for="enabled">
-                		<input id="enabled" type="checkbox" ng-model="vm.facility.enabled"/>
-                		{{'adminFacilityAdd.enabled' | message}}
-                	</label>
-                    <p class="note">{{'adminFacilityAdd.enabled.description.checked' | message}}</p>
-                    <p class="note">{{'adminFacilityAdd.enabled.description.unchecked' | message}}</p>
-                    <label for="geographic-zone">{{'adminFacilityAdd.geographicZone' | message}}</label>
-                    <select id="geographic-zone" ng-model="vm.facility.geographicZone" ng-options="zone.name for zone in vm.geographicZones" required></select>
-                    <label for="description">{{'adminFacilityAdd.description' | message}}</label>
-                    <textarea id="description" ng-model="vm.facility.description"></textarea>
-                    <label for="facility-operator">{{'adminFacilityAdd.facilityOperator' | message}}</label>
-                    <select id="facility-operator" ng-model="vm.facility.operator" ng-options="operator.name for operator in vm.facilityOperators"></select>
+                    <ng-include src="'admin-facility-add/facility-information.html'"></ng-include>
                 </form>
             </div>
             <div class="modal-footer">

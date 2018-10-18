@@ -119,8 +119,8 @@
          * Method that is executed on initiating FacilityListController.
          */
         function onInit() {
-            vm.facility = facility;
-            vm.facilityDetails = angular.copy(facility);
+            vm.originalFacilityName = facility.name;
+            vm.facility = angular.copy(facility);
             vm.facilityWithPrograms = angular.copy(facility);
             vm.facilityTypes = facilityTypes;
             vm.geographicZones = geographicZones;
@@ -163,7 +163,7 @@
          * Saves facility details and redirects to facility list screen.
          */
         function saveFacilityDetails() {
-            doSave(vm.facilityDetails,
+            doSave(vm.facility,
                 'adminFacilityView.saveFacility.success',
                 'adminFacilityView.saveFacility.fail');
         }

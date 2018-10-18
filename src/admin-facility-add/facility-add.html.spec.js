@@ -23,7 +23,7 @@ describe('Add Facility page', function() {
     describe('Facility Code input', function() {
 
         it('should be of type text', function() {
-            expect(template.find('#facility-code').attr('type')).toEqual('text');
+            expect(template.find('#facilityCode').attr('type')).toEqual('text');
         });
 
     });
@@ -31,7 +31,7 @@ describe('Add Facility page', function() {
     describe('Facility Name input', function() {
 
         it('should be of type text', function() {
-            expect(template.find('#facility-name').attr('type')).toEqual('text');
+            expect(template.find('#facilityName').attr('type')).toEqual('text');
         });
 
     });
@@ -41,7 +41,7 @@ describe('Add Facility page', function() {
         var select;
 
         beforeEach(function() {
-            select = template.find('#facility-type');
+            select = template.find('#facilityType');
         });
 
         it('should be a select', function() {
@@ -69,7 +69,7 @@ describe('Add Facility page', function() {
     describe('Active Facility input', function() {
 
         it('should be a checkbox', function() {
-            expect(template.find('#active-facility').attr('type')).toEqual('checkbox');
+            expect(template.find('#facilityActive').attr('type')).toEqual('checkbox');
         });
 
     });
@@ -77,7 +77,7 @@ describe('Add Facility page', function() {
     describe('Enabled input', function() {
 
         it('should be a checkbox', function() {
-            expect(template.find('#enabled').attr('type')).toEqual('checkbox');
+            expect(template.find('#facilityEnabled').attr('type')).toEqual('checkbox');
         });
 
     });
@@ -87,7 +87,7 @@ describe('Add Facility page', function() {
         var select;
 
         beforeEach(function() {
-            select = template.find('#geographic-zone');
+            select = template.find('#geographicZone');
         });
 
         it('should be a select', function() {
@@ -117,7 +117,7 @@ describe('Add Facility page', function() {
         var select;
 
         beforeEach(function() {
-            select = template.find('#facility-operator');
+            select = template.find('#facilityOperator');
         });
 
         it('should be a select', function() {
@@ -155,6 +155,7 @@ describe('Add Facility page', function() {
             vm.facility.geographicZone = geographicZones[0];
             vm.facility.description = 'Some Description';
             vm.facility.operator = facilityOperators[0];
+            vm.facility.goLiveDate = new Date('2018/10/18');
         });
 
         it('should require facility code', function() {
