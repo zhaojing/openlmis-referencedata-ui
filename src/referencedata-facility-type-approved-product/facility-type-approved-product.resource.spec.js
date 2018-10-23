@@ -13,32 +13,26 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('FacilityTypeApprovedProductResource', function() {
 
-    'use strict';
+    beforeEach(function() {
+        var test = this;
+        module('referencedata-facility-type-approved-product', function($provide) {
+            test.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
-    /**
-     * @ngdoc service
-     * @name referencedata-facility.FacilityResource
-     *
-     * @description
-     * Implementation of the FacilityResource interface. Communicates with the REST API of the OpenLMIS
-     * server.
-     */
-    angular
-        .module('referencedata-facility')
-        .factory('FacilityResource', FacilityResource);
+            $provide.factory('OpenlmisResource', function() {
+                return test.OpenlmisResourceMock;
+            });
+        });
 
-    FacilityResource.$inject = ['OpenlmisResource', 'classExtender'];
+        inject(function($injector) {
+            this.FacilityTypeApprovedProductResource = $injector.get('FacilityTypeApprovedProductResource');
+        });
+    });
 
-    function FacilityResource(OpenlmisResource, classExtender) {
+    it('should extend OpenlmisResource', function() {
+        new this.FacilityTypeApprovedProductResource();
 
-        classExtender.extend(FacilityResource, OpenlmisResource);
-
-        return FacilityResource;
-
-        function FacilityResource() {
-            this.super('/api/facilities');
-        }
-    }
-})();
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith(('/api/facilityTypeApprovedProducts'));
+    });
+});

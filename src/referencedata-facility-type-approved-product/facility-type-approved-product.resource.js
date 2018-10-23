@@ -19,26 +19,25 @@
 
     /**
      * @ngdoc service
-     * @name referencedata-facility.FacilityResource
+     * @name referencedata-facility-type-approved-product.FacilityTypeApprovedProductResource
      *
      * @description
-     * Implementation of the FacilityResource interface. Communicates with the REST API of the OpenLMIS
-     * server.
+     * Communicates with the RESTful FTAP endpoint of the OpenLMIS server.
      */
     angular
-        .module('referencedata-facility')
-        .factory('FacilityResource', FacilityResource);
+        .module('referencedata-facility-type-approved-product')
+        .factory('FacilityTypeApprovedProductResource', FacilityTypeApprovedProductResource);
 
-    FacilityResource.$inject = ['OpenlmisResource', 'classExtender'];
+    FacilityTypeApprovedProductResource.$inject = ['OpenlmisResource', 'classExtender'];
 
-    function FacilityResource(OpenlmisResource, classExtender) {
+    function FacilityTypeApprovedProductResource(OpenlmisResource, classExtender) {
 
-        classExtender.extend(FacilityResource, OpenlmisResource);
+        classExtender.extend(FacilityTypeApprovedProductResource, OpenlmisResource);
 
-        return FacilityResource;
+        return FacilityTypeApprovedProductResource;
 
-        function FacilityResource() {
-            this.super('/api/facilities');
+        function FacilityTypeApprovedProductResource() {
+            this.super('/api/facilityTypeApprovedProducts');
         }
     }
 })();
