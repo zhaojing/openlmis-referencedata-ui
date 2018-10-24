@@ -15,9 +15,9 @@
 
 describe('facilityFactory', function() {
 
-    var $rootScope, $q, facility1, facility2, userPrograms, programService, facilityService,
+    var $rootScope, $q, facility1, facility2, programService, facilityService,
         authorizationService, currentUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS,
-        FacilityDataBuilder, MinimalFacilityDataBuilder, ProgramDataBuilder;
+        FacilityDataBuilder, MinimalFacilityDataBuilder;
 
     beforeEach(function() {
         module('referencedata-facility');
@@ -30,10 +30,8 @@ describe('facilityFactory', function() {
             FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
 
             facilityService = $injector.get('facilityService');
-            spyOn(facilityService, 'getUserSupervisedFacilities');
             spyOn(facilityService, 'getUserFacilitiesForRight');
             spyOn(facilityService, 'get');
 
@@ -52,40 +50,6 @@ describe('facilityFactory', function() {
         facility2 = new FacilityDataBuilder().withId('2')
             .withName('facility2')
             .build();
-
-        userPrograms = [
-            new ProgramDataBuilder().withId('1')
-                .withName('program1')
-                .build(),
-            new ProgramDataBuilder().withId('2')
-                .withName('program2')
-                .build()
-        ];
-    });
-
-    it('should get all facilities and save them to storage', function() {
-        var data,
-            userId = '1';
-
-        authorizationService.getRightByName.andReturn({
-            id: '1'
-        });
-        programService.getUserPrograms.andCallFake(function() {
-            return $q.when(userPrograms);
-        });
-        facilityService.getUserSupervisedFacilities.andCallFake(function() {
-            return $q.when([facility1, facility2]);
-        });
-
-        facilityFactory.getUserFacilities(userId, REQUISITION_RIGHTS.REQUISITION_VIEW).then(function(response) {
-            data = response;
-        });
-        $rootScope.$apply();
-
-        expect(data.length).toBe(2);
-        expect(data[0].id).toBe(facility1.id);
-        expect(data[1].id).toBe(facility2.id);
-        expect(facilityService.getUserSupervisedFacilities.callCount).toEqual(2);
     });
 
     describe('getSupplyingFacilities', function() {
@@ -184,32 +148,6 @@ describe('facilityFactory', function() {
         });
     });
 
-    describe('getUserSupervisedFacilities', function() {
-        var userId = 'user-id',
-            rightId = 'right-id';
-
-        beforeEach(function() {
-            authorizationService.getRightByName.andCallFake(function(rightName) {
-                if (rightName === REQUISITION_RIGHTS.REQUISITION_CREATE) {
-                    return {
-                        id: rightId
-                    };
-                }
-            });
-        });
-
-        it('should fetch supervised facilities for the current user', function() {
-            facilityFactory.getUserSupervisedFacilities(
-                userId,
-                userPrograms[0],
-                REQUISITION_RIGHTS.REQUISITION_CREATE
-            );
-
-            expect(facilityService.getUserSupervisedFacilities)
-                .toHaveBeenCalledWith(userId, userPrograms[0], rightId);
-        });
-    });
-
     describe('getAllMinimalFacilities', function() {
 
         beforeEach(function() {
@@ -252,7 +190,7 @@ describe('facilityFactory', function() {
                 createFacility('facility-three', 'facilityThree')
             ];
 
-            spyOn(facilityFactory, 'getUserFacilities').andCallFake(function(userId, rightName) {
+            facilityService.getUserFacilitiesForRight.andCallFake(function(userId, rightName) {
                 if (rightName === REQUISITION_RIGHTS.REQUISITION_CREATE) {
                     return $q.when(requisitionCreateFacilities);
                 }
@@ -265,14 +203,14 @@ describe('facilityFactory', function() {
         it('should fetch facilities for REQUISITION_CREATE right', function() {
             facilityFactory.getRequestingFacilities(userId);
 
-            expect(facilityFactory.getUserFacilities)
+            expect(facilityService.getUserFacilitiesForRight)
                 .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_CREATE);
         });
 
         it('should fetch facilities for REQUISITION_AUTHORIZE right', function() {
             facilityFactory.getRequestingFacilities(userId);
 
-            expect(facilityFactory.getUserFacilities)
+            expect(facilityService.getUserFacilitiesForRight)
                 .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_AUTHORIZE);
         });
 

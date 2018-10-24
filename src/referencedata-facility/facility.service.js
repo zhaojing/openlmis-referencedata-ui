@@ -47,11 +47,6 @@
                     url: referencedataUrlFactory('/api/facilities/minimal'),
                     method: 'GET'
                 },
-                getUserSupervisedFacilities: {
-                    url: referencedataUrlFactory('api/users/:userId/supervisedFacilities'),
-                    method: 'GET',
-                    isArray: true
-                },
                 getFulfillmentFacilities: {
                     url: referencedataUrlFactory('/api/users/:userId/fulfillmentFacilities'),
                     method: 'GET',
@@ -70,7 +65,6 @@
         this.query = query;
         this.getAllMinimal = getAllMinimal;
         this.getUserFacilitiesForRight = getUserFacilitiesForRight;
-        this.getUserSupervisedFacilities = getUserSupervisedFacilities;
         this.getFulfillmentFacilities = getFulfillmentFacilities;
         this.search = search;
         this.save = save;
@@ -148,51 +142,6 @@
              */
         function search(paginationParams, queryParams) {
             return resource.search(paginationParams, queryParams).$promise;
-        }
-
-        /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name getUserSupervisedFacilities
-             *
-             * @description
-             * Returns facilities where program with the given programId is active and where the given
-             * user has right with the given rightId. Facilities are stored in local storage.
-             * If user is offline facilities are retrieved from the local storage.
-             *
-             * @param  {String}  userId    User UUID
-             * @param  {String}  programId Program UUID
-             * @param  {String}  rightId   Right UUID
-             * @return {Promise}           supervised facilities for user
-             */
-        function getUserSupervisedFacilities(userId, programId, rightId) {
-            var deferred = $q.defer();
-            if (offlineService.isOffline()) {
-                var facilities = facilitiesOffline.search({
-                    userIdOffline: userId,
-                    programIdOffline: programId,
-                    rightIdOffline: rightId
-                });
-                deferred.resolve(facilities);
-            } else {
-                resource.getUserSupervisedFacilities({
-                    userId: userId,
-                    programId: programId,
-                    rightId: rightId
-                }, function(response) {
-                    angular.forEach(response, function(facility) {
-                        var storageFacility = angular.copy(facility);
-                        storageFacility.userIdOffline = userId;
-                        storageFacility.programIdOffline = programId;
-                        storageFacility.rightIdOffline = rightId;
-                        facilitiesOffline.put(storageFacility);
-                    });
-                    deferred.resolve(response);
-                }, function() {
-                    deferred.reject();
-                });
-            }
-            return deferred.promise;
         }
 
         /**

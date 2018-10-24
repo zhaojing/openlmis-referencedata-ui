@@ -204,55 +204,6 @@ describe('facilityService', function() {
         });
     });
 
-    describe('getUserSupervisedFacilities', function() {
-        it('should get supervised facilities from storage while offline', function() {
-            var data,
-                userId = '1',
-                programId = '2',
-                rightId = '3';
-
-            facilitiesStorage.search.andReturn([facilityOne]);
-
-            offlineService.isOffline.andReturn(true);
-
-            facilityService.getUserSupervisedFacilities(userId, programId, rightId).then(function(response) {
-                data = response;
-            });
-
-            $rootScope.$apply();
-
-            expect(data[0].id).toBe(facilityOne.id);
-        });
-
-        it('should get supervised facilities and save them to storage', function() {
-            var data,
-                userId = '1',
-                programId = '2',
-                rightId = '3';
-
-            $httpBackend.when(
-                'GET',
-                referencedataUrlFactory(
-                    'api/users/' + userId + '/supervisedFacilities?programId=' + programId + '&rightId=' + rightId
-                )
-            )
-                .respond(200, [facilityOne, facilityTwo]);
-
-            offlineService.isOffline.andReturn(false);
-
-            facilityService.getUserSupervisedFacilities(userId, programId, rightId).then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data[0].id).toBe(facilityOne.id);
-            expect(data[1].id).toBe(facilityTwo.id);
-            expect(facilitiesStorage.put.callCount).toEqual(2);
-        });
-    });
-
     describe('getFulfillmentFacilities', function() {
 
         var userId, url;

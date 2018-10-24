@@ -6,6 +6,7 @@ Improvements:
 * [OLMIS-5409](https://openlmis.atlassian.net/browse/OLMIS-5409): Updated ui-components to version 7.0.0.
 * [OLMIS-3696](https://openlmis.atlassian.net/browse/OLMIS-3696): Added dependency and development dependency locking.
 * [OLMIS-5415](https://openlmis.atlassian.net/browse/OLMIS-5415): Disabled edit of some fields for externally managed facilities.
+* [OLMIS-4292](https://openlmis.atlassian.net/browse/OLMIS-4292): Changed Facility Service and Facility Factory to reflect endpoint refactor.
 
 Bug fixes:
 * [OLMIS-4403](https://openlmis.atlassian.net/browse/OLMIS-4403): Fix to appropriately show rights status under a give role

@@ -37,52 +37,13 @@
                      currentUserService, facilityService, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS) {
 
         return {
-            getUserFacilities: getUserFacilities,
             getSupplyingFacilities: getSupplyingFacilities,
             getRequestingFacilities: getRequestingFacilities,
             getUserHomeFacility: getUserHomeFacility,
-            getUserSupervisedFacilities: getUserSupervisedFacilities,
             getAllUserFacilities: getAllUserFacilities,
             searchAndOrderFacilities: searchAndOrderFacilities,
             getAllMinimalFacilities: getAllMinimalFacilities
         };
-
-        /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityFactory
-             * @name getUserFacilities
-             *
-             * @description
-             * Retrieves all user supervised facilities depending on the given access right.
-             *
-             * @param  {String}  userId    User UUID
-             * @param  {String}  rightName Name of access right
-             * @return {Promise}           Array of facilities
-             */
-        function getUserFacilities(userId, rightName) {
-            var promises = [],
-                facilities = [],
-                right = authorizationService.getRightByName(rightName),
-                deferred = $q.defer();
-
-            programService.getUserPrograms(userId).then(function(supervisedPrograms) {
-                angular.forEach(supervisedPrograms, function(program) {
-                    promises.push(facilityService.getUserSupervisedFacilities(userId, program.id, right.id));
-                });
-                $q.all(promises).then(function(results) {
-                    angular.forEach(results, function(result) {
-                        facilities = facilities.concat(result);
-                    });
-                    deferred.resolve($filter('unique')(facilities, 'id'));
-                }, function() {
-                    deferred.reject();
-                });
-            }, function() {
-                deferred.reject();
-            });
-
-            return deferred.promise;
-        }
 
         /**
              * @ngdoc method
@@ -128,8 +89,8 @@
             var deferred = $q.defer();
 
             $q.all([
-                this.getUserFacilities(userId, REQUISITION_RIGHTS.REQUISITION_CREATE),
-                this.getUserFacilities(userId, REQUISITION_RIGHTS.REQUISITION_AUTHORIZE)
+                facilityService.getUserFacilitiesForRight(userId, REQUISITION_RIGHTS.REQUISITION_CREATE),
+                facilityService.getUserFacilitiesForRight(userId, REQUISITION_RIGHTS.REQUISITION_AUTHORIZE)
             ]).then(function(results) {
                 deferred.resolve($filter('unique')(results[0].concat(results[1]), 'id'));
             }, function() {
@@ -168,25 +129,6 @@
                 });
 
             return deferred.promise;
-        }
-
-        /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityFactory
-             * @name getUserSupervisedFacilities
-             *
-             * @description
-             * Returns supervised facilities for the user.
-             *
-             * @param  {String} userId    the ID of the user to get supervised facilities
-             * @param  {String} programId the ID of the program
-             * @param  {String} right     the ID of right
-             * @return {Array}            the set of all supervised facilities
-             */
-        function getUserSupervisedFacilities(userId, programId, right) {
-            return facilityService.getUserSupervisedFacilities(userId,
-                programId,
-                authorizationService.getRightByName(right).id);
         }
 
         /**
