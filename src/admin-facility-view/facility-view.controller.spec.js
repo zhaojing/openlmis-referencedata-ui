@@ -15,22 +15,20 @@
 
 describe('FacilityViewController', function() {
 
-    var $q, $rootScope, $state, $controller, loadingModalService, notificationService,
-        facilityService, loadingModalPromise, vm, facility, facilityTypes, geographicZones,
-        facilityOperators, programs, FacilityTypeDataBuilder, GeographicZoneDataBuilder,
-        FacilityOperatorDataBuilder, ProgramDataBuilder, FacilityDataBuilder;
-
     beforeEach(function() {
         module('admin-facility-view');
 
+        var FacilityTypeDataBuilder, GeographicZoneDataBuilder, FacilityOperatorDataBuilder, ProgramDataBuilder,
+            FacilityDataBuilder;
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
-            notificationService = $injector.get('notificationService');
-            loadingModalService = $injector.get('loadingModalService');
-            facilityService = $injector.get('facilityService');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
+            this.notificationService = $injector.get('notificationService');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.FacilityRepository = $injector.get('FacilityRepository');
+
             FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
             GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
             FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
@@ -38,115 +36,115 @@ describe('FacilityViewController', function() {
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
-        spyOn(facilityService, 'save').andReturn($q.when());
+        spyOn(this.FacilityRepository.prototype, 'update').andReturn(this.$q.when());
 
-        loadingModalPromise = $q.defer();
-        spyOn(loadingModalService, 'close').andCallFake(loadingModalPromise.resolve);
-        spyOn(loadingModalService, 'open').andReturn(loadingModalPromise.promise);
+        var loadingModalPromise = this.$q.defer();
+        spyOn(this.loadingModalService, 'close').andCallFake(loadingModalPromise.resolve);
+        spyOn(this.loadingModalService, 'open').andReturn(loadingModalPromise.promise);
 
-        spyOn(notificationService, 'success').andReturn(true);
-        spyOn(notificationService, 'error').andReturn(true);
-        spyOn($state, 'go').andCallFake(loadingModalPromise.resolve);
+        spyOn(this.notificationService, 'success').andReturn(true);
+        spyOn(this.notificationService, 'error').andReturn(true);
+        spyOn(this.$state, 'go').andCallFake(loadingModalPromise.resolve);
 
-        facilityTypes = [
+        this.facilityTypes = [
             new FacilityTypeDataBuilder().build(),
             new FacilityTypeDataBuilder().build()
         ];
 
-        geographicZones = [
+        this.geographicZones = [
             new GeographicZoneDataBuilder().build(),
             new GeographicZoneDataBuilder().build()
         ];
 
-        facilityOperators = [
+        this.facilityOperators = [
             new FacilityOperatorDataBuilder().build(),
             new FacilityOperatorDataBuilder().build()
         ];
 
-        programs = [
+        this.programs = [
             new ProgramDataBuilder().build(),
             new ProgramDataBuilder().build()
         ];
 
-        facility = new FacilityDataBuilder().withFacilityType(facilityTypes[0])
+        this.facility = new FacilityDataBuilder().withFacilityType(this.facilityTypes[0])
             .build();
 
-        vm = $controller('FacilityViewController', {
-            facility: facility,
-            facilityTypes: facilityTypes,
-            geographicZones: geographicZones,
-            facilityOperators: facilityOperators,
-            programs: programs
+        this.vm = this.$controller('FacilityViewController', {
+            facility: this.facility,
+            facilityTypes: this.facilityTypes,
+            geographicZones: this.geographicZones,
+            facilityOperators: this.facilityOperators,
+            programs: this.programs
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose goToFacilityList method', function() {
-            expect(angular.isFunction(vm.goToFacilityList)).toBe(true);
+            expect(angular.isFunction(this.vm.goToFacilityList)).toBe(true);
         });
 
         it('should expose saveFacility method', function() {
-            expect(angular.isFunction(vm.saveFacilityDetails)).toBe(true);
+            expect(angular.isFunction(this.vm.saveFacilityDetails)).toBe(true);
         });
 
         it('should expose facility', function() {
-            expect(vm.facility).toEqual(facility);
+            expect(this.vm.facility).toEqual(this.facility);
         });
 
         it('should expose facilityTypes list', function() {
-            expect(vm.facilityTypes).toEqual(facilityTypes);
+            expect(this.vm.facilityTypes).toEqual(this.facilityTypes);
         });
 
         it('should expose geographicZones list', function() {
-            expect(vm.geographicZones).toEqual(geographicZones);
+            expect(this.vm.geographicZones).toEqual(this.geographicZones);
         });
 
         it('should expose facilityOperators list', function() {
-            expect(vm.facilityOperators).toEqual(facilityOperators);
+            expect(this.vm.facilityOperators).toEqual(this.facilityOperators);
         });
 
         it('should expose program list', function() {
-            expect(vm.programs).toEqual(programs);
+            expect(this.vm.programs).toEqual(this.programs);
         });
 
         it('should expose supported programs list', function() {
-            expect(vm.facilityWithPrograms.supportedPrograms).toEqual([]);
+            expect(this.vm.facilityWithPrograms.supportedPrograms).toEqual([]);
         });
 
         it('should expose supported programs list as empty list if undefined', function() {
-            vm.facility.supportedPrograms = undefined;
-            vm.$onInit();
+            this.vm.facility.supportedPrograms = undefined;
+            this.vm.$onInit();
 
-            expect(vm.facilityWithPrograms.supportedPrograms).toEqual([]);
+            expect(this.vm.facilityWithPrograms.supportedPrograms).toEqual([]);
         });
 
         it('should expose managedExternally flag', function() {
-            spyOn(facility, 'isManagedExternally').andReturn(true);
+            spyOn(this.facility, 'isManagedExternally').andReturn(true);
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.managedExternally).toBe(true);
+            expect(this.vm.managedExternally).toBe(true);
         });
 
         it('should expose original facility name', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.originalFacilityName).toEqual(facility.name);
+            expect(this.vm.originalFacilityName).toEqual(this.facility.name);
 
-            vm.facility.name += ' (Edited)';
+            this.vm.facility.name += ' (Edited)';
 
-            expect(vm.originalFacilityName).not.toBe(vm.facility.name);
+            expect(this.vm.originalFacilityName).not.toBe(this.vm.facility.name);
         });
     });
 
     describe('goToFacilityList', function() {
 
         it('should call state go with correct params', function() {
-            vm.goToFacilityList();
+            this.vm.goToFacilityList();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {}, {
                 reload: true
             });
         });
@@ -155,61 +153,61 @@ describe('FacilityViewController', function() {
     describe('saveFacility', function() {
 
         it('should open loading modal', function() {
-            vm.saveFacilityDetails();
-            $rootScope.$apply();
+            this.vm.saveFacilityDetails();
+            this.$rootScope.$apply();
 
-            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
-        it('should call facilityService save method', function() {
-            vm.saveFacilityDetails();
-            $rootScope.$apply();
+        it('should call this.FacilityRepository save method', function() {
+            this.vm.saveFacilityDetails();
+            this.$rootScope.$apply();
 
-            expect(facilityService.save).toHaveBeenCalledWith(vm.facility);
+            expect(this.FacilityRepository.prototype.update).toHaveBeenCalledWith(this.vm.facility);
         });
 
         it('should close loading modal and show error notification after save fails', function() {
-            facilityService.save.andReturn($q.reject());
-            vm.saveFacilityDetails();
-            $rootScope.$apply();
+            this.FacilityRepository.prototype.update.andReturn(this.$q.reject());
+            this.vm.saveFacilityDetails();
+            this.$rootScope.$apply();
 
-            expect(loadingModalService.close).toHaveBeenCalled();
-            expect(notificationService.error).toHaveBeenCalledWith('adminFacilityView.saveFacility.fail');
+            expect(this.loadingModalService.close).toHaveBeenCalled();
+            expect(this.notificationService.error).toHaveBeenCalledWith('adminFacilityView.saveFacility.fail');
         });
 
         it('should go to facility list after successful save', function() {
-            vm.saveFacilityDetails();
-            $rootScope.$apply();
+            this.vm.saveFacilityDetails();
+            this.$rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {}, {
                 reload: true
             });
         });
 
         it('should show success notification after successful save', function() {
-            vm.saveFacilityDetails();
-            $rootScope.$apply();
+            this.vm.saveFacilityDetails();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminFacilityView.saveFacility.success');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminFacilityView.saveFacility.success');
         });
     });
 
     describe('addProgram', function() {
 
         beforeEach(function() {
-            vm.facilityWithPrograms = {};
-            vm.facilityWithPrograms.supportedPrograms = [];
+            this.vm.facilityWithPrograms = {};
+            this.vm.facilityWithPrograms.supportedPrograms = [];
         });
 
         it('should add supported program to the list', function() {
-            vm.selectedProgram = vm.programs[0];
-            vm.selectedStartDate = new Date('08/10/2017');
+            this.vm.selectedProgram = this.vm.programs[0];
+            this.vm.selectedStartDate = new Date('08/10/2017');
 
-            var program = vm.selectedProgram;
+            var program = this.vm.selectedProgram;
 
-            vm.addProgram();
+            this.vm.addProgram();
 
-            expect(vm.facilityWithPrograms.supportedPrograms[0])
+            expect(this.vm.facilityWithPrograms.supportedPrograms[0])
                 .toEqual(angular.extend({}, program, {
                     supportStartDate: new Date('08/10/2017'),
                     supportActive: true
@@ -217,13 +215,13 @@ describe('FacilityViewController', function() {
         });
 
         it('should clear selections', function() {
-            vm.selectedProgram = vm.programs[0];
-            vm.selectedStartDate = new Date('08/10/2017');
+            this.vm.selectedProgram = this.vm.programs[0];
+            this.vm.selectedStartDate = new Date('08/10/2017');
 
-            vm.addProgram();
+            this.vm.addProgram();
 
-            expect(vm.selectedProgram).toBe(null);
-            expect(vm.selectedStartDate).toBe(null);
+            expect(this.vm.selectedProgram).toBe(null);
+            expect(this.vm.selectedStartDate).toBe(null);
         });
 
     });

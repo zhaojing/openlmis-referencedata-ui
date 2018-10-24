@@ -30,11 +30,11 @@
 
     controller.$inject = [
         '$q', '$state', 'facility', 'facilityTypes', 'geographicZones', 'facilityOperators',
-        'programs', 'facilityService', 'loadingModalService', 'notificationService'
+        'programs', 'FacilityRepository', 'loadingModalService', 'notificationService'
     ];
 
     function controller($q, $state, facility, facilityTypes, geographicZones, facilityOperators,
-                        programs, facilityService, loadingModalService, notificationService) {
+                        programs, FacilityRepository, loadingModalService, notificationService) {
 
         var vm = this;
 
@@ -210,11 +210,12 @@
 
         function doSave(facility, successMessage, errorMessage) {
             loadingModalService.open();
-            return facilityService.save(facility).then(function(facility) {
-                notificationService.success(successMessage);
-                goToFacilityList();
-                return $q.resolve(facility);
-            })
+            return new FacilityRepository().update(facility)
+                .then(function(facility) {
+                    notificationService.success(successMessage);
+                    goToFacilityList();
+                    return $q.resolve(facility);
+                })
                 .catch(function() {
                     notificationService.error(errorMessage);
                     loadingModalService.close();

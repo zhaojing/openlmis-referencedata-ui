@@ -31,12 +31,12 @@
 
     FacilityAddController.$inject = [
         'facility', 'facilityTypes', 'geographicZones', 'facilityOperators', 'confirmService',
-        'facilityService', 'stateTrackerService', '$state', 'loadingModalService',
+        'FacilityRepository', 'stateTrackerService', '$state', 'loadingModalService',
         'notificationService', 'messageService'
     ];
 
     function FacilityAddController(facility, facilityTypes, geographicZones, facilityOperators,
-                                   confirmService, facilityService, stateTrackerService,
+                                   confirmService, FacilityRepository, stateTrackerService,
                                    $state, loadingModalService, notificationService,
                                    messageService) {
         var vm = this;
@@ -88,7 +88,7 @@
 
         function doSave() {
             loadingModalService.open();
-            return facilityService.save(vm.facility)
+            return new FacilityRepository().create(vm.facility)
                 .then(function(facility) {
                     notificationService.success('adminFacilityAdd.facilityHasBeenSaved');
                     stateTrackerService.goToPreviousState();
