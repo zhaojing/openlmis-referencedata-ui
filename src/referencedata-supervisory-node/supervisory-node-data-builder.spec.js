@@ -27,6 +27,7 @@
 
         SupervisoryNodeDataBuilder.prototype.build = build;
         SupervisoryNodeDataBuilder.prototype.buildWithoutFacility = buildWithoutFacility;
+        SupervisoryNodeDataBuilder.prototype.buildWithChildNodes = buildWithChildNodes;
         SupervisoryNodeDataBuilder.prototype.addChildNode = addChildNode;
         SupervisoryNodeDataBuilder.prototype.withFacility = withFacility;
         SupervisoryNodeDataBuilder.prototype.withName = withName;
@@ -54,13 +55,15 @@
         }
 
         function buildWithoutFacility() {
-            return new SupervisoryNode(
-                this.id,
-                this.name,
-                this.code,
-                null,
-                this.childNodes
-            );
+            return this.withFacility()
+                .build();
+        }
+
+        function buildWithChildNodes() {
+            return this
+                .addChildNode(new SupervisoryNodeDataBuilder().build())
+                .addChildNode(new SupervisoryNodeDataBuilder().build())
+                .build();
         }
 
         function addChildNode(node) {

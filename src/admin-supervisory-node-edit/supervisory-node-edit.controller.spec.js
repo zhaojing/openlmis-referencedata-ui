@@ -15,61 +15,45 @@
 
 describe('SupervisoryNodeEditController', function() {
 
-    var $state, $controller,
-        vm, supervisoryNode, childNodes;
-
     beforeEach(function() {
         module('admin-supervisory-node-edit');
 
+        var SupervisoryNodeDataBuilder, $controller;
         inject(function($injector) {
+            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$state = $injector.get('$state');
         });
 
-        supervisoryNode = {
-            id: 'facility-id',
-            name: 'facility-name'
-        };
-        childNodes = [
-            {
-                id: 'node-1'
-            },
-            {
-                id: 'node-2'
-            }
-        ];
+        this.supervisoryNode = new SupervisoryNodeDataBuilder().buildWithChildNodes();
 
-        vm = $controller('SupervisoryNodeEditController', {
-            supervisoryNode: supervisoryNode,
-            childNodes: childNodes
+        this.vm = $controller('SupervisoryNodeEditController', {
+            supervisoryNode: this.supervisoryNode,
+            childNodes: this.supervisoryNode.childNodes
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
-        it('should expose goToSupervisoryNodeList method', function() {
-            expect(angular.isFunction(vm.goToSupervisoryNodeList)).toBe(true);
-        });
-
         it('should expose supervisoryNode', function() {
-            expect(vm.supervisoryNode).toEqual(supervisoryNode);
+            expect(this.vm.supervisoryNode).toEqual(this.supervisoryNode);
         });
 
         it('should expose childNodes', function() {
-            expect(vm.childNodes).toEqual(childNodes);
+            expect(this.vm.childNodes).toEqual(this.supervisoryNode.childNodes);
         });
     });
 
     describe('goToSupervisoryNodeList', function() {
 
         beforeEach(function() {
-            spyOn($state, 'go').andReturn();
-            vm.goToSupervisoryNodeList();
+            spyOn(this.$state, 'go').andReturn();
+            this.vm.goToSupervisoryNodeList();
         });
 
         it('should call state go with correct params', function() {
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
         });
