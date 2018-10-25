@@ -29,7 +29,7 @@
             <tr ng-repeat="node in vm.nodesPage">
                 <td>{{node.name}}</td>
                 <td>{{node.code}}</td>
-                <td>{{node.$facility.name}}</td>
+                <td>{{vm.facilitiesMap[node.facility.id].name}}</td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.supervisoryNodes.edit({id: node.id})">{{'adminSupervisoryNodeEdit.edit' | message}}</button>
                 </td>

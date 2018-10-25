@@ -28,9 +28,9 @@
         .module('admin-supervisory-node-edit')
         .controller('SupervisoryNodeEditController', controller);
 
-    controller.$inject = ['$state', 'supervisoryNode', 'childNodes'];
+    controller.$inject = ['$state', 'supervisoryNode', 'childNodes', 'facilitiesMap'];
 
-    function controller($state, supervisoryNode, childNodes) {
+    function controller($state, supervisoryNode, childNodes, facilitiesMap) {
 
         var vm = this;
 
@@ -71,6 +71,17 @@
         vm.nodesPage = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-supervisory-node-edit.controller:SupervisoryNodeEditController
+         * @type {Object}
+         * @name facilitiesMap
+         *
+         * @description
+         * Map where the key is the facility ID and value is the facility object.
+         */
+        vm.facilitiesMap = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf admin-supervisory-node-edit.controller:SupervisoryNodeEditController
          * @name $onInit
@@ -81,6 +92,7 @@
         function onInit() {
             vm.supervisoryNode = supervisoryNode;
             vm.childNodes = childNodes;
+            vm.facilitiesMap = facilitiesMap;
         }
 
         /**

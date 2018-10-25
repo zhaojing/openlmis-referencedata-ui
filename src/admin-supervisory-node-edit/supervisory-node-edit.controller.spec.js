@@ -18,18 +18,28 @@ describe('SupervisoryNodeEditController', function() {
     beforeEach(function() {
         module('admin-supervisory-node-edit');
 
-        var SupervisoryNodeDataBuilder, $controller;
+        var SupervisoryNodeDataBuilder, $controller, FacilityDataBuilder;
         inject(function($injector) {
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             $controller = $injector.get('$controller');
             this.$state = $injector.get('$state');
         });
 
         this.supervisoryNode = new SupervisoryNodeDataBuilder().buildWithChildNodes();
+        this.facilitiesMap = {
+            'facility-id-one': new FacilityDataBuilder()
+                .withId('facility-id-one')
+                .build(),
+            'facility-id-two': new FacilityDataBuilder()
+                .withId('facility-id-two')
+                .build()
+        };
 
         this.vm = $controller('SupervisoryNodeEditController', {
             supervisoryNode: this.supervisoryNode,
-            childNodes: this.supervisoryNode.childNodes
+            childNodes: this.supervisoryNode.childNodes,
+            facilitiesMap: this.facilitiesMap
         });
         this.vm.$onInit();
     });
@@ -43,6 +53,11 @@ describe('SupervisoryNodeEditController', function() {
         it('should expose childNodes', function() {
             expect(this.vm.childNodes).toEqual(this.supervisoryNode.childNodes);
         });
+
+        it('', function() {
+            expect(this.vm.facilitiesMap).toEqual(this.facilitiesMap);
+        });
+
     });
 
     describe('goToSupervisoryNodeList', function() {

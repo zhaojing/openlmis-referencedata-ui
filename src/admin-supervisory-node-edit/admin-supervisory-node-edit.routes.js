@@ -35,8 +35,14 @@
                 }
             },
             resolve: {
-                supervisoryNode: function(supervisoryNodeFactory, $stateParams) {
-                    return supervisoryNodeFactory.getSupervisoryNode($stateParams.id);
+                supervisoryNode: function(SupervisoryNodeResource, $stateParams) {
+                    return new SupervisoryNodeResource().get($stateParams.id);
+                },
+                facilities: function(facilityService) {
+                    return facilityService.getAllMinimal();
+                },
+                facilitiesMap: function(facilities, ObjectMapper) {
+                    return new ObjectMapper().map(facilities);
                 },
                 childNodes: function(paginationService, supervisoryNode, $stateParams) {
                     return paginationService.registerList(null, $stateParams, function() {
