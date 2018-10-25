@@ -13,40 +13,36 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis.administration.users.roles', function() {
-
-    var $location, $rootScope, RoleDataBuilder, roles, referencedataRoleFactory, ProgramDataBuilder, programs, $state,
-        SupervisoryNodeDataBuilder, supervisoryNodes, programService, supervisoryNodeFactory, $q, warehouses,
-        MinimalFacilityDataBuilder, facilityService, homeFacility, user, UserDataBuilder, currentUserService,
-        userRoleAssignmentFactory, $templateCache, ROLE_TYPES, paginationService;
+ddescribe('openlmis.administration.users.roles', function() {
 
     beforeEach(function() {
-        module('openlmis-main-state');
-        module('openlmis-admin');
         module('admin-user-roles');
 
+        var RoleDataBuilder, ProgramDataBuilder, SupervisoryNodeDataBuilder, MinimalFacilityDataBuilder,
+            UserDataBuilder;
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $location = $injector.get('$location');
-            $rootScope = $injector.get('$rootScope');
             RoleDataBuilder = $injector.get('RoleDataBuilder');
-            referencedataRoleFactory = $injector.get('referencedataRoleFactory');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-            supervisoryNodeFactory = $injector.get('supervisoryNodeFactory');
-            programService = $injector.get('programService');
             MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-            facilityService = $injector.get('facilityService');
             UserDataBuilder = $injector.get('UserDataBuilder');
-            currentUserService = $injector.get('currentUserService');
-            $state = $injector.get('$state');
-            userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
-            $templateCache = $injector.get('$templateCache');
-            ROLE_TYPES = $injector.get('ROLE_TYPES');
-            paginationService = $injector.get('paginationService');
+
+            this.$q = $injector.get('$q');
+            this.$location = $injector.get('$location');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataRoleFactory = $injector.get('referencedataRoleFactory');
+            this.supervisoryNodeFactory = $injector.get('supervisoryNodeFactory');
+            this.programService = $injector.get('programService');
+            this.facilityService = $injector.get('facilityService');
+            this.currentUserService = $injector.get('currentUserService');
+            this.$state = $injector.get('$state');
+            this.userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
+            this.$templateCache = $injector.get('$templateCache');
+            this.ROLE_TYPES = $injector.get('ROLE_TYPES');
+            this.paginationService = $injector.get('paginationService');
         });
 
-        roles = [
+        this.roles = [
             new RoleDataBuilder().build(),
             new RoleDataBuilder().build(),
             new RoleDataBuilder().build(),
@@ -55,126 +51,130 @@ describe('openlmis.administration.users.roles', function() {
             new RoleDataBuilder().build()
         ];
 
-        programs = [
+        this.programs = [
             new ProgramDataBuilder().build(),
             new ProgramDataBuilder().build()
         ];
 
-        supervisoryNodes = [
+        this.supervisoryNodes = [
             new SupervisoryNodeDataBuilder().build(),
             new SupervisoryNodeDataBuilder().build()
         ];
 
-        warehouses = [
+        this.warehouses = [
             new MinimalFacilityDataBuilder().build(),
             new MinimalFacilityDataBuilder().build()
         ];
 
-        homeFacility = new MinimalFacilityDataBuilder().build();
+        this.homeFacility = new MinimalFacilityDataBuilder().build();
 
-        user = new UserDataBuilder()
-            .withHomeFacilityId(homeFacility.id)
-            .withSupervisionRoleAssignment(roles[0].id, supervisoryNodes[0].id, programs[0].id)
-            .withSupervisionRoleAssignment(roles[1].id, supervisoryNodes[1].id, programs[1].id)
-            .withOrderFulfillmentRoleAssignment(roles[2].id, warehouses[0].id)
-            .withOrderFulfillmentRoleAssignment(roles[3].id, warehouses[1].id)
-            .withGeneralAdminRoleAssignment(roles[4].id)
-            .withGeneralAdminRoleAssignment(roles[5].id)
+        this.user = new UserDataBuilder()
+            .withHomeFacilityId(this.homeFacility.id)
+            .withSupervisionRoleAssignment(this.roles[0].id, this.supervisoryNodes[0].id, this.programs[0].id)
+            .withSupervisionRoleAssignment(this.roles[1].id, this.supervisoryNodes[1].id, this.programs[1].id)
+            .withOrderFulfillmentRoleAssignment(this.roles[2].id, this.warehouses[0].id)
+            .withOrderFulfillmentRoleAssignment(this.roles[3].id, this.warehouses[1].id)
+            .withGeneralAdminRoleAssignment(this.roles[4].id)
+            .withGeneralAdminRoleAssignment(this.roles[5].id)
             .build();
 
-        spyOn(supervisoryNodeFactory, 'getAllSupervisoryNodesWithDisplay').andReturn($q.resolve(supervisoryNodes));
-        spyOn(referencedataRoleFactory, 'getAllWithType').andReturn($q.resolve(roles));
-        spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve(warehouses));
-        spyOn(currentUserService, 'getUserInfo').andReturn($q.resolve(user));
-        spyOn(programService, 'getAll').andReturn($q.resolve(programs));
-        spyOn(userRoleAssignmentFactory, 'getUser').andReturn($q.resolve(user));
-        spyOn($templateCache, 'get').andCallThrough();
-        spyOn(paginationService, 'registerUrl').andReturn($q.resolve([user]));
+        spyOn(this.supervisoryNodeFactory, 'getAllSupervisoryNodesWithDisplay')
+            .andReturn(this.$q.resolve(this.supervisoryNodes));
+        spyOn(this.referencedataRoleFactory, 'getAllWithType').andReturn(this.$q.resolve(this.roles));
+        spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.warehouses));
+        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
+        spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
+        spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.user));
+        spyOn(this.$templateCache, 'get').andCallThrough();
+        spyOn(this.paginationService, 'registerUrl').andReturn(this.$q.resolve([this.user]));
+
+        this.goToUrl = goToUrl;
+        this.getResolvedValue = getResolvedValue;
     });
 
     describe('.supervision state', function() {
 
         it('should resolve roles', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('roles')).toEqual(roles);
-            expect(referencedataRoleFactory.getAllWithType).toHaveBeenCalled();
+            expect(this.getResolvedValue('roles')).toEqual(this.roles);
+            expect(this.referencedataRoleFactory.getAllWithType).toHaveBeenCalled();
         });
 
         it('should resolve programs', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('programs')).toEqual(programs);
-            expect(programService.getAll).toHaveBeenCalled();
+            expect(this.getResolvedValue('programs')).toEqual(this.programs);
+            expect(this.programService.getAll).toHaveBeenCalled();
         });
 
         it('should resolve supervisoryNodes', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('supervisoryNodes')).toEqual(supervisoryNodes);
-            expect(supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay).toHaveBeenCalled();
+            expect(this.getResolvedValue('supervisoryNodes')).toEqual(this.supervisoryNodes);
+            expect(this.supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay).toHaveBeenCalled();
         });
 
         it('should resolve warehouses', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('warehouses')).toEqual(warehouses);
-            expect(facilityService.getAllMinimal).toHaveBeenCalled();
+            expect(this.getResolvedValue('warehouses')).toEqual(this.warehouses);
+            expect(this.facilityService.getAllMinimal).toHaveBeenCalled();
         });
 
         it('should resolve user', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('user')).toEqual(user);
-            expect(userRoleAssignmentFactory.getUser).toHaveBeenCalledWith(
-                user.id,
-                roles,
-                programs,
-                supervisoryNodes,
-                warehouses
+            expect(this.getResolvedValue('user')).toEqual(this.user);
+            expect(this.userRoleAssignmentFactory.getUser).toHaveBeenCalledWith(
+                this.user.id,
+                this.roles,
+                this.programs,
+                this.supervisoryNodes,
+                this.warehouses
             );
         });
 
         it('should be available under "/:id/roles/supervision" URI', function() {
-            expect($state.current.name).not.toEqual('openlmis.administration.users.roles.SUPERVISION');
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.users.roles.SUPERVISION');
 
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect($state.current.name).toEqual('openlmis.administration.users.roles.SUPERVISION');
+            expect(this.$state.current.name).toEqual('openlmis.administration.users.roles.SUPERVISION');
         });
 
         it('should use template', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-supervision.html');
+            expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-supervision.html');
         });
 
         it('should resolve tab', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('tab')).toEqual(ROLE_TYPES.SUPERVISION);
+            expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.SUPERVISION);
         });
 
         it('should resolve roleAssignments', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            expect(getResolvedValue('roleAssignments')).toEqual([
-                user.roleAssignments[0],
-                user.roleAssignments[1]
+            expect(this.getResolvedValue('roleAssignments')).toEqual([
+                this.user.roleAssignments[0],
+                this.user.roleAssignments[1]
             ]);
         });
 
         it('should resolve home roleRightsMap', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/supervision');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
-            var roleRightsMap = getResolvedValue('roleRightsMap');
+            var roleRightsMap = this.getResolvedValue('roleRightsMap');
 
-            expect(roleRightsMap[roles[0].id]).toEqual(roles[0].rights);
-            expect(roleRightsMap[roles[1].id]).toEqual(roles[1].rights);
-            expect(roleRightsMap[roles[2].id]).toEqual(roles[2].rights);
-            expect(roleRightsMap[roles[3].id]).toEqual(roles[3].rights);
-            expect(roleRightsMap[roles[4].id]).toEqual(roles[4].rights);
-            expect(roleRightsMap[roles[5].id]).toEqual(roles[5].rights);
+            expect(roleRightsMap[this.roles[0].id]).toEqual(this.roles[0].rights);
+            expect(roleRightsMap[this.roles[1].id]).toEqual(this.roles[1].rights);
+            expect(roleRightsMap[this.roles[2].id]).toEqual(this.roles[2].rights);
+            expect(roleRightsMap[this.roles[3].id]).toEqual(this.roles[3].rights);
+            expect(roleRightsMap[this.roles[4].id]).toEqual(this.roles[4].rights);
+            expect(roleRightsMap[this.roles[5].id]).toEqual(this.roles[5].rights);
         });
 
     });
@@ -182,31 +182,31 @@ describe('openlmis.administration.users.roles', function() {
     describe('.fulfillment state', function() {
 
         it('should be available under "/:id/roles/fulfillment" URI', function() {
-            expect($state.current.name).not.toEqual('openlmis.administration.users.roles.ORDER_FULFILLMENT');
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.users.roles.ORDER_FULFILLMENT');
 
-            goToUrl('/administration/users/' + user.id + '/roles/fulfillment');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/fulfillment');
 
-            expect($state.current.name).toEqual('openlmis.administration.users.roles.ORDER_FULFILLMENT');
+            expect(this.$state.current.name).toEqual('openlmis.administration.users.roles.ORDER_FULFILLMENT');
         });
 
         it('should use template', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/fulfillment');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/fulfillment');
 
-            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-fulfillment.html');
+            expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-fulfillment.html');
         });
 
         it('should resolve tab', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/fulfillment');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/fulfillment');
 
-            expect(getResolvedValue('tab')).toEqual(ROLE_TYPES.ORDER_FULFILLMENT);
+            expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.ORDER_FULFILLMENT);
         });
 
         it('should resolve programs', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/fulfillment');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/fulfillment');
 
-            expect(getResolvedValue('roleAssignments')).toEqual([
-                user.roleAssignments[2],
-                user.roleAssignments[3]
+            expect(this.getResolvedValue('roleAssignments')).toEqual([
+                this.user.roleAssignments[2],
+                this.user.roleAssignments[3]
             ]);
         });
 
@@ -215,29 +215,29 @@ describe('openlmis.administration.users.roles', function() {
     describe('.report state', function() {
 
         it('should be available under "/:id/roles/reports" URI', function() {
-            expect($state.current.name).not.toEqual('openlmis.administration.users.roles.REPORTS');
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.users.roles.REPORTS');
 
-            goToUrl('/administration/users/' + user.id + '/roles/reports');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/reports');
 
-            expect($state.current.name).toEqual('openlmis.administration.users.roles.REPORTS');
+            expect(this.$state.current.name).toEqual('openlmis.administration.users.roles.REPORTS');
         });
 
         it('should use template', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/reports');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/reports');
 
-            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
+            expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
         });
 
         it('should resolve tab', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/reports');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/reports');
 
-            expect(getResolvedValue('tab')).toEqual(ROLE_TYPES.REPORTS);
+            expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.REPORTS);
         });
 
         it('should resolve programs', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/reports');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/reports');
 
-            expect(getResolvedValue('roleAssignments')).toEqual([]);
+            expect(this.getResolvedValue('roleAssignments')).toEqual([]);
         });
 
     });
@@ -245,43 +245,43 @@ describe('openlmis.administration.users.roles', function() {
     describe('.admin state', function() {
 
         it('should be available under "/:id/roles/admin" URI', function() {
-            expect($state.current.name).not.toEqual('openlmis.administration.users.roles.GENERAL_ADMIN');
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.users.roles.GENERAL_ADMIN');
 
-            goToUrl('/administration/users/' + user.id + '/roles/admin');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/admin');
 
-            expect($state.current.name).toEqual('openlmis.administration.users.roles.GENERAL_ADMIN');
+            expect(this.$state.current.name).toEqual('openlmis.administration.users.roles.GENERAL_ADMIN');
         });
 
         it('should use template', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/admin');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/admin');
 
-            expect($templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
+            expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
         });
 
         it('should resolve tab', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/admin');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/admin');
 
-            expect(getResolvedValue('tab')).toEqual(ROLE_TYPES.GENERAL_ADMIN);
+            expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.GENERAL_ADMIN);
         });
 
         it('should resolve programs', function() {
-            goToUrl('/administration/users/' + user.id + '/roles/admin');
+            this.goToUrl('/administration/users/' + this.user.id + '/roles/admin');
 
-            expect(getResolvedValue('roleAssignments')).toEqual([
-                user.roleAssignments[4],
-                user.roleAssignments[5]
+            expect(this.getResolvedValue('roleAssignments')).toEqual([
+                this.user.roleAssignments[4],
+                this.user.roleAssignments[5]
             ]);
         });
 
     });
 
     function goToUrl(url) {
-        $location.url(url);
-        $rootScope.$apply();
+        this.$location.url(url);
+        this.$rootScope.$apply();
     }
 
     function getResolvedValue(name) {
-        return $state.$current.locals.globals[name];
+        return this.$state.$current.locals.globals[name];
     }
 
 });
