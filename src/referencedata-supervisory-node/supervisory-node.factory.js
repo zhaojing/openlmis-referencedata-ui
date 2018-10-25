@@ -28,9 +28,11 @@
         .module('referencedata-supervisory-node')
         .factory('supervisoryNodeFactory', factory);
 
-    factory.$inject = ['$q', 'supervisoryNodeService', 'facilityService'];
+    factory.$inject = ['$q', 'facilityService', 'SupervisoryNodeResource'];
 
-    function factory($q, supervisoryNodeService, facilityService) {
+    function factory($q, facilityService, SupervisoryNodeResource) {
+
+        var supervisoryNodeResource = new SupervisoryNodeResource();
 
         return {
             getAllSupervisoryNodesWithDisplay: getAllSupervisoryNodesWithDisplay,
@@ -48,7 +50,7 @@
          * @return {Promise} supervisoryNodes array of supervisory nodes
          */
         function getAllSupervisoryNodesWithDisplay() {
-            return supervisoryNodeService.query()
+            return supervisoryNodeResource.query()
                 .then(function(supervisoryNodePage) {
                     return supervisoryNodePage.content;
                 });
@@ -67,7 +69,7 @@
          */
         function getSupervisoryNode(id) {
             return $q.all([
-                supervisoryNodeService.get(id),
+                supervisoryNodeResource.get(id),
                 facilityService.getAllMinimal()
             ])
                 .then(function(responses) {

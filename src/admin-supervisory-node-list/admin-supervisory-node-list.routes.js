@@ -32,9 +32,9 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.SUPERVISORY_NODES_MANAGE],
             resolve: {
-                supervisoryNodes: function(paginationService, supervisoryNodeService, $stateParams) {
+                supervisoryNodes: function(paginationService, SupervisoryNodeResource, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return supervisoryNodeService.query(stateParams);
+                        return new SupervisoryNodeResource().query(stateParams);
                     }, {
                         customPageParamName: 'nodesPage',
                         customSizeParamName: 'nodesSize'

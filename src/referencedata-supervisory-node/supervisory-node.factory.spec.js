@@ -15,27 +15,19 @@
 
 describe('supervisoryNodeFactory', function() {
 
-    var $rootScope, $q, supervisoryNodeService, supervisoryNodeFactory, facilityService,
-        supervisoryNodes, facilities, SupervisoryNodeDataBuilder;
+    var $rootScope, $q, supervisoryNodeFactory, facilityService,
+        supervisoryNodes, facilities, SupervisoryNodeDataBuilder, SupervisoryNodeResource;
 
     beforeEach(function() {
-        module('referencedata-supervisory-node', function($provide) {
-            supervisoryNodeService = jasmine.createSpyObj('supervisoryNodeService', ['query', 'get']);
-            $provide.service('supervisoryNodeService', function() {
-                return supervisoryNodeService;
-            });
-
-            facilityService = jasmine.createSpyObj('facilityService', ['getAllMinimal']);
-            $provide.service('facilityService', function() {
-                return facilityService;
-            });
-        });
+        module('referencedata-supervisory-node');
 
         inject(function($injector) {
             $rootScope = $injector.get('$rootScope');
             $q = $injector.get('$q');
             supervisoryNodeFactory = $injector.get('supervisoryNodeFactory');
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            SupervisoryNodeResource = $injector.get('SupervisoryNodeResource');
+            facilityService = $injector.get('facilityService');
         });
 
         facilities = [
@@ -58,7 +50,9 @@ describe('supervisoryNodeFactory', function() {
             new SupervisoryNodeDataBuilder().buildWithoutFacility()
         ];
 
-        supervisoryNodeService.query.andReturn($q.when({
+        spyOn(facilityService, 'getAllMinimal');
+        spyOn(SupervisoryNodeResource.prototype, 'get');
+        spyOn(SupervisoryNodeResource.prototype, 'query').andReturn($q.when({
             content: supervisoryNodes
         }));
     });
@@ -80,7 +74,7 @@ describe('supervisoryNodeFactory', function() {
     describe('getSupervisoryNode', function() {
 
         beforeEach(function() {
-            supervisoryNodeService.get.andReturn($q.when(supervisoryNodes[0]));
+            SupervisoryNodeResource.prototype.get.andReturn($q.when(supervisoryNodes[0]));
             facilityService.getAllMinimal.andReturn($q.when(facilities));
         });
 
@@ -93,7 +87,7 @@ describe('supervisoryNodeFactory', function() {
         it('should call supervisoryNodeService', function() {
             supervisoryNodeFactory.getSupervisoryNode(supervisoryNodes[0].id);
 
-            expect(supervisoryNodeService.get).toHaveBeenCalledWith(supervisoryNodes[0].id);
+            expect(SupervisoryNodeResource.prototype.get).toHaveBeenCalledWith(supervisoryNodes[0].id);
         });
 
         it('should call facilityService', function() {
