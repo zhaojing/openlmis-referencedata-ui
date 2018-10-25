@@ -49,7 +49,14 @@ describe('UserRolesTabController', function() {
 
         supervisoryNodes = [
             new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build()
+            new SupervisoryNodeDataBuilder()
+                .withName('Supervisory Node')
+                .withFacility(
+                    new FacilityDataBuilder()
+                        .withName('Facility')
+                        .build()
+                )
+                .build()
         ];
         warehouses = [
             new FacilityDataBuilder().build(),
@@ -211,7 +218,7 @@ describe('UserRolesTabController', function() {
             expect(user.roleAssignments[roleAssignmentsCount].roleName).toEqual(roles[1].name);
             expect(user.roleAssignments[roleAssignmentsCount].programName).toEqual(programs[1].name);
             expect(user.roleAssignments[roleAssignmentsCount].supervisoryNodeName)
-                .toEqual(supervisoryNodes[1].$display);
+                .toEqual('Supervisory Node (Facility)');
         });
     });
 

@@ -28,9 +28,9 @@
         .module('referencedata-supervisory-node')
         .factory('supervisoryNodeFactory', factory);
 
-    factory.$inject = ['$q', '$filter', 'supervisoryNodeService', 'facilityService'];
+    factory.$inject = ['$q', 'supervisoryNodeService', 'facilityService'];
 
-    function factory($q, $filter, supervisoryNodeService, facilityService) {
+    function factory($q, supervisoryNodeService, facilityService) {
 
         return {
             getAllSupervisoryNodesWithDisplay: getAllSupervisoryNodesWithDisplay,
@@ -50,13 +50,6 @@
         function getAllSupervisoryNodesWithDisplay() {
             return supervisoryNodeService.query()
                 .then(function(supervisoryNodePage) {
-                    supervisoryNodePage.content.forEach(function(node) {
-                        if (node.facility) {
-                            node.$display = node.name + ' (' + node.facility.name + ')';
-                        } else {
-                            node.$display = node.name;
-                        }
-                    });
                     return supervisoryNodePage.content;
                 });
         }

@@ -9,7 +9,7 @@
     <div class="form-group">
         <label for="supervisoryNode">{{'adminUserRoles.supervisoryNode' | message}}</label>
         <select id="supervisoryNode" ng-model="vm.selectedSupervisoryNode"
-            ng-options="supervisoryNode as supervisoryNode.$display for supervisoryNode in vm.supervisoryNodes"
+            ng-options="supervisoryNode as (supervisoryNode | supervisoryNode) for supervisoryNode in vm.supervisoryNodes"
             no-auto-select="true">
         </select>
     </div>

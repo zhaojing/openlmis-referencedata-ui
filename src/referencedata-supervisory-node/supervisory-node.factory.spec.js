@@ -74,20 +74,6 @@ describe('supervisoryNodeFactory', function() {
             $rootScope.$apply();
 
             expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
-            expect(data[0].$display).toEqual(data[0].name + ' (' + data[0].facility.name + ')');
-            expect(data[1].$display).toEqual(data[1].name + ' (' + data[1].facility.name + ')');
-        });
-
-        it('should get all when facility is null', function() {
-            var data;
-
-            supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay().then(function(response) {
-                data = response;
-            });
-            $rootScope.$apply();
-
-            expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
-            expect(data[2].$display).toEqual(data[2].name);
         });
     });
 

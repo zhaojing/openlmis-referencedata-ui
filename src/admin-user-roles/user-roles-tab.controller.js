@@ -29,11 +29,11 @@
         .controller('UserRolesTabController', controller);
 
     controller.$inject = [
-        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', '$state',
+        'user', 'supervisoryNodes', 'programs', 'warehouses', '$stateParams', '$q', 'tab', '$state', '$filter',
         'notificationService', 'confirmService', 'roleAssignments', 'filteredRoles', 'roleRightsMap'
     ];
 
-    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, $state,
+    function controller(user, supervisoryNodes, programs, warehouses, $stateParams, $q, tab, $state, $filter,
                         notificationService, confirmService, roleAssignments, filteredRoles, roleRightsMap) {
 
         var vm = this;
@@ -191,7 +191,7 @@
                     vm.selectedProgram ? vm.selectedProgram.id : undefined,
                     vm.selectedProgram ? vm.selectedProgram.name : undefined,
                     vm.selectedSupervisoryNode ? vm.selectedSupervisoryNode.id : undefined,
-                    vm.selectedSupervisoryNode ? vm.selectedSupervisoryNode.$display : undefined,
+                    vm.selectedSupervisoryNode ? $filter('supervisoryNode')(vm.selectedSupervisoryNode) : undefined,
                     vm.selectedWarehouse ? vm.selectedWarehouse.id : undefined,
                     vm.selectedWarehouse ? vm.selectedWarehouse.name : undefined);
                 reloadState();

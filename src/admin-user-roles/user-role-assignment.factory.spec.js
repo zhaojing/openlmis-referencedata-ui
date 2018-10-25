@@ -36,7 +36,14 @@ describe('userRoleAssignmentFactory', function() {
         });
 
         supervisoryNodes = [
-            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder()
+                .withName('Supervisory Node')
+                .withFacility(
+                    new FacilityDataBuilder()
+                        .withName('Facility')
+                        .build()
+                )
+                .build(),
             new SupervisoryNodeDataBuilder().build()
         ];
         warehouses = [
@@ -115,7 +122,7 @@ describe('userRoleAssignmentFactory', function() {
         });
 
         it('should set supervisory node name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[1].supervisoryNodeName).toEqual(supervisoryNodes[0].$display);
+            expect(resultUser.roleAssignments[0].supervisoryNodeName).toEqual('Supervisory Node (Facility)');
         });
 
         it('should set warehouse name properties for all assignments', function() {

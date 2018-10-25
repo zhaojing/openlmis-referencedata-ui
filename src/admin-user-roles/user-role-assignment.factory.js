@@ -98,7 +98,7 @@
                     roleAssignment.programId,
                     filteredPrograms ? filteredPrograms[0].name : undefined,
                     roleAssignment.supervisoryNodeId,
-                    filteredSupervisoryNodes ? filteredSupervisoryNodes[0].$display : undefined,
+                    filteredSupervisoryNodes ? $filter('supervisoryNode')(filteredSupervisoryNodes[0]) : undefined,
                     roleAssignment.warehouseId,
                     filteredWarehouses ? filteredWarehouses[0].name : undefined);
             });

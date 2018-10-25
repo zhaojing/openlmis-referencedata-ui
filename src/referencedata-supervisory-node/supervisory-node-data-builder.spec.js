@@ -29,6 +29,7 @@
         SupervisoryNodeDataBuilder.prototype.buildWithoutFacility = buildWithoutFacility;
         SupervisoryNodeDataBuilder.prototype.addChildNode = addChildNode;
         SupervisoryNodeDataBuilder.prototype.withFacility = withFacility;
+        SupervisoryNodeDataBuilder.prototype.withName = withName;
 
         return SupervisoryNodeDataBuilder;
 
@@ -69,6 +70,11 @@
 
         function withFacility(facility) {
             this.facility = facility;
+            return this;
+        }
+
+        function withName(name) {
+            this.name = name;
             return this;
         }
     }
