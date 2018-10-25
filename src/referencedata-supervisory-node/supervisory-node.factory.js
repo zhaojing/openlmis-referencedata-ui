@@ -35,26 +35,8 @@
         var supervisoryNodeResource = new SupervisoryNodeResource();
 
         return {
-            getAllSupervisoryNodesWithDisplay: getAllSupervisoryNodesWithDisplay,
             getSupervisoryNode: getSupervisoryNode
         };
-
-        /**
-         * @ngdoc method
-         * @methodOf referencedata-supervisory-node.supervisoryNodeFactory
-         * @name getAllSupervisoryNodesWithDisplay
-         *
-         * @description
-         * Returns list of the supervisory nodes with display property.
-         *
-         * @return {Promise} supervisoryNodes array of supervisory nodes
-         */
-        function getAllSupervisoryNodesWithDisplay() {
-            return supervisoryNodeResource.query()
-                .then(function(supervisoryNodePage) {
-                    return supervisoryNodePage.content;
-                });
-        }
 
         /**
          * @ngdoc method

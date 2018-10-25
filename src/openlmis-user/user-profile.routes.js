@@ -38,8 +38,11 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                supervisoryNodes: function(supervisoryNodeFactory) {
-                    return supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay();
+                supervisoryNodes: function(SupervisoryNodeResource) {
+                    return new SupervisoryNodeResource().query()
+                        .then(function(page) {
+                            return page.content;
+                        });
                 },
                 warehouses: function(facilityService) {
                     return facilityService.getAllMinimal();

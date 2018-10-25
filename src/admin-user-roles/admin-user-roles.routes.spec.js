@@ -13,25 +13,26 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('openlmis.administration.users.roles', function() {
+describe('openlmis.administration.users.roles', function() {
 
     beforeEach(function() {
         module('admin-user-roles');
 
         var RoleDataBuilder, ProgramDataBuilder, SupervisoryNodeDataBuilder, MinimalFacilityDataBuilder,
-            UserDataBuilder;
+            UserDataBuilder, PageDataBuilder;
         inject(function($injector) {
             RoleDataBuilder = $injector.get('RoleDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
             UserDataBuilder = $injector.get('UserDataBuilder');
+            PageDataBuilder = $injector.get('PageDataBuilder');
 
             this.$q = $injector.get('$q');
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
             this.referencedataRoleFactory = $injector.get('referencedataRoleFactory');
-            this.supervisoryNodeFactory = $injector.get('supervisoryNodeFactory');
+            this.SupervisoryNodeResource = $injector.get('SupervisoryNodeResource');
             this.programService = $injector.get('programService');
             this.facilityService = $injector.get('facilityService');
             this.currentUserService = $injector.get('currentUserService');
@@ -78,8 +79,10 @@ ddescribe('openlmis.administration.users.roles', function() {
             .withGeneralAdminRoleAssignment(this.roles[5].id)
             .build();
 
-        spyOn(this.supervisoryNodeFactory, 'getAllSupervisoryNodesWithDisplay')
-            .andReturn(this.$q.resolve(this.supervisoryNodes));
+        spyOn(this.SupervisoryNodeResource.prototype, 'query')
+            .andReturn(this.$q.resolve(new PageDataBuilder()
+                .withContent(this.supervisoryNodes)
+                .build()));
         spyOn(this.referencedataRoleFactory, 'getAllWithType').andReturn(this.$q.resolve(this.roles));
         spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.warehouses));
         spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
@@ -112,7 +115,7 @@ ddescribe('openlmis.administration.users.roles', function() {
             this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
             expect(this.getResolvedValue('supervisoryNodes')).toEqual(this.supervisoryNodes);
-            expect(this.supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay).toHaveBeenCalled();
+            expect(this.SupervisoryNodeResource.prototype.query).toHaveBeenCalled();
         });
 
         it('should resolve warehouses', function() {

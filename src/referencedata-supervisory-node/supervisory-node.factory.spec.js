@@ -57,20 +57,6 @@ describe('supervisoryNodeFactory', function() {
         }));
     });
 
-    describe('getAllSupervisoryNodesWithDisplay', function() {
-
-        it('should get all roles', function() {
-            var data;
-
-            supervisoryNodeFactory.getAllSupervisoryNodesWithDisplay().then(function(response) {
-                data = response;
-            });
-            $rootScope.$apply();
-
-            expect(angular.toJson(data)).toEqual(angular.toJson(supervisoryNodes));
-        });
-    });
-
     describe('getSupervisoryNode', function() {
 
         beforeEach(function() {
