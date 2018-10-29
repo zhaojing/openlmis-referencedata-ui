@@ -22,7 +22,7 @@
      * @name referencedata-supply-partner.supplyPartnerService
      *
      * @description
-     * Responsible for retrieving supply partner info from the server.
+     * Responsible for retrieving all supply partners info from server.
      */
     angular
         .module('referencedata-supply-partner')
@@ -48,7 +48,7 @@
          * @name get
          *
          * @description
-         * Gets supply partner by UUID.
+         * Gets supply partner by id.
          *
          * @param  {String}  id the supply partner UUID
          * @return {Promise}    the supply partner object
@@ -67,7 +67,7 @@
          * @description
          * Searches supply partners using given parameters.
          *
-         * @param  {Object}  params the query and pagination parameters
+         * @param  {Object}  params the pagination and query and parameters
          * @return {Promise}        the requested page of filtered supply partners
          */
         function query(params) {
