@@ -1,0 +1,60 @@
+/*
+ * This program is part of the OpenLMIS logistics management information system platform software.
+ * Copyright © 2017 VillageReach
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms
+ * of the GNU Affero General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU Affero General Public License for more details. You should have received a copy of
+ * the GNU Affero General Public License along with this program. If not, see
+ * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
+ */
+
+describe('SupplyPartnerListController', function() {
+
+    var $state, $controller,
+        vm, supplyPartners, stateParams;
+
+    beforeEach(function() {
+
+        module('admin-supply-partner-list');
+
+        inject(function($injector) {
+            $controller = $injector.get('$controller');
+            $state = $injector.get('$state');
+        });
+
+        supplyPartners = [
+            {
+                id: 1,
+                name: 'supply-partner-1'
+            },
+            {
+                id: 2,
+                name: 'supply-partner-2'
+            }
+        ];
+        stateParams = {
+            page: 0,
+            size: 10
+        };
+
+        vm = $controller('SupplyPartnerListController', {
+            supplyPartners: supplyPartners,
+            $stateParams: stateParams
+        });
+        vm.$onInit();
+
+        spyOn($state, 'go').andReturn();
+    });
+
+    describe('onInit', function() {
+
+        it('should expose supply partners array', function() {
+            expect(vm.supplyPartners).toEqual(supplyPartners);
+        });
+    });
+});

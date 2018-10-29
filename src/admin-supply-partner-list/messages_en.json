@@ -1,0 +1,8 @@
+{
+    "adminSupplyPartnerList.supplyPartners": "Supply Partners",
+    "adminSupplyPartnerList.noSupplyPartners": "No supply partners found.",
+    "adminSupplyPartnerList.name": "Name",
+    "adminSupplyPartnerList.code": "Code",
+    "adminSupplyPartnerList.actions": "Actions",
+    "adminSupplyPartnerList.edit": "Edit"
+}

@@ -1,0 +1,41 @@
+<h2>{{'adminSupplyPartnerEdit.editSupplyPartner' | message}}</h2>
+<form id="editSupplyPartner">
+    <label for="code">{{'adminSupplyPartnerEdit.code' | message}}</label>
+    <input id="code" class="form-control" ng-model="vm.supplyPartner.code" required/>
+    <label for="name">{{'adminSupplyPartnerEdit.name' | message}}</label>
+    <input id="name" class="form-control" ng-model="vm.supplyPartner.name" required/>
+</form>
+<label>{{'adminSupplyPartnerEdit.associations' | message}}</label>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.associationsPage || vm.associationsPage.length === 0">
+            {{'adminSupplyPartnerEdit.noAssociations' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminSupplyPartnerEdit.program' | message}}</th>
+                <th>{{'adminSupplyPartnerEdit.supervisoryNode' | message}}</th>
+                <th>{{'adminSupplyPartnerEdit.facilities' | message}}</th>
+                <th>{{'adminSupplyPartnerEdit.products' | message}}</th>
+                <th>{{'adminSupplyPartnerEdit.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="association in vm.associationsPage">
+                <td>{{association.program.id}}</td>
+                <td>{{association.supervisoryNode.id}}</td>
+                <td>{{association.facilities.length || 0}} {{'adminSupplyPartnerEdit.facilities' | message}}</td>
+                <td>{{association.products.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}</td>
+                <td>
+                    <button class="primary" ui-sref="openlmis.administration.supplyPartners.edit({id: association.id})">{{'adminSupplyPartnerEdit.edit' | message}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <openlmis-pagination
+        list="vm.associations"
+        paged-list="vm.associationsPage"/>
+</section>
+<div class="openlmis-toolbar">
+    <button ng-click="vm.goToSupplyPartnerList()">{{'adminSupplyPartnerEdit.cancel' | message}}</button>
+</div>

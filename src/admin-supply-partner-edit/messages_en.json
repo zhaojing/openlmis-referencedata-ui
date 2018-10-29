@@ -1,0 +1,15 @@
+{
+    "adminSupplyPartnerEdit.editSupplyPartner": "Edit Supply Partner",
+    "adminSupplyPartnerEdit.code": "Code",
+    "adminSupplyPartnerEdit.name": "Name",
+    "adminSupplyPartnerEdit.associations": "Associations",
+    "adminSupplyPartnerEdit.program": "Program",
+    "adminSupplyPartnerEdit.supervisoryNode": "Supervisory Node",
+    "adminSupplyPartnerEdit.facilities": "Facilities",
+    "adminSupplyPartnerEdit.products": "Products",
+    "adminSupplyPartnerEdit.noAssociations": "No associations assigned",
+    "adminSupplyPartnerEdit.actions": "Actions",
+    "adminSupplyPartnerEdit.edit": "Edit",
+    "adminSupplyPartnerEdit.update": "Update Supply Partner",
+    "adminSupplyPartnerEdit.cancel": "Cancel"
+}
