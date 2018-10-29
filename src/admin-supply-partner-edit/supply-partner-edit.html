@@ -25,7 +25,7 @@
                 <td>{{association.program.id}}</td>
                 <td>{{association.supervisoryNode.id}}</td>
                 <td>{{association.facilities.length || 0}} {{'adminSupplyPartnerEdit.facilities' | message}}</td>
-                <td>{{association.products.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}</td>
+                <td>{{association.orderables.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}</td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.supplyPartners.edit({id: association.id})">{{'adminSupplyPartnerEdit.edit' | message}}</button>
                 </td>

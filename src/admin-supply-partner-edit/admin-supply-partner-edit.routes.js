@@ -35,8 +35,8 @@
                 }
             },
             resolve: {
-                supplyPartner: function(supplyPartnerService, $stateParams) {
-                    return supplyPartnerService.get($stateParams.id);
+                supplyPartner: function(SupplyPartnerResource, $stateParams) {
+                    return new SupplyPartnerResource().get($stateParams.id);
                 },
                 associations: function(paginationService, supplyPartner, $stateParams) {
                     return paginationService.registerList(null, $stateParams, function() {

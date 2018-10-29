@@ -32,9 +32,9 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.SUPPLY_PARTNERS_MANAGE],
             resolve: {
-                supplyPartners: function(paginationService, supplyPartnerService, $stateParams) {
+                supplyPartners: function(paginationService, SupplyPartnerResource, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return supplyPartnerService.query(stateParams);
+                        return new SupplyPartnerResource().query(stateParams);
                     }, {
                         customPageParamName: 'page',
                         customSizeParamName: 'size'
