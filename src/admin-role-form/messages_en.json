@@ -44,6 +44,7 @@
     "adminRoleForm.supervisionDescription": "Provides rights for managing requisitions.",
     "adminRoleForm.supervisoryNodesManage": "Manage supervisory nodes",
     "adminRoleForm.supplyLinesManage": "Manage supply lines",
+    "adminRoleForm.supplyPartnersManage": "Manage supply partners",
     "adminRoleForm.systemSettingsManage": "Manage system settings",
     "adminRoleForm.roleType": "Role Type: ",
     "adminRoleForm.updateRole": "Update Role",
