@@ -38,7 +38,9 @@
         return FacilityResource;
 
         function FacilityResource() {
-            this.super('/api/facilities');
+            this.super('/api/facilities', {
+                paginated: false
+            });
         }
     }
 })();

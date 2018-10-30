@@ -40,6 +40,18 @@
                         customSizeParamName: 'nodesSize'
                     });
                 },
+                facilities: function(supervisoryNodes, FacilityResource) {
+                    var facilitiesIds = supervisoryNodes.map(function(supervisoryNode) {
+                        return supervisoryNode.facility.id;
+                    });
+
+                    return new FacilityResource().query({
+                        id: facilitiesIds
+                    });
+                },
+                facilitiesMap: function(facilities, ObjectMapper) {
+                    return new ObjectMapper().map(facilities);
+                },
                 geographicZones: function($q, geographicZoneService) {
                     var deferred = $q.defer();
 

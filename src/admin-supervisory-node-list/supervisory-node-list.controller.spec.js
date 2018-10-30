@@ -19,11 +19,12 @@ describe('SupervisoryNodeListController', function() {
 
         module('admin-supervisory-node-list');
 
-        var $controller, SupervisoryNodeDataBuilder, GeographicZoneDataBuilder;
+        var $controller, SupervisoryNodeDataBuilder, GeographicZoneDataBuilder, FacilityDataBuilder;
         inject(function($injector) {
             $controller = $injector.get('$controller');
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
 
             this.$state = $injector.get('$state');
         });
@@ -45,10 +46,20 @@ describe('SupervisoryNodeListController', function() {
             name: '1'
         };
 
+        this.facilitiesMap = {
+            'facility-id-one': new FacilityDataBuilder()
+                .withId('facility-id-one')
+                .build(),
+            'facility-id-two': new FacilityDataBuilder()
+                .withId('facility-id-two')
+                .build()
+        };
+
         this.vm = $controller('SupervisoryNodeListController', {
             supervisoryNodes: this.supervisoryNodes,
             geographicZones: this.geographicZones,
-            $stateParams: this.$stateParams
+            $stateParams: this.$stateParams,
+            facilitiesMap: this.facilitiesMap
         });
         this.vm.$onInit();
 
@@ -71,6 +82,10 @@ describe('SupervisoryNodeListController', function() {
 
         it('should expose geographic zone id', function() {
             expect(this.vm.geographicZone).toEqual(this.$stateParams.zoneId);
+        });
+
+        it('should expose facilities map', function() {
+            expect(this.vm.facilitiesMap).toEqual(this.facilitiesMap);
         });
     });
 

@@ -28,12 +28,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="supervisoryNode in vm.supervisoryNodes">
+            <tr ng-repeat="supervisoryNode in vm.supervisoryNodes" ng-init="facility = vm.facilitiesMap[supervisoryNode.facility.id]">
                 <td>{{supervisoryNode.name}}</td>
                 <td>{{supervisoryNode.code}}</td>
-                <td>{{supervisoryNode.facility.name}}</td>
+                <td>{{facility.name}}</td>
                 <td>{{supervisoryNode.childNodes.length}}</td>
-                <td>{{supervisoryNode.facility.geographicZone.name}}</td>
+                <td>{{facility.geographicZone.name}}</td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.supervisoryNodes.edit({id: supervisoryNode.id})">{{'adminSupervisoryNodeList.edit' | message}}</button>
                 </td>

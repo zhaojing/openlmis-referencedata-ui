@@ -28,9 +28,9 @@
         .module('admin-supervisory-node-list')
         .controller('SupervisoryNodeListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'supervisoryNodes', 'geographicZones'];
+    controller.$inject = ['$state', '$stateParams', 'supervisoryNodes', 'geographicZones', 'facilitiesMap'];
 
-    function controller($state, $stateParams, supervisoryNodes, geographicZones) {
+    function controller($state, $stateParams, supervisoryNodes, geographicZones, facilitiesMap) {
 
         var vm = this;
 
@@ -82,6 +82,17 @@
         vm.geographicZone = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-supervisory-node-edit.controller:SupervisoryNodeEditController
+         * @type {Object}
+         * @name facilitiesMap
+         *
+         * @description
+         * Map where the key is the facility ID and value is the facility object.
+         */
+        vm.facilitiesMap = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-supervisory-node-list.controller:SupervisoryNodeListController
          * @name $onInit
@@ -94,6 +105,7 @@
             vm.geographicZones = geographicZones;
             vm.supervisoryNodeName = $stateParams.name;
             vm.geographicZone = $stateParams.zoneId;
+            vm.facilitiesMap = facilitiesMap;
         }
 
         /**
