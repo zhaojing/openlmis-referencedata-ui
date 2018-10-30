@@ -40,21 +40,21 @@
          * @description
          * Creates a new instance of the Orderable class.
          *
-         * @param  {String}  id                                     the UUID of the orderable to be created
-         * @param  {String}  productCode                            the code of the orderable to be created
-         * @param  {String}  fullProductName                        the name of the orderable to be created
-         * @param  {Object}  dispensable                            the dispensable of the orderable to be created
-         * @param  {Object}  extraData                              the extra data
-         * @param  {Object}  identifiers                            the identifiers
-         * @return {Orderable}                                      the orderable object
+         * @param  {Object} json the object that hold orderable info
+         * @return {Object}      the orderable object
          */
-        function Orderable(id, productCode, fullProductName, dispensable, extraData, identifiers) {
-            this.id = id;
-            this.productCode = productCode;
-            this.fullProductName = fullProductName;
-            this.dispensable = dispensable;
-            this.extraData = extraData;
-            this.identifiers = identifiers;
+        function Orderable(json) {
+            this.id = json.id;
+            this.productCode = json.productCode;
+            this.fullProductName = json.fullProductName;
+            this.dispensable = json.dispensable;
+            this.extraData = json.extraData;
+            this.identifiers = json.identifiers;
+            this.programs = json.programs;
+            this.roundToZero = json.roundToZero;
+            this.description = json.description;
+            this.netContent = json.netContent;
+            this.packRoundingThreshold = json.packRoundingThreshold;
         }
 
     }

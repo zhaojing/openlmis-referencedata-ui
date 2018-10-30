@@ -100,14 +100,7 @@
         }
 
         function build() {
-            return new Orderable(
-                this.id,
-                this.productCode,
-                this.fullProductName,
-                this.dispensable,
-                this.extraData,
-                this.identifiers
-            );
+            return new Orderable(this.buildJson());
         }
 
         function buildJson() {
