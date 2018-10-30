@@ -114,7 +114,8 @@
                 dispensable: this.dispensable,
                 description: this.description,
                 netContent: this.netContent,
-                packRoundingThreshold: this.packRoundingThreshold
+                packRoundingThreshold: this.packRoundingThreshold,
+                extraData: this.extraData
             };
         }
 
