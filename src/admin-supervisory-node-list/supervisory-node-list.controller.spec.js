@@ -15,94 +15,91 @@
 
 describe('SupervisoryNodeListController', function() {
 
-    var $state, $controller,
-        vm, geographicZones, supervisoryNodes, stateParams;
-
     beforeEach(function() {
 
         module('admin-supervisory-node-list');
 
+        var $controller, SupervisoryNodeDataBuilder, GeographicZoneDataBuilder;
         inject(function($injector) {
             $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+
+            this.$state = $injector.get('$state');
         });
 
-        supervisoryNodes = [
-            {
-                id: 1,
-                name: 'facility-1'
-            },
-            {
-                id: 2,
-                name: 'facility-2'
-            }
+        this.supervisoryNodes = [
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build()
         ];
-        stateParams = {
+
+        this.geographicZones = [
+            new GeographicZoneDataBuilder().build(),
+            new GeographicZoneDataBuilder().build()
+        ];
+
+        this.$stateParams = {
             page: 0,
             size: 10,
             zoneId: 'zone-id',
             name: '1'
         };
 
-        vm = $controller('SupervisoryNodeListController', {
-            supervisoryNodes: supervisoryNodes,
-            geographicZones: geographicZones,
-            $stateParams: stateParams
+        this.vm = $controller('SupervisoryNodeListController', {
+            supervisoryNodes: this.supervisoryNodes,
+            geographicZones: this.geographicZones,
+            $stateParams: this.$stateParams
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
-        it('should expose search method', function() {
-            expect(angular.isFunction(vm.search)).toBe(true);
-        });
-
         it('should expose facilities array', function() {
-            expect(vm.supervisoryNodes).toEqual(supervisoryNodes);
+            expect(this.vm.supervisoryNodes).toEqual(this.supervisoryNodes);
         });
 
         it('should expose geographic zones array', function() {
-            expect(vm.geographicZones).toEqual(geographicZones);
+            expect(this.vm.geographicZones).toEqual(this.geographicZones);
         });
 
         it('should expose facility name', function() {
-            expect(vm.supervisoryNodeName).toEqual(stateParams.name);
+            expect(this.vm.supervisoryNodeName).toEqual(this.$stateParams.name);
         });
 
         it('should expose geographic zone id', function() {
-            expect(vm.geographicZone).toEqual(stateParams.zoneId);
+            expect(this.vm.geographicZone).toEqual(this.$stateParams.zoneId);
         });
     });
 
     describe('search', function() {
 
         it('should set name param', function() {
-            vm.supervisoryNodeName = 'name';
+            this.vm.supervisoryNodeName = 'name';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.supervisoryNodes', {
-                page: stateParams.page,
-                size: stateParams.size,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.supervisoryNodes', {
+                page: this.$stateParams.page,
+                size: this.$stateParams.size,
                 name: 'name',
-                zoneId: stateParams.zoneId
+                zoneId: this.$stateParams.zoneId
             }, {
                 reload: true
             });
         });
 
         it('should set firstName param', function() {
-            vm.geographicZone = 'some-id';
+            this.vm.geographicZone = 'some-id';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.supervisoryNodes', {
-                page: stateParams.page,
-                size: stateParams.size,
-                name: stateParams.name,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.supervisoryNodes', {
+                page: this.$stateParams.page,
+                size: this.$stateParams.size,
+                name: this.$stateParams.name,
                 zoneId: 'some-id'
             }, {
                 reload: true
@@ -110,9 +107,9 @@ describe('SupervisoryNodeListController', function() {
         });
 
         it('should call state go method', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });
