@@ -15,19 +15,15 @@
 
 describe('SupplyPartnerListController', function() {
 
-    var $state, $controller,
-        vm, supplyPartners, stateParams;
-
     beforeEach(function() {
 
         module('admin-supply-partner-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
         });
 
-        supplyPartners = [
+        this.supplyPartners = [
             {
                 id: 1,
                 name: 'supply-partner-1'
@@ -37,24 +33,22 @@ describe('SupplyPartnerListController', function() {
                 name: 'supply-partner-2'
             }
         ];
-        stateParams = {
+        this.stateParams = {
             page: 0,
             size: 10
         };
 
-        vm = $controller('SupplyPartnerListController', {
-            supplyPartners: supplyPartners,
-            $stateParams: stateParams
+        this.vm = this.$controller('SupplyPartnerListController', {
+            supplyPartners: this.supplyPartners,
+            $stateParams: this.stateParams
         });
-        vm.$onInit();
-
-        spyOn($state, 'go').andReturn();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose supply partners array', function() {
-            expect(vm.supplyPartners).toEqual(supplyPartners);
+            expect(this.vm.supplyPartners).toEqual(this.supplyPartners);
         });
     });
 });

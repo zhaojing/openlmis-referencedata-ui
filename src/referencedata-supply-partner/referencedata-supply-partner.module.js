@@ -21,7 +21,7 @@
      * @module referencedata-supply-partner
      *
      * @description
-     * Provides roles information from server.
+     * Responsible for providing supply partner info to other modules.
      */
     angular.module('referencedata-supply-partner', [
         'ngResource',

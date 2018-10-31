@@ -1,5 +1,8 @@
-5.4.2 / WIP
+5.5.0 / WIP
 ==================
+
+New functionality added in a backwards-compatible manner:
+* [OLMIS-5354](https://openlmis.atlassian.net/browse/OLMIS-5354): Added Supply Partners list page.
 
 Improvements:
 * [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.
