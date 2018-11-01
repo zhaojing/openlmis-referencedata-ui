@@ -1,9 +1,9 @@
 <h2>{{'adminSupplyPartnerEdit.editSupplyPartner' | message}}</h2>
 <form id="editSupplyPartner">
     <label for="code">{{'adminSupplyPartnerEdit.code' | message}}</label>
-    <input id="code" class="form-control" ng-model="vm.supplyPartner.code" required/>
+    <input id="code" class="form-control" ng-model="vm.supplyPartner.code" required readonly/>
     <label for="name">{{'adminSupplyPartnerEdit.name' | message}}</label>
-    <input id="name" class="form-control" ng-model="vm.supplyPartner.name" required/>
+    <input id="name" class="form-control" ng-model="vm.supplyPartner.name" required readonly/>
 </form>
 <label>{{'adminSupplyPartnerEdit.associations' | message}}</label>
 <section class="openlmis-table-container">
@@ -22,12 +22,11 @@
         </thead>
         <tbody>
             <tr ng-repeat="association in vm.associationsPage">
-                <td>{{association.program.id}}</td>
-                <td>{{association.supervisoryNode.id}}</td>
+                <td>{{association.program.name}}</td>
+                <td>{{association.supervisoryNode.name}}</td>
                 <td>{{association.facilities.length || 0}} {{'adminSupplyPartnerEdit.facilities' | message}}</td>
                 <td>{{association.orderables.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}</td>
                 <td>
-                    <button class="primary" ui-sref="openlmis.administration.supplyPartners.edit({id: association.id})">{{'adminSupplyPartnerEdit.edit' | message}}</button>
                 </td>
             </tr>
         </tbody>

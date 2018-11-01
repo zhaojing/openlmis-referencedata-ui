@@ -23,7 +23,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.supplyPartners', {
+        $stateProvider.state('openlmis.administration.supplyPartnersList', {
             showInNavigation: true,
             label: 'adminSupplyPartnerList.supplyPartners',
             url: '/supplyPartners?page&size',

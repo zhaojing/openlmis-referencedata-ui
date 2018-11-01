@@ -19,40 +19,35 @@
 
     /**
      * @ngdoc service
-     * @name referencedata-supply-partner.SupplyPartner
+     * @name referencedata-supply-partner.SupplyPartnerAssociation
      *
      * @description
-     * Represents a single supply partner.
+     * Represents a single supply partner association.
      */
     angular
         .module('referencedata-supply-partner')
-        .factory('SupplyPartner', SupplyPartner);
+        .factory('SupplyPartnerAssociation', SupplyPartnerAssociation);
 
-    SupplyPartner.$inject = ['SupplyPartnerAssociation'];
+    function SupplyPartnerAssociation() {
 
-    function SupplyPartner(SupplyPartnerAssociation) {
-
-        return SupplyPartner;
+        return SupplyPartnerAssociation;
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-supply-partner.SupplyPartner
-         * @name SupplyPartner
+         * @methodOf referencedata-supply-partner.SupplyPartnerAssociation
+         * @name SupplyPartnerAssociation
          * @constructor
          * 
          * @description
-         * Creates an instance of the SupplyPartner class.
+         * Creates an instance of the SupplyPartnerAssociation class.
          * 
-         * @param {Object}                  json       the JSON representation of the supply partner
-         * @param {SupplyPartnerRepository} repository the instance of the SupplyPartnerRepository class
+         * @param {Object} json the JSON representation of the supply partner association
          */
-        function SupplyPartner(json, repository) {
-            angular.copy(json, this);
-            this.repository = repository;
-
-            this.associations = json.associations.map(function(associationJson) {
-                return new SupplyPartnerAssociation(associationJson);
-            });
+        function SupplyPartnerAssociation(json) {
+            this.program = json.program;
+            this.supervisoryNode = json.supervisoryNode;
+            this.facilities = json.facilities;
+            this.orderables = json.orderables;
         }
     }
 })();

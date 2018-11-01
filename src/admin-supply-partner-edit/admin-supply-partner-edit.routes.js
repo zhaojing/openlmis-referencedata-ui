@@ -23,7 +23,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.supplyPartners.edit', {
+        $stateProvider.state('openlmis.administration.supplyPartnersEdit', {
             label: 'adminSupplyPartnerEdit.editSupplyPartner',
             url: '/supplyPartners/:id',
             accessRights: [ADMINISTRATION_RIGHTS.SUPPLY_PARTNERS_MANAGE],
@@ -35,8 +35,8 @@
                 }
             },
             resolve: {
-                supplyPartner: function(SupplyPartnerResource, $stateParams) {
-                    return new SupplyPartnerResource().get($stateParams.id);
+                supplyPartner: function(SupplyPartnerRepository, $stateParams) {
+                    return new SupplyPartnerRepository().get($stateParams.id);
                 },
                 associations: function(paginationService, supplyPartner, $stateParams) {
                     return paginationService.registerList(null, $stateParams, function() {

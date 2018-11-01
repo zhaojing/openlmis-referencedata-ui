@@ -21,28 +21,52 @@
         .module('referencedata-supply-partner')
         .factory('SupplyPartnerDataBuilder', SupplyPartnerDataBuilder);
 
-    SupplyPartnerDataBuilder.$inject = ['SupplyPartner'];
+    SupplyPartnerDataBuilder.$inject = ['SupplyPartner', 'SupplyPartnerAssociationDataBuilder'];
 
-    function SupplyPartnerDataBuilder(SupplyPartner) {
+    function SupplyPartnerDataBuilder(SupplyPartner, SupplyPartnerAssociationDataBuilder) {
 
+        SupplyPartnerDataBuilder.prototype.addAssociation = addAssociation;
+        SupplyPartnerDataBuilder.prototype.buildWithAssociations = buildWithAssociations;
         SupplyPartnerDataBuilder.prototype.build = build;
+        SupplyPartnerDataBuilder.prototype.buildJson = buildJson;
 
         return SupplyPartnerDataBuilder;
 
         function SupplyPartnerDataBuilder() {
             SupplyPartnerDataBuilder.instanceNumber = (SupplyPartnerDataBuilder.instanceNumber || 0) + 1;
 
+            this.repository = jasmine.createSpyObj('supplyPartnerRepository', [
+                'create', 'update', 'get', 'query'
+            ]);
             this.id = 'partner-id-' + SupplyPartnerDataBuilder.instanceNumber;
             this.name = 'partner-' + SupplyPartnerDataBuilder.instanceNumber;
             this.code = 'SP' + SupplyPartnerDataBuilder.instanceNumber;
+            this.associations = [];
+        }
+
+        function addAssociation(association) {
+            this.associations.push(association);
+            return this;
+        }
+
+        function buildWithAssociations() {
+            return this
+                .addAssociation(new SupplyPartnerAssociationDataBuilder().buildWithFacilitiesAndOrderables())
+                .addAssociation(new SupplyPartnerAssociationDataBuilder().buildWithFacilitiesAndOrderables())
+                .build();
         }
 
         function build() {
-            return new SupplyPartner(
-                this.id,
-                this.name,
-                this.code
-            );
+            return new SupplyPartner(this.buildJson(), this.repository);
+        }
+
+        function buildJson() {
+            return {
+                id: this.id,
+                code: this.code,
+                name: this.name,
+                associations: this.associations
+            };
         }
     }
 })();

@@ -19,19 +19,16 @@ describe('SupplyPartnerListController', function() {
 
         module('admin-supply-partner-list');
 
+        var SupplyPartnerDataBuilder;
+
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
+            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
         });
 
         this.supplyPartners = [
-            {
-                id: 1,
-                name: 'supply-partner-1'
-            },
-            {
-                id: 2,
-                name: 'supply-partner-2'
-            }
+            new SupplyPartnerDataBuilder().build(),
+            new SupplyPartnerDataBuilder().build()
         ];
         this.stateParams = {
             page: 0,

@@ -19,40 +19,38 @@
 
     /**
      * @ngdoc service
-     * @name referencedata-supply-partner.SupplyPartner
+     * @name referencedata-supply-partner.SupplyPartnerRepository
      *
      * @description
-     * Represents a single supply partner.
+     * Interface for managing supply partners.
      */
     angular
         .module('referencedata-supply-partner')
-        .factory('SupplyPartner', SupplyPartner);
+        .factory('SupplyPartnerRepository', SupplyPartnerRepository);
 
-    SupplyPartner.$inject = ['SupplyPartnerAssociation'];
+    SupplyPartnerRepository.inject = [
+        'SupplyPartner', 'OpenlmisRepository', 'classExtender', 'SupplyPartnerRepositoryImpl'
+    ];
 
-    function SupplyPartner(SupplyPartnerAssociation) {
+    function SupplyPartnerRepository(SupplyPartner, OpenlmisRepository, classExtender, SupplyPartnerRepositoryImpl) {
 
-        return SupplyPartner;
+        classExtender.extend(SupplyPartnerRepository, OpenlmisRepository);
+
+        return SupplyPartnerRepository;
 
         /**
          * @ngdoc method
-         * @methodOf referencedata-supply-partner.SupplyPartner
-         * @name SupplyPartner
+         * @methodOf referencedata-supply-partner.SupplyPartnerRepository
+         * @name SupplyPartnerRepository
          * @constructor
          * 
          * @description
-         * Creates an instance of the SupplyPartner class.
-         * 
-         * @param {Object}                  json       the JSON representation of the supply partner
-         * @param {SupplyPartnerRepository} repository the instance of the SupplyPartnerRepository class
+         * Creates an object of the SupplyPartnerRepository class. It no implementation is provided it
+         * will use an instance of the SupplyPartnerRepositoryImpl class by default.
          */
-        function SupplyPartner(json, repository) {
-            angular.copy(json, this);
-            this.repository = repository;
-
-            this.associations = json.associations.map(function(associationJson) {
-                return new SupplyPartnerAssociation(associationJson);
-            });
+        function SupplyPartnerRepository(impl) {
+            this.super(SupplyPartner, impl || new SupplyPartnerRepositoryImpl());
         }
     }
+
 })();

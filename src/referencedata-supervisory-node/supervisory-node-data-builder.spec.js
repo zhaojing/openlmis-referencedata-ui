@@ -29,6 +29,7 @@
         SupervisoryNodeDataBuilder.prototype.buildWithoutFacility = buildWithoutFacility;
         SupervisoryNodeDataBuilder.prototype.buildWithChildNodes = buildWithChildNodes;
         SupervisoryNodeDataBuilder.prototype.addChildNode = addChildNode;
+        SupervisoryNodeDataBuilder.prototype.withId = withId;
         SupervisoryNodeDataBuilder.prototype.withFacility = withFacility;
         SupervisoryNodeDataBuilder.prototype.withName = withName;
 
@@ -68,6 +69,11 @@
 
         function addChildNode(node) {
             this.childNodes.push(node);
+            return this;
+        }
+
+        function withId(newId) {
+            this.id = newId;
             return this;
         }
 

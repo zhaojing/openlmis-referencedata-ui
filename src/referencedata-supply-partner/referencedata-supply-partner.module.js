@@ -25,6 +25,8 @@
      */
     angular.module('referencedata-supply-partner', [
         'ngResource',
+        'referencedata-program',
+        'referencedata-supervisory-node',
         'referencedata'
     ]);
 
