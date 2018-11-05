@@ -47,7 +47,7 @@
          * @ngdoc property
          * @propertyOf admin-supply-partner-add.controller:SupplyPartnerAddController
          * @name supplyPartner
-         * @type {Array}
+         * @type {Object}
          *
          * @description
          * The following property contains details of supply partner that will be created.
