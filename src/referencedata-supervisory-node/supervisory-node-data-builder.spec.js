@@ -95,11 +95,6 @@
             return this;
         }
 
-        function withId(id) {
-            this.id = id;
-            return this;
-        }
-
         function withChildNodes() {
             return this
                 .addChildNode(new SupervisoryNodeDataBuilder().build())
