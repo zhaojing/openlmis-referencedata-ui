@@ -23,10 +23,27 @@ describe('SupervisoryNodeEditController', function() {
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             $controller = $injector.get('$controller');
+
             this.$state = $injector.get('$state');
         });
 
-        this.supervisoryNode = new SupervisoryNodeDataBuilder().buildWithChildNodes();
+        this.supervisoryNodes = [
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build(),
+            new SupervisoryNodeDataBuilder().build()
+        ];
+
+        this.supervisoryNodesMap = {};
+        this.supervisoryNodesMap[this.supervisoryNodes[0].id] = this.supervisoryNodes[0];
+        this.supervisoryNodesMap[this.supervisoryNodes[1].id] = this.supervisoryNodes[1];
+        this.supervisoryNodesMap[this.supervisoryNodes[2].id] = this.supervisoryNodes[2];
+        this.supervisoryNodesMap[this.supervisoryNodes[3].id] = this.supervisoryNodes[3];
+        this.supervisoryNodesMap[this.supervisoryNodes[4].id] = this.supervisoryNodes[4];
+
+        this.supervisoryNode = new SupervisoryNodeDataBuilder().build();
+
         this.facilitiesMap = {
             'facility-id-one': new FacilityDataBuilder()
                 .withId('facility-id-one')
@@ -39,7 +56,9 @@ describe('SupervisoryNodeEditController', function() {
         this.vm = $controller('SupervisoryNodeEditController', {
             supervisoryNode: this.supervisoryNode,
             childNodes: this.supervisoryNode.childNodes,
-            facilitiesMap: this.facilitiesMap
+            facilitiesMap: this.facilitiesMap,
+            supervisoryNodes: this.supervisoryNodes,
+            supervisoryNodesMap: this.supervisoryNodesMap
         });
         this.vm.$onInit();
     });
@@ -54,8 +73,12 @@ describe('SupervisoryNodeEditController', function() {
             expect(this.vm.childNodes).toEqual(this.supervisoryNode.childNodes);
         });
 
-        it('', function() {
+        it('should expose facilitiesMap', function() {
             expect(this.vm.facilitiesMap).toEqual(this.facilitiesMap);
+        });
+
+        it('should expose supervisoryNodesMap', function() {
+            expect(this.vm.supervisoryNodesMap).toEqual(this.supervisoryNodesMap);
         });
 
     });
@@ -72,5 +95,107 @@ describe('SupervisoryNodeEditController', function() {
                 reload: true
             });
         });
+    });
+
+    describe('getAvailableParentNodes', function() {
+
+        it('should not return added child nodes', function() {
+            this.vm.supervisoryNode.childNodes = [
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[3]
+            ];
+
+            var result = this.vm.getAvailableParentNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[2],
+                this.supervisoryNodes[4]
+            ]);
+        });
+
+        it('should return selected parent node', function() {
+            this.vm.supervisoryNode.parentNode = this.supervisoryNodes[4];
+
+            var result = this.vm.getAvailableParentNodes();
+
+            expect(result).toEqual(this.supervisoryNodes);
+        });
+
+        it('should not return supervisory node being edited', function() {
+            this.vm.supervisoryNodesMap[this.vm.supervisoryNode.id] = this.vm.supervisoryNode;
+
+            var result = this.vm.getAvailableParentNodes();
+
+            expect(result).toEqual(this.supervisoryNodes);
+        });
+
+        it('should not return supervisory node selected to add as child node', function() {
+            this.vm.selectedChildNode = this.supervisoryNodes[2];
+
+            var result = this.vm.getAvailableParentNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[3],
+                this.supervisoryNodes[4]
+            ]);
+        });
+
+    });
+
+    describe('getAvailableChildNodes', function() {
+
+        it('should not return added child nodes', function() {
+            this.vm.supervisoryNode.childNodes = [
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[3]
+            ];
+
+            var result = this.vm.getAvailableChildNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[2],
+                this.supervisoryNodes[4]
+            ]);
+        });
+
+        it('should not return selected parent node', function() {
+            this.vm.supervisoryNode.parentNode = this.supervisoryNodes[4];
+
+            var result = this.vm.getAvailableChildNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[2],
+                this.supervisoryNodes[3]
+            ]);
+        });
+
+        it('should not return supervisory node being edited', function() {
+            this.vm.supervisoryNodesMap[this.vm.supervisoryNode.id] = this.vm.supervisoryNode;
+
+            var result = this.vm.getAvailableChildNodes();
+
+            expect(result).toEqual(this.supervisoryNodes);
+        });
+
+        it('should return supervisory node selected to add as child node', function() {
+            this.vm.selectedChildNode = this.supervisoryNodes[2];
+
+            var result = this.vm.getAvailableChildNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[2],
+                this.supervisoryNodes[3],
+                this.supervisoryNodes[4]
+            ]);
+        });
+
     });
 });

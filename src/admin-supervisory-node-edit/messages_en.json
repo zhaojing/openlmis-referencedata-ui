@@ -11,5 +11,12 @@
     "adminSupervisoryNodeEdit.actions": "Actions",
     "adminSupervisoryNodeEdit.edit": "Edit",
     "adminSupervisoryNodeEdit.cancel": "Cancel",
-    "adminSupervisoryNodeEdit.description": "Description"
+    "adminSupervisoryNodeEdit.description": "Description",
+    "adminSupervisoryNodeEdit.removeChildNode": "Remove Child Node",
+    "adminSupervisoryNodeEdit.supervisoryNode": "Supervisory Node",
+    "adminSupervisoryNodeEdit.add": "Add",
+    "adminSupervisoryNodeEdit.updateSupervisoryNode": "Update Supervisory Node",
+    "adminSupervisoryNodeEdit.supervisoryNodeUpdatedSuccessfully": "Supervisory node updated successfully",
+    "adminSupervisoryNodeEdit.failedToUpdateSupervisoryNode": "Failed to update supervisory node",
+    "adminSupervisoryNodeEdit.confirmChildNodeRemoval": "Do you really want to remove the child node?"
 }

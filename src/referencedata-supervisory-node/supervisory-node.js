@@ -30,6 +30,10 @@
 
     function SupervisoryNode() {
 
+        SupervisoryNode.prototype.addChildNode = addChildNode;
+        SupervisoryNode.prototype.removeChildNode = removeChildNode;
+        SupervisoryNode.prototype.save = save;
+
         return SupervisoryNode;
 
         /**
@@ -40,19 +44,102 @@
          * @description
          * Creates a new instance of the SupervisoryNode class.
          *
-         * @param  {String} id         the UUID of the supervisory node to be created
-         * @param  {String} name       the name of the supervisory node to be created
-         * @param  {String} code       the code of the supervisory node to be created
-         * @param  {Object} facility   the facility of the supervisory node to be created
-         * @param  {Array}  childNodes the childNodes of the supervisory node to be created
+         * @param  {String} json  the JSON representation of the Supervisory Node
          * @return {Object}            the supervisory node object
          */
-        function SupervisoryNode(id, name, code, facility, childNodes) {
-            this.id = id;
-            this.name = name;
-            this.code = code;
-            this.facility = facility;
-            this.childNodes = childNodes;
+        function SupervisoryNode(json, repository) {
+            this.id = json.id;
+            this.name = json.name;
+            this.code = json.code;
+            this.facility = json.facility;
+            this.childNodes = json.childNodes;
+            this.description = json.description;
+            this.parentNode = json.parentNode;
+            this.repository = repository;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.SupervisoryNode
+         * @name addChildNode
+         * 
+         * @description
+         * Adds the given supervisory node as a child node of this supervisory node. Will throw an exception when trying
+         * to add null, undefined, duplicate supervisory node or parent node.
+         * 
+         * @param {Object} supervisoryNode  the supervisory node
+         */
+        function addChildNode(supervisoryNode) {
+            validateExists(supervisoryNode, 'Supervisory node must be defined');
+            validateNotParentNode(supervisoryNode, this.parentNode);
+            validateNotDuplicate(supervisoryNode, this.childNodes);
+
+            this.childNodes.push(supervisoryNode);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.SupervisoryNode
+         * @name removeChildNode
+         * 
+         * @description
+         * Removed supervisory node with the given ID from the list of child nodes of this supervisory node. Will throw
+         * an exception when trying to remove null, undefined or a supervisory node that is not a child node of this
+         * supervisory node.
+         * 
+         * @param {String} childNodeId  the ID of the supervisory node
+         */
+        function removeChildNode(childNodeId) {
+            validateExists(childNodeId, 'Child node ID must be defined');
+
+            var existingChildNode = getByIt(childNodeId, this.childNodes);
+            validateExists(existingChildNode, 'Child node with the given ID does not exist');
+
+            var childNodeIndex = this.childNodes.indexOf(existingChildNode);
+            this.childNodes.splice(childNodeIndex, 1);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.SupervisoryNode
+         * @name save
+         * 
+         * @description
+         * Updates this supervisory node in the the repository.
+         * 
+         * @return {Promise}  the promise resolved when updating is successful, rejected otherwise
+         */
+        function save() {
+            return this.repository.update(this);
+        }
+
+        function validateNotParentNode(supervisoryNode, parentNode) {
+            if (parentNode && parentNode.id === supervisoryNode.id) {
+                throw 'Given supervisory node is parent node';
+            }
+        }
+
+        function validateNotDuplicate(supervisoryNode, childNodes) {
+            var filtered = childNodes.filter(function(childNode) {
+                return childNode.id === supervisoryNode.id;
+            });
+            if (filtered.length) {
+                throw 'Given supervisory node is already a child node';
+            }
+        }
+
+        function validateExists(supervisoryNode, errorMessage) {
+            if (!supervisoryNode) {
+                throw errorMessage;
+            }
+        }
+
+        function getByIt(id, supervisoryNodes) {
+            var existing = supervisoryNodes.filter(function(supervisoryNode) {
+                return supervisoryNode.id === id;
+            });
+
+            return existing.length ? existing[0] : undefined;
         }
     }
 })();

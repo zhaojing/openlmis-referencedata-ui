@@ -3,6 +3,7 @@
 
 New functionality added in a backwards-compatible manner:
 * [OLMIS-5354](https://openlmis.atlassian.net/browse/OLMIS-5354): Added Supply Partners list page.
+* [OLMIS-5625](https://openlmis.atlassian.net/browse/OLMIS-5625): Made Supervisory Node editable
 
 Improvements:
 * [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.

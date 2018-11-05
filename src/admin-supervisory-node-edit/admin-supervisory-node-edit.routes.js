@@ -35,8 +35,16 @@
                 }
             },
             resolve: {
-                supervisoryNode: function(SupervisoryNodeResource, $stateParams) {
-                    return new SupervisoryNodeResource().get($stateParams.id);
+                /**
+                 * First part of a hack to fix broken pagination on the View Supervisory Node page, the problem here is
+                 * that requests for both paginated list are being done concurrently, which causes the pagination to
+                 * break. This makes the calls non-concurrent and fixes the problem with paginated list registration
+                 */
+                supervisoryNodes: function(supervisoryNodes, SupervisoryNodeResource) {
+                    return new SupervisoryNodeResource().query();
+                },
+                supervisoryNode: function(AdminSupervisoryNodeEditService, $stateParams) {
+                    return new AdminSupervisoryNodeEditService().getSupervisoryNode($stateParams.id);
                 },
                 facilities: function(facilityService) {
                     return facilityService.getAllMinimal();
@@ -44,7 +52,11 @@
                 facilitiesMap: function(facilities, ObjectMapper) {
                     return new ObjectMapper().map(facilities);
                 },
-                childNodes: function(paginationService, supervisoryNode, $stateParams) {
+                supervisoryNodesMap: function(supervisoryNodes, ObjectMapper) {
+                    return new ObjectMapper().map(supervisoryNodes.content);
+                },
+                // Second part of a hack to fix broken pagination on the View Supervisory Node page.
+                childNodes: function(supervisoryNodes, paginationService, supervisoryNode, $stateParams) {
                     return paginationService.registerList(null, $stateParams, function() {
                         return supervisoryNode.childNodes;
                     });

@@ -21,17 +21,21 @@
         .module('referencedata-supervisory-node')
         .factory('SupervisoryNodeDataBuilder', SupervisoryNodeDataBuilder);
 
-    SupervisoryNodeDataBuilder.$inject = ['SupervisoryNode', 'FacilityDataBuilder'];
+    SupervisoryNodeDataBuilder.$inject = ['SupervisoryNode', 'FacilityDataBuilder', 'SupervisoryNodeRepository'];
 
-    function SupervisoryNodeDataBuilder(SupervisoryNode, FacilityDataBuilder) {
+    function SupervisoryNodeDataBuilder(SupervisoryNode, FacilityDataBuilder, SupervisoryNodeRepository) {
 
         SupervisoryNodeDataBuilder.prototype.build = build;
+        SupervisoryNodeDataBuilder.prototype.buildJson = buildJson;
         SupervisoryNodeDataBuilder.prototype.buildWithoutFacility = buildWithoutFacility;
         SupervisoryNodeDataBuilder.prototype.buildWithChildNodes = buildWithChildNodes;
         SupervisoryNodeDataBuilder.prototype.addChildNode = addChildNode;
         SupervisoryNodeDataBuilder.prototype.withId = withId;
         SupervisoryNodeDataBuilder.prototype.withFacility = withFacility;
         SupervisoryNodeDataBuilder.prototype.withName = withName;
+        SupervisoryNodeDataBuilder.prototype.withChildNodes = withChildNodes;
+        SupervisoryNodeDataBuilder.prototype.withId = withId;
+        SupervisoryNodeDataBuilder.prototype.withParentNode = withParentNode;
 
         return SupervisoryNodeDataBuilder;
 
@@ -41,30 +45,34 @@
             this.id = 'node-id-' + SupervisoryNodeDataBuilder.instanceNumber;
             this.name = 'node-' + SupervisoryNodeDataBuilder.instanceNumber;
             this.code = 'SN' + SupervisoryNodeDataBuilder.instanceNumber;
+            this.parentNode = undefined;
             this.facility = new FacilityDataBuilder().build();
             this.childNodes = [];
+            this.description = 'Node description ' + SupervisoryNodeDataBuilder.instanceNumber;
         }
 
         function build() {
-            return new SupervisoryNode(
-                this.id,
-                this.name,
-                this.code,
-                this.facility,
-                this.childNodes
-            );
+            return new SupervisoryNode(this.buildJson(), new SupervisoryNodeRepository());
+        }
+
+        function buildJson() {
+            return {
+                id: this.id,
+                name: this.name,
+                code: this.code,
+                facility: this.facility,
+                childNodes: this.childNodes,
+                description: this.description,
+                parentNode: this.parentNode
+            };
         }
 
         function buildWithoutFacility() {
-            return this.withFacility()
-                .build();
+            return this.withFacility().build();
         }
 
         function buildWithChildNodes() {
-            return this
-                .addChildNode(new SupervisoryNodeDataBuilder().build())
-                .addChildNode(new SupervisoryNodeDataBuilder().build())
-                .build();
+            return this.withChildNodes().build();
         }
 
         function addChildNode(node) {
@@ -84,6 +92,22 @@
 
         function withName(name) {
             this.name = name;
+            return this;
+        }
+
+        function withId(id) {
+            this.id = id;
+            return this;
+        }
+
+        function withChildNodes() {
+            return this
+                .addChildNode(new SupervisoryNodeDataBuilder().build())
+                .addChildNode(new SupervisoryNodeDataBuilder().build());
+        }
+
+        function withParentNode(parentNode) {
+            this.parentNode = parentNode || new SupervisoryNodeDataBuilder().build();
             return this;
         }
     }
