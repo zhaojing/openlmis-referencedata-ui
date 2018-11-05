@@ -3,6 +3,7 @@
 
 New functionality added in a backwards-compatible manner:
 * [OLMIS-5354](https://openlmis.atlassian.net/browse/OLMIS-5354): Added Supply Partners list page.
+* [OLMIS-5355](https://openlmis.atlassian.net/browse/OLMIS-5355): Added Add Supply Partner modal.
 * [OLMIS-5625](https://openlmis.atlassian.net/browse/OLMIS-5625): Made Supervisory Node editable
 
 Improvements:

@@ -1,5 +1,8 @@
 <h2>{{'adminSupplyPartnerList.supplyPartners' | message}}</h2>
 <section class="openlmis-table-container">
+    <button id="add-supply-partner" class="add" ui-sref="openlmis.administration.supplyPartners.add">
+        {{'adminSupplyPartnerList.addSupplyPartner' | message}}
+    </button>
     <table>
         <caption ng-if="!vm.supplyPartners || vm.supplyPartners.length === 0">
             {{'adminSupplyPartnerList.noSupplyPartners' | message}}
