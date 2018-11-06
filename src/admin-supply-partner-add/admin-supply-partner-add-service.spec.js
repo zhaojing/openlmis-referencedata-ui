@@ -48,6 +48,29 @@ describe('AdminSupplyPartnerAddService', function() {
         spyOn(this.$state, 'go');
     });
 
+    describe('initSupplyPartner', function() {
+
+        it('should init supply partner', function() {
+            var expected = JSON.stringify({
+                associations: []
+            });
+            var actual;
+
+            this.adminSupplyPartnerAddService.initSupplyPartner()
+                .then(function(supplyPartner) {
+                    actual = JSON.stringify(supplyPartner, function(key, value) {
+                        // to avoid converting repository inside the object
+                        return key === 'repository' ? undefined : value;
+                    });
+                });
+
+            this.$rootScope.$apply();
+
+            expect(actual).toEqual(expected);
+        });
+
+    });
+
     describe('decoratedCreate', function() {
 
         beforeEach(function() {
