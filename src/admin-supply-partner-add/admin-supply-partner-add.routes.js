@@ -30,7 +30,11 @@
             controllerAs: 'vm',
             templateUrl: 'admin-supply-partner-add/supply-partner-add.html',
             url: '/new',
-            resolve: {},
+            resolve: {
+                supplyPartner: function(AdminSupplyPartnerAddService) {
+                    return new AdminSupplyPartnerAddService().initSupplyPartner();
+                }
+            },
             parentResolves: []
         });
 

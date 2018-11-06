@@ -20,6 +20,8 @@ describe('openlmis.administration.supplyPartners.add state', function() {
     beforeEach(function() {
         module('admin-supply-partner-add');
 
+        var SupplyPartnerDataBuilder;
+
         inject(function($injector) {
             this.$q = $injector.get('$q');
             this.$state = $injector.get('$state');
@@ -27,10 +29,16 @@ describe('openlmis.administration.supplyPartners.add state', function() {
             this.$rootScope = $injector.get('$rootScope');
             this.$templateCache = $injector.get('$templateCache');
             this.paginationService = $injector.get('paginationService');
+            this.AdminSupplyPartnerAddService = $injector.get('AdminSupplyPartnerAddService');
+
+            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
         });
+
+        this.supplyPartner = new SupplyPartnerDataBuilder().build();
 
         spyOn(this.$templateCache, 'get').andCallThrough();
         spyOn(this.paginationService, 'registerUrl').andReturn(this.$q.when());
+        spyOn(this.AdminSupplyPartnerAddService.prototype, 'initSupplyPartner').andReturn(this.supplyPartner);
 
         goToUrl(this, '/administration/supplyPartners/new');
     });
@@ -43,9 +51,17 @@ describe('openlmis.administration.supplyPartners.add state', function() {
         expect(this.$templateCache.get).toHaveBeenCalledWith('admin-supply-partner-add/supply-partner-add.html');
     });
 
+    it('should resolve supplyPartner', function() {
+        expect(getResolvedValue(this, 'supplyPartner')).toEqual(this.supplyPartner);
+    });
+
     function goToUrl(context, url) {
         context.$location.url(url);
         context.$rootScope.$apply();
+    }
+
+    function getResolvedValue(context, name) {
+        return context.$state.$current.locals.globals[name];
     }
 
 });

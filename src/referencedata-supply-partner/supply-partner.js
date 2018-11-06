@@ -32,6 +32,8 @@
 
     function SupplyPartner(SupplyPartnerAssociation) {
 
+        SupplyPartner.prototype.create = create;
+
         return SupplyPartner;
 
         /**
@@ -50,9 +52,27 @@
             angular.copy(json, this);
             this.repository = repository;
 
-            this.associations = json.associations.map(function(associationJson) {
-                return new SupplyPartnerAssociation(associationJson);
-            });
+            if (json.associations) {
+                this.associations = json.associations.map(function(associationJson) {
+                    return new SupplyPartnerAssociation(associationJson);
+                });
+            } else {
+                this.associations = [];
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supply-partner.SupplyPartner
+         * @name save
+         * 
+         * @description
+         * Creates this supply partner in the the repository.
+         * 
+         * @return {Promise}  the promise resolved when updating is successful, rejected otherwise
+         */
+        function create() {
+            return this.repository.create(this);
         }
     }
 })();

@@ -5,7 +5,7 @@
                 <h1>{{'adminSupplyPartnerAdd.header.addSupplyPartner' | message}}</h1>
             </div>
             <div class="modal-body">
-                <form id="add-supply-partner-form" ng-submit="vm.save()">
+                <form id="add-supply-partner-form" ng-submit="vm.supplyPartner.create()">
                     <label for="code">{{'adminSupplyPartnerAdd.supplyPartner.code' | message}}</label>
                     <input id="code" ng-model="vm.supplyPartner.code" type="text" required/>
 
