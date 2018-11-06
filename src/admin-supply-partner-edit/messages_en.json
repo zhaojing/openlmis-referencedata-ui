@@ -10,6 +10,11 @@
     "adminSupplyPartnerEdit.noAssociations": "No associations assigned",
     "adminSupplyPartnerEdit.actions": "Actions",
     "adminSupplyPartnerEdit.edit": "Edit",
+    "adminSupplyPartnerEdit.view": "View",
+    "adminSupplyPartnerEdit.associatedFacilities": "Associated Facilities",
+    "adminSupplyPartnerEdit.associatedProducts": "Associated Products",
+    "adminSupplyPartnerEdit.search": "Search",
+    "adminSupplyPartnerEdit.close": "Close",
     "adminSupplyPartnerEdit.update": "Update Supply Partner",
     "adminSupplyPartnerEdit.cancel": "Cancel"
 }

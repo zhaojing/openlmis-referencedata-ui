@@ -30,11 +30,12 @@
         .factory('SupplyPartnerRepositoryImpl', SupplyPartnerRepositoryImpl);
 
     SupplyPartnerRepositoryImpl.$inject = [
-        'SupplyPartnerResource', '$q', 'SupervisoryNodeResource', 'programService'
+        'SupplyPartnerResource', '$q', 'SupervisoryNodeResource', 'programService', 'FacilityResource',
+        'OrderableResource'
     ];
 
     function SupplyPartnerRepositoryImpl(SupplyPartnerResource, $q, SupervisoryNodeResource,
-                                         programService) {
+                                         programService, FacilityResource, OrderableResource) {
 
         SupplyPartnerRepositoryImpl.prototype.create = create;
         SupplyPartnerRepositoryImpl.prototype.update = update;
@@ -56,6 +57,8 @@
         function SupplyPartnerRepositoryImpl() {
             this.supplyPartnerResource = new SupplyPartnerResource();
             this.supervisoryNodeResource = new SupervisoryNodeResource();
+            this.facilityResource = new FacilityResource();
+            this.orderableResource = new OrderableResource();
         }
 
         /**
@@ -104,23 +107,49 @@
          */
         function get(id) {
             var supervisoryNodeResource = this.supervisoryNodeResource;
+            var facilityResource = this.facilityResource;
+            var orderableResource = this.orderableResource;
             return this.supplyPartnerResource.get(id)
                 .then(function(response) {
                     var supplyPartner = response;
                     var supervisoryNodeIds = supplyPartner.associations.map(function(association) {
                         return association.supervisoryNode.id;
                     });
+                    var facilityIds = [];
+                    var orderableIds = [];
+                    supplyPartner.associations.forEach(function(association) {
+                        association.facilities.forEach(function(facility) {
+                            if (facilityIds.indexOf(facility.id) === -1) {
+                                facilityIds.push(facility.id);
+                            }
+                        });
+                        association.orderables.forEach(function(orderable) {
+                            if (orderableIds.indexOf(orderable.id) === -1) {
+                                orderableIds.push(orderable.id);
+                            }
+                        });
+                    });
 
                     return $q.all([
                         programService.getAll(),
                         supervisoryNodeResource.query({
                             id: supervisoryNodeIds
+                        }),
+                        facilityResource.query({
+                            id: facilityIds
+                        }),
+                        orderableResource.query({
+                            id: orderableIds
                         })
                     ]).then(function(responses) {
                         var programs = responses[0],
-                            supervisoryNodes = responses[1].content;
+                            supervisoryNodes = responses[1].content,
+                            facilities = responses[2],
+                            orderables = responses[3].content;
 
-                        return combineResponses(supplyPartner, programs, supervisoryNodes);
+                        return combineResponses(supplyPartner, programs, supervisoryNodes, facilities, orderables);
+                    }, function() {
+                        return supplyPartner;
                     });
                 });
         }
@@ -140,7 +169,16 @@
             return this.supplyPartnerResource.query(params);
         }
 
-        function combineResponses(supplyPartner, programs, supervisoryNodes) {
+        function combineResponses(supplyPartner, programs, supervisoryNodes, facilities, orderables) {
+            var facilitiesMap = facilities.reduce(function(map, facility) {
+                map[facility.id] = facility;
+                return map;
+            }, {});
+            var orderablesMap = orderables.reduce(function(map, orderable) {
+                map[orderable.id] = orderable;
+                return map;
+            }, {});
+
             supplyPartner.associations.forEach(function(association) {
                 programs.forEach(function(program) {
                     if (association.program.id === program.id) {
@@ -152,6 +190,17 @@
                     if (association.supervisoryNode.id === supervisoryNode.id) {
                         association.supervisoryNode = supervisoryNode;
                     }
+                });
+
+                association.facilities = association.facilities.map(function(facility) {
+                    return facilitiesMap[facility.id];
+                });
+
+                association.orderables = association.orderables.map(function(orderable) {
+                    var filledInOrderable = orderablesMap[orderable.id];
+                    filledInOrderable.code = filledInOrderable.productCode;
+                    filledInOrderable.name = filledInOrderable.fullProductName;
+                    return filledInOrderable;
                 });
             });
 

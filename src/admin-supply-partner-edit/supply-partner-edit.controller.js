@@ -28,14 +28,16 @@
         .module('admin-supply-partner-edit')
         .controller('SupplyPartnerEditController', controller);
 
-    controller.$inject = ['$state', 'supplyPartner', 'associations'];
+    controller.$inject = ['$state', 'supplyPartner', 'associations', 'viewItemsModalService'];
 
-    function controller($state, supplyPartner, associations) {
+    function controller($state, supplyPartner, associations, viewItemsModalService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.goToSupplyPartnerList = goToSupplyPartnerList;
+        vm.viewFacilities = viewFacilities;
+        vm.viewOrderables = viewOrderables;
 
         /**
          * @ngdoc property
@@ -95,6 +97,32 @@
             $state.go('^', {}, {
                 reload: true
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-supply-partner-edit.controller:SupplyPartnerEditController
+         * @name viewFacilities
+         *
+         * @description
+         * Shows associated facilities.
+         */
+        function viewFacilities(associationIndex) {
+            return viewItemsModalService.show('adminSupplyPartnerEdit.associatedFacilities',
+                vm.associations[associationIndex].facilities);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-supply-partner-edit.controller:SupplyPartnerEditController
+         * @name viewOrderables
+         *
+         * @description
+         * Shows associated orderables.
+         */
+        function viewOrderables(associationIndex) {
+            return viewItemsModalService.show('adminSupplyPartnerEdit.associatedProducts',
+                vm.associations[associationIndex].orderables);
         }
     }
 })();

@@ -29,6 +29,7 @@
 
         FacilityDataBuilder.prototype.build = build;
         FacilityDataBuilder.prototype.buildJson = buildJson;
+        FacilityDataBuilder.prototype.withCode = withCode;
         FacilityDataBuilder.prototype.withName = withName;
         FacilityDataBuilder.prototype.withId = withId;
         FacilityDataBuilder.prototype.withSupportedPrograms = withSupportedPrograms;
@@ -59,6 +60,11 @@
             this.location = 'POINT(35.23962 -13.30037)';
             this.extraData = {};
             this.supportedPrograms = [];
+        }
+
+        function withCode(newCode) {
+            this.code = newCode;
+            return this;
         }
 
         function withName(newName) {

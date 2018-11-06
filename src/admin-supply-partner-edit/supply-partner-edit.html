@@ -24,8 +24,11 @@
             <tr ng-repeat="association in vm.associationsPage">
                 <td>{{association.program.name}}</td>
                 <td>{{association.supervisoryNode.name}}</td>
-                <td>{{association.facilities.length || 0}} {{'adminSupplyPartnerEdit.facilities' | message}}</td>
-                <td>{{association.orderables.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}</td>
+                <td>{{association.facilities.length || 0}} {{'adminSupplyPartnerEdit.facilities' | message}}
+                    <button ng-click="vm.viewFacilities($index)">{{'adminSupplyPartnerEdit.view' | message}}</button>
+                </td>
+                <td>{{association.orderables.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}
+                    <button ng-click="vm.viewOrderables($index)">{{'adminSupplyPartnerEdit.view' | message}}</button>
                 <td>
                 </td>
             </tr>

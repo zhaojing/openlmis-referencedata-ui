@@ -16,34 +16,42 @@
 describe('SupplyPartnerEditController', function() {
 
     var $state, $controller,
-        vm, supplyPartner, associations;
+        vm, facility, orderable, supplyPartner, association, associations;
 
     beforeEach(function() {
         module('admin-supply-partner-edit');
 
+        var ObjectReferenceDataBuilder, SupplyPartnerDataBuilder, SupplyPartnerAssociationDataBuilder;
         inject(function($injector) {
             $controller = $injector.get('$controller');
             $state = $injector.get('$state');
+            this.$q = $injector.get('$q');
+            ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
+            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
+            SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
+            this.viewItemsModalService = $injector.get('viewItemsModalService');
         });
 
-        supplyPartner = {
-            id: 'partner-id',
-            name: 'partner-name'
-        };
-        associations = [
-            {
-                id: 'assoc-1'
-            },
-            {
-                id: 'assoc-2'
-            }
-        ];
+        facility = new ObjectReferenceDataBuilder().withResource('facility')
+            .build();
+        orderable = new ObjectReferenceDataBuilder().withResource('orderable')
+            .build();
+        association = new SupplyPartnerAssociationDataBuilder()
+            .addFacility(facility)
+            .addOrderable(orderable)
+            .build();
+        associations = [association];
+        supplyPartner = new SupplyPartnerDataBuilder()
+            .addAssociation(association)
+            .build();
 
         vm = $controller('SupplyPartnerEditController', {
             supplyPartner: supplyPartner,
             associations: associations
         });
         vm.$onInit();
+
+        spyOn(this.viewItemsModalService, 'show');
     });
 
     describe('onInit', function() {
@@ -72,6 +80,34 @@ describe('SupplyPartnerEditController', function() {
             expect($state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
+        });
+    });
+
+    describe('viewFacilities', function() {
+
+        beforeEach(function() {
+            this.viewItemsModalService.show.andReturn(this.$q.resolve([]));
+        });
+
+        it('should open modal', function() {
+            vm.viewFacilities(0);
+
+            expect(this.viewItemsModalService.show).toHaveBeenCalledWith('adminSupplyPartnerEdit.associatedFacilities',
+                [facility]);
+        });
+    });
+
+    describe('viewOrderables', function() {
+
+        beforeEach(function() {
+            this.viewItemsModalService.show.andReturn(this.$q.resolve([]));
+        });
+
+        it('should open modal', function() {
+            vm.viewOrderables(0);
+
+            expect(this.viewItemsModalService.show).toHaveBeenCalledWith('adminSupplyPartnerEdit.associatedProducts',
+                [orderable]);
         });
     });
 });

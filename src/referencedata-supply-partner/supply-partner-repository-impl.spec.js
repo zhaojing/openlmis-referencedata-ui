@@ -15,7 +15,8 @@
 
 describe('SupplyPartnerRepositoryImpl', function() {
 
-    var supplyPartnerResourceMock, programServiceMock, supervisoryNodeResourceMock;
+    var supplyPartnerResourceMock, programServiceMock, supervisoryNodeResourceMock, facilityResourceMock,
+        orderableResourceMock;
 
     beforeEach(function() {
         module('referencedata-supply-partner', function($provide) {
@@ -35,14 +36,33 @@ describe('SupplyPartnerRepositoryImpl', function() {
                     return supervisoryNodeResourceMock;
                 };
             });
+            facilityResourceMock = jasmine.createSpyObj('facilityResource', [
+                'query'
+            ]);
+            $provide.factory('FacilityResource', function() {
+                return function() {
+                    return facilityResourceMock;
+                };
+            });
+            orderableResourceMock = jasmine.createSpyObj('orderableResource', [
+                'query'
+            ]);
+            $provide.factory('OrderableResource', function() {
+                return function() {
+                    return orderableResourceMock;
+                };
+            });
         });
 
-        var SupplyPartnerRepositoryImpl, ProgramDataBuilder, SupervisoryNodeDataBuilder, SupplyPartnerDataBuilder,
-            SupplyPartnerAssociationDataBuilder, ObjectReferenceDataBuilder;
+        var SupplyPartnerRepositoryImpl, ProgramDataBuilder, SupervisoryNodeDataBuilder, FacilityDataBuilder,
+            OrderableDataBuilder, SupplyPartnerDataBuilder, SupplyPartnerAssociationDataBuilder,
+            ObjectReferenceDataBuilder;
         inject(function($injector) {
             SupplyPartnerRepositoryImpl = $injector.get('SupplyPartnerRepositoryImpl');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
             SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
             ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
@@ -54,32 +74,52 @@ describe('SupplyPartnerRepositoryImpl', function() {
 
         this.supplyPartnerRepositoryImpl = new SupplyPartnerRepositoryImpl();
 
-        var programId = 'spri-program-id-1', supervisoryNodeId = 'spri-node-id-1';
+        this.programId = 'spri-program-id-1';
+        this.supervisoryNodeId = 'spri-node-id-1';
+        this.facilityId = 'spri-facility-id-1';
+        this.orderableId = 'spri-orderable-id-1';
         this.programs = [
             new ProgramDataBuilder()
-                .withId(programId)
+                .withId(this.programId)
                 .build(),
             new ProgramDataBuilder().build()
         ];
         this.supervisoryNodes = [
             new SupervisoryNodeDataBuilder()
-                .withId(supervisoryNodeId)
+                .withId(this.supervisoryNodeId)
                 .build(),
             new SupervisoryNodeDataBuilder().build()
         ];
-        this.supervisoryNodeIds = this.supervisoryNodes.map(function(node) {
-            return node.id;
-        });
+        this.facilities = [
+            new FacilityDataBuilder()
+                .withId(this.facilityId)
+                .build(),
+            new FacilityDataBuilder().build()
+        ];
+        this.orderables = [
+            new OrderableDataBuilder()
+                .withId(this.orderableId)
+                .build(),
+            new OrderableDataBuilder().build()
+        ];
 
         this.supplyPartner = new SupplyPartnerDataBuilder()
             .addAssociation(new SupplyPartnerAssociationDataBuilder()
                 .withProgram(new ObjectReferenceDataBuilder()
-                    .withId(programId)
+                    .withId(this.programId)
                     .withResource('program')
                     .build())
                 .withSupervisoryNode(new ObjectReferenceDataBuilder()
-                    .withId(supervisoryNodeId)
+                    .withId(this.supervisoryNodeId)
                     .withResource('supervisoryNode')
+                    .build())
+                .addFacility(new ObjectReferenceDataBuilder()
+                    .withId(this.facilityId)
+                    .withResource('facility')
+                    .build())
+                .addOrderable(new ObjectReferenceDataBuilder()
+                    .withId(this.orderableId)
+                    .withResource('orderable')
                     .build())
                 .build())
             .build();
@@ -151,7 +191,7 @@ describe('SupplyPartnerRepositoryImpl', function() {
 
     describe('get', function() {
 
-        it('should reject if unsuccessful', function() {
+        it('should reject if get supply partner unsuccessful', function() {
             supplyPartnerResourceMock.get.andReturn(this.$q.reject());
 
             var rejected;
@@ -165,11 +205,15 @@ describe('SupplyPartnerRepositoryImpl', function() {
             expect(supplyPartnerResourceMock.get).toHaveBeenCalledWith(this.supplyPartner.id);
         });
 
-        it('should resolve and return object with program and supervisory node expanded if successful', function() {
+        it('should resolve and return object with all expanded if all successful', function() {
             supplyPartnerResourceMock.get.andReturn(this.$q.resolve(this.supplyPartner));
             programServiceMock.getAll.andReturn(this.$q.resolve(this.programs));
             supervisoryNodeResourceMock.query.andReturn(this.$q.resolve({
                 content: this.supervisoryNodes
+            }));
+            facilityResourceMock.query.andReturn(this.$q.resolve(this.facilities));
+            orderableResourceMock.query.andReturn(this.$q.resolve({
+                content: this.orderables
             }));
 
             var result;
@@ -185,7 +229,15 @@ describe('SupplyPartnerRepositoryImpl', function() {
             expect(supplyPartnerResourceMock.get).toHaveBeenCalledWith(this.supplyPartner.id);
             expect(programServiceMock.getAll).toHaveBeenCalled();
             expect(supervisoryNodeResourceMock.query).toHaveBeenCalledWith({
-                id: [this.supervisoryNodeIds[0]]
+                id: [this.supervisoryNodeId]
+            });
+
+            expect(facilityResourceMock.query).toHaveBeenCalledWith({
+                id: [this.facilityId]
+            });
+
+            expect(orderableResourceMock.query).toHaveBeenCalledWith({
+                id: [this.orderableId]
             });
         });
 

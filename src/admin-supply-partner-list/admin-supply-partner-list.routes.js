@@ -35,9 +35,6 @@
                 supplyPartners: function(paginationService, SupplyPartnerResource, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         return new SupplyPartnerResource().query(stateParams);
-                    }, {
-                        customPageParamName: 'page',
-                        customSizeParamName: 'size'
                     });
                 }
             }
