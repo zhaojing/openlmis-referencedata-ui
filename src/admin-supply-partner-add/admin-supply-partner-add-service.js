@@ -22,7 +22,7 @@
      * @name admin-supply-partner-add.AdminSupplyPartnerAddService
      *
      * @description
-     * Prepared Supply Partner object to be displayable by the Add Supply Partner page.
+     * Prepares Supply Partner object to be displayable by the Add Supply Partner page.
      */
     angular
         .module('admin-supply-partner-add')
@@ -51,7 +51,7 @@
          * @name createSupplyPartner
          *
          * @description
-         * Creates an empty Supply Partner object with methods decorated with loading modal, confirmation modal and
+         * Creates an Supply Partner object with methods decorated with loading modal, confirmation modal and
          * notifications.
          *
          * @return {SupplyPartner}     the new Supply Partner
