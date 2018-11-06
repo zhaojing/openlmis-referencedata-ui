@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-ddescribe('SupervisoryNode', function() {
+describe('SupervisoryNode', function() {
 
     beforeEach(function() {
         module('referencedata-supervisory-node');
