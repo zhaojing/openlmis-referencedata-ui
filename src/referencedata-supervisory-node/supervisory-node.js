@@ -28,7 +28,11 @@
         .module('referencedata-supervisory-node')
         .factory('SupervisoryNode', SupervisoryNode);
 
-    function SupervisoryNode() {
+    SupervisoryNode.$inject = ['OpenlmisValidator', 'OpenlmisArrayDecorator'];
+
+    function SupervisoryNode(OpenlmisValidator, OpenlmisArrayDecorator) {
+
+        var openlmisValidator = new OpenlmisValidator();
 
         SupervisoryNode.prototype.addChildNode = addChildNode;
         SupervisoryNode.prototype.removeChildNode = removeChildNode;
@@ -44,15 +48,15 @@
          * @description
          * Creates a new instance of the SupervisoryNode class.
          *
-         * @param  {String} json  the JSON representation of the Supervisory Node
-         * @return {Object}            the supervisory node object
+         * @param  {Object} json  the JSON representation of the Supervisory Node
+         * @return {Object}       the supervisory node object
          */
         function SupervisoryNode(json, repository) {
             this.id = json.id;
             this.name = json.name;
             this.code = json.code;
             this.facility = json.facility;
-            this.childNodes = json.childNodes;
+            this.childNodes = new OpenlmisArrayDecorator(json.childNodes);
             this.description = json.description;
             this.parentNode = json.parentNode;
             this.repository = repository;
@@ -70,9 +74,13 @@
          * @param {Object} supervisoryNode  the supervisory node
          */
         function addChildNode(supervisoryNode) {
-            validateExists(supervisoryNode, 'Supervisory node must be defined');
+            openlmisValidator.validateExists(supervisoryNode, 'Supervisory node must be defined');
+            openlmisValidator.validateObjectWithIdDoesNotExist(
+                this.childNodes,
+                supervisoryNode.id,
+                'Given supervisory node is already a child node'
+            );
             validateNotParentNode(supervisoryNode, this.parentNode);
-            validateNotDuplicate(supervisoryNode, this.childNodes);
 
             this.childNodes.push(supervisoryNode);
         }
@@ -90,10 +98,10 @@
          * @param {String} childNodeId  the ID of the supervisory node
          */
         function removeChildNode(childNodeId) {
-            validateExists(childNodeId, 'Child node ID must be defined');
+            openlmisValidator.validateExists(childNodeId, 'Child node ID must be defined');
 
-            var existingChildNode = getByIt(childNodeId, this.childNodes);
-            validateExists(existingChildNode, 'Child node with the given ID does not exist');
+            var existingChildNode = this.childNodes.getById(childNodeId);
+            openlmisValidator.validateExists(existingChildNode, 'Child node with the given ID does not exist');
 
             var childNodeIndex = this.childNodes.indexOf(existingChildNode);
             this.childNodes.splice(childNodeIndex, 1);
@@ -117,29 +125,6 @@
             if (parentNode && parentNode.id === supervisoryNode.id) {
                 throw 'Given supervisory node is parent node';
             }
-        }
-
-        function validateNotDuplicate(supervisoryNode, childNodes) {
-            var filtered = childNodes.filter(function(childNode) {
-                return childNode.id === supervisoryNode.id;
-            });
-            if (filtered.length) {
-                throw 'Given supervisory node is already a child node';
-            }
-        }
-
-        function validateExists(supervisoryNode, errorMessage) {
-            if (!supervisoryNode) {
-                throw errorMessage;
-            }
-        }
-
-        function getByIt(id, supervisoryNodes) {
-            var existing = supervisoryNodes.filter(function(supervisoryNode) {
-                return supervisoryNode.id === id;
-            });
-
-            return existing.length ? existing[0] : undefined;
         }
     }
 })();

@@ -26,7 +26,9 @@
     angular.module('referencedata-supervisory-node', [
         'referencedata-facility',
         'ngResource',
-        'openlmis-urls'
+        'openlmis-urls',
+        'openlmis-validator',
+        'openlmis-array-decorator'
     ]);
 
 })();

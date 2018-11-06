@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('SupervisoryNode', function() {
+ddescribe('SupervisoryNode', function() {
 
     beforeEach(function() {
         module('referencedata-supervisory-node');
@@ -26,6 +26,7 @@ describe('SupervisoryNode', function() {
 
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
+            this.OpenlmisArrayDecorator = $injector.get('OpenlmisArrayDecorator');
         });
 
         this.json = new SupervisoryNodeDataBuilder()
@@ -60,9 +61,9 @@ describe('SupervisoryNode', function() {
     describe('addChildNode', function() {
 
         it('should throw exception when trying to add the same object twice', function() {
-            this.supervisoryNode.childNodes = [
+            this.supervisoryNode.childNodes = new this.OpenlmisArrayDecorator([
                 this.newChildNode
-            ];
+            ]);
 
             var supervisoryNode = this.supervisoryNode,
                 newChildNode = this.newChildNode;
@@ -89,9 +90,9 @@ describe('SupervisoryNode', function() {
         });
 
         it('should throw exception when trying to add object with duplicated id', function() {
-            this.supervisoryNode.childNodes = [
+            this.supervisoryNode.childNodes = new this.OpenlmisArrayDecorator([
                 this.newChildNode
-            ];
+            ]);
 
             var supervisoryNode = this.supervisoryNode,
                 duplicatedChildNode = this.duplicatedChildNode;
