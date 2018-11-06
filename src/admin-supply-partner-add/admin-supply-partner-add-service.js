@@ -51,7 +51,7 @@
          * @name createSupplyPartner
          *
          * @description
-         * Creates an Supply Partner object with methods decorated with loading modal, confirmation modal and
+         * Creates a Supply Partner object with methods decorated with loading modal, confirmation modal and
          * notifications.
          *
          * @return {SupplyPartner}     the new Supply Partner
