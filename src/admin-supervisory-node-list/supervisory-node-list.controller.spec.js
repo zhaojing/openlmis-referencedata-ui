@@ -55,11 +55,16 @@ describe('SupervisoryNodeListController', function() {
                 .build()
         };
 
+        this.supervisoryNodesMap = {};
+        this.supervisoryNodesMap[this.supervisoryNodes[0].id] = this.supervisoryNodes[0];
+        this.supervisoryNodesMap[this.supervisoryNodes[1].id] = this.supervisoryNodes[1];
+
         this.vm = $controller('SupervisoryNodeListController', {
             supervisoryNodes: this.supervisoryNodes,
             geographicZones: this.geographicZones,
             $stateParams: this.$stateParams,
-            facilitiesMap: this.facilitiesMap
+            facilitiesMap: this.facilitiesMap,
+            supervisoryNodesMap: this.supervisoryNodesMap
         });
         this.vm.$onInit();
 
@@ -86,6 +91,10 @@ describe('SupervisoryNodeListController', function() {
 
         it('should expose facilities map', function() {
             expect(this.vm.facilitiesMap).toEqual(this.facilitiesMap);
+        });
+
+        it('should expose supervisory nodes map', function() {
+            expect(this.vm.supervisoryNodesMap).toEqual(this.supervisoryNodesMap);
         });
     });
 

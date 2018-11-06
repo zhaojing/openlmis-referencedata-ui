@@ -9,5 +9,9 @@
     "adminSupervisoryNodeList.geographicZone": "Geographic Zone",
     "adminSupervisoryNodeList.actions": "Actions",
     "adminSupervisoryNodeList.search": "Search",
-    "adminSupervisoryNodeList.edit": "Edit"
+    "adminSupervisoryNodeList.edit": "Edit",
+    "adminSupervisoryNodeList.noPartnerNodes": "No Partner Nodes",
+    "adminSupervisoryNodeList.singlePartnerNode": "1 Partner Node",
+    "adminSupervisoryNodeList.partnerNodesCount": "${count} Partner Nodes",
+    "adminSupervisoryNodeList.partnerNodes": "Partner Nodes"
 }

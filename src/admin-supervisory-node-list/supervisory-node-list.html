@@ -24,6 +24,7 @@
                 <th>{{'adminSupervisoryNodeList.facility' | message}}</th>
                 <th>{{'adminSupervisoryNodeList.childNodes' | message}}</th>
                 <th>{{'adminSupervisoryNodeList.geographicZone' | message}}</th>
+                <th>{{'adminSupervisoryNodeList.partnerNodes' | message}}</th>
                 <th>{{'adminSupervisoryNodeList.actions' | message}}</th>
             </tr>
         </thead>
@@ -34,6 +35,15 @@
                 <td>{{facility.name}}</td>
                 <td>{{supervisoryNode.childNodes.length}}</td>
                 <td>{{facility.geographicZone.name}}</td>
+                <td ng-if="!supervisoryNode.extraData.partnerNodeIds || !supervisoryNode.extraData.partnerNodeIds.length"></td>
+                <td ng-if="supervisoryNode.extraData.partnerNodeIds && supervisoryNode.extraData.partnerNodeIds.length === 1">
+                    {{vm.supervisoryNodesMap[supervisoryNode.extraData.partnerNodeIds[0]].name}}
+                </td>
+                <td ng-if="supervisoryNode.extraData.partnerNodeIds && supervisoryNode.extraData.partnerNodeIds.length > 1"
+                    popover-template="admin-supervisory-node-list/partner-nodes-popover.html"
+                    popover-title="{{'adminSupervisoryNodeList.partnerNodes' | message}}">
+                    {{supervisoryNode.extraData.partnerNodeIds | partnerNodesCount}}
+                </td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.supervisoryNodes.edit({id: supervisoryNode.id})">{{'adminSupervisoryNodeList.edit' | message}}</button>
                 </td>

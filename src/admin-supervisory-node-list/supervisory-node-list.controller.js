@@ -28,9 +28,11 @@
         .module('admin-supervisory-node-list')
         .controller('SupervisoryNodeListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'supervisoryNodes', 'geographicZones', 'facilitiesMap'];
+    controller.$inject = [
+        '$state', '$stateParams', 'supervisoryNodes', 'geographicZones', 'facilitiesMap', 'supervisoryNodesMap'
+    ];
 
-    function controller($state, $stateParams, supervisoryNodes, geographicZones, facilitiesMap) {
+    function controller($state, $stateParams, supervisoryNodes, geographicZones, facilitiesMap, supervisoryNodesMap) {
 
         var vm = this;
 
@@ -106,6 +108,7 @@
             vm.supervisoryNodeName = $stateParams.name;
             vm.geographicZone = $stateParams.zoneId;
             vm.facilitiesMap = facilitiesMap;
+            vm.supervisoryNodesMap = supervisoryNodesMap;
         }
 
         /**

@@ -52,6 +52,19 @@
                 facilitiesMap: function(facilities, ObjectMapper) {
                     return new ObjectMapper().map(facilities);
                 },
+                supervisoryNodesMap: function(SupervisoryNodeResource, supervisoryNodes, ObjectMapper) {
+                    var supervisoryNodeIds = supervisoryNodes.flatMap(function(supervisoryNode) {
+                        return supervisoryNode.extraData.partnerNodeIds || [];
+                    });
+
+                    return new SupervisoryNodeResource()
+                        .query({
+                            id: supervisoryNodeIds
+                        })
+                        .then(function(supplyPartners) {
+                            return new ObjectMapper().map(supplyPartners.content);
+                        });
+                },
                 geographicZones: function($q, geographicZoneService) {
                     var deferred = $q.defer();
 

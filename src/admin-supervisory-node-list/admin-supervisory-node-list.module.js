@@ -26,6 +26,7 @@
     angular.module('admin-supervisory-node-list', [
         'openlmis-pagination',
         'openlmis-rights',
+        'openlmis-i18n',
         'referencedata-supervisory-node',
         'referencedata-geographic-zone',
         'ui.router'
