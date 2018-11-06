@@ -49,8 +49,11 @@
                 facilities: function(facilityService) {
                     return facilityService.getAllMinimal();
                 },
-                facilitiesMap: function(facilities, ObjectMapper) {
-                    return new ObjectMapper().map(facilities);
+                facilitiesMap: function(facilityService, ObjectMapper) {
+                    return facilityService.getAllMinimal()
+                        .then(function(facilities) {
+                            return new ObjectMapper().map(facilities);
+                        });
                 },
                 supervisoryNodesMap: function(supervisoryNodes, ObjectMapper) {
                     return new ObjectMapper().map(supervisoryNodes.content);
