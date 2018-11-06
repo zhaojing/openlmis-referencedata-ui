@@ -1,9 +1,9 @@
-<h2>{{'adminSupplyPartnerEdit.editSupplyPartner' | message}}</h2>
+<h2>{{'adminSupplyPartnerEdit.viewSupplyPartner' | message}}</h2>
 <form id="editSupplyPartner">
     <label for="code">{{'adminSupplyPartnerEdit.code' | message}}</label>
-    <input id="code" class="form-control" ng-model="vm.supplyPartner.code" required readonly/>
+    <input id="code" class="form-control" ng-model="vm.supplyPartner.code" required disabled/>
     <label for="name">{{'adminSupplyPartnerEdit.name' | message}}</label>
-    <input id="name" class="form-control" ng-model="vm.supplyPartner.name" required readonly/>
+    <input id="name" class="form-control" ng-model="vm.supplyPartner.name" required disabled/>
 </form>
 <label>{{'adminSupplyPartnerEdit.associations' | message}}</label>
 <section class="openlmis-table-container">
