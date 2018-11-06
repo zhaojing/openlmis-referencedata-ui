@@ -24,7 +24,7 @@
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.supplyPartners.edit', {
-            label: 'adminSupplyPartnerEdit.editSupplyPartner',
+            label: 'adminSupplyPartnerEdit.viewSupplyPartner',
             url: '/:id',
             accessRights: [ADMINISTRATION_RIGHTS.SUPPLY_PARTNERS_MANAGE],
             views: {
