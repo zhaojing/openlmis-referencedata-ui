@@ -17,6 +17,13 @@
 
     'use strict';
 
+    /**
+     * @ngdoc service
+     * @name referencedata-supervisory-node.SupervisoryNodeResource
+     *
+     * @description
+     * Communicates with the Supervisory Node REST API of the OpenLMIS server.
+     */
     angular
         .module('referencedata-supervisory-node')
         .factory('SupervisoryNodeResource', SupervisoryNodeResource);
