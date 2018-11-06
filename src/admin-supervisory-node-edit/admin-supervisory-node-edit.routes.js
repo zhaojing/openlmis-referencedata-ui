@@ -46,9 +46,6 @@
                 supervisoryNode: function(AdminSupervisoryNodeEditService, $stateParams) {
                     return new AdminSupervisoryNodeEditService().getSupervisoryNode($stateParams.id);
                 },
-                facilities: function(facilityService) {
-                    return facilityService.getAllMinimal();
-                },
                 facilitiesMap: function(facilityService, ObjectMapper) {
                     return facilityService.getAllMinimal()
                         .then(function(facilities) {
