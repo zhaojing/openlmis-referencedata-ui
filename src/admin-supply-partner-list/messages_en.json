@@ -4,6 +4,6 @@
     "adminSupplyPartnerList.name": "Name",
     "adminSupplyPartnerList.code": "Code",
     "adminSupplyPartnerList.actions": "Actions",
-    "adminSupplyPartnerList.edit": "View",
+    "adminSupplyPartnerList.view": "View",
     "adminSupplyPartnerList.addSupplyPartner": "Add Supply Partner"
 }

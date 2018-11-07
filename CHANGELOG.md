@@ -6,6 +6,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-5355](https://openlmis.atlassian.net/browse/OLMIS-5355): Added Add Supply Partner modal.
 * [OLMIS-5625](https://openlmis.atlassian.net/browse/OLMIS-5625): Made Supervisory Node editable.
 * [OLMIS-5643](https://openlmis.atlassian.net/browse/OLMIS-5643): Added information about Partner Nodes to the View Supervisory Nodes page.
+* [OLMIS-5623](https://openlmis.atlassian.net/browse/OLMIS-5623): Added Supply Partner view detail page.
 
 Improvements:
 * [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.

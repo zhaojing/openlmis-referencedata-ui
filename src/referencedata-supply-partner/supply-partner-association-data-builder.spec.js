@@ -72,7 +72,7 @@
         }
 
         function build() {
-            return new SupplyPartnerAssociation(this.buildJson());
+            return this.buildJson();
         }
 
         function buildWithFacilitiesAndOrderables() {

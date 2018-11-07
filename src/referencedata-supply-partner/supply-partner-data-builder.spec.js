@@ -21,9 +21,10 @@
         .module('referencedata-supply-partner')
         .factory('SupplyPartnerDataBuilder', SupplyPartnerDataBuilder);
 
-    SupplyPartnerDataBuilder.$inject = ['SupplyPartner', 'SupplyPartnerAssociationDataBuilder'];
+    SupplyPartnerDataBuilder.$inject = ['SupplyPartner', 'SupplyPartnerAssociationDataBuilder',
+        'SupplyPartnerRepository'];
 
-    function SupplyPartnerDataBuilder(SupplyPartner, SupplyPartnerAssociationDataBuilder) {
+    function SupplyPartnerDataBuilder(SupplyPartner, SupplyPartnerAssociationDataBuilder, SupplyPartnerRepository) {
 
         SupplyPartnerDataBuilder.prototype.addAssociation = addAssociation;
         SupplyPartnerDataBuilder.prototype.buildWithAssociations = buildWithAssociations;
@@ -35,9 +36,7 @@
         function SupplyPartnerDataBuilder() {
             SupplyPartnerDataBuilder.instanceNumber = (SupplyPartnerDataBuilder.instanceNumber || 0) + 1;
 
-            this.repository = jasmine.createSpyObj('supplyPartnerRepository', [
-                'create', 'update', 'get', 'query'
-            ]);
+            this.repository = new SupplyPartnerRepository();
             this.id = 'partner-id-' + SupplyPartnerDataBuilder.instanceNumber;
             this.name = 'partner-' + SupplyPartnerDataBuilder.instanceNumber;
             this.code = 'SP' + SupplyPartnerDataBuilder.instanceNumber;
