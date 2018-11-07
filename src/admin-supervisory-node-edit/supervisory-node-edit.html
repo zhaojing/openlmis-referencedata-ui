@@ -1,11 +1,11 @@
 <h2>{{'adminSupervisoryNodeEdit.editSupervisoryNode' | message}}</h2>
-<form id="editSupervisoryNode">
+<form id="editSupervisoryNode" ng-submit="vm.supervisoryNode.save()">
     <label for="code">{{'adminSupervisoryNodeEdit.code' | message}}</label>
     <input id="code" class="form-control" ng-model="vm.supervisoryNode.code" required/>
     <label for="supervisoryNodeName">{{'adminSupervisoryNodeEdit.supervisoryNodeName' | message}}</label>
     <input id="supervisoryNodeName" class="form-control" ng-model="vm.supervisoryNode.name" required/>
     <label for="facility">{{'adminSupervisoryNodeEdit.associatedFacility' | message}}</label>
-    <select id="facility" class="form-control" ng-model="vm.supervisoryNode.facility" ng-options="facility as facility.name for (facilityId, facility) in vm.facilitiesMap track by facility.id" required ></select>
+    <select id="facility" class="form-control" ng-model="vm.supervisoryNode.facility" ng-options="facility as facility.name for (facilityId, facility) in vm.facilitiesMap track by facility.id"></select>
     <label for="parentSupervisoryNode">{{'adminSupervisoryNodeEdit.parentNode' | message}}</label>
     <select id="parentSupervisoryNode" class="form-control" ng-model="vm.supervisoryNode.parentNode" ng-options="supervisoryNode as supervisoryNode.name for supervisoryNode in vm.getAvailableParentNodes() track by supervisoryNode.id"></select>
     <label for="description">{{'adminSupervisoryNodeEdit.description' | message}}</label>
@@ -51,6 +51,6 @@
         paged-list="vm.nodesPage"/>
 </section>
 <div class="openlmis-toolbar">
-    <button class="primary" ng-click="vm.supervisoryNode.save()">{{'adminSupervisoryNodeEdit.updateSupervisoryNode' | message}}</button>
+    <button class="primary" type="submit" form="editSupervisoryNode">{{'adminSupervisoryNodeEdit.updateSupervisoryNode' | message}}</button>
     <button ng-click="vm.goToSupervisoryNodeList()">{{'adminSupervisoryNodeEdit.cancel' | message}}</button>
 </div>
