@@ -30,6 +30,7 @@ describe('AdminSupervisoryNodeEditService', function() {
             this.loadingModalService = $injector.get('loadingModalService');
             this.notificationService = $injector.get('notificationService');
             this.confirmService = $injector.get('confirmService');
+            this.$state = $injector.get('$state');
         });
 
         this.supervisoryNode = new SupervisoryNodeDataBuilder().buildWithChildNodes();
@@ -44,6 +45,7 @@ describe('AdminSupervisoryNodeEditService', function() {
         spyOn(this.notificationService, 'success');
         spyOn(this.notificationService, 'error');
         spyOn(this.confirmService, 'confirmDestroy');
+        spyOn(this.$state, 'go');
     });
 
     describe('getSupervisoryNode', function() {
@@ -125,11 +127,11 @@ describe('AdminSupervisoryNodeEditService', function() {
             expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
-        it('should close loading modal after successfully saving', function() {
+        it('should leave closing of the loading modal to the state change', function() {
             this.supervisoryNode.save();
             this.$rootScope.$apply();
 
-            expect(this.loadingModalService.close).toHaveBeenCalled();
+            expect(this.loadingModalService.close).not.toHaveBeenCalled();
         });
 
         it('should close loading modal after failing to save', function() {
@@ -198,6 +200,24 @@ describe('AdminSupervisoryNodeEditService', function() {
             this.$rootScope.$apply();
 
             expect(this.notificationService.success).not.toHaveBeenCalled();
+        });
+
+        it('should take user to the View Supervisory Node view after saving is successful', function() {
+            this.supervisoryNode.save();
+            this.$rootScope.$apply();
+
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.supervisoryNodes', {}, {
+                reload: true
+            });
+        });
+
+        it('should not take user to the View Supervisory Node view after failed save', function() {
+            this.SupervisoryNode.prototype.save.andReturn(this.$q.reject());
+
+            this.supervisoryNode.save();
+            this.$rootScope.$apply();
+
+            expect(this.$state.go).not.toHaveBeenCalled();
         });
 
     });

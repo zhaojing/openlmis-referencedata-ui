@@ -29,11 +29,11 @@
         .factory('AdminSupervisoryNodeEditService', AdminSupervisoryNodeEditService);
 
     AdminSupervisoryNodeEditService.$inject = [
-        'SupervisoryNodeRepository', 'loadingModalService', 'notificationService', '$q', 'confirmService'
+        'SupervisoryNodeRepository', 'loadingModalService', 'notificationService', '$q', 'confirmService', '$state'
     ];
 
     function AdminSupervisoryNodeEditService(SupervisoryNodeRepository, loadingModalService, notificationService, $q,
-                                             confirmService) {
+                                             confirmService, $state) {
 
         AdminSupervisoryNodeEditService.prototype.getSupervisoryNode = getSupervisoryNode;
 
@@ -72,14 +72,15 @@
                 return originalSave.apply(supervisoryNode, arguments)
                     .then(function(supervisoryNode) {
                         notificationService.success('adminSupervisoryNodeEdit.supervisoryNodeUpdatedSuccessfully');
+                        $state.go('openlmis.administration.supervisoryNodes', {}, {
+                            reload: true
+                        });
                         return supervisoryNode;
                     })
                     .catch(function(error) {
                         notificationService.error('adminSupervisoryNodeEdit.failedToUpdateSupervisoryNode');
-                        return $q.reject(error);
-                    })
-                    .finally(function() {
                         loadingModalService.close();
+                        return $q.reject(error);
                     });
             };
         }
