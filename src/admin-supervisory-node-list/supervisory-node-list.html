@@ -29,12 +29,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="supervisoryNode in vm.supervisoryNodes" ng-init="facility = vm.facilitiesMap[supervisoryNode.facility.id]">
+            <tr ng-repeat="supervisoryNode in vm.supervisoryNodes">
                 <td>{{supervisoryNode.name}}</td>
                 <td>{{supervisoryNode.code}}</td>
-                <td>{{facility.name}}</td>
+                <td ng-if="supervisoryNode.facility">{{vm.facilitiesMap[supervisoryNode.facility.id].name}}</td>
+                <td ng-if="!supervisoryNode.facility"></td>
                 <td>{{supervisoryNode.childNodes.length}}</td>
-                <td>{{facility.geographicZone.name}}</td>
+                <td ng-if="supervisoryNode.facility">{{vm.facilitiesMap[supervisoryNode.facility.id].geographicZone.name}}</td>
+                <td ng-if="!supervisoryNode.facility"></td>
                 <td ng-if="!supervisoryNode.extraData.partnerNodeIds || !supervisoryNode.extraData.partnerNodeIds.length"></td>
                 <td ng-if="supervisoryNode.extraData.partnerNodeIds && supervisoryNode.extraData.partnerNodeIds.length === 1">
                     {{vm.supervisoryNodesMap[supervisoryNode.extraData.partnerNodeIds[0]].name}}

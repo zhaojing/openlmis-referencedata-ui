@@ -35,10 +35,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="node in vm.nodesPage">
-                <td>{{vm.supervisoryNodesMap[node.id].name}}</td>
-                <td>{{vm.supervisoryNodesMap[node.id].code}}</td>
-                <td>{{vm.facilitiesMap[vm.supervisoryNodesMap[node.id].facility.id].name}}</td>
+            <tr ng-repeat="node in vm.nodesPage" ng-init="nodeDetails = vm.supervisoryNodesMap[node.id]">
+                <td>{{nodeDetails.name}}</td>
+                <td>{{nodeDetails.code}}</td>
+                <td ng-if="nodeDetails.facility">{{vm.facilitiesMap[nodeDetails.facility.id].name}}</td>
+                <td ng-if="!nodeDetails.facility"></td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.supervisoryNodes.edit({id: node.id})">{{'adminSupervisoryNodeEdit.edit' | message}}</button>
                     <button class="danger" ng-click="vm.supervisoryNode.removeChildNode(node.id)">{{'adminSupervisoryNodeEdit.removeChildNode' | message}}</button>

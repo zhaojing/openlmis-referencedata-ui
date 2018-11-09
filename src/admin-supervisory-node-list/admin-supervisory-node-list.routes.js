@@ -41,9 +41,13 @@
                     });
                 },
                 facilities: function(supervisoryNodes, FacilityResource) {
-                    var facilitiesIds = supervisoryNodes.map(function(supervisoryNode) {
-                        return supervisoryNode.facility.id;
-                    });
+                    var facilitiesIds = supervisoryNodes
+                        .filter(function(supervisoryNode) {
+                            return !!supervisoryNode.facility;
+                        })
+                        .map(function(supervisoryNode) {
+                            return supervisoryNode.facility.id;
+                        });
 
                     return new FacilityResource().query({
                         id: facilitiesIds
