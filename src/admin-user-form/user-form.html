@@ -31,14 +31,14 @@
     <label for="phoneNumber">{{'adminUserForm.phoneNumber' | message}}</label>
     <input id="phoneNumber" ng-model="vm.user.phoneNumber" type="text"/>
     <fieldset class="form-group">
-        <legend>{{'adminUserForm.loginRestricted' | message}}</legend>
+        <legend>{{'adminUserForm.enabled' | message}}</legend>
         <label class="radio">
-            <input type="radio" ng-model="vm.user.loginRestricted"
+            <input type="radio" ng-model="vm.user.enabled"
                 ng-value="true" required/>
             {{'adminUserForm.yes' | message}}
         </label>
         <label class="radio">
-            <input type="radio" ng-model="vm.user.loginRestricted"
+            <input type="radio" ng-model="vm.user.enabled"
                 ng-value="false" required/>
             {{'adminUserForm.no' | message}}
         </label>

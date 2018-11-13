@@ -55,7 +55,6 @@
             this.homeFacilityId = 'facility-id';
             this.verified = true;
             this.active = true;
-            this.loginRestricted = true;
             this.allowNotify = true;
             this.extraData = {};
             this.roleAssignments = [];

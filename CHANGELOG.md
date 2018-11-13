@@ -16,6 +16,9 @@ Improvements:
 * [OLMIS-5415](https://openlmis.atlassian.net/browse/OLMIS-5415): Disabled edit of some fields for externally managed facilities.
 * [OLMIS-4292](https://openlmis.atlassian.net/browse/OLMIS-4292): Changed Facility Service and Facility Factory to reflect endpoint refactor.
 * [OLMIS-5488](https://openlmis.atlassian.net/browse/OLMIS-5488): Added styles for select2 inside openlmis-facility-program-select component
+* [OLMIS-5668](https://openlmis.atlassian.net/browse/OLMIS-5668):
+** Updated View User page to allow selecting whether user is enabled or not.
+** Removed the possibility to change login restricted as it has been removed from the model.
 
 Bug fixes:
 * [OLMIS-4403](https://openlmis.atlassian.net/browse/OLMIS-4403): Fix to appropriately show rights status under a give role

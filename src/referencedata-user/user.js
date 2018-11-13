@@ -64,16 +64,12 @@
                 this.homeFacilityId = json.homeFacilityId;
                 this.verified = json.verified;
                 this.active = json.active;
-                this.loginRestricted = json.loginRestricted;
                 this.allowNotify = json.allowNotify;
                 this.extraData = json.extraData;
                 this.enabled = json.enabled;
                 this.roleAssignments = json.roleAssignments;
-            } else {
-                this.loginRestricted = false;
             }
 
-            this.active = true;
             this.enabled = true;
             this.repository = repository;
             this.isNewUser = !this.id;
@@ -139,7 +135,6 @@
                 timezone: this.timezone,
                 homeFacilityId: this.homeFacilityId,
                 active: this.active,
-                loginRestricted: this.loginRestricted,
                 extraData: this.extraData,
                 roleAssignments: this.roleAssignments
             };

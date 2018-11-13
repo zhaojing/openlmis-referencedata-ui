@@ -9,7 +9,7 @@
     "adminUserForm.lastName": "Last name",
     "adminUserForm.jobTitle": "Job title",
     "adminUserForm.phoneNumber": "Phone Number",
-    "adminUserForm.loginRestricted": "Login restricted",
+    "adminUserForm.enabled": "Enabled",
     "adminUserForm.yes": "Yes",
     "adminUserForm.no": "No",
     "adminUserForm.emailVerified": "Email verified",

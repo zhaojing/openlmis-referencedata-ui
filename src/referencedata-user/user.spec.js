@@ -60,24 +60,11 @@ describe('User', function() {
             expect(user.homeFacilityId).toEqual(json.homeFacilityId);
             expect(user.verified).toEqual(json.verified);
             expect(user.active).toEqual(json.active);
-            expect(user.loginRestricted).toEqual(json.loginRestricted);
             expect(user.allowNotify).toEqual(json.allowNotify);
             expect(user.extraData).toEqual(json.extraData);
             expect(user.roleAssignments).toEqual(json.roleAssignments);
             expect(user.repository).toEqual(userRepository);
             expect(user.isNewUser).toEqual(false);
-        });
-
-        it('should default login restricted to false', function() {
-            user = new User();
-
-            expect(user.loginRestricted).toEqual(false);
-        });
-
-        it('should default active to true', function() {
-            user = new User();
-
-            expect(user.active).toEqual(true);
         });
 
         it('should return true if user has no id', function() {
@@ -155,7 +142,6 @@ describe('User', function() {
                 timezone: user.timezone,
                 homeFacilityId: user.homeFacilityId,
                 active: user.active,
-                loginRestricted: user.loginRestricted,
                 extraData: user.extraData,
                 roleAssignments: user.roleAssignments
             });
