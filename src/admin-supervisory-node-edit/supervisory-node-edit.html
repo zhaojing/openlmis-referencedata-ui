@@ -51,6 +51,44 @@
         list="vm.childNodes"
         paged-list="vm.nodesPage"/>
 </section>
+<label>{{'adminSupervisoryNodeEdit.partnerNodes' | message}}</label>
+<section class="openlmis-table-container">
+    <section class="is-primary">
+        <form class="form-inline" ng-submit="vm.addPartnerNode()" reload-form>
+            <div>
+                <label for="selectedPartnerNode">{{'adminSupervisoryNodeEdit.supervisoryNode' | message}}</label>
+                <select id="selectedPartnerNode" class="form-control" ng-model="vm.selectedPartnerNode" ng-options="supervisoryNode as supervisoryNode.name for supervisoryNode in vm.getAvailablePartnerNodes() track by supervisoryNode.id" required></select>
+            </div>
+            <button type="submit" class="add">{{'adminSupervisoryNodeEdit.add' | message}}</button>
+        </form>
+    </section>
+    <table>
+        <caption ng-if="!vm.supervisoryNode.partnerNodes || !vm.supervisoryNode.partnerNodes.length">
+            {{'adminSupervisoryNodeEdit.noPartnerNodes' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminSupervisoryNodeEdit.name' | message}}</th>
+                <th>{{'adminSupervisoryNodeEdit.code' | message}}</th>
+                <th>{{'adminSupervisoryNodeEdit.facility' | message}}</th>
+                <th>{{'adminSupervisoryNodeEdit.actions' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="partnerNode in vm.supervisoryNode.partnerNodes">
+                <td>{{vm.supervisoryNodesMap[partnerNode.id].name}}</td>
+                <td>{{vm.supervisoryNodesMap[partnerNode.id].code}}</td>
+                <td>{{vm.facilitiesMap[vm.supervisoryNodesMap[partnerNode.id].facility.id].name}}</td>
+                <td>
+                    <button class="primary" ui-sref="openlmis.administration.supervisoryNodes.edit({id: partnerNode.id})">{{'adminSupervisoryNodeEdit.edit'
+                        | message}}</button>
+                    <button class="danger" ng-click="vm.supervisoryNode.removePartnerNode(partnerNode.id)">{{'adminSupervisoryNodeEdit.removePartnerNode'
+                        | message}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
 <div class="openlmis-toolbar">
     <button class="primary" type="submit" form="editSupervisoryNode">{{'adminSupervisoryNodeEdit.updateSupervisoryNode' | message}}</button>
     <button ng-click="vm.goToSupervisoryNodeList()">{{'adminSupervisoryNodeEdit.cancel' | message}}</button>

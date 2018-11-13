@@ -18,5 +18,8 @@
     "adminSupervisoryNodeEdit.updateSupervisoryNode": "Update Supervisory Node",
     "adminSupervisoryNodeEdit.supervisoryNodeUpdatedSuccessfully": "Supervisory node updated successfully",
     "adminSupervisoryNodeEdit.failedToUpdateSupervisoryNode": "Failed to update supervisory node",
-    "adminSupervisoryNodeEdit.confirmChildNodeRemoval": "Do you really want to remove the child node?"
+    "adminSupervisoryNodeEdit.confirmChildNodeRemoval": "Do you really want to remove the child node?",
+    "adminSupervisoryNodeEdit.confirmPartnerNodeRemoval": "Do you really want to remove the partner node?",
+    "adminSupervisoryNodeEdit.partnerNodes": "Partner Nodes",
+    "adminSupervisoryNodeEdit.removePartnerNode": "Remove Partner Node"
 }

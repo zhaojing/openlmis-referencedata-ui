@@ -198,4 +198,46 @@ describe('SupervisoryNodeEditController', function() {
         });
 
     });
+
+    describe('getAvailablePartnerNodes', function() {
+
+        it('should not return added partner nodes', function() {
+            this.vm.supervisoryNode.partnerNodes = [
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[3]
+            ];
+
+            var result = this.vm.getAvailablePartnerNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[2],
+                this.supervisoryNodes[4]
+            ]);
+        });
+
+        it('should not return supervisory node being edited', function() {
+            this.vm.supervisoryNodesMap[this.vm.supervisoryNode.id] = this.vm.supervisoryNode;
+
+            var result = this.vm.getAvailablePartnerNodes();
+
+            expect(result).toEqual(this.supervisoryNodes);
+        });
+
+        it('should return supervisory node selected to add as partner node', function() {
+            this.vm.selectedPartnerNode = this.supervisoryNodes[2];
+
+            var result = this.vm.getAvailablePartnerNodes();
+
+            expect(result).toEqual([
+                this.supervisoryNodes[0],
+                this.supervisoryNodes[1],
+                this.supervisoryNodes[2],
+                this.supervisoryNodes[3],
+                this.supervisoryNodes[4]
+            ]);
+        });
+
+    });
+
 });

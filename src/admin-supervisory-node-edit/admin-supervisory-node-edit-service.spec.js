@@ -33,13 +33,17 @@ describe('AdminSupervisoryNodeEditService', function() {
             this.$state = $injector.get('$state');
         });
 
-        this.supervisoryNode = new SupervisoryNodeDataBuilder().buildWithChildNodes();
+        this.supervisoryNode = new SupervisoryNodeDataBuilder()
+            .withChildNodes()
+            .withPartnerNodes()
+            .build();
         this.supervisoryNodeId = this.supervisoryNode.id;
         this.adminSupervisoryNodeEditService = new AdminSupervisoryNodeEditService();
 
         spyOn(this.SupervisoryNodeRepository.prototype, 'get').andReturn();
         spyOn(this.SupervisoryNode.prototype, 'save');
         spyOn(this.SupervisoryNode.prototype, 'removeChildNode');
+        spyOn(this.SupervisoryNode.prototype, 'removePartnerNode');
         spyOn(this.loadingModalService, 'open');
         spyOn(this.loadingModalService, 'close');
         spyOn(this.notificationService, 'success');
@@ -324,6 +328,112 @@ describe('AdminSupervisoryNodeEditService', function() {
 
             expect(this.SupervisoryNode.prototype.removeChildNode)
                 .toHaveBeenCalledWith(this.supervisoryNode.childNodes[0].id);
+        });
+
+    });
+
+    describe('removePartnerNode', function() {
+
+        beforeEach(function() {
+            this.SupervisoryNodeRepository.prototype.get.andReturn(this.$q.resolve(this.supervisoryNode));
+            this.SupervisoryNode.prototype.save.andReturn(this.$q.resolve(this.supervisoryNode));
+            this.confirmService.confirmDestroy.andReturn(this.$q.resolve());
+
+            var suite = this;
+            this.adminSupervisoryNodeEditService.getSupervisoryNode()
+                .then(function(supervisoryNode) {
+                    suite.supervisoryNode = supervisoryNode;
+                });
+            this.$rootScope.$apply();
+        });
+
+        it('should confirm removing', function() {
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+
+            expect(this.confirmService.confirmDestroy).toHaveBeenCalledWith(
+                'adminSupervisoryNodeEdit.confirmPartnerNodeRemoval',
+                'adminSupervisoryNodeEdit.removePartnerNode'
+            );
+        });
+
+        it('should open loading modal after confirmation', function() {
+            this.confirmService.confirmDestroy.andReturn(this.$q.resolve());
+
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+
+            expect(this.loadingModalService.open).not.toHaveBeenCalled();
+
+            this.$rootScope.$apply();
+
+            expect(this.loadingModalService.open).toHaveBeenCalled();
+        });
+
+        it('should do nothing without confirmation', function() {
+            this.confirmService.confirmDestroy.andReturn(this.$q.defer().promise);
+
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+
+            expect(this.loadingModalService.open).not.toHaveBeenCalled();
+            expect(this.SupervisoryNode.prototype.removePartnerNode).not.toHaveBeenCalled();
+        });
+
+        it('should remove partner node after confirmation', function() {
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+            this.$rootScope.$apply();
+
+            expect(this.SupervisoryNode.prototype.removePartnerNode)
+                .toHaveBeenCalledWith(this.supervisoryNode.partnerNodes[0].id);
+        });
+
+        it('should close loading modal on success', function() {
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+            this.$rootScope.$apply();
+
+            expect(this.loadingModalService.close).toHaveBeenCalled();
+        });
+
+        it('should close loading modal on failure', function() {
+            this.SupervisoryNode.prototype.removePartnerNode.andThrow('Error message');
+
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+            this.$rootScope.$apply();
+
+            expect(this.loadingModalService.close).toHaveBeenCalled();
+
+        });
+
+        it('should reject with exception message if removing throws an exception', function() {
+            var errorMessage = 'Error message';
+
+            this.SupervisoryNode.prototype.removePartnerNode.andThrow('Error message');
+
+            var result;
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id)
+                .catch(function(errorMessage) {
+                    result = errorMessage;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(errorMessage);
+        });
+
+        it('should resolve when successful', function() {
+            var success;
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id)
+                .then(function() {
+                    success = true;
+                });
+            this.$rootScope.$apply();
+
+            expect(success).toBe(true);
+        });
+
+        it('should call original function with original arguments', function() {
+            this.supervisoryNode.removePartnerNode(this.supervisoryNode.partnerNodes[0].id);
+            this.$rootScope.$apply();
+
+            expect(this.SupervisoryNode.prototype.removePartnerNode)
+                .toHaveBeenCalledWith(this.supervisoryNode.partnerNodes[0].id);
         });
 
     });

@@ -60,6 +60,7 @@
                 .then(function(supervisoryNode) {
                     decorateSave(supervisoryNode);
                     decorateRemoveChildNode(supervisoryNode);
+                    decorateRemovePartnerNode(supervisoryNode);
                     return supervisoryNode;
                 });
         }
@@ -86,16 +87,29 @@
         }
 
         function decorateRemoveChildNode(supervisoryNode) {
-            var originalRemoveChildNode = supervisoryNode.removeChildNode;
-            supervisoryNode.removeChildNode = function() {
+            return decorateRemovalAction(supervisoryNode, {
+                actionName: 'removeChildNode',
+                confirmMessage: 'adminSupervisoryNodeEdit.confirmChildNodeRemoval',
+                confirmButtonLabel: 'adminSupervisoryNodeEdit.removeChildNode'
+            });
+        }
+
+        function decorateRemovePartnerNode(supervisoryNode) {
+            return decorateRemovalAction(supervisoryNode, {
+                actionName: 'removePartnerNode',
+                confirmMessage: 'adminSupervisoryNodeEdit.confirmPartnerNodeRemoval',
+                confirmButtonLabel: 'adminSupervisoryNodeEdit.removePartnerNode'
+            });
+        }
+
+        function decorateRemovalAction(supervisoryNode, config) {
+            var originalAction = supervisoryNode[config.actionName];
+            supervisoryNode[config.actionName] = function() {
                 var args = arguments;
-                return confirmService.confirmDestroy(
-                    'adminSupervisoryNodeEdit.confirmChildNodeRemoval',
-                    'adminSupervisoryNodeEdit.removeChildNode'
-                )
+                return confirmService.confirmDestroy(config.confirmMessage, config.confirmButtonLabel)
                     .then(function() {
                         loadingModalService.open();
-                        return originalRemoveChildNode.apply(supervisoryNode, args);
+                        return originalAction.apply(supervisoryNode, args);
                     })
                     .catch(function(error) {
                         return $q.reject(error);

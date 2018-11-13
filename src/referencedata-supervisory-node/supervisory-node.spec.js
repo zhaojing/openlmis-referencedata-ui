@@ -32,12 +32,17 @@ describe('SupervisoryNode', function() {
         this.json = new SupervisoryNodeDataBuilder()
             .withParentNode()
             .withChildNodes()
+            .withPartnerNodes()
             .buildJson();
         this.repository = new SupervisoryNodeRepository();
         this.supervisoryNode = new SupervisoryNode(this.json, this.repository);
         this.newChildNode = new SupervisoryNodeDataBuilder().buildJson();
+        this.newPartnerNode = new SupervisoryNodeDataBuilder().buildJson();
         this.duplicatedChildNode = new SupervisoryNodeDataBuilder()
             .withId(this.newChildNode.id)
+            .buildJson();
+        this.duplicatedPartnerNode = new SupervisoryNodeDataBuilder()
+            .withId(this.newPartnerNode.id)
             .buildJson();
 
         spyOn(this.repository, 'update');
@@ -191,6 +196,96 @@ describe('SupervisoryNode', function() {
             this.$rootScope.$apply();
 
             expect(result).toEqual(this.supervisoryNode);
+        });
+
+    });
+
+    describe('addPartnerNode', function() {
+
+        it('should throw exception when trying to add the same object twice', function() {
+            this.supervisoryNode.partnerNodes = new this.OpenlmisArrayDecorator([
+                this.newPartnerNode
+            ]);
+
+            var supervisoryNode = this.supervisoryNode,
+                newPartnerNode = this.newPartnerNode;
+
+            expect(function() {
+                supervisoryNode.addPartnerNode(newPartnerNode);
+            }).toThrow('Given supervisory node is already a partner node');
+        });
+
+        it('should throw exception when trying to add null partner node', function() {
+            var supervisoryNode = this.supervisoryNode;
+
+            expect(function() {
+                supervisoryNode.addPartnerNode(null);
+            }).toThrow('Supervisory node must be defined');
+        });
+
+        it('should throw exception when trying to add undefined partner node', function() {
+            var supervisoryNode = this.supervisoryNode;
+
+            expect(function() {
+                supervisoryNode.addPartnerNode(undefined);
+            }).toThrow('Supervisory node must be defined');
+        });
+
+        it('should throw exception when trying to add object with duplicated id', function() {
+            this.supervisoryNode.partnerNodes = new this.OpenlmisArrayDecorator([
+                this.newPartnerNode
+            ]);
+
+            var supervisoryNode = this.supervisoryNode,
+                duplicatedPartnerNode = this.duplicatedPartnerNode;
+
+            expect(function() {
+                supervisoryNode.addPartnerNode(duplicatedPartnerNode);
+            }).toThrow('Given supervisory node is already a partner node');
+        });
+
+        it('should add partner node', function() {
+            this.supervisoryNode.addPartnerNode(this.newPartnerNode);
+
+            expect(this.supervisoryNode.partnerNodes.pop()).toEqual(this.newPartnerNode);
+        });
+
+    });
+
+    describe('removePartnerNode', function() {
+
+        it('should throw exception when trying to remove null partner node', function() {
+            var supervisoryNode = this.supervisoryNode;
+
+            expect(function() {
+                supervisoryNode.removePartnerNode(null);
+            }).toThrow('Partner node ID must be defined');
+        });
+
+        it('should throw exception when trying to remove undefined partner node', function() {
+            var supervisoryNode = this.supervisoryNode;
+
+            expect(function() {
+                supervisoryNode.removePartnerNode(undefined);
+            }).toThrow('Partner node ID must be defined');
+        });
+
+        it('should throw exception when trying to remove supervisory node that is not partner node', function() {
+            var supervisoryNode = this.supervisoryNode,
+                newPartnerNode = this.newPartnerNode;
+
+            expect(function() {
+                supervisoryNode.removePartnerNode(newPartnerNode.id);
+            }).toThrow('Partner node with the given ID does not exist');
+        });
+
+        it('should remove partner node with the given ID', function() {
+            var partnerNodeId = this.supervisoryNode.partnerNodes[0].id;
+
+            this.supervisoryNode.removePartnerNode(partnerNodeId);
+
+            expect(this.supervisoryNode.partnerNodes.length).toBe(1);
+            expect(this.supervisoryNode.partnerNodes[0].id).not.toEqual(partnerNodeId);
         });
 
     });

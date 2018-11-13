@@ -29,18 +29,20 @@
         .controller('SupervisoryNodeEditController', controller);
 
     controller.$inject = [
-        '$state', 'supervisoryNode', 'childNodes', 'facilitiesMap', '$q', 'supervisoryNodesMap'
+        '$state', 'supervisoryNode', 'childNodes', 'facilitiesMap', '$q', 'supervisoryNodesMap', 'supervisoryNodes'
     ];
 
-    function controller($state, supervisoryNode, childNodes, facilitiesMap, $q, supervisoryNodesMap) {
+    function controller($state, supervisoryNode, childNodes, facilitiesMap, $q, supervisoryNodesMap, supervisoryNodes) {
 
         var vm = this;
 
         vm.$onInit = onInit;
         vm.goToSupervisoryNodeList = goToSupervisoryNodeList;
         vm.addChildNode = addChildNode;
+        vm.addPartnerNode = addPartnerNode;
         vm.getAvailableParentNodes = getAvailableParentNodes;
         vm.getAvailableChildNodes = getAvailableChildNodes;
+        vm.getAvailablePartnerNodes = getAvailablePartnerNodes;
 
         /**
          * @ngdoc property
@@ -133,11 +135,26 @@
          *
          * @description
          * Add the currently selected supervisory node as a child node to the supervisory node being edited.
-         * 
+         *
          * @return {Promise}  the promise resolved after adding the child node to the supervisoryNode
          */
         function addChildNode() {
             supervisoryNode.addChildNode(vm.selectedChildNode);
+            return $q.resolve();
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-supervisory-node-edit.controller:SupervisoryNodeEditController
+         * @name addPartnerNode
+         *
+         * @description
+         * Add the currently selected supervisory node as a partner node to the supervisory node being edited.
+         *
+         * @return {Promise}  the promise resolved after adding the partner node to the supervisoryNode
+         */
+        function addPartnerNode() {
+            supervisoryNode.addPartnerNode(vm.selectedPartnerNode);
             return $q.resolve();
         }
 
@@ -149,17 +166,14 @@
          * @description
          * Returns a list of all available supervisory node that can be selected as parent of the supervisory node being
          * edited.
-         * 
+         *
          * @return {Array}  the list of supervisory nodes
          */
         function getAvailableParentNodes() {
-            var selectedChildNodeId;
-
-            if (vm.selectedChildNode) {
-                selectedChildNodeId = vm.selectedChildNode.id;
-            }
-
-            return filterOutUserSupervisoryNodesIncluding(selectedChildNodeId);
+            return supervisoryNodes
+                .filter(filterOutChildNodes())
+                .filter(filterOutEditedSupervisoryNode)
+                .filter(filterOutSelectedChildNode);
         }
 
         /**
@@ -170,42 +184,65 @@
          * @description
          * Returns a list of all available supervisory node that can be selected as child node of the supervisory node
          * being edited.
-         * 
+         *
          * @return {Array}  the list of supervisory nodes
          */
         function getAvailableChildNodes() {
-            var parentNodeId;
-
-            if (vm.supervisoryNode.parentNode) {
-                parentNodeId = vm.supervisoryNode.parentNode.id;
-            }
-
-            return filterOutUserSupervisoryNodesIncluding(parentNodeId);
+            return supervisoryNodes
+                .filter(filterOutChildNodes())
+                .filter(filterOutEditedSupervisoryNode)
+                .filter(filterOutParentNode);
         }
 
-        function getChildNodeIds() {
-            return supervisoryNode.childNodes.map(function(childNodes) {
+        /**
+         * @ngdoc method
+         * @methodOf admin-supervisory-node-edit.controller:SupervisoryNodeEditController
+         * @name getAvailablePartnerNodes
+         *
+         * @description
+         * Returns a list of all available supervisory node that can be selected as partner node of the supervisory node
+         * being edited.
+         *
+         * @return {Array}  the list of supervisory nodes
+         */
+        function getAvailablePartnerNodes() {
+            return supervisoryNodes
+                .filter(filterOutPartnerNodes())
+                .filter(filterOutEditedSupervisoryNode);
+        }
+
+        function filterOutChildNodes() {
+            return filterOurNodes(vm.supervisoryNode.childNodes);
+        }
+
+        function filterOutPartnerNodes() {
+            return filterOurNodes(vm.supervisoryNode.partnerNodes);
+        }
+
+        function filterOutParentNode(supervisoryNode) {
+            return !vm.supervisoryNode.parentNode || vm.supervisoryNode.parentNode.id !== supervisoryNode.id;
+        }
+
+        function filterOutSelectedChildNode(supervisoryNode) {
+            return !vm.selectedChildNode || supervisoryNode.id !== vm.selectedChildNode.id;
+        }
+
+        function filterOutEditedSupervisoryNode(supervisoryNode) {
+            return supervisoryNode.id !== vm.supervisoryNode.id;
+        }
+
+        function filterOurNodes(nodes) {
+            var nodeIds = getNodeIds(nodes);
+
+            return function(supervisoryNode) {
+                return nodeIds.indexOf(supervisoryNode.id) === -1;
+            };
+        }
+
+        function getNodeIds(nodes) {
+            return nodes.map(function(childNodes) {
                 return childNodes.id;
             });
-        }
-
-        function filterOutUserSupervisoryNodesIncluding(id) {
-            var supervisoryNodeIds = getChildNodeIds();
-
-            supervisoryNodeIds.push(supervisoryNode.id);
-
-            if (id) {
-                supervisoryNodeIds.push(id);
-            }
-
-            var supervisoryNodes = [];
-            for (var supervisoryNodeId in supervisoryNodesMap) {
-                if (supervisoryNodeIds.indexOf(supervisoryNodeId) === -1) {
-                    supervisoryNodes.push(supervisoryNodesMap[supervisoryNodeId]);
-                }
-            }
-
-            return supervisoryNodes;
         }
     }
 })();

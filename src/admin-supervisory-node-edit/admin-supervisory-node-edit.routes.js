@@ -41,7 +41,10 @@
                  * break. This makes the calls non-concurrent and fixes the problem with paginated list registration
                  */
                 supervisoryNodes: function(supervisoryNodes, SupervisoryNodeResource) {
-                    return new SupervisoryNodeResource().query();
+                    return new SupervisoryNodeResource().query()
+                        .then(function(response) {
+                            return response.content;
+                        });
                 },
                 supervisoryNode: function(AdminSupervisoryNodeEditService, $stateParams) {
                     return new AdminSupervisoryNodeEditService().getSupervisoryNode($stateParams.id);
@@ -53,7 +56,7 @@
                         });
                 },
                 supervisoryNodesMap: function(supervisoryNodes, ObjectMapper) {
-                    return new ObjectMapper().map(supervisoryNodes.content);
+                    return new ObjectMapper().map(supervisoryNodes);
                 },
                 // Second part of a hack to fix broken pagination on the View Supervisory Node page.
                 childNodes: function(supervisoryNodes, paginationService, supervisoryNode, $stateParams) {

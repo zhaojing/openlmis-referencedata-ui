@@ -36,6 +36,8 @@
 
         SupervisoryNode.prototype.addChildNode = addChildNode;
         SupervisoryNode.prototype.removeChildNode = removeChildNode;
+        SupervisoryNode.prototype.addPartnerNode = addPartnerNode;
+        SupervisoryNode.prototype.removePartnerNode = removePartnerNode;
         SupervisoryNode.prototype.save = save;
 
         return SupervisoryNode;
@@ -59,6 +61,7 @@
             this.childNodes = new OpenlmisArrayDecorator(json.childNodes);
             this.description = json.description;
             this.parentNode = json.parentNode;
+            this.partnerNodes = new OpenlmisArrayDecorator(json.partnerNodes);
             this.repository = repository;
         }
 
@@ -66,55 +69,74 @@
          * @ngdoc method
          * @methodOf referencedata-supervisory-node.SupervisoryNode
          * @name addChildNode
-         * 
+         *
          * @description
          * Adds the given supervisory node as a child node of this supervisory node. Will throw an exception when trying
          * to add null, undefined, duplicate supervisory node or parent node.
-         * 
+         *
          * @param {Object} supervisoryNode  the supervisory node
          */
         function addChildNode(supervisoryNode) {
             openlmisValidator.validateExists(supervisoryNode, 'Supervisory node must be defined');
-            openlmisValidator.validateObjectWithIdDoesNotExist(
-                this.childNodes,
-                supervisoryNode.id,
-                'Given supervisory node is already a child node'
-            );
             validateNotParentNode(supervisoryNode, this.parentNode);
-
-            this.childNodes.push(supervisoryNode);
+            addNode(this.childNodes, supervisoryNode, 'child');
         }
 
         /**
          * @ngdoc method
          * @methodOf referencedata-supervisory-node.SupervisoryNode
          * @name removeChildNode
-         * 
+         *
          * @description
          * Removed supervisory node with the given ID from the list of child nodes of this supervisory node. Will throw
          * an exception when trying to remove null, undefined or a supervisory node that is not a child node of this
          * supervisory node.
-         * 
-         * @param {String} childNodeId  the ID of the supervisory node
+         *
+         * @param {string} childNodeId  the ID of the supervisory node
          */
         function removeChildNode(childNodeId) {
-            openlmisValidator.validateExists(childNodeId, 'Child node ID must be defined');
+            removeNode(this.childNodes, childNodeId, 'Child');
+        }
 
-            var existingChildNode = this.childNodes.getById(childNodeId);
-            openlmisValidator.validateExists(existingChildNode, 'Child node with the given ID does not exist');
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.SupervisoryNode
+         * @name addPartnerNode
+         *
+         * @description
+         * Adds the given supervisory node as a partner node of this supervisory node.
+         *
+         * @param {Object} supervisoryNode  the supervisory node to be added as partner
+         */
+        function addPartnerNode(supervisoryNode) {
+            openlmisValidator.validateExists(supervisoryNode, 'Supervisory node must be defined');
+            addNode(this.partnerNodes, supervisoryNode, 'partner');
+        }
 
-            var childNodeIndex = this.childNodes.indexOf(existingChildNode);
-            this.childNodes.splice(childNodeIndex, 1);
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-supervisory-node.SupervisoryNode
+         * @name removePartnerNode
+         *
+         * @description
+         * Removed supervisory node with the given ID from the list of partner nodes of this supervisory node. Will
+         * throw an exception when trying to remove null, undefined or a supervisory node that is not a partner node of
+         * this supervisory node.
+         *
+         * @param {string} partnerNodeId  the ID of the supervisory node
+         */
+        function removePartnerNode(partnerNodeId) {
+            removeNode(this.partnerNodes, partnerNodeId, 'Partner');
         }
 
         /**
          * @ngdoc method
          * @methodOf referencedata-supervisory-node.SupervisoryNode
          * @name save
-         * 
+         *
          * @description
          * Updates this supervisory node in the the repository.
-         * 
+         *
          * @return {Promise}  the promise resolved when updating is successful, rejected otherwise
          */
         function save() {
@@ -125,6 +147,26 @@
             if (parentNode && parentNode.id === supervisoryNode.id) {
                 throw 'Given supervisory node is parent node';
             }
+        }
+
+        function addNode(nodes, node, nodeType) {
+            openlmisValidator.validateObjectWithIdDoesNotExist(
+                nodes,
+                node.id,
+                'Given supervisory node is already a ' + nodeType + ' node'
+            );
+
+            nodes.push(node);
+        }
+
+        function removeNode(nodes, nodeId, nodeType) {
+            openlmisValidator.validateExists(nodeId, nodeType + ' node ID must be defined');
+
+            var existingNode = nodes.getById(nodeId);
+            openlmisValidator.validateExists(existingNode, nodeType + ' node with the given ID does not exist');
+
+            var existingNodeIndex = nodes.indexOf(existingNode);
+            nodes.splice(existingNodeIndex, 1);
         }
     }
 })();

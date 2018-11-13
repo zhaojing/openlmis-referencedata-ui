@@ -36,6 +36,8 @@
         SupervisoryNodeDataBuilder.prototype.withChildNodes = withChildNodes;
         SupervisoryNodeDataBuilder.prototype.withId = withId;
         SupervisoryNodeDataBuilder.prototype.withParentNode = withParentNode;
+        SupervisoryNodeDataBuilder.prototype.withPartnerNodes = withPartnerNodes;
+        SupervisoryNodeDataBuilder.prototype.addPartnerNode = addPartnerNode;
 
         return SupervisoryNodeDataBuilder;
 
@@ -49,6 +51,7 @@
             this.facility = new FacilityDataBuilder().build();
             this.childNodes = [];
             this.description = 'Node description ' + SupervisoryNodeDataBuilder.instanceNumber;
+            this.partnerNodes = [];
         }
 
         function build() {
@@ -63,7 +66,8 @@
                 facility: this.facility,
                 childNodes: this.childNodes,
                 description: this.description,
-                parentNode: this.parentNode
+                parentNode: this.parentNode,
+                partnerNodes: this.partnerNodes
             };
         }
 
@@ -77,6 +81,11 @@
 
         function addChildNode(node) {
             this.childNodes.push(node);
+            return this;
+        }
+
+        function addPartnerNode(node) {
+            this.partnerNodes.push(node);
             return this;
         }
 
@@ -99,6 +108,12 @@
             return this
                 .addChildNode(new SupervisoryNodeDataBuilder().build())
                 .addChildNode(new SupervisoryNodeDataBuilder().build());
+        }
+
+        function withPartnerNodes() {
+            return this
+                .addPartnerNode(new SupervisoryNodeDataBuilder().build())
+                .addPartnerNode(new SupervisoryNodeDataBuilder().build());
         }
 
         function withParentNode(parentNode) {
