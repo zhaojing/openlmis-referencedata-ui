@@ -25,7 +25,7 @@
      * Returns a message how many partner nodes there is based on the given list.
      *
      * @param   {Array}  partnerNodes  the list of the partner nodes
-     * @return  {String}               the message telling how many partner nodes there is in the list
+     * @return  {string}               the message telling how many partner nodes there is in the list
      *
      * @example
      * We want to display how many partner nodes there is in a given list in human-readable way:
