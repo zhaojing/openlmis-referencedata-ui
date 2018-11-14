@@ -240,8 +240,8 @@
         }
 
         function getNodeIds(nodes) {
-            return nodes.map(function(childNodes) {
-                return childNodes.id;
+            return nodes.map(function(node) {
+                return node.id;
             });
         }
     }
