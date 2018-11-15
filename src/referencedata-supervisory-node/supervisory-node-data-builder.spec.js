@@ -29,7 +29,7 @@
         SupervisoryNodeDataBuilder.prototype.buildJson = buildJson;
         SupervisoryNodeDataBuilder.prototype.buildWithoutFacility = buildWithoutFacility;
         SupervisoryNodeDataBuilder.prototype.buildWithChildNodes = buildWithChildNodes;
-        SupervisoryNodeDataBuilder.prototype.addChildNode = addChildNode;
+        SupervisoryNodeDataBuilder.prototype.withChildNode = withChildNode;
         SupervisoryNodeDataBuilder.prototype.withId = withId;
         SupervisoryNodeDataBuilder.prototype.withFacility = withFacility;
         SupervisoryNodeDataBuilder.prototype.withName = withName;
@@ -37,7 +37,7 @@
         SupervisoryNodeDataBuilder.prototype.withId = withId;
         SupervisoryNodeDataBuilder.prototype.withParentNode = withParentNode;
         SupervisoryNodeDataBuilder.prototype.withPartnerNodes = withPartnerNodes;
-        SupervisoryNodeDataBuilder.prototype.addPartnerNode = addPartnerNode;
+        SupervisoryNodeDataBuilder.prototype.withPartnerNode = withPartnerNode;
 
         return SupervisoryNodeDataBuilder;
 
@@ -79,12 +79,12 @@
             return this.withChildNodes().build();
         }
 
-        function addChildNode(node) {
+        function withChildNode(node) {
             this.childNodes.push(node);
             return this;
         }
 
-        function addPartnerNode(node) {
+        function withPartnerNode(node) {
             this.partnerNodes.push(node);
             return this;
         }
@@ -106,14 +106,14 @@
 
         function withChildNodes() {
             return this
-                .addChildNode(new SupervisoryNodeDataBuilder().build())
-                .addChildNode(new SupervisoryNodeDataBuilder().build());
+                .withChildNode(new SupervisoryNodeDataBuilder().build())
+                .withChildNode(new SupervisoryNodeDataBuilder().build());
         }
 
         function withPartnerNodes() {
             return this
-                .addPartnerNode(new SupervisoryNodeDataBuilder().build())
-                .addPartnerNode(new SupervisoryNodeDataBuilder().build());
+                .withPartnerNode(new SupervisoryNodeDataBuilder().build())
+                .withPartnerNode(new SupervisoryNodeDataBuilder().build());
         }
 
         function withParentNode(parentNode) {
