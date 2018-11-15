@@ -6,8 +6,8 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-5355](https://openlmis.atlassian.net/browse/OLMIS-5355): Added Add Supply Partner modal.
 * [OLMIS-5625](https://openlmis.atlassian.net/browse/OLMIS-5625): Made Supervisory Node editable.
 * [OLMIS-5643](https://openlmis.atlassian.net/browse/OLMIS-5643):
-** Added information about Partner Nodes to the View Supervisory Nodes page.
-** Added information about Partner Nodes to the View Supervisory Node page.
+  * Added information about Partner Nodes to the View Supervisory Nodes page.
+  * Added information about Partner Nodes to the View Supervisory Node page.
 * [OLMIS-5623](https://openlmis.atlassian.net/browse/OLMIS-5623): Added Supply Partner view detail page.
 
 Improvements:
@@ -18,8 +18,8 @@ Improvements:
 * [OLMIS-4292](https://openlmis.atlassian.net/browse/OLMIS-4292): Changed Facility Service and Facility Factory to reflect endpoint refactor.
 * [OLMIS-5488](https://openlmis.atlassian.net/browse/OLMIS-5488): Added styles for select2 inside openlmis-facility-program-select component
 * [OLMIS-5668](https://openlmis.atlassian.net/browse/OLMIS-5668):
-** Updated View User page to allow selecting whether user is enabled or not.
-** Removed the possibility to change login restricted as it has been removed from the model.
+  * Updated View User page to allow selecting whether user is enabled or not.
+  * Removed the possibility to change login restricted as it has been removed from the model.
 
 Bug fixes:
 * [OLMIS-4403](https://openlmis.atlassian.net/browse/OLMIS-4403): Fix to appropriately show rights status under a give role
@@ -29,8 +29,8 @@ Bug fixes:
 
 Improvements:
 * [OLMIS-5235](https://openlmis.atlassian.net/browse/OLMIS-5235): Improved performance of login:
-** Made the requests when login concurrent (where possible).
-** Minimal Facilities are now cached in the LocalDatabase instead of the LocalStorage.
+  * Made the requests when login concurrent (where possible).
+  * Minimal Facilities are now cached in the LocalDatabase instead of the LocalStorage.
 
 Bug fixes:
 * [OLMIS-5235](https://openlmis.atlassian.net/browse/OLMIS-5235): FacilityProgramCacheService will now pass user ID when fetching user programs.
