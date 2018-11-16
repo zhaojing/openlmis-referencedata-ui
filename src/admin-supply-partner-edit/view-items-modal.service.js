@@ -43,11 +43,10 @@
          * @description
          * Opens a modal responsible for viewing items.
          *
-         * @param  {String}  titleLabel the label of the modal title
-         * @param  {Array}   items      the list of associated items
-         * @return {promise}            the promise resolving to a list of items
+         * @param  {Object}  config the configuration object, which should have properties of titleLabel and items
+         * @return {promise}        the promise resolving to a list of items
          */
-        function show(titleLabel, items) {
+        function show(config) {
             if (dialog) {
                 return dialog.promise;
             }
@@ -59,12 +58,12 @@
                 show: true,
                 resolve: {
                     titleLabel: function() {
-                        return titleLabel;
+                        return config.titleLabel || 'adminSupplyPartnerEdit.items';
                     },
                     items: function() {
                         return paginationService.registerList(null, $stateParams,
                             function() {
-                                return items;
+                                return config && config.items ? config.items : [];
                             }, {
                                 customPageParamName: 'pPage',
                                 customSizeParamName: 'pSize'

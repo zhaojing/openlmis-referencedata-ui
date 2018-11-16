@@ -27,51 +27,82 @@ describe('viewItemsModalService', function() {
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
-        this.items = [
+        this.testTitleLabel = 'label.test';
+        this.testItems = [
             new FacilityDataBuilder().buildJson(),
             new FacilityDataBuilder().buildJson()
         ];
+        this.config = {
+            titleLabel: this.testTitleLabel,
+            items: this.testItems
+        };
+
         this.dialogDeferred = this.$q.defer();
         this.dialog = {
             promise: this.dialogDeferred.promise
         };
-
-        spyOn(this.openlmisModalService, 'createDialog').andReturn(this.dialog);
     });
 
     describe('show', function() {
 
-        it('it should not open second dialog if the first one is still open', function() {
-            this.viewItemsModalService.show(this.items);
-            this.viewItemsModalService.show(this.items);
+        describe('modal behavior', function() {
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+            beforeEach(function() {
+                spyOn(this.openlmisModalService, 'createDialog').andReturn(this.dialog);
+            });
+
+            it('should not open second dialog if the first one is still open', function() {
+                this.viewItemsModalService.show(this.config);
+                this.viewItemsModalService.show(this.config);
+
+                expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+            });
+
+            it('should close modal if dialog resolves', function() {
+                this.viewItemsModalService.show(this.config);
+                this.dialogDeferred.resolve();
+                this.$rootScope.$apply();
+
+                expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+
+                this.viewItemsModalService.show(this.config);
+
+                expect(this.openlmisModalService.createDialog.calls.length).toBe(2);
+            });
+
+            it('should close modal if dialog does not resolve', function() {
+                this.viewItemsModalService.show(this.config);
+                this.dialogDeferred.reject();
+                this.$rootScope.$apply();
+
+                expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+
+                this.viewItemsModalService.show(this.config);
+
+                expect(this.openlmisModalService.createDialog.calls.length).toBe(2);
+            });
         });
 
-        it('should close modal if adding item succeeds', function() {
-            this.viewItemsModalService.show(this.items);
-            this.dialogDeferred.resolve();
-            this.$rootScope.$apply();
+        describe('resolves', function() {
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+            beforeEach(function() {
+                spyOn(this.openlmisModalService, 'createDialog').andCallThrough();
+            });
 
-            this.viewItemsModalService.show(this.items);
+            it('should resolve title label from config object', function() {
+                this.viewItemsModalService.show(this.config);
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(2);
+                expect(this.openlmisModalService.createDialog.calls[0].args[0].resolve['titleLabel'])
+                    .toEqual(this.testTitleLabel);
+            });
+
+            it('should resolve default title label if title label not found in config object', function() {
+                this.config.titleLabel = null;
+                this.viewItemsModalService.show(this.config);
+
+                expect(this.openlmisModalService.createDialog.calls[0].args[0].resolve['titleLabel'])
+                    .toEqual('adminSupplyPartnerEdit.items');
+            });
         });
-
-        it('should close modal if adding item fails', function() {
-            this.viewItemsModalService.show(this.items);
-            this.dialogDeferred.reject();
-            this.$rootScope.$apply();
-
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
-
-            this.viewItemsModalService.show(this.items);
-
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(2);
-        });
-
     });
-
 });

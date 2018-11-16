@@ -21,9 +21,9 @@
         .module('referencedata-supply-partner')
         .factory('SupplyPartnerAssociationDataBuilder', SupplyPartnerAssociationDataBuilder);
 
-    SupplyPartnerAssociationDataBuilder.$inject = ['SupplyPartnerAssociation', 'ObjectReferenceDataBuilder'];
+    SupplyPartnerAssociationDataBuilder.$inject = ['ObjectReferenceDataBuilder'];
 
-    function SupplyPartnerAssociationDataBuilder(SupplyPartnerAssociation, ObjectReferenceDataBuilder) {
+    function SupplyPartnerAssociationDataBuilder(ObjectReferenceDataBuilder) {
 
         SupplyPartnerAssociationDataBuilder.prototype.withProgram = withProgram;
         SupplyPartnerAssociationDataBuilder.prototype.withSupervisoryNode = withSupervisoryNode;

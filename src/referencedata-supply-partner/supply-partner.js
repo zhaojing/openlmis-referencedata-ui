@@ -28,9 +28,9 @@
         .module('referencedata-supply-partner')
         .factory('SupplyPartner', SupplyPartner);
 
-    SupplyPartner.$inject = ['SupplyPartnerAssociation'];
+    SupplyPartner.$inject = [];
 
-    function SupplyPartner(SupplyPartnerAssociation) {
+    function SupplyPartner() {
 
         SupplyPartner.prototype.create = create;
 
@@ -54,7 +54,12 @@
 
             if (json.associations) {
                 this.associations = json.associations.map(function(associationJson) {
-                    return new SupplyPartnerAssociation(associationJson);
+                    return {
+                        program: associationJson.program,
+                        supervisoryNode: associationJson.supervisoryNode,
+                        facilities: associationJson.facilities,
+                        orderables: associationJson.orderables
+                    };
                 });
             } else {
                 this.associations = [];
