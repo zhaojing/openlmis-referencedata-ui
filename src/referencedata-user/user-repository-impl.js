@@ -76,10 +76,10 @@
                 .then(function(referenceDataUser) {
                     user.id = referenceDataUser.id;
                     return $q.all([
-                        authUserResource.create(user.getAuthDetails()),
-                        userContactDetailsResource.update(user.getContactDetails())
+                        userContactDetailsResource.update(user.getContactDetails()),
+                        authUserResource.create(user.getAuthDetails())
                     ]).then(function(responses) {
-                        return combineResponses(referenceDataUser, responses[1]);
+                        return combineResponses(referenceDataUser, responses[0], responses[1]);
                     });
                 });
         }
@@ -103,9 +103,10 @@
                 this.authUserResource.create(user.getAuthDetails())
             ]).then(function(responses) {
                 var referenceDataUser = responses[0],
-                    userContactDetails = responses[1];
+                    userContactDetails = responses[1],
+                    authUser = responses[2];
 
-                return combineResponses(referenceDataUser, userContactDetails);
+                return combineResponses(referenceDataUser, userContactDetails, authUser);
             });
         }
 
@@ -124,12 +125,14 @@
         function get(id) {
             return $q.all([
                 this.referenceDataUserResource.get(id),
-                this.userContactDetailsResource.get(id)
+                this.userContactDetailsResource.get(id),
+                this.authUserResource.get(id)
             ]).then(function(responses) {
                 var referenceDataUser = responses[0],
-                    userContactDetails = responses[1];
+                    userContactDetails = responses[1],
+                    authUser = responses[2];
 
-                return combineResponses(referenceDataUser, userContactDetails);
+                return combineResponses(referenceDataUser, userContactDetails, authUser);
             });
         }
 
@@ -194,12 +197,16 @@
             return referenceDataUserPage;
         }
 
-        function combineResponses(referenceDataUser, userContactDetails) {
+        function combineResponses(referenceDataUser, userContactDetails, authUser) {
             if (userContactDetails) {
                 referenceDataUser.phoneNumber = userContactDetails.phoneNumber;
                 referenceDataUser.email = userContactDetails.emailDetails.email;
                 referenceDataUser.verified = userContactDetails.emailDetails.emailVerified;
                 referenceDataUser.allowNotify = userContactDetails.allowNotify;
+            }
+
+            if (authUser) {
+                referenceDataUser.enabled = authUser.enabled;
             }
 
             return referenceDataUser;

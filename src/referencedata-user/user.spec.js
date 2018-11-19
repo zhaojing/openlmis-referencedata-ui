@@ -62,6 +62,7 @@ describe('User', function() {
             expect(user.active).toEqual(json.active);
             expect(user.allowNotify).toEqual(json.allowNotify);
             expect(user.extraData).toEqual(json.extraData);
+            expect(user.enabled).toEqual(json.enabled);
             expect(user.roleAssignments).toEqual(json.roleAssignments);
             expect(user.repository).toEqual(userRepository);
             expect(user.isNewUser).toEqual(false);

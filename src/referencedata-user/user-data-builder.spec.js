@@ -57,6 +57,7 @@
             this.active = true;
             this.allowNotify = true;
             this.extraData = {};
+            this.enabled = true;
             this.roleAssignments = [];
             this.repository = new UserRepository();
         }
@@ -124,7 +125,6 @@
                 homeFacilityId: this.homeFacilityId,
                 verified: this.verified,
                 active: this.active,
-                loginRestricted: this.loginRestricted,
                 allowNotify: this.allowNotify,
                 extraData: this.extraData,
                 roleAssignments: this.roleAssignments
@@ -141,7 +141,6 @@
                 timezone: this.timezone,
                 homeFacilityId: this.homeFacilityId,
                 active: this.active,
-                loginRestricted: this.loginRestricted,
                 extraData: this.extraData,
                 roleAssignments: this.roleAssignments
             };

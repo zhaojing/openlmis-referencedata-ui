@@ -15,120 +15,127 @@
 
 describe('UserRepositoryImpl', function() {
 
-    var userRepositoryImpl, UserRepositoryImpl, UserDataBuilder, userDataBuilder, $q, $rootScope, user, userBuilders,
-        expected, PageDataBuilder, ReferenceDataUserResource, AuthUserResource, UserContactDetailsResource;
-
     beforeEach(function() {
         module('openlmis-pagination');
         module('referencedata-user');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            UserRepositoryImpl = $injector.get('UserRepositoryImpl');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-            ReferenceDataUserResource = $injector.get('ReferenceDataUserResource');
-            AuthUserResource = $injector.get('AuthUserResource');
-            UserContactDetailsResource = $injector.get('UserContactDetailsResource');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.UserRepositoryImpl = $injector.get('UserRepositoryImpl');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.ReferenceDataUserResource = $injector.get('ReferenceDataUserResource');
+            this.AuthUserResource = $injector.get('AuthUserResource');
+            this.UserContactDetailsResource = $injector.get('UserContactDetailsResource');
         });
 
-        userDataBuilder = new UserDataBuilder().asNew();
+        this.userDataBuilder = new this.UserDataBuilder().asNew();
 
-        user = userDataBuilder.build();
+        this.user = this.userDataBuilder.build();
 
-        userBuilders = [
-            new UserDataBuilder(),
-            new UserDataBuilder(),
-            new UserDataBuilder(),
-            new UserDataBuilder()
+        this.userBuilders = [
+            new this.UserDataBuilder(),
+            new this.UserDataBuilder(),
+            new this.UserDataBuilder(),
+            new this.UserDataBuilder()
         ];
 
-        userDataBuilder.withId('some-id');
-        expected = userDataBuilder.build();
+        this.userDataBuilder.withId('some-id');
+        this.expected = this.userDataBuilder.build();
 
-        spyOn(AuthUserResource.prototype, 'create').andReturn($q.resolve(userDataBuilder.buildAuthUserJson()));
+        this.authUser = this.userDataBuilder.buildAuthUserJson();
 
-        spyOn(ReferenceDataUserResource.prototype, 'query');
-        spyOn(ReferenceDataUserResource.prototype, 'update')
-            .andReturn($q.resolve(userDataBuilder.buildReferenceDataUserJson()));
-        spyOn(ReferenceDataUserResource.prototype, 'get')
-            .andReturn($q.resolve(userDataBuilder.buildReferenceDataUserJson()));
+        spyOn(this.AuthUserResource.prototype, 'create').andReturn(this.$q.resolve(this.authUser));
+        spyOn(this.AuthUserResource.prototype, 'get').andReturn(this.$q.resolve(this.authUser));
 
-        spyOn(UserContactDetailsResource.prototype, 'query');
-        spyOn(UserContactDetailsResource.prototype, 'update')
-            .andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
-        spyOn(UserContactDetailsResource.prototype, 'get')
-            .andReturn($q.resolve(userDataBuilder.buildUserContactDetailsJson()));
+        spyOn(this.ReferenceDataUserResource.prototype, 'query');
+        spyOn(this.ReferenceDataUserResource.prototype, 'update')
+            .andReturn(this.$q.resolve(this.userDataBuilder.buildReferenceDataUserJson()));
+        spyOn(this.ReferenceDataUserResource.prototype, 'get')
+            .andReturn(this.$q.resolve(this.userDataBuilder.buildReferenceDataUserJson()));
 
-        userRepositoryImpl = new UserRepositoryImpl();
+        spyOn(this.UserContactDetailsResource.prototype, 'query');
+        spyOn(this.UserContactDetailsResource.prototype, 'update')
+            .andReturn(this.$q.resolve(this.userDataBuilder.buildUserContactDetailsJson()));
+        spyOn(this.UserContactDetailsResource.prototype, 'get')
+            .andReturn(this.$q.resolve(this.userDataBuilder.buildUserContactDetailsJson()));
+
+        this.userRepositoryImpl = new this.UserRepositoryImpl();
     });
 
     describe('create', function() {
 
         it('should create reference data user before creating contact and auth details', function() {
-            var referenceDataUserUpdateDeferred = $q.defer();
-            ReferenceDataUserResource.prototype.update.andReturn(referenceDataUserUpdateDeferred.promise);
+            var referenceDataUserUpdateDeferred = this.$q.defer();
+            this.ReferenceDataUserResource.prototype.update.andReturn(referenceDataUserUpdateDeferred.promise);
 
-            userRepositoryImpl.create(user);
+            this.userRepositoryImpl.create(this.user);
 
-            expect(ReferenceDataUserResource.prototype.update).toHaveBeenCalledWith(user.getBasicInformation());
-            expect(AuthUserResource.prototype.create).not.toHaveBeenCalled();
-            expect(UserContactDetailsResource.prototype.update).not.toHaveBeenCalled();
+            expect(this.ReferenceDataUserResource.prototype.update)
+                .toHaveBeenCalledWith(this.user.getBasicInformation());
 
-            referenceDataUserUpdateDeferred.resolve(userDataBuilder.buildReferenceDataUserJson());
-            $rootScope.$apply();
+            expect(this.AuthUserResource.prototype.create).not.toHaveBeenCalled();
+            expect(this.UserContactDetailsResource.prototype.update).not.toHaveBeenCalled();
 
-            expect(AuthUserResource.prototype.create).toHaveBeenCalledWith(expected.getAuthDetails());
-            expect(UserContactDetailsResource.prototype.update).toHaveBeenCalledWith(expected.getContactDetails());
+            referenceDataUserUpdateDeferred.resolve(this.userDataBuilder.buildReferenceDataUserJson());
+            this.$rootScope.$apply();
+
+            expect(this.AuthUserResource.prototype.create).toHaveBeenCalledWith(this.expected.getAuthDetails());
+            expect(this.UserContactDetailsResource.prototype.update)
+                .toHaveBeenCalledWith(this.expected.getContactDetails());
         });
 
         it('should return user json', function() {
-            var result;
-            userRepositoryImpl.create(user)
+            var expected = this.userDataBuilder.buildJson(),
+                result;
+
+            expected.enabled = this.authUser.enabled;
+
+            this.userRepositoryImpl.create(this.user)
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(userDataBuilder.buildJson());
+            expect(result).toEqual(expected);
         });
 
         it('should reject if reference data user creation failed', function() {
-            ReferenceDataUserResource.prototype.update.andReturn($q.reject());
+            this.ReferenceDataUserResource.prototype.update.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.create(user)
+            this.userRepositoryImpl.create(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if auth data user creation failed', function() {
-            AuthUserResource.prototype.create.andReturn($q.reject());
+            this.AuthUserResource.prototype.create.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.create(user)
+            this.userRepositoryImpl.create(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if user contact details creation failed', function() {
-            UserContactDetailsResource.prototype.update.andReturn($q.reject());
+            this.UserContactDetailsResource.prototype.update.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.create(user)
+            this.userRepositoryImpl.create(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
@@ -138,58 +145,67 @@ describe('UserRepositoryImpl', function() {
     describe('update', function() {
 
         beforeEach(function() {
-            user = userDataBuilder.build();
+            this.user = this.userDataBuilder.build();
         });
 
         it('should return user json', function() {
-            var result;
-            userRepositoryImpl.update(user)
+            var expected = this.userDataBuilder.buildJson(),
+                result;
+
+            expected.enabled = this.authUser.enabled;
+
+            this.userRepositoryImpl.update(this.user)
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(userDataBuilder.buildJson());
-            expect(AuthUserResource.prototype.create).toHaveBeenCalledWith(expected.getAuthDetails());
-            expect(ReferenceDataUserResource.prototype.update).toHaveBeenCalledWith(expected.getBasicInformation());
-            expect(UserContactDetailsResource.prototype.update).toHaveBeenCalledWith(expected.getContactDetails());
+            expect(result).toEqual(expected);
+            expect(this.AuthUserResource.prototype.create)
+                .toHaveBeenCalledWith(this.expected.getAuthDetails());
+
+            expect(this.ReferenceDataUserResource.prototype.update)
+                .toHaveBeenCalledWith(this.expected.getBasicInformation());
+
+            expect(this.UserContactDetailsResource.prototype.update)
+                .toHaveBeenCalledWith(this.expected.getContactDetails());
         });
 
         it('should reject if reference data user update failed', function() {
-            ReferenceDataUserResource.prototype.update.andReturn($q.reject());
+            this.ReferenceDataUserResource.prototype.update.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.update(user)
+            this.userRepositoryImpl.update(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if user contact details update failed', function() {
-            UserContactDetailsResource.prototype.update.andReturn($q.reject());
+            this.UserContactDetailsResource.prototype.update.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.update(user)
+            this.userRepositoryImpl.update(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if auth data user update failed', function() {
-            AuthUserResource.prototype.create.andReturn($q.reject());
+            this.AuthUserResource.prototype.create.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.update(user)
+            this.userRepositoryImpl.update(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
@@ -199,44 +215,49 @@ describe('UserRepositoryImpl', function() {
     describe('get', function() {
 
         beforeEach(function() {
-            user = userDataBuilder.build();
+            this.user = this.userDataBuilder.build();
         });
 
         it('should return user json', function() {
-            var result;
-            userRepositoryImpl.get(user.id)
+            var expected = this.userDataBuilder.buildJson(),
+                result;
+
+            expected.enabled = this.authUser.enabled;
+
+            this.userRepositoryImpl.get(this.user.id)
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(userDataBuilder.buildJson());
-            expect(ReferenceDataUserResource.prototype.get).toHaveBeenCalledWith(user.id);
-            expect(UserContactDetailsResource.prototype.get).toHaveBeenCalledWith(user.id);
+            expect(result).toEqual(expected);
+            expect(this.ReferenceDataUserResource.prototype.get).toHaveBeenCalledWith(this.user.id);
+            expect(this.UserContactDetailsResource.prototype.get).toHaveBeenCalledWith(this.user.id);
+            expect(this.AuthUserResource.prototype.get).toHaveBeenCalledWith(this.user.id);
         });
 
         it('should reject if reference data user creation failed', function() {
-            ReferenceDataUserResource.prototype.get.andReturn($q.reject());
+            this.ReferenceDataUserResource.prototype.get.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.get(user.id)
+            this.userRepositoryImpl.get(this.user.id)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if user contact details creation failed', function() {
-            UserContactDetailsResource.prototype.get.andReturn($q.reject());
+            this.UserContactDetailsResource.prototype.get.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.get(user.id)
+            this.userRepositoryImpl.get(this.user.id)
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
@@ -246,33 +267,33 @@ describe('UserRepositoryImpl', function() {
     describe('query', function() {
 
         beforeEach(function() {
-            ReferenceDataUserResource.prototype.query.andReturn($q.resolve(
-                new PageDataBuilder()
+            this.ReferenceDataUserResource.prototype.query.andReturn(this.$q.resolve(
+                new this.PageDataBuilder()
                     .withContent([
-                        userBuilders[0].buildReferenceDataUserJson(),
-                        userBuilders[1].buildReferenceDataUserJson(),
-                        userBuilders[2].buildReferenceDataUserJson()
+                        this.userBuilders[0].buildReferenceDataUserJson(),
+                        this.userBuilders[1].buildReferenceDataUserJson(),
+                        this.userBuilders[2].buildReferenceDataUserJson()
                     ])
                     .build()
             ));
 
-            UserContactDetailsResource.prototype.query.andReturn($q.resolve(
-                new PageDataBuilder()
+            this.UserContactDetailsResource.prototype.query.andReturn(this.$q.resolve(
+                new this.PageDataBuilder()
                     .withContent([
-                        userBuilders[0].buildUserContactDetailsJson(),
-                        userBuilders[1].buildUserContactDetailsJson(),
-                        userBuilders[2].buildUserContactDetailsJson()
+                        this.userBuilders[0].buildUserContactDetailsJson(),
+                        this.userBuilders[1].buildUserContactDetailsJson(),
+                        this.userBuilders[2].buildUserContactDetailsJson()
                     ])
                     .build()
             ));
         });
 
         it('should fetch user contact details first if searching by email', function() {
-            ReferenceDataUserResource.prototype.query.andReturn($q.resolve(
-                new PageDataBuilder()
+            this.ReferenceDataUserResource.prototype.query.andReturn(this.$q.resolve(
+                new this.PageDataBuilder()
                     .withContent([
-                        userBuilders[0].buildReferenceDataUserJson(),
-                        userBuilders[1].buildReferenceDataUserJson()
+                        this.userBuilders[0].buildReferenceDataUserJson(),
+                        this.userBuilders[1].buildReferenceDataUserJson()
                     ])
                     .build()
             ));
@@ -283,33 +304,34 @@ describe('UserRepositoryImpl', function() {
                     username: 'user'
                 };
 
-            userRepositoryImpl.query(params).then(function(page) {
+            this.userRepositoryImpl.query(params).then(function(page) {
                 result = page;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.content).toEqual([
-                userBuilders[0].buildJson(),
-                userBuilders[1].buildJson()
+                this.userBuilders[0].buildJson(),
+                this.userBuilders[1].buildJson()
             ]);
 
-            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com'
             });
 
-            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com',
                 username: 'user',
                 id: [
-                    userBuilders[0].id,
-                    userBuilders[1].id,
-                    userBuilders[2].id
+                    this.userBuilders[0].id,
+                    this.userBuilders[1].id,
+                    this.userBuilders[2].id
                 ]
             });
         });
 
         it('should not call reference data if there are no matching contact details', function() {
-            UserContactDetailsResource.prototype.query.andReturn($q.resolve(new PageDataBuilder().build()));
+            this.UserContactDetailsResource.prototype.query
+                .andReturn(this.$q.resolve(new this.PageDataBuilder().build()));
 
             var result,
                 params = {
@@ -317,17 +339,17 @@ describe('UserRepositoryImpl', function() {
                     username: 'user'
                 };
 
-            userRepositoryImpl.query(params).then(function(page) {
+            this.userRepositoryImpl.query(params).then(function(page) {
                 result = page;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.content).toEqual([]);
-            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 email: 'jack.smith@opelmis.com'
             });
 
-            expect(ReferenceDataUserResource.prototype.query).not.toHaveBeenCalled();
+            expect(this.ReferenceDataUserResource.prototype.query).not.toHaveBeenCalled();
         });
 
         it('should fetch referencedata user first if email is not specified', function() {
@@ -336,57 +358,58 @@ describe('UserRepositoryImpl', function() {
                     username: 'user'
                 };
 
-            userRepositoryImpl.query(params).then(function(page) {
+            this.userRepositoryImpl.query(params).then(function(page) {
                 result = page;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.content).toEqual([
-                userBuilders[0].buildJson(),
-                userBuilders[1].buildJson(),
-                userBuilders[2].buildJson()
+                this.userBuilders[0].buildJson(),
+                this.userBuilders[1].buildJson(),
+                this.userBuilders[2].buildJson()
             ]);
 
-            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
 
-            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 id: [
-                    userBuilders[0].id,
-                    userBuilders[1].id,
-                    userBuilders[2].id
+                    this.userBuilders[0].id,
+                    this.userBuilders[1].id,
+                    this.userBuilders[2].id
                 ]
             });
         });
 
         it('should not call notification if there are no matching users', function() {
-            ReferenceDataUserResource.prototype.query.andReturn($q.resolve(new PageDataBuilder().build()));
+            this.ReferenceDataUserResource.prototype.query
+                .andReturn(this.$q.resolve(new this.PageDataBuilder().build()));
 
             var result,
                 params = {
                     username: 'user'
                 };
 
-            userRepositoryImpl.query(params).then(function(page) {
+            this.userRepositoryImpl.query(params).then(function(page) {
                 result = page;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.content).toEqual([]);
-            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
 
-            expect(UserContactDetailsResource.prototype.query).not.toHaveBeenCalled();
+            expect(this.UserContactDetailsResource.prototype.query).not.toHaveBeenCalled();
         });
 
         it('should reference data user if there is no contact details', function() {
-            UserContactDetailsResource.prototype.query.andReturn($q.resolve(
-                new PageDataBuilder()
+            this.UserContactDetailsResource.prototype.query.andReturn(this.$q.resolve(
+                new this.PageDataBuilder()
                     .withContent([
-                        userBuilders[0].buildUserContactDetailsJson(),
-                        userBuilders[1].buildUserContactDetailsJson()
+                        this.userBuilders[0].buildUserContactDetailsJson(),
+                        this.userBuilders[1].buildUserContactDetailsJson()
                     ])
                     .build()
             ));
@@ -396,52 +419,52 @@ describe('UserRepositoryImpl', function() {
                     username: 'user'
                 };
 
-            userRepositoryImpl.query(params).then(function(page) {
+            this.userRepositoryImpl.query(params).then(function(page) {
                 result = page;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.content).toEqual([
-                userBuilders[0].buildJson(),
-                userBuilders[1].buildJson(),
-                userBuilders[2].buildReferenceDataUserJson()
+                this.userBuilders[0].buildJson(),
+                this.userBuilders[1].buildJson(),
+                this.userBuilders[2].buildReferenceDataUserJson()
             ]);
 
-            expect(ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
                 username: 'user'
             });
 
-            expect(UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
+            expect(this.UserContactDetailsResource.prototype.query).toHaveBeenCalledWith({
                 id: [
-                    userBuilders[0].id,
-                    userBuilders[1].id,
-                    userBuilders[2].id
+                    this.userBuilders[0].id,
+                    this.userBuilders[1].id,
+                    this.userBuilders[2].id
                 ]
             });
         });
 
         it('should reject if reference data rejects', function() {
-            ReferenceDataUserResource.prototype.query.andReturn($q.reject());
+            this.ReferenceDataUserResource.prototype.query.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.query()
+            this.userRepositoryImpl.query()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if notification rejects', function() {
-            UserContactDetailsResource.prototype.query.andReturn($q.reject());
+            this.UserContactDetailsResource.prototype.query.andReturn(this.$q.reject());
 
             var rejected;
-            userRepositoryImpl.query()
+            this.userRepositoryImpl.query()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });

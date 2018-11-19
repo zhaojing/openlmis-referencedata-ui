@@ -70,7 +70,6 @@
                 this.roleAssignments = json.roleAssignments;
             }
 
-            this.enabled = true;
             this.repository = repository;
             this.isNewUser = !this.id;
         }
