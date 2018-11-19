@@ -92,8 +92,10 @@ describe('SupplyPartnerEditController', function() {
         it('should open modal', function() {
             vm.viewFacilities(0);
 
-            expect(this.viewItemsModalService.show).toHaveBeenCalledWith('adminSupplyPartnerEdit.associatedFacilities',
-                [facility]);
+            expect(this.viewItemsModalService.show).toHaveBeenCalledWith({
+                titleLabel: 'adminSupplyPartnerEdit.associatedFacilities',
+                items: [facility]
+            });
         });
     });
 
@@ -106,8 +108,10 @@ describe('SupplyPartnerEditController', function() {
         it('should open modal', function() {
             vm.viewOrderables(0);
 
-            expect(this.viewItemsModalService.show).toHaveBeenCalledWith('adminSupplyPartnerEdit.associatedProducts',
-                [orderable]);
+            expect(this.viewItemsModalService.show).toHaveBeenCalledWith({
+                titleLabel: 'adminSupplyPartnerEdit.associatedProducts',
+                items: [orderable]
+            });
         });
     });
 });

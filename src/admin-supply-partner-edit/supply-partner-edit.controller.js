@@ -108,8 +108,10 @@
          * Shows associated facilities.
          */
         function viewFacilities(associationIndex) {
-            return viewItemsModalService.show('adminSupplyPartnerEdit.associatedFacilities',
-                vm.associations[associationIndex].facilities);
+            return viewItemsModalService.show({
+                titleLabel: 'adminSupplyPartnerEdit.associatedFacilities',
+                items: vm.associations[associationIndex].facilities
+            });
         }
 
         /**
@@ -121,8 +123,10 @@
          * Shows associated orderables.
          */
         function viewOrderables(associationIndex) {
-            return viewItemsModalService.show('adminSupplyPartnerEdit.associatedProducts',
-                vm.associations[associationIndex].orderables);
+            return viewItemsModalService.show({
+                titleLabel: 'adminSupplyPartnerEdit.associatedProducts',
+                items: vm.associations[associationIndex].orderables
+            });
         }
     }
 })();
