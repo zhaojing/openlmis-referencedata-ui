@@ -32,7 +32,7 @@ describe('openlmis.administration.users.roles', function() {
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
             this.referencedataRoleFactory = $injector.get('referencedataRoleFactory');
-            this.SupervisoryNodeResource = $injector.get('SupervisoryNodeResource');
+            this.AdminUserRolesSupervisoryNodeResource = $injector.get('AdminUserRolesSupervisoryNodeResource');
             this.programService = $injector.get('programService');
             this.facilityService = $injector.get('facilityService');
             this.currentUserService = $injector.get('currentUserService');
@@ -79,7 +79,7 @@ describe('openlmis.administration.users.roles', function() {
             .withGeneralAdminRoleAssignment(this.roles[5].id)
             .build();
 
-        spyOn(this.SupervisoryNodeResource.prototype, 'query')
+        spyOn(this.AdminUserRolesSupervisoryNodeResource.prototype, 'query')
             .andReturn(this.$q.resolve(new PageDataBuilder()
                 .withContent(this.supervisoryNodes)
                 .build()));
@@ -115,7 +115,7 @@ describe('openlmis.administration.users.roles', function() {
             this.goToUrl('/administration/users/' + this.user.id + '/roles/supervision');
 
             expect(this.getResolvedValue('supervisoryNodes')).toEqual(this.supervisoryNodes);
-            expect(this.SupervisoryNodeResource.prototype.query).toHaveBeenCalled();
+            expect(this.AdminUserRolesSupervisoryNodeResource.prototype.query).toHaveBeenCalled();
         });
 
         it('should resolve warehouses', function() {
