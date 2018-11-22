@@ -38,20 +38,17 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                facilitiesMap: function(facilityService, ObjectMapper) {
-                    return facilityService.getAllMinimal()
-                        .then(function(facilities) {
-                            return new ObjectMapper().map(facilities);
-                        });
+                warehouses: function(facilityService) {
+                    return facilityService.getAllMinimal();
+                },
+                facilitiesMap: function(warehouses, ObjectMapper) {
+                    return new ObjectMapper().map(warehouses);
                 },
                 supervisoryNodes: function(AdminUserRolesSupervisoryNodeResource, facilitiesMap) {
                     return new AdminUserRolesSupervisoryNodeResource(facilitiesMap).query()
                         .then(function(page) {
                             return page.content;
                         });
-                },
-                warehouses: function(facilityService) {
-                    return facilityService.getAllMinimal();
                 },
                 user: function(userRoleAssignmentFactory, userId, roles, programs, supervisoryNodes, warehouses) {
                     return userRoleAssignmentFactory.getUser(userId, roles, programs, supervisoryNodes, warehouses);
