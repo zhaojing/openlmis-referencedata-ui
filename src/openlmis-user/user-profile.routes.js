@@ -38,8 +38,14 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                supervisoryNodes: function(SupervisoryNodeResource) {
-                    return new SupervisoryNodeResource().query()
+                facilitiesMap: function(facilityService, ObjectMapper) {
+                    return facilityService.getAllMinimal()
+                        .then(function(facilities) {
+                            return new ObjectMapper().map(facilities);
+                        });
+                },
+                supervisoryNodes: function(AdminUserRolesSupervisoryNodeResource, facilitiesMap) {
+                    return new AdminUserRolesSupervisoryNodeResource(facilitiesMap).query()
                         .then(function(page) {
                             return page.content;
                         });

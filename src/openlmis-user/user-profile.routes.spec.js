@@ -19,7 +19,7 @@ describe('openlmis.profile', function() {
         module('openlmis-user');
 
         var RoleDataBuilder, ProgramDataBuilder, SupervisoryNodeDataBuilder, MinimalFacilityDataBuilder,
-            UserDataBuilder, PageDataBuilder;
+            UserDataBuilder, PageDataBuilder, ObjectMapper;
         inject(function($injector) {
             RoleDataBuilder = $injector.get('RoleDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
@@ -32,7 +32,7 @@ describe('openlmis.profile', function() {
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
             this.referencedataRoleFactory = $injector.get('referencedataRoleFactory');
-            this.SupervisoryNodeResource = $injector.get('SupervisoryNodeResource');
+            this.AdminUserRolesSupervisoryNodeResource = $injector.get('AdminUserRolesSupervisoryNodeResource');
             this.programService = $injector.get('programService');
             this.facilityService = $injector.get('facilityService');
             this.currentUserService = $injector.get('currentUserService');
@@ -41,6 +41,7 @@ describe('openlmis.profile', function() {
             this.$templateCache = $injector.get('$templateCache');
             this.ROLE_TYPES = $injector.get('ROLE_TYPES');
             this.authUserService = $injector.get('authUserService');
+            ObjectMapper = $injector.get('ObjectMapper');
         });
 
         this.roles = [
@@ -83,7 +84,9 @@ describe('openlmis.profile', function() {
             email: 'example@test.org'
         };
 
-        spyOn(this.SupervisoryNodeResource.prototype, 'query')
+        this.objectMapper = new ObjectMapper();
+
+        spyOn(this.AdminUserRolesSupervisoryNodeResource.prototype, 'query')
             .andReturn(this.$q.resolve(new PageDataBuilder()
                 .withContent(this.supervisoryNodes)
                 .build()));
@@ -130,11 +133,26 @@ describe('openlmis.profile', function() {
             expect(this.programService.getAll).toHaveBeenCalled();
         });
 
+        it('should resolve facilitiesMap', function() {
+            var facilitiesMap;
+
+            this.objectMapper
+                .map(this.warehouses)
+                .then(function(value) {
+                    facilitiesMap = value;
+                });
+
+            this.goToUrl('/profile');
+
+            expect(this.getResolvedValue('facilitiesMap')).toEqual(facilitiesMap);
+            expect(this.facilityService.getAllMinimal).toHaveBeenCalled();
+        });
+
         it('should resolve supervisoryNodes', function() {
             this.goToUrl('/profile');
 
             expect(this.getResolvedValue('supervisoryNodes')).toEqual(this.supervisoryNodes);
-            expect(this.SupervisoryNodeResource.prototype.query).toHaveBeenCalled();
+            expect(this.AdminUserRolesSupervisoryNodeResource.prototype.query).toHaveBeenCalled();
         });
 
         it('should resolve warehouses', function() {
