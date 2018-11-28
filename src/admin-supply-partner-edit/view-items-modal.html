@@ -24,8 +24,8 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="lineItem in vm.lineItems">
-                                <td>{{lineItem.name}}</td>
-                                <td>{{lineItem.code}}</td>
+                                <td>{{vm.getName(lineItem)}}</td>
+                                <td>{{vm.getCode(lineItem)}}</td>
                             </tr>
                             </tbody>
                         </table>

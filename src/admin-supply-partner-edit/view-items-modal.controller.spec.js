@@ -32,6 +32,7 @@ describe('ViewItemsModalController', function() {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
             this.$controller = $injector.get('$controller');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
@@ -126,6 +127,34 @@ describe('ViewItemsModalController', function() {
             this.vm.search();
 
             expect(this.vm.filteredItems).toEqual([this.items[0], this.items[1]]);
+        });
+
+    });
+
+    describe('getName', function() {
+
+        it('should get a name for a facility', function() {
+            var orderable = new this.OrderableDataBuilder().build();
+
+            expect(this.vm.getName(orderable)).toEqual(orderable.fullProductName);
+        });
+
+        it('should get a name for an orderable', function() {
+            expect(this.vm.getName(this.items[0])).toEqual(this.items[0].name);
+        });
+
+    });
+
+    describe('getCode', function() {
+
+        it('should get a code for a facility', function() {
+            var orderable = new this.OrderableDataBuilder().build();
+
+            expect(this.vm.getCode(orderable)).toEqual(orderable.productCode);
+        });
+
+        it('should get a code for an orderable', function() {
+            expect(this.vm.getCode(this.items[0])).toEqual(this.items[0].code);
         });
 
     });

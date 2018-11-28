@@ -36,6 +36,8 @@
         vm.$onInit = onInit;
         vm.close = modalDeferred.reject;
         vm.search = search;
+        vm.getName = getName;
+        vm.getCode = getCode;
 
         /**
          * @ngdoc property
@@ -103,9 +105,44 @@
 
         function searchByCodeAndName(item) {
             var searchText = vm.searchText.toLowerCase();
-            return (item.name.toLowerCase().contains(searchText) ||
-                item.code.toLowerCase().startsWith(searchText));
+            var foundInName = getName(item)
+                .toLowerCase()
+                .contains(searchText);
+            var foundInCode = getCode(item)
+                .toLowerCase()
+                .startsWith(searchText);
+
+            return foundInName || foundInCode;
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf view-items-modal.controller:ViewItemsModalController
+         * @name getName
+         *
+         * @description
+         * Get the item name.
+         *
+         * @param {Object} item a single item from the items list.
+         */
+        function getName(item) {
+            return item.name || item.fullProductName;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf view-items-modal.controller:ViewItemsModalController
+         * @name getCode
+         *
+         * @description
+         * Get the item code.
+         *
+         * @param {Object} item a single item from the items list.
+         */
+        function getCode(item) {
+            return item.code || item.productCode;
+        }
+
     }
 
 })();
