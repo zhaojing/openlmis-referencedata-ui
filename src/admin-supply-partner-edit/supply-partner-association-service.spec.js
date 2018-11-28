@@ -13,16 +13,16 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('AssociationModalService', function() {
+describe('SupplyPartnerAssociationService', function() {
 
     beforeEach(function() {
         module('admin-supply-partner-edit');
 
-        var AssociationModalService, SupplyPartnerAssociationDataBuilder, SupervisoryNodeDataBuilder, PageDataBuilder,
-            FacilityDataBuilder, SupplyPartnerDataBuilder, FacilityTypeDataBuilder, ProgramDataBuilder,
-            OrderableDataBuilder, FacilityTypeApprovedProductDataBuilder;
+        var SupplyPartnerAssociationService, SupplyPartnerAssociationDataBuilder, SupervisoryNodeDataBuilder,
+            PageDataBuilder, FacilityDataBuilder, SupplyPartnerDataBuilder, FacilityTypeDataBuilder,
+            ProgramDataBuilder, OrderableDataBuilder, FacilityTypeApprovedProductDataBuilder;
         inject(function($injector) {
-            AssociationModalService = $injector.get('AssociationModalService');
+            SupplyPartnerAssociationService = $injector.get('SupplyPartnerAssociationService');
             SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
             SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
@@ -119,7 +119,7 @@ describe('AssociationModalService', function() {
             .withContent(this.facilities)
             .build();
 
-        this.associationModalService = new AssociationModalService();
+        this.supplyPartnerAssociationService = new SupplyPartnerAssociationService();
 
         spyOn(this.SupervisoryNodeFacilityResource.prototype, 'query');
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'getAll');
@@ -128,7 +128,7 @@ describe('AssociationModalService', function() {
     describe('getAssociation', function() {
 
         it('should return matching association', function() {
-            var result = this.associationModalService.getAssociation(this.supplyPartner, this.stateParams);
+            var result = this.supplyPartnerAssociationService.getAssociation(this.supplyPartner, this.stateParams);
 
             expect(result).toEqual(this.supplyPartner.associations[1]);
         });
@@ -136,7 +136,7 @@ describe('AssociationModalService', function() {
         it('should return new association when program is not passed', function() {
             this.stateParams.programId = undefined;
 
-            var result = this.associationModalService.getAssociation(this.supplyPartner, this.stateParams);
+            var result = this.supplyPartnerAssociationService.getAssociation(this.supplyPartner, this.stateParams);
 
             expect(result).toEqual(this.newAssociation);
         });
@@ -144,34 +144,34 @@ describe('AssociationModalService', function() {
         it('should return new association when supervisory node is not passed', function() {
             this.stateParams.supervisoryNodeId = undefined;
 
-            var result = this.associationModalService.getAssociation(this.supplyPartner, this.stateParams);
+            var result = this.supplyPartnerAssociationService.getAssociation(this.supplyPartner, this.stateParams);
 
             expect(result).toEqual(this.newAssociation);
         });
 
         it('should throw exception if supply partner is not given', function() {
-            var associationModalService = this.associationModalService,
+            var supplyPartnerAssociationService = this.supplyPartnerAssociationService,
                 stateParams = this.stateParams;
 
             expect(function() {
-                associationModalService.getAssociation(undefined, stateParams);
+                supplyPartnerAssociationService.getAssociation(undefined, stateParams);
             }).toThrow();
 
             expect(function() {
-                associationModalService.getAssociation(null, stateParams);
+                supplyPartnerAssociationService.getAssociation(null, stateParams);
             }).toThrow();
         });
 
         it('should throw exception if state parameters are not given', function() {
-            var associationModalService = this.associationModalService,
+            var supplyPartnerAssociationService = this.supplyPartnerAssociationService,
                 supplyPartner = this.supplyPartner;
 
             expect(function() {
-                associationModalService.getAssociation(supplyPartner, undefined);
+                supplyPartnerAssociationService.getAssociation(supplyPartner, undefined);
             }).toThrow();
 
             expect(function() {
-                associationModalService.getAssociation(supplyPartner, null);
+                supplyPartnerAssociationService.getAssociation(supplyPartner, null);
             }).toThrow();
         });
 
@@ -187,7 +187,7 @@ describe('AssociationModalService', function() {
             this.SupervisoryNodeFacilityResource.prototype.query.andReturn(this.$q.reject());
 
             var rejected;
-            this.associationModalService.getFacilities(this.association, this.supervisoryNodes)
+            this.supplyPartnerAssociationService.getFacilities(this.association, this.supervisoryNodes)
                 .catch(function() {
                     rejected = true;
                 });
@@ -200,7 +200,7 @@ describe('AssociationModalService', function() {
             this.association.supervisoryNode = undefined;
 
             var result;
-            this.associationModalService.getFacilities(this.association, this.supervisoryNodes)
+            this.supplyPartnerAssociationService.getFacilities(this.association, this.supervisoryNodes)
                 .then(function(facilities) {
                     result = facilities;
                 });
@@ -213,7 +213,7 @@ describe('AssociationModalService', function() {
             this.association.program = undefined;
 
             var result;
-            this.associationModalService.getFacilities(this.association, this.supervisoryNodes)
+            this.supplyPartnerAssociationService.getFacilities(this.association, this.supervisoryNodes)
                 .then(function(facilities) {
                     result = facilities;
                 });
@@ -224,7 +224,7 @@ describe('AssociationModalService', function() {
 
         it('should return a list of matching facilities', function() {
             var result;
-            this.associationModalService.getFacilities(this.association, this.supervisoryNodes)
+            this.supplyPartnerAssociationService.getFacilities(this.association, this.supervisoryNodes)
                 .then(function(facilities) {
                     result = facilities;
                 });
@@ -234,7 +234,7 @@ describe('AssociationModalService', function() {
         });
 
         it('should fetch facilities for correct program and supervisory node', function() {
-            this.associationModalService.getFacilities(this.association, this.supervisoryNodes);
+            this.supplyPartnerAssociationService.getFacilities(this.association, this.supervisoryNodes);
 
             expect(this.SupervisoryNodeFacilityResource.prototype.query).toHaveBeenCalledWith({
                 supervisoryNodeId: this.supervisoryNodes[1].partnerNodeOf.id,
@@ -255,7 +255,7 @@ describe('AssociationModalService', function() {
             this.association.facilities = [];
 
             var result;
-            this.associationModalService.getOrderables(this.association, this.facilities, this.programs)
+            this.supplyPartnerAssociationService.getOrderables(this.association, this.facilities, this.programs)
                 .then(function(orderables) {
                     result = orderables;
                 });
@@ -266,7 +266,7 @@ describe('AssociationModalService', function() {
 
         it('should return a list of orderables', function() {
             var result;
-            this.associationModalService.getOrderables(this.association, this.facilities, this.programs)
+            this.supplyPartnerAssociationService.getOrderables(this.association, this.facilities, this.programs)
                 .then(function(orderables) {
                     result = orderables;
                 });
@@ -276,7 +276,7 @@ describe('AssociationModalService', function() {
         });
 
         it('should fetch orderables for matching program and facility types', function() {
-            this.associationModalService.getOrderables(this.association, this.facilities, this.programs);
+            this.supplyPartnerAssociationService.getOrderables(this.association, this.facilities, this.programs);
 
             expect(this.FacilityTypeApprovedProductResource.prototype.getAll)
                 .toHaveBeenCalledWith({
@@ -289,44 +289,44 @@ describe('AssociationModalService', function() {
         });
 
         it('should throw exception when association is not defined', function() {
-            var associationModalService = this.associationModalService,
+            var supplyPartnerAssociationService = this.supplyPartnerAssociationService,
                 facilities = this.facilities,
                 programs = this.programs;
 
             expect(function() {
-                associationModalService.getOrderables(undefined, facilities, programs);
+                supplyPartnerAssociationService.getOrderables(undefined, facilities, programs);
             }).toThrow();
 
             expect(function() {
-                associationModalService.getOrderables(null, facilities, programs);
+                supplyPartnerAssociationService.getOrderables(null, facilities, programs);
             }).toThrow();
         });
 
         it('should throw exception when the list of facilities is not defined', function() {
-            var associationModalService = this.associationModalService,
+            var supplyPartnerAssociationService = this.supplyPartnerAssociationService,
                 association = this.association,
                 programs = this.programs;
 
             expect(function() {
-                associationModalService.getOrderables(association, undefined, programs);
+                supplyPartnerAssociationService.getOrderables(association, undefined, programs);
             }).toThrow();
 
             expect(function() {
-                associationModalService.getOrderables(association, null, programs);
+                supplyPartnerAssociationService.getOrderables(association, null, programs);
             }).toThrow();
         });
 
         it('should throw exception when the list of programs is not defined', function() {
-            var associationModalService = this.associationModalService,
+            var supplyPartnerAssociationService = this.supplyPartnerAssociationService,
                 association = this.association,
                 facilities = this.facilities;
 
             expect(function() {
-                associationModalService.getOrderables(association, facilities, undefined);
+                supplyPartnerAssociationService.getOrderables(association, facilities, undefined);
             }).toThrow();
 
             expect(function() {
-                associationModalService.getOrderables(association, facilities, null);
+                supplyPartnerAssociationService.getOrderables(association, facilities, null);
             }).toThrow();
         });
 
@@ -334,7 +334,7 @@ describe('AssociationModalService', function() {
             this.FacilityTypeApprovedProductResource.prototype.getAll.andReturn(this.$q.reject());
 
             var rejected;
-            this.associationModalService.getOrderables(this.association, this.facilities, this.programs)
+            this.supplyPartnerAssociationService.getOrderables(this.association, this.facilities, this.programs)
                 .catch(function() {
                     rejected = true;
                 });

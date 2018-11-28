@@ -19,7 +19,7 @@
 
     /**
      * @ngdoc service
-     * @name admin-supply-partner-edit.AssociationModalService
+     * @name admin-supply-partner-edit.SupplyPartnerAssociationService
      *
      * @description
      * Provides utility methods for fetching data (association, facilities and orderables) from the association
@@ -27,38 +27,38 @@
      */
     angular
         .module('admin-supply-partner-edit')
-        .factory('AssociationModalService', AssociationModalService);
+        .factory('SupplyPartnerAssociationService', SupplyPartnerAssociationService);
 
-    AssociationModalService.$inject = [
+    SupplyPartnerAssociationService.$inject = [
         'SupervisoryNodeFacilityResource', 'OpenlmisArrayDecorator', 'FacilityTypeApprovedProductResource', '$q'
     ];
 
-    function AssociationModalService(SupervisoryNodeFacilityResource, OpenlmisArrayDecorator,
-                                     FacilityTypeApprovedProductResource, $q) {
+    function SupplyPartnerAssociationService(SupervisoryNodeFacilityResource, OpenlmisArrayDecorator,
+                                             FacilityTypeApprovedProductResource, $q) {
 
-        AssociationModalService.prototype.getAssociation = getAssociation;
-        AssociationModalService.prototype.getFacilities = getFacilities;
-        AssociationModalService.prototype.getOrderables = getOrderables;
+        SupplyPartnerAssociationService.prototype.getAssociation = getAssociation;
+        SupplyPartnerAssociationService.prototype.getFacilities = getFacilities;
+        SupplyPartnerAssociationService.prototype.getOrderables = getOrderables;
 
-        return AssociationModalService;
+        return SupplyPartnerAssociationService;
 
         /**
          * @ngdoc method
-         * @methodOf admin-supply-partner-edit.AssociationModalService
-         * @name AssociationModalService
+         * @methodOf admin-supply-partner-edit.SupplyPartnerAssociationService
+         * @name SupplyPartnerAssociationService
          * @constructor
          *
          * @description
-         * Creates an instance of the AssociationModalService.
+         * Creates an instance of the SupplyPartnerAssociationService.
          */
-        function AssociationModalService() {
+        function SupplyPartnerAssociationService() {
             this.facilityTypeApprovedProductResource = new FacilityTypeApprovedProductResource();
             this.supervisoryNodeFacilityResource = new SupervisoryNodeFacilityResource();
         }
 
         /**
          * @ngdoc method
-         * @methodOf admin-supply-partner-edit.AssociationModalService
+         * @methodOf admin-supply-partner-edit.SupplyPartnerAssociationService
          * @name getAssociation
          *
          * @description
@@ -91,7 +91,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-supply-partner-edit.AssociationModalService
+         * @methodOf admin-supply-partner-edit.SupplyPartnerAssociationService
          * @name getFacilities
          *
          * @description
@@ -119,7 +119,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-supply-partner-edit.AssociationModalService
+         * @methodOf admin-supply-partner-edit.SupplyPartnerAssociationService
          * @name getOrderables
          *
          * @description

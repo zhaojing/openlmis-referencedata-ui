@@ -30,11 +30,12 @@
 
     controller.$inject = [
         'originalAssociation', 'programs', 'supervisoryNodes', 'ObjectMapper', 'facilities', 'loadingModalService',
-        'supplyPartner', 'orderables', 'selectProductsModalService', '$state', 'associationModalService', '$q'
+        'supplyPartner', 'orderables', 'selectProductsModalService', '$state', 'supplyPartnerAssociationService', '$q'
     ];
 
     function controller(originalAssociation, programs, supervisoryNodes, ObjectMapper, facilities, loadingModalService,
-                        supplyPartner, orderables, selectProductsModalService, $state, associationModalService, $q) {
+                        supplyPartner, orderables, selectProductsModalService, $state, supplyPartnerAssociationService,
+                        $q) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -234,7 +235,7 @@
         }
 
         function updateFacilities() {
-            return associationModalService.getFacilities(vm.association, supervisoryNodes)
+            return supplyPartnerAssociationService.getFacilities(vm.association, supervisoryNodes)
                 .then(function(facilities) {
                     vm.association.facilities = [];
                     vm.facilities = facilities;
@@ -243,7 +244,7 @@
         }
 
         function updateProducts(clearSelectedFacilities) {
-            return associationModalService.getOrderables(vm.association, vm.facilities, vm.programs)
+            return supplyPartnerAssociationService.getOrderables(vm.association, vm.facilities, vm.programs)
                 .then(function(orderables) {
                     if (clearSelectedFacilities) {
                         vm.association.orderables = [];

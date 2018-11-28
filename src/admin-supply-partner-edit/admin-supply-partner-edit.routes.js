@@ -53,23 +53,23 @@
             controllerAs: 'vm',
             parentResolves: ['supplyPartner'],
             resolve: {
-                associationModalService: function(AssociationModalService) {
-                    return new AssociationModalService();
+                supplyPartnerAssociationService: function(SupplyPartnerAssociationService) {
+                    return new SupplyPartnerAssociationService();
                 },
-                originalAssociation: function(associationModalService, $stateParams, supplyPartner) {
-                    return associationModalService.getAssociation(supplyPartner, $stateParams);
+                originalAssociation: function(supplyPartnerAssociationService, $stateParams, supplyPartner) {
+                    return supplyPartnerAssociationService.getAssociation(supplyPartner, $stateParams);
                 },
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                facilities: function(originalAssociation, supervisoryNodes, associationModalService) {
-                    return associationModalService.getFacilities(originalAssociation, supervisoryNodes);
+                facilities: function(originalAssociation, supervisoryNodes, supplyPartnerAssociationService) {
+                    return supplyPartnerAssociationService.getFacilities(originalAssociation, supervisoryNodes);
                 },
                 supervisoryNodes: function(SupervisoryNodeResource) {
                     return new SupervisoryNodeResource().getAll();
                 },
-                orderables: function(associationModalService, facilities, originalAssociation, programs) {
-                    return associationModalService.getOrderables(originalAssociation, facilities, programs);
+                orderables: function(supplyPartnerAssociationService, facilities, originalAssociation, programs) {
+                    return supplyPartnerAssociationService.getOrderables(originalAssociation, facilities, programs);
                 }
             }
         });
