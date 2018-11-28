@@ -134,13 +134,7 @@ describe('openlmis.profile', function() {
         });
 
         it('should resolve facilitiesMap', function() {
-            var facilitiesMap;
-
-            this.objectMapper
-                .map(this.warehouses)
-                .then(function(value) {
-                    facilitiesMap = value;
-                });
+            var facilitiesMap; this.objectMapper.map(this.warehouses);
 
             this.goToUrl('/profile');
 
