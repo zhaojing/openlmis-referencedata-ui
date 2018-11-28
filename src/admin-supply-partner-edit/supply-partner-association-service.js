@@ -155,29 +155,10 @@
                     program: new OpenlmisArrayDecorator(programs).getById(association.program.id).code
                 })
                 .then(function(result) {
-                    return filterOutDuplicates(
-                        result
-                            .map(function(ftap) {
-                                return ftap.orderable;
-                            })
-                    );
+                    return new OpenlmisArrayDecorator(result.map(function(ftap) {
+                        return ftap.orderable;
+                    })).getAllWithUniqueIds();
                 });
-        }
-
-        function filterOutDuplicates(orderables) {
-            var filtered = [];
-
-            orderables.forEach(function(orderable) {
-                var existing = filtered.filter(function(filtered) {
-                    return filtered.id === orderable.id;
-                });
-
-                if (!existing.length) {
-                    filtered.push(orderable);
-                }
-            });
-
-            return filtered;
         }
 
     }
