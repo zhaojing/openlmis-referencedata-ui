@@ -22,8 +22,8 @@
     "adminSupplyPartnerEdit.productName": "Product Name",
     "adminSupplyPartnerEdit.productCode": "Product Code",
     "adminSupplyPartnerEdit.remove": "Remove",
-    "adminSupplyPartnerEdit.noFacilities": "There are no facilities",
-    "adminSupplyPartnerEdit.noProducts": "There are no products",
+    "adminSupplyPartnerEdit.noFacilities": "There are no facilities.",
+    "adminSupplyPartnerEdit.noProducts": "There are no products.",
     "adminSupplyPartnerEdit.addProducts": "Add Products",
     "adminSupplyPartnerEdit.addAssociation": "Add Association",
     "adminSupplyPartnerEdit.editAssociation": "Edit Association",
@@ -34,6 +34,6 @@
     "adminSupplyPartnerEdit.facilitiesDisclaimer": "Removing any of the facilities will result in clearing the selected products.",
     "adminSupplyPartnerEdit.confirmAssociationRemoval": "Do you really want to remove the association?",
     "adminSupplyPartnerEdit.removeAssociation": "Remove Association",
-    "adminSupplyPartnerEdit.supplyPartnerUpdatedSuccessfully": "Supply partner updated successfully",
-    "adminSupplyPartnerEdit.failedToUpdateSupplyPartner": "Failed to update supply partner"
+    "adminSupplyPartnerEdit.supplyPartnerUpdatedSuccessfully": "Supply partner updated successfully.",
+    "adminSupplyPartnerEdit.failedToUpdateSupplyPartner": "Failed to update supply partner."
 }
