@@ -47,7 +47,7 @@
         });
 
         modalStateProvider.state('openlmis.administration.supplyPartners.edit.association', {
-            url: '/assocation?programId&supervisoryNodeId',
+            url: '/association?programId&supervisoryNodeId',
             templateUrl: 'admin-supply-partner-edit/association-modal.html',
             controller: 'AssociationModalController',
             controllerAs: 'vm',

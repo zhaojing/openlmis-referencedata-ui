@@ -195,7 +195,7 @@
 
             var nonAssociatedProducts = vm.orderables.filter(filterOutByIds(associatedProductIds));
 
-            selectProductsModalService.show(nonAssociatedProducts)
+            return selectProductsModalService.show(nonAssociatedProducts)
                 .then(function(orderables) {
                     orderables.forEach(function(orderable) {
                         vm.association.orderables.push(orderable);
