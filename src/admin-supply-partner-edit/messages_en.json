@@ -1,5 +1,5 @@
 {
-    "adminSupplyPartnerEdit.viewSupplyPartner": "View Supply Partner",
+    "adminSupplyPartnerEdit.editSupplyPartner": "Edit Supply Partner",
     "adminSupplyPartnerEdit.code": "Code",
     "adminSupplyPartnerEdit.name": "Name",
     "adminSupplyPartnerEdit.associations": "Associations",
@@ -35,5 +35,9 @@
     "adminSupplyPartnerEdit.confirmAssociationRemoval": "Do you really want to remove the association?",
     "adminSupplyPartnerEdit.removeAssociation": "Remove Association",
     "adminSupplyPartnerEdit.supplyPartnerUpdatedSuccessfully": "Supply partner updated successfully.",
-    "adminSupplyPartnerEdit.failedToUpdateSupplyPartner": "Failed to update supply partner."
+    "adminSupplyPartnerEdit.failedToUpdateSupplyPartner": "Failed to update supply partner.",
+    "adminSupplyPartnerEdit.associationEmptyProgram": "Program is required for new association.",
+    "adminSupplyPartnerEdit.associationEmptySupervisoryNode": "Supervisory Node is required for new association.",
+    "adminSupplyPartnerEdit.associationEmptyFacilities": "Facilities list cannot be empty for new association.",
+    "adminSupplyPartnerEdit.associationEmptyOrderables": "Ordereables list cannot be empty for new association."
 }

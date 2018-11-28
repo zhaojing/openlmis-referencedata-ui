@@ -25,6 +25,7 @@
      */
     angular.module('admin-supply-partner-edit', [
         'openlmis-rights',
+        'openlmis-modal',
         'openlmis-modal-state',
         'openlmis-state-tracker',
         'openlmis-object-utils',

@@ -21,6 +21,7 @@ describe('AssociationModalController', function() {
         var SupervisoryNodeDataBuilder, ProgramDataBuilder, FacilityDataBuilder, PageDataBuilder,
             SupplyPartnerAssociationService, SupplyPartnerDataBuilder, SupplyPartnerAssociationDataBuilder,
             FacilityTypeApprovedProductDataBuilder, FacilityTypeDataBuilder;
+
         inject(function($injector) {
             SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
@@ -41,6 +42,7 @@ describe('AssociationModalController', function() {
             this.loadingModalService = $injector.get('loadingModalService');
             this.selectProductsModalService = $injector.get('selectProductsModalService');
             this.$state = $injector.get('$state');
+            this.alertService = $injector.get('alertService');
         });
 
         this.supplyPartner = new SupplyPartnerDataBuilder().buildWithAssociations();
@@ -152,6 +154,7 @@ describe('AssociationModalController', function() {
         spyOn(this.supplyPartnerAssociationService, 'getOrderables');
         spyOn(this.supplyPartnerAssociationService, 'getFacilities');
         spyOn(this.$state, 'go');
+        spyOn(this.alertService, 'error');
 
         initControllerWithEditedAssociation(this);
     });
@@ -700,6 +703,61 @@ describe('AssociationModalController', function() {
             expect(this.$state.go).toHaveBeenCalledWith('^');
         });
 
+    });
+
+    describe('addAssociation', function() {
+
+        beforeEach(function() {
+            this.vm.association = {
+                program: this.programs[0],
+                supervisoryNode: this.supervisoryNodes[0],
+                facilities: this.facilities,
+                orderables: this.orderables
+            };
+        });
+
+        it('should show error message if program is undefined', function() {
+            this.vm.association.program = undefined;
+            this.vm.addAssociation();
+
+            expect(this.alertService.error).toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptyProgram');
+        });
+
+        it('should show error message if supervisory node is undefined', function() {
+            this.vm.association.supervisoryNode = undefined;
+            this.vm.addAssociation();
+
+            expect(this.alertService.error)
+                .toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptySupervisoryNode');
+        });
+
+        it('should show error message if facilities are undefined', function() {
+            this.vm.association.facilities = undefined;
+            this.vm.addAssociation();
+
+            expect(this.alertService.error).toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptyFacilities');
+        });
+
+        it('should show error message if facilities are empty', function() {
+            this.vm.association.facilities = [];
+            this.vm.addAssociation();
+
+            expect(this.alertService.error).toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptyFacilities');
+        });
+
+        it('should show error message if orderables are undefined', function() {
+            this.vm.association.orderables = undefined;
+            this.vm.addAssociation();
+
+            expect(this.alertService.error).toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptyOrderables');
+        });
+
+        it('should show error message if orderables are empty', function() {
+            this.vm.association.orderables = [];
+            this.vm.addAssociation();
+
+            expect(this.alertService.error).toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptyOrderables');
+        });
     });
 
     function initControllerWithEditedAssociation(context) {

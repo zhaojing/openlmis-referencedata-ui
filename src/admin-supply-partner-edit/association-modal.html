@@ -6,14 +6,14 @@
                 <h1 ng-if="!vm.isNew">{{'adminSupplyPartnerEdit.editAssociation' | message}}</h1>
             </div>
             <div class="modal-body">
-                <form id="add-supply-partner-association-form" ng-submit="vm.saveAssociation()">
+                <form id="add-supply-partner-association-form" ng-submit="vm.addAssociation()">
                     <p class="note" ng-if="vm.isNew">{{'adminSupplyPartnerEdit.programAndSupervisoryNodeDisclaimer' | message}}</p>
                     <p class="note">{{'adminSupplyPartnerEdit.facilitiesDisclaimer' | message}}</p>
                     <label for="program">{{'adminSupplyPartnerEdit.program' | message}}</label>
-                    <select id="program" class="form-control" ng-model="vm.association.program" ng-options="program as program.name for program in vm.getAvailablePrograms() track by program.id" ng-change="vm.updateFacilitiesAndProducts()" ng-disabled="!vm.isNew"></select>
+                    <select id="program" class="form-control" ng-model="vm.association.program" ng-options="program as program.name for program in vm.getAvailablePrograms() track by program.id" ng-change="vm.updateFacilitiesAndProducts()" ng-disabled="!vm.isNew" required></select>
 
                     <label for="supervisoryNode">{{'adminSupplyPartnerEdit.supervisoryNode' | message}}</label>
-                    <select id="supervisoryNode" class="form-control" ng-model="vm.association.supervisoryNode" ng-options="supervisoryNode as supervisoryNode.name for supervisoryNode in vm.getAvailableSupervisoryNodes() track by supervisoryNode.id" ng-change="vm.updateFacilitiesAndProducts()" ng-disabled="!vm.isNew"></select>
+                    <select id="supervisoryNode" class="form-control" ng-model="vm.association.supervisoryNode" ng-options="supervisoryNode as supervisoryNode.name for supervisoryNode in vm.getAvailableSupervisoryNodes() track by supervisoryNode.id" ng-change="vm.updateFacilitiesAndProducts()" ng-disabled="!vm.isNew" required></select>
                 </form>
                 <section class="openlmis-table-container">
                     <section class="is-primary">
@@ -71,8 +71,7 @@
                 </section>
             </div>
             <div class="modal-footer">
-                <button id="cancel" ng-click="vm.goToPreviousState()">{{'adminSupplyPartnerEdit.cancel' |
-                    message}}</button>
+                <button id="cancel" ng-click="vm.goToPreviousState()">{{'adminSupplyPartnerEdit.cancel' | message}}</button>
                 <button class="primary" type="submit" form="add-supply-partner-association-form">{{!vm.isNew ? 'adminSupplyPartnerEdit.updateAssociation' : 'adminSupplyPartnerEdit.addAssociation' | message}}</button>
             </div>
         </div>

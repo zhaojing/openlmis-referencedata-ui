@@ -37,7 +37,7 @@
         SupplyPartner.prototype.create = create;
         SupplyPartner.prototype.getAssociationByProgramAndSupervisoryNode = getAssociationByProgramAndSupervisoryNode;
         SupplyPartner.prototype.save = save;
-        SupplyPartner.prototype.saveAssociation = saveAssociation;
+        SupplyPartner.prototype.addAssociation = addAssociation;
         SupplyPartner.prototype.removeAssociation = removeAssociation;
 
         return SupplyPartner;
@@ -124,7 +124,7 @@
         /**
          * @ngdoc method
          * @methodOf referencedata-supply-partner.SupplyPartner
-         * @name saveAssociation
+         * @name addAssociation
          *
          * @description
          * Saves the given association in the supply partner. If an association for the given program and supervisory
@@ -132,7 +132,7 @@
          *
          * @param {Object} association  the association to save
          */
-        function saveAssociation(association) {
+        function addAssociation(association) {
             var existing = this.getAssociationByProgramAndSupervisoryNode(
                 association.program.id, association.supervisoryNode.id
             );

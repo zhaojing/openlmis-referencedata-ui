@@ -30,12 +30,13 @@
 
     controller.$inject = [
         'originalAssociation', 'programs', 'supervisoryNodes', 'ObjectMapper', 'facilities', 'loadingModalService',
-        'supplyPartner', 'orderables', 'selectProductsModalService', '$state', 'supplyPartnerAssociationService', '$q'
+        'supplyPartner', 'orderables', 'selectProductsModalService', '$state', 'supplyPartnerAssociationService', '$q',
+        'alertService'
     ];
 
     function controller(originalAssociation, programs, supervisoryNodes, ObjectMapper, facilities, loadingModalService,
                         supplyPartner, orderables, selectProductsModalService, $state, supplyPartnerAssociationService,
-                        $q) {
+                        $q, alertService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -47,7 +48,7 @@
         vm.removeFacility = removeFacility;
         vm.addProducts = addProducts;
         vm.goToPreviousState = goToPreviousState;
-        vm.saveAssociation = saveAssociation;
+        vm.addAssociation = addAssociation;
 
         /**
          * @ngdoc method
@@ -218,14 +219,19 @@
         /**
          * @ngdoc method
          * @methodOf admin-supply-partner-edit.controller:AssociationModalController
-         * @name saveAssociation
+         * @name addAssociation
          *
          * @description
          * Saves the association in the supply partner and takes the user back to the supply partner edit page.
          */
-        function saveAssociation() {
-            supplyPartner.saveAssociation(vm.association);
-            vm.goToPreviousState();
+        function addAssociation() {
+            var errorMessage = validateAssociation();
+            if (errorMessage) {
+                alertService.error(errorMessage);
+            } else {
+                supplyPartner.addAssociation(vm.association);
+                vm.goToPreviousState();
+            }
         }
 
         function updateOptionsAfterFacilityChange(clearSelectedOrderables) {
@@ -305,5 +311,20 @@
             };
         }
 
+        // TODO: this should be moved to new association class
+        function validateAssociation() {
+            if (!vm.association.program) {
+                return 'adminSupplyPartnerEdit.associationEmptyProgram';
+            }
+            if (!vm.association.supervisoryNode) {
+                return 'adminSupplyPartnerEdit.associationEmptySupervisoryNode';
+            }
+            if (!vm.association.facilities || vm.association.facilities < 1) {
+                return 'adminSupplyPartnerEdit.associationEmptyFacilities';
+            }
+            if (!vm.association.orderables || vm.association.orderables < 1) {
+                return 'adminSupplyPartnerEdit.associationEmptyOrderables';
+            }
+        }
     }
 })();

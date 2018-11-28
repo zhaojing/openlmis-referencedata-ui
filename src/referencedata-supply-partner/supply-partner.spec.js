@@ -160,7 +160,7 @@ describe('SupplyPartner', function() {
 
     });
 
-    describe('saveAssociation', function() {
+    describe('addAssociation', function() {
 
         it('should override the existing association if ID matches', function() {
             var associationCopy = angular.copy(this.supplyPartner.associations[1]),
@@ -168,7 +168,7 @@ describe('SupplyPartner', function() {
 
             associationCopy.facilities = [associationCopy.facilities[0]];
 
-            this.supplyPartner.saveAssociation(associationCopy);
+            this.supplyPartner.addAssociation(associationCopy);
 
             expect(this.supplyPartner.associations[1]).toBe(associationCopy);
             expect(this.supplyPartner.associations[1]).not.toBe(association);
@@ -177,7 +177,7 @@ describe('SupplyPartner', function() {
         it('should add new association if association has no id', function() {
             var newAssociation = new this.SupplyPartnerAssociationDataBuilder().buildAsNew();
 
-            this.supplyPartner.saveAssociation(newAssociation);
+            this.supplyPartner.addAssociation(newAssociation);
 
             expect(this.supplyPartner.associations.pop()).toEqual(newAssociation);
         });
@@ -185,11 +185,11 @@ describe('SupplyPartner', function() {
         it('should not create a new association when updating a new one', function() {
             var newAssociation = new this.SupplyPartnerAssociationDataBuilder().buildAsNew();
 
-            this.supplyPartner.saveAssociation(angular.copy(newAssociation));
+            this.supplyPartner.addAssociation(angular.copy(newAssociation));
 
             newAssociation.facilities = [newAssociation.facilities[0]];
 
-            this.supplyPartner.saveAssociation(angular.copy(newAssociation));
+            this.supplyPartner.addAssociation(angular.copy(newAssociation));
 
             expect(this.supplyPartner.associations.length).toBe(3);
             expect(this.supplyPartner.associations[2]).toEqual(newAssociation);
