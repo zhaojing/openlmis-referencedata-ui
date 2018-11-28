@@ -166,7 +166,7 @@ describe('AdminSupplyPartnerAddService', function() {
             this.$rootScope.$apply();
 
             expect(this.$state.go).toHaveBeenCalledWith(
-                'openlmis.administration.supplyPartners.edit.association', {
+                'openlmis.administration.supplyPartners.edit', {
                     id: this.supplyPartner.id
                 }
             );

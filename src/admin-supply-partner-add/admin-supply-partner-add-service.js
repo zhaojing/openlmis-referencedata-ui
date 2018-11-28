@@ -82,7 +82,7 @@
                             'adminSupplyPartnerAdd.button.yesAddAssociation',
                             'adminSupplyPartnerAdd.button.no')
                             .then(function() {
-                                $state.go('openlmis.administration.supplyPartners.edit.association', {
+                                $state.go('openlmis.administration.supplyPartners.edit', {
                                     id: supplyPartner.id
                                 });
 
