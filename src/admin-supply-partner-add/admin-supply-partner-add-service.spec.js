@@ -91,11 +91,11 @@ describe('AdminSupplyPartnerAddService', function() {
             expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
-        it('should close loading modal after successfully saving', function() {
+        it('should leave closing loading modal to the state change after successfully saving', function() {
             this.createdSupplyPartner.create();
             this.$rootScope.$apply();
 
-            expect(this.loadingModalService.close).toHaveBeenCalled();
+            expect(this.loadingModalService.close).not.toHaveBeenCalled();
         });
 
         it('should close loading modal after failing to create', function() {
@@ -166,7 +166,7 @@ describe('AdminSupplyPartnerAddService', function() {
             this.$rootScope.$apply();
 
             expect(this.$state.go).toHaveBeenCalledWith(
-                'openlmis.administration.supplyPartners.edit', {
+                'openlmis.administration.supplyPartners.edit.association', {
                     id: this.supplyPartner.id
                 }
             );

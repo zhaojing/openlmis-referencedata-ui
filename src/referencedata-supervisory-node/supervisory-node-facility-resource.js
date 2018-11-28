@@ -18,19 +18,29 @@
     'use strict';
 
     /**
-     * @module admin-supply-partner-edit
+     * @ngdoc service
+     * @name referencedata-supervisory-node.SupervisoryNodeFacilityResource
      *
      * @description
-     * Provides supply partner edit screen for administrator.
+     * Communicates with the RESTful endpoint of the OpenLMIS server for fetching facilities for a specific supervisory
+     * node.
      */
-    angular.module('admin-supply-partner-edit', [
-        'openlmis-rights',
-        'openlmis-modal-state',
-        'openlmis-state-tracker',
-        'openlmis-object-utils',
-        'select-products-modal',
-        'referencedata-supply-partner',
-        'referencedata-facility-type-approved-product',
-        'ui.router'
-    ]);
+    angular
+        .module('referencedata-supervisory-node')
+        .factory('SupervisoryNodeFacilityResource', SupervisoryNodeFacilityResource);
+
+    SupervisoryNodeFacilityResource.$inject = ['OpenlmisResource', 'classExtender'];
+
+    function SupervisoryNodeFacilityResource(OpenlmisResource, classExtender) {
+
+        classExtender.extend(SupervisoryNodeFacilityResource, OpenlmisResource);
+
+        return SupervisoryNodeFacilityResource;
+
+        function SupervisoryNodeFacilityResource() {
+            this.super('/api/supervisoryNodes/:supervisoryNodeId/facilities');
+        }
+
+    }
+
 })();

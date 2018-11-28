@@ -11,6 +11,7 @@ New functionality added in a backwards-compatible manner:
 * [OLMIS-5623](https://openlmis.atlassian.net/browse/OLMIS-5623): Added Supply Partner view detail page.
 * [OLMIS-5356](https://openlmis.atlassian.net/browse/OLMIS-5356):
   * Added select-products-modal component.
+  * Added the ability to edit Supply Partners.
 
 Improvements:
 * [OLMIS-5134](https://openlmis.atlassian.net/browse/OLMIS-5134): Added ability to find user's role assignments by supervisoryNodeId and programId.

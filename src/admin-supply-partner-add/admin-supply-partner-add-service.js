@@ -82,7 +82,7 @@
                             'adminSupplyPartnerAdd.button.yesAddAssociation',
                             'adminSupplyPartnerAdd.button.no')
                             .then(function() {
-                                $state.go('openlmis.administration.supplyPartners.edit', {
+                                $state.go('openlmis.administration.supplyPartners.edit.association', {
                                     id: supplyPartner.id
                                 });
 
@@ -94,10 +94,8 @@
                     })
                     .catch(function(error) {
                         notificationService.error('adminSupplyPartnerAdd.message.failedToSaveSupplyPartner');
-                        return $q.reject(error);
-                    })
-                    .finally(function() {
                         loadingModalService.close();
+                        return $q.reject(error);
                     });
             };
         }

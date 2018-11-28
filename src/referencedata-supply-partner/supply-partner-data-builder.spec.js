@@ -28,6 +28,7 @@
 
         SupplyPartnerDataBuilder.prototype.addAssociation = addAssociation;
         SupplyPartnerDataBuilder.prototype.buildWithAssociations = buildWithAssociations;
+        SupplyPartnerDataBuilder.prototype.withAssociations = withAssociations;
         SupplyPartnerDataBuilder.prototype.build = build;
         SupplyPartnerDataBuilder.prototype.buildJson = buildJson;
 
@@ -48,10 +49,19 @@
             return this;
         }
 
-        function buildWithAssociations() {
+        function withAssociations(associations) {
+            if (associations) {
+                this.associations = associations;
+                return this;
+            }
             return this
                 .addAssociation(new SupplyPartnerAssociationDataBuilder().buildWithFacilitiesAndOrderables())
-                .addAssociation(new SupplyPartnerAssociationDataBuilder().buildWithFacilitiesAndOrderables())
+                .addAssociation(new SupplyPartnerAssociationDataBuilder().buildWithFacilitiesAndOrderables());
+        }
+
+        function buildWithAssociations() {
+            return this
+                .withAssociations()
                 .build();
         }
 

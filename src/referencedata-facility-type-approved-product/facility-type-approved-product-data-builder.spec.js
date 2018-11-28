@@ -27,6 +27,7 @@
     function FacilityTypeApprovedProductDataBuilder(FacilityTypeApprovedProduct, OrderableDataBuilder,
                                                     ProgramDataBuilder, FacilityTypeDataBuilder) {
 
+        FacilityTypeApprovedProductDataBuilder.prototype.withOrderable = withOrderable;
         FacilityTypeApprovedProductDataBuilder.prototype.build = build;
         FacilityTypeApprovedProductDataBuilder.prototype.buildJson = buildJson;
 
@@ -43,6 +44,11 @@
             this.maxPeriodsOfStock = 3;
             this.minPeriodsOfStock = 1;
             this.emergencyOrderPoint = 10;
+        }
+
+        function withOrderable(orderable) {
+            this.orderable = orderable;
+            return this;
         }
 
         function build() {

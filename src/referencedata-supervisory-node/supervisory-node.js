@@ -62,6 +62,7 @@
             this.description = json.description;
             this.parentNode = json.parentNode;
             this.partnerNodes = new OpenlmisArrayDecorator(json.partnerNodes);
+            this.partnerNodeOf = json.partnerNodeOf;
             this.repository = repository;
         }
 

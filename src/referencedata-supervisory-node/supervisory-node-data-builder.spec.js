@@ -38,6 +38,8 @@
         SupervisoryNodeDataBuilder.prototype.withParentNode = withParentNode;
         SupervisoryNodeDataBuilder.prototype.withPartnerNodes = withPartnerNodes;
         SupervisoryNodeDataBuilder.prototype.withPartnerNode = withPartnerNode;
+        SupervisoryNodeDataBuilder.prototype.withPartnerNodeOf = withPartnerNodeOf;
+        SupervisoryNodeDataBuilder.prototype.buildPartnerNode = buildPartnerNode;
 
         return SupervisoryNodeDataBuilder;
 
@@ -52,6 +54,7 @@
             this.childNodes = [];
             this.description = 'Node description ' + SupervisoryNodeDataBuilder.instanceNumber;
             this.partnerNodes = [];
+            this.partnerNodeOf = undefined;
         }
 
         function build() {
@@ -67,8 +70,20 @@
                 childNodes: this.childNodes,
                 description: this.description,
                 parentNode: this.parentNode,
-                partnerNodes: this.partnerNodes
+                partnerNodes: this.partnerNodes,
+                partnerNodeOf: this.partnerNodeOf
             };
+        }
+
+        function withPartnerNodeOf() {
+            this.partnerNodeOf = new SupervisoryNodeDataBuilder().build();
+            return this;
+        }
+
+        function buildPartnerNode() {
+            return this
+                .withPartnerNodeOf()
+                .build();
         }
 
         function buildWithoutFacility() {

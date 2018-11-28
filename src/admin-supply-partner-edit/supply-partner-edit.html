@@ -1,5 +1,5 @@
 <h2>{{'adminSupplyPartnerEdit.viewSupplyPartner' | message}}</h2>
-<form id="editSupplyPartner">
+<form id="editSupplyPartner" ng-submit="vm.supplyPartner.save()">
     <label for="code">{{'adminSupplyPartnerEdit.code' | message}}</label>
     <input id="code" class="form-control" ng-model="vm.supplyPartner.code" required disabled/>
     <label for="name">{{'adminSupplyPartnerEdit.name' | message}}</label>
@@ -7,6 +7,9 @@
 </form>
 <label>{{'adminSupplyPartnerEdit.associations' | message}}</label>
 <section class="openlmis-table-container">
+    <button id="add-supply-partner-association" class="add" ui-sref=".association">
+        {{'adminSupplyPartnerEdit.addAssociation' | message}}
+    </button>
     <table>
         <caption ng-if="!vm.associationsPage || vm.associationsPage.length === 0">
             {{'adminSupplyPartnerEdit.noAssociations' | message}}
@@ -30,6 +33,8 @@
                 <td>{{association.orderables.length || 0}} {{'adminSupplyPartnerEdit.products' | message}}
                     <button ng-click="vm.viewOrderables($index)">{{'adminSupplyPartnerEdit.view' | message}}</button>
                 <td>
+                    <button ui-sref=".association({programId: association.program.id, supervisoryNodeId: association.supervisoryNode.id})">{{'adminSupplyPartnerEdit.editAssociation' | message}}</button>
+                    <button class="danger" ng-click="vm.supplyPartner.removeAssociation(association)">{{'adminSupplyPartnerEdit.remove' | message}}</button>
                 </td>
             </tr>
         </tbody>
@@ -40,4 +45,5 @@
 </section>
 <div class="openlmis-toolbar">
     <button ng-click="vm.goToSupplyPartnerList()">{{'adminSupplyPartnerEdit.cancel' | message}}</button>
+    <button class="primary" form="editSupplyPartner" type="submit">{{'adminSupplyPartnerEdit.updateSupplyPartner' | message}}</button>
 </div>

@@ -19,9 +19,9 @@
 
     angular.module('admin-supply-partner-edit').config(routes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'modalStateProvider', 'ADMINISTRATION_RIGHTS'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function routes($stateProvider, modalStateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.supplyPartners.edit', {
             label: 'adminSupplyPartnerEdit.viewSupplyPartner',
@@ -35,13 +35,41 @@
                 }
             },
             resolve: {
-                supplyPartner: function(SupplyPartnerRepository, $stateParams) {
-                    return new SupplyPartnerRepository().get($stateParams.id);
+                supplyPartner: function(AdminSupplyPartnerEditService, $stateParams) {
+                    return new AdminSupplyPartnerEditService().getSupplyPartner($stateParams.id);
                 },
                 associations: function(paginationService, supplyPartner, $stateParams) {
                     return paginationService.registerList(null, $stateParams, function() {
                         return supplyPartner.associations;
                     });
+                }
+            }
+        });
+
+        modalStateProvider.state('openlmis.administration.supplyPartners.edit.association', {
+            url: '/assocation?programId&supervisoryNodeId',
+            templateUrl: 'admin-supply-partner-edit/association-modal.html',
+            controller: 'AssociationModalController',
+            controllerAs: 'vm',
+            parentResolves: ['supplyPartner'],
+            resolve: {
+                associationModalService: function(AssociationModalService) {
+                    return new AssociationModalService();
+                },
+                originalAssociation: function(associationModalService, $stateParams, supplyPartner) {
+                    return associationModalService.getAssociation(supplyPartner, $stateParams);
+                },
+                programs: function(programService) {
+                    return programService.getAll();
+                },
+                facilities: function(originalAssociation, supervisoryNodes, associationModalService) {
+                    return associationModalService.getFacilities(originalAssociation, supervisoryNodes);
+                },
+                supervisoryNodes: function(SupervisoryNodeResource) {
+                    return new SupervisoryNodeResource().getAll();
+                },
+                orderables: function(associationModalService, facilities, originalAssociation, programs) {
+                    return associationModalService.getOrderables(originalAssociation, facilities, programs);
                 }
             }
         });

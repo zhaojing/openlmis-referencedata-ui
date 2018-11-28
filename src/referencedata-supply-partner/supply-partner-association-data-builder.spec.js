@@ -27,11 +27,16 @@
 
         SupplyPartnerAssociationDataBuilder.prototype.withProgram = withProgram;
         SupplyPartnerAssociationDataBuilder.prototype.withSupervisoryNode = withSupervisoryNode;
+        SupplyPartnerAssociationDataBuilder.prototype.withoutProgram = withoutProgram;
+        SupplyPartnerAssociationDataBuilder.prototype.withoutSupervisoryNode = withoutSupervisoryNode;
         SupplyPartnerAssociationDataBuilder.prototype.addFacility = addFacility;
         SupplyPartnerAssociationDataBuilder.prototype.addOrderable = addOrderable;
         SupplyPartnerAssociationDataBuilder.prototype.build = build;
+        SupplyPartnerAssociationDataBuilder.prototype.buildAsNew = buildAsNew;
+        SupplyPartnerAssociationDataBuilder.prototype.withoutId = withoutId;
         SupplyPartnerAssociationDataBuilder.prototype.buildWithFacilitiesAndOrderables =
             buildWithFacilitiesAndOrderables;
+        SupplyPartnerAssociationDataBuilder.prototype.buildCleanNew = buildCleanNew;
         SupplyPartnerAssociationDataBuilder.prototype.buildJson = buildJson;
 
         return SupplyPartnerAssociationDataBuilder;
@@ -61,6 +66,14 @@
             return this;
         }
 
+        function withoutProgram() {
+            return this.withProgram(undefined);
+        }
+
+        function withoutSupervisoryNode() {
+            return this.withSupervisoryNode(undefined);
+        }
+
         function addFacility(facility) {
             this.facilities.push(facility);
             return this;
@@ -68,6 +81,11 @@
 
         function addOrderable(orderable) {
             this.orderables.push(orderable);
+            return this;
+        }
+
+        function withoutId() {
+            this.id = undefined;
             return this;
         }
 
@@ -85,6 +103,19 @@
                     .build())
                 .addOrderable(new ObjectReferenceDataBuilder().withResource('orderable')
                     .build())
+                .build();
+        }
+
+        function buildCleanNew() {
+            return this
+                .withoutProgram()
+                .withSupervisoryNode()
+                .build();
+        }
+
+        function buildAsNew() {
+            return this
+                .withoutId()
                 .build();
         }
 
