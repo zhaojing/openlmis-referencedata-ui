@@ -310,8 +310,7 @@
                 return ids.indexOf(program.id) === -1;
             };
         }
-
-        // TODO: this should be moved to new association class
+        
         function validateAssociation() {
             if (!vm.association.program) {
                 return 'adminSupplyPartnerEdit.associationEmptyProgram';
