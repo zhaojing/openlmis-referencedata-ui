@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('AssociationModalController', function() {
+ddescribe('AssociationModalController', function() {
 
     beforeEach(function() {
         module('admin-supply-partner-edit');
@@ -604,6 +604,8 @@ describe('AssociationModalController', function() {
                 this.orderables[0],
                 this.orderables[1]
             ]));
+
+            initControllerWithNewAssociation(this);
         });
 
         it('should clear the associated facilities', function() {

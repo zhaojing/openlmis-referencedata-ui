@@ -139,6 +139,10 @@
          * Updates the lists of available facilities and products. Will clear any associated facilities and products.
          */
         function updateFacilitiesAndProducts() {
+            if (!vm.isNew) {
+                return;
+            }
+
             loadingModalService.open();
             updateFacilities()
                 .then(function() {
