@@ -7,5 +7,5 @@
     "selectProductsModal.uoi": "Unit of Issue",
     "selectProductsModal.cancel": "Cancel",
     "selectProductsModal.addProducts.emptyList": "You have not selected any products.",
-    "selectProductsModal.searchByCodeInfo": "The product search by code works only if the code is entered from the beginning."
+    "selectProductsModal.searchByCodeInfo": "Please type in a part of the product name or the first few letters of the product code."
 }
