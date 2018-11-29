@@ -310,7 +310,7 @@
                 return ids.indexOf(program.id) === -1;
             };
         }
-        
+
         function validateAssociation() {
             if (!vm.association.program) {
                 return 'adminSupplyPartnerEdit.associationEmptyProgram';
