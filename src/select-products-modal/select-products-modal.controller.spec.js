@@ -32,6 +32,7 @@ describe('SelectProductsModalController', function() {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
             this.$controller = $injector.get('$controller');
+            this.alertService = $injector.get('alertService');
             OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
@@ -55,6 +56,8 @@ describe('SelectProductsModalController', function() {
                 .withProductCode('N64')
                 .build()
         ];
+
+        spyOn(this.alertService, 'error');
 
         this.vm = this.$controller('SelectProductsModalController', {
             modalDeferred: this.modalDeferred,
@@ -100,6 +103,12 @@ describe('SelectProductsModalController', function() {
             ]);
         });
 
+        it('should show error modal if no products were selected', function() {
+            this.vm.selectProducts();
+            this.$rootScope.$apply();
+
+            expect(this.alertService.error).toHaveBeenCalledWith('selectProductsModal.addProducts.emptyList');
+        });
     });
 
     describe('search', function() {

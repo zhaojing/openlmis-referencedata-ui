@@ -27,7 +27,8 @@
         'openlmis-auth',
         'openlmis-form',
         'openlmis-pagination',
-        'openlmis-templates'
+        'openlmis-templates',
+        'openlmis-modal'
     ]);
 
 })();

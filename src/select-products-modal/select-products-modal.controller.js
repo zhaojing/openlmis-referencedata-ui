@@ -28,9 +28,9 @@
         .module('select-products-modal')
         .controller('SelectProductsModalController', controller);
 
-    controller.$inject = ['modalDeferred', 'products'];
+    controller.$inject = ['modalDeferred', 'products', 'alertService'];
 
-    function controller(modalDeferred, products) {
+    function controller(modalDeferred, products, alertService) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -99,7 +99,11 @@
                 return vm.selections[orderable.id];
             });
 
-            modalDeferred.resolve(selectedProducts);
+            if (selectedProducts.length < 1) {
+                alertService.error('selectProductsModal.addProducts.emptyList');
+            } else {
+                modalDeferred.resolve(selectedProducts);
+            }
         }
 
         /**
