@@ -44,7 +44,7 @@
 
                     return deferred.promise;
                 },
-                requisitionGroups: function(paginationService, requisitionGroupService, $stateParams) {
+                requisitionGroups: function(paginationService, adminRequisitionGroupListService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
                             page = stateParams.page,
@@ -53,7 +53,7 @@
                         delete params.page;
                         delete params.size;
 
-                        return requisitionGroupService.search({
+                        return adminRequisitionGroupListService.search({
                             page: page,
                             size: size
                         }, params);

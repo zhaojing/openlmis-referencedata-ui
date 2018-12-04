@@ -26,7 +26,8 @@
     angular.module('referencedata-requisition-group', [
         'ngResource',
         'openlmis-local-storage',
-        'referencedata'
+        'referencedata',
+        'referencedata-supervisory-node'
     ]);
 
 })();

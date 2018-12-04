@@ -27,6 +27,7 @@
     angular.module('admin-requisition-group-list', [
         'openlmis-pagination',
         'openlmis-rights',
+        'openlmis-object-utils',
         'referencedata-requisition-group',
         'referencedata-program',
         'referencedata-geographic-zone',
