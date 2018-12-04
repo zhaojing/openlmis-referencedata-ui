@@ -26,6 +26,7 @@ Improvements:
 
 Bug fixes:
 * [OLMIS-4403](https://openlmis.atlassian.net/browse/OLMIS-4403): Fix to appropriately show rights status under a give role
+* [OLMIS-5798](https://openlmis.atlassian.net/browse/OLMIS-5798): Fix Report Only flag display when adding a processing period.
 
 5.4.1 / 2018-10-01
 ==================
