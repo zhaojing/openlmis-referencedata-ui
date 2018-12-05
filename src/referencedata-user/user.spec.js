@@ -129,6 +129,15 @@ describe('User', function() {
             expect(userRepository.update).not.toHaveBeenCalled();
         });
 
+        it('should set active flag before sending a request', function() {
+            user.enabled = false;
+            user.active = true;
+
+            user.save();
+
+            expect(user.active).toEqual(user.enabled);
+        });
+
     });
 
     describe('getBasicInformation', function() {
