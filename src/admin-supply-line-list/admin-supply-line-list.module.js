@@ -24,10 +24,13 @@
      * Provides base admin state and controller for retrieving list of supply lines from the OpenLMIS server.
      */
     angular.module('admin-supply-line-list', [
+        'openlmis-admin',
         'openlmis-pagination',
         'openlmis-rights',
         'referencedata-facility',
         'referencedata-supply-line',
+        'referencedata-requisition-group',
+        'openlmis-object-utils',
         'ui.router'
     ]);
 

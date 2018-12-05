@@ -28,9 +28,11 @@
         .module('referencedata-supervisory-node')
         .factory('SupervisoryNode', SupervisoryNode);
 
-    SupervisoryNode.$inject = ['OpenlmisValidator', 'OpenlmisArrayDecorator'];
+    SupervisoryNode.$inject = [
+        'OpenlmisValidator', 'OpenlmisArrayDecorator', 'ObjectReferenceDataBuilder'
+    ];
 
-    function SupervisoryNode(OpenlmisValidator, OpenlmisArrayDecorator) {
+    function SupervisoryNode(OpenlmisValidator, OpenlmisArrayDecorator, ObjectReferenceDataBuilder) {
 
         var openlmisValidator = new OpenlmisValidator();
 
@@ -63,6 +65,7 @@
             this.parentNode = json.parentNode;
             this.partnerNodes = new OpenlmisArrayDecorator(json.partnerNodes);
             this.partnerNodeOf = json.partnerNodeOf;
+            this.requisitionGroup = new ObjectReferenceDataBuilder().build();
             this.repository = repository;
         }
 

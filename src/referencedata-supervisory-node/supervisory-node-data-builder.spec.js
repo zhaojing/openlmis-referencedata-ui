@@ -21,9 +21,12 @@
         .module('referencedata-supervisory-node')
         .factory('SupervisoryNodeDataBuilder', SupervisoryNodeDataBuilder);
 
-    SupervisoryNodeDataBuilder.$inject = ['SupervisoryNode', 'FacilityDataBuilder', 'SupervisoryNodeRepository'];
+    SupervisoryNodeDataBuilder.$inject = [
+        'SupervisoryNode', 'FacilityDataBuilder', 'SupervisoryNodeRepository', 'ObjectReferenceDataBuilder'
+    ];
 
-    function SupervisoryNodeDataBuilder(SupervisoryNode, FacilityDataBuilder, SupervisoryNodeRepository) {
+    function SupervisoryNodeDataBuilder(SupervisoryNode, FacilityDataBuilder, SupervisoryNodeRepository,
+                                        ObjectReferenceDataBuilder) {
 
         SupervisoryNodeDataBuilder.prototype.build = build;
         SupervisoryNodeDataBuilder.prototype.buildJson = buildJson;
@@ -55,6 +58,7 @@
             this.description = 'Node description ' + SupervisoryNodeDataBuilder.instanceNumber;
             this.partnerNodes = [];
             this.partnerNodeOf = undefined;
+            this.requisitionGroup = new ObjectReferenceDataBuilder().build();
         }
 
         function build() {
@@ -71,7 +75,8 @@
                 description: this.description,
                 parentNode: this.parentNode,
                 partnerNodes: this.partnerNodes,
-                partnerNodeOf: this.partnerNodeOf
+                partnerNodeOf: this.partnerNodeOf,
+                requisitionGroup: this.requisitionGroup
             };
         }
 

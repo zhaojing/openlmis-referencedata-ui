@@ -85,7 +85,7 @@
         /**
          * @ngdoc property
          * @propertyOf admin-supply-line-list.controller:SupplyLineListController
-         * @type {Array}
+         * @type {Object}
          * @name requisitionGroupsMap
          *
          * @description
