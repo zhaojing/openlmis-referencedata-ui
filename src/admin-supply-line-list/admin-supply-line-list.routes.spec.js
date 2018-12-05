@@ -16,7 +16,6 @@
 describe('openlmis.administration.supplyLine', function() {
 
     beforeEach(function() {
-        module('openlmis-admin');
         module('admin-supply-line-list');
 
         var FacilityDataBuilder, ProgramDataBuilder, SupplyLineDataBuilder, RequisitionGroupDataBuilder,
