@@ -30,10 +30,10 @@
         <tbody>
             <tr ng-repeat="supplyLine in vm.supplyLines">
                 <td>{{supplyLine.supplyingFacility.name}}</td>
-                <td ng-if="!supplyLine.supervisoryNode.requisitionGroup.memberFacilities.length">
+                <td ng-if="!vm.requisitionGroupsMap[supplyLine.supervisoryNode.requisitionGroup.id].memberFacilities.length">
                     {{supplyLine.supervisoryNode.code}}
                 </td>
-                <td ng-if="supplyLine.supervisoryNode.requisitionGroup.memberFacilities.length"
+                <td ng-if="vm.requisitionGroupsMap[supplyLine.supervisoryNode.requisitionGroup.id].memberFacilities.length"
                     popover-template="admin-supply-line-list/facilities-popover.html"
                     popover-title="{{'adminSupplyLineList.servedFacilities' | message}}">
                     {{supplyLine.supervisoryNode.code}}

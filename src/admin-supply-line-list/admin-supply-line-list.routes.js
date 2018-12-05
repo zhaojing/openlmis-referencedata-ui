@@ -55,6 +55,19 @@
 
                         return supplyLineService.search(params);
                     });
+                },
+                requisitionGroupsMap: function(supplyLines, RequisitionGroupResource, ObjectMapper) {
+                    var requisitionGroupIds = supplyLines.map(function(supplyLine) {
+                        return supplyLine.supervisoryNode.requisitionGroup.id;
+                    });
+                    return new RequisitionGroupResource()
+                        .query({
+                            id: requisitionGroupIds
+                        })
+                        .then(function(requisitionGroups) {
+                            return new ObjectMapper().map(requisitionGroups);
+                        });
+
                 }
             }
         });

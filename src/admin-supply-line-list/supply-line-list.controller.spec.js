@@ -17,14 +17,16 @@ describe('SupplyLineListController', function() {
 
     beforeEach(function() {
         module('admin-supply-line-list');
+        module('referencedata-requisition-group');
         module('referencedata-supply-line');
 
-        var FacilityDataBuilder, SupplyLineDataBuilder, ProgramDataBuilder, $controller;
+        var FacilityDataBuilder, SupplyLineDataBuilder, ProgramDataBuilder, $controller, RequisitionGroupDataBuilder;
         inject(function($injector) {
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             $controller = $injector.get('$controller');
+            RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
 
             this.$state = $injector.get('$state');
         });
@@ -41,6 +43,15 @@ describe('SupplyLineListController', function() {
             new ProgramDataBuilder().build(),
             new ProgramDataBuilder().build()
         ];
+        this.requisitionGroups = [
+            new RequisitionGroupDataBuilder().buildJson(),
+            new RequisitionGroupDataBuilder().buildJson()
+        ];
+
+        this.requisitionGroupsMap = {};
+        this.requisitionGroupsMap[this.requisitionGroups[0].id] = this.requisitionGroups[0];
+        this.requisitionGroupsMap[this.requisitionGroups[1].id] = this.requisitionGroups[1];
+
         this.stateParams = {
             page: 0,
             size: 10,
@@ -52,6 +63,7 @@ describe('SupplyLineListController', function() {
             supplyLines: this.supplyLines,
             supplyingFacilities: this.supplyingFacilities,
             programs: this.programs,
+            requisitionGroupsMap: this.requisitionGroupsMap,
             $stateParams: this.stateParams
         });
         this.vm.$onInit();
@@ -83,6 +95,10 @@ describe('SupplyLineListController', function() {
 
         it('should expose program', function() {
             expect(this.vm.program).toEqual(this.stateParams.program);
+        });
+
+        it('should expose a map of requisition groups', function() {
+            expect(this.vm.requisitionGroupsMap).toEqual(this.requisitionGroupsMap);
         });
     });
 

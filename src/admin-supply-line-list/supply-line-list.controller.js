@@ -28,9 +28,11 @@
         .module('admin-supply-line-list')
         .controller('SupplyLineListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'supplyLines', 'supplyingFacilities', 'programs'];
+    controller.$inject = [
+        '$state', '$stateParams', 'supplyLines', 'supplyingFacilities', 'programs', 'requisitionGroupsMap'
+    ];
 
-    function controller($state, $stateParams, supplyLines, supplyingFacilities, programs) {
+    function controller($state, $stateParams, supplyLines, supplyingFacilities, programs, requisitionGroupsMap) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -81,6 +83,17 @@
         vm.supplyingFacility = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-supply-line-list.controller:SupplyLineListController
+         * @type {Array}
+         * @name requisitionGroupsMap
+         *
+         * @description
+         * The map of requisition groups related with the displayed supply lines.
+         */
+        vm.requisitionGroupsMap = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-supply-line-list.controller:SupplyLineListController
          * @name $onInit
@@ -94,6 +107,7 @@
             vm.programs = programs;
             vm.supplyingFacility = $stateParams.supplyingFacility;
             vm.program = $stateParams.program;
+            vm.requisitionGroupsMap = requisitionGroupsMap;
         }
 
         /**
