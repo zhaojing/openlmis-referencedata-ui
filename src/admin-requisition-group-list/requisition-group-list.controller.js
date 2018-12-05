@@ -75,7 +75,7 @@
          * @ngdoc property
          * @propertyOf admin-requisition-group-list.controller:RequisitionGroupListController
          * @name facilitiesMap
-         * @type {Map}
+         * @type {Object}
          *
          * @description
          * Contains facilities related to requisition groups. The key value is equal to a facility ID value.
