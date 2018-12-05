@@ -45,7 +45,8 @@
                 <td ng-if="!(requisitionGroup.requisitionGroupProgramSchedules.length > 1)">{{requisitionGroup.requisitionGroupProgramSchedules[0].program.name}}</td>
                 <td>{{requisitionGroup.code}}</td>
                 <td>{{requisitionGroup.supervisoryNode.name}}</td>
-                <td>{{requisitionGroup.supervisoryNode.facility.geographicZone.name}}</td>
+                <td ng-if="requisitionGroup.supervisoryNode.facility">{{vm.facilitiesMap[requisitionGroup.supervisoryNode.facility.id].geographicZone.name}}</td>
+                <td ng-if="!requisitionGroup.supervisoryNode.facility"></td>
                 <td>{{requisitionGroup.memberFacilities.length}}</td>
                 <td>
                     <button class="primary" ui-sref="openlmis.administration.requisitionGroupView({id: requisitionGroup.id})">{{'adminRequisitionGroupList.view' | message}}</button>

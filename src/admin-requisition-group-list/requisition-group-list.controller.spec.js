@@ -15,109 +15,101 @@
 
 describe('RequisitionGroupListController', function() {
 
-    var $state, $controller,
-        vm, requisitionGroups, programs, geographicZones, stateParams;
-
     beforeEach(function() {
         module('admin-requisition-group-list');
 
+        var RequisitionGroupDataBuilder, GeographicZoneDataBuilder, ProgramDataBuilder, ObjectMapper;
+
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
+
+            ObjectMapper = $injector.get('ObjectMapper');
+
+            RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
+            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+
         });
 
-        programs = [
-            {
-                id: 'program-id-1',
-                name: 'program-1',
-                code: 'program-1-code'
-            },
-            {
-                id: 'program-id-2',
-                name: 'program-2',
-                code: 'program-2-code'
-            }
+        this.programs = [
+            new ProgramDataBuilder().build(),
+            new ProgramDataBuilder().build()
         ];
-        geographicZones = [
-            {
-                id: 'zone-1',
-                code: 'zone-1-code'
-            },
-            {
-                id: 'zone-2',
-                code: 'zone-2-code'
-            }
+        this.geographicZones = [
+            new GeographicZoneDataBuilder().build(),
+            new GeographicZoneDataBuilder().build()
         ];
-        requisitionGroups = [
-            {
-                id: 'group-id-1',
-                name: 'group-1',
-                code: 'group-code-1'
-            },
-            {
-                id: 'group-id-2',
-                name: 'group-2',
-                code: 'group-code-2'
-            }
+        this.requisitionGroups = [
+            new RequisitionGroupDataBuilder().buildJson(),
+            new RequisitionGroupDataBuilder().buildJson()
         ];
-        stateParams = {
+        this.facilitiesMap = new ObjectMapper().map(this.requisitionGroups.map(function(group) {
+            return group.supervisoryNode.facility;
+        }));
+        this.stateParams = {
             page: 0,
             size: 10,
-            zone: geographicZones[0].code,
+            zone: this.geographicZones[0].code,
             name: 'requisition-group',
-            program: programs[0].code
+            program: this.programs[0].code
         };
 
-        vm = $controller('RequisitionGroupListController', {
-            requisitionGroups: requisitionGroups,
-            programs: programs,
-            geographicZones: geographicZones,
-            $stateParams: stateParams
+        this.vm = this.$controller('RequisitionGroupListController', {
+            requisitionGroups: this.requisitionGroups,
+            programs: this.programs,
+            geographicZones: this.geographicZones,
+            $stateParams: this.stateParams,
+            facilitiesMap: this.facilitiesMap
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
         it('should expose search method', function() {
-            expect(angular.isFunction(vm.search)).toBe(true);
+            expect(angular.isFunction(this.vm.search)).toBe(true);
         });
 
         it('should expose requisition groups array', function() {
-            expect(vm.requisitionGroups).toEqual(requisitionGroups);
+            expect(this.vm.requisitionGroups).toEqual(this.requisitionGroups);
         });
 
         it('should expose programs array', function() {
-            expect(vm.programs).toEqual(programs);
+            expect(this.vm.programs).toEqual(this.programs);
         });
 
         it('should expose name', function() {
-            expect(vm.name).toEqual(stateParams.name);
+            expect(this.vm.name).toEqual(this.stateParams.name);
         });
 
         it('should expose program', function() {
-            expect(vm.program).toEqual(stateParams.program);
+            expect(this.vm.program).toEqual(this.stateParams.program);
         });
 
         it('should expose geographic zone', function() {
-            expect(vm.geographicZone).toEqual(stateParams.zone);
+            expect(this.vm.geographicZone).toEqual(this.stateParams.zone);
+        });
+
+        it('should expose facilities map', function() {
+            expect(this.vm.facilitiesMap).toEqual(this.facilitiesMap);
         });
     });
 
     describe('search', function() {
 
         it('should set all params', function() {
-            vm.geographicZone = 'some-zone';
-            vm.program = 'some-program';
-            vm.name = 'some-name';
+            this.vm.geographicZone = 'some-zone';
+            this.vm.program = 'some-program';
+            this.vm.name = 'some-name';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroupList', {
-                page: stateParams.page,
-                size: stateParams.size,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroupList', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
                 zone: 'some-zone',
                 name: 'some-name',
                 program: 'some-program'
@@ -127,9 +119,9 @@ describe('RequisitionGroupListController', function() {
         });
 
         it('should call state go method', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });

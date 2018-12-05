@@ -44,7 +44,7 @@
 
                     return deferred.promise;
                 },
-                requisitionGroups: function(paginationService, adminRequisitionGroupListService, $stateParams) {
+                requisitionGroups: function(paginationService, requisitionGroupService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
                             page = stateParams.page,
@@ -53,11 +53,31 @@
                         delete params.page;
                         delete params.size;
 
-                        return adminRequisitionGroupListService.search({
+                        return requisitionGroupService.search({
                             page: page,
                             size: size
                         }, params);
                     });
+                },
+                facilitiesMap: function(requisitionGroups, facilityService, ObjectMapper) {
+                    var facilityIds = requisitionGroups.map(function(group) {
+                        if (group.supervisoryNode && group.supervisoryNode.facility) {
+                            return group.supervisoryNode.facility.id;
+                        }
+
+                        return undefined;
+                    }).filter(function(elem) {
+                        return elem !== undefined;
+                    });
+
+                    return facilityService
+                        .query({
+                            id: facilityIds,
+                            page: 0,
+                            size: facilityIds.length
+                        }).then(function(facilities) {
+                            return new ObjectMapper().map(facilities);
+                        });
                 }
             }
         });

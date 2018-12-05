@@ -28,9 +28,11 @@
         .module('admin-requisition-group-list')
         .controller('RequisitionGroupListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'requisitionGroups', 'programs', 'geographicZones'];
+    controller.$inject = [
+        '$state', '$stateParams', 'requisitionGroups', 'programs', 'geographicZones', 'facilitiesMap'
+    ];
 
-    function controller($state, $stateParams, requisitionGroups, programs, geographicZones) {
+    function controller($state, $stateParams, requisitionGroups, programs, geographicZones, facilitiesMap) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -68,6 +70,17 @@
          * Contains list of all geographic zones.
          */
         vm.geographicZones = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-requisition-group-list.controller:RequisitionGroupListController
+         * @name facilitiesMap
+         * @type {Map}
+         *
+         * @description
+         * Contains facilities related to requisition groups. The key value is equal to a facility ID value.
+         */
+        vm.facilitiesMap = undefined;
 
         /**
          * @ngdoc property
@@ -117,6 +130,7 @@
             vm.program = $stateParams.program;
             vm.geographicZone = $stateParams.zone;
             vm.name = $stateParams.name;
+            vm.facilitiesMap = facilitiesMap;
         }
 
         /**
