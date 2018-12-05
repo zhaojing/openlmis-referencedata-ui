@@ -59,7 +59,7 @@
                         }, params);
                     });
                 },
-                facilitiesMap: function(requisitionGroups, facilityService, ObjectMapper) {
+                facilitiesMap: function(requisitionGroups, FacilityResource, ObjectMapper) {
                     var facilityIds = requisitionGroups.map(function(group) {
                         if (group.supervisoryNode && group.supervisoryNode.facility) {
                             return group.supervisoryNode.facility.id;
@@ -70,12 +70,13 @@
                         return elem !== undefined;
                     });
 
-                    return facilityService
+                    return new FacilityResource()
                         .query({
                             id: facilityIds,
                             page: 0,
                             size: facilityIds.length
-                        }).then(function(facilities) {
+                        })
+                        .then(function(facilities) {
                             return new ObjectMapper().map(facilities);
                         });
                 }
