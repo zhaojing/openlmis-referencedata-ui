@@ -33,7 +33,7 @@
                 processingSchedule: function($stateParams, processingScheduleService) {
                     return processingScheduleService.get($stateParams.id);
                 },
-                processingPeriods: function($stateParams, periodFactory, paginationService) {
+                processingPeriods: function(processingSchedules, $stateParams, periodFactory, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
                         delete params.id;
