@@ -33,6 +33,8 @@
                 processingSchedule: function($stateParams, processingScheduleService) {
                     return processingScheduleService.get($stateParams.id);
                 },
+                // processingSchedules resolve added to make sure that pagination is registered after parent state
+                // should be fixed in OLMIS-5748
                 processingPeriods: function(processingSchedules, $stateParams, periodFactory, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
