@@ -33,6 +33,8 @@
         RequisitionGroupDataBuilder.prototype.withName = withName;
         RequisitionGroupDataBuilder.prototype.withDescription = withDescription;
         RequisitionGroupDataBuilder.prototype.withSupervisoryNode = withSupervisoryNode;
+        RequisitionGroupDataBuilder.prototype.withoutSupervisoryNode = withoutSupervisoryNode;
+        RequisitionGroupDataBuilder.prototype.withoutSupervisoryNodeFacility = withoutSupervisoryNodeFacility;
         RequisitionGroupDataBuilder.prototype.withMemberFacility = withMemberFacility;
         RequisitionGroupDataBuilder.prototype.withMemberFacilities = withMemberFacilities;
 
@@ -71,6 +73,15 @@
 
         function withSupervisoryNode(newSupervisoryNode) {
             this.supervisoryNode = newSupervisoryNode;
+            return this;
+        }
+
+        function withoutSupervisoryNode() {
+            return this.withSupervisoryNode(undefined);
+        }
+
+        function withoutSupervisoryNodeFacility() {
+            this.supervisoryNode.facility = undefined;
             return this;
         }
 

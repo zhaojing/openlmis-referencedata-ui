@@ -35,14 +35,11 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                geographicZones: function($q, geographicZoneService) {
-                    var deferred = $q.defer();
-
-                    geographicZoneService.getAll().then(function(response) {
-                        deferred.resolve(response.content);
-                    }, deferred.reject);
-
-                    return deferred.promise;
+                geographicZones: function(geographicZoneService) {
+                    return geographicZoneService.getAll()
+                        .then(function(response) {
+                            return response.content;
+                        });
                 },
                 requisitionGroups: function(paginationService, requisitionGroupService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
