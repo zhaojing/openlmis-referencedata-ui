@@ -59,6 +59,7 @@ describe('SupervisoryNode', function() {
             expect(this.supervisoryNode.description).toEqual(this.json.description);
             expect(this.supervisoryNode.repository).toEqual(this.repository);
             expect(this.supervisoryNode.parentNode).toEqual(this.json.parentNode);
+            expect(this.supervisoryNode.requisitionGroup).toEqual(this.json.requisitionGroup);
         });
 
     });
