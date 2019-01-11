@@ -1,3 +1,9 @@
+5.5.1 / WIP
+==================
+
+Bug fixes:
+* [OLMIS-5904](https://openlmis.atlassian.net/browse/OLMIS-5904): Fixed issue with a random order of programs and facilities in openlmis-facility-program-select component.
+
 5.5.0 / 2018-12-12
 ==================
 
