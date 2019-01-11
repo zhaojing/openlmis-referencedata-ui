@@ -34,7 +34,7 @@
     <label for="programListMyFacility">{{'openlmisFacilityProgramSelect.program' | message}}</label>
     <select id="programListMyFacility"
         ng-model="vm.program"
-        ng-options="program as program.name for program in vm.programs"
+        ng-options="program as program.name for program in vm.programs | orderBy:'name' track by program.id"
         placeholder="{{'openlmisFacilityProgramSelect.selectProgram' | message}}"
         required></select>
 
@@ -44,7 +44,7 @@
     <label for="programListSupervisedFacility">{{'openlmisFacilityProgramSelect.program' | message}}</label>
     <select id="programListSupervisedFacility"
         ng-model="vm.program"
-        ng-options="program as program.name for program in vm.programs"
+        ng-options="program as program.name for program in vm.programs | orderBy:'name' track by program.id"
         ng-change="vm.updateFacilities()"
         placeholder="{{'openlmisFacilityProgramSelect.selectProgram' | message}}"
         required></select>
@@ -52,7 +52,7 @@
     <label for="supervisedFacilityName">{{'openlmisFacilityProgramSelect.facility' | message}}</label>
     <select id="supervisedFacilityName"
         ng-model="vm.facility"
-        ng-options="facility as facility.name for facility in vm.facilities | unique:'id'"
+        ng-options="facility as facility.name for facility in vm.facilities | unique:'id' | orderBy:'name' track by facility.id"
         placeholder="{{'openlmisFacilityProgramSelect.selectFacility' | message}}"
         required></select>
 
