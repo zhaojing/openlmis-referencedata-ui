@@ -36,12 +36,12 @@
             resolve: {
                 facilityTypes: function(paginationService, facilityTypeService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        var params = angular.copy(stateParams);
+                        var  params = {},
+                            sortParam = {};
 
-                        params.sort = 'displayOrder,asc';
+                        sortParam.sort = 'displayOrder,asc';
 
-                        delete params.page;
-                        delete params.size;
+                        angular.merge(params, stateParams, sortParam);
 
                         return facilityTypeService.query(params);
                     });
