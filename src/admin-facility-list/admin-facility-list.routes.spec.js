@@ -46,13 +46,14 @@ describe('openlmis.administration.facilities state', function() {
             content: facilities
         }));
 
-        goTo('/administration/facilities?name=Facility&page=1&size=2&zoneId=zone-one');
+        goTo('/administration/facilities?name=Facility&page=1&size=2&zoneId=zone-one&sort=name,asc');
 
         expect($state.current.name).toEqual('openlmis.administration.facilities');
         expect(getResolvedValue('facilities')).toEqual(facilities);
         expect(facilityService.search).toHaveBeenCalledWith({
             page: '1',
-            size: '2'
+            size: '2',
+            sort: 'name,asc'
         }, {
             name: 'Facility',
             zoneId: 'zone-one'

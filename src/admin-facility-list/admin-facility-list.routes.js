@@ -43,7 +43,8 @@
 
                         return facilityService.search({
                             page: page,
-                            size: size
+                            size: size,
+                            sort: 'name,asc'
                         }, params);
                     });
                 },
