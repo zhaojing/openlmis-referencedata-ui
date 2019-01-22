@@ -4,6 +4,7 @@
 Bug fixes:
 * [OLMIS-5904](https://openlmis.atlassian.net/browse/OLMIS-5904): Fixed issue with a random order of programs and facilities in openlmis-facility-program-select component.
 * [OLMIS-5204](https://openlmis.atlassian.net/browse/OLMIS-5204): Fixed facility type list pagination
+* [OLMIS-5915](https://openlmis.atlassian.net/browse/OLMIS-5915): Fixed products disappear after removing one of the Facility on the Add/Edit Association screen
 
 5.5.0 / 2018-12-12
 ==================

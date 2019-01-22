@@ -146,7 +146,7 @@
             loadingModalService.open();
             updateFacilities()
                 .then(function() {
-                    return updateProducts(true);
+                    return updateProducts(false);
                 })
                 .finally(loadingModalService.close);
         }
@@ -175,13 +175,17 @@
          *
          * @description
          * Removes a facility with the given index from the association. This will update the list of available products
-         * as well ass clear the list of selected ones.
+         * as well as clear the list of selected ones if facility list is zero.
          *
          * @param {int} id  the index of the facility
          */
         function removeFacility(id) {
             vm.association.facilities.splice(id, 1);
-            updateOptionsAfterFacilityChange(true);
+
+            if (vm.association.facilities.length < 1) {
+                updateOptionsAfterFacilityChange(true);
+            }
+
         }
 
         /**
