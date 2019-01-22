@@ -184,8 +184,9 @@
 
             if (vm.association.facilities.length < 1) {
                 updateOptionsAfterFacilityChange(true);
+            } else {
+                updateOptionsAfterFacilityChange(false);
             }
-
         }
 
         /**

@@ -538,8 +538,13 @@ describe('AssociationModalController', function() {
             expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
-        it('should clear the list of selected orderables', function() {
-            this.vm.removeFacility(this.vm.association.facilities[1]);
+        it('should clear the list of selected orderables if there is no facilities associated', function() {
+            this.supplyPartnerAssociationService.getOrderables.andReturn(this.$q.resolve([]));
+
+            this.vm.association.facilities = [
+                this.vm.association.facilities[1]
+            ];
+            this.vm.removeFacility(this.vm.association.facilities[0]);
             this.$rootScope.$apply();
 
             expect(this.vm.association.orderables).toEqual([]);
