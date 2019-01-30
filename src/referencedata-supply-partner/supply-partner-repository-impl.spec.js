@@ -211,7 +211,9 @@ describe('SupplyPartnerRepositoryImpl', function() {
             supervisoryNodeResourceMock.query.andReturn(this.$q.resolve({
                 content: this.supervisoryNodes
             }));
-            facilityResourceMock.query.andReturn(this.$q.resolve(this.facilities));
+            facilityResourceMock.query.andReturn(this.$q.resolve({
+                content: this.facilities
+            }));
             orderableResourceMock.query.andReturn(this.$q.resolve({
                 content: this.orderables
             }));

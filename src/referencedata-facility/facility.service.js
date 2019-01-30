@@ -40,8 +40,7 @@
             resource = $resource(referencedataUrlFactory('/api/facilities/:id'), {}, {
                 query: {
                     url: referencedataUrlFactory('/api/facilities/'),
-                    method: 'GET',
-                    isArray: true
+                    method: 'GET'
                 },
                 getAllMinimal: {
                     url: referencedataUrlFactory('/api/facilities/minimal'),
@@ -111,19 +110,20 @@
          * When user is offline it gets facilities from offline storage.
          * If user is online it stores all facilities into offline storage.
          *
+         * @param  {String}  queryParams      the pagination parameters
          * @param  {String}  queryParams      the search parameters
          * @return {Promise} Array of facilities
          */
-        function query(queryParams) {
+        function query(paginationParams, queryParams) {
             if (offlineService.isOffline()) {
                 return $q.resolve(facilitiesOffline.getAll());
             }
-            return resource.query(queryParams).$promise
-                .then(function(facilities) {
-                    facilities.forEach(function(facility) {
+            return resource.query(paginationParams, queryParams).$promise
+                .then(function(page) {
+                    page.content.forEach(function(facility) {
                         facilitiesOffline.put(facility);
                     });
-                    return facilities;
+                    return page;
                 });
         }
 

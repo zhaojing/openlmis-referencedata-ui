@@ -101,70 +101,82 @@ describe('facilityService', function() {
     });
 
     describe('getAll', function() {
+        var result,
+            page = 0,
+            size = 2;
 
         it('should get all facilities from storage while offline', function() {
-            var data;
-
             facilitiesStorage.getAll.andReturn([facilityOne, facilityTwo]);
 
             offlineService.isOffline.andReturn(true);
 
-            facilityService.query().then(function(response) {
-                data = response;
+            facilityService.query({
+                page: page,
+                size: size
+            }, {}).then(function(paginatedObject) {
+                result = paginatedObject;
             });
 
             $rootScope.$apply();
 
-            expect(data[0].id).toBe(facilityOne.id);
-            expect(data[1].id).toBe(facilityTwo.id);
+            expect(result[0].id).toBe(facilityOne.id);
+            expect(result[1].id).toBe(facilityTwo.id);
         });
 
         it('should get all facilities and save them to storage', function() {
-            var data,
-                spy = jasmine.createSpy();
+            var spy = jasmine.createSpy();
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities'))
-                .respond(200, [facilityOne, facilityTwo]);
-            facilitiesStorage.put.andCallFake(spy);
-
-            offlineService.isOffline.andReturn(false);
-
-            facilityService.query().then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data[0].id).toBe(facilityOne.id);
-            expect(data[1].id).toBe(facilityTwo.id);
-            expect(spy.callCount).toEqual(2);
-        });
-
-        it('should get all facilities by id and save them to storage', function() {
-            var data,
-                spy = jasmine.createSpy(),
-                idOne = 'id-one',
-                idTwo = 'id-two';
-
-            $httpBackend
-                .when('GET', referencedataUrlFactory('/api/facilities?id=' + idOne + '&id=' + idTwo))
-                .respond(200, [facilityOne, facilityTwo]);
+            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities?page=' + page + '&size=' + size))
+                .respond(200, {
+                    content: [facilityOne, facilityTwo]
+                });
             facilitiesStorage.put.andCallFake(spy);
 
             offlineService.isOffline.andReturn(false);
 
             facilityService.query({
-                id: [idOne, idTwo]
-            }).then(function(response) {
-                data = response;
+                page: page,
+                size: size
+            }, {}).then(function(paginatedObject) {
+                result = paginatedObject;
             });
 
             $httpBackend.flush();
             $rootScope.$apply();
 
-            expect(data[0].id).toBe(facilityOne.id);
-            expect(data[1].id).toBe(facilityTwo.id);
+            expect(result.content.length).toEqual(2);
+            expect(result.content).toEqual([facilityOne, facilityTwo]);
+            expect(spy.callCount).toEqual(2);
+        });
+
+        it('should get all facilities by id and save them to storage', function() {
+            var spy = jasmine.createSpy(),
+                idOne = 'id-one',
+                idTwo = 'id-two';
+
+            $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities?.*')))
+                .respond(200, {
+                    content: [facilityOne, facilityTwo]
+                });
+
+            facilitiesStorage.put.andCallFake(spy);
+
+            offlineService.isOffline.andReturn(false);
+
+            facilityService.query({
+                page: page,
+                size: size
+            }, {
+                id: [idOne, idTwo]
+            }).then(function(paginatedObject) {
+                result = paginatedObject;
+            });
+
+            $httpBackend.flush();
+            $rootScope.$apply();
+
+            expect(result.content.length).toEqual(2);
+            expect(result.content).toEqual([facilityOne, facilityTwo]);
             expect(spy.callCount).toEqual(2);
         });
     });

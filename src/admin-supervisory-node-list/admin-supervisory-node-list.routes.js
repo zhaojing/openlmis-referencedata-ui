@@ -40,7 +40,7 @@
                         customSizeParamName: 'nodesSize'
                     });
                 },
-                facilities: function(supervisoryNodes, FacilityResource) {
+                facilities: function(supervisoryNodes, FacilityResource, OpenlmisArrayDecorator) {
                     var facilitiesIds = supervisoryNodes
                         .filter(function(supervisoryNode) {
                             return !!supervisoryNode.facility;
@@ -50,11 +50,11 @@
                         });
 
                     return new FacilityResource().query({
-                        id: facilitiesIds
+                        id: new OpenlmisArrayDecorator(facilitiesIds).getUnique()
                     });
                 },
                 facilitiesMap: function(facilities, ObjectMapper) {
-                    return new ObjectMapper().map(facilities);
+                    return new ObjectMapper().map(facilities.content);
                 },
                 supervisoryNodesMap: function(SupervisoryNodeResource, supervisoryNodes, ObjectMapper) {
                     var supervisoryNodeIds = supervisoryNodes.flatMap(function(supervisoryNode) {

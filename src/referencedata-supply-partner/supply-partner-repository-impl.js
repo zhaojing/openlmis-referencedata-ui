@@ -144,7 +144,7 @@
                     ]).then(function(responses) {
                         var programs = responses[0],
                             supervisoryNodes = responses[1].content,
-                            facilities = responses[2],
+                            facilities = responses[2].content,
                             orderables = responses[3].content;
 
                         return combineResponses(supplyPartner, programs, supervisoryNodes, facilities, orderables);

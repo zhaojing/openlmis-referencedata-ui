@@ -1,6 +1,9 @@
 5.5.1 / WIP
 ==================
 
+Improvements:
+* [OLMIS-3773](https://openlmis.atlassian.net/browse/OLMIS-3773): Updated UI after changing /facilities endpoint to return page.
+
 Bug fixes:
 * [OLMIS-5904](https://openlmis.atlassian.net/browse/OLMIS-5904): Fixed issue with a random order of programs and facilities in openlmis-facility-program-select component.
 * [OLMIS-5204](https://openlmis.atlassian.net/browse/OLMIS-5204): Fixed facility type list pagination

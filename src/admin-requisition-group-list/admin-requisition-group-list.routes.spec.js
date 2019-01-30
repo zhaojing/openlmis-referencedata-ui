@@ -76,7 +76,11 @@ describe('openlmis.administration.requisitionGroupList', function() {
             .andReturn(this.$q.resolve(new PageDataBuilder()
                 .withContent(this.geographicZones)
                 .build()));
-        spyOn(this.FacilityResource.prototype, 'query').andReturn(this.$q.resolve(this.facilities));
+        spyOn(this.FacilityResource.prototype, 'query').andReturn(this.$q.resolve(
+            new PageDataBuilder()
+                .withContent(this.facilities)
+                .build()
+        ));
         spyOn(this.$templateCache, 'get').andCallThrough();
 
         this.goToUrl = goToUrl;

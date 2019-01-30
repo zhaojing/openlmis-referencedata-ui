@@ -56,7 +56,8 @@
                         }, params);
                     });
                 },
-                facilitiesMap: function(requisitionGroups, FacilityResource, ObjectMapper) {
+                facilitiesMap: function(requisitionGroups, FacilityResource, ObjectMapper,
+                    OpenlmisArrayDecorator) {
                     var facilityIds = requisitionGroups.map(function(group) {
                         if (group.supervisoryNode && group.supervisoryNode.facility) {
                             return group.supervisoryNode.facility.id;
@@ -67,14 +68,16 @@
                         return elem !== undefined;
                     });
 
+                    var uniqueFacilities =  new OpenlmisArrayDecorator(facilityIds).getUnique();
+
                     return new FacilityResource()
                         .query({
-                            id: facilityIds,
+                            id: uniqueFacilities,
                             page: 0,
-                            size: facilityIds.length
+                            size: uniqueFacilities.length
                         })
                         .then(function(facilities) {
-                            return new ObjectMapper().map(facilities);
+                            return new ObjectMapper().map(facilities.content);
                         });
                 }
             }

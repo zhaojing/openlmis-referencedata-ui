@@ -35,7 +35,7 @@ describe('FacilityResource', function() {
         new FacilityResource();
 
         expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/facilities', {
-            paginated: false
+            paginated: true
         });
     });
 });
