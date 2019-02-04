@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.supplyLines', {
             showInNavigation: true,
             label: 'adminSupplyLineList.supplyLines',
-            url: '/supplyLines?supplyingFacility&program&page&size&sort',
+            url: '/supplyLines?supplyingFacilityId&programId&page&size',
             controller: 'SupplyLineListController',
             templateUrl: 'admin-supply-line-list/supply-line-list.html',
             controllerAs: 'vm',
@@ -48,11 +48,6 @@
                 supplyLines: function($stateParams, supplyLineService, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
-
-                        if (!params.sort) {
-                            params.sort = 'supplyingFacility';
-                        }
-
                         return supplyLineService.search(params);
                     });
                 },
@@ -74,7 +69,6 @@
                         .then(function(requisitionGroups) {
                             return new ObjectMapper().map(requisitionGroups);
                         });
-
                 }
             }
         });
