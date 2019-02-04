@@ -110,6 +110,36 @@ describe('openlmis.administration.supplyLine', function() {
         expect(this.getResolvedValue('requisitionGroupsMap')).toEqual(expected);
     });
 
+    it('should get requisition groups only if supply line has requisition group', function() {
+        this.supplyLines[0].supervisoryNode.requisitionGroup = undefined;
+
+        var expected = {};
+        expected[this.requisitionGroups[0].id] = this.requisitionGroups[0];
+        expected[this.requisitionGroups[1].id] = this.requisitionGroups[1];
+
+        this.goToUrl('/administration/supplyLines');
+
+        var requisitionGroupdId = this.supplyLines[1].supervisoryNode.requisitionGroup.id;
+
+        expect(this.RequisitionGroupResource.prototype.query).toHaveBeenCalledWith({
+            id: [requisitionGroupdId]
+        });
+
+        expect(this.getResolvedValue('requisitionGroupsMap')).toEqual(expected);
+    });
+
+    it('should get empty object if there is no requisition group assigned', function() {
+        this.supplyLines[0].supervisoryNode.requisitionGroup = undefined;
+        this.supplyLines[1].supervisoryNode.requisitionGroup = undefined;
+
+        var expected = {};
+
+        this.goToUrl('/administration/supplyLines');
+
+        expect(this.RequisitionGroupResource.prototype.query).not.toHaveBeenCalled();
+        expect(this.getResolvedValue('requisitionGroupsMap')).toEqual(expected);
+    });
+
     it('should not change state when fetching supplying facilities fails', function() {
         this.facilityService.search.andReturn(this.$q.reject());
 

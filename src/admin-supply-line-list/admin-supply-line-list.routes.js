@@ -57,9 +57,16 @@
                     });
                 },
                 requisitionGroupsMap: function(supplyLines, RequisitionGroupResource, ObjectMapper) {
-                    var requisitionGroupIds = supplyLines.map(function(supplyLine) {
-                        return supplyLine.supervisoryNode.requisitionGroup.id;
-                    });
+                    var requisitionGroupIds = supplyLines
+                        .filter(function(supplyLine) {
+                            return supplyLine.supervisoryNode.requisitionGroup;
+                        })
+                        .map(function(supplyLine) {
+                            return supplyLine.supervisoryNode.requisitionGroup.id;
+                        });
+                    if (!requisitionGroupIds.length) {
+                        return {};
+                    }
                     return new RequisitionGroupResource()
                         .query({
                             id: requisitionGroupIds
