@@ -129,7 +129,7 @@ describe('openlmis.administration.supplyLine', function() {
         expect(this.getResolvedValue('requisitionGroupsMap')).toEqual(expected);
     });
 
-    it('should get empty object if there is no requisition group assigned', function() {
+    it('should get empty requisition group map if there is no assigned', function() {
         this.supplyLines[0].supervisoryNode.requisitionGroup = undefined;
         this.supplyLines[1].supervisoryNode.requisitionGroup = undefined;
 
