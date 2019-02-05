@@ -3,7 +3,6 @@
 
 Improvements:
 * [OLMIS-3773](https://openlmis.atlassian.net/browse/OLMIS-3773): Updated UI after changing /facilities endpoint to return page.
-* [OLMIS-5976](https://openlmis.atlassian.net/browse/OLMIS-5976): Updated auth-ui to version 6.2.0.
 * [OLMIS-5000](https://openlmis.atlassian.net/browse/OLMIS-5000): Updated supply line service to use refactored endpoints
 
 Bug fixes:
