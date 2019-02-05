@@ -20,6 +20,7 @@ describe('openlmis.administration.supplyLine', function() {
 
         var FacilityDataBuilder, ProgramDataBuilder, SupplyLineDataBuilder, RequisitionGroupDataBuilder,
             PageDataBuilder;
+
         inject(function($injector) {
             FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
@@ -33,7 +34,7 @@ describe('openlmis.administration.supplyLine', function() {
             this.$q = $injector.get('$q');
             this.facilityService = $injector.get('facilityService');
             this.programService = $injector.get('programService');
-            this.supplyLineService = $injector.get('supplyLineService');
+            this.SupplyLineResource = $injector.get('SupplyLineResource');
             this.RequisitionGroupResource = $injector.get('RequisitionGroupResource');
         });
 
@@ -70,7 +71,7 @@ describe('openlmis.administration.supplyLine', function() {
 
         spyOn(this.facilityService, 'search').andReturn(this.$q.resolve(this.facilitiesPage));
         spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
-        spyOn(this.supplyLineService, 'search').andReturn(this.$q.resolve(this.supplyLinesPage));
+        spyOn(this.SupplyLineResource.prototype, 'query').andReturn(this.$q.resolve(this.supplyLinesPage));
         spyOn(this.RequisitionGroupResource.prototype, 'query').andReturn(this.$q.resolve(this.requisitionGroups));
     });
 
@@ -153,7 +154,7 @@ describe('openlmis.administration.supplyLine', function() {
     });
 
     it('should not change state when fetching supply lines fails', function() {
-        this.supplyLineService.search.andReturn(this.$q.reject());
+        this.SupplyLineResource.prototype.query.andReturn(this.$q.reject());
 
         expect(this.$state.current.name).not.toEqual('openlmis.administration.supplyLines');
     });
