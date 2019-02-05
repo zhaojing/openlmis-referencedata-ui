@@ -35,8 +35,8 @@
                 }
             },
             resolve: {
-                supplyLine: function(supplyLineService, $stateParams) {
-                    return supplyLineService.get($stateParams.id);
+                supplyLine: function(SupplyLineResource, $stateParams) {
+                    return new SupplyLineResource().get($stateParams.id);
                 }
             }
         });
