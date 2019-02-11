@@ -41,8 +41,8 @@ describe('openlmis-permissions run', function() {
 
         this.user = new UserDataBuilder().build();
 
-        this.postLoginAction = this.loginServiceSpy.registerPostLoginAction.calls[0].args[0];
-        this.postLogoutAction = this.loginServiceSpy.registerPostLogoutAction.calls[0].args[0];
+        this.postLoginAction = this.loginServiceSpy.registerPostLoginAction.calls[1].args[0];
+        this.postLogoutAction = this.loginServiceSpy.registerPostLogoutAction.calls[1].args[0];
 
         spyOn(this.userRightsFactory, 'buildRights').andReturn(this.$q.resolve(this.rights));
         spyOn(this.authorizationService, 'setRights');

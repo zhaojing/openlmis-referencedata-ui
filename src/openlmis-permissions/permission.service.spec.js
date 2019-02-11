@@ -18,13 +18,38 @@ describe('openlmis-permissions.this.permissionService', function() {
     beforeEach(function() {
         module('openlmis-permissions');
 
+        var UserDataBuilder, RoleDataBuilder;
         inject(function($injector) {
+            UserDataBuilder = $injector.get('UserDataBuilder');
+            RoleDataBuilder = $injector.get('RoleDataBuilder');
+
             this.$rootScope = $injector.get('$rootScope');
             this.permissionService = $injector.get('permissionService');
             this.localStorageService = $injector.get('localStorageService');
             this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
             this.$httpBackend = $injector.get('$httpBackend');
+            this.currentUserService = $injector.get('currentUserService');
+            this.RoleResource = $injector.get('RoleResource');
+            this.$q = $injector.get('$q');
         });
+
+        this.possessedRightName = 'POSSESSED_RIGHT';
+        this.nonPossessedRightName = 'NON_POSSESSED_RIGHT';
+
+        this.roles = [
+            new RoleDataBuilder()
+                .withSupervisionType()
+                .withRight(this.possessedRightName)
+                .build(),
+            new RoleDataBuilder()
+                .withSupervisionType()
+                .withRight(this.nonPossessedRightName)
+                .build()
+        ];
+
+        this.user = new UserDataBuilder()
+            .withSupervisionRoleAssignment(this.roles[0].id, 'supervisory-node-id', 'program-id')
+            .buildReferenceDataUserJson();
 
         var permissionStrings = [
             'permissionString1|facility-id|program-id',
@@ -38,6 +63,8 @@ describe('openlmis-permissions.this.permissionService', function() {
         spyOn(this.localStorageService, 'get').andReturn(null);
         spyOn(this.localStorageService, 'add').andCallThrough();
         spyOn(this.localStorageService, 'remove');
+        spyOn(this.RoleResource.prototype, 'query').andReturn(this.$q.resolve(this.roles));
+        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
     });
 
     it('empty will clear permission strings from browser', function() {
@@ -309,6 +336,34 @@ describe('openlmis-permissions.this.permissionService', function() {
                 right: 'right'
             })).toBe(true);
         });
+    });
+
+    describe('hasRoleWithRight', function() {
+
+        it('should return true if user has a role with the given right', function() {
+            var result;
+            this.permissionService
+                .hasRoleWithRight(this.possessedRightName)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(true);
+        });
+
+        it('should return false if user has no role with the given right', function() {
+            var result;
+            this.permissionService
+                .hasRoleWithRight(this.nonPossessedRightName)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(false);
+        });
+
     });
 
 });

@@ -13,25 +13,29 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('RoleResource', function() {
 
-    'use strict';
+    var RoleResource, OpenlmisResourceMock;
 
-    /**
-     * @module openlmis-permissions
-     *
-     * @description
-     * Provides methods to get a user's permissions and rights.
-     *
-     * This module loads rights and permissions into the authorizationService.
-     */
-    angular.module('openlmis-permissions', [
-        'openlmis-auth',
-        'openlmis-loading',
-        'openlmis-login',
-        'referencedata-program',
-        'referencedata-user',
-        'referencedata-role'
-    ]);
+    beforeEach(function() {
+        module('referencedata-role', function($provide) {
+            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
-})();
+            $provide.factory('OpenlmisResource', function() {
+                return OpenlmisResourceMock;
+            });
+        });
+
+        inject(function($injector) {
+            RoleResource = $injector.get('RoleResource');
+        });
+    });
+
+    it('should extend OpenlmisResource', function() {
+        new RoleResource();
+
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/roles', {
+            paginated: false
+        });
+    });
+});

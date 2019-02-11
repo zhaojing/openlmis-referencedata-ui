@@ -18,20 +18,28 @@
     'use strict';
 
     /**
-     * @module openlmis-permissions
+     * @ngdoc service
+     * @name referencedata-role.RoleResource
      *
      * @description
-     * Provides methods to get a user's permissions and rights.
-     *
-     * This module loads rights and permissions into the authorizationService.
+     * Communicates with the /api/roles endpoint of the OpenLMIS server.
      */
-    angular.module('openlmis-permissions', [
-        'openlmis-auth',
-        'openlmis-loading',
-        'openlmis-login',
-        'referencedata-program',
-        'referencedata-user',
-        'referencedata-role'
-    ]);
+    angular
+        .module('referencedata-role')
+        .factory('RoleResource', RoleResource);
 
+    RoleResource.$inject = ['OpenlmisResource', 'classExtender'];
+
+    function RoleResource(OpenlmisResource, classExtender) {
+
+        classExtender.extend(RoleResource, OpenlmisResource);
+
+        return RoleResource;
+
+        function RoleResource() {
+            this.super('/api/roles', {
+                paginated: false
+            });
+        }
+    }
 })();

@@ -48,11 +48,14 @@
         .module('openlmis-permissions')
         .service('permissionService', service);
 
-    service.$inject = ['$q', '$http', 'openlmisUrlFactory', 'localStorageService', 'Permission'];
+    service.$inject = [
+        '$q', '$http', 'openlmisUrlFactory', 'localStorageService', 'Permission', 'RoleResource', 'currentUserService'
+    ];
 
-    function service($q, $http, openlmisUrlFactory, localStorageService, Permission) {
+    function service($q, $http, openlmisUrlFactory, localStorageService, Permission, RoleResource, currentUserService) {
         // Used in service.load
-        var savedUserId;
+        var savedUserId,
+            roleResource = new RoleResource();
 
         this.hasPermission = hasPermission;
         this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
@@ -60,6 +63,7 @@
         this.load = load;
         this.empty = empty;
         this.testPermission = testPermission;
+        this.hasRoleWithRight = hasRoleWithRight;
 
         /**
          * @ngdoc method
@@ -114,7 +118,7 @@
          *
          * @description
          * The returned promise will resolve if the browser has a matching
-         * permission for any program and facility. If there is no permission that matches, 
+         * permission for any program and facility. If there is no permission that matches,
          * then the promise is rejected.
          *
          * If the permission object that is tested against doesn't have a
@@ -122,6 +126,59 @@
          */
         function hasPermissionWithAnyProgramAndAnyFacility(userId, permission) {
             return this.testPermission(userId, permission, permissionMatchWithAnyProgramAndAnyFacility);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name load
+         *
+         * @param {String} userId ID of user to get permissions for
+         *
+         * @return {Promise} A promise with an Array of permission objects
+         *
+         * @description
+         * This method returns a list of permission. If there is a list of
+         * permissions cached in the browser, those permissions are returned.
+         * Otherwise, the OpenLMIS Auth service will be queried for the
+         * permission strings of the currently logged in user.
+         *
+         * The promise will be rejected if:
+         * - The user isn't authenticated
+         */
+        function load(userId) {
+            if (!userId) {
+                savedUserId = undefined;
+                this.empty();
+                return $q.reject();
+            }
+
+            if (userId !== savedUserId) {
+                savedUserId = userId;
+                this.empty();
+            }
+
+            return getCachedPermissions()
+                .catch(function() {
+                    return getPermissionStringsFromServer(userId)
+                        .then(parsePermissionStrings)
+                        .then(savePermissions);
+                });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name empty
+         *
+         * @return {Promise} Promise resolves once cache is cleared
+         *
+         * @description
+         * Clears the browser cache of any stored permissions.
+         */
+        function empty() {
+            localStorageService.remove('permissions');
+            return $q.resolve();
         }
 
         /**
@@ -167,6 +224,54 @@
             return deferred.promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name hasRoleWithRight
+         *
+         * @description
+         * Checks whether current user has a role with the given right name assigned.
+         *
+         * @param  {string}     rightName   the name of the right
+         * @return {Promise}                the promise resolving to a boolean, true if user has role with the given
+         *                                  right, false otherwise, the promise is rejected if checking right fails
+         */
+        function hasRoleWithRight(rightName) {
+            return $q
+                .all([
+                    roleResource.query(),
+                    currentUserService.getUserInfo()
+                ])
+                .then(function(resolves) {
+                    var roles = resolves[0],
+                        user = resolves[1];
+
+                    return roles
+                        .filter(isAssignedToUser(user))
+                        .filter(hasRight(rightName))
+                        .length > 0;
+                });
+        }
+
+        function isAssignedToUser(user) {
+            var userRoleIds = user.roleAssignments
+                .map(function(roleAssignment) {
+                    return roleAssignment.roleId;
+                });
+
+            return function(role) {
+                return userRoleIds.indexOf(role.id) > -1;
+            };
+        }
+
+        function hasRight(rightName) {
+            return function(role) {
+                return role.rights.filter(function(right) {
+                    return right === rightName;
+                }).length > 0;
+            };
+        }
+
         function testPermissions(permissionsList, permission, permissionMatchFn) {
             var i = 0;
             for (i; i < permissionsList.length; i++) {
@@ -191,44 +296,6 @@
 
         function permissionMatchWithAnyProgramAndAnyFacility(permission, right) {
             return permission.right === right;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-permissions.permissionService
-         * @name load
-         *
-         * @param {String} userId ID of user to get permissions for
-         *
-         * @return {Promise} A promise with an Array of permission objects
-         *
-         * @description
-         * This method returns a list of permission. If there is a list of
-         * permissions cached in the browser, those permissions are returned.
-         * Otherwise, the OpenLMIS Auth service will be queried for the
-         * permission strings of the currently logged in user.
-         *
-         * The promise will be rejected if:
-         * - The user isn't authenticated
-         */
-        function load(userId) {
-            if (!userId) {
-                savedUserId = undefined;
-                this.empty();
-                return $q.reject();
-            }
-
-            if (userId !== savedUserId) {
-                savedUserId = userId;
-                this.empty();
-            }
-
-            return getCachedPermissions()
-                .catch(function() {
-                    return getPermissionStringsFromServer(userId)
-                        .then(parsePermissionStrings)
-                        .then(savePermissions);
-                });
         }
 
         function parsePermissionStrings(permissionStrings) {
@@ -272,21 +339,6 @@
         function savePermissions(permissions) {
             localStorageService.add('permissions', angular.toJson(permissions));
             return $q.resolve(permissions);
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-permissions.permissionService
-         * @name empty
-         *
-         * @return {Promise} Promise resolves once cache is cleared
-         *
-         * @description
-         * Clears the browser cache of any stored permissions.
-         */
-        function empty() {
-            localStorageService.remove('permissions');
-            return $q.resolve();
         }
     }
 
