@@ -15,92 +15,91 @@
 
 describe('openlmis-permissions run', function() {
 
-    var loginServiceSpy, userRightsFactory, authorizationService, postLoginAction, $q, $rootScope, rights,
-        RightDataBuilder, postLogoutAction, UserDataBuilder, user;
-
     beforeEach(function() {
+        var context = this;
         module('openlmis-permissions');
         module('referencedata-user', function($provide) {
-            loginServiceSpy = jasmine.createSpyObj('loginService', [
+            context.loginServiceSpy = jasmine.createSpyObj('loginService', [
                 'registerPostLoginAction', 'registerPostLogoutAction'
             ]);
-            $provide.value('loginService', loginServiceSpy);
+            $provide.value('loginService', context.loginServiceSpy);
         });
 
+        var RightDataBuilder, UserDataBuilder;
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
             RightDataBuilder = $injector.get('RightDataBuilder');
-            userRightsFactory = $injector.get('userRightsFactory');
-            authorizationService = $injector.get('authorizationService');
+            this.userRightsFactory = $injector.get('userRightsFactory');
+            this.authorizationService = $injector.get('authorizationService');
             UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        rights = [
+        this.rights = [
             new RightDataBuilder().build()
         ];
 
-        user = new UserDataBuilder().build();
+        this.user = new UserDataBuilder().build();
 
-        postLoginAction = loginServiceSpy.registerPostLoginAction.calls[0].args[0];
-        postLogoutAction = loginServiceSpy.registerPostLogoutAction.calls[0].args[0];
+        this.postLoginAction = this.loginServiceSpy.registerPostLoginAction.calls[0].args[0];
+        this.postLogoutAction = this.loginServiceSpy.registerPostLogoutAction.calls[0].args[0];
 
-        spyOn(userRightsFactory, 'buildRights').andReturn($q.resolve(rights));
-        spyOn(authorizationService, 'setRights');
-        spyOn(authorizationService, 'clearRights');
+        spyOn(this.userRightsFactory, 'buildRights').andReturn(this.$q.resolve(this.rights));
+        spyOn(this.authorizationService, 'setRights');
+        spyOn(this.authorizationService, 'clearRights');
     });
 
     describe('run block', function() {
 
         it('should register post login action', function() {
-            expect(loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
         });
 
         it('should register post logout action', function() {
-            expect(loginServiceSpy.registerPostLogoutAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLogoutAction).toHaveBeenCalled();
         });
 
     });
 
     describe('post login action', function() {
 
-        it('should build user rights', function() {
-            postLoginAction(user);
-            $rootScope.$apply();
+        it('should build user this.rights', function() {
+            this.postLoginAction(this.user);
+            this.$rootScope.$apply();
 
-            expect(userRightsFactory.buildRights).toHaveBeenCalledWith(user.userId);
+            expect(this.userRightsFactory.buildRights).toHaveBeenCalledWith(this.user.userId);
         });
 
-        it('should set up rights', function() {
-            authorizationService.setRights.andReturn($q.resolve());
+        it('should set up this.rights', function() {
+            this.authorizationService.setRights.andReturn(this.$q.resolve());
 
             var success;
-            postLoginAction(user)
+            this.postLoginAction(this.user)
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(authorizationService.setRights).toHaveBeenCalledWith(rights);
+            expect(this.authorizationService.setRights).toHaveBeenCalledWith(this.rights);
         });
 
     });
 
     describe('post logout action', function() {
 
-        it('should clear rights', function() {
-            authorizationService.clearRights.andReturn($q.resolve());
+        it('should clear this.rights', function() {
+            this.authorizationService.clearRights.andReturn(this.$q.resolve());
 
             var success;
-            postLogoutAction()
+            this.postLogoutAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(authorizationService.clearRights).toHaveBeenCalled();
+            expect(this.authorizationService.clearRights).toHaveBeenCalled();
         });
 
     });
