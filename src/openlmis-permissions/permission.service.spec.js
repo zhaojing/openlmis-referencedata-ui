@@ -13,81 +13,79 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis-permissions.permissionService', function() {
-    var permissionService, localStorageService, $httpBackend, $rootScope;
+describe('openlmis-permissions.this.permissionService', function() {
 
-    beforeEach(module('openlmis-permissions'));
+    beforeEach(function() {
+        module('openlmis-permissions');
 
-    beforeEach(inject(function(_$rootScope_, _permissionService_) {
-        $rootScope = _$rootScope_;
-        permissionService = _permissionService_;
-    }));
+        inject(function($injector) {
+            this.$rootScope = $injector.get('$rootScope');
+            this.permissionService = $injector.get('permissionService');
+            this.localStorageService = $injector.get('localStorageService');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.$httpBackend = $injector.get('$httpBackend');
+        });
 
-    beforeEach(inject(function(_localStorageService_) {
-        localStorageService = _localStorageService_;
-        spyOn(localStorageService, 'get').andReturn(null);
-        spyOn(localStorageService, 'add').andCallThrough();
-        spyOn(localStorageService, 'remove');
-    }));
-
-    beforeEach(inject(function(openlmisUrlFactory, _$httpBackend_) {
         var permissionStrings = [
             'permissionString1|facility-id|program-id',
             'permissionString2|some-facility'
         ];
 
-        $httpBackend = _$httpBackend_;
-        $httpBackend.when('GET', openlmisUrlFactory('/api/users/userId/permissionStrings'))
+        this.$httpBackend
+            .when('GET', this.openlmisUrlFactory('/api/users/userId/permissionStrings'))
             .respond(permissionStrings);
 
-    }));
+        spyOn(this.localStorageService, 'get').andReturn(null);
+        spyOn(this.localStorageService, 'add').andCallThrough();
+        spyOn(this.localStorageService, 'remove');
+    });
 
     it('empty will clear permission strings from browser', function() {
-        permissionService.empty();
+        this.permissionService.empty();
 
-        expect(localStorageService.remove).toHaveBeenCalledWith('permissions');
+        expect(this.localStorageService.remove).toHaveBeenCalledWith('permissions');
     });
 
     it('will fail and empty all permissions if userId not entered', function() {
-        spyOn(permissionService, 'empty').andCallThrough();
+        spyOn(this.permissionService, 'empty').andCallThrough();
 
         var failed = false;
-        permissionService.load()
+        this.permissionService.load()
             .catch(function() {
                 failed = true;
             });
 
-        $rootScope.$apply();
+        this.$rootScope.$apply();
 
         expect(failed).toBe(true);
-        expect(permissionService.empty).toHaveBeenCalled();
+        expect(this.permissionService.empty).toHaveBeenCalled();
     });
 
     it('gets permission strings from the server, and saves them locally', function() {
         var permissions;
-        permissionService.load('userId')
+        this.permissionService.load('userId')
             .then(function(response) {
                 permissions = response;
             });
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
         expect(permissions).toBeTruthy();
         expect(Array.isArray(permissions)).toBeTruthy();
 
-        expect(localStorageService.add).toHaveBeenCalledWith('permissions', angular.toJson(permissions));
+        expect(this.localStorageService.add).toHaveBeenCalledWith('permissions', angular.toJson(permissions));
     });
 
     it('correctly parses permission strings from the server', function() {
         var permissions;
-        permissionService.load('userId')
+        this.permissionService.load('userId')
             .then(function(response) {
                 permissions = response;
             });
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
         expect(permissions.length).toBe(2);
 
@@ -101,54 +99,57 @@ describe('openlmis-permissions.permissionService', function() {
     });
 
     it('will return cached permissions, if they are available', function() {
-        localStorageService.get.andReturn([{
+        this.localStorageService.get.andReturn([{
             right: 'example'
         }]);
 
         var permissions;
-        permissionService.load('userId')
+        this.permissionService.load('userId')
             .then(function(response) {
                 permissions = response;
             });
 
-        $rootScope.$apply();
+        this.$rootScope.$apply();
 
         expect(permissions.length).toBe(1);
         expect(permissions[0].right).toBe('example');
 
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 
     describe('hasPermission', function() {
+
         beforeEach(function() {
-            localStorageService.get.andReturn([{
+            this.localStorageService.get.andReturn([{
                 right: 'example',
                 facilityId: 'facility-id'
             }]);
+
+            this.checkPermission = checkPermission;
         });
 
         function checkPermission(permissionObj) {
             var success = false;
 
-            permissionService.hasPermission('userId', permissionObj)
+            this.permissionService.hasPermission('userId', permissionObj)
                 .then(function() {
                     success = true;
                 });
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
             return success;
         }
 
         it('will return FALSE if no arguments', function() {
-            expect(checkPermission({})).toBe(false);
+            expect(this.checkPermission({})).toBe(false);
         });
 
         it('will return FALSE if the right is not set', function() {
-            expect(checkPermission({
+            expect(this.checkPermission({
                 facilityId: 'facility-id'
             })).toBe(false);
 
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example',
                 facilityId: 'facility-id'
             })).toBe(true);
@@ -156,32 +157,32 @@ describe('openlmis-permissions.permissionService', function() {
 
         it('will resolve promise if the argument EXACTLY matches a permission', function() {
             // Too vague
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example'
             })).toBe(false);
 
             // Too strict
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example',
                 programId: 'program-id',
                 facilityId: 'facility-id'
             })).toBe(false);
 
             // Just right
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example',
                 facilityId: 'facility-id'
             })).toBe(true);
         });
 
         it('will reject promise if the argument is missing program', function() {
-            localStorageService.get.andReturn([{
+            this.localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
                 programId: 'program-id'
             }]);
 
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'right',
                 facilityId: 'facility-id'
             })).toBe(false);
@@ -190,35 +191,38 @@ describe('openlmis-permissions.permissionService', function() {
     });
 
     describe('hasPermissionWithAnyProgram', function() {
+
         beforeEach(function() {
-            localStorageService.get.andReturn([{
+            this.localStorageService.get.andReturn([{
                 right: 'example',
                 facilityId: 'facility-id'
             }]);
+
+            this.checkPermission = checkPermission;
         });
 
         function checkPermission(permissionObj) {
             var success = false;
 
-            permissionService.hasPermissionWithAnyProgram('userId', permissionObj)
+            this.permissionService.hasPermissionWithAnyProgram('userId', permissionObj)
                 .then(function() {
                     success = true;
                 });
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
             return success;
         }
 
         it('will return FALSE if no arguments', function() {
-            expect(checkPermission({})).toBe(false);
+            expect(this.checkPermission({})).toBe(false);
         });
 
         it('will return FALSE if the right is not set', function() {
-            expect(checkPermission({
+            expect(this.checkPermission({
                 facilityId: 'facility-id'
             })).toBe(false);
 
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example',
                 facilityId: 'facility-id'
             })).toBe(true);
@@ -226,32 +230,32 @@ describe('openlmis-permissions.permissionService', function() {
 
         it('will resolve promise if the argument EXACTLY matches a permission', function() {
             // Too vague
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example'
             })).toBe(false);
 
             // Not too strict, program is ignored
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example',
                 programId: 'program-id',
                 facilityId: 'facility-id'
             })).toBe(true);
 
             // Just right
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'example',
                 facilityId: 'facility-id'
             })).toBe(true);
         });
 
         it('will resolve promise if the argument is missing program', function() {
-            localStorageService.get.andReturn([{
+            this.localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
                 programId: 'program-id'
             }]);
 
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'right',
                 facilityId: 'facility-id'
             })).toBe(true);
@@ -260,37 +264,40 @@ describe('openlmis-permissions.permissionService', function() {
     });
 
     describe('hasPermissionWithAnyProgramAndAnyFacility', function() {
+
         beforeEach(function() {
-            localStorageService.get.andReturn([{
+            this.localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
                 programId: 'program-id'
             }]);
+
+            this.checkPermission = checkPermission;
         });
 
         function checkPermission(permissionObj) {
             var success = false;
-            permissionService.hasPermissionWithAnyProgramAndAnyFacility('userId', permissionObj)
+            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility('userId', permissionObj)
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
             return success;
         }
 
         it('will return FALSE if no arguments', function() {
-            expect(checkPermission({})).toBe(false);
+            expect(this.checkPermission({})).toBe(false);
         });
 
         it('will return FALSE if the right is not set', function() {
-            expect(checkPermission({
+            expect(this.checkPermission({
                 facilityId: 'facility-id',
                 programId: 'program-id'
             })).toBe(false);
         });
 
         it('will resolve promise if the argument matches a permission ignoring facility and program', function() {
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'right',
                 programId: 'program-id',
                 facilityId: 'facility-id'
@@ -298,7 +305,7 @@ describe('openlmis-permissions.permissionService', function() {
         });
 
         it('will resolve promise if the argument matches a permission right', function() {
-            expect(checkPermission({
+            expect(this.checkPermission({
                 right: 'right'
             })).toBe(true);
         });
