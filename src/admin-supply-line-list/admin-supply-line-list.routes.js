@@ -32,15 +32,11 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.SUPPLY_LINES_MANAGE],
             resolve: {
-                supplyingFacilities: function($q, facilityService) {
-                    var deferred = $q.defer();
-
-                    facilityService.search(null, {})
+                supplyingFacilities: function(FacilityRepository) {
+                    return new FacilityRepository().query()
                         .then(function(response) {
-                            deferred.resolve(response.content);
-                        }, deferred.reject);
-
-                    return deferred.promise;
+                            return response.content;
+                        });
                 },
                 programs: function(programService) {
                     return programService.getAll();

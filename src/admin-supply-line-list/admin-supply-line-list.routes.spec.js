@@ -32,7 +32,7 @@ describe('openlmis.administration.supplyLine', function() {
             this.$rootScope = $injector.get('$rootScope');
             this.$state = $injector.get('$state');
             this.$q = $injector.get('$q');
-            this.facilityService = $injector.get('facilityService');
+            this.FacilityRepository = $injector.get('FacilityRepository');
             this.programService = $injector.get('programService');
             this.SupplyLineResource = $injector.get('SupplyLineResource');
             this.RequisitionGroupResource = $injector.get('RequisitionGroupResource');
@@ -69,7 +69,7 @@ describe('openlmis.administration.supplyLine', function() {
         this.goToUrl = goToUrl;
         this.getResolvedValue = getResolvedValue;
 
-        spyOn(this.facilityService, 'search').andReturn(this.$q.resolve(this.facilitiesPage));
+        spyOn(this.FacilityRepository.prototype, 'query').andReturn(this.$q.resolve(this.facilitiesPage));
         spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
         spyOn(this.SupplyLineResource.prototype, 'query').andReturn(this.$q.resolve(this.supplyLinesPage));
         spyOn(this.RequisitionGroupResource.prototype, 'query').andReturn(this.$q.resolve(this.requisitionGroups));
@@ -142,7 +142,7 @@ describe('openlmis.administration.supplyLine', function() {
     });
 
     it('should not change state when fetching supplying facilities fails', function() {
-        this.facilityService.search.andReturn(this.$q.reject());
+        this.FacilityRepository.prototype.query.andReturn(this.$q.reject());
 
         expect(this.$state.current.name).not.toEqual('openlmis.administration.supplyLines');
     });

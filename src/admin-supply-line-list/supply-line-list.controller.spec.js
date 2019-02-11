@@ -55,8 +55,8 @@ describe('SupplyLineListController', function() {
         this.stateParams = {
             page: 0,
             size: 10,
-            supplyingFacility: this.supplyingFacilities[0].code,
-            program: this.programs[0].code
+            supplyingFacilityId: this.supplyingFacilities[0].id,
+            programId: this.programs[0].id
         };
 
         this.vm = $controller('SupplyLineListController', {
@@ -85,16 +85,16 @@ describe('SupplyLineListController', function() {
             expect(this.vm.supplyingFacilities).toEqual(this.supplyingFacilities);
         });
 
-        it('should expose supplying facility', function() {
-            expect(this.vm.supplyingFacility).toEqual(this.stateParams.supplyingFacility);
+        it('should expose supplying facility id', function() {
+            expect(this.vm.supplyingFacilityId).toEqual(this.stateParams.supplyingFacilityId);
         });
 
         it('should expose programs array', function() {
             expect(this.vm.programs).toEqual(this.programs);
         });
 
-        it('should expose program', function() {
-            expect(this.vm.program).toEqual(this.stateParams.program);
+        it('should expose program id', function() {
+            expect(this.vm.programId).toEqual(this.stateParams.programId);
         });
 
         it('should expose a map of requisition groups', function() {
@@ -105,30 +105,30 @@ describe('SupplyLineListController', function() {
     describe('search', function() {
 
         it('should search by supplying facility', function() {
-            this.vm.supplyingFacility = 'facility-code';
-            this.vm.program = undefined;
+            this.vm.supplyingFacilityId = 'facility-id';
+            this.vm.programId = undefined;
 
             this.vm.search();
 
             expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.supplyLines', {
                 page: this.stateParams.page,
                 size: this.stateParams.size,
-                supplyingFacility: this.vm.supplyingFacility
+                supplyingFacilityId: this.vm.supplyingFacilityId
             }, {
                 reload: true
             });
         });
 
         it('should search by program', function() {
-            this.vm.program = 'program-code';
-            this.vm.supplyingFacility = undefined;
+            this.vm.programId = 'program-id';
+            this.vm.supplyingFacilityId = undefined;
 
             this.vm.search();
 
             expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.supplyLines', {
                 page: this.stateParams.page,
                 size: this.stateParams.size,
-                program: this.vm.program
+                programId: this.vm.programId
             }, {
                 reload: true
             });

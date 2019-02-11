@@ -74,13 +74,24 @@
         /**
          * @ngdoc property
          * @propertyOf admin-supply-line-list.controller:SupplyLineListController
-         * @name supplyingFacility
-         * @type {String}
+         * @name supplyingFacilityId
+         * @type {string}
          *
          * @description
-         * Contains supplying facility code param for searching supply lines.
+         * Contains supplying facility id param for searching supply lines.
          */
-        vm.supplyingFacility = undefined;
+        vm.supplyingFacilityId = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-supply-line-list.controller:SupplyLineListController
+         * @name programId
+         * @type {string}
+         *
+         * @description
+         * Contains program id param for searching supply lines.
+         */
+        vm.programId = undefined;
 
         /**
          * @ngdoc property
@@ -105,8 +116,8 @@
             vm.supplyLines = supplyLines;
             vm.supplyingFacilities = supplyingFacilities;
             vm.programs = programs;
-            vm.supplyingFacility = $stateParams.supplyingFacility;
-            vm.program = $stateParams.program;
+            vm.supplyingFacilityId = $stateParams.supplyingFacilityId;
+            vm.programId = $stateParams.programId;
             vm.requisitionGroupsMap = requisitionGroupsMap;
         }
 
@@ -121,8 +132,8 @@
         function search() {
             var stateParams = angular.copy($stateParams);
 
-            stateParams.supplyingFacility = vm.supplyingFacility;
-            stateParams.program = vm.program;
+            stateParams.supplyingFacilityId = vm.supplyingFacilityId;
+            stateParams.programId = vm.programId;
 
             $state.go('openlmis.administration.supplyLines', stateParams, {
                 reload: true
