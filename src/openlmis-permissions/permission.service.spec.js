@@ -18,10 +18,11 @@ describe('openlmis-permissions.this.permissionService', function() {
     beforeEach(function() {
         module('openlmis-permissions');
 
-        var UserDataBuilder, RoleDataBuilder;
+        var UserDataBuilder, RoleDataBuilder, RightDataBuilder;
         inject(function($injector) {
             UserDataBuilder = $injector.get('UserDataBuilder');
             RoleDataBuilder = $injector.get('RoleDataBuilder');
+            RightDataBuilder = $injector.get('RightDataBuilder');
 
             this.$rootScope = $injector.get('$rootScope');
             this.permissionService = $injector.get('permissionService');
@@ -36,14 +37,22 @@ describe('openlmis-permissions.this.permissionService', function() {
         this.possessedRightName = 'POSSESSED_RIGHT';
         this.nonPossessedRightName = 'NON_POSSESSED_RIGHT';
 
+        this.possessedRight = new RightDataBuilder()
+            .withName(this.possessedRightName)
+            .build();
+
+        this.nonPossessedRight = new RightDataBuilder()
+            .withName(this.nonPossessedRightName)
+            .build();
+
         this.roles = [
             new RoleDataBuilder()
                 .withSupervisionType()
-                .withRight(this.possessedRightName)
+                .withRight(this.possessedRight)
                 .build(),
             new RoleDataBuilder()
                 .withSupervisionType()
-                .withRight(this.nonPossessedRightName)
+                .withRight(this.nonPossessedRight)
                 .build()
         ];
 

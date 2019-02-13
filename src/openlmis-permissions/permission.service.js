@@ -267,7 +267,7 @@
         function hasRight(rightName) {
             return function(role) {
                 return role.rights.filter(function(right) {
-                    return right === rightName;
+                    return right.name === rightName;
                 }).length > 0;
             };
         }
