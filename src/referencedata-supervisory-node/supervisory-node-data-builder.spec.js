@@ -43,6 +43,7 @@
         SupervisoryNodeDataBuilder.prototype.withPartnerNode = withPartnerNode;
         SupervisoryNodeDataBuilder.prototype.withPartnerNodeOf = withPartnerNodeOf;
         SupervisoryNodeDataBuilder.prototype.buildPartnerNode = buildPartnerNode;
+        SupervisoryNodeDataBuilder.prototype.withRequisitionGroup = withRequisitionGroup;
 
         return SupervisoryNodeDataBuilder;
 
@@ -80,8 +81,8 @@
             };
         }
 
-        function withPartnerNodeOf() {
-            this.partnerNodeOf = new SupervisoryNodeDataBuilder().build();
+        function withPartnerNodeOf(partnerNodeOf) {
+            this.partnerNodeOf = partnerNodeOf || new SupervisoryNodeDataBuilder().build();
             return this;
         }
 
@@ -138,6 +139,11 @@
 
         function withParentNode(parentNode) {
             this.parentNode = parentNode || new SupervisoryNodeDataBuilder().build();
+            return this;
+        }
+
+        function withRequisitionGroup(requisitionGroup) {
+            this.requisitionGroup = requisitionGroup;
             return this;
         }
     }
