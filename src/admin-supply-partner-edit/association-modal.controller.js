@@ -5,16 +5,14 @@
  * This program is free software: you can redistribute it and/or modify it under the terms
  * of the GNU Affero General Public License as published by the Free Software Foundation, either
  * version 3 of the License, or (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Affero General Public License for more details. You should have received a copy of
  * the GNU Affero General Public License along with this program. If not, see
- * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
+ * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
-
 (function() {
-
     'use strict';
 
     /**
@@ -29,14 +27,36 @@
         .controller('AssociationModalController', controller);
 
     controller.$inject = [
-        'originalAssociation', 'programs', 'supervisoryNodes', 'ObjectMapper', 'facilities', 'loadingModalService',
-        'supplyPartner', 'orderables', 'selectProductsModalService', '$state', 'supplyPartnerAssociationService', '$q',
+        'originalAssociation',
+        'programs',
+        'supervisoryNodes',
+        'ObjectMapper',
+        'facilities',
+        'loadingModalService',
+        'supplyPartner',
+        'orderables',
+        'selectProductsModalService',
+        '$state',
+        'supplyPartnerAssociationService',
+        '$q',
         'alertService'
     ];
 
-    function controller(originalAssociation, programs, supervisoryNodes, ObjectMapper, facilities, loadingModalService,
-                        supplyPartner, orderables, selectProductsModalService, $state, supplyPartnerAssociationService,
-                        $q, alertService) {
+    function controller(
+        originalAssociation,
+        programs,
+        supervisoryNodes,
+        ObjectMapper,
+        facilities,
+        loadingModalService,
+        supplyPartner,
+        orderables,
+        selectProductsModalService,
+        $state,
+        supplyPartnerAssociationService,
+        $q,
+        alertService
+    ) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -66,9 +86,11 @@
             vm.facilities = facilities;
             vm.facilitiesMap = new ObjectMapper().map(facilities);
             vm.orderablesMap = new ObjectMapper().map(orderables);
-            vm.supervisoryNodesMap = new ObjectMapper().map(supervisoryNodes.filter(function(supervisoryNode) {
-                return !!supervisoryNode.partnerNodeOf;
-            }));
+            vm.supervisoryNodesMap = new ObjectMapper().map(
+                supervisoryNodes.filter(function(supervisoryNode) {
+                    return !!supervisoryNode.partnerNodeOf;
+                })
+            );
         }
 
         /**
@@ -88,7 +110,9 @@
             }
 
             var programsAssociatedWithSupervisoryNode = getProgramsAssociatedWithSupervisoryNode();
-            return programs.filter(filterOutByIds(programsAssociatedWithSupervisoryNode));
+            return programs.filter(
+                filterOutByIds(programsAssociatedWithSupervisoryNode)
+            );
         }
 
         /**
@@ -110,7 +134,9 @@
             }
 
             var supervisoryNodesAssociatedWithProgram = getSupervisoryNodesAssociatedWithProgram();
-            return partnerNodes.filter(filterOutByIds(supervisoryNodesAssociatedWithProgram));
+            return partnerNodes.filter(
+                filterOutByIds(supervisoryNodesAssociatedWithProgram)
+            );
         }
 
         /**
@@ -124,7 +150,9 @@
          * @return {Array}  the list of available facilities
          */
         function getAvailableFacilities() {
-            var associatedFacilityIds = vm.association.facilities.map(function(facility) {
+            var associatedFacilityIds = vm.association.facilities.map(function(
+                facility
+            ) {
                 return facility.id;
             });
             return vm.facilities.filter(filterOutByIds(associatedFacilityIds));
@@ -164,7 +192,7 @@
          */
         function addFacility() {
             vm.association.facilities.push(vm.selectedFacility);
-            updateOptionsAfterFacilityChange();
+            updateOptionsAfterFacilityChange(false);
             return $q.resolve();
         }
 
@@ -172,7 +200,6 @@
          * @ngdoc method
          * @methodOf admin-supply-partner-edit.controller:AssociationModalController
          * @name removeFacility
-         *
          * @description
          * Removes a facility with the given index from the association. This will update the list of available products
          * as well as clear the list of selected ones if facility list is zero.
@@ -181,12 +208,7 @@
          */
         function removeFacility(id) {
             vm.association.facilities.splice(id, 1);
-
-            if (vm.association.facilities.length < 1) {
-                updateOptionsAfterFacilityChange(true);
-            } else {
-                updateOptionsAfterFacilityChange(false);
-            }
+            updateOptionsAfterFacilityChange(true);
         }
 
         /**
@@ -203,9 +225,12 @@
                 return orderable.id;
             });
 
-            var nonAssociatedProducts = vm.orderables.filter(filterOutByIds(associatedProductIds));
+            var nonAssociatedProducts = vm.orderables.filter(
+                filterOutByIds(associatedProductIds)
+            );
 
-            return selectProductsModalService.show(nonAssociatedProducts)
+            return selectProductsModalService
+                .show(nonAssociatedProducts)
                 .then(function(orderables) {
                     orderables.forEach(function(orderable) {
                         vm.association.orderables.push(orderable);
@@ -245,12 +270,14 @@
 
         function updateOptionsAfterFacilityChange(clearSelectedOrderables) {
             loadingModalService.open();
-            updateProducts(clearSelectedOrderables)
-                .finally(loadingModalService.close);
+            updateProducts(clearSelectedOrderables).finally(
+                loadingModalService.close
+            );
         }
 
         function updateFacilities() {
-            return supplyPartnerAssociationService.getFacilities(vm.association, supervisoryNodes)
+            return supplyPartnerAssociationService
+                .getFacilities(vm.association, supervisoryNodes)
                 .then(function(facilities) {
                     vm.association.facilities = [];
                     vm.facilities = facilities;
@@ -259,10 +286,16 @@
         }
 
         function updateProducts(clearSelectedFacilities) {
-            return supplyPartnerAssociationService.getOrderables(vm.association, vm.facilities, vm.programs)
+            return supplyPartnerAssociationService
+                .getOrderables(vm.association, vm.facilities, vm.programs)
                 .then(function(orderables) {
                     if (clearSelectedFacilities) {
-                        vm.association.orderables = [];
+                        var orderableIds = orderables.map(function(orderable) {
+                            return orderable.id;
+                        });
+                        vm.association.orderables = vm.association.orderables.filter(
+                            filterOutNonMatchingIds(orderableIds)
+                        );
                     }
                     vm.orderables = orderables;
                     vm.orderablesMap = new ObjectMapper().map(orderables);
@@ -287,14 +320,17 @@
 
         function filterOutMatchingOriginalByFieldsId(fieldName) {
             return function(association) {
-                return !originalAssociation[fieldName]
-                    || association[fieldName].id !== originalAssociation[fieldName].id;
+                return (!originalAssociation[fieldName] ||
+                    association[fieldName].id !== originalAssociation[fieldName].id
+                );
             };
         }
 
         function filterOutMatchingCurrentByFieldsId(fieldName) {
             return function(association) {
-                return !vm.association[fieldName] || association[fieldName].id !== vm.association[fieldName].id;
+                return (!vm.association[fieldName] ||
+                    association[fieldName].id !== vm.association[fieldName].id
+                );
             };
         }
 
@@ -317,6 +353,12 @@
         function filterOutByIds(ids) {
             return function(program) {
                 return ids.indexOf(program.id) === -1;
+            };
+        }
+
+        function filterOutNonMatchingIds(ids) {
+            return function(program) {
+                return ids.indexOf(program.id) !== -1;
             };
         }
 

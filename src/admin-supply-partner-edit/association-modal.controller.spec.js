@@ -550,13 +550,6 @@ describe('AssociationModalController', function() {
             expect(this.vm.association.orderables).toEqual([]);
         });
 
-        it('should not clear the list of orderables if there is still a facility selected', function() {
-            this.vm.removeFacility(this.vm.association.facilities[0]);
-            this.$rootScope.$apply();
-
-            expect(this.vm.association.orderables.length).toEqual(2);
-        });
-
         it('should update the map of available orderables', function() {
             this.vm.removeFacility(this.vm.association.facilities[1]);
             this.$rootScope.$apply();
@@ -590,6 +583,17 @@ describe('AssociationModalController', function() {
             expect(this.vm.association.orderables).toEqual([]);
             expect(this.vm.orderablesMap).toEqual({});
             expect(this.vm.orderables).toEqual([]);
+        });
+
+        it('should not clear the product fields if there is still a facility associated', function() {
+            this.supplyPartnerAssociationService.getOrderables.andReturn(this.$q.resolve([]));
+            var orderablesLenghtBeforeRemoveFacilty = this.vm.association.orderables.length;
+
+            this.vm.removeFacility(this.vm.association.facilities[0]);
+            this.$rootScope.$apply();
+
+            expect(this.vm.association.orderables.length).not.toEqual(orderablesLenghtBeforeRemoveFacilty);
+            expect(this.vm.association.orderables).not.toEqual(0);
         });
 
         it('should fetch facility type approved products for associated facilities', function() {
