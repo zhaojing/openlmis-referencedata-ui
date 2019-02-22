@@ -585,7 +585,7 @@ describe('AssociationModalController', function() {
             expect(this.vm.orderables).toEqual([]);
         });
 
-        it('should not clear the product fields if there is still a facility associated', function() {
+        it('should not clear associated product if there is still a facility associated', function() {
             this.supplyPartnerAssociationService.getOrderables.andReturn(this.$q.resolve([]));
             var orderablesLenghtBeforeRemoveFacilty = this.vm.association.orderables.length;
 
