@@ -571,7 +571,7 @@ describe('AssociationModalController', function() {
 
             expect(this.vm.association.orderables).toEqual([]);
             expect(this.vm.orderablesMap).toEqual({});
-            expect(this.vm.orderables).toEqual([]);192.168.99.101
+            expect(this.vm.orderables).toEqual([]);
         });
 
 
