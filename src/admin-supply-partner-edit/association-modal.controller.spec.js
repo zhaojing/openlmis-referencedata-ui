@@ -499,8 +499,8 @@ describe('AssociationModalController', function() {
 
         beforeEach(function() {
             this.supplyPartnerAssociationService.getOrderables.andReturn(this.$q.resolve([
-                   this.orderables[0],
-                   this.orderables[1],
+                this.orderables[0],
+                this.orderables[1]
             ]));
         });
 
@@ -538,7 +538,6 @@ describe('AssociationModalController', function() {
             expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
-
         it('should update the map of available orderables', function() {
             this.vm.removeFacility(this.vm.association.facilities[1]);
             this.$rootScope.$apply();
@@ -573,7 +572,6 @@ describe('AssociationModalController', function() {
             expect(this.vm.orderablesMap).toEqual({});
             expect(this.vm.orderables).toEqual([]);
         });
-
 
         it('should not clear orderables if there is still a facility associated', function() {
             this.vm.removeFacility(this.vm.association.facilities[0]);
