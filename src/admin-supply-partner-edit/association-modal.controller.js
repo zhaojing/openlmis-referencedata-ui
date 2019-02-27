@@ -254,11 +254,11 @@
                 });
         }
 
-        function updateProducts(clearSelectedFacilities) {
+        function updateProducts(clearSelectedOrderables) {
             return supplyPartnerAssociationService
                 .getOrderables(vm.association, vm.facilities, vm.programs)
                 .then(function(orderables) {
-                    if (clearSelectedFacilities) {
+                    if (clearSelectedOrderables) {
                         var orderableIds = orderables.map(function(orderable) {
                             return orderable.id;
                         });
@@ -323,8 +323,8 @@
         }
 
         function filterOutNonMatchingIds(ids) {
-            return function(program) {
-                return ids.indexOf(program.id) !== -1;
+            return function(orderable) {
+                return ids.indexOf(orderable.id) !== -1;
             };
         }
 
