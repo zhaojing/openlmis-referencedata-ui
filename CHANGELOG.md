@@ -1,6 +1,9 @@
 5.5.1 / WIP
 ==================
 
+New functionality added in a backwards-compatible manner:
+* [OLMIS-6055](https://openlmis.atlassian.net/browse/OLMIS-6055): Added translations for superset report rights.
+
 Improvements:
 * [OLMIS-3773](https://openlmis.atlassian.net/browse/OLMIS-3773): Updated UI after changing /facilities endpoint to return page.
 * [OLMIS-5000](https://openlmis.atlassian.net/browse/OLMIS-5000): Updated supply line service to use refactored endpoints
