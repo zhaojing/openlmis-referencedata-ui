@@ -60,11 +60,11 @@
     "adminRoleForm.serviceAccountsManage": "Manage service accounts",
     "adminRoleForm.shipmentsView": "View shipments",
     "adminRoleForm.shipmentsEdit": "Edit shipments",
-    "adminRoleForm.consumptionReportManage": "Manage Consumption Report",
-    "adminRoleForm.adjustmentsReportManage": "Manage Adjustments Report",
-    "adminRoleForm.reportingRateAndTimelinessReportManage": "Manage Reporting Rate and Timeliness Report",
-    "adminRoleForm.administrativeReportManage": "Manage Administrative Report",
-    "adminRoleForm.ordersReportManage": "Manage Orders Report",
-    "adminRoleForm.stockStatusReportManage": "Manage Stock Status Report",
-    "adminRoleForm.stockoutsReportManage": "Manage Stockout Report"
+    "adminRoleForm.consumptionReportView": "View Consumption Report",
+    "adminRoleForm.adjustmentsReportView": "View Adjustments Report",
+    "adminRoleForm.reportingRateAndTimelinessReportView": "View Reporting Rate and Timeliness Report",
+    "adminRoleForm.administrativeReportView": "View Administrative Report",
+    "adminRoleForm.ordersReportView": "View Orders Report",
+    "adminRoleForm.stockStatusReportView": "View Stock Status Report",
+    "adminRoleForm.stockoutsReportView": "View Stockout Report"
 }
