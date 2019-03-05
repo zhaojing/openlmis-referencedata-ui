@@ -21,11 +21,12 @@
         .module('openlmis-permissions')
         .run(routes);
 
-    routes.$inject = ['loginService', 'userRightsFactory', 'authorizationService'];
+    routes.$inject = ['loginService', 'userRightsFactory', 'authorizationService', 'currentUserRolesService'];
 
-    function routes(loginService, userRightsFactory, authorizationService) {
+    function routes(loginService, userRightsFactory, authorizationService, currentUserRolesService) {
 
         loginService.registerPostLoginAction(function(user) {
+            currentUserRolesService.getUserRoles();
             return userRightsFactory.buildRights(user.userId)
                 .then(function(rights) {
                     authorizationService.setRights(rights);
@@ -33,6 +34,7 @@
         });
 
         loginService.registerPostLogoutAction(function() {
+            currentUserRolesService.clearCachedRoles();
             return authorizationService.clearRights();
         });
 

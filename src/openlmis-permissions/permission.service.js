@@ -49,13 +49,14 @@
         .service('permissionService', service);
 
     service.$inject = [
-        '$q', '$http', 'openlmisUrlFactory', 'localStorageService', 'Permission', 'RoleResource', 'currentUserService'
+        '$q', '$http', 'openlmisUrlFactory', 'localStorageService', 'Permission', 'currentUserRolesService',
+        'currentUserService'
     ];
 
-    function service($q, $http, openlmisUrlFactory, localStorageService, Permission, RoleResource, currentUserService) {
+    function service($q, $http, openlmisUrlFactory, localStorageService, Permission, currentUserRolesService,
+                     currentUserService) {
         // Used in service.load
-        var savedUserId,
-            roleResource = new RoleResource();
+        var savedUserId;
 
         this.hasPermission = hasPermission;
         this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
@@ -64,6 +65,7 @@
         this.empty = empty;
         this.testPermission = testPermission;
         this.hasRoleWithRight = hasRoleWithRight;
+        this.hasRoleWithRightForProgramAndSupervisoryNode = hasRoleWithRightForProgramAndSupervisoryNode;
 
         /**
          * @ngdoc method
@@ -237,30 +239,55 @@
          *                                  right, false otherwise, the promise is rejected if checking right fails
          */
         function hasRoleWithRight(rightName) {
+            return currentUserRolesService.getUserRoles()
+                .then(function(roles) {
+                    return roles
+                        .filter(hasRight(rightName))
+                        .length > 0;
+                });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name hasRoleWithRight
+         *
+         * @description
+         * Checks whether current user has a role with the given right name assigned for the given program and
+         * supervisory node.
+         *
+         * @param  {string}  rightName          the name of the right
+         * @param  {string}  programId          the id of the program
+         * @param  {string}  supervisoryNodeId  the id of the supervisory node   
+         * @return {Promise}                    the promise resolving to a boolean, true if user has role with the given
+         *                                      right for the given program and supervisory node, false otherwise, the
+         *                                      promise is rejected if checking right fails
+         */
+        function hasRoleWithRightForProgramAndSupervisoryNode(rightName, programId, supervisoryNodeId) {
             return $q
                 .all([
-                    roleResource.query(),
+                    currentUserRolesService.getUserRoles(),
                     currentUserService.getUserInfo()
                 ])
                 .then(function(resolves) {
                     var roles = resolves[0],
                         user = resolves[1];
 
+                    var matchingRoleIds = user.roleAssignments
+                        .filter(matchesByProperty('programId', programId))
+                        .filter(matchesByProperty('supervisoryNodeId', supervisoryNodeId))
+                        .map(toRoleId);
+
                     return roles
-                        .filter(isAssignedToUser(user))
+                        .filter(hasMatchingIds(matchingRoleIds))
                         .filter(hasRight(rightName))
                         .length > 0;
                 });
         }
 
-        function isAssignedToUser(user) {
-            var userRoleIds = user.roleAssignments
-                .map(function(roleAssignment) {
-                    return roleAssignment.roleId;
-                });
-
+        function hasMatchingIds(matchingRoleIds) {
             return function(role) {
-                return userRoleIds.indexOf(role.id) > -1;
+                return matchingRoleIds.indexOf(role.id) > -1;
             };
         }
 
@@ -269,6 +296,12 @@
                 return role.rights.filter(function(right) {
                     return right.name === rightName;
                 }).length > 0;
+            };
+        }
+
+        function matchesByProperty(propertyName, value) {
+            return function(roleAssignment) {
+                return roleAssignment[propertyName] === value;
             };
         }
 
@@ -339,6 +372,10 @@
         function savePermissions(permissions) {
             localStorageService.add('permissions', angular.toJson(permissions));
             return $q.resolve(permissions);
+        }
+
+        function toRoleId(roleAssignment) {
+            return roleAssignment.roleId;
         }
     }
 

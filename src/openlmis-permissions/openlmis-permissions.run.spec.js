@@ -27,12 +27,14 @@ describe('openlmis-permissions run', function() {
 
         var RightDataBuilder, UserDataBuilder;
         inject(function($injector) {
+            RightDataBuilder = $injector.get('RightDataBuilder');
+            UserDataBuilder = $injector.get('UserDataBuilder');
+
             this.$rootScope = $injector.get('$rootScope');
             this.$q = $injector.get('$q');
-            RightDataBuilder = $injector.get('RightDataBuilder');
             this.userRightsFactory = $injector.get('userRightsFactory');
             this.authorizationService = $injector.get('authorizationService');
-            UserDataBuilder = $injector.get('UserDataBuilder');
+            this.currentUserRolesService = $injector.get('currentUserRolesService');
         });
 
         this.rights = [
@@ -41,12 +43,14 @@ describe('openlmis-permissions run', function() {
 
         this.user = new UserDataBuilder().build();
 
-        this.postLoginAction = this.loginServiceSpy.registerPostLoginAction.calls[1].args[0];
-        this.postLogoutAction = this.loginServiceSpy.registerPostLogoutAction.calls[1].args[0];
+        this.postLoginAction = getLastCall(this.loginServiceSpy.registerPostLoginAction).args[0];
+        this.postLogoutAction = getLastCall(this.loginServiceSpy.registerPostLogoutAction).args[0];
 
         spyOn(this.userRightsFactory, 'buildRights').andReturn(this.$q.resolve(this.rights));
         spyOn(this.authorizationService, 'setRights');
         spyOn(this.authorizationService, 'clearRights');
+        spyOn(this.currentUserRolesService, 'getUserRoles');
+        spyOn(this.currentUserRolesService, 'clearCachedRoles');
     });
 
     describe('run block', function() {
@@ -84,6 +88,13 @@ describe('openlmis-permissions run', function() {
             expect(this.authorizationService.setRights).toHaveBeenCalledWith(this.rights);
         });
 
+        it('should cache user roles', function() {
+            this.postLoginAction(this.user);
+            this.$rootScope.$apply();
+
+            expect(this.currentUserRolesService.getUserRoles).toHaveBeenCalled();
+        });
+
     });
 
     describe('post logout action', function() {
@@ -102,6 +113,17 @@ describe('openlmis-permissions run', function() {
             expect(this.authorizationService.clearRights).toHaveBeenCalled();
         });
 
+        it('should cache user roles', function() {
+            this.postLogoutAction();
+            this.$rootScope.$apply();
+
+            expect(this.currentUserRolesService.clearCachedRoles).toHaveBeenCalled();
+        });
+
     });
+
+    function getLastCall(method) {
+        return method.calls[method.calls.length - 1];
+    }
 
 });

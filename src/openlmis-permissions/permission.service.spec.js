@@ -32,13 +32,26 @@ describe('openlmis-permissions.this.permissionService', function() {
             this.currentUserService = $injector.get('currentUserService');
             this.RoleResource = $injector.get('RoleResource');
             this.$q = $injector.get('$q');
+            this.currentUserRolesService = $injector.get('currentUserRolesService');
         });
 
         this.possessedRightName = 'POSSESSED_RIGHT';
+        this.otherPossessedRightName = 'OTHER_POSSESSED_RIGHT';
+        this.anotherPossessedRightName = 'ANOTHER_POSSESSED_RIGHT';
         this.nonPossessedRightName = 'NON_POSSESSED_RIGHT';
+        this.supervisoryNodeId = 'supervisory-node-id';
+        this.programId = 'program-id';
 
         this.possessedRight = new RightDataBuilder()
             .withName(this.possessedRightName)
+            .build();
+
+        this.otherPossessedRight = new RightDataBuilder()
+            .withName(this.otherPossessedRightName)
+            .build();
+
+        this.anotherPossessedRight = new RightDataBuilder()
+            .withName(this.anotherPossessedRightName)
             .build();
 
         this.nonPossessedRight = new RightDataBuilder()
@@ -52,12 +65,22 @@ describe('openlmis-permissions.this.permissionService', function() {
                 .build(),
             new RoleDataBuilder()
                 .withSupervisionType()
+                .withRight(this.otherPossessedRight)
+                .build(),
+            new RoleDataBuilder()
+                .withSupervisionType()
+                .withRight(this.anotherPossessedRight)
+                .build(),
+            new RoleDataBuilder()
+                .withSupervisionType()
                 .withRight(this.nonPossessedRight)
                 .build()
         ];
 
         this.user = new UserDataBuilder()
-            .withSupervisionRoleAssignment(this.roles[0].id, 'supervisory-node-id', 'program-id')
+            .withSupervisionRoleAssignment(this.roles[0].id, this.supervisoryNodeId, this.programId)
+            .withSupervisionRoleAssignment(this.roles[1].id, this.supervisoryNodeId, 'program-id-2')
+            .withSupervisionRoleAssignment(this.roles[2].id, 'supervisory-node-id-2', this.programId)
             .buildReferenceDataUserJson();
 
         var permissionStrings = [
@@ -74,6 +97,12 @@ describe('openlmis-permissions.this.permissionService', function() {
         spyOn(this.localStorageService, 'remove');
         spyOn(this.RoleResource.prototype, 'query').andReturn(this.$q.resolve(this.roles));
         spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
+        spyOn(this.currentUserRolesService, 'getUserRoles').andReturn(this.$q.resolve([
+            this.roles[0],
+            this.roles[1],
+            this.roles[2]
+        ]));
+
     });
 
     it('empty will clear permission strings from browser', function() {
@@ -127,7 +156,7 @@ describe('openlmis-permissions.this.permissionService', function() {
 
         expect(permissions[0].right).toBe('permissionString1');
         expect(permissions[0].facilityId).toBe('facility-id');
-        expect(permissions[0].programId).toBe('program-id');
+        expect(permissions[0].programId).toBe(this.programId);
 
         expect(permissions[1].right).toBe('permissionString2');
         expect(permissions[1].facilityId).toBe('some-facility');
@@ -200,7 +229,7 @@ describe('openlmis-permissions.this.permissionService', function() {
             // Too strict
             expect(this.checkPermission({
                 right: 'example',
-                programId: 'program-id',
+                programId: this.programId,
                 facilityId: 'facility-id'
             })).toBe(false);
 
@@ -215,7 +244,7 @@ describe('openlmis-permissions.this.permissionService', function() {
             this.localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
-                programId: 'program-id'
+                programId: this.programId
             }]);
 
             expect(this.checkPermission({
@@ -273,7 +302,7 @@ describe('openlmis-permissions.this.permissionService', function() {
             // Not too strict, program is ignored
             expect(this.checkPermission({
                 right: 'example',
-                programId: 'program-id',
+                programId: this.programId,
                 facilityId: 'facility-id'
             })).toBe(true);
 
@@ -288,7 +317,7 @@ describe('openlmis-permissions.this.permissionService', function() {
             this.localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
-                programId: 'program-id'
+                programId: this.programId
             }]);
 
             expect(this.checkPermission({
@@ -305,7 +334,7 @@ describe('openlmis-permissions.this.permissionService', function() {
             this.localStorageService.get.andReturn([{
                 right: 'right',
                 facilityId: 'facility-id',
-                programId: 'program-id'
+                programId: this.programId
             }]);
 
             this.checkPermission = checkPermission;
@@ -328,14 +357,14 @@ describe('openlmis-permissions.this.permissionService', function() {
         it('will return FALSE if the right is not set', function() {
             expect(this.checkPermission({
                 facilityId: 'facility-id',
-                programId: 'program-id'
+                programId: this.programId
             })).toBe(false);
         });
 
         it('will resolve promise if the argument matches a permission ignoring facility and program', function() {
             expect(this.checkPermission({
                 right: 'right',
-                programId: 'program-id',
+                programId: this.programId,
                 facilityId: 'facility-id'
             })).toBe(true);
         });
@@ -371,6 +400,74 @@ describe('openlmis-permissions.this.permissionService', function() {
             this.$rootScope.$apply();
 
             expect(result).toEqual(false);
+        });
+
+    });
+
+    describe('hasRoleWithRightForProgramAndSupervisoryNode', function() {
+
+        it('should return false if user has not role with the given right', function() {
+            var result;
+            this.permissionService
+                .hasRoleWithRightForProgramAndSupervisoryNode(
+                    this.nonPossessedRightName,
+                    this.programId,
+                    this.supervisoryNodeId
+                )
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(false);
+        });
+
+        it('should return false if user has role with the given right for program but different node', function() {
+            var result;
+            this.permissionService
+                .hasRoleWithRightForProgramAndSupervisoryNode(
+                    this.otherPossessedRight,
+                    this.programId,
+                    this.supervisoryNodeId
+                )
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(false);
+        });
+
+        it('should return false if user has role with the given right for node but different program', function() {
+            var result;
+            this.permissionService
+                .hasRoleWithRightForProgramAndSupervisoryNode(
+                    this.anotherPossessedRight,
+                    this.programId,
+                    this.supervisoryNodeId
+                )
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(false);
+        });
+
+        it('should return true if user has role with the given right, program and node', function() {
+            var result;
+            this.permissionService
+                .hasRoleWithRightForProgramAndSupervisoryNode(
+                    this.possessedRightName,
+                    this.programId,
+                    this.supervisoryNodeId
+                )
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(true);
         });
 
     });
