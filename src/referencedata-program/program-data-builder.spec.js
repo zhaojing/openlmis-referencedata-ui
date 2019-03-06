@@ -28,6 +28,8 @@
         ProgramDataBuilder.prototype.build = build;
         ProgramDataBuilder.prototype.withId = withId;
         ProgramDataBuilder.prototype.withName = withName;
+        ProgramDataBuilder.prototype.withEnabledDatePhysicalStockCountCompleted =
+            withEnabledDatePhysicalStockCountCompleted;
 
         return ProgramDataBuilder;
 
@@ -52,6 +54,11 @@
 
         function withId(newId) {
             this.id = newId;
+            return this;
+        }
+
+        function withEnabledDatePhysicalStockCountCompleted() {
+            this.enableDatePhysicalStockCountCompleted = true;
             return this;
         }
 
