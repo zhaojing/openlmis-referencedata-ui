@@ -96,6 +96,23 @@ describe('currentUserService', function() {
             expect(UserRepository.prototype.get).not.toHaveBeenCalledWith();
         });
 
+        it('should not fetch user twice from the server if none is cached', function() {
+            authorizationService.getUser.andReturn(authUser);
+            UserRepository.prototype.get.andReturn($q.resolve(user));
+
+            currentUserService.getUserInfo();
+            $rootScope.$apply();
+
+            expect(localStorageService.get.callCount).toEqual(1);
+            expect(UserRepository.prototype.get.callCount).toEqual(1);
+
+            currentUserService.getUserInfo();
+            $rootScope.$apply();
+
+            expect(localStorageService.get.callCount).toEqual(1);
+            expect(UserRepository.prototype.get.callCount).toEqual(1);
+        });
+
         it('should fetch user from the server if none is cached', function() {
             authorizationService.getUser.andReturn(authUser);
             UserRepository.prototype.get.andReturn($q.resolve(user));

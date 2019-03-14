@@ -33,6 +33,7 @@
     function currentUserInfo($q, UserRepository, localStorageService, authorizationService, User) {
 
         var CURRENT_USER = 'currentUser',
+            promise,
             userRepository = new UserRepository();
 
         this.getUserInfo = getUserInfo;
@@ -51,6 +52,10 @@
          * @return {Promise}    promise that resolves with user info
          */
         function getUserInfo() {
+            if (promise) {
+                return promise;
+            }
+
             var authUser = authorizationService.getUser();
             if (!authUser) {
                 return $q.reject();
@@ -58,14 +63,16 @@
 
             var cachedUserAsJson = localStorageService.get(CURRENT_USER);
             if (cachedUserAsJson) {
-                return $q.resolve(new User(angular.fromJson(cachedUserAsJson), new UserRepository()));
+                promise = $q.resolve(new User(angular.fromJson(cachedUserAsJson), new UserRepository()));
+            } else {
+                promise = userRepository.get(authUser.user_id)
+                    .then(function(refUser) {
+                        localStorageService.add(CURRENT_USER, refUser.toJson());
+                        return refUser;
+                    });
             }
 
-            return userRepository.get(authUser.user_id)
-                .then(function(refUser) {
-                    localStorageService.add(CURRENT_USER, refUser.toJson());
-                    return refUser;
-                });
+            return promise;
         }
 
         /**
