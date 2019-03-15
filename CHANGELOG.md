@@ -12,7 +12,7 @@ Bug fixes:
 * [OLMIS-5204](https://openlmis.atlassian.net/browse/OLMIS-5204): Fixed facility type list pagination
 * [OLMIS-5915](https://openlmis.atlassian.net/browse/OLMIS-5915): Fixed products disappear after removing one of the Facility on the Add/Edit Association screen
 * [OLMIS-5983](https://openlmis.atlassian.net/browse/OLMIS-5983): Fixed problem with entering Supply Lines screen when supervisory node has no requisition group
-* [OLMIS-6073](https://openlmis.atlassian.net/browse/OLMIS-6073): Fixed problem with making request for users, auth users and user contact details four times when logging in.
+* [OLMIS-6073](https://openlmis.atlassian.net/browse/OLMIS-6073): Reduced the number of requests for users, auth users and user contact details when logging in.
 
 5.5.0 / 2018-12-12
 ==================
