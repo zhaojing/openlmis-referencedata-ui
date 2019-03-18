@@ -41,7 +41,11 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                supplyLines: function($stateParams, SupplyLineResource, paginationService) {
+                supplyLineExpandEnabled: function(FeatureFlagService) {
+                    return new FeatureFlagService().isEnabled('SUPPLY_LINES_EXPAND');
+                },
+                supplyLines: function($stateParams, SupplyLineResource, SupplyLineResourceV2, supplyLineExpandEnabled,
+                    paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
 
@@ -49,10 +53,23 @@
                             params.sort = 'supplyingFacility';
                         }
 
+                        if (supplyLineExpandEnabled) {
+                            params.expand = [
+                                'supervisoryNode.requisitionGroup.memberFacilities',
+                                'supplyingFacility',
+                                'program'
+                            ];
+                            return new SupplyLineResourceV2().query(params);
+                        }
                         return new SupplyLineResource().query(params);
                     });
                 },
-                requisitionGroupsMap: function(supplyLines, RequisitionGroupResource, ObjectMapper) {
+                requisitionGroupsMap: function(supplyLines, RequisitionGroupResource, supplyLineExpandEnabled,
+                    ObjectMapper) {
+                    if (supplyLineExpandEnabled) {
+                        return {};
+                    }
+
                     var requisitionGroupIds = supplyLines
                         .filter(function(supplyLine) {
                             return supplyLine.supervisoryNode.requisitionGroup;
@@ -60,9 +77,11 @@
                         .map(function(supplyLine) {
                             return supplyLine.supervisoryNode.requisitionGroup.id;
                         });
+
                     if (!requisitionGroupIds.length) {
                         return {};
                     }
+
                     return new RequisitionGroupResource()
                         .query({
                             id: requisitionGroupIds

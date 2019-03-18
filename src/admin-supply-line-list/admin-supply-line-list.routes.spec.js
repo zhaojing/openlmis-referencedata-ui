@@ -35,7 +35,9 @@ describe('openlmis.administration.supplyLine', function() {
             this.FacilityRepository = $injector.get('FacilityRepository');
             this.programService = $injector.get('programService');
             this.SupplyLineResource = $injector.get('SupplyLineResource');
+            this.SupplyLineResourceV2 = $injector.get('SupplyLineResourceV2');
             this.RequisitionGroupResource = $injector.get('RequisitionGroupResource');
+            this.FeatureFlagService = $injector.get('FeatureFlagService');
         });
 
         this.facilities = [
@@ -53,6 +55,11 @@ describe('openlmis.administration.supplyLine', function() {
             new SupplyLineDataBuilder().buildJson()
         ];
 
+        this.supplyLinesV2 = [
+            new SupplyLineDataBuilder().buildJson(),
+            new SupplyLineDataBuilder().buildJson()
+        ];
+
         this.requisitionGroups = [
             new RequisitionGroupDataBuilder().buildJson(),
             new RequisitionGroupDataBuilder().buildJson()
@@ -66,13 +73,19 @@ describe('openlmis.administration.supplyLine', function() {
             .withContent(this.supplyLines)
             .build();
 
+        this.supplyLinesPageV2 = new PageDataBuilder()
+            .withContent(this.supplyLinesV2)
+            .build();
+
         this.goToUrl = goToUrl;
         this.getResolvedValue = getResolvedValue;
 
         spyOn(this.FacilityRepository.prototype, 'query').andReturn(this.$q.resolve(this.facilitiesPage));
         spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
         spyOn(this.SupplyLineResource.prototype, 'query').andReturn(this.$q.resolve(this.supplyLinesPage));
+        spyOn(this.SupplyLineResourceV2.prototype, 'query').andReturn(this.$q.resolve(this.supplyLinesPageV2));
         spyOn(this.RequisitionGroupResource.prototype, 'query').andReturn(this.$q.resolve(this.requisitionGroups));
+        spyOn(this.FeatureFlagService.prototype, 'isEnabled').andReturn(this.$q.resolve(false));
     });
 
     it('should be available under "/profile" URI', function() {
@@ -81,6 +94,12 @@ describe('openlmis.administration.supplyLine', function() {
         this.goToUrl('/administration/supplyLines');
 
         expect(this.$state.current.name).toEqual('openlmis.administration.supplyLines');
+    });
+
+    it('should retrieve supply line expand feature flag', function() {
+        this.goToUrl('/administration/supplyLines');
+
+        expect(this.getResolvedValue('supplyLineExpandEnabled')).toEqual(false);
     });
 
     it('should retrieve related supplying facilities', function() {
@@ -99,6 +118,27 @@ describe('openlmis.administration.supplyLine', function() {
         this.goToUrl('/administration/supplyLines');
 
         expect(this.getResolvedValue('supplyLines')).toEqual(this.supplyLines);
+    });
+
+    it('should retrieve supply lines v2 if flag is enabled', function() {
+        this.FeatureFlagService.prototype.isEnabled.andReturn(this.$q.resolve(true));
+
+        this.goToUrl('/administration/supplyLines');
+
+        expect(this.SupplyLineResourceV2.prototype.query).toHaveBeenCalledWith({
+            supplyingFacilityId: undefined,
+            programId: undefined,
+            page: 0,
+            size: 10,
+            sort: 'supplyingFacility',
+            expand: [
+                'supervisoryNode.requisitionGroup.memberFacilities',
+                'supplyingFacility',
+                'program'
+            ]
+        });
+
+        expect(this.getResolvedValue('supplyLines')).toEqual(this.supplyLinesV2);
     });
 
     it('should retrieve related requisition groups', function() {
@@ -139,6 +179,14 @@ describe('openlmis.administration.supplyLine', function() {
 
         expect(this.RequisitionGroupResource.prototype.query).not.toHaveBeenCalled();
         expect(this.getResolvedValue('requisitionGroupsMap')).toEqual(expected);
+    });
+
+    it('should get empty requisition group map if supply line feature is enabled', function() {
+        this.FeatureFlagService.prototype.isEnabled.andReturn(this.$q.resolve(true));
+
+        this.goToUrl('/administration/supplyLines');
+
+        expect(this.getResolvedValue('requisitionGroupsMap')).toEqual({});
     });
 
     it('should not change state when fetching supplying facilities fails', function() {

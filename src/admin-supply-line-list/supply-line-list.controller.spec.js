@@ -20,20 +20,19 @@ describe('SupplyLineListController', function() {
         module('referencedata-requisition-group');
         module('referencedata-supply-line');
 
-        var FacilityDataBuilder, SupplyLineDataBuilder, ProgramDataBuilder, $controller, RequisitionGroupDataBuilder;
+        var SupplyLineDataBuilder, ProgramDataBuilder, $controller;
         inject(function($injector) {
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
             SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             $controller = $injector.get('$controller');
-            RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
 
             this.$state = $injector.get('$state');
         });
 
         this.supplyingFacilities = [
-            new FacilityDataBuilder().build(),
-            new FacilityDataBuilder().build()
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
         this.supplyLines = [
             new SupplyLineDataBuilder().buildJson(),
@@ -43,14 +42,12 @@ describe('SupplyLineListController', function() {
             new ProgramDataBuilder().build(),
             new ProgramDataBuilder().build()
         ];
-        this.requisitionGroups = [
-            new RequisitionGroupDataBuilder().buildJson(),
-            new RequisitionGroupDataBuilder().buildJson()
-        ];
 
         this.requisitionGroupsMap = {};
-        this.requisitionGroupsMap[this.requisitionGroups[0].id] = this.requisitionGroups[0];
-        this.requisitionGroupsMap[this.requisitionGroups[1].id] = this.requisitionGroups[1];
+        this.requisitionGroupsMap[this.supplyLines[0].supervisoryNode.requisitionGroup.id] =
+            this.supplyLines[0].supervisoryNode.requisitionGroup;
+        this.requisitionGroupsMap[this.supplyLines[1].supervisoryNode.requisitionGroup.id] =
+            this.supplyLines[1].supervisoryNode.requisitionGroup;
 
         this.stateParams = {
             page: 0,
@@ -59,11 +56,14 @@ describe('SupplyLineListController', function() {
             programId: this.programs[0].id
         };
 
+        this.supplyLineExpandEnabled = false;
+
         this.vm = $controller('SupplyLineListController', {
             supplyLines: this.supplyLines,
             supplyingFacilities: this.supplyingFacilities,
             programs: this.programs,
             requisitionGroupsMap: this.requisitionGroupsMap,
+            supplyLineExpandEnabled: this.supplyLineExpandEnabled,
             $stateParams: this.stateParams
         });
         this.vm.$onInit();
@@ -99,6 +99,10 @@ describe('SupplyLineListController', function() {
 
         it('should expose a map of requisition groups', function() {
             expect(this.vm.requisitionGroupsMap).toEqual(this.requisitionGroupsMap);
+        });
+
+        it('should expose supply line feature flag', function() {
+            expect(this.vm.supplyLineExpandEnabled).toEqual(this.supplyLineExpandEnabled);
         });
     });
 
@@ -138,6 +142,58 @@ describe('SupplyLineListController', function() {
             this.vm.search();
 
             expect(this.$state.go).toHaveBeenCalled();
+        });
+    });
+
+    describe('showFacilityPopover', function() {
+
+        describe('supply line expand feature enabled', function() {
+
+            beforeEach(function() {
+                this.vm.supplyLineExpandEnabled = true;
+            });
+
+            it('should not show facility popover when member facilities are null', function() {
+                this.supplyLines[0].supervisoryNode.requisitionGroup.memberFacilities = null;
+
+                expect(this.vm.showFacilityPopover(this.supplyLines[0])).toBeFalsy();
+            });
+
+            it('should not show facility popover when member facilities are empty', function() {
+                this.supplyLines[0].supervisoryNode.requisitionGroup.memberFacilities = [];
+
+                expect(this.vm.showFacilityPopover(this.supplyLines[0])).toBeFalsy();
+            });
+
+            it('should show facility popover when member facilities are not empty', function() {
+                this.supplyLines[0].supervisoryNode.requisitionGroup.memberFacilities = [
+                    new this.FacilityDataBuilder().build()
+                ];
+
+                expect(this.vm.showFacilityPopover(this.supplyLines[0])).toBeTruthy();
+            });
+        });
+
+        describe('supply line expand feature disabled', function() {
+
+            beforeEach(function() {
+                this.vm.supplyLineExpandEnabled = false;
+            });
+
+            it('should not show facility popover when member facilities are empty', function() {
+                this.requisitionGroupsMap[this.supplyLines[0].supervisoryNode.requisitionGroup.id]
+                    .memberFacilities = [];
+
+                expect(this.vm.showFacilityPopover(this.supplyLines[0])).toBeFalsy();
+            });
+
+            it('should show facility popover when member facilities are not empty', function() {
+                this.supplyLines[0].supervisoryNode.requisitionGroup.memberFacilities = [
+                    new this.FacilityDataBuilder().build()
+                ];
+
+                expect(this.vm.showFacilityPopover(this.supplyLines[0])).toBeTruthy();
+            });
         });
     });
 });

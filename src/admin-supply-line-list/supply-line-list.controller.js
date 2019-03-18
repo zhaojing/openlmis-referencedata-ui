@@ -29,14 +29,17 @@
         .controller('SupplyLineListController', controller);
 
     controller.$inject = [
-        '$state', '$stateParams', 'supplyLines', 'supplyingFacilities', 'programs', 'requisitionGroupsMap'
+        '$state', '$stateParams', 'supplyLines', 'supplyingFacilities', 'programs', 'requisitionGroupsMap',
+        'supplyLineExpandEnabled'
     ];
 
-    function controller($state, $stateParams, supplyLines, supplyingFacilities, programs, requisitionGroupsMap) {
+    function controller($state, $stateParams, supplyLines, supplyingFacilities, programs, requisitionGroupsMap,
+                        supplyLineExpandEnabled) {
         var vm = this;
 
         vm.$onInit = onInit;
         vm.search = search;
+        vm.showFacilityPopover = showFacilityPopover;
 
         /**
          * @ngdoc property
@@ -105,6 +108,17 @@
         vm.requisitionGroupsMap = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-supply-line-list.controller:SupplyLineListController
+         * @type {boolean}
+         * @name supplyLineExpandEnabled
+         *
+         * @description
+         * Indicates if supply line expand feature flag is enabled.
+         */
+        vm.supplyLineExpandEnabled = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-supply-line-list.controller:SupplyLineListController
          * @name $onInit
@@ -119,6 +133,7 @@
             vm.supplyingFacilityId = $stateParams.supplyingFacilityId;
             vm.programId = $stateParams.programId;
             vm.requisitionGroupsMap = requisitionGroupsMap;
+            vm.supplyLineExpandEnabled = supplyLineExpandEnabled;
         }
 
         /**
@@ -138,6 +153,25 @@
             $state.go('openlmis.administration.supplyLines', stateParams, {
                 reload: true
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-supply-line-list.controller:SupplyLineListController
+         * @name showFacilityPopover
+         *
+         * @description
+         * Checks if member facilities popover should be shown.
+         * 
+         * @param   {Object}  supplyLine given supply line
+         * @returns {boolean}            true if popover should be shown
+         */
+        function showFacilityPopover(supplyLine) {
+            if (vm.supplyLineExpandEnabled) {
+                return supplyLine.supervisoryNode.requisitionGroup.memberFacilities &&
+                    supplyLine.supervisoryNode.requisitionGroup.memberFacilities.length;
+            }
+            return vm.requisitionGroupsMap[supplyLine.supervisoryNode.requisitionGroup.id].memberFacilities.length;
         }
     }
 
