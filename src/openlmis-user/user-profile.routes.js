@@ -25,53 +25,68 @@
 
     function routes($stateProvider, ROLE_TYPES) {
 
-        $stateProvider.state('openlmis.profile', {
-            url: '/profile',
-            label: 'openlmisUser.profile',
-            templateUrl: 'openlmis-user/user-profile.html',
-            controller: 'UserProfileController',
-            controllerAs: 'vm',
-            resolve: {
-                roles: function(referencedataRoleFactory) {
-                    return referencedataRoleFactory.getAllWithType();
-                },
-                programs: function(programService) {
-                    return programService.getAll();
-                },
-                warehouses: function(facilityService) {
-                    return facilityService.getAllMinimal();
-                },
-                facilitiesMap: function(warehouses, ObjectMapper) {
-                    return new ObjectMapper().map(warehouses);
-                },
-                supervisoryNodes: function(AdminUserRolesSupervisoryNodeResource, facilitiesMap) {
-                    return new AdminUserRolesSupervisoryNodeResource(facilitiesMap).query()
-                        .then(function(page) {
-                            return page.content;
-                        });
-                },
-                user: function(userRoleAssignmentFactory, userId, roles, programs, supervisoryNodes, warehouses) {
-                    return userRoleAssignmentFactory.getUser(userId, roles, programs, supervisoryNodes, warehouses);
-                },
-                userId: function(currentUserService) {
-                    return currentUserService.getUserInfo()
-                        .then(function(user) {
-                            return user.id;
-                        });
-                },
-                homeFacility: function(user, facilityService) {
-                    if (user.homeFacilityId) {
-                        return facilityService.getMinimal(user.homeFacilityId);
+        $stateProvider
+            .state('openlmis.profile', {
+                url: '/profile',
+                label: 'openlmisUser.profile',
+                templateUrl: 'openlmis-user/user-profile.html',
+                controller: 'UserProfileController',
+                controllerAs: 'vm',
+                resolve: {
+                    user: function(currentUserService) {
+                        return currentUserService.getUserInfo();
                     }
-                },
-                roleRightsMap: function(roles, ObjectMapper) {
-                    return new ObjectMapper().map(roles, 'rights');
-                },
-                pendingVerificationEmail: function(userId, authUserService) {
-                    return authUserService.getVerificationEmail(userId);
                 }
-            }
-        });
+            })
+            .state('openlmis.profile.basicInformation', {
+                url: '/basicInformation',
+                templateUrl: 'openlmis-user/user-profile-basic-information.html',
+                controller: 'UserProfileBasicInformationController',
+                controllerAs: 'vm',
+                resolve: {
+                    homeFacility: function(user, facilityService) {
+                        if (user.homeFacilityId) {
+                            return facilityService.getMinimal(user.homeFacilityId);
+                        }
+                    },
+                    pendingVerificationEmail: function(user, authUserService) {
+                        return authUserService.getVerificationEmail(user.id);
+                    }
+                }
+            })
+            .state('openlmis.profile.roleAssignments', {
+                url: '/roleAssignments',
+                templateUrl: 'openlmis-user/user-profile-role-assignments.html',
+                controller: 'UserProfileRoleAssignmentsController',
+                controllerAs: 'vm',
+                resolve: {
+                    roles: function(referencedataRoleFactory) {
+                        return referencedataRoleFactory.getAllWithType();
+                    },
+                    roleRightsMap: function(roles, ObjectMapper) {
+                        return new ObjectMapper().map(roles, 'rights');
+                    },
+                    programs: function(programService) {
+                        return programService.getAll();
+                    },
+                    warehouses: function(facilityService) {
+                        return facilityService.getAllMinimal();
+                    },
+                    facilitiesMap: function(warehouses, ObjectMapper) {
+                        return new ObjectMapper().map(warehouses);
+                    },
+                    supervisoryNodes: function(AdminUserRolesSupervisoryNodeResource, facilitiesMap) {
+                        return new AdminUserRolesSupervisoryNodeResource(facilitiesMap).query()
+                            .then(function(page) {
+                                return page.content;
+                            });
+                    },
+                    user: function(userRoleAssignmentFactory, user, roles, programs, supervisoryNodes, warehouses) {
+                        return userRoleAssignmentFactory
+                            .getUser(user.id, roles, programs, supervisoryNodes, warehouses);
+                    }
+                }
+            });
 
         addStateForRoleType(ROLE_TYPES.ORDER_FULFILLMENT, '/fulfillment', 'user-roles-fulfillment.html');
         addStateForRoleType(ROLE_TYPES.SUPERVISION, '/supervision', 'user-roles-supervision.html');
@@ -79,7 +94,7 @@
         addStateForRoleType(ROLE_TYPES.REPORTS, '/reports', 'user-roles-tab.html');
 
         function addStateForRoleType(type, url, templateFile) {
-            $stateProvider.state('openlmis.profile.' + type, {
+            $stateProvider.state('openlmis.profile.roleAssignments.' + type, {
                 url: url,
                 controller: 'UserProfileRolesTabController',
                 templateUrl: 'admin-user-roles/' + templateFile,

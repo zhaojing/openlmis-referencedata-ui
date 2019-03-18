@@ -6,6 +6,7 @@ Improvements:
 * [OLMIS-5000](https://openlmis.atlassian.net/browse/OLMIS-5000): Updated supply line service to use refactored endpoints
 * [OLMIS-5837](https://openlmis.atlassian.net/browse/OLMIS-5837): Added the ability to check for right based on role assignment instead of permission strings.
 * [OLMIS-6055](https://openlmis.atlassian.net/browse/OLMIS-6055): Added translations for superset report rights.
+* [OLMIS-6020](https://openlmis.atlassian.net/browse/OLMIS-6020): Reworked user profile into multiple tabs.
 
 Bug fixes:
 * [OLMIS-5904](https://openlmis.atlassian.net/browse/OLMIS-5904): Fixed issue with a random order of programs and facilities in openlmis-facility-program-select component.

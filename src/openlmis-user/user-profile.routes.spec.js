@@ -119,15 +119,79 @@ describe('openlmis.profile', function() {
             expect(this.$templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile.html');
         });
 
-        it('should resolve roles', function() {
+        it('should resolve user', function() {
             this.goToUrl('/profile');
+
+            expect(this.getResolvedValue('user')).toEqual(this.user);
+            expect(this.currentUserService.getUserInfo).toHaveBeenCalled();
+        });
+
+    });
+
+    describe('.basicInformation state', function() {
+
+        it('should be available under "/profile/basicInformation" URI', function() {
+            expect(this.$state.current.name).not.toEqual('openlmis.profile.basicInformation');
+
+            this.goToUrl('/profile/basicInformation');
+
+            expect(this.$state.current.name).toEqual('openlmis.profile.basicInformation');
+        });
+
+        it('should use template', function() {
+            this.goToUrl('/profile/basicInformation');
+
+            expect(this.$templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile-basic-information.html');
+        });
+
+        it('should resolve home facility', function() {
+            this.goToUrl('/profile/basicInformation');
+
+            expect(this.getResolvedValue('homeFacility')).toEqual(this.homeFacility);
+            expect(this.facilityService.getMinimal).toHaveBeenCalledWith(this.user.homeFacilityId);
+        });
+
+        it('should resolve home facility to undefined if user has no home facility', function() {
+            this.user.homeFacilityId = undefined;
+
+            this.goToUrl('/profile/basicInformation');
+
+            expect(this.getResolvedValue('homeFacility')).toBeUndefined();
+        });
+
+        it('should resolve pending verification email', function() {
+            this.goToUrl('/profile/basicInformation');
+
+            expect(this.getResolvedValue('pendingVerificationEmail')).toEqual(this.pendingVerificationEmail);
+        });
+
+    });
+
+    describe('.roleAssignments state', function() {
+
+        it('should be available under "/profile/roleAssignments" URI', function() {
+            expect(this.$state.current.name).not.toEqual('openlmis.profile.roleAssignments');
+
+            this.goToUrl('/profile/roleAssignments');
+
+            expect(this.$state.current.name).toEqual('openlmis.profile.roleAssignments');
+        });
+
+        it('should use template', function() {
+            this.goToUrl('/profile/roleAssignments');
+
+            expect(this.$templateCache.get).toHaveBeenCalledWith('openlmis-user/user-profile-role-assignments.html');
+        });
+
+        it('should resolve roles', function() {
+            this.goToUrl('/profile/roleAssignments');
 
             expect(this.getResolvedValue('roles')).toEqual(this.roles);
             expect(this.referencedataRoleFactory.getAllWithType).toHaveBeenCalled();
         });
 
         it('should resolve programs', function() {
-            this.goToUrl('/profile');
+            this.goToUrl('/profile/roleAssignments');
 
             expect(this.getResolvedValue('programs')).toEqual(this.programs);
             expect(this.programService.getAll).toHaveBeenCalled();
@@ -136,28 +200,28 @@ describe('openlmis.profile', function() {
         it('should resolve facilitiesMap', function() {
             var facilitiesMap = this.objectMapper.map(this.warehouses);
 
-            this.goToUrl('/profile');
+            this.goToUrl('/profile/roleAssignments');
 
             expect(this.getResolvedValue('facilitiesMap')).toEqual(facilitiesMap);
             expect(this.facilityService.getAllMinimal).toHaveBeenCalled();
         });
 
         it('should resolve supervisoryNodes', function() {
-            this.goToUrl('/profile');
+            this.goToUrl('/profile/roleAssignments');
 
             expect(this.getResolvedValue('supervisoryNodes')).toEqual(this.supervisoryNodes);
             expect(this.AdminUserRolesSupervisoryNodeResource.prototype.query).toHaveBeenCalled();
         });
 
         it('should resolve warehouses', function() {
-            this.goToUrl('/profile');
+            this.goToUrl('/profile/roleAssignments');
 
             expect(this.getResolvedValue('warehouses')).toEqual(this.warehouses);
             expect(this.facilityService.getAllMinimal).toHaveBeenCalled();
         });
 
         it('should resolve user', function() {
-            this.goToUrl('/profile');
+            this.goToUrl('/profile/roleAssignments');
 
             expect(this.getResolvedValue('user')).toEqual(this.user);
             expect(this.userRoleAssignmentFactory.getUser).toHaveBeenCalledWith(
@@ -169,30 +233,8 @@ describe('openlmis.profile', function() {
             );
         });
 
-        it('should resolve userId', function() {
-            this.goToUrl('/profile');
-
-            expect(this.getResolvedValue('userId')).toEqual(this.user.id);
-            expect(this.currentUserService.getUserInfo).toHaveBeenCalled();
-        });
-
-        it('should resolve home facility', function() {
-            this.goToUrl('/profile');
-
-            expect(this.getResolvedValue('homeFacility')).toEqual(this.homeFacility);
-            expect(this.facilityService.getMinimal).toHaveBeenCalledWith(this.user.homeFacilityId);
-        });
-
-        it('should resolve home facility to undefined if user has no home facility', function() {
-            this.user.homeFacilityId = undefined;
-
-            this.goToUrl('/profile');
-
-            expect(this.getResolvedValue('homeFacility')).toBeUndefined();
-        });
-
         it('should resolve home roleRightsMap', function() {
-            this.goToUrl('/profile');
+            this.goToUrl('/profile/roleAssignments');
 
             var roleRightsMap = this.getResolvedValue('roleRightsMap');
 
@@ -204,38 +246,32 @@ describe('openlmis.profile', function() {
             expect(roleRightsMap[this.roles[5].id]).toEqual(this.roles[5].rights);
         });
 
-        it('should resolve pending verification email', function() {
-            this.goToUrl('/profile');
-
-            expect(this.getResolvedValue('pendingVerificationEmail')).toEqual(this.pendingVerificationEmail);
-        });
-
     });
 
     describe('.supervision state', function() {
 
-        it('should be available under "/profile/supervision" URI', function() {
-            expect(this.$state.current.name).not.toEqual('openlmis.profile.SUPERVISION');
+        it('should be available under "/profile/roleAssignments/supervision" URI', function() {
+            expect(this.$state.current.name).not.toEqual('openlmis.profile.roleAssignments.SUPERVISION');
 
-            this.goToUrl('/profile/supervision');
+            this.goToUrl('/profile/roleAssignments/supervision');
 
-            expect(this.$state.current.name).toEqual('openlmis.profile.SUPERVISION');
+            expect(this.$state.current.name).toEqual('openlmis.profile.roleAssignments.SUPERVISION');
         });
 
         it('should use template', function() {
-            this.goToUrl('/profile/supervision');
+            this.goToUrl('/profile/roleAssignments/supervision');
 
             expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-supervision.html');
         });
 
         it('should resolve tab', function() {
-            this.goToUrl('/profile/supervision');
+            this.goToUrl('/profile/roleAssignments/supervision');
 
             expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.SUPERVISION);
         });
 
         it('should resolve programs', function() {
-            this.goToUrl('/profile/supervision');
+            this.goToUrl('/profile/roleAssignments/supervision');
 
             expect(this.getResolvedValue('roleAssignments')).toEqual([
                 this.user.roleAssignments[0],
@@ -247,28 +283,28 @@ describe('openlmis.profile', function() {
 
     describe('.fulfillment state', function() {
 
-        it('should be available under "/profile/fulfillment" URI', function() {
-            expect(this.$state.current.name).not.toEqual('openlmis.profile.ORDER_FULFILLMENT');
+        it('should be available under "/profile/roleAssignments/fulfillment" URI', function() {
+            expect(this.$state.current.name).not.toEqual('openlmis.profile.roleAssignments.ORDER_FULFILLMENT');
 
-            this.goToUrl('/profile/fulfillment');
+            this.goToUrl('/profile/roleAssignments/fulfillment');
 
-            expect(this.$state.current.name).toEqual('openlmis.profile.ORDER_FULFILLMENT');
+            expect(this.$state.current.name).toEqual('openlmis.profile.roleAssignments.ORDER_FULFILLMENT');
         });
 
         it('should use template', function() {
-            this.goToUrl('/profile/fulfillment');
+            this.goToUrl('/profile/roleAssignments/fulfillment');
 
             expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-fulfillment.html');
         });
 
         it('should resolve tab', function() {
-            this.goToUrl('/profile/fulfillment');
+            this.goToUrl('/profile/roleAssignments/fulfillment');
 
             expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.ORDER_FULFILLMENT);
         });
 
         it('should resolve programs', function() {
-            this.goToUrl('/profile/fulfillment');
+            this.goToUrl('/profile/roleAssignments/fulfillment');
 
             expect(this.getResolvedValue('roleAssignments')).toEqual([
                 this.user.roleAssignments[2],
@@ -280,28 +316,28 @@ describe('openlmis.profile', function() {
 
     describe('.report state', function() {
 
-        it('should be available under "/profile/reports" URI', function() {
-            expect(this.$state.current.name).not.toEqual('openlmis.profile.REPORTS');
+        it('should be available under "/profile/roleAssignments/reports" URI', function() {
+            expect(this.$state.current.name).not.toEqual('openlmis.profile.roleAssignments.REPORTS');
 
-            this.goToUrl('/profile/reports');
+            this.goToUrl('/profile/roleAssignments/reports');
 
-            expect(this.$state.current.name).toEqual('openlmis.profile.REPORTS');
+            expect(this.$state.current.name).toEqual('openlmis.profile.roleAssignments.REPORTS');
         });
 
         it('should use template', function() {
-            this.goToUrl('/profile/reports');
+            this.goToUrl('/profile/roleAssignments/reports');
 
             expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
         });
 
         it('should resolve tab', function() {
-            this.goToUrl('/profile/reports');
+            this.goToUrl('/profile/roleAssignments/reports');
 
             expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.REPORTS);
         });
 
         it('should resolve programs', function() {
-            this.goToUrl('/profile/reports');
+            this.goToUrl('/profile/roleAssignments/reports');
 
             expect(this.getResolvedValue('roleAssignments')).toEqual([]);
         });
@@ -310,28 +346,28 @@ describe('openlmis.profile', function() {
 
     describe('.admin state', function() {
 
-        it('should be available under "/profile/admin" URI', function() {
-            expect(this.$state.current.name).not.toEqual('openlmis.profile.GENERAL_ADMIN');
+        it('should be available under "/profile/roleAssignments/admin" URI', function() {
+            expect(this.$state.current.name).not.toEqual('openlmis.profile.roleAssignments.GENERAL_ADMIN');
 
-            this.goToUrl('/profile/admin');
+            this.goToUrl('/profile/roleAssignments/admin');
 
-            expect(this.$state.current.name).toEqual('openlmis.profile.GENERAL_ADMIN');
+            expect(this.$state.current.name).toEqual('openlmis.profile.roleAssignments.GENERAL_ADMIN');
         });
 
         it('should use template', function() {
-            this.goToUrl('/profile/admin');
+            this.goToUrl('/profile/roleAssignments/admin');
 
             expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-roles/user-roles-tab.html');
         });
 
         it('should resolve tab', function() {
-            this.goToUrl('/profile/admin');
+            this.goToUrl('/profile/roleAssignments/admin');
 
             expect(this.getResolvedValue('tab')).toEqual(this.ROLE_TYPES.GENERAL_ADMIN);
         });
 
         it('should resolve programs', function() {
-            this.goToUrl('/profile/admin');
+            this.goToUrl('/profile/roleAssignments/admin');
 
             expect(this.getResolvedValue('roleAssignments')).toEqual([
                 this.user.roleAssignments[4],

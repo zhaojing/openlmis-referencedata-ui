@@ -13,16 +13,23 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('UserProfileController', function() {
+describe('UserProfileRoleAssignmentsController', function() {
 
     beforeEach(function() {
         module('openlmis-user');
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
+            this.$q = $injector.get('$q');
+            this.ROLE_TYPES = $injector.get('ROLE_TYPES');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        this.vm = this.$controller('UserProfileController', {});
+        this.user = new this.UserDataBuilder().build();
+
+        this.vm = this.$controller('UserProfileRoleAssignmentsController', {
+            user: this.user
+        });
     });
 
     describe('onInit', function() {
@@ -32,13 +39,11 @@ describe('UserProfileController', function() {
         });
 
         it('should set user profile', function() {
-            expect(this.vm.tabs).toEqual([{
-                state: 'openlmis.profile.basicInformation',
-                name: 'openlmisUser.basicInformation'
-            }, {
-                state: 'openlmis.profile.roleAssignments.SUPERVISION',
-                name: 'openlmisUser.roleAssignments'
-            }]);
+            expect(this.user).toEqual(this.vm.user);
+        });
+
+        it('should expose role types', function() {
+            expect(this.vm.roleTypes).toEqual(this.ROLE_TYPES.getRoleTypes());
         });
 
     });
