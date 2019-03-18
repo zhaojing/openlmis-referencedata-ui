@@ -84,6 +84,7 @@
          * Deletes users stored in the browser cache.
          */
         function clearCache() {
+            promise = undefined;
             localStorageService.remove(CURRENT_USER);
         }
     }

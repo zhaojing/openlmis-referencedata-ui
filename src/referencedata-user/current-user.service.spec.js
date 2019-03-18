@@ -47,6 +47,7 @@ describe('currentUserService', function() {
 
         spyOn(authorizationService, 'getUser');
         spyOn(localStorageService, 'get');
+        spyOn(localStorageService, 'remove');
         spyOn(UserRepository.prototype, 'get');
     });
 
@@ -152,10 +153,21 @@ describe('currentUserService', function() {
     describe('clearCache', function() {
 
         it('should clear cache', function() {
-            spyOn(localStorageService, 'remove');
+            authorizationService.getUser.andReturn(authUser);
+            UserRepository.prototype.get.andReturn($q.resolve(user));
+
+            currentUserService.getUserInfo();
+            $rootScope.$apply();
+
+            expect(localStorageService.get.callCount).toEqual(1);
+            expect(UserRepository.prototype.get.callCount).toEqual(1);
 
             currentUserService.clearCache();
+            currentUserService.getUserInfo();
+            $rootScope.$apply();
 
+            expect(localStorageService.get.callCount).toEqual(2);
+            expect(UserRepository.prototype.get.callCount).toEqual(2);
             expect(localStorageService.remove).toHaveBeenCalledWith(CURRENT_USER);
         });
 
