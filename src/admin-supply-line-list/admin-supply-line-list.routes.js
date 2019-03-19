@@ -49,17 +49,19 @@
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
 
-                        if (!params.sort) {
-                            params.sort = 'supplyingFacility';
-                        }
-
                         if (supplyLineExpandEnabled) {
+                            if (!params.sort) {
+                                params.sort = 'supplyingFacility.name';
+                            }
                             params.expand = [
                                 'supervisoryNode.requisitionGroup.memberFacilities',
                                 'supplyingFacility',
                                 'program'
                             ];
                             return new SupplyLineResourceV2().query(params);
+                        }
+                        if (!params.sort) {
+                            params.sort = 'supplyingFacility';
                         }
                         return new SupplyLineResource().query(params);
                     });

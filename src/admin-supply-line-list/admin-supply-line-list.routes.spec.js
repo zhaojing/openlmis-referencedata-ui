@@ -130,7 +130,7 @@ describe('openlmis.administration.supplyLine', function() {
             programId: undefined,
             page: 0,
             size: 10,
-            sort: 'supplyingFacility',
+            sort: 'supplyingFacility.name',
             expand: [
                 'supervisoryNode.requisitionGroup.memberFacilities',
                 'supplyingFacility',
