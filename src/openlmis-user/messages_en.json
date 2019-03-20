@@ -25,5 +25,6 @@
     "openlmisUser.allowNotifications.description.unchecked": "Unchecked = you will not receive any notifications",
     "openlmisUser.sendVerificationEmail": "Send verification email",
     "openlmisUser.sendVerificationEmail.success": "Verification email has been sent successfully",
-    "openlmisUser.pendingVerificationEmail.info": "The email address has been changed to ${email} and is pending verification"
+    "openlmisUser.pendingVerificationEmail.info": "The email address has been changed to ${email} and is pending verification",
+    "openlmisUser.userProfile": "User Profile"
 }
