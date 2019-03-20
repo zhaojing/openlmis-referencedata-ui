@@ -26,5 +26,8 @@
     "openlmisUser.sendVerificationEmail": "Send verification email",
     "openlmisUser.sendVerificationEmail.success": "Verification email has been sent successfully",
     "openlmisUser.pendingVerificationEmail.info": "The email address has been changed to ${email} and is pending verification",
-    "openlmisUser.userProfile": "User Profile"
+    "openlmisUser.userProfile": "User Profile",
+    "openlmisUser.notificationSettings": "Notification Settings",
+    "openlmisUser.notification": "Notification",
+    "openlmisUser.noDigestConfigurations": "There are no digest configurations"
 }

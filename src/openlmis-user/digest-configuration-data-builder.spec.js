@@ -17,34 +17,35 @@
 
     'use strict';
 
-    /**
-     * @ngdoc controller
-     * @name openlmis-user.controller:UserProfileController
-     *
-     * @description
-     * Allows user to see his own profile info.
-     */
     angular
         .module('openlmis-user')
-        .controller('UserProfileController', controller);
+        .factory('DigestConfigurationDataBuilder', DigestConfigurationDataBuilder);
 
-    function controller() {
-        var vm = this;
+    DigestConfigurationDataBuilder.$inject = [];
 
-        vm.$onInit = onInit;
+    function DigestConfigurationDataBuilder() {
 
-        function onInit() {
-            vm.tabs = [{
-                state: 'openlmis.profile.basicInformation',
-                name: 'openlmisUser.basicInformation'
-            }, {
-                state: 'openlmis.profile.roleAssignments.SUPERVISION',
-                name: 'openlmisUser.roleAssignments'
-            }, {
-                state: 'openlmis.profile.notificationSettings',
-                name: 'openlmisUser.notificationSettings'
-            }];
+        DigestConfigurationDataBuilder.prototype.buildJson = buildJson;
+
+        return DigestConfigurationDataBuilder;
+
+        function DigestConfigurationDataBuilder() {
+            DigestConfigurationDataBuilder.instanceNumber = (DigestConfigurationDataBuilder.instanceNumber || 0) + 1;
+
+            var instanceNumber = DigestConfigurationDataBuilder.instanceNumber;
+            this.message = 'Digest message ${count} ' +  instanceNumber;
+            this.tag = 'digest-configuration-tag-' + instanceNumber;
+            this.id = 'digest-configuration-id-' + instanceNumber;
         }
+
+        function buildJson() {
+            return {
+                message: this.message,
+                tag: this.tag,
+                id: this.id
+            };
+        }
+
     }
 
 })();

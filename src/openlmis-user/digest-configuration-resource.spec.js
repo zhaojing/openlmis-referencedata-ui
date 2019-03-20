@@ -13,37 +13,27 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('UserProfileController', function() {
+describe('DigestConfigurationResource', function() {
+
+    var DigestConfigurationResource, OpenlmisResourceMock;
 
     beforeEach(function() {
-        module('openlmis-user');
+        module('openlmis-user', function($provide) {
+            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+
+            $provide.factory('OpenlmisResource', function() {
+                return OpenlmisResourceMock;
+            });
+        });
 
         inject(function($injector) {
-            this.$controller = $injector.get('$controller');
+            DigestConfigurationResource = $injector.get('DigestConfigurationResource');
         });
-
-        this.vm = this.$controller('UserProfileController', {});
     });
 
-    describe('onInit', function() {
+    it('should extend OpenlmisResource', function() {
+        new DigestConfigurationResource();
 
-        beforeEach(function() {
-            this.vm.$onInit();
-        });
-
-        it('should set user profile', function() {
-            expect(this.vm.tabs).toEqual([{
-                state: 'openlmis.profile.basicInformation',
-                name: 'openlmisUser.basicInformation'
-            }, {
-                state: 'openlmis.profile.roleAssignments.SUPERVISION',
-                name: 'openlmisUser.roleAssignments'
-            }, {
-                state: 'openlmis.profile.notificationSettings',
-                name: 'openlmisUser.notificationSettings'
-            }]);
-        });
-
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/digestConfiguration');
     });
-
 });

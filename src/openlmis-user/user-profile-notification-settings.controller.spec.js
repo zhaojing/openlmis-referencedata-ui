@@ -13,35 +13,31 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('UserProfileController', function() {
+describe('UserProfileNotificationSettingsController', function() {
 
     beforeEach(function() {
         module('openlmis-user');
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
+            this.DigestConfigurationDataBuilder = $injector.get('DigestConfigurationDataBuilder');
         });
 
-        this.vm = this.$controller('UserProfileController', {});
+        this.digestConfigurations = [
+            new this.DigestConfigurationDataBuilder().buildJson(),
+            new this.DigestConfigurationDataBuilder().buildJson()
+        ];
+
+        this.vm = this.$controller('UserProfileNotificationSettingsController', {
+            digestConfigurations: this.digestConfigurations
+        });
+        this.vm.$onInit();
     });
 
-    describe('onInit', function() {
+    describe('$onInit', function() {
 
-        beforeEach(function() {
-            this.vm.$onInit();
-        });
-
-        it('should set user profile', function() {
-            expect(this.vm.tabs).toEqual([{
-                state: 'openlmis.profile.basicInformation',
-                name: 'openlmisUser.basicInformation'
-            }, {
-                state: 'openlmis.profile.roleAssignments.SUPERVISION',
-                name: 'openlmisUser.roleAssignments'
-            }, {
-                state: 'openlmis.profile.notificationSettings',
-                name: 'openlmisUser.notificationSettings'
-            }]);
+        it('should set the list of digest configurations', function() {
+            expect(this.vm.digestConfigurations).toEqual(this.digestConfigurations);
         });
 
     });

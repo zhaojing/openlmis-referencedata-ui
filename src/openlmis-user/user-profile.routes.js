@@ -86,6 +86,20 @@
                             .getUser(user.id, roles, programs, supervisoryNodes, warehouses);
                     }
                 }
+            })
+            .state('openlmis.profile.notificationSettings', {
+                url: '/notificationSettings',
+                templateUrl: 'openlmis-user/user-profile-notification-settings.html',
+                controller: 'UserProfileNotificationSettingsController',
+                controllerAs: 'vm',
+                resolve: {
+                    digestConfigurations: function(DigestConfigurationResource) {
+                        return new DigestConfigurationResource().query()
+                            .then(function(digestConfigurationsPage) {
+                                return digestConfigurationsPage.content;
+                            });
+                    }
+                }
             });
 
         addStateForRoleType(ROLE_TYPES.ORDER_FULFILLMENT, '/fulfillment', 'user-roles-fulfillment.html');

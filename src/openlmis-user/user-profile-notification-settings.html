@@ -1,0 +1,18 @@
+<h3>{{'openlmisUser.notificationSettings' | message}}</h3>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.digestConfigurations || vm.digestConfigurations.length === 0">
+            {{'openlmisUser.noDigestConfigurations' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'openlmisUser.notification' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="digestConfiguration in vm.digestConfigurations | orderBy : '$name'">
+                <td>{{digestConfiguration.tag | notificationTag}}</td>
+            </tr>
+        </tbody>
+    </table>
+</section>

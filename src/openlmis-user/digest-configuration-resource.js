@@ -18,33 +18,26 @@
     'use strict';
 
     /**
-     * @ngdoc controller
-     * @name openlmis-user.controller:UserProfileController
+     * @ngdoc service
+     * @name shipment.DigestConfigurationResource
      *
      * @description
-     * Allows user to see his own profile info.
+     * Communicates with the RESTful user subscriptions endpoint of the OpenLMIS server.
      */
     angular
         .module('openlmis-user')
-        .controller('UserProfileController', controller);
+        .factory('DigestConfigurationResource', DigestConfigurationResource);
 
-    function controller() {
-        var vm = this;
+    DigestConfigurationResource.$inject = ['OpenlmisResource', 'classExtender'];
 
-        vm.$onInit = onInit;
+    function DigestConfigurationResource(OpenlmisResource, classExtender) {
 
-        function onInit() {
-            vm.tabs = [{
-                state: 'openlmis.profile.basicInformation',
-                name: 'openlmisUser.basicInformation'
-            }, {
-                state: 'openlmis.profile.roleAssignments.SUPERVISION',
-                name: 'openlmisUser.roleAssignments'
-            }, {
-                state: 'openlmis.profile.notificationSettings',
-                name: 'openlmisUser.notificationSettings'
-            }];
+        classExtender.extend(DigestConfigurationResource, OpenlmisResource);
+
+        return DigestConfigurationResource;
+
+        function DigestConfigurationResource() {
+            this.super('/api/digestConfiguration');
         }
     }
-
 })();

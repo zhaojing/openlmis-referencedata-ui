@@ -19,31 +19,43 @@
 
     /**
      * @ngdoc controller
-     * @name openlmis-user.controller:UserProfileController
+     * @name openlmis-user.controller:UserProfileNotificationSettingsController
      *
      * @description
-     * Allows user to see his own profile info.
+     * Allows user to see his notification settings.
      */
     angular
         .module('openlmis-user')
-        .controller('UserProfileController', controller);
+        .controller('UserProfileNotificationSettingsController', controller);
 
-    function controller() {
+    controller.$inject = ['digestConfigurations'];
+
+    function controller(digestConfigurations) {
         var vm = this;
 
         vm.$onInit = onInit;
 
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-user.controller:UserProfileNotificationSettingsController
+         * @type {Array}
+         * @name digestConfigurations
+         *
+         * @description
+         * The list of digest configurations available in the system.
+         */
+        vm.digestConfigurations = undefined;
+
+        /**
+         * @ngdoc method
+         * @propertyOf openlmis-user.controller:UserProfileNotificationSettingsController
+         * @name $onInit
+         *
+         * @description
+         * Initialization method of the UserProfileNotificationSetttingsController.
+         */
         function onInit() {
-            vm.tabs = [{
-                state: 'openlmis.profile.basicInformation',
-                name: 'openlmisUser.basicInformation'
-            }, {
-                state: 'openlmis.profile.roleAssignments.SUPERVISION',
-                name: 'openlmisUser.roleAssignments'
-            }, {
-                state: 'openlmis.profile.notificationSettings',
-                name: 'openlmisUser.notificationSettings'
-            }];
+            vm.digestConfigurations = digestConfigurations;
         }
     }
 
