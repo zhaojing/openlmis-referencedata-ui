@@ -39,7 +39,5 @@
         function SupplyLineResource() {
             this.super('/api/supplyLines');
         }
-
     }
-
 })();

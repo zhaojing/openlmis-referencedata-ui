@@ -1,10 +1,5 @@
 <ul class="list-unstyled">
-    <li ng-if="!vm.supplyLineExpandEnabled"
-        ng-repeat="facility in vm.requisitionGroupsMap[supplyLine.supervisoryNode.requisitionGroup.id].memberFacilities">
-        {{facility.name}}
-    </li>
-    <li ng-if="vm.supplyLineExpandEnabled"
-        ng-repeat="facility in supplyLine.supervisoryNode.requisitionGroup.memberFacilities">
+    <li ng-repeat="facility in supplyLine.supervisoryNode.requisitionGroup.memberFacilities">
         {{facility.name}}
     </li>
 </ul>

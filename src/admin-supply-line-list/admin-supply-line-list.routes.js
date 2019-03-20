@@ -41,56 +41,20 @@
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                supplyLineExpandEnabled: function(FeatureFlagService) {
-                    return new FeatureFlagService().isEnabled('SUPPLY_LINES_EXPAND');
-                },
-                supplyLines: function($stateParams, SupplyLineResource, SupplyLineResourceV2, supplyLineExpandEnabled,
-                    paginationService) {
+                supplyLines: function($stateParams, SupplyLineResource, paginationService) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams);
 
-                        if (supplyLineExpandEnabled) {
-                            if (!params.sort) {
-                                params.sort = 'supplyingFacility.name';
-                            }
-                            params.expand = [
-                                'supervisoryNode.requisitionGroup.memberFacilities',
-                                'supplyingFacility',
-                                'program'
-                            ];
-                            return new SupplyLineResourceV2().query(params);
-                        }
                         if (!params.sort) {
-                            params.sort = 'supplyingFacility';
+                            params.sort = 'supplyingFacility.name';
                         }
+                        params.expand = [
+                            'supervisoryNode.requisitionGroup.memberFacilities',
+                            'supplyingFacility',
+                            'program'
+                        ];
                         return new SupplyLineResource().query(params);
                     });
-                },
-                requisitionGroupsMap: function(supplyLines, RequisitionGroupResource, supplyLineExpandEnabled,
-                    ObjectMapper) {
-                    if (supplyLineExpandEnabled) {
-                        return {};
-                    }
-
-                    var requisitionGroupIds = supplyLines
-                        .filter(function(supplyLine) {
-                            return supplyLine.supervisoryNode.requisitionGroup;
-                        })
-                        .map(function(supplyLine) {
-                            return supplyLine.supervisoryNode.requisitionGroup.id;
-                        });
-
-                    if (!requisitionGroupIds.length) {
-                        return {};
-                    }
-
-                    return new RequisitionGroupResource()
-                        .query({
-                            id: requisitionGroupIds
-                        })
-                        .then(function(requisitionGroups) {
-                            return new ObjectMapper().map(requisitionGroups);
-                        });
                 }
             }
         });

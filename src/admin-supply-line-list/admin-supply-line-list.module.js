@@ -28,7 +28,6 @@
         'openlmis-pagination',
         'openlmis-rights',
         'referencedata-facility',
-        'referencedata-feature-flag',
         'referencedata-supply-line',
         'referencedata-requisition-group',
         'openlmis-object-utils',
