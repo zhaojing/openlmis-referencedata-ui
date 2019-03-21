@@ -28,12 +28,23 @@
         .module('openlmis-user')
         .controller('UserProfileNotificationSettingsController', controller);
 
-    controller.$inject = ['digestConfigurations'];
+    controller.$inject = [
+        'digestConfigurations', 'userSubscriptions', 'UserSubscriptionResource', 'user', '$state', 'FunctionDecorator'
+    ];
 
-    function controller(digestConfigurations) {
-        var vm = this;
+    function controller(digestConfigurations, userSubscriptions, UserSubscriptionResource, user, $state,
+                        FunctionDecorator) {
+        var vm = this,
+            DAILY_AT_MIDNIGHT = '0 0 * * *';
 
         vm.$onInit = onInit;
+
+        vm.saveUserSubscriptions = new FunctionDecorator()
+            .decorateFunction(saveUserSubscriptions)
+            .withSuccessNotification('openlmisUser.userSubscriptionsHaveBeenSavedSuccessfully')
+            .withErrorNotification('openlmisUser.failedToSaveUserSubscriptions')
+            .withLoading()
+            .getDecoratedFunction();
 
         /**
          * @ngdoc property
@@ -47,6 +58,17 @@
         vm.digestConfigurations = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf openlmis-user.controller:UserProfileNotificationSettingsController
+         * @type {Array}
+         * @name userSubscriptions
+         *
+         * @description
+         * The list of user subscription to digest configurations.
+         */
+        vm.userSubscriptions = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf openlmis-user.controller:UserProfileNotificationSettingsController
          * @name $onInit
@@ -56,7 +78,52 @@
          */
         function onInit() {
             vm.digestConfigurations = digestConfigurations;
+            vm.userSubscriptionsMap = digestConfigurations.reduce(function(map, configuration) {
+                map[configuration.id] = userSubscriptions.filter(function(subscription) {
+                    return configuration.id === subscription.digestConfiguration.id;
+                }).length > 0;
+                return map;
+            }, {});
         }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-user.controller:UserProfileNotificationSettingsController
+         * @name saveUserSubscriptions
+         *
+         * @description
+         * Saves the user subscriptions on the server.
+         * 
+         * @return {Promise}  the promise resolved once saving is complete.
+         */
+        function saveUserSubscriptions() {
+            var userSubscriptions = Object.keys(vm.userSubscriptionsMap)
+                .filter(isSubscribed)
+                .map(mapToDigestConfiguration);
+
+            return new UserSubscriptionResource()
+                .create(userSubscriptions, {
+                    userId: user.id
+                })
+                .then(function() {
+                    $state.reload();
+                });
+        }
+
+        function isSubscribed(digestConfigurationId) {
+            return vm.userSubscriptionsMap[digestConfigurationId];
+        }
+
+        function mapToDigestConfiguration(digestConfigurationId) {
+            return {
+                digestConfiguration: {
+                    id: digestConfigurationId
+
+                },
+                cronExpression: DAILY_AT_MIDNIGHT
+            };
+        }
+
     }
 
 })();

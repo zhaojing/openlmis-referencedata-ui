@@ -19,25 +19,35 @@
 
     /**
      * @ngdoc service
-     * @name openlmis-user.DigestConfigurationResource
+     * @name openlmis-user.UserSubscriptionResource
      *
      * @description
-     * Communicates with the RESTful digest configurations endpoint of the OpenLMIS server.
+     * Communicates with the RESTful user subscriptions endpoint of the OpenLMIS server.
      */
     angular
         .module('openlmis-user')
-        .factory('DigestConfigurationResource', DigestConfigurationResource);
+        .factory('UserSubscriptionResource', UserSubscriptionResource);
 
-    DigestConfigurationResource.$inject = ['OpenlmisResource', 'classExtender'];
+    UserSubscriptionResource.$inject = ['OpenlmisResource', 'classExtender', '$resource', 'openlmisUrlFactory'];
 
-    function DigestConfigurationResource(OpenlmisResource, classExtender) {
+    function UserSubscriptionResource(OpenlmisResource, classExtender, $resource, openlmisUrlFactory) {
 
-        classExtender.extend(DigestConfigurationResource, OpenlmisResource);
+        classExtender.extend(UserSubscriptionResource, OpenlmisResource);
 
-        return DigestConfigurationResource;
+        return UserSubscriptionResource;
 
-        function DigestConfigurationResource() {
-            this.super('/api/digestConfiguration');
+        function UserSubscriptionResource() {
+            var url = '/api/users/:userId/subscriptions';
+            this.super(url);
+            this.resource = $resource(openlmisUrlFactory(url), {}, {
+                save: {
+                    method: 'POST',
+                    isArray: true
+                },
+                query: {
+                    isArray: true
+                }
+            });
         }
     }
 })();

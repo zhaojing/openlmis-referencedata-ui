@@ -6,13 +6,23 @@
         </caption>
         <thead>
             <tr>
+                <th></th>
                 <th>{{'openlmisUser.notification' | message}}</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="digestConfiguration in vm.digestConfigurations | orderBy : '$name'">
+                <td>
+                    <input type="checkbox" ng-model="vm.userSubscriptionsMap[digestConfiguration.id]" />
+                </td>
                 <td>{{digestConfiguration.tag | notificationTag}}</td>
             </tr>
         </tbody>
     </table>
 </section>
+<div class="openlmis-toolbar">
+    <div class="button-group primary">
+        <button class="primary" ng-click="vm.saveUserSubscriptions()">{{
+            'openlmisUser.updateSubscriptions' | message }}</button>
+    </div>
+</div>

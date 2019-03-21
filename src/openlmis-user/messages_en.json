@@ -29,5 +29,8 @@
     "openlmisUser.userProfile": "User Profile",
     "openlmisUser.notificationSettings": "Notification Settings",
     "openlmisUser.notification": "Notification",
-    "openlmisUser.noDigestConfigurations": "There are no digest configurations"
+    "openlmisUser.noDigestConfigurations": "There are no digest configurations",
+    "openlmisUser.userSubscriptionsHaveBeenSavedSuccessfully": "User subscriptions have been saved successfully",
+    "openlmisUser.failedToSaveUserSubscriptions": "Failed to save user subscriptions",
+    "openlmisUser.updateSubscriptions": "Update Subscriptions"
 }

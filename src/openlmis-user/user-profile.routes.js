@@ -107,6 +107,11 @@
                             .then(function(digestConfigurationsPage) {
                                 return digestConfigurationsPage.content;
                             });
+                    },
+                    userSubscriptions: function(UserSubscriptionResource, user) {
+                        return new UserSubscriptionResource().query({
+                            userId: user.id
+                        });
                     }
                 }
             });

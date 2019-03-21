@@ -36,7 +36,8 @@
         'openlmis-templates',
         'ui.router',
         'openlmis-modal',
-        'auth-user'
+        'auth-user',
+        'openlmis-function-decorator'
     ]);
 
 })();

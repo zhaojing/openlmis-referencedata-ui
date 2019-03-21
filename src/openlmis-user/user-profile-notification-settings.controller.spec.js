@@ -21,15 +21,51 @@ describe('UserProfileNotificationSettingsController', function() {
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
             this.DigestConfigurationDataBuilder = $injector.get('DigestConfigurationDataBuilder');
+            this.UserSubscriptionDataBuilder = $injector.get('UserSubscriptionDataBuilder');
+            this.ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.UserSubscriptionResource = $injector.get('UserSubscriptionResource');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$state = $injector.get('$state');
         });
 
         this.digestConfigurations = [
             new this.DigestConfigurationDataBuilder().buildJson(),
+            new this.DigestConfigurationDataBuilder().buildJson(),
             new this.DigestConfigurationDataBuilder().buildJson()
         ];
 
+        this.userSubscriptions = [
+            new this.UserSubscriptionDataBuilder()
+                .withCronExpression('0 0 * * *')
+                .withDigestConfiguration(
+                    new this.ObjectReferenceDataBuilder()
+                        .withId(this.digestConfigurations[0].id)
+                        .build()
+                )
+                .buildJson(),
+            new this.UserSubscriptionDataBuilder()
+                .withCronExpression('0 0 * * *')
+                .withDigestConfiguration(
+                    new this.ObjectReferenceDataBuilder()
+                        .withId(this.digestConfigurations[2].id)
+                        .build()
+                )
+                .buildJson()
+        ];
+
+        this.user = new this.UserDataBuilder().build();
+
+        spyOn(this.$state, 'reload');
+        spyOn(this.UserSubscriptionResource.prototype, 'create').andReturn(this.$q.resolve([
+            this.userSubscriptions[1]
+        ]));
+
         this.vm = this.$controller('UserProfileNotificationSettingsController', {
-            digestConfigurations: this.digestConfigurations
+            digestConfigurations: this.digestConfigurations,
+            userSubscriptions: this.userSubscriptions,
+            user: this.user
         });
         this.vm.$onInit();
     });
@@ -38,6 +74,66 @@ describe('UserProfileNotificationSettingsController', function() {
 
         it('should set the list of digest configurations', function() {
             expect(this.vm.digestConfigurations).toEqual(this.digestConfigurations);
+        });
+
+        it('should map user subscriptions by digest configuration ID', function() {
+            var expected = {};
+            expected[this.digestConfigurations[0].id] = true;
+            expected[this.digestConfigurations[1].id] = false;
+            expected[this.digestConfigurations[2].id] = true;
+
+            expect(this.vm.userSubscriptionsMap).toEqual(expected);
+        });
+
+    });
+
+    describe('saveUserSubscriptions', function() {
+
+        it('should update user subscriptions', function() {
+            this.vm.userSubscriptionsMap[this.digestConfigurations[2].id] = false;
+
+            this.vm.saveUserSubscriptions();
+            this.$rootScope.$apply();
+
+            expect(this.UserSubscriptionResource.prototype.create).toHaveBeenCalledWith(
+                [{
+                    digestConfiguration: {
+                        id: this.digestConfigurations[0].id
+                    },
+                    cronExpression: '0 0 * * *'
+                }],
+                {
+                    userId: this.user.id
+                }
+            );
+        });
+
+        it('should return promise', function() {
+            var success;
+            this.vm.saveUserSubscriptions()
+                .then(function() {
+                    success = true;
+                });
+
+            this.$rootScope.$apply();
+
+            expect(success).toEqual(true);
+        });
+
+        it('should reload state on success', function() {
+            this.vm.saveUserSubscriptions();
+            this.$rootScope.$apply();
+
+            expect(this.$state.reload).toHaveBeenCalled();
+        });
+
+        it('should not reload on error', function() {
+            this.UserSubscriptionResource.prototype.create.andReturn(this.$q.reject());
+
+            this.vm.saveUserSubscriptions();
+            this.$rootScope.$apply();
+
+            expect(this.$state.reload).not.toHaveBeenCalled();
         });
 
     });

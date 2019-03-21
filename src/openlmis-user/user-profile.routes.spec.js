@@ -19,7 +19,7 @@ describe('openlmis.profile', function() {
         module('openlmis-user');
 
         var RoleDataBuilder, ProgramDataBuilder, SupervisoryNodeDataBuilder, MinimalFacilityDataBuilder,
-            UserDataBuilder, PageDataBuilder, ObjectMapper, DigestConfigurationDataBuilder;
+            UserDataBuilder, PageDataBuilder, ObjectMapper, DigestConfigurationDataBuilder, UserSubscriptionDataBuilder;
         inject(function($injector) {
             RoleDataBuilder = $injector.get('RoleDataBuilder');
             ProgramDataBuilder = $injector.get('ProgramDataBuilder');
@@ -28,6 +28,7 @@ describe('openlmis.profile', function() {
             UserDataBuilder = $injector.get('UserDataBuilder');
             PageDataBuilder = $injector.get('PageDataBuilder');
             DigestConfigurationDataBuilder = $injector.get('DigestConfigurationDataBuilder');
+            UserSubscriptionDataBuilder = $injector.get('UserSubscriptionDataBuilder');
 
             this.$q = $injector.get('$q');
             this.$location = $injector.get('$location');
@@ -44,6 +45,7 @@ describe('openlmis.profile', function() {
             this.ROLE_TYPES = $injector.get('ROLE_TYPES');
             this.authUserService = $injector.get('authUserService');
             this.DigestConfigurationResource = $injector.get('DigestConfigurationResource');
+            this.UserSubscriptionResource = $injector.get('UserSubscriptionResource');
             ObjectMapper = $injector.get('ObjectMapper');
         });
 
@@ -74,6 +76,11 @@ describe('openlmis.profile', function() {
         this.digestConfigurations = [
             new DigestConfigurationDataBuilder().buildJson(),
             new DigestConfigurationDataBuilder().buildJson()
+        ];
+
+        this.userSubscriptions = [
+            new UserSubscriptionDataBuilder().buildJson(),
+            new UserSubscriptionDataBuilder().buildJson()
         ];
 
         this.digestConfigurationsPage = new PageDataBuilder()
@@ -111,6 +118,7 @@ describe('openlmis.profile', function() {
         spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.user));
         spyOn(this.$templateCache, 'get').andCallThrough();
         spyOn(this.authUserService, 'getVerificationEmail').andReturn(this.$q.resolve(this.pendingVerificationEmail));
+        spyOn(this.UserSubscriptionResource.prototype, 'query').andReturn(this.$q.resolve(this.userSubscriptions));
         spyOn(this.DigestConfigurationResource.prototype, 'query')
             .andReturn(this.$q.resolve(this.digestConfigurationsPage));
 
@@ -276,6 +284,15 @@ describe('openlmis.profile', function() {
             this.goToUrl('/profile/notificationSettings');
 
             expect(this.getResolvedValue('digestConfigurations')).toEqual(this.digestConfigurations);
+        });
+
+        it('should resolve user subscriptions', function() {
+            this.goToUrl('/profile/notificationSettings');
+
+            expect(this.getResolvedValue('userSubscriptions')).toEqual(this.userSubscriptions);
+            expect(this.UserSubscriptionResource.prototype.query).toHaveBeenCalledWith({
+                userId: this.user.id
+            });
         });
 
     });

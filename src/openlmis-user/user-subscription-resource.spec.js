@@ -13,31 +13,27 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('UserSubscriptionResource', function() {
 
-    'use strict';
+    var UserSubscriptionResource, OpenlmisResourceMock;
 
-    /**
-     * @ngdoc service
-     * @name openlmis-user.DigestConfigurationResource
-     *
-     * @description
-     * Communicates with the RESTful digest configurations endpoint of the OpenLMIS server.
-     */
-    angular
-        .module('openlmis-user')
-        .factory('DigestConfigurationResource', DigestConfigurationResource);
+    beforeEach(function() {
+        module('openlmis-user', function($provide) {
+            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
-    DigestConfigurationResource.$inject = ['OpenlmisResource', 'classExtender'];
+            $provide.factory('OpenlmisResource', function() {
+                return OpenlmisResourceMock;
+            });
+        });
 
-    function DigestConfigurationResource(OpenlmisResource, classExtender) {
+        inject(function($injector) {
+            UserSubscriptionResource = $injector.get('UserSubscriptionResource');
+        });
+    });
 
-        classExtender.extend(DigestConfigurationResource, OpenlmisResource);
+    it('should extend OpenlmisResource', function() {
+        new UserSubscriptionResource();
 
-        return DigestConfigurationResource;
-
-        function DigestConfigurationResource() {
-            this.super('/api/digestConfiguration');
-        }
-    }
-})();
+        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/users/:userId/subscriptions');
+    });
+});
