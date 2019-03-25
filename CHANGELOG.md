@@ -1,5 +1,7 @@
 5.5.1 / WIP
 ==================
+New functionality:
+* [OLMIS-6052](https://openlmis.atlassian.net/browse/OLMIS-6052): Added a UI for managing kit unpack list in product page
 
 Improvements:
 * [OLMIS-3773](https://openlmis.atlassian.net/browse/OLMIS-3773): Updated UI after changing /facilities endpoint to return page.
