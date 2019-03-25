@@ -51,7 +51,6 @@ describe('UserProfileBasicInformationController', function() {
         spyOn(this.$rootScope, '$emit');
         spyOn(this.loginService, 'logout');
         spyOn(this.$state, 'go');
-        spyOn(this.$state, 'reload').andReturn();
         spyOn(this.alertService, 'info');
         spyOn(this.authUserService, 'sendVerificationEmail').andReturn(this.$q.when(true));
 
@@ -107,6 +106,15 @@ describe('UserProfileBasicInformationController', function() {
             expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
+        it('should reload the state', function() {
+            this.saveUserDeferred.resolve();
+            this.$rootScope.$apply();
+
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.profile.basicInformation', undefined, {
+                reload: true
+            });
+        });
+
         afterEach(function() {
             expect(this.loadingModalService.open).toHaveBeenCalled();
             expect(this.user.save).toHaveBeenCalledWith();
@@ -126,7 +134,9 @@ describe('UserProfileBasicInformationController', function() {
         });
 
         it('should reload the state', function() {
-            expect(this.$state.reload).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.profile.basicInformation', undefined, {
+                reload: true
+            });
         });
 
         it('should show a notification', function() {

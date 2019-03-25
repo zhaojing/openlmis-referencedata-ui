@@ -33,8 +33,14 @@
                 controller: 'UserProfileController',
                 controllerAs: 'vm',
                 resolve: {
-                    user: function(currentUserService) {
-                        return currentUserService.getUserInfo();
+                    userId: function(currentUserService) {
+                        return currentUserService.getUserInfo()
+                            .then(function(user) {
+                                return user.id;
+                            });
+                    },
+                    user: function(UserRepository, userId) {
+                        return new UserRepository().get(userId);
                     }
                 }
             })
@@ -44,6 +50,9 @@
                 controller: 'UserProfileBasicInformationController',
                 controllerAs: 'vm',
                 resolve: {
+                    user: function(user) {
+                        return angular.copy(user);
+                    },
                     homeFacility: function(user, facilityService) {
                         if (user.homeFacilityId) {
                             return facilityService.getMinimal(user.homeFacilityId);
@@ -81,9 +90,9 @@
                                 return page.content;
                             });
                     },
-                    user: function(userRoleAssignmentFactory, user, roles, programs, supervisoryNodes, warehouses) {
+                    user: function(userRoleAssignmentFactory, userId, roles, programs, supervisoryNodes, warehouses) {
                         return userRoleAssignmentFactory
-                            .getUser(user.id, roles, programs, supervisoryNodes, warehouses);
+                            .getUser(userId, roles, programs, supervisoryNodes, warehouses);
                     }
                 }
             })

@@ -107,7 +107,9 @@
 
             return vm.user.save()
                 .then(function() {
-                    $state.reload();
+                    $state.go('openlmis.profile.basicInformation', undefined, {
+                        reload: true
+                    });
                     notificationService.success('openlmisUser.updateProfile.updateSuccessful');
                 })
                 .catch(function() {
@@ -126,7 +128,9 @@
          */
         function restoreProfile() {
             loadingModalService.open();
-            $state.reload();
+            $state.go('openlmis.profile.basicInformation', undefined, {
+                reload: true
+            });
             notificationService.success('openlmisUser.cancel.restoreSuccessful');
         }
 

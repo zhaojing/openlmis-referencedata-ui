@@ -37,6 +37,7 @@ describe('openlmis.profile', function() {
             this.programService = $injector.get('programService');
             this.facilityService = $injector.get('facilityService');
             this.currentUserService = $injector.get('currentUserService');
+            this.UserRepository = $injector.get('UserRepository');
             this.$state = $injector.get('$state');
             this.userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
             this.$templateCache = $injector.get('$templateCache');
@@ -105,6 +106,7 @@ describe('openlmis.profile', function() {
         spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.warehouses));
         spyOn(this.facilityService, 'getMinimal').andReturn(this.$q.resolve(this.homeFacility));
         spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
+        spyOn(this.UserRepository.prototype, 'get').andReturn(this.$q.resolve(this.user));
         spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
         spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.user));
         spyOn(this.$templateCache, 'get').andCallThrough();
@@ -136,7 +138,7 @@ describe('openlmis.profile', function() {
             this.goToUrl('/profile');
 
             expect(this.getResolvedValue('user')).toEqual(this.user);
-            expect(this.currentUserService.getUserInfo).toHaveBeenCalled();
+            expect(this.UserRepository.prototype.get).toHaveBeenCalled();
         });
 
     });
@@ -176,6 +178,13 @@ describe('openlmis.profile', function() {
             this.goToUrl('/profile/basicInformation');
 
             expect(this.getResolvedValue('pendingVerificationEmail')).toEqual(this.pendingVerificationEmail);
+        });
+
+        it('should resolve a copy of the original user', function() {
+            this.goToUrl('/profile/basicInformation');
+
+            expect(this.getResolvedValue('user')).not.toBe(this.user);
+            expect(this.getResolvedValue('user')).toEqual(this.user);
         });
 
     });
