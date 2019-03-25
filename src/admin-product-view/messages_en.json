@@ -17,5 +17,18 @@
     "adminProductView.fullSupply": "Full Supply",
     "adminProductView.pricePerPack": "Price per Pack",
     "adminProductView.orderableCategoryDisplayName": "Category",
-    "adminProductView.cancel": "Cancel"
+    "adminProductView.cancel": "Cancel",
+    "adminProductView.addKitUnpackList" : "Create Kit Unpack List",
+    "adminProductView.saveKitUnpackList": "Save",
+    "adminProductView.quantity":"Quantity",
+    "adminProductView.productUnpackList":"Kit Unpack List",
+    "adminProductView.action":"Action",
+    "adminProductView.delete":"Delete",
+    "adminProductView.add":"Add",
+    "adminProductView.productUpdatedSuccessfully":"Product saved successfully",
+    "adminProductView.confirm":"Are you sure you want to save product",
+    "adminProductView.noProductsToAdd.label": "No product",
+    "adminProductView.noProductsToAdd.message":"All products has already been added",
+    "adminProductView.submitInvalid": "Product form have invalid fields"
 }
+

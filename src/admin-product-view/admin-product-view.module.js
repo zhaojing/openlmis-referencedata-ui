@@ -26,7 +26,10 @@
     angular.module('admin-product-view', [
         'openlmis-rights',
         'referencedata-orderable',
-        'ui.router'
+        'ui.router',
+        'openlmis-i18n',
+        'openlmis-modal',
+        'select-products-modal'
     ]);
 
 })();

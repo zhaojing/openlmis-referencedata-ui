@@ -37,6 +37,28 @@
             resolve: {
                 product: function(orderableFactory, $stateParams) {
                     return orderableFactory.getOrderableWithProgramData($stateParams.id);
+                },
+                kitConstituents: function(product, orderableService) {
+                    var ids = _.map(product.children, function(c) {
+                        return c.orderable.id;
+                    });
+                    if (ids.length > 0) {
+                        return orderableService.search({}, {
+                            id: ids
+                        }).then(function(response) {
+                            return response.content;
+                        });
+                    }
+                    return product.children;
+                },
+                products: function(orderableService) {
+                    return orderableService.search(
+                        {
+                            sort: 'fullProductName,asc'
+                        }
+                    ).then(function(products) {
+                        return products.content;
+                    });
                 }
             }
         });

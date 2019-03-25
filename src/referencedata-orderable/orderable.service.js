@@ -36,12 +36,16 @@
             search: {
                 url: openlmisUrlFactory('/api/orderables'),
                 method: 'GET'
+            },
+            update: {
+                method: 'PUT'
             }
         });
 
         return {
             get: get,
-            search: search
+            search: search,
+            update: update
         };
 
         /**
@@ -59,6 +63,23 @@
             return resource.get({
                 id: id
             }).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-orderable.orderableService
+         * @name update
+         *
+         * @description
+         * Update orderable by id.
+         *
+         * @param  {String}  id orderable UUID
+         * @return {Promise}    orderable info
+         */
+        function update(orderable) {
+            return resource.update({
+                id: orderable.updateid
+            }, orderable).$promise;
         }
 
         /**

@@ -32,6 +32,7 @@
         OrderableDataBuilder.prototype.withExtraData = withExtraData;
         OrderableDataBuilder.prototype.withIdentifiers = withIdentifiers;
         OrderableDataBuilder.prototype.withNetContent = withNetContent;
+        OrderableDataBuilder.prototype.withChildren = withChildren;
         OrderableDataBuilder.prototype.build = build;
         OrderableDataBuilder.prototype.buildJson = buildJson;
 
@@ -52,6 +53,7 @@
             this.packRoundingThreshold = 2;
             this.roundToZero = false;
             this.identifiers = {};
+            this.children = [];
 
             this.programs = [
                 new ProgramOrderableDataBuilder()
@@ -99,6 +101,11 @@
             return this;
         }
 
+        function withChildren(children) {
+            this.children = children;
+            return this;
+        }
+
         function build() {
             return new Orderable(this.buildJson());
         }
@@ -115,7 +122,8 @@
                 description: this.description,
                 netContent: this.netContent,
                 packRoundingThreshold: this.packRoundingThreshold,
-                extraData: this.extraData
+                extraData: this.extraData,
+                children: this.children
             };
         }
 
