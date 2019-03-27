@@ -32,5 +32,6 @@
     "openlmisUser.noDigestConfigurations": "There are no digest configurations",
     "openlmisUser.userSubscriptionsHaveBeenSavedSuccessfully": "User subscriptions have been saved successfully",
     "openlmisUser.failedToSaveUserSubscriptions": "Failed to save user subscriptions",
-    "openlmisUser.updateSubscriptions": "Update Subscriptions"
+    "openlmisUser.updateSubscriptions": "Update Subscriptions",
+    "openlmisUser.schedule": "Schedule"
 }

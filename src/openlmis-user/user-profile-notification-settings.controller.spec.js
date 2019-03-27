@@ -78,9 +78,18 @@ describe('UserProfileNotificationSettingsController', function() {
 
         it('should map user subscriptions by digest configuration ID', function() {
             var expected = {};
-            expected[this.digestConfigurations[0].id] = true;
-            expected[this.digestConfigurations[1].id] = false;
-            expected[this.digestConfigurations[2].id] = true;
+            expected[this.digestConfigurations[0].id] = {
+                subscribed: true,
+                cronExpression: this.userSubscriptions[0].cronExpression
+            };
+            expected[this.digestConfigurations[1].id] = {
+                subscribed: false,
+                cronExpression: ''
+            };
+            expected[this.digestConfigurations[2].id] = {
+                subscribed: true,
+                cronExpression: this.userSubscriptions[1].cronExpression
+            };
 
             expect(this.vm.userSubscriptionsMap).toEqual(expected);
         });
@@ -90,7 +99,7 @@ describe('UserProfileNotificationSettingsController', function() {
     describe('saveUserSubscriptions', function() {
 
         it('should update user subscriptions', function() {
-            this.vm.userSubscriptionsMap[this.digestConfigurations[2].id] = false;
+            this.vm.userSubscriptionsMap[this.digestConfigurations[2].id].subscribed = false;
 
             this.vm.saveUserSubscriptions();
             this.$rootScope.$apply();
@@ -100,7 +109,7 @@ describe('UserProfileNotificationSettingsController', function() {
                     digestConfiguration: {
                         id: this.digestConfigurations[0].id
                     },
-                    cronExpression: '0 0 * * *'
+                    cronExpression: this.userSubscriptions[0].cronExpression
                 }],
                 {
                     userId: this.user.id

@@ -34,8 +34,7 @@
 
     function controller(digestConfigurations, userSubscriptions, UserSubscriptionResource, user, $state,
                         FunctionDecorator) {
-        var vm = this,
-            DAILY_AT_MIDNIGHT = '0 0 * * *';
+        var vm = this;
 
         vm.$onInit = onInit;
 
@@ -78,10 +77,19 @@
          */
         function onInit() {
             vm.digestConfigurations = digestConfigurations;
+            vm.subsMap = userSubscriptions.reduce(function(map, sub) {
+                map[sub.digestConfiguration.id] = sub;
+                return map;
+            }, {});
             vm.userSubscriptionsMap = digestConfigurations.reduce(function(map, configuration) {
-                map[configuration.id] = userSubscriptions.filter(function(subscription) {
+                var filtered = userSubscriptions.filter(function(subscription) {
                     return configuration.id === subscription.digestConfiguration.id;
-                }).length > 0;
+                });
+
+                map[configuration.id] = {
+                    subscribed: filtered.length > 0,
+                    cronExpression: filtered.length ? filtered[0].cronExpression : ''
+                };
                 return map;
             }, {});
         }
@@ -111,7 +119,7 @@
         }
 
         function isSubscribed(digestConfigurationId) {
-            return vm.userSubscriptionsMap[digestConfigurationId];
+            return vm.userSubscriptionsMap[digestConfigurationId].subscribed;
         }
 
         function mapToDigestConfiguration(digestConfigurationId) {
@@ -120,7 +128,7 @@
                     id: digestConfigurationId
 
                 },
-                cronExpression: DAILY_AT_MIDNIGHT
+                cronExpression: vm.userSubscriptionsMap[digestConfigurationId].cronExpression
             };
         }
 

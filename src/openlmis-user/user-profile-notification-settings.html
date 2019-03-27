@@ -1,5 +1,5 @@
 <h3>{{'openlmisUser.notificationSettings' | message}}</h3>
-<section class="openlmis-table-container">
+<form id="digestSubscriptions" class="openlmis-table-container" ng-submit="vm.saveUserSubscriptions()">
     <table>
         <caption ng-if="!vm.digestConfigurations || vm.digestConfigurations.length === 0">
             {{'openlmisUser.noDigestConfigurations' | message}}
@@ -8,21 +8,26 @@
             <tr>
                 <th></th>
                 <th>{{'openlmisUser.notification' | message}}</th>
+                <th>{{'openlmisUser.schedule' | message}}</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="digestConfiguration in vm.digestConfigurations | orderBy : '$name'">
                 <td>
-                    <input type="checkbox" ng-model="vm.userSubscriptionsMap[digestConfiguration.id]" />
+                    <input type="checkbox" ng-model="vm.userSubscriptionsMap[digestConfiguration.id].subscribed" />
                 </td>
                 <td>{{digestConfiguration.tag | notificationTag}}</td>
+                <td>
+                    <openlmis-cron-selection
+                        ng-model="vm.userSubscriptionsMap[digestConfiguration.id].cronExpression" />
+                </td>
             </tr>
         </tbody>
     </table>
-</section>
+</form>
 <div class="openlmis-toolbar">
     <div class="button-group primary">
-        <button class="primary" ng-click="vm.saveUserSubscriptions()">{{
+        <button class="primary" form="digestSubscriptions">{{
             'openlmisUser.updateSubscriptions' | message }}</button>
     </div>
 </div>
