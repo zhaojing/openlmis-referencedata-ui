@@ -27,7 +27,7 @@ describe('ProductViewController', function() {
             this.$q = $injector.get('$q');
             this.alertService =  $injector.get('alertService');
             this.selectProductsModalService =  $injector.get('selectProductsModalService');
-            this.orderableService =  $injector.get('orderableService');
+            this.OrderableResource =  $injector.get('OrderableResource');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.OrderableChildrenDataBuilder = $injector.get('OrderableChildrenDataBuilder');
             this.$rootScope = $injector.get('$rootScope');
@@ -76,7 +76,7 @@ describe('ProductViewController', function() {
         spyOn(this.loadingModalService, 'close').andCallFake(this.loadingDeferred.resolve);
         spyOn(this.selectProductsModalService, 'show');
         spyOn(this.confirmService, 'confirm').andReturn(this.confirmDeferred.promise);
-        spyOn(this.orderableService, 'update').andReturn(this.saveDeferred.promise);
+        spyOn(this.OrderableResource.prototype, 'update').andReturn(this.saveDeferred.promise);
         spyOn(this.notificationService, 'success');
         spyOn(this.notificationService, 'error');
         spyOn(this.alertService, 'error').andCallFake();
@@ -183,7 +183,7 @@ describe('ProductViewController', function() {
         });
 
         it('should save kit product constituents', function() {
-            this.orderableService.update.andReturn(this.$q.when(this.product));
+            this.OrderableResource.prototype.update.andReturn(this.$q.when(this.product));
             spyOn(this.$state, 'go').andReturn();
 
             this.vm.save();
@@ -198,7 +198,7 @@ describe('ProductViewController', function() {
             });
 
             expect(this.notificationService.success).toHaveBeenCalledWith(
-                'adminProductView.productUpdatedSuccessfully'
+                'adminProductView.productSavedSuccessfully'
             );
 
         });

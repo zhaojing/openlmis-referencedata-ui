@@ -29,14 +29,14 @@
         <dd>{{vm.product.description}}<dd>
     </dl>
     <dl ng-if="vm.product.children && vm.product.children.length > 0">
-        <dt>{{'adminProductView.productUnpackList' | message}} 
-            </dt>
+        <dt>{{'adminProductView.kitUnpackList' | message}}</dt>
         <dd>
+            <form id="saveKitUnpackList" class="form-inline" ng-submit="vm.save()">
             <section class="openlmis-table-container">
-                <button  style="float: right;"
-                ng-click="vm.addKitContituents()">
-                            {{'adminProductView.add' | message}}</button>
-                <table suppress-tr-openlmis-invalid>
+                <div class="is-primary">
+                    <button type="button" ng-click="vm.addKitContituents()">
+                            {{'adminProductView.add' | message}}</button></div>                
+                <table>
                     <thead>
                         <tr>
                             <th>{{'adminProductView.productCode' | message}}</th>
@@ -49,8 +49,7 @@
                         <tr ng-repeat="kitConstituent in vm.product.children">
                             <td>{{kitConstituent.productCode}}</td>
                             <td>{{kitConstituent.fullProductName}}</td>
-                            <td><input type="number" ng-name="" ng-change="vm.validateQuantity(kitConstituent)" 
-                             ng-class="{'error': kitConstituent.$errors.quantityInvalid}" ng-model="kitConstituent.quantity" required></td>
+                            <td><input type="number" id="quantity_{{$index}}" ng-model="kitConstituent.quantity" required></td>
                             <td><button ng-click="vm.removeKitContituent(kitConstituent)">
                             {{'adminProductView.delete' | message}}</button></td>
                         </tr> 
@@ -58,6 +57,7 @@
                 </table>
 
             </section>
+            </form>
         </dd>
     </dl>
     <dl>
@@ -103,8 +103,8 @@
     <div class="openlmis-toolbar">
         <button ui-sref="^">{{'adminProductView.cancel' | message}}</button>
         <div class="button-group primary">
-            <button class="primary"  type="submit" ng-if="vm.product.children.length > 0" ng-click="vm.save()">{{'adminProductView.saveKitUnpackList' | message}}</button>
-            <button class="primary" ng-if="vm.product.children.length === 0" ng-click="vm.addKitContituents()">{{'adminProductView.addKitUnpackList' | message}}</button>
+            <button class="primary"  type="submit" ng-if="vm.product.children.length > 0" form="saveKitUnpackList">{{'adminProductView.saveKitUnpackList' | message}}</button>
+            <button  ng-if="vm.product.children.length === 0" ng-click="vm.addKitContituents()">{{'adminProductView.createKitUnpackList' | message}}</button>
         </div>
     </div>
 </div>

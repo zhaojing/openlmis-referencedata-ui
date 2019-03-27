@@ -29,11 +29,11 @@
         .controller('ProductViewController', controller);
 
     controller.$inject = ['confirmService', 'loadingModalService', 'notificationService', '$state',
-        '$q', 'alertService', 'selectProductsModalService', 'orderableService', 'product', 'kitConstituents',
-        'products'];
+        '$q', 'alertService', 'selectProductsModalService', 'product', 'kitConstituents',
+        'products', 'OrderableResource'];
 
     function controller(confirmService, loadingModalService, notificationService, $state, $q, alertService,
-                        selectProductsModalService, orderableService, product, kitConstituents, products) {
+                        selectProductsModalService, product, kitConstituents, products, OrderableResource) {
 
         var vm = this;
 
@@ -41,7 +41,6 @@
         vm.goToProductList  = goToProductList;
         vm.addKitContituents   = addKitContituents;
         vm.removeKitContituent = removeKitContituent;
-        vm.validateQuantity = validateQuantity;
         vm.save = save;
 
         /**
@@ -113,11 +112,7 @@
          * Method that will save a list of kit constituent parts.
          */
         function save() {
-            if (validateProduct()) {
-                confirmService.confirm('adminProductView.confirm').then(confirmSave);
-            } else {
-                alertService.error('adminProductView.submitInvalid');
-            }
+            confirmService.confirm('adminProductView.confirm').then(confirmSave);
         }
 
         /**
@@ -138,50 +133,16 @@
             var loadingPromise = loadingModalService.open();
             var productToSave = angular.copy(vm.product);
             productToSave.children = transformChildren(vm.product);
-            orderableService.update(productToSave).then(function() {
-                loadingPromise.then(function() {
-                    notificationService.success('adminProductView.productUpdatedSuccessfully');
+            new OrderableResource().update(productToSave)
+                .then(function() {
+                    loadingPromise.then(function() {
+                        notificationService.success('adminProductView.productSavedSuccessfully');
+                    });
+                    goToProductList();
+                }, function(errorResponse) {
+                    loadingModalService.close();
+                    alertService.error(errorResponse.data.message);
                 });
-                goToProductList();
-            }, function(errorResponse) {
-                loadingModalService.close();
-                alertService.error(errorResponse.data.message);
-            });
-        }
-
-        function validateProduct() {
-            _.each(vm.product.children, function(item) {
-                vm.validateQuantity(item);
-            });
-
-            return _.chain(vm.product.children)
-                .pluck('$errors')
-                .map(function(value) {
-                    return _.values(value);
-                })
-                .flatten()
-                .contains(true)
-                .value() === false;
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf admin-product-view.controller:ProductViewController
-         * @name goToProductList
-         *
-         * @description
-         * Redirects to product list screen.
-         *
-         * @param {Object} a single child or kit constituent to be validated
-         */
-        function validateQuantity(item) {
-            item.$errors = {};
-            if (item.quantity < 0 || item.quantity === undefined) {
-                item.$errors.quantityInvalid = true;
-            } else {
-                item.$errors.quantityInvalid = false;
-            }
-            return item;
         }
 
         function selectProducts(availableProducts) {
@@ -204,7 +165,7 @@
 
         function transformChildren(product) {
             /*  convert product childern objects to the format the API expects */
-            return _.map(product.children, function(child) {
+            return product.children.map(function(child) {
                 return {
                     orderable: {
                         id: child.id
@@ -216,7 +177,7 @@
 
         function normalizeChildren() {
             /* Add product's children object missing properties that comes from the API */
-            vm.product.children = _.map(kitConstituents, function(constituent) {
+            vm.product.children = kitConstituents.map(function(constituent) {
                 var foundConstituent = _.find(vm.product.children, function(product) {
                     return constituent.id === product.orderable.id;
                 });

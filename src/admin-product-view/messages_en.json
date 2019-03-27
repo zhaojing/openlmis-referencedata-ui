@@ -18,17 +18,16 @@
     "adminProductView.pricePerPack": "Price per Pack",
     "adminProductView.orderableCategoryDisplayName": "Category",
     "adminProductView.cancel": "Cancel",
-    "adminProductView.addKitUnpackList" : "Create Kit Unpack List",
-    "adminProductView.saveKitUnpackList": "Save",
+    "adminProductView.createKitUnpackList" : "Create Kit Unpack List",
+    "adminProductView.saveKitUnpackList": "Save Kit Unpack List",
     "adminProductView.quantity":"Quantity",
-    "adminProductView.productUnpackList":"Kit Unpack List",
+    "adminProductView.kitUnpackList":"Kit Unpack List",
     "adminProductView.action":"Action",
     "adminProductView.delete":"Delete",
     "adminProductView.add":"Add",
-    "adminProductView.productUpdatedSuccessfully":"Product saved successfully",
+    "adminProductView.productSavedSuccessfully":"Product saved successfully",
     "adminProductView.confirm":"Are you sure you want to save product",
     "adminProductView.noProductsToAdd.label": "No product",
-    "adminProductView.noProductsToAdd.message":"All products has already been added",
-    "adminProductView.submitInvalid": "Product form have invalid fields"
+    "adminProductView.noProductsToAdd.message":"All products has already been added"
 }
 

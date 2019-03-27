@@ -38,27 +38,29 @@
                 product: function(orderableFactory, $stateParams) {
                     return orderableFactory.getOrderableWithProgramData($stateParams.id);
                 },
-                kitConstituents: function(product, orderableService) {
-                    var ids = _.map(product.children, function(c) {
-                        return c.orderable.id;
+                kitConstituents: function(product, OrderableResource) {
+                    var ids = product.children.map(function(product) {
+                        return product.orderable.id;
                     });
-                    if (ids.length > 0) {
-                        return orderableService.search({}, {
+                    if (ids.length) {
+                        return new OrderableResource().query({
                             id: ids
-                        }).then(function(response) {
-                            return response.content;
-                        });
+                        })
+                            .then(function(response) {
+                                return response.content;
+                            });
                     }
                     return product.children;
                 },
-                products: function(orderableService) {
-                    return orderableService.search(
+                products: function(OrderableResource) {
+                    return new OrderableResource().query(
                         {
                             sort: 'fullProductName,asc'
                         }
-                    ).then(function(products) {
-                        return products.content;
-                    });
+                    )
+                        .then(function(products) {
+                            return products.content;
+                        });
                 }
             }
         });
