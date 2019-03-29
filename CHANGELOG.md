@@ -14,6 +14,7 @@ Improvements:
 * [OLMIS-6055](https://openlmis.atlassian.net/browse/OLMIS-6055): Added translations for superset report rights.
 * [OLMIS-6020](https://openlmis.atlassian.net/browse/OLMIS-6020): Reworked user profile into multiple tabs.
 * [OLMIS-3641](https://openlmis.atlassian.net/browse/OLMIS-3641): Added usage of REST expand pattern to supply line admin screen.
+* [OLMIS-4944](https://openlmis.atlassian.net/browse/OLMIS-4944): Added caching locale settings on login.
 
 Bug fixes:
 * [OLMIS-5904](https://openlmis.atlassian.net/browse/OLMIS-5904): Fixed issue with a random order of programs and facilities in openlmis-facility-program-select component.
