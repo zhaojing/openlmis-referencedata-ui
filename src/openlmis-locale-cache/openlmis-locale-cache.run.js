@@ -26,8 +26,7 @@
     function run(loginService, localeService) {
 
         loginService.registerPostLoginAction(function() {
-            return localeService.getLocaleSettings()
-                .catch(localeService.getLocaleSettingsFromConfig);
+            return localeService.getLocaleSettings();
         });
 
     }

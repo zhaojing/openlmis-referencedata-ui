@@ -22,9 +22,7 @@ describe('openlmis-locale-cache run', function() {
             loginServiceSpy = jasmine.createSpyObj('loginService', ['registerPostLoginAction']);
             $provide.value('loginService', loginServiceSpy);
 
-            localeServiceSpy = jasmine.createSpyObj('localeService', [
-                'getLocaleSettings', 'getLocaleSettingsFromConfig'
-            ]);
+            localeServiceSpy = jasmine.createSpyObj('localeService', ['getLocaleSettings']);
             $provide.value('localeService', localeServiceSpy);
         });
 
@@ -58,25 +56,7 @@ describe('openlmis-locale-cache run', function() {
 
             expect(success).toBe(true);
             expect(localeServiceSpy.getLocaleSettings).toHaveBeenCalled();
-            expect(localeServiceSpy.getLocaleSettingsFromConfig).not.toHaveBeenCalled();
         });
-
-        it('should fallback to the config settings if fetching settings from the server fails', function() {
-            localeServiceSpy.getLocaleSettings.andReturn($q.reject());
-            localeServiceSpy.getLocaleSettingsFromConfig.andReturn($q.resolve());
-
-            var success;
-            postLoginAction()
-                .then(function() {
-                    success = true;
-                });
-            $rootScope.$apply();
-
-            expect(success).toBe(success);
-            expect(localeServiceSpy.getLocaleSettings).toHaveBeenCalled();
-            expect(localeServiceSpy.getLocaleSettingsFromConfig).toHaveBeenCalled();
-        });
-
     });
 
 });
