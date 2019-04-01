@@ -62,7 +62,7 @@
                             })[0];
                     }
 
-                    vm.updateFacilities(true);
+                    vm.updateFacilities();
                 });
         }
 
@@ -90,7 +90,7 @@
          * Updates the facility list by clearing the facility selection and setting appropriate
          * facility list.
          */
-        function updateFacilities(isInit) {
+        function updateFacilities() {
             vm.facility = undefined;
 
             if (!vm.isSupervised) {
@@ -98,7 +98,7 @@
                 vm.facility = vm.facilities[0];
             } else if (vm.program) {
                 vm.facilities = facilityProgramCacheService.getSupervisedFacilities(vm.program.id);
-                if (isInit) {
+                if ($stateParams.facility) {
                     vm.facility = $filter('filter')(vm.facilities,
                         {
                             id: $stateParams.facility

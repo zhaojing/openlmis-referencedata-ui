@@ -91,7 +91,7 @@ describe('OpenlmisFacilityProgramSelectController', function() {
             vm.$onInit();
             $rootScope.$apply();
 
-            expect(vm.updateFacilities).toHaveBeenCalledWith(true);
+            expect(vm.updateFacilities).toHaveBeenCalledWith();
         });
     });
 
@@ -144,6 +144,19 @@ describe('OpenlmisFacilityProgramSelectController', function() {
 
             expect(vm.facilities).toEqual(facilities);
             expect(facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(vm.program.id);
+            expect(vm.facility).toBeUndefined();
+        });
+
+        it('should set selected facility if facility specified in state', function() {
+            vm.isSupervised = true;
+            vm.program = supervisedPrograms[1];
+            $stateParams.facility = 'facility-two-id';
+
+            vm.updateFacilities();
+
+            expect(vm.facilities).toEqual(facilities);
+            expect(facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(vm.program.id);
+            expect(vm.facility).toEqual(facilities[1]);
         });
     });
 });
