@@ -33,7 +33,8 @@
         'products', 'OrderableResource'];
 
     function controller(confirmService, loadingModalService, notificationService, $state, $q, alertService,
-                        selectProductsModalService, product, kitConstituents, products, OrderableResource) {
+                        selectProductsModalService, product, kitConstituents, products,
+                        OrderableResource) {
 
         var vm = this;
 
@@ -55,6 +56,17 @@
         vm.product = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-product-view.controller:ProductViewController
+         * @name constituents
+         * @type {Object}
+         *
+         * @description
+         * Contains product's normalized children object. 
+         */
+        vm.constituents = undefined;
+
+        /**
          * @ngdoc method
          * @propertyOf admin-product-view.controller:ProductViewController
          * @name $onInit
@@ -64,8 +76,7 @@
          */
         function onInit() {
             vm.product = product;
-            vm.kitConstituentsCount = product.children.length;
-            normalizeChildren();
+            vm.constituents = normalizeChildren();
         }
 
         /**
@@ -79,10 +90,10 @@
         function addKitContituents() {
             selectProducts(excludeSelectedOrderables()).
                 then(function(selectedProducts) {
-                    if (vm.product.children.length === 0) {
-                        vm.product.children = selectedProducts;
+                    if (vm.constituents.length === 0) {
+                        vm.constituents = selectedProducts;
                     } else {
-                        vm.product.children.push.apply(vm.product.children, selectedProducts);
+                        vm.constituents.push.apply(vm.constituents, angular.copy(selectedProducts));
                     }
                 });
         }
@@ -98,8 +109,8 @@
          * @param {Object} a single child or kit constituent to be removed
          */
         function removeKitContituent(productKit) {
-            if (product.children.indexOf(productKit) > -1) {
-                product.children.splice(product.children.indexOf(productKit), 1);
+            if (vm.constituents.indexOf(productKit) > -1) {
+                vm.constituents.splice(vm.constituents.indexOf(productKit), 1);
             }
         }
 
@@ -132,16 +143,16 @@
         function confirmSave() {
             var loadingPromise = loadingModalService.open();
             var productToSave = angular.copy(vm.product);
-            productToSave.children = transformChildren(vm.product);
+            productToSave.children = transformChildren();
             new OrderableResource().update(productToSave)
                 .then(function() {
                     loadingPromise.then(function() {
                         notificationService.success('adminProductView.productSavedSuccessfully');
                     });
                     goToProductList();
-                }, function(errorResponse) {
+                }, function() {
                     loadingModalService.close();
-                    alertService.error(errorResponse.data.message);
+                    alertService.error('adminProductView.failedToSaveProduct');
                 });
         }
 
@@ -159,13 +170,13 @@
 
         function excludeSelectedOrderables() {
             return products.filter(function(i) {
-                return _.pluck(product.children, 'id').indexOf(i.id) < 0;
+                return _.pluck(vm.constituents, 'id').indexOf(i.id) < 0;
             });
         }
 
-        function transformChildren(product) {
+        function transformChildren() {
             /*  convert product childern objects to the format the API expects */
-            return product.children.map(function(child) {
+            return vm.constituents.map(function(child) {
                 return {
                     orderable: {
                         id: child.id
@@ -176,8 +187,7 @@
         }
 
         function normalizeChildren() {
-            /* Add product's children object missing properties that comes from the API */
-            vm.product.children = kitConstituents.map(function(constituent) {
+            return kitConstituents.map(function(constituent) {
                 var foundConstituent = _.find(vm.product.children, function(product) {
                     return constituent.id === product.orderable.id;
                 });

@@ -24,12 +24,14 @@
      * Provides admin product view state and controller.
      */
     angular.module('admin-product-view', [
+        'openlmis-admin',
         'openlmis-rights',
         'referencedata-orderable',
         'ui.router',
         'openlmis-i18n',
         'openlmis-modal',
-        'select-products-modal'
+        'select-products-modal',
+        'admin-product-list'
     ]);
 
 })();

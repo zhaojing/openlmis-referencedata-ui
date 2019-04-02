@@ -19,15 +19,15 @@
     "adminProductView.orderableCategoryDisplayName": "Category",
     "adminProductView.cancel": "Cancel",
     "adminProductView.createKitUnpackList" : "Create Kit Unpack List",
-    "adminProductView.saveKitUnpackList": "Save Kit Unpack List",
+    "adminProductView.save": "Save",
     "adminProductView.quantity":"Quantity",
     "adminProductView.kitUnpackList":"Kit Unpack List",
     "adminProductView.action":"Action",
-    "adminProductView.delete":"Delete",
-    "adminProductView.add":"Add",
-    "adminProductView.productSavedSuccessfully":"Product saved successfully",
-    "adminProductView.confirm":"Are you sure you want to save product",
+    "adminProductView.remove":"Remove",
+    "adminProductView.addProduct":"Add Product",
+    "adminProductView.productSavedSuccessfully":"The product was updated successfully!",
+    "adminProductView.confirm":"Are you sure you want to update the product?",
     "adminProductView.noProductsToAdd.label": "No product",
-    "adminProductView.noProductsToAdd.message":"All products has already been added"
+    "adminProductView.noProductsToAdd.message":"All products has already been added",
+    "adminProductView.failedToSaveProduct": "Failed to update the product!"
 }
-

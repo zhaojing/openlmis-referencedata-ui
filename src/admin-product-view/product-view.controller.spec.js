@@ -100,7 +100,7 @@ describe('ProductViewController', function() {
         });
 
         it('should update or normalize children properties from kitConstituents reference', function() {
-            expect(this.vm.product.children.pop()).toEqual(this.kitConstituents[1]);
+            expect(this.vm.constituents.pop()).toEqual(this.kitConstituents[1]);
         });
     });
 
@@ -133,12 +133,12 @@ describe('ProductViewController', function() {
             this.vm.addKitContituents();
             this.$rootScope.$apply();
 
-            expect(this.vm.product.children.pop()).toEqual(this.productsToSelect[1]);
-            expect(this.vm.product.children.pop()).toEqual(this.productsToSelect[0]);
+            expect(this.vm.constituents.pop()).toEqual(this.productsToSelect[1]);
+            expect(this.vm.constituents.pop()).toEqual(this.productsToSelect[0]);
         });
 
         it('should exclude selected/children ordereables from the modal', function() {
-            this.vm.product.children.push(this.productsToSelect[0]);
+            this.vm.constituents.push(this.productsToSelect[0]);
             this.vm.addKitContituents();
 
             expect(this.selectProductsModalService.show).toHaveBeenCalledWith([this.productsToSelect[1]]);
@@ -147,12 +147,12 @@ describe('ProductViewController', function() {
         it('should do nothing if user closes the select products modal', function() {
             this.selectProductsModalService.show.andReturn(this.$q.reject());
 
-            var originalCount = this.vm.product.children.length;
+            var originalCount = this.vm.constituents.length;
 
             this.vm.addKitContituents();
             this.$rootScope.$apply();
 
-            expect(this.vm.product.children.length).toEqual(originalCount);
+            expect(this.vm.constituents.length).toEqual(originalCount);
         });
     });
 
@@ -161,8 +161,8 @@ describe('ProductViewController', function() {
             this.vm.removeKitContituent(this.kitConstituents[0]);
             this.$rootScope.$apply();
 
-            expect(this.vm.product.children.length).toEqual(1);
-            expect(this.vm.product.children.pop()).toEqual(this.kitConstituents[1]);
+            expect(this.vm.constituents.length).toEqual(1);
+            expect(this.vm.constituents.pop()).toEqual(this.kitConstituents[1]);
         });
 
         it('should should not remove invalid kit constituent from a product', function() {
@@ -170,7 +170,7 @@ describe('ProductViewController', function() {
             this.vm.removeKitContituent(nonExistantProduct);
             this.$rootScope.$apply();
 
-            expect(this.vm.product.children.length).toEqual(2);
+            expect(this.vm.constituents.length).toEqual(2);
         });
     });
 
@@ -204,21 +204,14 @@ describe('ProductViewController', function() {
         });
 
         it('should show error alert wen product save fails', function() {
-            var error =
-            {
-                data: {
-                    message: 'some error message'
-                }
-            };
-
             this.vm.save();
 
             this.confirmDeferred.resolve();
-            this.saveDeferred.reject(error);
+            this.saveDeferred.reject();
             this.$rootScope.$apply();
 
             expect(this.loadingModalService.close).toHaveBeenCalled();
-            expect(this.alertService.error).toHaveBeenCalledWith(error.data.message);
+            expect(this.alertService.error).toHaveBeenCalledWith('adminProductView.failedToSaveProduct');
         });
     });
 });

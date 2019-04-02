@@ -38,19 +38,25 @@
                 product: function(orderableFactory, $stateParams) {
                     return orderableFactory.getOrderableWithProgramData($stateParams.id);
                 },
-                kitConstituents: function(product, OrderableResource) {
-                    var ids = product.children.map(function(product) {
-                        return product.orderable.id;
+                kitConstituents: function($stateParams, product, OrderableResource, paginationService) {
+                    return paginationService.registerList(null, $stateParams, function() {
+                        var ids = product.children.map(function(product) {
+                            return product.orderable.id;
+                        });
+
+                        if (ids.length) {
+                            return new OrderableResource().query({
+                                id: ids
+                            })
+                                .then(function(response) {
+                                    return response.content;
+                                });
+                        }
+                        return product.children;
+                    }, {
+                        customPageParamName: 'kitConstituentPage',
+                        customSizeParamName: 'kitConstituentSize'
                     });
-                    if (ids.length) {
-                        return new OrderableResource().query({
-                            id: ids
-                        })
-                            .then(function(response) {
-                                return response.content;
-                            });
-                    }
-                    return product.children;
                 },
                 products: function(OrderableResource) {
                     return new OrderableResource().query(
