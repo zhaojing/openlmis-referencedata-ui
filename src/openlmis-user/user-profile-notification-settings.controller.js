@@ -42,7 +42,7 @@
             .decorateFunction(saveUserSubscriptions)
             .withSuccessNotification('openlmisUser.userSubscriptionsHaveBeenSavedSuccessfully')
             .withErrorNotification('openlmisUser.failedToSaveUserSubscriptions')
-            .withLoading()
+            .withLoading(true)
             .getDecoratedFunction();
 
         /**

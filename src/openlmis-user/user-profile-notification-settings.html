@@ -19,6 +19,8 @@
                 <td>{{digestConfiguration.tag | notificationTag}}</td>
                 <td>
                     <openlmis-cron-selection
+                        ng-required="vm.userSubscriptionsMap[digestConfiguration.id].subscribed"
+                        ng-disabled="!vm.userSubscriptionsMap[digestConfiguration.id].subscribed"
                         ng-model="vm.userSubscriptionsMap[digestConfiguration.id].cronExpression" />
                 </td>
             </tr>
