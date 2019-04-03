@@ -30,8 +30,8 @@
     "openlmisUser.notificationSettings": "Notification Settings",
     "openlmisUser.notification": "Notification",
     "openlmisUser.noDigestConfigurations": "There are no digest configurations",
-    "openlmisUser.userSubscriptionsHaveBeenSavedSuccessfully": "User subscriptions have been saved successfully",
-    "openlmisUser.failedToSaveUserSubscriptions": "Failed to save user subscriptions",
+    "openlmisUser.userSubscriptionsHaveBeenUpdatedSuccessfully": "User subscriptions have been updated successfully",
+    "openlmisUser.failedToUpdateUserSubscriptions": "Failed to update user subscriptions",
     "openlmisUser.updateSubscriptions": "Update Subscriptions",
     "openlmisUser.schedule": "Schedule"
 }

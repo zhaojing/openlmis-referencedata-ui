@@ -40,8 +40,8 @@
 
         vm.saveUserSubscriptions = new FunctionDecorator()
             .decorateFunction(saveUserSubscriptions)
-            .withSuccessNotification('openlmisUser.userSubscriptionsHaveBeenSavedSuccessfully')
-            .withErrorNotification('openlmisUser.failedToSaveUserSubscriptions')
+            .withSuccessNotification('openlmisUser.userSubscriptionsHaveBeenUpdatedSuccessfully')
+            .withErrorNotification('openlmisUser.failedToUpdateUserSubscriptions')
             .withLoading(true)
             .getDecoratedFunction();
 
