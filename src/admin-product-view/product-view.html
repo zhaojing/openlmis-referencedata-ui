@@ -105,7 +105,7 @@
         <button ui-sref="^">{{'adminProductView.cancel' | message}}</button>
         <div class="button-group primary">
             <button class="primary"  type="submit" ng-if="vm.product.children.length > 0 || saveKitUnpackListForm.$dirty || vm.product.children.length !== vm.constituents.length" form="saveKitUnpackList">{{'adminProductView.save' | message}}</button>
-            <button  ng-if="vm.constituents.length === 0" ng-click="vm.addKitContituents()">{{'adminProductView.createKitUnpackList' | message}}</button>
+            <button class="primary" ng-if="vm.constituents.length === 0" ng-click="vm.addKitContituents()">{{'adminProductView.createKitUnpackList' | message}}</button>
         </div>
     </div>
 </div>

@@ -20,6 +20,7 @@ Bug fixes:
 * [OLMIS-5983](https://openlmis.atlassian.net/browse/OLMIS-5983): Fixed problem with entering Supply Lines screen when supervisory node has no requisition group
 * [OLMIS-6073](https://openlmis.atlassian.net/browse/OLMIS-6073): Reduced the number of requests for users, auth users and user contact details when logging in.
 * [OLMIS-5913](https://openlmis.atlassian.net/browse/OLMIS-5913): Fixed facility getting unselected in facility/program selector during load.
+* [OLMIS-6157](https://openlmis.atlassian.net/browse/OLMIS-6157): Fixed UI issues with the orderable details screen
 
 5.5.0 / 2018-12-12
 ==================

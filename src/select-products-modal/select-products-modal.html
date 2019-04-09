@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>{{'selectProductsModal.addProducts' | message}}</h4>
+                <h4>{{'selectProductsModal.addProductKitUnPackList' | message}}</h4>
             </div>
             <div class="modal-body">
                 <form id="productForm" ng-submit="vm.selectProducts()">
@@ -41,14 +41,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <div class="button-group">
-                    <button class="primary" type="submit" form="productForm">
-                        {{'selectProductsModal.addProducts' | message}}
-                    </button>
-                    <button type="button" class="cancel" ng-click="vm.close()">
-                        {{'selectProductsModal.cancel' | message}}
-                    </button>
-                </div>
+                    <button id="cancel" ng-click="vm.close()">{{'selectProductsModal.cancel' | message}}</button>
+                    <button class="primary" type="submit" form="productForm">{{'selectProductsModal.addProducts' | message}}</button>
             </div>
         </div>
     </div>
