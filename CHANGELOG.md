@@ -21,6 +21,7 @@ Bug fixes:
 * [OLMIS-6073](https://openlmis.atlassian.net/browse/OLMIS-6073): Reduced the number of requests for users, auth users and user contact details when logging in.
 * [OLMIS-5913](https://openlmis.atlassian.net/browse/OLMIS-5913): Fixed facility getting unselected in facility/program selector during load.
 * [OLMIS-6157](https://openlmis.atlassian.net/browse/OLMIS-6157): Fixed UI issues with the orderable details screen
+* [OLMIS-6167](https://openlmis.atlassian.net/browse/OLMIS-6167): Fixed UI issue of misplaced button after searching for products on the orderable details screen
 
 5.5.0 / 2018-12-12
 ==================
