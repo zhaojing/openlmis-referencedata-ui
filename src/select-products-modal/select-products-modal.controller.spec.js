@@ -54,6 +54,10 @@ describe('SelectProductsModalController', function() {
             new OrderableDataBuilder()
                 .withFullProductName('Product Four')
                 .withProductCode('N64')
+                .build(),
+            new OrderableDataBuilder()
+                .withFullProductName('undefined')
+                .withProductCode('undefined')
                 .build()
         ];
 
@@ -151,12 +155,20 @@ describe('SelectProductsModalController', function() {
             expect(this.vm.filteredProducts).toEqual([]);
         });
 
-        it('should search by both code and full product name', function() {
-            this.vm.searchText = 'pC';
+        it('should only return defined full product name', function() {
+            this.vm.searchText = 'mC1';
 
             this.vm.search();
 
-            expect(this.vm.filteredProducts).toEqual([this.products[0], this.products[1]]);
+            expect(this.products[4].withFullProductName).toBeUndefined();
+        });
+
+        it('should only return defined product codes', function() {
+            this.vm.searchText = 'mC1';
+
+            this.vm.search();
+
+            expect(this.products[4].withProductCode).toBeUndefined();
         });
 
     });
