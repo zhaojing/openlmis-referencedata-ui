@@ -39,6 +39,7 @@
 
         vm.$onInit = onInit;
         vm.getChannelLabel = NOTIFICATION_CHANNEL.getLabel;
+        vm.validateSubscription = validateSubscription;
 
         vm.saveUserSubscriptions = new FunctionDecorator()
             .decorateFunction(saveUserSubscriptions)
@@ -104,6 +105,22 @@
         /**
          * @ngdoc method
          * @methodOf openlmis-user.controller:UserProfileNotificationSettingsController
+         * @name validateSubscription
+         *
+         * @description
+         * Check whether given subscription is valid.
+         *
+         * @return {string}  the key of the error message, undefined otherwise
+         */
+        function validateSubscription(subscription) {
+            if (isChannelInvalid(subscription)) {
+                return 'openlmisUser.onlyEmailChannelIsSupportedForDigestMessage';
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-user.controller:UserProfileNotificationSettingsController
          * @name saveUserSubscriptions
          *
          * @description
@@ -130,6 +147,12 @@
             return _.extend({}, subscription, {
                 cronExpression: subscription.useDigest ? subscription.cronExpression : undefined
             });
+        }
+
+        function isChannelInvalid(subscription) {
+            return subscription.useDigest
+                && subscription.preferredChannel
+                && NOTIFICATION_CHANNEL.EMAIL !== subscription.preferredChannel;
         }
 
     }

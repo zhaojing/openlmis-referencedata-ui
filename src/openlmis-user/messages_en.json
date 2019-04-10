@@ -36,5 +36,6 @@
     "openlmisUser.schedule": "Schedule",
     "openlmisUser.useDigest": "Use Digest",
     "openlmisUser.channel": "Channel",
-    "openlmisUser.sms": "SMS"
+    "openlmisUser.sms": "SMS",
+    "openlmisUser.onlyEmailChannelIsSupportedForDigestMessage": "Only email channel is supported for digest message"
 }

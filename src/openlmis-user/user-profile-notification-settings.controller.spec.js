@@ -138,4 +138,39 @@ describe('UserProfileNotificationSettingsController', function() {
 
     });
 
+    describe('validateSubscription', function() {
+
+        it('should return error if non email channel is selected for digest message', function() {
+            var userSubscription = this.vm.userSubscriptionsMap[this.digestConfigurations[0].id];
+            userSubscription.preferredChannel = this.NOTIFICATION_CHANNEL.SMS;
+
+            expect(this.vm.validateSubscription(userSubscription))
+                .toEqual('openlmisUser.onlyEmailChannelIsSupportedForDigestMessage');
+        });
+
+        it('should not return error if email channel is selected for digest message', function() {
+            var userSubscription = this.vm.userSubscriptionsMap[this.digestConfigurations[0].id];
+            userSubscription.preferredChannel = this.NOTIFICATION_CHANNEL.EMAIL;
+
+            expect(this.vm.validateSubscription(userSubscription)).toBeUndefined();
+        });
+
+        it('should not return error if non email channel is selected for non digest message', function() {
+            var userSubscription = this.vm.userSubscriptionsMap[this.digestConfigurations[0].id];
+            userSubscription.preferredChannel = this.NOTIFICATION_CHANNEL.SMS;
+            userSubscription.useDigest = false;
+
+            expect(this.vm.validateSubscription(userSubscription)).toBeUndefined();
+        });
+
+        it('should not return error if channel is not specified', function() {
+            var userSubscription = this.vm.userSubscriptionsMap[this.digestConfigurations[0].id];
+            userSubscription.preferredChannel = undefined;
+            userSubscription.useDigest = false;
+
+            expect(this.vm.validateSubscription(userSubscription)).toBeUndefined();
+        });
+
+    });
+
 });
