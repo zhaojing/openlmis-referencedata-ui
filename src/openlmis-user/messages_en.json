@@ -33,5 +33,8 @@
     "openlmisUser.userSubscriptionsHaveBeenUpdatedSuccessfully": "User subscriptions have been updated successfully",
     "openlmisUser.failedToUpdateUserSubscriptions": "Failed to update user subscriptions",
     "openlmisUser.updateSubscriptions": "Update Subscriptions",
-    "openlmisUser.schedule": "Schedule"
+    "openlmisUser.schedule": "Schedule",
+    "openlmisUser.useDigest": "Use Digest",
+    "openlmisUser.channel": "Channel",
+    "openlmisUser.sms": "SMS"
 }

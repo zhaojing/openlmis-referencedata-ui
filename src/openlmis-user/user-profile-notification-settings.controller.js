@@ -29,14 +29,16 @@
         .controller('UserProfileNotificationSettingsController', controller);
 
     controller.$inject = [
-        'digestConfigurations', 'userSubscriptions', 'UserSubscriptionResource', 'user', '$state', 'FunctionDecorator'
+        'digestConfigurations', 'userSubscriptions', 'UserSubscriptionResource', 'user', '$state', 'FunctionDecorator',
+        'NOTIFICATION_CHANNEL'
     ];
 
     function controller(digestConfigurations, userSubscriptions, UserSubscriptionResource, user, $state,
-                        FunctionDecorator) {
+                        FunctionDecorator, NOTIFICATION_CHANNEL) {
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.getChannelLabel = NOTIFICATION_CHANNEL.getLabel;
 
         vm.saveUserSubscriptions = new FunctionDecorator()
             .decorateFunction(saveUserSubscriptions)
@@ -77,19 +79,24 @@
          */
         function onInit() {
             vm.digestConfigurations = digestConfigurations;
-            vm.subsMap = userSubscriptions.reduce(function(map, sub) {
-                map[sub.digestConfiguration.id] = sub;
-                return map;
-            }, {});
+            vm.channels = NOTIFICATION_CHANNEL.getChannels();
+
             vm.userSubscriptionsMap = digestConfigurations.reduce(function(map, configuration) {
                 var filtered = userSubscriptions.filter(function(subscription) {
                     return configuration.id === subscription.digestConfiguration.id;
                 });
 
-                map[configuration.id] = {
-                    subscribed: filtered.length > 0,
-                    cronExpression: filtered.length ? filtered[0].cronExpression : ''
-                };
+                if (filtered.length) {
+                    map[configuration.id] = filtered[0];
+                } else {
+                    map[configuration.id] = {
+                        useDigest: false,
+                        preferredChannel: NOTIFICATION_CHANNEL.EMAIL,
+                        cronExpression: undefined,
+                        digestConfiguration: configuration
+                    };
+                }
+
                 return map;
             }, {});
         }
@@ -106,8 +113,7 @@
          */
         function saveUserSubscriptions() {
             var userSubscriptions = Object.keys(vm.userSubscriptionsMap)
-                .filter(isSubscribed)
-                .map(mapToDigestConfiguration);
+                .map(mapToSubscription);
 
             return new UserSubscriptionResource()
                 .create(userSubscriptions, {
@@ -118,18 +124,12 @@
                 });
         }
 
-        function isSubscribed(digestConfigurationId) {
-            return vm.userSubscriptionsMap[digestConfigurationId].subscribed;
-        }
+        function mapToSubscription(digestConfigurationId) {
+            var subscription = vm.userSubscriptionsMap[digestConfigurationId];
 
-        function mapToDigestConfiguration(digestConfigurationId) {
-            return {
-                digestConfiguration: {
-                    id: digestConfigurationId
-
-                },
-                cronExpression: vm.userSubscriptionsMap[digestConfigurationId].cronExpression
-            };
+            return _.extend({}, subscription, {
+                cronExpression: subscription.useDigest ? subscription.cronExpression : undefined
+            });
         }
 
     }

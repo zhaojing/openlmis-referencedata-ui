@@ -34,6 +34,8 @@
         function UserSubscriptionDataBuilder() {
             this.digestConfiguration = new ObjectReferenceDataBuilder().build(),
             this.cronExpression = '0 0 * * *';
+            this.useDigest = true;
+            this.preferredChannel = 'EMAIL';
         }
 
         function withDigestConfiguration(digestConfiguration) {
@@ -49,7 +51,9 @@
         function buildJson() {
             return {
                 digestConfiguration: this.digestConfiguration,
-                cronExpression: this.cronExpression
+                cronExpression: this.cronExpression,
+                useDigest: this.useDigest,
+                preferredChannel: this.preferredChannel
             };
         }
 

@@ -28,6 +28,7 @@ describe('UserProfileNotificationSettingsController', function() {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
             this.$state = $injector.get('$state');
+            this.NOTIFICATION_CHANNEL = $injector.get('NOTIFICATION_CHANNEL');
         });
 
         this.digestConfigurations = [
@@ -78,18 +79,14 @@ describe('UserProfileNotificationSettingsController', function() {
 
         it('should map user subscriptions by digest configuration ID', function() {
             var expected = {};
-            expected[this.digestConfigurations[0].id] = {
-                subscribed: true,
-                cronExpression: this.userSubscriptions[0].cronExpression
-            };
+            expected[this.digestConfigurations[0].id] = this.userSubscriptions[0];
             expected[this.digestConfigurations[1].id] = {
-                subscribed: false,
-                cronExpression: ''
+                useDigest: false,
+                cronExpression: undefined,
+                preferredChannel: this.NOTIFICATION_CHANNEL.EMAIL,
+                digestConfiguration: this.digestConfigurations[1]
             };
-            expected[this.digestConfigurations[2].id] = {
-                subscribed: true,
-                cronExpression: this.userSubscriptions[1].cronExpression
-            };
+            expected[this.digestConfigurations[2].id] = this.userSubscriptions[1];
 
             expect(this.vm.userSubscriptionsMap).toEqual(expected);
         });
@@ -99,22 +96,16 @@ describe('UserProfileNotificationSettingsController', function() {
     describe('saveUserSubscriptions', function() {
 
         it('should update user subscriptions', function() {
-            this.vm.userSubscriptionsMap[this.digestConfigurations[2].id].subscribed = false;
-
             this.vm.saveUserSubscriptions();
             this.$rootScope.$apply();
 
-            expect(this.UserSubscriptionResource.prototype.create).toHaveBeenCalledWith(
-                [{
-                    digestConfiguration: {
-                        id: this.digestConfigurations[0].id
-                    },
-                    cronExpression: this.userSubscriptions[0].cronExpression
-                }],
-                {
-                    userId: this.user.id
-                }
-            );
+            expect(this.UserSubscriptionResource.prototype.create).toHaveBeenCalledWith([
+                this.vm.userSubscriptionsMap[this.digestConfigurations[0].id],
+                this.vm.userSubscriptionsMap[this.digestConfigurations[1].id],
+                this.vm.userSubscriptionsMap[this.digestConfigurations[2].id]
+            ], {
+                userId: this.user.id
+            });
         });
 
         it('should return promise', function() {
