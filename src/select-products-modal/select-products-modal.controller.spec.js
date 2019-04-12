@@ -58,6 +58,18 @@ describe('SelectProductsModalController', function() {
             new OrderableDataBuilder()
                 .withFullProductName('undefined')
                 .withProductCode('undefined')
+                .build(),
+            new OrderableDataBuilder()
+                .withFullProductName('Counter Something')
+                .withProductCode('Co1')
+                .build(),
+            new OrderableDataBuilder()
+                .withFullProductName('Another product')
+                .withProductCode('Code Name')
+                .build(),
+            new OrderableDataBuilder()
+                .withFullProductName('Some Product')
+                .withProductCode('CD1')
                 .build()
         ];
 
@@ -169,6 +181,24 @@ describe('SelectProductsModalController', function() {
             this.vm.search();
 
             expect(this.products[4].withProductCode).toBeUndefined();
+        });
+
+        it('should return result for search text of both product codes and full product name', function() {
+            this.vm.searchText = 'co';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([this.products[5], this.products[6]]);
+
+        });
+
+        it('should show all for search text', function() {
+            this.vm.searchText = 'po';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([]);
+
         });
 
     });

@@ -124,14 +124,17 @@
 
         function searchByCodeAndName(product) {
             var searchText = vm.searchText.toLowerCase();
+            var foundInFullProductName;
+            var foundInProductCode;
 
             if (product.productCode !== undefined) {
-                return (product.productCode.toLowerCase().startsWith(searchText));
+                foundInProductCode = product.productCode.toLowerCase().startsWith(searchText);
             }
 
             if (product.fullProductName !== undefined) {
-                return (product.fullProductName.toLowerCase().contains(searchText));
+                foundInFullProductName = product.fullProductName.toLowerCase().contains(searchText);
             }
+            return foundInFullProductName || foundInProductCode;
         }
     }
 
