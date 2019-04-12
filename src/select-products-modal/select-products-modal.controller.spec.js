@@ -70,6 +70,10 @@ describe('SelectProductsModalController', function() {
             new OrderableDataBuilder()
                 .withFullProductName('Some Product')
                 .withProductCode('CD1')
+                .build(),
+            new OrderableDataBuilder()
+                .withFullProductName('Same Product')
+                .withProductCode('AME1')
                 .build()
         ];
 
@@ -192,12 +196,21 @@ describe('SelectProductsModalController', function() {
 
         });
 
-        it('should show all for search text', function() {
+        it('should return empty list if no matches found', function() {
             this.vm.searchText = 'po';
 
             this.vm.search();
 
             expect(this.vm.filteredProducts).toEqual([]);
+
+        });
+
+        it('should return result with either product code or full product name', function() {
+            this.vm.searchText = 'ame';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([this.products[8]]);
 
         });
 
