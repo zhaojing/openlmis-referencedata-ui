@@ -72,7 +72,7 @@ describe('SelectProductsModalController', function() {
                 .withProductCode('CD1')
                 .build(),
             new OrderableDataBuilder()
-                .withFullProductName('Same Product')
+                .withFullProductName('Same Product to displayed')
                 .withProductCode('AME1')
                 .build()
         ];
@@ -211,6 +211,14 @@ describe('SelectProductsModalController', function() {
             this.vm.search();
 
             expect(this.vm.filteredProducts).toEqual([this.products[8]]);
+
+            this.vm.searchText = 'disp';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([this.products[8]]);
+
+            expect(this.products[8].withProductCode).toBeUndefined();
 
         });
 
