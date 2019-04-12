@@ -35,6 +35,7 @@
         OrderableDataBuilder.prototype.withChildren = withChildren;
         OrderableDataBuilder.prototype.build = build;
         OrderableDataBuilder.prototype.buildJson = buildJson;
+        OrderableDataBuilder.prototype.withoutProductCode = withoutProductCode;
 
         return OrderableDataBuilder;
 
@@ -103,6 +104,11 @@
 
         function withChildren(children) {
             this.children = children;
+            return this;
+        }
+
+        function withoutProductCode() {
+            this.productCode = undefined;
             return this;
         }
 
