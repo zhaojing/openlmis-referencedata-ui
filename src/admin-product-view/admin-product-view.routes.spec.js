@@ -17,11 +17,12 @@ describe('openlmis.administration.product.view.route', function() {
 
     beforeEach(function() {
         module('admin-product-view', function($provide) {
-            var programService = jasmine.createSpyObj('orderableService', ['getAll']);
+            var programServiceMock = jasmine.createSpyObj('orderableService', ['getAll']);
             $provide.service('programService', function() {
-                return programService;
+                return programServiceMock;
             });
         });
+        module('admin-product-list');
 
         inject(function($injector) {
             this.$q = $injector.get('$q');
@@ -34,6 +35,8 @@ describe('openlmis.administration.product.view.route', function() {
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.PageDataBuilder = $injector.get('PageDataBuilder');
             this.paginationService = $injector.get('paginationService');
+            this.orderableService = $injector.get('orderableService');
+            this.programService = $injector.get('programService');
             this.OrderableChildrenDataBuilder = $injector.get('OrderableChildrenDataBuilder');
             this.ADMINISTRATION_RIGHTS = $injector.get('ADMINISTRATION_RIGHTS');
         });
@@ -73,63 +76,69 @@ describe('openlmis.administration.product.view.route', function() {
             .withFullProductName('p1')
             .buildJson();
 
+        this.kitConstituentsPage = new this.PageDataBuilder()
+            .withContent(this.kitConstituents)
+            .build();
+
         spyOn(this.orderableFactory, 'getOrderableWithProgramData')
             .andReturn(this.$q.resolve(this.product));
-        spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(
-            new this.PageDataBuilder()
-                .withContent(this.kitConstituents)
-                .build()
-        ));
+        spyOn(this.OrderableResource.prototype, 'query').andReturn(
+            this.$q.resolve(this.kitConstituentsPage)
+        );
         spyOn(this.$templateCache, 'get').andCallThrough();
+        spyOn(this.orderableService, 'search').andReturn(this.$q.resolve());
 
         this.state = this.$state.get('openlmis.administration.products.view');
+
+        this.goToUrl = goToUrl;
+        this.getResolvedValue = getResolvedValue;
     });
 
     describe('state', function() {
 
-        it('should resolve product', function() {
-            var result;
+        it('should go to product detail page', function() {
+            this.goToUrl('administration/products/products/2');
 
-            this.state.resolve.product(this.orderableFactory, this.$state).then(function(product) {
-                result = product;
-            });
-
-            this.$rootScope.$apply();
-
-            expect(result).toEqual(this.product);
+            expect(this.$state.current.name).toEqual('openlmis.administration.products.view');
         });
 
         it('should resolve kitConstituents', function() {
-            var result;
+            this.goToUrl('administration/products/products/2');
 
-            this.state.resolve.kitConstituents(this.$state, this.product, this.OrderableResource,
-                this.paginationService)
-                .then(function(kitsConstituents) {
-                    result = kitsConstituents;
-                });
+            expect(this.getResolvedValue('kitConstituents')).toEqual(this.kitConstituents);
+        });
 
-            this.$rootScope.$apply();
+        it('should resolve product', function() {
+            this.goToUrl('administration/products/products/2');
 
-            expect(result).toEqual(this.kitConstituents);
+            expect(this.getResolvedValue('product')).toEqual(this.product);
+        });
+
+        it('should resolve products', function() {
+            this.goToUrl('administration/products/products/2');
+
+            expect(this.getResolvedValue('products')).toEqual(this.kitConstituents);
         });
 
         it('should resolve kitConstituents to emptry Array if product does not have children', function() {
-            var result;
+            this.orderableFactory.getOrderableWithProgramData.andReturn(this.productWithNoChildren);
 
-            this.state.resolve.kitConstituents(this.$state, this.productWithNoChildren, this.OrderableResource,
-                this.paginationService)
+            this.goToUrl('administration/products/products/2');
 
-                .then(function(kitsConstituents) {
-                    result = kitsConstituents;
-                });
-
-            this.$rootScope.$apply();
-
-            expect(result).toEqual([]);
+            expect(this.getResolvedValue('kitConstituents')).toEqual([]);
         });
 
-        it('should expose controller as vm', function() {
+        it('should be accessed by user with role ORDERABLES_MANAGE', function() {
             expect(this.state.accessRights).toEqual([this.ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE]);
         });
     });
+
+    function getResolvedValue(name) {
+        return this.$state.$current.locals.globals[name];
+    }
+
+    function goToUrl(url) {
+        this.$location.url(url);
+        this.$rootScope.$apply();
+    }
 });
