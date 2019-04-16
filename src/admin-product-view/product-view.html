@@ -29,13 +29,13 @@
         <dd>{{vm.product.description}}<dd>
     </dl>
     <dl>
-        <dt ng-if="vm.constituents && vm.constituents.length > 0">{{'adminProductView.kitConstituent' | message}}</dt>
+        <dt ng-if="vm.constituents && vm.constituents.length > 0">{{'adminProductView.kitUnpackList' | message}}</dt>
         <dd>
             <form name="saveKitUnpackListForm" id="saveKitUnpackList" class="form-inline" ng-submit="vm.save()">
                 <section class="openlmis-table-container" ng-if="vm.constituents && vm.constituents.length > 0">
                 <div class="is-primary">
-                    <button type="button" ng-click="vm.addKitContituents()" class="add">
-                            {{'adminProductView.add' | message}}</button></div>                
+                    <button type="button" ng-click="vm.addKitContituents()">
+                            {{'adminProductView.addProduct' | message}}</button></div>                
                 <table>
                     <thead>
                         <tr>

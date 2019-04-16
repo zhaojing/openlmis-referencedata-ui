@@ -31,8 +31,7 @@
         'openlmis-i18n',
         'openlmis-modal',
         'select-products-modal',
-        'admin-product-list',
-        'openlmis-function-decorator'
+        'admin-product-list'
     ]);
 
 })();

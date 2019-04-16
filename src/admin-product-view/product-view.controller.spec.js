@@ -31,7 +31,6 @@ describe('ProductViewController', function() {
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.OrderableChildrenDataBuilder = $injector.get('OrderableChildrenDataBuilder');
             this.$rootScope = $injector.get('$rootScope');
-            this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
         var productChildren = [
@@ -183,7 +182,7 @@ describe('ProductViewController', function() {
             expect(this.confirmService.confirm).toHaveBeenCalledWith('adminProductView.confirm');
         });
 
-        it('should redirect to product list page is save succeeds', function() {
+        it('should save kit product constituents', function() {
             this.OrderableResource.prototype.update.andReturn(this.$q.when(this.product));
             spyOn(this.$state, 'go').andReturn();
 
@@ -198,18 +197,21 @@ describe('ProductViewController', function() {
                 reload: true
             });
 
+            expect(this.notificationService.success).toHaveBeenCalledWith(
+                'adminProductView.productSavedSuccessfully'
+            );
+
         });
 
-        it('should not redirect to product list page is save fails', function() {
-            spyOn(this.$state, 'go').andReturn();
-
+        it('should show error alert wen product save fails', function() {
             this.vm.save();
 
             this.confirmDeferred.resolve();
             this.saveDeferred.reject();
             this.$rootScope.$apply();
 
-            expect(this.$state.go).not.toHaveBeenCalled();
+            expect(this.loadingModalService.close).toHaveBeenCalled();
+            expect(this.alertService.error).toHaveBeenCalledWith('adminProductView.failedToSaveProduct');
         });
     });
 });

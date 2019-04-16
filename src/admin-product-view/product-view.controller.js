@@ -30,11 +30,11 @@
 
     controller.$inject = ['confirmService', 'loadingModalService', 'notificationService', '$state',
         '$q', 'alertService', 'selectProductsModalService', 'product', 'kitConstituents',
-        'products', 'OrderableResource', 'FunctionDecorator'];
+        'products', 'OrderableResource'];
 
     function controller(confirmService, loadingModalService, notificationService, $state, $q, alertService,
                         selectProductsModalService, product, kitConstituents, products,
-                        OrderableResource, FunctionDecorator) {
+                        OrderableResource) {
 
         var vm = this;
 
@@ -123,7 +123,7 @@
          * Method that will save a list of kit constituent parts.
          */
         function save() {
-            confirmService.confirm('adminProductView.confirm').then(confirmSaveDecorated);
+            confirmService.confirm('adminProductView.confirm').then(confirmSave);
         }
 
         /**
@@ -140,19 +140,19 @@
             });
         }
 
-        var confirmSaveDecorated = new FunctionDecorator()
-            .decorateFunction(confirmSave)
-            .withSuccessNotification('adminProductView.productSavedSuccessfully')
-            .withErrorNotification('adminProductView.failedToSaveProduct')
-            .withLoading(true)
-            .getDecoratedFunction();
-
         function confirmSave() {
+            var loadingPromise = loadingModalService.open();
             var productToSave = angular.copy(vm.product);
             productToSave.children = transformChildren();
             new OrderableResource().update(productToSave)
                 .then(function() {
+                    loadingPromise.then(function() {
+                        notificationService.success('adminProductView.productSavedSuccessfully');
+                    });
                     goToProductList();
+                }, function() {
+                    loadingModalService.close();
+                    alertService.error('adminProductView.failedToSaveProduct');
                 });
         }
 
