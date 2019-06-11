@@ -1,0 +1,12 @@
+{
+    "adminSystemNotificationList.systemNotifications": "System Notifications",
+    "adminSystemNotificationList.title": "Title",
+    "adminSystemNotificationList.author": "Author",
+    "adminSystemNotificationList.createdDate": "Created Date",
+    "adminSystemNotificationList.active": "Active",
+    "adminSystemNotificationList.isDisplayed": "Is Displayed",
+    "adminSystemNotificationList.message": "Message",
+    "adminSystemNotificationList.actions": "Actions",
+    "adminSystemNotificationList.edit": "Edit",
+    "adminSystemNotificationList.addSystemNotification": "Add System Notification"
+}

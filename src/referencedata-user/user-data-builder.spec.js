@@ -35,6 +35,8 @@
         UserDataBuilder.prototype.withGeneralAdminRoleAssignment = withGeneralAdminRoleAssignment;
         UserDataBuilder.prototype.withId = withId;
         UserDataBuilder.prototype.withUsername = withUsername;
+        UserDataBuilder.prototype.withFirstName = withFirstName;
+        UserDataBuilder.prototype.withLastName = withLastName;
         UserDataBuilder.prototype.withHomeFacilityId = withHomeFacilityId;
         UserDataBuilder.prototype.withoutHomeFacilityId = withoutHomeFacilityId;
         UserDataBuilder.prototype.asNew = asNew;
@@ -69,6 +71,16 @@
 
         function withUsername(newUsername) {
             this.username = newUsername;
+            return this;
+        }
+
+        function withFirstName(firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        function withLastName(lastName) {
+            this.lastName = lastName;
             return this;
         }
 

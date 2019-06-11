@@ -1,3 +1,9 @@
+5.6.0 / Work in Progress
+========================
+
+New functionality:
+* [OLMIS-6350](https://openlmis.atlassian.net/browse/OLMIS-6350): Added UI for displaying system notifications.
+
 5.5.1 / 2019-05-27
 ==================
 
