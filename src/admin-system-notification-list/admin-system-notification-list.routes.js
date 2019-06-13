@@ -30,7 +30,7 @@
             controller: 'SystemNotificationListController',
             templateUrl: 'admin-system-notification-list/system-notification-list.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.ADMINISTRATIVE_MESSAGES_MANAGE],
+            accessRights: [ADMINISTRATION_RIGHTS.SYSTEM_NOTIFICATIONS_MANAGE],
             resolve: {
                 systemNotifications: function(paginationService, SystemNotificationResource, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
