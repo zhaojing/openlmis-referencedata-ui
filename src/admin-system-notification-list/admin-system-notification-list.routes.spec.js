@@ -120,15 +120,10 @@ describe('openlmis.administration.systemNotification route', function() {
         expect(this.getResolvedValue('users')).toEqual(this.users);
     });
 
-    it('should resolve users with unique IDs', function() {
+    it('should resolve all users', function() {
         this.goToUrl('/administration/systemNotifications?page=0&size=10');
 
-        expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
-            id: [
-                this.users[0].id,
-                this.users[1].id
-            ]
-        });
+        expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalled();
     });
 
     it('should not change state when fetching system notifications fails', function() {

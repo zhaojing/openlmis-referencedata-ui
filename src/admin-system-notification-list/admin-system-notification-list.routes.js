@@ -38,12 +38,7 @@
                     });
                 },
                 users: function(systemNotifications, ReferenceDataUserResource) {
-                    var userIds = systemNotifications.reduce(toUniqueUserIds, []);
-
-                    return new ReferenceDataUserResource()
-                        .query({
-                            id: userIds
-                        })
+                    return new ReferenceDataUserResource().query()
                         .then(function(users) {
                             return users.content;
                         });
@@ -53,13 +48,6 @@
                 }
             }
         });
-    }
-
-    function toUniqueUserIds(userIds, systemNotification) {
-        if (userIds.indexOf(systemNotification.author.id) === -1) {
-            userIds.push(systemNotification.author.id);
-        }
-        return userIds;
     }
 
     function toUsersMap(usersMap, user) {
