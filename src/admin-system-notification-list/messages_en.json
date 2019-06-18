@@ -9,5 +9,6 @@
     "adminSystemNotificationList.message": "Message",
     "adminSystemNotificationList.actions": "Actions",
     "adminSystemNotificationList.edit": "Edit",
-    "adminSystemNotificationList.addSystemNotification": "Add System Notification"
+    "adminSystemNotificationList.addSystemNotification": "Add System Notification",
+    "adminSystemNotificationList.noSystemNotifications": "No system notifications found."
 }
