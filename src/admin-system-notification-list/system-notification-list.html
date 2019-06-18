@@ -1,5 +1,15 @@
 <h2>{{'adminSystemNotificationList.systemNotifications' | message}}</h2>
 <section class="openlmis-table-container">
+    <form ng-submit="vm.loadSystemNotifications()" >
+        <label for="author">{{'adminSystemNotificationList.author' | message}}</label>
+        <select id="author"
+                ng-model="vm.authorId"
+                ng-options="author.id as author | user for author in vm.users"></select>
+        <label class="checkbox">
+            <input type="checkbox" ng-model="vm.isDisplayed"/>
+            {{'adminSystemNotificationList.only.displayed' | message}}
+        </label>
+    </form>
     <table>
         <caption ng-if="!vm.systemNotifications || vm.systemNotifications.length === 0">
             {{'adminSystemNotificationList.noSystemNotifications' | message}}
@@ -20,7 +30,7 @@
                 <td>{{vm.usersMap[systemNotification.author.id] | user}}</td>
                 <td>{{systemNotification.createdDate | openlmisDate}}</td>
                 <td><openlmis-ok-icon show="systemNotification.active"></openlmis-ok-icon></td>
-                <td><openlmis-ok-icon show="vm.isDisplayedMap[systemNotification.id]"></openlmis-ok-icon></td>
+                <td><openlmis-ok-icon show="systemNotification.displayed"></openlmis-ok-icon></td>
                 <td>{{systemNotification.message}}</td>
             </tr>
         </tbody>

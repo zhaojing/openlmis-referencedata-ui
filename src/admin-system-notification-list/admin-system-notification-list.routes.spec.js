@@ -114,7 +114,13 @@ describe('openlmis.administration.systemNotification route', function() {
         expect(this.getResolvedValue('usersMap')).toEqual(expected);
     });
 
-    it('should users with unique IDs', function() {
+    it('should resolve users list', function() {
+        this.goToUrl('/administration/systemNotifications?page=0&size=10');
+
+        expect(this.getResolvedValue('users')).toEqual(this.users);
+    });
+
+    it('should resolve users with unique IDs', function() {
         this.goToUrl('/administration/systemNotifications?page=0&size=10');
 
         expect(this.ReferenceDataUserResource.prototype.query).toHaveBeenCalledWith({
@@ -139,6 +145,17 @@ describe('openlmis.administration.systemNotification route', function() {
         this.goToUrl('/administration/systemNotifications?page=0&size=10');
 
         expect(this.$state.current.name).not.toBe('openlmis.administration.systemNotification');
+    });
+
+    it('should set state params as undefined by default', function() {
+        this.goToUrl('/administration/systemNotifications?page=0&size=10');
+
+        expect(this.SystemNotificationResource.prototype.query).toHaveBeenCalledWith({
+            isDisplayed: undefined,
+            authorId: undefined,
+            page: '0',
+            size: '10'
+        });
     });
 
 });

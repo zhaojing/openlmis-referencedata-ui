@@ -46,6 +46,7 @@
             this.createdDate = '2019-06-10T05:41:37.603Z';
             this.active = true;
             this.author = new ObjectReferenceDataBuilder().build();
+            this.displayed = true;
         }
 
         function withStartDate(startDate) {

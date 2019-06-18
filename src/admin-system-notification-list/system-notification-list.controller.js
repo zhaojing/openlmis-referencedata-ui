@@ -28,13 +28,14 @@
         .module('admin-system-notification-list')
         .controller('SystemNotificationListController', controller);
 
-    controller.$inject = ['systemNotifications', 'usersMap'];
+    controller.$inject = ['systemNotifications', 'usersMap', 'users', '$stateParams', '$state'];
 
-    function controller(systemNotifications, usersMap) {
+    function controller(systemNotifications, usersMap, users, $stateParams, $state) {
 
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.loadSystemNotifications = loadSystemNotifications;
 
         /**
          * @ngdoc property
@@ -61,13 +62,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-system-notification-list.controller:SystemNotificationListController
-         * @name isDisplayedMap
-         * @type {Object}
+         * @name users
+         * @type {Array}
          *
          * @description
-         * Map holding information whether system notification with specific ID is displayed.
+         * List of users that are authors of the notifications.
          */
-        vm.isDisplayedMap = undefined;
+        vm.users = undefined;
 
         /**
          * @ngdoc method
@@ -80,22 +81,33 @@
         function onInit() {
             vm.systemNotifications = systemNotifications;
             vm.usersMap = usersMap;
-            vm.isDisplayedMap = systemNotifications.reduce(toIsDisplayedMap, {});
+            vm.users = users;
+            vm.isDisplayed = $stateParams.isDisplayed ? true : undefined;
+
+            if ($stateParams.authorId) {
+                vm.authorId = vm.users.filter(function(author) {
+                    return author.id === $stateParams.authorId;
+                })[0].id;
+            }
         }
 
-        function toIsDisplayedMap(isDisplayedMap, systemNotification) {
-            isDisplayedMap[systemNotification.id] = isDisplayed(systemNotification);
-            return isDisplayedMap;
-        }
+        /**
+         * @ngdoc method
+         * @methodOf admin-system-notification-list.controller:SystemNotificationListController
+         * @name loadSystemNotifications
+         *
+         * @description
+         * Retrieves the list of system notifications matching the selected filters.
+         */
+        function loadSystemNotifications() {
+            var stateParams = angular.copy($stateParams);
 
-        function isDisplayed(systemNotification) {
-            var startDate = new Date(systemNotification.startDate),
-                expiryDate = systemNotification.expiryDate ? new Date(systemNotification.expiryDate) : undefined,
-                now = new Date();
+            stateParams.isDisplayed = vm.isDisplayed === true ? vm.isDisplayed : undefined;
+            stateParams.authorId = vm.authorId ? vm.authorId : undefined;
 
-            return systemNotification.active &&
-                now >= startDate &&
-                (!expiryDate || now < expiryDate);
+            $state.go('openlmis.administration.systemNotification', stateParams, {
+                reload: true
+            });
         }
     }
 })();

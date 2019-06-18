@@ -5,6 +5,7 @@
     "adminSystemNotificationList.createdDate": "Created Date",
     "adminSystemNotificationList.active": "Active",
     "adminSystemNotificationList.isDisplayed": "Is Displayed",
+    "adminSystemNotificationList.only.displayed": "Only Displayed",
     "adminSystemNotificationList.message": "Message",
     "adminSystemNotificationList.actions": "Actions",
     "adminSystemNotificationList.edit": "Edit",

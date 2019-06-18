@@ -26,7 +26,7 @@
         $stateProvider.state('openlmis.administration.systemNotification', {
             showInNavigation: true,
             label: 'adminSystemNotificationList.systemNotifications',
-            url: '/systemNotifications?page&size',
+            url: '/systemNotifications?authorId&isDisplayed&page&size',
             controller: 'SystemNotificationListController',
             templateUrl: 'admin-system-notification-list/system-notification-list.html',
             controllerAs: 'vm',
@@ -37,7 +37,7 @@
                         return new SystemNotificationResource().query(stateParams);
                     });
                 },
-                usersMap: function(systemNotifications, ReferenceDataUserResource) {
+                users: function(systemNotifications, ReferenceDataUserResource) {
                     var userIds = systemNotifications.reduce(toUniqueUserIds, []);
 
                     return new ReferenceDataUserResource()
@@ -45,8 +45,11 @@
                             id: userIds
                         })
                         .then(function(users) {
-                            return users.content.reduce(toUsersMap, {});
+                            return users.content;
                         });
+                },
+                usersMap: function(users) {
+                    return users.reduce(toUsersMap, {});
                 }
             }
         });

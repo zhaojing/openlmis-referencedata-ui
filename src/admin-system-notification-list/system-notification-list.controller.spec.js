@@ -22,6 +22,8 @@ describe('SystemNotificationListController', function() {
             this.$controller = $injector.get('$controller');
             this.SystemNotificationDataBuilder = $injector.get('SystemNotificationDataBuilder');
             this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.$stateParams = $injector.get('$stateParams');
+            this.$state = $injector.get('$state');
         });
 
         var currentDay = new Date().getDate();
@@ -47,7 +49,7 @@ describe('SystemNotificationListController', function() {
 
         this.futureSystemNotification = new this.SystemNotificationDataBuilder()
             .withStartDate(this.farPastDate)
-            .withExpiryDate(this.pastDate)
+            .withExpiryDate(this.futureDate)
             .build();
 
         this.inactiveSystemNotification = new this.SystemNotificationDataBuilder()
@@ -75,9 +77,12 @@ describe('SystemNotificationListController', function() {
 
         this.vm = this.$controller('SystemNotificationListController', {
             systemNotifications: this.systemNotifications,
-            usersMap: this.usersMap
+            usersMap: this.usersMap,
+            users: this.users
         });
         this.vm.$onInit();
+
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('$onInit', function() {
@@ -90,12 +95,62 @@ describe('SystemNotificationListController', function() {
             expect(this.vm.usersMap).toEqual(this.usersMap);
         });
 
-        it('should create is displayed map', function() {
-            expect(this.vm.isDisplayedMap[this.ongoingSystemNotification.id]).toEqual(true);
-            expect(this.vm.isDisplayedMap[this.systemNotificationWithoutExpiryDate.id]).toEqual(true);
-            expect(this.vm.isDisplayedMap[this.pastSystemNotification.id]).toEqual(false);
-            expect(this.vm.isDisplayedMap[this.futureSystemNotification.id]).toEqual(false);
-            expect(this.vm.isDisplayedMap[this.inactiveSystemNotification.id]).toEqual(false);
+        it('should set isDisplayed if flag was passed through the URL', function() {
+            this.$stateParams.isDisplayed = true;
+
+            this.vm.$onInit();
+
+            expect(this.vm.isDisplayed).toBeTruthy();
+        });
+
+        it('should not set isDisplayed if flag was not passed through the URL', function() {
+            this.$stateParams.isDisplayed = undefined;
+
+            this.vm.$onInit();
+
+            expect(this.vm.isDisplayed).toBeUndefined();
+        });
+
+        it('should not set authorId if it was not passed through the URL', function() {
+            this.$stateParams.authorId = undefined;
+
+            this.vm.$onInit();
+
+            expect(this.vm.authorId).toBeUndefined();
+        });
+
+        it('should set authorId if it was not passed through the URL', function() {
+            this.$stateParams.authorId = this.users[0].id;
+
+            this.vm.$onInit();
+
+            expect(this.vm.authorId).toEqual(this.users[0].id);
+        });
+
+    });
+
+    describe('loadSystemNotifications', function() {
+
+        it('should set all params', function() {
+            this.vm.authorId = 'some-author';
+            this.vm.isDisplayed = true;
+
+            this.vm.loadSystemNotifications();
+
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.systemNotification', {
+                page: this.$stateParams.page,
+                size: this.$stateParams.size,
+                authorId: 'some-author',
+                isDisplayed: true
+            }, {
+                reload: true
+            });
+        });
+
+        it('should call state go method', function() {
+            this.vm.loadSystemNotifications();
+
+            expect(this.$state.go).toHaveBeenCalled();
         });
 
     });
