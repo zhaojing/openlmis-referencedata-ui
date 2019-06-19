@@ -10,6 +10,9 @@
             {{'adminSystemNotificationList.only.displayed' | message}}
         </label>
     </form>
+    <button id="add-system-notification" class="add" ui-sref="openlmis.administration.systemNotifications.add">
+        {{'adminSystemNotificationList.addSystemNotification' | message}}
+    </button>
     <table>
         <caption ng-if="!vm.systemNotifications || vm.systemNotifications.length === 0">
             {{'adminSystemNotificationList.noSystemNotifications' | message}}
@@ -22,6 +25,7 @@
                 <th>{{'adminSystemNotificationList.active' | message}}</th>
                 <th>{{'adminSystemNotificationList.isDisplayed' | message}}</th>
                 <th>{{'adminSystemNotificationList.message' | message}}</th>
+                <th>{{'adminSystemNotificationList.actions' | message}}</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +36,10 @@
                 <td><openlmis-ok-icon show="systemNotification.active"></openlmis-ok-icon></td>
                 <td><openlmis-ok-icon show="systemNotification.displayed"></openlmis-ok-icon></td>
                 <td class="crop-long-text">{{systemNotification.message}}</td>
+                <td>
+                    <button class="primary"
+                        ui-sref=".edit({id: systemNotification.id})">{{'adminSystemNotificationList.edit' | message}}</button>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -31,6 +31,7 @@
         SystemNotificationDataBuilder.prototype.withExpiryDate = withExpiryDate;
         SystemNotificationDataBuilder.prototype.inactive = inactive;
         SystemNotificationDataBuilder.prototype.withoutExpiryDate = withoutExpiryDate;
+        SystemNotificationDataBuilder.prototype.withoutId = withoutId;
 
         return SystemNotificationDataBuilder;
 
@@ -71,6 +72,11 @@
 
         function withoutExpiryDate() {
             return this.withExpiryDate();
+        }
+
+        function withoutId() {
+            this.id = undefined;
+            return this;
         }
 
         function build() {

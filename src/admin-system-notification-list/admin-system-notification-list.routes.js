@@ -23,7 +23,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.systemNotification', {
+        $stateProvider.state('openlmis.administration.systemNotifications', {
             showInNavigation: true,
             label: 'adminSystemNotificationList.systemNotifications',
             url: '/systemNotifications?authorId&isDisplayed&page&size',
