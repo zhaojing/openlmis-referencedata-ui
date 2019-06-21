@@ -1,0 +1,20 @@
+<div class="home-page">
+  <h2>{{'openlmisHome.welcome' | message}}</h2>
+  <div class="system-notification-list">
+    <h2> {{'openlmisSystemNotifications.systemNotifications' | message}} </h2>
+    <h3 ng-if="!vm.homePageSystemNotifications || vm.homePageSystemNotifications.length === 0">
+      {{'openlmisSystemNotifications.noSystemNotifications' | message}}
+    </h3>
+    <div class="scroll">
+      <div ng-repeat="systemNotification in vm.homePageSystemNotifications | orderBy: '-createdDate'">
+        <openlmis-message
+                title="systemNotification.title"
+                user-first-name="systemNotification.author.firstName"
+                user-last-name="systemNotification.author.lastName"
+                message="systemNotification.message"
+                created-date="systemNotification.createdDate">
+        </openlmis-message>
+      </div>
+    </div>
+  </div>
+</div>

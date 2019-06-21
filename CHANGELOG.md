@@ -5,6 +5,7 @@ New functionality:
 * [OLMIS-6350](https://openlmis.atlassian.net/browse/OLMIS-6350): Added UI for displaying system notifications.
 * [OLMIS-6347](https://openlmis.atlassian.net/browse/OLMIS-6347): Renamed ADMINISTRATIVE_MESSAGES_MANAGE right to SYSTEM_NOTIFICATIONS_MANAGE.
 * [OLMIS-6359](https://openlmis.atlassian.net/browse/OLMIS-6359): Added UI for adding and editing system notifications.
+* [OLMIS-6361](https://openlmis.atlassian.net/browse/OLMIS-6361): Added UI for displaying system notifications on Home page.
 
 5.5.1 / 2019-05-27
 ==================
