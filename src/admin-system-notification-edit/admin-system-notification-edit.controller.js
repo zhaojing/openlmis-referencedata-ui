@@ -42,7 +42,6 @@
         vm.saveSystemNotification = new FunctionDecorator()
             .decorateFunction(saveSystemNotification)
             .withSuccessNotification(successNotificationKey)
-            .withErrorNotification(errorNotificationKey)
             .withLoading(true)
             .getDecoratedFunction();
 
