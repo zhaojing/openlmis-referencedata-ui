@@ -28,21 +28,23 @@
         .module('openlmis-system-notifications-indicator')
         .controller('SystemNotificationsIndicatorController', controller);
 
-    controller.$inject = ['SystemNotificationResource'];
+    controller.$inject = ['SystemNotificationResource', 'offlineService'];
 
-    function controller(SystemNotificationResource) {
+    function controller(SystemNotificationResource, offlineService) {
 
         var vm = this;
 
         vm.$onInit = onInit;
 
         function onInit() {
-            new SystemNotificationResource().query({
-                isDisplayed: true
-            })
-                .then(function(response) {
-                    vm.systemNotifications = response.content;
-                });
+            if (!offlineService.isOffline()) {
+                new SystemNotificationResource().query({
+                    isDisplayed: true
+                })
+                    .then(function(response) {
+                        vm.systemNotifications = response.content;
+                    });
+            }
         }
     }
 

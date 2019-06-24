@@ -28,9 +28,9 @@
         .module('openlmis-home')
         .controller('HomeSystemNotificationsController', controller);
 
-    controller.$inject = ['homePageSystemNotifications'];
+    controller.$inject = ['homePageSystemNotifications', 'offlineService'];
 
-    function controller(homePageSystemNotifications) {
+    function controller(homePageSystemNotifications, offlineService) {
 
         var vm = this;
 
@@ -48,6 +48,17 @@
         vm.homePageSystemNotifications = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf home-system-notifications.controller:HomeSystemNotificationsController
+         * @type {boolean}
+         * @name isOffline
+         *
+         * @description
+         * Indicates offline connection.
+         */
+        vm.isOffline = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf home-system-notifications.controller:HomeSystemNotificationsController
          * @name $onInit
@@ -56,6 +67,7 @@
          * Method that is executed on initiating HomeSystemNotificationsController.
          */
         function onInit() {
+            vm.isOffline = offlineService.isOffline();
             vm.homePageSystemNotifications = homePageSystemNotifications;
         }
     }

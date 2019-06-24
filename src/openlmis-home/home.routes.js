@@ -40,12 +40,15 @@
                 }
             },
             resolve: {
-                homePageSystemNotifications: function(paginationService, SystemNotificationResource, $stateParams) {
+                homePageSystemNotifications: function(paginationService, SystemNotificationResource, $stateParams,
+                    offlineService) {
                     return paginationService.registerUrl($stateParams, function() {
-                        return new SystemNotificationResource().query({
-                            isDisplayed: true,
-                            expand: 'author'
-                        });
+                        if (!offlineService.isOffline()) {
+                            return new SystemNotificationResource().query({
+                                isDisplayed: true,
+                                expand: 'author'
+                            });
+                        }
                     });
                 }
             }
