@@ -34,7 +34,7 @@
                 <td>{{vm.usersMap[systemNotification.author.id] | user}}</td>
                 <td>{{systemNotification.createdDate | openlmisDate}}</td>
                 <td><openlmis-ok-icon show="systemNotification.active"></openlmis-ok-icon></td>
-                <td><openlmis-ok-icon show="systemNotification.displayed"></openlmis-ok-icon></td>
+                <td><openlmis-ok-icon show="systemNotification.isDisplayed"></openlmis-ok-icon></td>
                 <td class="crop-long-text">{{systemNotification.message}}</td>
                 <td>
                     <button class="primary"
