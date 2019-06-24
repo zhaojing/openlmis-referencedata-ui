@@ -2,8 +2,8 @@
     <h1 class="title">{{'openlmisHeader.appHeader' | message}}</h1>
     <div class="openlmis-header-actions">
         <div class="openlmis-header-info">
-            <a ui-sref="openlmis.home">
-                <openlmis-system-notifications-indicator></openlmis-system-notifications-indicator>
+            <a ui-sref="openlmis.home" >
+                <openlmis-system-notifications-indicator ng-if="!isOffline" ></openlmis-system-notifications-indicator>
             </a>
             <openlmis-app-cache></openlmis-app-cache>
         </div>
