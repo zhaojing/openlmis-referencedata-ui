@@ -27,6 +27,7 @@ describe('SystemNotificationsIndicatorController', function() {
             this.SystemNotificationDataBuilder = $injector.get('SystemNotificationDataBuilder');
             this.UserDataBuilder = $injector.get('UserDataBuilder');
             this.SystemNotificationResource = $injector.get('SystemNotificationResource');
+            this.offlineService = $injector.get('offlineService');
         });
 
         var currentDay = new Date().getDate();
@@ -86,14 +87,16 @@ describe('SystemNotificationsIndicatorController', function() {
                 });
             });
 
+        spyOn(this.offlineService, 'isOffline');
+
         this.vm = this.$controller('SystemNotificationsIndicatorController');
         this.vm.$onInit();
-        this.$rootScope.$apply();
     });
 
     describe('$onInit', function() {
 
         it('should expose active system notifications', function() {
+            this.$rootScope.$apply();
 
             var expectedSystemNotifications = [
                 systemNotifications[0],
@@ -101,6 +104,13 @@ describe('SystemNotificationsIndicatorController', function() {
             ];
 
             expect(this.vm.systemNotifications).toEqual(expectedSystemNotifications);
+        });
+
+        it('should not resolve system notifications while offline', function() {
+            this.offlineService.isOffline.andReturn(true);
+            this.vm.$onInit();
+
+            expect(this.vm.systemNotifications).toEqual(undefined);
         });
 
     });

@@ -30,6 +30,7 @@ describe('openlmis.home route', function() {
             this.ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
             this.UserObjectReferenceDataBuilder = $injector.get('UserObjectReferenceDataBuilder');
             this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.offlineService = $injector.get('offlineService');
         });
 
         this.users = [
@@ -76,6 +77,7 @@ describe('openlmis.home route', function() {
 
         spyOn(this.SystemNotificationResource.prototype, 'query')
             .andReturn(this.$q.resolve(this.systemNotificationsPage));
+        spyOn(this.offlineService, 'isOffline');
 
         this.goToUrl = function(url) {
             this.$location.url(url);
@@ -110,5 +112,12 @@ describe('openlmis.home route', function() {
 
         expect(this.getResolvedValue('homePageSystemNotifications')[0].author.lastName)
             .toEqual(this.systemNotifications[0].author.lastName);
+    });
+
+    it('should not resolve system notifications while offline', function() {
+        this.offlineService.isOffline.andReturn(true);
+        this.goToUrl('/home');
+
+        expect(this.SystemNotificationResource.prototype.query).not.toHaveBeenCalled();
     });
 });
