@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis.administration.systemNotification route', function() {
+describe('openlmis.administration.systemNotifications route', function() {
 
     beforeEach(function() {
         module('admin-system-notification-list');
@@ -131,7 +131,7 @@ describe('openlmis.administration.systemNotification route', function() {
 
         this.goToUrl('/administration/systemNotifications?page=0&size=10');
 
-        expect(this.$state.current.name).not.toBe('openlmis.administration.systemNotification');
+        expect(this.$state.current.name).not.toBe('openlmis.administration.systemNotifications');
     });
 
     it('should not change state when fetching users fails', function() {
@@ -139,7 +139,7 @@ describe('openlmis.administration.systemNotification route', function() {
 
         this.goToUrl('/administration/systemNotifications?page=0&size=10');
 
-        expect(this.$state.current.name).not.toBe('openlmis.administration.systemNotification');
+        expect(this.$state.current.name).not.toBe('openlmis.administration.systemNotifications');
     });
 
     it('should set state params as undefined by default', function() {

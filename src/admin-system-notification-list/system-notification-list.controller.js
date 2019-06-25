@@ -105,7 +105,7 @@
             stateParams.isDisplayed = vm.isDisplayed === true ? vm.isDisplayed : undefined;
             stateParams.authorId = vm.authorId ? vm.authorId : undefined;
 
-            $state.go('openlmis.administration.systemNotification', stateParams, {
+            $state.go('openlmis.administration.systemNotifications', stateParams, {
                 reload: true
             });
         }

@@ -137,7 +137,7 @@ describe('SystemNotificationListController', function() {
 
             this.vm.loadSystemNotifications();
 
-            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.systemNotification', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.systemNotifications', {
                 page: this.$stateParams.page,
                 size: this.$stateParams.size,
                 authorId: 'some-author',
