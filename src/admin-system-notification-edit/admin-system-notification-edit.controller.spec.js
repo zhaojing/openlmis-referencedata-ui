@@ -16,7 +16,11 @@
 describe('AdminSystemNotificationEditController', function() {
 
     beforeEach(function() {
-        module('admin-system-notification-edit');
+        module('admin-system-notification-edit', function($provide) {
+            $provide.service('notificationService', function() {
+                return jasmine.createSpyObj('notificationService', ['success', 'error']);
+            });
+        });
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
