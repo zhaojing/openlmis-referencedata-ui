@@ -7,11 +7,11 @@
     <label for="message">{{'adminSystemNotificationEdit.message' | message}}</label>
     <textarea id="message" ng-model="vm.systemNotification.message" required></textarea>
     <label for="startDate">{{'adminSystemNotificationEdit.startDate' | message}}</label>
-    <input id="startDate" type="text" openlmis-datetimepicker ng-model="vm.systemNotification.startDate" max-date="vm.systemNotification.expiryDate" required>
+    <input id="startDate" type="text" openlmis-datetimepicker ng-model="vm.systemNotification.startDate" max-date="vm.systemNotification.expiryDate">
     <label for="expiryDate">{{'adminSystemNotificationEdit.expiryDate' | message}}</label>
     <input id="expiryDate" type="text" openlmis-datetimepicker ng-model="vm.systemNotification.expiryDate" min-date="vm.systemNotification.startDate">
     <label for="title">{{'adminSystemNotificationEdit.title' | message}}</label>
-    <input id="title" type="text" ng-model="vm.systemNotification.title" />
+    <input id="title" type="text" characters-left ng-maxlength="{{vm.maxSystemNotificationTitleLength}}" ng-model="vm.systemNotification.title" />
     <label>
         <input type="checkbox" ng-model="vm.systemNotification.active" />
         {{'adminSystemNotificationEdit.active' | message}}

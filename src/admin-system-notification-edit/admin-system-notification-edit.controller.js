@@ -30,12 +30,13 @@
 
     adminSystemNotificationEditController.$inject = [
         'systemNotification', 'author', 'FunctionDecorator', 'SystemNotificationResource', 'successNotificationKey',
-        'errorNotificationKey', '$state'
+        'errorNotificationKey', '$state', 'MAX_SYSTEM_NOTIFICATION_TITLE_LENGTH'
     ];
 
     function adminSystemNotificationEditController(systemNotification, author, FunctionDecorator,
                                                    SystemNotificationResource, successNotificationKey,
-                                                   errorNotificationKey, $state) {
+                                                   errorNotificationKey, $state,
+                                                   MAX_SYSTEM_NOTIFICATION_TITLE_LENGTH) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -69,6 +70,17 @@
         vm.author = undefined;
 
         /**
+         * @ngdoc property
+         * @propertyOf admin-system-notification-edit.controller:AdminSystemNotificationEditController
+         * @type {Number}
+         * @name maxSystemNotificationTitleLength
+         *
+         * @description
+         * Stores max system notification title length.
+         */
+        vm.maxSystemNotificationTitleLength = undefined;
+
+        /**
          * @ngdoc method
          * @methodOf admin-system-notification-edit.controller:AdminSystemNotificationEditController
          * @name $onInit
@@ -79,6 +91,7 @@
         function onInit() {
             vm.systemNotification = systemNotification;
             vm.author = author;
+            vm.maxSystemNotificationTitleLength = MAX_SYSTEM_NOTIFICATION_TITLE_LENGTH;
         }
 
         /**
