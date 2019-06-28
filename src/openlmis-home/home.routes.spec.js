@@ -95,15 +95,6 @@ describe('openlmis.home route', function() {
         expect(this.getResolvedValue('homePageSystemNotifications')).toEqual(this.systemNotifications);
     });
 
-    it('should pass URL params to the system notification fetch call', function() {
-        this.goToUrl('/home?isDisplayed=true&expand=author');
-
-        expect(this.SystemNotificationResource.prototype.query).toHaveBeenCalledWith({
-            isDisplayed: true,
-            expand: 'author'
-        });
-    });
-
     it('should resolve a user with correct first name and last name', function() {
         this.goToUrl('/home');
 

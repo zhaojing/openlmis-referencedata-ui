@@ -17,33 +17,17 @@
 
     'use strict';
 
-    /**
-     * @ngdoc controller
-     * @name openlmis-system-notifications-indicator.controller:SystemNotificationsIndicatorController
-     *
-     * @description
-     * Exposes data to the system notifications view.
-     */
     angular
-        .module('openlmis-system-notifications-indicator')
-        .controller('SystemNotificationsIndicatorController', controller);
+        .module('referencedata-system-notification')
+        .run(routes);
 
-    controller.$inject = ['offlineService', 'systemNotificationService'];
+    routes.$inject = ['loginService', 'systemNotificationService'];
 
-    function controller(offlineService, systemNotificationService) {
+    function routes(loginService, systemNotificationService) {
 
-        var vm = this;
-
-        vm.$onInit = onInit;
-
-        function onInit() {
-            if (!offlineService.isOffline()) {
-                return systemNotificationService.getSystemNotifications()
-                    .then(function(results) {
-                        vm.systemNotifications = results;
-                    });
-            }
-        }
+        loginService.registerPostLoginAction(function() {
+            return systemNotificationService.clearCachedSystemNotifications();
+        });
 
     }
 

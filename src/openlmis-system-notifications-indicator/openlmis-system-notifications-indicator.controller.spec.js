@@ -15,77 +15,58 @@
 
 describe('SystemNotificationsIndicatorController', function() {
 
-    var systemNotifications, $q;
-
     beforeEach(function() {
         module('openlmis-system-notifications-indicator');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
+            this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
             this.$controller = $injector.get('$controller');
+            this.systemNotificationService = $injector.get('systemNotificationService');
             this.SystemNotificationDataBuilder = $injector.get('SystemNotificationDataBuilder');
             this.UserDataBuilder = $injector.get('UserDataBuilder');
-            this.SystemNotificationResource = $injector.get('SystemNotificationResource');
+            this.ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
             this.offlineService = $injector.get('offlineService');
         });
 
-        var currentDay = new Date().getDate();
-        this.farPastDate = new Date(new Date().setDate(currentDay - 3)).toISOString();
-        this.pastDate = new Date(new Date().setDate(currentDay - 2)).toISOString();
-        this.futureDate = new Date(new Date().setDate(currentDay + 2)).toISOString();
-        this.farFutureDate = new Date(new Date().setDate(currentDay + 3)).toISOString();
-
-        this.ongoingSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.pastDate)
-            .withExpiryDate(this.futureDate)
-            .build();
-
-        this.systemNotificationWithoutExpiryDate = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.pastDate)
-            .withoutExpiryDate()
-            .build();
-
-        this.pastSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.farPastDate)
-            .withExpiryDate(this.pastDate)
-            .build();
-
-        this.futureSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.futureDate)
-            .withExpiryDate(this.farFutureDate)
-            .build();
-
-        this.inactiveSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.pastDate)
-            .withExpiryDate(this.futureDate)
-            .inactive()
-            .build();
-
-        systemNotifications = [
-            this.ongoingSystemNotification,
-            this.systemNotificationWithoutExpiryDate,
-            this.pastSystemNotification,
-            this.futureSystemNotification,
-            this.inactiveSystemNotification
+        this.users = [
+            new this.UserDataBuilder().buildReferenceDataUserJson(),
+            new this.UserDataBuilder().buildReferenceDataUserJson()
         ];
 
-        spyOn(this.SystemNotificationResource.prototype, 'query')
-            .andCallFake(function(param) {
-                var result;
-                if (param.isDisplayed) {
-                    result = [
-                        systemNotifications[0],
-                        systemNotifications[1]
-                    ];
-                } else {
-                    result = systemNotifications;
-                }
+        this.systemNotifications = [
+            new this.SystemNotificationDataBuilder()
+                .withAuthor(
+                    new this.ObjectReferenceDataBuilder()
+                        .withId(this.users[0].id)
+                        .build()
+                )
+                .build(),
+            new this.SystemNotificationDataBuilder()
+                .withAuthor(
+                    new this.ObjectReferenceDataBuilder()
+                        .withId(this.users[1].id)
+                        .build()
+                )
+                .build(),
+            new this.SystemNotificationDataBuilder()
+                .withAuthor(
+                    new this.ObjectReferenceDataBuilder()
+                        .withId(this.users[1].id)
+                        .build()
+                )
+                .build(),
+            new this.SystemNotificationDataBuilder()
+                .withAuthor(
+                    new this.ObjectReferenceDataBuilder()
+                        .withId(this.users[0].id)
+                        .build()
+                )
+                .build()
+        ];
 
-                return $q.resolve({
-                    content: result
-                });
-            });
+        spyOn(this.systemNotificationService, 'getSystemNotifications')
+            .andReturn(this.$q.resolve(this.systemNotifications));
 
         spyOn(this.offlineService, 'isOffline');
 
@@ -95,15 +76,10 @@ describe('SystemNotificationsIndicatorController', function() {
 
     describe('$onInit', function() {
 
-        it('should expose active system notifications', function() {
+        it('should expose system notifications', function() {
             this.$rootScope.$apply();
 
-            var expectedSystemNotifications = [
-                systemNotifications[0],
-                systemNotifications[1]
-            ];
-
-            expect(this.vm.systemNotifications).toEqual(expectedSystemNotifications);
+            expect(this.vm.systemNotifications).toEqual(this.systemNotifications);
         });
 
         it('should not resolve system notifications while offline', function() {
@@ -113,11 +89,6 @@ describe('SystemNotificationsIndicatorController', function() {
             expect(this.vm.systemNotifications).toEqual(undefined);
         });
 
-    });
-
-    afterEach(function() {
-        systemNotifications = null;
-        $q = null;
     });
 
 });

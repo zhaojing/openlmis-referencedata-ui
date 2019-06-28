@@ -41,15 +41,13 @@
             },
             resolve: {
                 homePageSystemNotifications: function(paginationService, SystemNotificationResource, $stateParams,
-                    offlineService) {
-                    return paginationService.registerUrl($stateParams, function() {
-                        if (!offlineService.isOffline()) {
-                            return new SystemNotificationResource().query({
-                                isDisplayed: true,
-                                expand: 'author'
+                    offlineService, systemNotificationService) {
+                    if (!offlineService.isOffline()) {
+                        return systemNotificationService.getSystemNotifications()
+                            .then(function(results) {
+                                return results;
                             });
-                        }
-                    });
+                    }
                 }
             }
         });
