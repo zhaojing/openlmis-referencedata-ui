@@ -91,7 +91,6 @@ describe('systemNotificationService', function() {
                 });
             });
 
-        spyOn(this.systemNotificationService, 'cacheSystemNotification').andReturn();
         spyOn(this.localStorageService, 'get');
         spyOn(this.localStorageService, 'remove');
         spyOn(this.localStorageService, 'add');
@@ -129,7 +128,6 @@ describe('systemNotificationService', function() {
             this.$rootScope.$apply();
 
             expect(this.localStorageService.get).toHaveBeenCalledWith(this.localStorageKey);
-            expect(this.systemNotificationService.cacheSystemNotification.callCount).toEqual(0);
             expect(this.SystemNotificationResource.prototype.query.callCount).toEqual(0);
             expect(result).toEqual([
                 systemNotifications[0],

@@ -38,7 +38,6 @@
             SYSTEM_NOTIFICATIONS = 'systemNotifications',
             systemNotificationsPromise;
 
-        this.cacheSystemNotification = cacheSystemNotification;
         this.getSystemNotifications = getSystemNotifications;
         this.clearCachedSystemNotifications = clearCachedSystemNotifications;
 

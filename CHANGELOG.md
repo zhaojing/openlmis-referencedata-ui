@@ -9,6 +9,9 @@ New functionality:
 * [OLMIS-6388](https://openlmis.atlassian.net/browse/OLMIS-6388): Adjusted UI after renaming displayed property of system notification to isDisplayed.
 * [OLMIS-6399](https://openlmis.atlassian.net/browse/OLMIS-6399): Adjusted UI after renaming openlmis.administration.systemNotification state to openlmis.administration.systemNotifications.
 
+Improvements:
+* [OLMIS-6389](https://openlmis.atlassian.net/browse/OLMIS-6389): Added caching of system notifications on Home page and in header indicator.
+
 5.5.1 / 2019-05-27
 ==================
 

@@ -43,10 +43,7 @@
                 homePageSystemNotifications: function(paginationService, SystemNotificationResource, $stateParams,
                     offlineService, systemNotificationService) {
                     if (!offlineService.isOffline()) {
-                        return systemNotificationService.getSystemNotifications()
-                            .then(function(results) {
-                                return results;
-                            });
+                        return systemNotificationService.getSystemNotifications();
                     }
                 }
             }
