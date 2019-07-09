@@ -33,16 +33,14 @@
 
         return UserService;
 
-        function UserService() {
-            this.userRepository = new UserRepository();
-        }
+        function UserService() {}
 
         function get(id) {
             var userPromise;
             if (id) {
-                userPromise = this.userRepository.get(id);
+                userPromise = new UserRepository().get(id);
             } else {
-                userPromise = $q.resolve(new User(undefined, this.userRepository));
+                userPromise = $q.resolve(new User(undefined, new UserRepository()));
             }
 
             return userPromise
