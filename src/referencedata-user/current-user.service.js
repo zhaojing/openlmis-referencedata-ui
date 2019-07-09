@@ -33,8 +33,7 @@
     function currentUserInfo($q, UserRepository, localStorageService, authorizationService, User) {
 
         var CURRENT_USER = 'currentUser',
-            promise,
-            userRepository = new UserRepository();
+            promise;
 
         this.getUserInfo = getUserInfo;
         this.clearCache = clearCache;
@@ -65,7 +64,7 @@
             if (cachedUserAsJson) {
                 promise = $q.resolve(new User(angular.fromJson(cachedUserAsJson), new UserRepository()));
             } else {
-                promise = userRepository.get(authUser.user_id)
+                promise = new UserRepository().get(authUser.user_id)
                     .then(function(refUser) {
                         localStorageService.add(CURRENT_USER, refUser.toJson());
                         return refUser;
