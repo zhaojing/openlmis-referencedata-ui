@@ -14,6 +14,7 @@ Improvements:
 
 Bug fixes:
 * [OLMIS-6330](https://openlmis.atlassian.net/browse/OLMIS-6330): fixed trigerring reference-ui build.
+* [OLMIS-6357](https://openlmis.atlassian.net/browse/OLMIS-6357): Fixed logging into the application on Firefox with cleared history.
 
 5.5.1 / 2019-05-27
 ==================
