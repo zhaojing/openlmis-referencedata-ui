@@ -28,6 +28,7 @@
         OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
         OrderableDataBuilder.prototype.withProductCode = withProductCode;
         OrderableDataBuilder.prototype.withId = withId;
+        OrderableDataBuilder.prototype.withVersionId = withVersionId;
         OrderableDataBuilder.prototype.withPrograms = withPrograms;
         OrderableDataBuilder.prototype.withExtraData = withExtraData;
         OrderableDataBuilder.prototype.withIdentifiers = withIdentifiers;
@@ -65,6 +66,10 @@
                     .withPricePerPack(20.77)
                     .buildJson()
             ];
+
+            this.meta = {
+                versionId: '1'
+            };
         }
 
         function withFullProductName(fullProductName) {
@@ -74,6 +79,11 @@
 
         function withId(id) {
             this.id = id;
+            return this;
+        }
+
+        function withVersionId(versionId) {
+            this.meta.versionId = versionId;
             return this;
         }
 
@@ -129,7 +139,8 @@
                 netContent: this.netContent,
                 packRoundingThreshold: this.packRoundingThreshold,
                 extraData: this.extraData,
-                children: this.children
+                children: this.children,
+                meta: this.meta
             };
         }
 

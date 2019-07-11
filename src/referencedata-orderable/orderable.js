@@ -55,6 +55,7 @@
             this.description = json.description;
             this.netContent = json.netContent;
             this.packRoundingThreshold = json.packRoundingThreshold;
+            this.meta = json.meta;
         }
 
     }
