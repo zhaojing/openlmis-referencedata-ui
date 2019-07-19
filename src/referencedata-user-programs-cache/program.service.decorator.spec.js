@@ -14,14 +14,14 @@
  */
 
 describe('ProgramService getUserPrograms decorator', function() {
-    var programService, $rootScope, $httpBackend, openlmisUrlFactory,
-        programs, user, cache;
 
     beforeEach(function() {
+        this.cache = jasmine.createSpyObj('cache', ['getBy', 'put', 'clearAll', 'getAll', 'search']);
+        var cache = this.cache;
+        module('referencedata-user');
         module('referencedata-user-programs-cache', function($provide) {
-            cache = jasmine.createSpyObj('cache', ['getBy', 'put', 'clearAll', 'getAll', 'search']);
-            cache.getAll.andReturn([]);
             $provide.factory('localStorageFactory', function() {
+                cache.getAll.andReturn([]);
                 return function() {
                     return cache;
                 };
@@ -29,67 +29,73 @@ describe('ProgramService getUserPrograms decorator', function() {
         });
 
         inject(function($injector) {
-            programService = $injector.get('programService');
-            $rootScope = $injector.get('$rootScope');
-            $httpBackend = $injector.get('$httpBackend');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.programService = $injector.get('programService');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
-        user = {
-            id: 'user-id',
-            username: 'some-user'
-        };
+        this.user = new this.UserDataBuilder().buildReferenceDataUserJson();
 
-        programs = [
-            {
-                id: 'program-id-1',
-                name: 'program-1'
-            },
-            {
-                id: 'program-id-2',
-                name: 'program-2'
-            }
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
+
+        this.userIdOffline = {
+            userIdOffline: this.user.id
+        };
     });
 
     it('should return a cached programs if available', function() {
-        cache.search.andReturn(programs);
+        this.cache.search.andReturn(this.programs);
 
         var result;
-        programService.getUserPrograms(user.id).then(function(response) {
-            result = response;
-        });
-        $rootScope.$apply();
+        this.programService
+            .getUserPrograms(this.user.id)
+            .then(function(response) {
+                result = response;
+            });
+        this.$rootScope.$apply();
 
-        expect(result).toEqual(programs);
-        expect(cache.search).toHaveBeenCalled();
+        expect(result).toEqual(this.programs);
+        expect(this.cache.search).toHaveBeenCalled();
     });
 
     it('should send original request if there is no user programs cached', function() {
-        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + user.id + '/programs'))
-            .respond(200, programs);
+        this.$httpBackend
+            .expectGET(this.openlmisUrlFactory('api/users/' + this.user.id + '/programs'))
+            .respond(200, this.programs);
 
-        cache.search.andReturn(undefined);
+        this.cache.search.andReturn(undefined);
 
         var result;
-        programService.getUserPrograms(user.id).then(function(response) {
-            result = response;
-        });
-        $httpBackend.flush();
-        $rootScope.$apply();
+        this.programService
+            .getUserPrograms(this.user.id)
+            .then(function(response) {
+                result = response;
+            });
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
-        expect(result.length).toEqual(2);
-        expect(result[0].id).toEqual(programs[0].id);
-        expect(result[1].id).toEqual(programs[1].id);
-        expect(cache.put.callCount).toEqual(2);
-
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        expect(this.cache.put.callCount).toEqual(2);
+        expect(angular.toJson(result)).toEqual(angular.toJson([
+            _.extend({}, this.programs[0], this.userIdOffline),
+            _.extend({}, this.programs[1], this.userIdOffline)
+        ]));
     });
 
     it('should clear user programs cache', function() {
-        programService.clearUserProgramsCache();
+        this.programService.clearUserProgramsCache();
 
-        expect(cache.clearAll).toHaveBeenCalled();
+        expect(this.cache.clearAll).toHaveBeenCalled();
     });
+
+    afterEach(function() {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+    });
+
 });

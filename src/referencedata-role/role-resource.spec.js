@@ -15,26 +15,25 @@
 
 describe('RoleResource', function() {
 
-    var RoleResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('referencedata-role', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('referencedata-role', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            RoleResource = $injector.get('RoleResource');
+            this.RoleResource = $injector.get('RoleResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new RoleResource();
+        new this.RoleResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/roles', {
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/roles', {
             paginated: false
         });
     });

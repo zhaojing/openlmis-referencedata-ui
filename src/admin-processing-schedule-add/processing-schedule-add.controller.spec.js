@@ -15,119 +15,115 @@
 
 describe('ProcessingScheduleAddController', function() {
 
-    var $controller, $rootScope, $q, confirmService, processingScheduleService, stateTrackerService,
-        loadingModalService, notificationService, messageService, ProcessingScheduleDataBuilder, vm, processingSchedule,
-        confirmDeferred, saveDeferred, loadingDeferred;
-
     beforeEach(function() {
         module('admin-processing-schedule-add');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $rootScope = $injector.get('$rootScope');
-            confirmService = $injector.get('confirmService');
-            $q = $injector.get('$q');
-            processingScheduleService = $injector.get('processingScheduleService');
-            stateTrackerService = $injector.get('stateTrackerService');
-            loadingModalService = $injector.get('loadingModalService');
-            notificationService = $injector.get('notificationService');
-            messageService = $injector.get('messageService');
-            ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
+            this.$controller = $injector.get('$controller');
+            this.$rootScope = $injector.get('$rootScope');
+            this.confirmService = $injector.get('confirmService');
+            this.$q = $injector.get('$q');
+            this.processingScheduleService = $injector.get('processingScheduleService');
+            this.stateTrackerService = $injector.get('stateTrackerService');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.notificationService = $injector.get('notificationService');
+            this.messageService = $injector.get('messageService');
+            this.ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
         });
 
-        processingSchedule = new ProcessingScheduleDataBuilder().build();
+        this.processingSchedule = new this.ProcessingScheduleDataBuilder().build();
 
-        confirmDeferred = $q.defer();
-        saveDeferred = $q.defer();
-        loadingDeferred = $q.defer();
+        this.confirmDeferred = this.$q.defer();
+        this.saveDeferred = this.$q.defer();
+        this.loadingDeferred = this.$q.defer();
 
-        spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
-        spyOn(stateTrackerService, 'goToPreviousState').andCallFake(loadingDeferred.resolve);
-        spyOn(processingScheduleService, 'create').andReturn(saveDeferred.promise);
-        spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
-        spyOn(loadingModalService, 'close').andCallFake(loadingDeferred.resolve);
-        spyOn(notificationService, 'success');
-        spyOn(notificationService, 'error');
-        spyOn(messageService, 'get').andCallFake(function(key, param) {
+        spyOn(this.confirmService, 'confirm').andReturn(this.confirmDeferred.promise);
+        spyOn(this.stateTrackerService, 'goToPreviousState').andCallFake(this.loadingDeferred.resolve);
+        spyOn(this.processingScheduleService, 'create').andReturn(this.saveDeferred.promise);
+        spyOn(this.loadingModalService, 'open').andReturn(this.loadingDeferred.promise);
+        spyOn(this.loadingModalService, 'close').andCallFake(this.loadingDeferred.resolve);
+        spyOn(this.notificationService, 'success');
+        spyOn(this.notificationService, 'error');
+        spyOn(this.messageService, 'get').andCallFake(function(key, param) {
             if (key === 'adminProcessingScheduleAdd.save.question') {
                 return 'Do you want to save Processing Schedule ' + param.processingSchedule + '?';
             }
         });
 
-        vm = $controller('ProcessingScheduleAddController');
+        this.vm = this.$controller('ProcessingScheduleAddController');
     });
 
     describe('$onInit', function() {
 
         it('should expose resolved fields', function() {
-            expect(vm.processingSchedule).toEqual({});
+            expect(this.vm.processingSchedule).toEqual({});
         });
     });
 
     describe('save', function() {
 
         beforeEach(function() {
-            vm.processingSchedule = processingSchedule;
+            this.vm.processingSchedule = this.processingSchedule;
         });
 
         it('should prompt user to save schedule', function() {
-            vm.save();
+            this.vm.save();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
-                'Do you want to save Processing Schedule ' + processingSchedule.name + '?',
+            expect(this.confirmService.confirm).toHaveBeenCalledWith(
+                'Do you want to save Processing Schedule ' + this.processingSchedule.name + '?',
                 'adminProcessingScheduleAdd.save'
             );
         });
 
         it('should not save period if user does not confirm it', function() {
-            vm.save();
+            this.vm.save();
 
-            confirmDeferred.reject();
-            $rootScope.$apply();
+            this.confirmDeferred.reject();
+            this.$rootScope.$apply();
 
-            expect(processingScheduleService.create).not.toHaveBeenCalled();
+            expect(this.processingScheduleService.create).not.toHaveBeenCalled();
         });
 
         it('should save schedule and open loading modal after confirm', function() {
-            vm.save();
+            this.vm.save();
 
-            confirmDeferred.resolve();
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(processingScheduleService.create).toHaveBeenCalledWith(processingSchedule);
-            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(this.processingScheduleService.create).toHaveBeenCalledWith(this.processingSchedule);
+            expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should show notification if schedule was saved successfully', function() {
-            vm.save();
+            this.vm.save();
 
-            confirmDeferred.resolve();
-            saveDeferred.resolve(processingSchedule);
-            loadingDeferred.resolve();
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.saveDeferred.resolve(this.processingSchedule);
+            this.loadingDeferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminProcessingScheduleAdd.save.success');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminProcessingScheduleAdd.save.success');
         });
 
         it('should show notification if schedule save has failed', function() {
-            vm.save();
+            this.vm.save();
 
-            confirmDeferred.resolve();
-            saveDeferred.reject();
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.saveDeferred.reject();
+            this.$rootScope.$apply();
 
-            expect(notificationService.error).toHaveBeenCalledWith('adminProcessingScheduleAdd.save.fail');
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(this.notificationService.error).toHaveBeenCalledWith('adminProcessingScheduleAdd.save.fail');
+            expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should take the user to processing schedule list page after successful save', function() {
-            vm.save();
+            this.vm.save();
 
-            confirmDeferred.resolve();
-            saveDeferred.resolve(processingSchedule);
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.saveDeferred.resolve(this.processingSchedule);
+            this.$rootScope.$apply();
 
-            expect(stateTrackerService.goToPreviousState)
+            expect(this.stateTrackerService.goToPreviousState)
                 .toHaveBeenCalledWith('openlmis.administration.processingSchedules');
         });
     });
@@ -135,9 +131,9 @@ describe('ProcessingScheduleAddController', function() {
     describe('goToPreviousState', function() {
 
         it('should redirect to Processing Period screen', function() {
-            vm.goToPreviousState();
+            this.vm.goToPreviousState();
 
-            expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });
 });

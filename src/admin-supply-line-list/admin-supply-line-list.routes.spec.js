@@ -18,14 +18,11 @@ describe('openlmis.administration.supplyLine', function() {
     beforeEach(function() {
         module('admin-supply-line-list');
 
-        var FacilityDataBuilder, ProgramDataBuilder, SupplyLineDataBuilder, PageDataBuilder;
-
         inject(function($injector) {
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
             this.$state = $injector.get('$state');
@@ -36,25 +33,25 @@ describe('openlmis.administration.supplyLine', function() {
         });
 
         this.facilities = [
-            new FacilityDataBuilder().build(),
-            new FacilityDataBuilder().build()
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
 
         this.programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
         this.supplyLines = [
-            new SupplyLineDataBuilder().buildJson(),
-            new SupplyLineDataBuilder().buildJson()
+            new this.SupplyLineDataBuilder().buildJson(),
+            new this.SupplyLineDataBuilder().buildJson()
         ];
 
-        this.facilitiesPage = new PageDataBuilder()
+        this.facilitiesPage = new this.PageDataBuilder()
             .withContent(this.facilities)
             .build();
 
-        this.supplyLinesPage = new PageDataBuilder()
+        this.supplyLinesPage = new this.PageDataBuilder()
             .withContent(this.supplyLines)
             .build();
 

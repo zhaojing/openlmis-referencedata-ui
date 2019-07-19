@@ -15,74 +15,7 @@
 
 describe('openlmis.administration.facilities.facility.programs state', function() {
 
-    var state, $state, openlmisModalService, dialogSpy, $q, $rootScope, programService, programs,
-        facilityOperatorService, facilityOperators, geographicZoneService, facilityTypeService,
-        facilityTypes, geographicZones, ProgramDataBuilder, FacilityOperatorDataBuilder,
-        FacilityTypeDataBuilder, GeographicZoneDataBuilder;
-
-    beforeEach(prepareSuite);
-
-    it('should expect facility from parent state', function() {
-        expect(state.parentResolves.indexOf('facility')).toBeGreaterThan(-1);
-    });
-
-    it('should resolve programs', function() {
-        var result;
-
-        state.resolve.programs(programService).then(function(programs) {
-            result = programs;
-        });
-        $rootScope.$apply();
-
-        expect(result).toEqual(programs);
-    });
-
-    it('should resolve facilityOperators', function() {
-        var result;
-
-        state.resolve.facilityOperators(facilityOperatorService).then(function(facilityOperators) {
-            result = facilityOperators;
-        });
-        $rootScope.$apply();
-
-        expect(result).toEqual(facilityOperators);
-    });
-
-    it('should resolve geographicZones', function() {
-        var result;
-
-        state.resolve.geographicZones($q, geographicZoneService).then(function(geographicZones) {
-            result = geographicZones;
-        });
-        $rootScope.$apply();
-
-        expect(result).toEqual(geographicZones);
-    });
-
-    it('should resolve facilityTypes', function() {
-        var result;
-
-        state.resolve.facilityTypes(facilityTypeService).then(function(facilityTypes) {
-            result = facilityTypes;
-        });
-        $rootScope.$apply();
-
-        expect(result).toEqual(facilityTypes);
-    });
-
-    it('should use facility-programs.html template', function() {
-        expect(state.templateUrl).toEqual('admin-facility-programs/facility-programs.html');
-    });
-
-    it('should expose controller as vm', function() {
-        expect(state.controllerAs).toEqual('vm');
-    });
-
-    it('should expose FacilityViewController', function() {
-        expect(state.controller).toEqual('FacilityViewController');
-    });
-
-    function prepareSuite() {
+    beforeEach(function() {
         module('openlmis-modal-state', function($provide) {
             $provide.provider('modalState', function($stateProvider) {
                 return $stateProvider;
@@ -92,64 +25,124 @@ describe('openlmis.administration.facilities.facility.programs state', function(
         module('admin-facility-view');
 
         inject(function($injector) {
-            $state = $injector.get('$state');
-            openlmisModalService = $injector.get('openlmisModalService');
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            programService = $injector.get('programService');
-            facilityOperatorService = $injector.get('facilityOperatorService');
-            geographicZoneService = $injector.get('geographicZoneService');
-            facilityTypeService = $injector.get('facilityTypeService');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
-            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
-            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.$state = $injector.get('$state');
+            this.openlmisModalService = $injector.get('openlmisModalService');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.programService = $injector.get('programService');
+            this.facilityOperatorService = $injector.get('facilityOperatorService');
+            this.geographicZoneService = $injector.get('geographicZoneService');
+            this.facilityTypeService = $injector.get('facilityTypeService');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        prepareTestData();
-        prepareSpies();
-    }
-
-    function prepareTestData() {
-        programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
-        facilityTypes = [
-            new FacilityTypeDataBuilder().build(),
-            new FacilityTypeDataBuilder().build(),
-            new FacilityTypeDataBuilder().build()
+        this.facilityTypes = [
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build()
         ];
 
-        facilityOperators = [
-            new FacilityOperatorDataBuilder().build(),
-            new FacilityOperatorDataBuilder().build(),
-            new FacilityOperatorDataBuilder().build()
+        this.facilityOperators = [
+            new this.FacilityOperatorDataBuilder().build(),
+            new this.FacilityOperatorDataBuilder().build(),
+            new this.FacilityOperatorDataBuilder().build()
         ];
 
-        geographicZones = [
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build()
+        this.geographicZones = [
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
         ];
 
-        dialogSpy = jasmine.createSpyObj('dialog', ['hide']);
+        this.dialogSpy = jasmine.createSpyObj('dialog', ['hide']);
 
-        state = $state.get('openlmis.administration.facilities.facility.programs');
-    }
+        this.state = this.$state.get('openlmis.administration.facilities.facility.programs');
 
-    function prepareSpies() {
-        spyOn(openlmisModalService, 'createDialog').andReturn(dialogSpy);
-        spyOn(programService, 'getAll').andReturn($q.when(programs));
-        spyOn(facilityOperatorService, 'getAll').andReturn($q.when(facilityOperators));
-        spyOn(facilityTypeService, 'query').andReturn($q.when({
-            content: facilityTypes
-        }));
-        spyOn(geographicZoneService, 'getAll').andReturn($q.when({
-            content: geographicZones
-        }));
-    }
+        spyOn(this.openlmisModalService, 'createDialog').andReturn(this.dialogSpy);
+        spyOn(this.programService, 'getAll').andReturn(this.$q.when(this.programs));
+        spyOn(this.facilityOperatorService, 'getAll').andReturn(this.$q.when(this.facilityOperators));
+
+        spyOn(this.facilityTypeService, 'query').andReturn(this.$q.when(
+            new this.PageDataBuilder()
+                .withContent(this.facilityTypes)
+                .build()
+        ));
+
+        spyOn(this.geographicZoneService, 'getAll').andReturn(this.$q.when(
+            new this.PageDataBuilder()
+                .withContent(this.geographicZones)
+                .build()
+        ));
+    });
+
+    it('should expect facility from parent state', function() {
+        expect(this.state.parentResolves.indexOf('facility')).toBeGreaterThan(-1);
+    });
+
+    it('should resolve programs', function() {
+        var result;
+
+        this.state.resolve.programs(this.programService).then(function(programs) {
+            result = programs;
+        });
+        this.$rootScope.$apply();
+
+        expect(result).toEqual(this.programs);
+    });
+
+    it('should resolve facilityOperators', function() {
+        var result;
+
+        this.state.resolve.facilityOperators(this.facilityOperatorService).then(function(facilityOperators) {
+            result = facilityOperators;
+        });
+        this.$rootScope.$apply();
+
+        expect(result).toEqual(this.facilityOperators);
+    });
+
+    it('should resolve geographicZones', function() {
+        var result;
+
+        this.state.resolve.geographicZones(this.$q, this.geographicZoneService).then(function(geographicZones) {
+            result = geographicZones;
+        });
+        this.$rootScope.$apply();
+
+        expect(result).toEqual(this.geographicZones);
+    });
+
+    it('should resolve facilityTypes', function() {
+        var result;
+
+        this.state.resolve.facilityTypes(this.facilityTypeService).then(function(facilityTypes) {
+            result = facilityTypes;
+        });
+        this.$rootScope.$apply();
+
+        expect(result).toEqual(this.facilityTypes);
+    });
+
+    it('should use facility-programs.html template', function() {
+        expect(this.state.templateUrl).toEqual('admin-facility-programs/facility-programs.html');
+    });
+
+    it('should expose controller as vm', function() {
+        expect(this.state.controllerAs).toEqual('vm');
+    });
+
+    it('should expose FacilityViewController', function() {
+        expect(this.state.controller).toEqual('FacilityViewController');
+    });
 
 });

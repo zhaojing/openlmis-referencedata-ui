@@ -15,26 +15,25 @@
 
 describe('RequisitionGroupResource', function() {
 
-    var RequisitionGroupResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('referencedata-requisition-group', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('referencedata-requisition-group', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            RequisitionGroupResource = $injector.get('RequisitionGroupResource');
+            this.RequisitionGroupResource = $injector.get('RequisitionGroupResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new RequisitionGroupResource();
+        new this.RequisitionGroupResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/requisitionGroups', {
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/requisitionGroups', {
             paginated: false
         });
     });

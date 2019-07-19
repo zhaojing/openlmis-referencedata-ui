@@ -23,12 +23,9 @@ describe('HomeSystemNotificationsController', function() {
             this.SystemNotificationDataBuilder = $injector.get('SystemNotificationDataBuilder');
         });
 
-        this.notification1 = new this.SystemNotificationDataBuilder().build();
-        this.notification2 = new this.SystemNotificationDataBuilder().build();
-
         this.systemNotifications = [
-            this.notification1,
-            this.notification2
+            new this.SystemNotificationDataBuilder().build(),
+            new this.SystemNotificationDataBuilder().build()
         ];
 
         this.vm = this.$controller('HomeSystemNotificationsController', {

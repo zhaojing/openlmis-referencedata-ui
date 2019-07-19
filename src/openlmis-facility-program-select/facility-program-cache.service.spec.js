@@ -15,188 +15,169 @@
 
 describe('facilityProgramCacheService', function() {
 
-    var facilityProgramCacheService, $q, $rootScope, authorizationService, programService,
-        facilityService, currentUserService, permissionService, referencedataUser,
-        user, loadPromise, programs, facilities;
-
     beforeEach(function() {
         module('openlmis-facility-program-select');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            facilityProgramCacheService = $injector.get('facilityProgramCacheService');
-            authorizationService = $injector.get('authorizationService');
-            programService = $injector.get('programService');
-            facilityService = $injector.get('facilityService');
-            permissionService = $injector.get('permissionService');
-            currentUserService = $injector.get('currentUserService');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.facilityProgramCacheService = $injector.get('facilityProgramCacheService');
+            this.authorizationService = $injector.get('authorizationService');
+            this.programService = $injector.get('programService');
+            this.facilityService = $injector.get('facilityService');
+            this.permissionService = $injector.get('permissionService');
+            this.currentUserService = $injector.get('currentUserService');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.PermissionDataBuilder = $injector.get('PermissionDataBuilder');
         });
 
-        user = {
-            //eslint-disable-next-line camelcase
-            user_id: 'user-id'
-        };
-
-        referencedataUser = {
-            homeFacilityId: 'facility-1'
-        };
-
-        programs = [
-            {
-                id: 'program-1',
-                name: 'program-1-name'
-            },
-            {
-                id: 'program-2',
-                name: 'program-2-name'
-            },
-            {
-                id: 'program-3',
-                name: 'program-3-name'
-            }
+        this.facilities = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
 
-        facilities = [
-            {
-                id: 'facility-1',
-                name: 'facility-1-name'
-            },
-            {
-                id: 'facility-2',
-                name: 'facility-2-name'
-            }
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
+
+        this.user = new this.UserDataBuilder().buildAuthUserJson();
+
+        this.referencedataUser = new this.UserDataBuilder()
+            .withHomeFacilityId(this.facilities[0].id)
+            .build();
 
         var permissions = [
-            {
-                right: 'right-1',
-                programId: 'program-1',
-                facilityId: 'facility-1'
-            },
-            {
-                right: 'right-1',
-                programId: 'program-2',
-                facilityId: 'facility-2'
-            },
-            {
-                right: 'right-1',
-                programId: 'program-3',
-                facilityId: 'facility-2'
-            },
-            {
-                right: 'right-2',
-                programId: 'program-2',
-                facilityId: 'facility-1'
-            }
+            new this.PermissionDataBuilder()
+                .withRight('right-1')
+                .withProgramId(this.programs[0].id)
+                .withFacilityId(this.facilities[0].id)
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight('right-1')
+                .withProgramId(this.programs[1].id)
+                .withFacilityId(this.facilities[1].id)
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight('right-1')
+                .withProgramId(this.programs[2].id)
+                .withFacilityId(this.facilities[1].id)
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight('right-2')
+                .withProgramId(this.programs[1].id)
+                .withFacilityId(this.facilities[0].id)
+                .build()
         ];
 
-        spyOn(authorizationService, 'getUser').andReturn(user);
-        spyOn(programService, 'getUserPrograms').andReturn($q.when(programs));
-        spyOn(facilityService, 'getAllMinimal').andReturn($q.when(facilities));
-        spyOn(permissionService, 'load').andReturn($q.when(permissions));
-        spyOn(currentUserService, 'getUserInfo').andReturn($q.when(referencedataUser));
+        spyOn(this.authorizationService, 'getUser').andReturn(this.user);
+        spyOn(this.programService, 'getUserPrograms').andReturn(this.$q.when(this.programs));
+        spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.when(this.facilities));
+        spyOn(this.permissionService, 'load').andReturn(this.$q.when(permissions));
+        spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.when(this.referencedataUser));
 
-        facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
-        loadPromise = facilityProgramCacheService.loadData('module');
-        $rootScope.$apply();
+        this.facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
+        this.loadPromise = this.facilityProgramCacheService.loadData('module');
+        this.$rootScope.$apply();
     });
 
     describe('load', function() {
 
         it('should return promise', function() {
-            expect(loadPromise.then).not.toBe(undefined);
+            expect(this.loadPromise.then).not.toBe(undefined);
         });
 
         it('should call facilityService', function() {
-            expect(facilityService.getAllMinimal).toHaveBeenCalled();
+            expect(this.facilityService.getAllMinimal).toHaveBeenCalled();
         });
 
         it('should call authorizationService', function() {
-            expect(authorizationService.getUser).toHaveBeenCalled();
+            expect(this.authorizationService.getUser).toHaveBeenCalled();
         });
 
         it('should call programService', function() {
-            expect(programService.getUserPrograms).toHaveBeenCalledWith(user.user_id);
+            expect(this.programService.getUserPrograms).toHaveBeenCalledWith(this.user.user_id);
         });
 
         it('should call permissionService', function() {
-            expect(permissionService.load).toHaveBeenCalledWith(user.user_id);
+            expect(this.permissionService.load).toHaveBeenCalledWith(this.user.user_id);
         });
 
         it('should call currentUserService', function() {
-            expect(currentUserService.getUserInfo).toHaveBeenCalled();
+            expect(this.currentUserService.getUserInfo).toHaveBeenCalled();
         });
 
         it('should reject promise if request fails', function() {
-            var result;
+            this.currentUserService.getUserInfo.andReturn(this.$q.reject());
 
-            currentUserService.getUserInfo.andReturn($q.reject());
-
-            facilityProgramCacheService.loadData()
-                .then(function() {
-                    result = 'resolved';
-                })
+            var rejected;
+            this.facilityProgramCacheService.loadData()
                 .catch(function() {
-                    result = 'rejected';
+                    rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(currentUserService.getUserInfo).toHaveBeenCalled();
-            expect(result).toEqual('rejected');
+            expect(this.currentUserService.getUserInfo).toHaveBeenCalled();
+            expect(rejected).toEqual(true);
         });
     });
 
     describe('getUserHomeFacility', function() {
 
         it('should return home facility', function() {
-            expect(facilityProgramCacheService.getUserHomeFacility()).toEqual(facilities[0]);
+            expect(this.facilityProgramCacheService.getUserHomeFacility()).toEqual(this.facilities[0]);
         });
     });
 
     describe('getUserPrograms', function() {
 
         it('should return supervised programs if isSupervised is true', function() {
-            expect(facilityProgramCacheService.getUserPrograms(true).length).toEqual(2);
-            expect(facilityProgramCacheService.getUserPrograms(true)).toContain(programs[1]);
-            expect(facilityProgramCacheService.getUserPrograms(true)).toContain(programs[2]);
+            expect(this.facilityProgramCacheService.getUserPrograms(true).length).toEqual(2);
+            expect(this.facilityProgramCacheService.getUserPrograms(true)).toContain(this.programs[1]);
+            expect(this.facilityProgramCacheService.getUserPrograms(true)).toContain(this.programs[2]);
         });
 
         it('should return home facility programs if isSupervised is false', function() {
-            expect(facilityProgramCacheService.getUserPrograms(false)).toEqual([programs[0]]);
+            expect(this.facilityProgramCacheService.getUserPrograms(false)).toEqual([this.programs[0]]);
         });
 
         it('should return supervised programs if isSupervised is true and user does not have a home facility',
             function() {
-                referencedataUser.homeFacilityId = null;
-                loadPromise = facilityProgramCacheService.loadData('module');
-                $rootScope.$apply();
+                this.referencedataUser.homeFacilityId = null;
+                this.loadPromise = this.facilityProgramCacheService.loadData('module');
+                this.$rootScope.$apply();
 
-                expect(facilityProgramCacheService.getUserPrograms(true)).toEqual(programs);
+                expect(this.facilityProgramCacheService.getUserPrograms(true)).toEqual(this.programs);
             });
 
         it('should return an empty list if isSupervised is false and user does not have a home facility', function() {
-            referencedataUser.homeFacilityId = null;
-            loadPromise = facilityProgramCacheService.loadData('module');
-            $rootScope.$apply();
+            this.referencedataUser.homeFacilityId = null;
+            this.loadPromise = this.facilityProgramCacheService.loadData('module');
+            this.$rootScope.$apply();
 
-            expect(facilityProgramCacheService.getUserPrograms(false)).toEqual([]);
+            expect(this.facilityProgramCacheService.getUserPrograms(false)).toEqual([]);
         });
     });
 
     describe('getSupervisedFacilities', function() {
 
         beforeEach(function() {
-            facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
-            facilityProgramCacheService.pushRightsForModule('module-2', ['right-1', 'right-2']);
+            this.facilityProgramCacheService.pushRightsForModule('module', ['right-1']);
+            this.facilityProgramCacheService.pushRightsForModule('module-2', ['right-1', 'right-2']);
 
-            loadPromise = facilityProgramCacheService.loadData('module');
-            $rootScope.$apply();
+            this.loadPromise = this.facilityProgramCacheService.loadData('module');
+            this.$rootScope.$apply();
         });
 
         it('should return filtered facilities', function() {
-            expect(facilityProgramCacheService.getSupervisedFacilities('program-1')).toEqual([facilities[0]]);
-            expect(facilityProgramCacheService.getSupervisedFacilities('program-2')).toEqual([facilities[1]]);
+            expect(this.facilityProgramCacheService.getSupervisedFacilities(this.programs[0].id))
+                .toEqual([this.facilities[0]]);
+
+            expect(this.facilityProgramCacheService.getSupervisedFacilities(this.programs[1].id))
+                .toEqual([this.facilities[1]]);
         });
     });
 });

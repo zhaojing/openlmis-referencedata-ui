@@ -15,37 +15,41 @@
 
 describe('referencedata-facilities-cache run', function() {
 
-    var loginServiceSpy, facilityService, postLoginAction, $q, $rootScope, postLogoutAction;
-
     beforeEach(function() {
+        this.loginServiceSpy = jasmine.createSpyObj('loginService', [
+            'registerPostLoginAction', 'registerPostLogoutAction'
+        ]);
+
+        var loginServiceSpy = this.loginServiceSpy;
         module('referencedata-facilities-cache', function($provide) {
-            loginServiceSpy = jasmine.createSpyObj('loginService', [
-                'registerPostLoginAction', 'registerPostLogoutAction'
-            ]);
             $provide.value('loginService', loginServiceSpy);
         });
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            facilityService = $injector.get('facilityService');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.facilityService = $injector.get('facilityService');
         });
 
-        postLoginAction = getLastCall(loginServiceSpy.registerPostLoginAction).args[0];
-        postLogoutAction = getLastCall(loginServiceSpy.registerPostLogoutAction).args[0];
+        this.getLastCall = function(method) {
+            return method.calls[method.calls.length - 1];
+        };
 
-        spyOn(facilityService, 'cacheAllMinimal');
-        spyOn(facilityService, 'clearMinimalFacilitiesCache');
+        this.postLoginAction = this.getLastCall(loginServiceSpy.registerPostLoginAction).args[0];
+        this.postLogoutAction = this.getLastCall(loginServiceSpy.registerPostLogoutAction).args[0];
+
+        spyOn(this.facilityService, 'cacheAllMinimal');
+        spyOn(this.facilityService, 'clearMinimalFacilitiesCache');
     });
 
     describe('run block', function() {
 
         it('should register post login action', function() {
-            expect(loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
         });
 
         it('should register post logout action', function() {
-            expect(loginServiceSpy.registerPostLogoutAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLogoutAction).toHaveBeenCalled();
         });
 
     });
@@ -53,17 +57,17 @@ describe('referencedata-facilities-cache run', function() {
     describe('post login action', function() {
 
         it('should set up rights', function() {
-            facilityService.cacheAllMinimal.andReturn($q.resolve());
+            this.facilityService.cacheAllMinimal.andReturn(this.$q.resolve());
 
             var success;
-            postLoginAction()
+            this.postLoginAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(facilityService.cacheAllMinimal).toHaveBeenCalledWith();
+            expect(this.facilityService.cacheAllMinimal).toHaveBeenCalledWith();
         });
 
     });
@@ -71,23 +75,19 @@ describe('referencedata-facilities-cache run', function() {
     describe('post logout action', function() {
 
         it('should clear rights', function() {
-            facilityService.clearMinimalFacilitiesCache.andReturn($q.resolve());
+            this.facilityService.clearMinimalFacilitiesCache.andReturn(this.$q.resolve());
 
             var success;
-            postLogoutAction()
+            this.postLogoutAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(facilityService.clearMinimalFacilitiesCache).toHaveBeenCalled();
+            expect(this.facilityService.clearMinimalFacilitiesCache).toHaveBeenCalled();
         });
 
     });
-
-    function getLastCall(method) {
-        return method.calls[method.calls.length - 1];
-    }
 
 });

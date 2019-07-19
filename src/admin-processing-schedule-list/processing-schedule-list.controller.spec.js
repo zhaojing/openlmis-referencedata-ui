@@ -15,32 +15,29 @@
 
 describe('ProcessingScheduleListController', function() {
 
-    var $controller, ProcessingScheduleDataBuilder,
-        vm, processingSchedules;
-
     beforeEach(function() {
         module('admin-processing-schedule-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
+            this.$controller = $injector.get('$controller');
+            this.ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
         });
 
-        processingSchedules = [
-            new ProcessingScheduleDataBuilder().build(),
-            new ProcessingScheduleDataBuilder().build()
+        this.processingSchedules = [
+            new this.ProcessingScheduleDataBuilder().build(),
+            new this.ProcessingScheduleDataBuilder().build()
         ];
 
-        vm = $controller('ProcessingScheduleListController', {
-            processingSchedules: processingSchedules
+        this.vm = this.$controller('ProcessingScheduleListController', {
+            processingSchedules: this.processingSchedules
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose processing schedules', function() {
-            expect(vm.processingSchedules).toBe(processingSchedules);
+            expect(this.vm.processingSchedules).toBe(this.processingSchedules);
         });
     });
 });

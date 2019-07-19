@@ -15,25 +15,24 @@
 
 describe('DigestConfigurationResource', function() {
 
-    var DigestConfigurationResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('openlmis-user', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('openlmis-user', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            DigestConfigurationResource = $injector.get('DigestConfigurationResource');
+            this.DigestConfigurationResource = $injector.get('DigestConfigurationResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new DigestConfigurationResource();
+        new this.DigestConfigurationResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/digestConfiguration');
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/digestConfiguration');
     });
 });

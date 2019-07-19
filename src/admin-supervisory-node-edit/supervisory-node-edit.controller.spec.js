@@ -18,21 +18,19 @@ describe('SupervisoryNodeEditController', function() {
     beforeEach(function() {
         module('admin-supervisory-node-edit');
 
-        var SupervisoryNodeDataBuilder, $controller, FacilityDataBuilder;
         inject(function($injector) {
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            $controller = $injector.get('$controller');
-
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.$controller = $injector.get('$controller');
             this.$state = $injector.get('$state');
         });
 
         this.supervisoryNodes = [
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build()
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().build()
         ];
 
         this.supervisoryNodesMap = {};
@@ -42,18 +40,18 @@ describe('SupervisoryNodeEditController', function() {
         this.supervisoryNodesMap[this.supervisoryNodes[3].id] = this.supervisoryNodes[3];
         this.supervisoryNodesMap[this.supervisoryNodes[4].id] = this.supervisoryNodes[4];
 
-        this.supervisoryNode = new SupervisoryNodeDataBuilder().build();
+        this.supervisoryNode = new this.SupervisoryNodeDataBuilder().build();
 
         this.facilitiesMap = {
-            'facility-id-one': new FacilityDataBuilder()
+            'facility-id-one': new this.FacilityDataBuilder()
                 .withId('facility-id-one')
                 .build(),
-            'facility-id-two': new FacilityDataBuilder()
+            'facility-id-two': new this.FacilityDataBuilder()
                 .withId('facility-id-two')
                 .build()
         };
 
-        this.vm = $controller('SupervisoryNodeEditController', {
+        this.vm = this.$controller('SupervisoryNodeEditController', {
             supervisoryNode: this.supervisoryNode,
             childNodes: this.supervisoryNode.childNodes,
             facilitiesMap: this.facilitiesMap,

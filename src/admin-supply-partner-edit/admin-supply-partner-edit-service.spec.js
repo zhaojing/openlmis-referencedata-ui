@@ -18,11 +18,9 @@ describe('AdminSupplyPartnerEditService', function() {
     beforeEach(function() {
         module('admin-supply-partner-edit');
 
-        var AdminSupplyPartnerEditService, SupplyPartnerDataBuilder;
         inject(function($injector) {
-            AdminSupplyPartnerEditService = $injector.get('AdminSupplyPartnerEditService');
-            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
-
+            this.AdminSupplyPartnerEditService = $injector.get('AdminSupplyPartnerEditService');
+            this.SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
             this.SupplyPartnerRepository = $injector.get('SupplyPartnerRepository');
             this.SupplyPartner = $injector.get('SupplyPartner');
             this.$rootScope = $injector.get('$rootScope');
@@ -33,9 +31,9 @@ describe('AdminSupplyPartnerEditService', function() {
             this.$state = $injector.get('$state');
         });
 
-        this.supplyPartner = new SupplyPartnerDataBuilder().buildWithAssociations();
+        this.supplyPartner = new this.SupplyPartnerDataBuilder().buildWithAssociations();
         this.supplyPartnerId = this.supplyPartner.id;
-        this.adminSupplyPartnerEditService = new AdminSupplyPartnerEditService();
+        this.adminSupplyPartnerEditService = new this.AdminSupplyPartnerEditService();
 
         spyOn(this.SupplyPartnerRepository.prototype, 'get').andReturn();
         spyOn(this.SupplyPartner.prototype, 'save');

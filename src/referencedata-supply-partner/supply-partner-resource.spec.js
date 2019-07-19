@@ -15,25 +15,24 @@
 
 describe('SupplyPartnerResource', function() {
 
-    var SupplyPartnerResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('referencedata-supply-partner', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('referencedata-supply-partner', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            SupplyPartnerResource = $injector.get('SupplyPartnerResource');
+            this.SupplyPartnerResource = $injector.get('SupplyPartnerResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new SupplyPartnerResource();
+        new this.SupplyPartnerResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/supplyPartners');
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/supplyPartners');
     });
 });

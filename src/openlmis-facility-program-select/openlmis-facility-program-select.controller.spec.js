@@ -15,104 +15,95 @@
 
 describe('OpenlmisFacilityProgramSelectController', function() {
 
-    var $q, $stateParams, $rootScope, facilityProgramCacheService,
-        vm, facilities, supervisedPrograms, homeFacility;
-
     beforeEach(function() {
         module('openlmis-facility-program-select');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $stateParams = $injector.get('$stateParams');
-            $rootScope = $injector.get('$rootScope');
-            facilityProgramCacheService = $injector.get('facilityProgramCacheService');
-            vm = $injector.get('$controller')('OpenlmisFacilityProgramSelectController');
+            this.$q = $injector.get('$q');
+            this.$stateParams = $injector.get('$stateParams');
+            this.$rootScope = $injector.get('$rootScope');
+            this.facilityProgramCacheService = $injector.get('facilityProgramCacheService');
+            this.vm = $injector.get('$controller')('OpenlmisFacilityProgramSelectController');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+
         });
 
-        supervisedPrograms = [{
-            id: 'program-two-id'
-        }, {
-            id: 'program-three-id'
-        }];
-
-        facilities = [
-            {
-                id: 'facility-one-id'
-            },
-            {
-                id: 'facility-two-id'
-            },
-            {
-                id: 'facility-three-id'
-            }
+        this.supervisedPrograms = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
-        homeFacility = {
-            id: 'home-facility-id'
-        };
+        this.facilities = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
+        ];
 
-        spyOn(facilityProgramCacheService, 'loadData').andReturn($q.when(true));
-        spyOn(facilityProgramCacheService, 'getUserHomeFacility').andReturn(homeFacility);
-        spyOn(facilityProgramCacheService, 'getUserPrograms').andReturn(supervisedPrograms);
-        spyOn(facilityProgramCacheService, 'getSupervisedFacilities').andReturn(facilities);
+        this.homeFacility = new this.FacilityDataBuilder().build();
 
-        vm.$onInit();
-        $rootScope.$apply();
+        spyOn(this.facilityProgramCacheService, 'loadData').andReturn(this.$q.when(true));
+        spyOn(this.facilityProgramCacheService, 'getUserHomeFacility').andReturn(this.homeFacility);
+        spyOn(this.facilityProgramCacheService, 'getUserPrograms').andReturn(this.supervisedPrograms);
+        spyOn(this.facilityProgramCacheService, 'getSupervisedFacilities').andReturn(this.facilities);
+
+        this.vm.$onInit();
+        this.$rootScope.$apply();
     });
 
     describe('$onInit', function() {
 
         it('should expose home facility', function() {
-            expect(vm.homeFacility).toEqual(homeFacility);
+            expect(this.vm.homeFacility).toEqual(this.homeFacility);
         });
 
         it('should expose supervised programs', function() {
-            expect(vm.supervisedPrograms).toEqual(supervisedPrograms);
+            expect(this.vm.supervisedPrograms).toEqual(this.supervisedPrograms);
         });
 
         it('should expose isSupervised', function() {
-            $stateParams.supervised = 'true';
-            vm.$onInit();
-            $rootScope.$apply();
+            this.$stateParams.supervised = 'true';
+            this.vm.$onInit();
+            this.$rootScope.$apply();
 
-            expect(vm.isSupervised).toEqual(true);
+            expect(this.vm.isSupervised).toEqual(true);
         });
 
         it('should expose program for home facility', function() {
-            $stateParams.program = 'program-two-id';
-            vm.$onInit();
-            $rootScope.$apply();
+            this.$stateParams.program = this.supervisedPrograms[0].id;
+            this.vm.$onInit();
+            this.$rootScope.$apply();
 
-            expect(vm.program).toEqual(supervisedPrograms[0]);
+            expect(this.vm.program).toEqual(this.supervisedPrograms[0]);
         });
 
         it('should update facilities', function() {
-            spyOn(vm, 'updateFacilities');
-            vm.$onInit();
-            $rootScope.$apply();
+            spyOn(this.vm, 'updateFacilities');
+            this.vm.$onInit();
+            this.$rootScope.$apply();
 
-            expect(vm.updateFacilities).toHaveBeenCalledWith();
+            expect(this.vm.updateFacilities).toHaveBeenCalledWith();
         });
     });
 
     describe('updateForm', function() {
 
         it('should clear program', function() {
-            vm.program = {
+            this.vm.program = {
                 id: 'some-program-id'
             };
 
-            vm.updateForm();
+            this.vm.updateForm();
 
-            expect(vm.program).toBeUndefined();
+            expect(this.vm.program).toBeUndefined();
         });
 
         it('should update facilities', function() {
-            spyOn(vm, 'updateFacilities');
+            spyOn(this.vm, 'updateFacilities');
 
-            vm.updateForm();
+            this.vm.updateForm();
 
-            expect(vm.updateFacilities).toHaveBeenCalledWith();
+            expect(this.vm.updateFacilities).toHaveBeenCalledWith();
         });
 
     });
@@ -120,43 +111,43 @@ describe('OpenlmisFacilityProgramSelectController', function() {
     describe('updateFacilities', function() {
 
         it('should expose home facility as facility list and select it', function() {
-            vm.isSupervised = false;
-            vm.updateFacilities();
+            this.vm.isSupervised = false;
+            this.vm.updateFacilities();
 
-            expect(vm.facilities).toEqual([homeFacility]);
-            expect(vm.facility).toEqual(homeFacility);
+            expect(this.vm.facilities).toEqual([this.homeFacility]);
+            expect(this.vm.facility).toEqual(this.homeFacility);
         });
 
         it('should clear facilities if program is undefined', function() {
-            vm.isSupervised = true;
-            vm.program = undefined;
-            vm.updateFacilities();
+            this.vm.isSupervised = true;
+            this.vm.program = undefined;
+            this.vm.updateFacilities();
 
-            expect(vm.facilities).toEqual([]);
+            expect(this.vm.facilities).toEqual([]);
         });
 
         it('should get supervised programs', function() {
-            vm.isSupervised = true;
-            vm.module = 'module';
-            vm.program = supervisedPrograms[1];
+            this.vm.isSupervised = true;
+            this.vm.module = 'module';
+            this.vm.program = this.supervisedPrograms[1];
 
-            vm.updateFacilities();
+            this.vm.updateFacilities();
 
-            expect(vm.facilities).toEqual(facilities);
-            expect(facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(vm.program.id);
-            expect(vm.facility).toBeUndefined();
+            expect(this.vm.facilities).toEqual(this.facilities);
+            expect(this.facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(this.vm.program.id);
+            expect(this.vm.facility).toBeUndefined();
         });
 
         it('should set selected facility if facility specified in state', function() {
-            vm.isSupervised = true;
-            vm.program = supervisedPrograms[1];
-            $stateParams.facility = 'facility-two-id';
+            this.vm.isSupervised = true;
+            this.vm.program = this.supervisedPrograms[1];
+            this.$stateParams.facility = this.facilities[1].id;
 
-            vm.updateFacilities();
+            this.vm.updateFacilities();
 
-            expect(vm.facilities).toEqual(facilities);
-            expect(facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(vm.program.id);
-            expect(vm.facility).toEqual(facilities[1]);
+            expect(this.vm.facilities).toEqual(this.facilities);
+            expect(this.facilityProgramCacheService.getSupervisedFacilities).toHaveBeenCalledWith(this.vm.program.id);
+            expect(this.vm.facility).toEqual(this.facilities[1]);
         });
     });
 });

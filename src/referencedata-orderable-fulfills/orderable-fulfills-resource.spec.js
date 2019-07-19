@@ -15,132 +15,99 @@
 
 describe('OrderableFulfillsResource', function() {
 
-    var OrderableFulfillsResource, OpenlmisResourceMock, parameterSplitterMock;
-
-    it('should extend OpenlmisResource', function() {
-        module('referencedata-orderable-fulfills', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
-
-            $provide.factory('OpenlmisResource', function() {
-                return OpenlmisResourceMock;
-            });
-
-            $provide.factory('ParameterSplitter', function() {
-                return function() {
-                    parameterSplitterMock = jasmine.createSpyObj('ParameterSplitter', ['split']);
-                    return parameterSplitterMock;
-                };
-            });
-        });
+    beforeEach(function() {
+        module('referencedata-orderable-fulfills');
 
         inject(function($injector) {
-            OrderableFulfillsResource = $injector.get('OrderableFulfillsResource');
+            this.OrderableFulfillsResource = $injector.get('OrderableFulfillsResource');
+            this.ParameterSplitter = $injector.get('ParameterSplitter');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
         });
 
-        new OrderableFulfillsResource();
+        spyOn(this.ParameterSplitter.prototype, 'split');
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/orderableFulfills');
+        this.orderableFulfillsResource = new this.OrderableFulfillsResource();
+
+        this.params = {
+            some: [
+                'paramOne',
+                'paramTwo'
+            ]
+        };
+
+        this.ParameterSplitter.prototype.split.andReturn([{
+            some: ['paramOne']
+        }, {
+            some: ['paramTwo']
+        }]);
+
+        this.responseOne = {
+            idOne: ['idTwo', 'idThree']
+        };
+
+        this.responseTwo = {
+            idFour: ['ifFive', 'idSix']
+        };
     });
 
     describe('query', function() {
-
-        var params, responseOne, responseTwo, orderableFulfillsResource, $httpBackend, openlmisUrlFactory;
-
-        beforeEach(function() {
-            module('referencedata-orderable-fulfills', function($provide) {
-                $provide.factory('ParameterSplitter', function() {
-                    return function() {
-                        parameterSplitterMock = jasmine.createSpyObj('ParameterSplitter', ['split']);
-                        return parameterSplitterMock;
-                    };
-                });
-            });
-
-            inject(function($injector) {
-                OrderableFulfillsResource = $injector.get('OrderableFulfillsResource');
-                $httpBackend = $injector.get('$httpBackend');
-                openlmisUrlFactory = $injector.get('openlmisUrlFactory');
-            });
-
-            orderableFulfillsResource = new OrderableFulfillsResource();
-
-            params = {
-                some: [
-                    'paramOne',
-                    'paramTwo'
-                ]
-            };
-
-            parameterSplitterMock.split.andReturn([{
-                some: ['paramOne']
-            }, {
-                some: ['paramTwo']
-            }]);
-
-            responseOne = {
-                idOne: ['idTwo', 'idThree']
-            };
-
-            responseTwo = {
-                idFour: ['ifFive', 'idSix']
-            };
-        });
 
         it('should return response if only one request was sent', function() {
             var params = {
                 some: 'param'
             };
 
-            parameterSplitterMock.split.andReturn([params]);
+            this.ParameterSplitter.prototype.split.andReturn([params]);
 
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/orderableFulfills?some=param'))
-                .respond(200, responseOne);
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/orderableFulfills?some=param'))
+                .respond(200, this.responseOne);
 
             var result;
-            orderableFulfillsResource.query(params)
+            this.orderableFulfillsResource.query(params)
                 .then(function(response) {
                     result = response;
                 });
-            $httpBackend.flush();
+            this.$httpBackend.flush();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(responseOne));
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.responseOne));
         });
 
         it('should reject if any of the requests fails', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/orderableFulfills?some=paramOne'))
-                .respond(200, responseOne);
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/orderableFulfills?some=paramOne'))
+                .respond(200, this.responseOne);
 
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/orderableFulfills?some=paramTwo'))
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/orderableFulfills?some=paramTwo'))
                 .respond(500);
 
             var rejected;
-            orderableFulfillsResource.query(params)
+            this.orderableFulfillsResource.query(this.params)
                 .catch(function() {
                     rejected = true;
                 });
-            $httpBackend.flush();
+            this.$httpBackend.flush();
 
             expect(rejected).toEqual(true);
         });
 
         it('should return merged responses if multiple requests were sent', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/orderableFulfills?some=paramOne'))
-                .respond(200, responseOne);
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/orderableFulfills?some=paramOne'))
+                .respond(200, this.responseOne);
 
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/orderableFulfills?some=paramTwo'))
-                .respond(200, responseTwo);
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/orderableFulfills?some=paramTwo'))
+                .respond(200, this.responseTwo);
 
             var result;
-            orderableFulfillsResource.query(params)
+            this.orderableFulfillsResource.query(this.params)
                 .then(function(response) {
                     result = response;
                 });
-            $httpBackend.flush();
+            this.$httpBackend.flush();
 
             expect(angular.toJson(result)).toEqual(angular.toJson({
                 idOne: ['idTwo', 'idThree'],

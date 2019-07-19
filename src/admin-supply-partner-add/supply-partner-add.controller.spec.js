@@ -19,16 +19,13 @@ describe('SupplyPartnerAddController', function() {
 
         module('admin-supply-partner-add');
 
-        var SupplyPartnerDataBuilder;
-
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
             this.stateTrackerService = $injector.get('stateTrackerService');
-
-            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
+            this.SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
         });
 
-        this.supplyPartner = new SupplyPartnerDataBuilder().build();
+        this.supplyPartner = new this.SupplyPartnerDataBuilder().build();
 
         spyOn(this.stateTrackerService, 'goToPreviousState');
 

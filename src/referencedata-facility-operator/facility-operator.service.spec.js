@@ -15,55 +15,43 @@
 
 describe('facilityOperatorService', function() {
 
-    var facilityOperatorService, $httpBackend, referencedataUrlFactory, facilityOperators,
-        $rootScope;
-
-    beforeEach(prepareSuite);
-
-    it('should get all', function() {
-        $httpBackend.expectGET(referencedataUrlFactory('/api/facilityOperators'))
-            .respond(200, facilityOperators);
-
-        var result;
-
-        facilityOperatorService.getAll().then(function(facilityOperators) {
-            result = facilityOperators;
-        });
-
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(angular.toJson(result)).toEqual(angular.toJson(facilityOperators));
-    });
-
-    afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
-    });
-
-    function prepareSuite() {
+    beforeEach(function() {
         module('referencedata-facility-operator');
 
         inject(function($injector) {
-            facilityOperatorService = $injector.get('facilityOperatorService');
-            $httpBackend = $injector.get('$httpBackend');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            $rootScope = $injector.get('$rootScope');
+            this.facilityOperatorService = $injector.get('facilityOperatorService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.$rootScope = $injector.get('$rootScope');
+            this.FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
         });
 
-        facilityOperators = [{
-            id: '9456c3e9-c4a6-4a28-9e08-47ceb16a4121',
-            code: 'moh',
-            name: 'Ministry of Health',
-            description: null,
-            displayOrder: 1
-        }, {
-            id: '1074353d-7364-4618-a127-708d7303a231',
-            code: 'dwb',
-            name: 'Doctors Without Borders',
-            description: null,
-            displayOrder: 2
-        }];
-    }
+        this.facilityOperators = [
+            new this.FacilityOperatorDataBuilder().build(),
+            new this.FacilityOperatorDataBuilder().build()
+        ];
+    });
+
+    it('should get all', function() {
+        this.$httpBackend
+            .expectGET(this.referencedataUrlFactory('/api/facilityOperators'))
+            .respond(200, this.facilityOperators);
+
+        var result;
+
+        this.facilityOperatorService.getAll()
+            .then(function(facilityOperators) {
+                result = facilityOperators;
+            });
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
+
+        expect(angular.toJson(result)).toEqual(angular.toJson(this.facilityOperators));
+    });
+
+    afterEach(function() {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+    });
 
 });

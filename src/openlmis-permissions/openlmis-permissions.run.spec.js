@@ -25,11 +25,9 @@ describe('openlmis-permissions run', function() {
             $provide.value('loginService', context.loginServiceSpy);
         });
 
-        var RightDataBuilder, UserDataBuilder;
         inject(function($injector) {
-            RightDataBuilder = $injector.get('RightDataBuilder');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-
+            this.RightDataBuilder = $injector.get('RightDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
             this.$rootScope = $injector.get('$rootScope');
             this.$q = $injector.get('$q');
             this.userRightsFactory = $injector.get('userRightsFactory');
@@ -38,10 +36,10 @@ describe('openlmis-permissions run', function() {
         });
 
         this.rights = [
-            new RightDataBuilder().build()
+            new this.RightDataBuilder().build()
         ];
 
-        this.user = new UserDataBuilder().build();
+        this.user = new this.UserDataBuilder().build();
 
         this.postLoginAction = getLastCall(this.loginServiceSpy.registerPostLoginAction).args[0];
         this.postLogoutAction = getLastCall(this.loginServiceSpy.registerPostLogoutAction).args[0];

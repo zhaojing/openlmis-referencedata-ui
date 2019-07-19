@@ -15,25 +15,20 @@
 
 describe('authUserService', function() {
 
-    var OK_RESPONSE = 'ok';
-
-    var $rootScope, $httpBackend, openlmisUrlFactory, authUserService, UserDataBuilder, user,
-        VerificationEmailDataBuilder;
-
     beforeEach(function() {
         module('auth-user');
         module('referencedata-user');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
-            authUserService = $injector.get('authUserService');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.authUserService = $injector.get('authUserService');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
         });
 
-        user = new UserDataBuilder().build();
+        this.user = new this.UserDataBuilder().build();
     });
 
     describe('saveUser', function() {
@@ -41,8 +36,9 @@ describe('authUserService', function() {
         it('should save user', function() {
             var data;
 
-            $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/users/auth'))
+            var user = this.user;
+            this.$httpBackend
+                .expectPOST(this.openlmisUrlFactory('/api/users/auth'))
                 .respond(function(method, url, body) {
                     var json = JSON.parse(body);
 
@@ -53,25 +49,24 @@ describe('authUserService', function() {
                     return [400];
                 });
 
-            authUserService.saveUser(user)
+            this.authUserService.saveUser(this.user)
                 .then(function(response) {
                     data = response;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(data.id).toBe(user.id);
+            expect(data.id).toBe(this.user.id);
         });
     });
 
     describe('resetPassword', function() {
 
         it('should reset password', function() {
-            var data;
-
-            $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/users/auth/passwordReset'))
+            var user = this.user;
+            this.$httpBackend
+                .expectPOST(this.openlmisUrlFactory('/api/users/auth/passwordReset'))
                 .respond(function(method, url, body) {
                     var json = JSON.parse(body);
 
@@ -82,15 +77,16 @@ describe('authUserService', function() {
                     return [400];
                 });
 
-            authUserService.resetPassword(user.username, 'password')
+            var success;
+            this.authUserService.resetPassword(this.user.username, 'password')
                 .then(function() {
-                    data = OK_RESPONSE;
+                    success = true;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(data).toEqual(OK_RESPONSE);
+            expect(success).toBe(true);
         });
 
     });
@@ -98,21 +94,20 @@ describe('authUserService', function() {
     describe('sendResetEmail', function() {
 
         it('should send reset email', function() {
-            var data;
-
-            $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/users/auth/forgotPassword?email=' + user.email))
+            this.$httpBackend
+                .expectPOST(this.openlmisUrlFactory('/api/users/auth/forgotPassword?email=' + this.user.email))
                 .respond(200);
 
-            authUserService.sendResetEmail(user.email)
+            var success;
+            this.authUserService.sendResetEmail(this.user.email)
                 .then(function() {
-                    data = OK_RESPONSE;
+                    success = true;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(data).toEqual(OK_RESPONSE);
+            expect(success).toBe(true);
         });
 
     });
@@ -120,41 +115,40 @@ describe('authUserService', function() {
     describe('sendVerificationEmail', function() {
 
         it('should send verification email', function() {
-            var data;
-
-            $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
+            this.$httpBackend
+                .expectPOST(this.openlmisUrlFactory('/api/userContactDetails/' + this.user.id + '/verifications'))
                 .respond(200);
 
-            authUserService.sendVerificationEmail(user.id)
+            var success;
+            this.authUserService.sendVerificationEmail(this.user.id)
                 .then(function() {
-                    data = OK_RESPONSE;
+                    success = true;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(data).toEqual(OK_RESPONSE);
+            expect(success).toBe(true);
         });
     });
 
     describe('getVerificationEmail', function() {
 
         it('should get pending verification email', function() {
-            var token = new VerificationEmailDataBuilder().build();
+            var token = new this.VerificationEmailDataBuilder().build();
             var data;
 
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/userContactDetails/' + this.user.id + '/verifications'))
                 .respond(200, token);
 
-            authUserService.getVerificationEmail(user.id)
+            this.authUserService.getVerificationEmail(this.user.id)
                 .then(function(response) {
                     data = response;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
             expect(data.email).toEqual(token.email);
         });
@@ -162,33 +156,33 @@ describe('authUserService', function() {
         it('should handle empty response', function() {
             var data;
 
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/userContactDetails/' + this.user.id + '/verifications'))
                 .respond(200);
 
-            authUserService.getVerificationEmail(user.id)
+            this.authUserService.getVerificationEmail(this.user.id)
                 .then(function(response) {
                     data = response;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
             expect(data).toEqual(undefined);
         });
 
         it('should reject if the requests fails', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/userContactDetails/' + user.id + '/verifications'))
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/userContactDetails/' + this.user.id + '/verifications'))
                 .respond(500);
 
             var rejected;
-            authUserService.getVerificationEmail(user.id)
+            this.authUserService.getVerificationEmail(this.user.id)
                 .catch(function() {
                     rejected = true;
                 });
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
@@ -196,7 +190,7 @@ describe('authUserService', function() {
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 });

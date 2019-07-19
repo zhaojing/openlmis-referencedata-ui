@@ -15,125 +15,117 @@
 
 describe('UserRolesController', function() {
 
-    var $state, $q, $controller, $rootScope, ROLE_TYPES, notificationService, loadingModalService, UserDataBuilder,
-        vm, user;
-
     beforeEach(function() {
 
-        module('admin-user-roles', function($provide) {
-            notificationService = jasmine.createSpyObj('notificationService', ['error', 'success']);
-            $provide.service('notificationService', function() {
-                return notificationService;
-            });
-
-            loadingModalService = jasmine.createSpyObj('loadingModalService', ['close', 'open']);
-            $provide.service('loadingModalService', function() {
-                return loadingModalService;
-            });
-        });
+        module('admin-user-roles');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $rootScope = $injector.get('$rootScope');
-            $state = $injector.get('$state');
-            $q = $injector.get('$q');
-            ROLE_TYPES = $injector.get('ROLE_TYPES');
-
-            UserDataBuilder = $injector.get('UserDataBuilder');
+            this.$controller = $injector.get('$controller');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$state = $injector.get('$state');
+            this.$q = $injector.get('$q');
+            this.ROLE_TYPES = $injector.get('ROLE_TYPES');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.notificationService = $injector.get('notificationService');
+            this.loadingModalService = $injector.get('loadingModalService');
         });
 
-        user = new UserDataBuilder()
+        this.user = new this.UserDataBuilder()
             .withSupervisionRoleAssignment('role-id-1', 'node-id-1', 'program-id-1')
             .withGeneralAdminRoleAssignment('role-id-2')
             .build();
 
-        vm = $controller('UserRolesController', {
-            user: user
+        spyOn(this.notificationService, 'error');
+        spyOn(this.notificationService, 'success');
+        spyOn(this.loadingModalService, 'close');
+        spyOn(this.loadingModalService, 'open');
+        spyOn(this.$state, 'go').andReturn();
+        spyOn(this.user, 'save');
+
+        this.vm = this.$controller('UserRolesController', {
+            user: this.user
         });
 
-        vm.$onInit();
-        $rootScope.$apply();
-
-        spyOn($state, 'go').andReturn();
-        spyOn(user, 'save');
+        this.vm.$onInit();
+        this.$rootScope.$apply();
     });
 
     describe('on init', function() {
 
         it('should expose saveUserRoles method', function() {
-            expect(angular.isFunction(vm.saveUserRoles)).toBe(true);
+            expect(angular.isFunction(this.vm.saveUserRoles)).toBe(true);
         });
 
         it('should expose goToUserList method', function() {
-            expect(angular.isFunction(vm.goToUserList)).toBe(true);
+            expect(angular.isFunction(this.vm.goToUserList)).toBe(true);
         });
 
         it('should set user', function() {
-            expect(vm.user).toEqual(user);
+            expect(this.vm.user).toEqual(this.user);
         });
 
         it('should set types', function() {
-            expect(vm.roleTypes).toEqual(ROLE_TYPES.getRoleTypes());
+            expect(this.vm.roleTypes).toEqual(this.ROLE_TYPES.getRoleTypes());
         });
     });
 
     describe('saveUser', function() {
 
         beforeEach(function() {
-            user.save.andReturn($q.when(true));
-            loadingModalService.open.andReturn($q.when(true));
-            vm.saveUserRoles();
+            this.user.save.andReturn(this.$q.when(true));
+            this.loadingModalService.open.andReturn(this.$q.when(true));
+            this.vm.saveUserRoles();
         });
 
         it('should open loading modal', function() {
-            expect(loadingModalService.open).toHaveBeenCalledWith(true);
+            expect(this.loadingModalService.open).toHaveBeenCalledWith(true);
         });
 
         it('should save user', function() {
-            expect(user.save).toHaveBeenCalled();
+            expect(this.user.save).toHaveBeenCalled();
         });
 
         it('should show success notification', function() {
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminUserRoles.updateSuccessful');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminUserRoles.updateSuccessful');
         });
 
         it('should redirect to users list', function() {
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
                 reload: true
             });
         });
 
         it('should close loading modal', function() {
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should show error notification if save failed', function() {
-            var deferred = $q.defer();
+            var deferred = this.$q.defer();
             deferred.reject();
 
-            $rootScope.$apply();
-            user.save.andReturn(deferred.promise);
-            vm.saveUserRoles();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
+            this.user.save.andReturn(deferred.promise);
+            this.vm.saveUserRoles();
+            this.$rootScope.$apply();
 
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserRoles.updateFailed');
+            expect(this.notificationService.error).toHaveBeenCalledWith('adminUserRoles.updateFailed');
         });
     });
 
     describe('goToUserList', function() {
 
         beforeEach(function() {
-            vm.goToUserList();
+            this.vm.goToUserList();
         });
 
         it('should redirect to users list page', function() {
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.users', {}, {
                 reload: true
             });
         });
@@ -142,7 +134,8 @@ describe('UserRolesController', function() {
     describe('getRoleTypeLabel', function() {
 
         it('should redirect to users list page', function() {
-            expect(vm.getRoleTypeLabel(ROLE_TYPES.SUPERVISION)).toEqual(ROLE_TYPES.getLabel(ROLE_TYPES.SUPERVISION));
+            expect(this.vm.getRoleTypeLabel(this.ROLE_TYPES.SUPERVISION))
+                .toEqual(this.ROLE_TYPES.getLabel(this.ROLE_TYPES.SUPERVISION));
         });
     });
 });

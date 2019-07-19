@@ -31,33 +31,27 @@ describe('AdminUserRolesSupervisoryNodeResource', function() {
 
         this.supervisoryNodes = [];
 
-        var AdminUserRolesSupervisoryNodeResource,
-            MinimalFacilityDataBuilder,
-            SupervisoryNodeDataBuilder,
-            PageDataBuilder,
-            facilityMap = {};
-
         inject(function($injector) {
-            AdminUserRolesSupervisoryNodeResource = $injector.get('AdminUserRolesSupervisoryNodeResource');
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-
+            this.AdminUserRolesSupervisoryNodeResource = $injector.get('AdminUserRolesSupervisoryNodeResource');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
             this.$rootScope = $injector.get('$rootScope');
             this.$q = $injector.get('$q');
         });
 
+        var facilityMap = {};
         for (var i = 0; i < 5; i++) {
-            var facility = new MinimalFacilityDataBuilder().build();
+            var facility = new this.MinimalFacilityDataBuilder().build();
             facilityMap[facility.id] = facility;
 
-            this.supervisoryNodes.push(new SupervisoryNodeDataBuilder()
+            this.supervisoryNodes.push(new this.SupervisoryNodeDataBuilder()
                 .withFacility(facility)
                 .build());
         }
 
-        this.resource = new AdminUserRolesSupervisoryNodeResource(facilityMap);
-        this.query.andReturn(this.$q.resolve(new PageDataBuilder()
+        this.resource = new this.AdminUserRolesSupervisoryNodeResource(facilityMap);
+        this.query.andReturn(this.$q.resolve(new this.PageDataBuilder()
             .withContent(this.supervisoryNodes)
             .build()));
     });

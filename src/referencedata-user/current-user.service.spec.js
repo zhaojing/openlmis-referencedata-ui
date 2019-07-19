@@ -15,137 +15,127 @@
 
 describe('currentUserService', function() {
 
-    var CURRENT_USER = 'currentUser';
-
-    var $q, user, cachedUser, authUser, localStorageService, $rootScope, currentUserService, authorizationService,
-        UserRepository, UserDataBuilder, AuthUserDataBuilder;
-
     beforeEach(function() {
         module('referencedata-user');
 
         inject(function($injector) {
-            currentUserService = $injector.get('currentUserService');
-            authorizationService = $injector.get('authorizationService');
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            AuthUserDataBuilder = $injector.get('AuthUserDataBuilder');
-            localStorageService = $injector.get('localStorageService');
-            UserRepository = $injector.get('UserRepository');
+            this.currentUserService = $injector.get('currentUserService');
+            this.authorizationService = $injector.get('authorizationService');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.AuthUserDataBuilder = $injector.get('AuthUserDataBuilder');
+            this.localStorageService = $injector.get('localStorageService');
+            this.UserRepository = $injector.get('UserRepository');
         });
 
-        authUser = new AuthUserDataBuilder().build();
+        this.currentUser = 'currentUser';
 
-        cachedUser = new UserDataBuilder()
-            .withId(authUser.user_id)
+        this.authUser = new this.AuthUserDataBuilder().build();
+
+        this.cachedUser = new this.UserDataBuilder()
+            .withId(this.authUser.user_id)
             .withUsername('cachedUser')
             .build();
 
-        user = new UserDataBuilder()
-            .withId(authUser.user_id)
+        this.user = new this.UserDataBuilder()
+            .withId(this.authUser.user_id)
             .build();
 
-        spyOn(authorizationService, 'getUser');
-        spyOn(localStorageService, 'get');
-        spyOn(localStorageService, 'remove');
-        spyOn(UserRepository.prototype, 'get');
+        spyOn(this.authorizationService, 'getUser').andReturn(this.authUser);
+        spyOn(this.localStorageService, 'get');
+        spyOn(this.localStorageService, 'remove');
+        spyOn(this.UserRepository.prototype, 'get').andReturn(this.$q.resolve(this.user));
     });
 
     describe('getUserInfo', function() {
 
         it('should reject promise if user is not logged in', function() {
+            this.authorizationService.getUser.andReturn();
+
             var rejected;
-            currentUserService.getUserInfo()
+            this.currentUserService.getUserInfo()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(localStorageService.get).not.toHaveBeenCalled();
-            expect(UserRepository.prototype.get).not.toHaveBeenCalled();
+            expect(this.localStorageService.get).not.toHaveBeenCalled();
+            expect(this.UserRepository.prototype.get).not.toHaveBeenCalled();
         });
 
         it('should reject promise if user is logged in but no details are cached and they does not exist on the server',
             function() {
-                authorizationService.getUser.andReturn(authUser);
-                UserRepository.prototype.get.andReturn($q.reject());
+                this.UserRepository.prototype.get.andReturn(this.$q.reject());
 
                 var rejected;
-                currentUserService.getUserInfo()
+                this.currentUserService.getUserInfo()
                     .catch(function() {
                         rejected = true;
                     });
-                $rootScope.$apply();
+                this.$rootScope.$apply();
 
                 expect(rejected).toBe(true);
-                expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
+                expect(this.UserRepository.prototype.get).toHaveBeenCalledWith(this.authUser.user_id);
             });
 
         it('should return cached user if available', function() {
-            authorizationService.getUser.andReturn(authUser);
-            localStorageService.get.andReturn(angular.toJson(cachedUser));
+            this.localStorageService.get.andReturn(angular.toJson(this.cachedUser));
 
             var result;
-            currentUserService.getUserInfo().then(function(response) {
+            this.currentUserService.getUserInfo().then(function(response) {
                 result = response;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(cachedUser));
-            expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
-            expect(UserRepository.prototype.get).not.toHaveBeenCalledWith();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.cachedUser));
+            expect(this.localStorageService.get).toHaveBeenCalledWith(this.currentUser);
+            expect(this.UserRepository.prototype.get).not.toHaveBeenCalledWith();
         });
 
         it('should not fetch user twice from the server if none is cached', function() {
-            authorizationService.getUser.andReturn(authUser);
-            UserRepository.prototype.get.andReturn($q.resolve(user));
+            this.currentUserService.getUserInfo();
+            this.$rootScope.$apply();
 
-            currentUserService.getUserInfo();
-            $rootScope.$apply();
+            expect(this.localStorageService.get.callCount).toEqual(1);
+            expect(this.UserRepository.prototype.get.callCount).toEqual(1);
 
-            expect(localStorageService.get.callCount).toEqual(1);
-            expect(UserRepository.prototype.get.callCount).toEqual(1);
+            this.currentUserService.getUserInfo();
+            this.$rootScope.$apply();
 
-            currentUserService.getUserInfo();
-            $rootScope.$apply();
-
-            expect(localStorageService.get.callCount).toEqual(1);
-            expect(UserRepository.prototype.get.callCount).toEqual(1);
+            expect(this.localStorageService.get.callCount).toEqual(1);
+            expect(this.UserRepository.prototype.get.callCount).toEqual(1);
         });
 
         it('should fetch user from the server if none is cached', function() {
-            authorizationService.getUser.andReturn(authUser);
-            UserRepository.prototype.get.andReturn($q.resolve(user));
-
             var result;
-            currentUserService.getUserInfo().then(function(response) {
+            this.currentUserService.getUserInfo().then(function(response) {
                 result = response;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(user);
-            expect(localStorageService.get).toHaveBeenCalledWith(CURRENT_USER);
-            expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(result).toEqual(this.user);
+            expect(this.localStorageService.get).toHaveBeenCalledWith(this.currentUser);
+            expect(this.UserRepository.prototype.get).toHaveBeenCalledWith(this.authUser.user_id);
         });
 
         it('should reject promise if object returned by service is not an User', function() {
-            authorizationService.getUser.andReturn(authUser);
-            UserRepository.prototype.get.andReturn($q.resolve({
+            this.UserRepository.prototype.get.andReturn(this.$q.resolve({
                 not: 'an',
                 instance: 'of',
                 user: 'class'
             }));
 
             var rejected;
-            currentUserService.getUserInfo()
+            this.currentUserService.getUserInfo()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(UserRepository.prototype.get).toHaveBeenCalledWith(authUser.user_id);
+            expect(this.UserRepository.prototype.get).toHaveBeenCalledWith(this.authUser.user_id);
         });
 
     });
@@ -153,22 +143,19 @@ describe('currentUserService', function() {
     describe('clearCache', function() {
 
         it('should clear cache', function() {
-            authorizationService.getUser.andReturn(authUser);
-            UserRepository.prototype.get.andReturn($q.resolve(user));
+            this.currentUserService.getUserInfo();
+            this.$rootScope.$apply();
 
-            currentUserService.getUserInfo();
-            $rootScope.$apply();
+            expect(this.localStorageService.get.callCount).toEqual(1);
+            expect(this.UserRepository.prototype.get.callCount).toEqual(1);
 
-            expect(localStorageService.get.callCount).toEqual(1);
-            expect(UserRepository.prototype.get.callCount).toEqual(1);
+            this.currentUserService.clearCache();
+            this.currentUserService.getUserInfo();
+            this.$rootScope.$apply();
 
-            currentUserService.clearCache();
-            currentUserService.getUserInfo();
-            $rootScope.$apply();
-
-            expect(localStorageService.get.callCount).toEqual(2);
-            expect(UserRepository.prototype.get.callCount).toEqual(2);
-            expect(localStorageService.remove).toHaveBeenCalledWith(CURRENT_USER);
+            expect(this.localStorageService.get.callCount).toEqual(2);
+            expect(this.UserRepository.prototype.get.callCount).toEqual(2);
+            expect(this.localStorageService.remove).toHaveBeenCalledWith(this.currentUser);
         });
 
     });

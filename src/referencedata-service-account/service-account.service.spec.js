@@ -15,83 +15,67 @@
 
 describe('serviceAccountService', function() {
 
-    var referencedataUrlFactory, $httpBackend, $rootScope, serviceAccountService, ServiceAccountBuilder,
-        serviceAccounts;
-
     beforeEach(function() {
         module('referencedata-service-account');
 
         inject(function($injector) {
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            serviceAccountService = $injector.get('serviceAccountService');
-            $rootScope = $injector.get('$rootScope');
-            $httpBackend = $injector.get('$httpBackend');
-            ServiceAccountBuilder = $injector.get('ServiceAccountBuilder');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.serviceAccountService = $injector.get('serviceAccountService');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.ServiceAccountBuilder = $injector.get('ServiceAccountBuilder');
         });
 
-        serviceAccounts = [
-            new ServiceAccountBuilder().build(),
-            new ServiceAccountBuilder().build()
+        this.serviceAccount = new this.ServiceAccountBuilder().build();
+
+        this.serviceAccounts = [
+            this.serviceAccount,
+            new this.ServiceAccountBuilder().build()
         ];
     });
 
     describe('create', function() {
 
-        beforeEach(function() {
-            $httpBackend.whenPOST(referencedataUrlFactory('/api/serviceAccounts')).respond(200, serviceAccounts[0]);
-        });
-
-        it('should return promise', function() {
-            var result = serviceAccountService.create(serviceAccounts[0].token);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to service account', function() {
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory('/api/serviceAccounts'))
+                .respond(200, this.serviceAccount);
+
             var result;
+            this.serviceAccountService
+                .create(this.serviceAccount.token)
+                .then(function(serviceAccount) {
+                    result = serviceAccount;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            serviceAccountService.create(serviceAccounts[0].token).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.token).toEqual(serviceAccounts[0].token);
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/serviceAccounts'));
-
-            serviceAccountService.create(serviceAccounts[0].token);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.serviceAccount));
         });
     });
 
     describe('remove', function() {
 
-        beforeEach(function() {
-            $httpBackend.whenDELETE(referencedataUrlFactory('/api/serviceAccounts/' + serviceAccounts[0].token))
+        it('should remove the service account', function() {
+            this.$httpBackend
+                .expectDELETE(this.referencedataUrlFactory('/api/serviceAccounts/' + this.serviceAccount.token))
                 .respond(204);
-        });
 
-        it('should return promise', function() {
-            var result = serviceAccountService.remove(serviceAccounts[0].token);
-            $httpBackend.flush();
+            var removed;
+            this.serviceAccountService
+                .remove(this.serviceAccount.token)
+                .then(function() {
+                    removed = true;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(result.then).not.toBeUndefined();
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectDELETE(referencedataUrlFactory('/api/serviceAccounts/' + serviceAccounts[0].token));
-
-            serviceAccountService.remove(serviceAccounts[0].token);
-            $httpBackend.flush();
+            expect(removed).toBe(true);
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 });

@@ -18,10 +18,8 @@ describe('FacilityAddController', function() {
     beforeEach(function() {
         module('admin-facility-add');
 
-        var $controller, FacilityTypeDataBuilder, GeographicZoneDataBuilder, FacilityOperatorDataBuilder,
-            FacilityDataBuilder;
         inject(function($injector) {
-            $controller = $injector.get('$controller');
+            this.$controller = $injector.get('$controller');
             this.$rootScope = $injector.get('$rootScope');
             this.confirmService = $injector.get('confirmService');
             this.$q = $injector.get('$q');
@@ -31,31 +29,30 @@ describe('FacilityAddController', function() {
             this.loadingModalService = $injector.get('loadingModalService');
             this.notificationService = $injector.get('notificationService');
             this.messageService = $injector.get('messageService');
-
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
-            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
-            FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
         });
 
-        this.facility = new FacilityDataBuilder().withoutId()
+        this.facility = new this.FacilityDataBuilder().withoutId()
             .build();
 
         this.facilityTypes = [
-            new FacilityTypeDataBuilder().build(),
-            new FacilityTypeDataBuilder().build(),
-            new FacilityTypeDataBuilder().build()
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build()
         ];
 
         this.geographicZones = [
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build()
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
         ];
 
         this.facilityOperators = [
-            new FacilityOperatorDataBuilder().build(),
-            new FacilityOperatorDataBuilder().build()
+            new this.FacilityOperatorDataBuilder().build(),
+            new this.FacilityOperatorDataBuilder().build()
         ];
 
         this.confirmDeferred = this.$q.defer();
@@ -76,7 +73,7 @@ describe('FacilityAddController', function() {
             }
         });
 
-        this.vm = $controller('FacilityAddController', {
+        this.vm = this.$controller('FacilityAddController', {
             facility: this.facility,
             facilityTypes: this.facilityTypes,
             geographicZones: this.geographicZones,

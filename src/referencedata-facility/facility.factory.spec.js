@@ -15,308 +15,281 @@
 
 describe('facilityFactory', function() {
 
-    var $rootScope, $q, facility1, facility2, programService, facilityService,
-        authorizationService, currentUserService, facilityFactory, REQUISITION_RIGHTS, FULFILLMENT_RIGHTS,
-        FacilityDataBuilder, MinimalFacilityDataBuilder;
-
     beforeEach(function() {
         module('referencedata-facility');
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            facilityFactory = $injector.get('facilityFactory');
-            REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
-            FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-
-            facilityService = $injector.get('facilityService');
-            spyOn(facilityService, 'getUserFacilitiesForRight');
-            spyOn(facilityService, 'get');
-
-            programService = $injector.get('programService');
-            spyOn(programService, 'getUserPrograms');
-
-            authorizationService = $injector.get('authorizationService');
-            spyOn(authorizationService, 'getRightByName');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.facilityFactory = $injector.get('facilityFactory');
+            this.REQUISITION_RIGHTS = $injector.get('REQUISITION_RIGHTS');
+            this.FULFILLMENT_RIGHTS = $injector.get('FULFILLMENT_RIGHTS');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.facilityService = $injector.get('facilityService');
+            this.programService = $injector.get('programService');
+            this.authorizationService = $injector.get('authorizationService');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.currentUserService = $injector.get('currentUserService');
         });
-    });
 
-    beforeEach(function() {
-        facility1 = new FacilityDataBuilder().withId('1')
+        this.facility1 = new this.FacilityDataBuilder()
+            .withId('1')
             .withName('facility1')
             .build();
-        facility2 = new FacilityDataBuilder().withId('2')
+        this.facility2 = new this.FacilityDataBuilder()
+            .withId('2')
             .withName('facility2')
             .build();
+
+        spyOn(this.facilityService, 'getUserFacilitiesForRight');
+        spyOn(this.facilityService, 'get');
+        spyOn(this.programService, 'getUserPrograms');
+        spyOn(this.authorizationService, 'getRightByName');
     });
 
     describe('getSupplyingFacilities', function() {
 
-        var userId, ordersViewFacilities, podsManageFacilities;
-
         beforeEach(inject(function() {
-            userId = 'user-id';
+            this.userId = 'user-id';
 
-            ordersViewFacilities = [
-                createFacility('facility-one', 'facilityOne'),
-                createFacility('facility-two', 'facilityTwo')
+            this.ordersViewFacilities = [
+                new this.FacilityDataBuilder().build(),
+                new this.FacilityDataBuilder().build()
             ];
 
-            podsManageFacilities = [
-                createFacility('facility-two', 'facilityTwo'),
-                createFacility('facility-three', 'facilityThree')
+            this.podsManageFacilities = [
+                this.ordersViewFacilities[1],
+                new this.FacilityDataBuilder().build()
             ];
 
-            facilityService.getUserFacilitiesForRight.andCallFake(function(userId, right) {
-                if (right === FULFILLMENT_RIGHTS.ORDERS_VIEW) {
-                    return $q.when(ordersViewFacilities);
+            var context = this;
+            this.facilityService.getUserFacilitiesForRight.andCallFake(function(userId, right) {
+                if (right === context.FULFILLMENT_RIGHTS.ORDERS_VIEW) {
+                    return context.$q.when(context.ordersViewFacilities);
                 }
-                if (right === FULFILLMENT_RIGHTS.PODS_MANAGE) {
-                    return $q.when(podsManageFacilities);
+                if (right === context.FULFILLMENT_RIGHTS.PODS_MANAGE) {
+                    return context.$q.when(context.podsManageFacilities);
                 }
             });
 
-            programService.getUserPrograms.andCallFake(function() {
-                return $q.when([]);
-            });
+            this.programService.getUserPrograms.andReturn(this.$q.when([]));
         }));
 
         it('should fetch facilities for ORDERS_VIEW right', function() {
-            facilityFactory.getSupplyingFacilities(userId);
+            this.facilityFactory.getSupplyingFacilities(this.userId);
 
-            expect(facilityService.getUserFacilitiesForRight)
-                .toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.ORDERS_VIEW);
+            expect(this.facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(this.userId, this.FULFILLMENT_RIGHTS.ORDERS_VIEW);
         });
 
         it('should fetch facilities for PODS_MANAGE right', function() {
-            facilityFactory.getSupplyingFacilities(userId);
+            this.facilityFactory.getSupplyingFacilities(this.userId);
 
-            expect(facilityService.getUserFacilitiesForRight)
-                .toHaveBeenCalledWith(userId, FULFILLMENT_RIGHTS.PODS_MANAGE);
+            expect(this.facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(this.userId, this.FULFILLMENT_RIGHTS.PODS_MANAGE);
         });
 
         it('should fetch programs for current user', function() {
-            facilityFactory.getSupplyingFacilities(userId);
+            this.facilityFactory.getSupplyingFacilities(this.userId);
 
-            expect(programService.getUserPrograms).toHaveBeenCalledWith(userId);
+            expect(this.programService.getUserPrograms).toHaveBeenCalledWith(this.userId);
         });
 
         it('should resolve to set of facilities', function() {
             var result;
 
-            facilityFactory.getSupplyingFacilities(userId).then(function(facilities) {
+            this.facilityFactory.getSupplyingFacilities(this.userId).then(function(facilities) {
                 result = facilities;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.length).toBe(3);
-            expect(result[0]).toEqual(ordersViewFacilities[0]);
-            expect(result[1]).toEqual(podsManageFacilities[0]);
-            expect(result[2]).toEqual(podsManageFacilities[1]);
+            expect(result[0]).toEqual(this.ordersViewFacilities[0]);
+            expect(result[1]).toEqual(this.podsManageFacilities[0]);
+            expect(result[2]).toEqual(this.podsManageFacilities[1]);
         });
 
     });
 
     describe('getUserHomeFacility', function() {
 
-        beforeEach(inject(function($injector) {
-            currentUserService = $injector.get('currentUserService');
-            spyOn(currentUserService, 'getUserInfo')
-                .andReturn($q.resolve({
-                    homeFacilityId: 'home-facility-id'
-                }));
-        }));
+        beforeEach(function() {
+            this.homeFacility = new this.FacilityDataBuilder().build();
+            this.user = new this.UserDataBuilder()
+                .withHomeFacilityId(this.homeFacility.id)
+                .buildReferenceDataUserJson();
+
+            spyOn(this.currentUserService, 'getUserInfo').andReturn(this.$q.resolve(this.user));
+        });
 
         it('should fetch home facility for the current user', function() {
-            facilityService.get.andCallFake(function() {
-                return {
-                    name: 'Home Facility'
-                };
-            });
+            this.facilityService.get.andReturn(this.$q.resolve(this.homeFacility));
 
-            var homeFacility;
-            facilityFactory.getUserHomeFacility().then(function(result) {
-                homeFacility = result;
+            var result;
+            this.facilityFactory.getUserHomeFacility().then(function(homeFacility) {
+                result = homeFacility;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(currentUserService.getUserInfo).toHaveBeenCalled();
-            expect(facilityService.get).toHaveBeenCalledWith('home-facility-id');
-            expect(homeFacility.name).toEqual('Home Facility');
+            expect(this.currentUserService.getUserInfo).toHaveBeenCalled();
+            expect(this.facilityService.get).toHaveBeenCalledWith(this.homeFacility.id);
+            expect(result).toEqual(this.homeFacility);
         });
     });
 
     describe('getAllMinimalFacilities', function() {
 
         beforeEach(function() {
-            spyOn(facilityService, 'getAllMinimal').andReturn($q.when([
-                new MinimalFacilityDataBuilder().withId('1')
-                    .withName('facility1')
-                    .build(),
-                new MinimalFacilityDataBuilder().withId('2')
-                    .withName('facility2')
-                    .build()
-            ]));
+            this.minimalFacilities = [
+                new this.MinimalFacilityDataBuilder().build(),
+                new this.MinimalFacilityDataBuilder().build()
+            ];
+            spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.when(this.minimalFacilities));
         });
 
         it('should fetch active minimal facilities', function() {
-            var minimalFacilities;
-            facilityFactory.getAllMinimalFacilities().then(function(result) {
-                minimalFacilities = result;
-            });
-            $rootScope.$apply();
+            var result;
+            this.facilityFactory.getAllMinimalFacilities()
+                .then(function(minimalFacilities) {
+                    result = minimalFacilities;
+                });
+            this.$rootScope.$apply();
 
-            expect(facilityService.getAllMinimal).toHaveBeenCalled();
-            expect(minimalFacilities.length).toEqual(2);
+            expect(result).toEqual(this.minimalFacilities);
         });
     });
 
     describe('getRequestingFacilities', function() {
 
-        var userId, requisitionCreateFacilities, requisitionAuthorizeFacilities;
-
         beforeEach(function() {
-            userId = 'user-id';
+            this.userId = 'user-id';
 
-            requisitionCreateFacilities = [
-                createFacility('facility-one', 'facilityOne'),
-                createFacility('facility-two', 'facilityTwo')
+            this.requisitionCreateFacilities = [
+                new this.FacilityDataBuilder().build(),
+                new this.FacilityDataBuilder().build()
             ];
 
-            requisitionAuthorizeFacilities = [
-                createFacility('facility-two', 'facilityTwo'),
-                createFacility('facility-three', 'facilityThree')
+            this.requisitionAuthorizeFacilities = [
+                this.requisitionCreateFacilities[1],
+                new this.FacilityDataBuilder().build()
             ];
 
-            facilityService.getUserFacilitiesForRight.andCallFake(function(userId, rightName) {
-                if (rightName === REQUISITION_RIGHTS.REQUISITION_CREATE) {
-                    return $q.when(requisitionCreateFacilities);
+            var context = this;
+            this.facilityService.getUserFacilitiesForRight.andCallFake(function(userId, rightName) {
+                if (rightName === context.REQUISITION_RIGHTS.REQUISITION_CREATE) {
+                    return context.$q.when(context.requisitionCreateFacilities);
                 }
-                if (rightName === REQUISITION_RIGHTS.REQUISITION_AUTHORIZE) {
-                    return $q.when(requisitionAuthorizeFacilities);
+                if (rightName === context.REQUISITION_RIGHTS.REQUISITION_AUTHORIZE) {
+                    return context.$q.when(context.requisitionAuthorizeFacilities);
                 }
             });
         });
 
         it('should fetch facilities for REQUISITION_CREATE right', function() {
-            facilityFactory.getRequestingFacilities(userId);
+            this.facilityFactory.getRequestingFacilities(this.userId);
 
-            expect(facilityService.getUserFacilitiesForRight)
-                .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_CREATE);
+            expect(this.facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(this.userId, this.REQUISITION_RIGHTS.REQUISITION_CREATE);
         });
 
         it('should fetch facilities for REQUISITION_AUTHORIZE right', function() {
-            facilityFactory.getRequestingFacilities(userId);
+            this.facilityFactory.getRequestingFacilities(this.userId);
 
-            expect(facilityService.getUserFacilitiesForRight)
-                .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_AUTHORIZE);
+            expect(this.facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(this.userId, this.REQUISITION_RIGHTS.REQUISITION_AUTHORIZE);
         });
 
         it('should resolve to set of facilities', function() {
             var result;
 
-            facilityFactory.getRequestingFacilities(userId).then(function(facilities) {
+            this.facilityFactory.getRequestingFacilities(this.userId).then(function(facilities) {
                 result = facilities;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result.length).toBe(3);
-            expect(result[0]).toEqual(requisitionCreateFacilities[0]);
-            expect(result[1]).toEqual(requisitionAuthorizeFacilities[0]);
-            expect(result[2]).toEqual(requisitionAuthorizeFacilities[1]);
+            expect(result).toEqual([
+                this.requisitionCreateFacilities[0],
+                this.requisitionAuthorizeFacilities[0],
+                this.requisitionAuthorizeFacilities[1]
+            ]);
         });
 
     });
 
     describe('getAllUserFacilities', function() {
 
-        var userId;
-
         beforeEach(inject(function() {
-            userId = 'user-id';
+            this.userId = 'user-id';
 
-            var facilities = [
-                createFacility('facility-one', 'Facility One'),
-                createFacility('facility-two', 'Facility Two')
+            this.program = new this.ProgramDataBuilder().build();
+
+            this.facilities = [
+                new this.FacilityDataBuilder()
+                    .withSupportedPrograms([this.program])
+                    .build(),
+                new this.FacilityDataBuilder().build()
             ];
 
-            facilities[0].supportedPrograms.push({
-                id: 'program1'
-            });
+            this.facilityService.getUserFacilitiesForRight.andReturn(this.$q.resolve(this.facilities));
 
-            facilityService.getUserFacilitiesForRight.andReturn($q.resolve(facilities));
-
-            programService.getUserPrograms.andReturn($q.resolve([{
-                id: 'program1',
-                name: 'A Program'
-            }]));
+            this.programService.getUserPrograms.andReturn(this.$q.resolve([this.program]));
 
         }));
 
         it('should get list of facilities for REQUISITION_VIEW right', function() {
-            facilityFactory.getAllUserFacilities(userId);
+            this.facilityFactory.getAllUserFacilities(this.userId);
 
-            expect(facilityService.getUserFacilitiesForRight)
-                .toHaveBeenCalledWith(userId, REQUISITION_RIGHTS.REQUISITION_VIEW);
+            expect(this.facilityService.getUserFacilitiesForRight)
+                .toHaveBeenCalledWith(this.userId, this.REQUISITION_RIGHTS.REQUISITION_VIEW);
         });
 
         it('should resolve to set of facilities', function() {
             var returnedFacilities;
 
-            facilityFactory.getAllUserFacilities(userId)
+            this.facilityFactory.getAllUserFacilities(this.userId)
                 .then(function(facilities) {
                     returnedFacilities = facilities;
                 });
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(returnedFacilities.length).toBe(2);
-            expect(returnedFacilities[0].id).toBe('facility-one');
+            expect(returnedFacilities).toEqual(this.facilities);
         });
 
         it('will resolve facilities with full supported programs', function() {
             var returnedFacilities;
 
-            facilityFactory.getAllUserFacilities(userId)
+            this.facilityFactory.getAllUserFacilities(this.userId)
                 .then(function(facilities) {
                     returnedFacilities = facilities;
                 });
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(Array.isArray(returnedFacilities[0].supportedPrograms)).toBe(true);
-            expect(returnedFacilities[0].supportedPrograms.length).toBe(1);
-            expect(returnedFacilities[0].supportedPrograms[0].id).toBe('program1');
-            expect(returnedFacilities[0].supportedPrograms[0].name).toBe('A Program');
+            expect(returnedFacilities[0].supportedPrograms).toEqual([this.program]);
         });
     });
 
     describe('searchAndOrderFacilities', function() {
 
         it('should order by name', function() {
-            var result = facilityFactory.searchAndOrderFacilities([facility2, facility1], null, 'name');
+            var result = this.facilityFactory.searchAndOrderFacilities([this.facility2, this.facility1], null, 'name');
 
-            expect(result.length).toEqual(2);
-            expect(result[0].name).toEqual(facility1.name);
-            expect(result[1].name).toEqual(facility2.name);
+            expect(result).toEqual([
+                this.facility1,
+                this.facility2
+            ]);
         });
 
         it('should filter name by given value', function() {
-            var result = facilityFactory.searchAndOrderFacilities([facility2, facility1], '1', 'name');
+            var result = this.facilityFactory.searchAndOrderFacilities([this.facility2, this.facility1], '1', 'name');
 
-            expect(result.length).toEqual(1);
-            expect(result[0].name).toEqual(facility1.name);
+            expect(result).toEqual([
+                this.facility1
+            ]);
         });
     });
-
-    function createFacility(id, name) {
-        return {
-            id: id,
-            name: name,
-            supportedPrograms: []
-        };
-    }
 
 });

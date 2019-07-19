@@ -15,64 +15,63 @@
 
 describe('UserProfileRolesTabController', function() {
 
-    var vm, roleAssignments, $controller, UserDataBuilder, RoleDataBuilder, $rootScope, roleRightsMap;
-
     beforeEach(function() {
         module('openlmis-user');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            RoleDataBuilder = $injector.get('RoleDataBuilder');
-            $rootScope = $injector.get('$rootScope');
+            this.$controller = $injector.get('$controller');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.$rootScope = $injector.get('$rootScope');
         });
 
         var roles = [
-            new RoleDataBuilder().withSupervisionType()
+            new this.RoleDataBuilder()
+                .withSupervisionType()
                 .build()
         ];
 
-        roleRightsMap = {};
-        roleRightsMap[roles[0].id] = roles[0].rights;
+        this.roleRightsMap = {};
+        this.roleRightsMap[roles[0].id] = roles[0].rights;
 
-        roleAssignments = new UserDataBuilder()
+        this.roleAssignments = new this.UserDataBuilder()
             .withGeneralAdminRoleAssignment(roles[0].id)
             .build().roleAssignments;
 
-        vm = $controller('UserProfileRolesTabController', {
-            roleAssignments: roleAssignments,
-            roleRightsMap: roleRightsMap
+        this.vm = this.$controller('UserProfileRolesTabController', {
+            roleAssignments: this.roleAssignments,
+            roleRightsMap: this.roleRightsMap
         });
     });
 
     describe('onInit', function() {
 
         beforeEach(function() {
-            vm.$onInit();
+            this.vm.$onInit();
         });
 
         it('should expose role assignments', function() {
-            expect(vm.roleAssignments).toEqual(roleAssignments);
+            expect(this.vm.roleAssignments).toEqual(this.roleAssignments);
         });
 
         it('should set showErrorColumn to false if role assignments does not have errors', function() {
-            expect(vm.showErrorColumn).toEqual(false);
+            expect(this.vm.showErrorColumn).toEqual(false);
         });
 
         it('should set showErrorColumn to true if role assignments have errors', function() {
-            vm.roleAssignments[0].errors = ['error'];
+            this.vm.roleAssignments[0].errors = ['error'];
 
-            vm.$onInit();
-            $rootScope.$apply();
+            this.vm.$onInit();
+            this.$rootScope.$apply();
 
-            expect(vm.showErrorColumn).toEqual(true);
+            expect(this.vm.showErrorColumn).toEqual(true);
         });
 
         it('should expose roleRightsMap', function() {
-            vm.$onInit();
-            $rootScope.$apply();
+            this.vm.$onInit();
+            this.$rootScope.$apply();
 
-            expect(vm.roleRightsMap).toEqual(roleRightsMap);
+            expect(this.vm.roleRightsMap).toEqual(this.roleRightsMap);
         });
     });
 

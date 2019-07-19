@@ -15,25 +15,24 @@
 
 describe('OrderableResource', function() {
 
-    var OrderableResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('referencedata-orderable', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('referencedata-orderable', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            OrderableResource = $injector.get('OrderableResource');
+            this.OrderableResource = $injector.get('OrderableResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new OrderableResource();
+        new this.OrderableResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith(('/api/orderables'));
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith(('/api/orderables'));
     });
 });

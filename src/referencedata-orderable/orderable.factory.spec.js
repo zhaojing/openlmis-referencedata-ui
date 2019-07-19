@@ -15,83 +15,67 @@
 
 describe('orderableFactory', function() {
 
-    var $rootScope, $q, orderableService, orderableFactory, programService, orderable, programs;
-
     beforeEach(function() {
-        module('referencedata-orderable', function($provide) {
-            orderableService = jasmine.createSpyObj('orderableService', ['get']);
-            $provide.service('orderableService', function() {
-                return orderableService;
-            });
-
-            programService = jasmine.createSpyObj('orderableService', ['getAll']);
-            $provide.service('programService', function() {
-                return programService;
-            });
-        });
+        module('referencedata-orderable');
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            orderableFactory = $injector.get('orderableFactory');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.orderableFactory = $injector.get('orderableFactory');
+            this.programService = $injector.get('programService');
+            this.orderableService = $injector.get('orderableService');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
+            this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
         });
 
-        programs = [
-            {
-                id: '1',
-                name: 'program-1'
-            },
-            {
-                id: '2',
-                name: 'program-2'
-            }
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
-        orderable = {
-            id: 'orderable-id',
-            programs: [
-                {
-                    programId: programs[0].id
-                },
-                {
-                    programId: 'some-id'
-                }
-            ]
-        };
+
+        this.orderable = new this.OrderableDataBuilder()
+            .withPrograms([
+                new this.ProgramOrderableDataBuilder()
+                    .withProgramId(this.programs[0].id)
+                    .buildJson(),
+                new this.ProgramOrderableDataBuilder().buildJson()
+            ])
+            .build();
+
+        spyOn(this.orderableService, 'get').andReturn(this.$q.when(this.orderable));
+        spyOn(this.programService, 'getAll').andReturn(this.$q.when(this.programs));
     });
 
     describe('getOrderableWithProgramData', function() {
 
-        var data;
-
         beforeEach(function() {
-            orderableService.get.andReturn($q.when(orderable));
-            programService.getAll.andReturn($q.when(programs));
-
-            orderableFactory.getOrderableWithProgramData(orderable.id).then(function(response) {
-                data = response;
-            });
-            $rootScope.$apply();
+            var suite = this;
+            this.orderableFactory.getOrderableWithProgramData(this.orderable.id)
+                .then(function(orderables) {
+                    suite.result = orderables;
+                });
+            this.$rootScope.$apply();
         });
 
         it('should get programs', function() {
-            expect(programService.getAll).toHaveBeenCalled();
+            expect(this.programService.getAll).toHaveBeenCalled();
         });
 
         it('should get orderable', function() {
-            expect(orderableService.get).toHaveBeenCalledWith(orderable.id);
+            expect(this.orderableService.get).toHaveBeenCalledWith(this.orderable.id);
         });
 
         it('should return orderable', function() {
-            expect(data.id).toEqual(orderable.id);
+            expect(this.result.id).toEqual(this.orderable.id);
         });
 
         it('should assign program if exists', function() {
-            expect(data.programs[0].$program).not.toBe(undefined);
-            expect(data.programs[0].$program).toEqual(programs[0]);
+            expect(this.result.programs[0].$program).toEqual(this.programs[0]);
         });
 
         it('should not assign program if does not exists', function() {
-            expect(data.programs[1].$program).toBe(undefined);
+            expect(this.result.programs[1].$program).toBeUndefined();
         });
     });
 });

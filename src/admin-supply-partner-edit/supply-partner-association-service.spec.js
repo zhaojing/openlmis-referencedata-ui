@@ -18,21 +18,17 @@ describe('SupplyPartnerAssociationService', function() {
     beforeEach(function() {
         module('admin-supply-partner-edit');
 
-        var SupplyPartnerAssociationService, SupplyPartnerAssociationDataBuilder, SupervisoryNodeDataBuilder,
-            PageDataBuilder, FacilityDataBuilder, SupplyPartnerDataBuilder, FacilityTypeDataBuilder,
-            ProgramDataBuilder, OrderableDataBuilder, FacilityTypeApprovedProductDataBuilder;
         inject(function($injector) {
-            SupplyPartnerAssociationService = $injector.get('SupplyPartnerAssociationService');
-            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
-            SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
-            FacilityTypeApprovedProductDataBuilder = $injector.get('FacilityTypeApprovedProductDataBuilder');
-
+            this.SupplyPartnerAssociationService = $injector.get('SupplyPartnerAssociationService');
+            this.SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
+            this.SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
+            this.FacilityTypeApprovedProductDataBuilder = $injector.get('FacilityTypeApprovedProductDataBuilder');
             this.FacilityTypeApprovedProductResource = $injector.get('FacilityTypeApprovedProductResource');
             this.SupervisoryNodeFacilityResource = $injector.get('SupervisoryNodeFacilityResource');
             this.$q = $injector.get('$q');
@@ -40,18 +36,18 @@ describe('SupplyPartnerAssociationService', function() {
         });
 
         this.supervisoryNodes = [
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().buildPartnerNode()
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().buildPartnerNode()
         ];
 
-        this.association = new SupplyPartnerAssociationDataBuilder()
+        this.association = new this.SupplyPartnerAssociationDataBuilder()
             .withSupervisoryNode(this.supervisoryNodes[1])
             .buildWithFacilitiesAndOrderables();
 
-        this.supplyPartner = new SupplyPartnerDataBuilder()
+        this.supplyPartner = new this.SupplyPartnerDataBuilder()
             .withAssociations([
                 this.association,
-                new SupplyPartnerAssociationDataBuilder().build()
+                new this.SupplyPartnerAssociationDataBuilder().build()
             ])
             .build();
 
@@ -66,60 +62,60 @@ describe('SupplyPartnerAssociationService', function() {
         };
 
         this.facilityTypes = [
-            new FacilityTypeDataBuilder()
+            new this.FacilityTypeDataBuilder()
                 .withCode('custom-code-one')
                 .build(),
-            new FacilityTypeDataBuilder()
+            new this.FacilityTypeDataBuilder()
                 .withCode('custom-code-two')
                 .build()
         ];
 
         this.facilities = [
-            new FacilityDataBuilder()
+            new this.FacilityDataBuilder()
                 .withId(this.supplyPartner.associations[0].facilities[0].id)
                 .withFacilityType(this.facilityTypes[0])
                 .build(),
-            new FacilityDataBuilder()
+            new this.FacilityDataBuilder()
                 .withId(this.supplyPartner.associations[0].facilities[1].id)
                 .withFacilityType(this.facilityTypes[1])
                 .build()
         ];
 
         this.programs = [
-            new ProgramDataBuilder()
+            new this.ProgramDataBuilder()
                 .withId(this.supplyPartner.associations[0].program.id)
                 .build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build()
         ];
 
         this.orderables = [
-            new OrderableDataBuilder().build(),
-            new OrderableDataBuilder().build()
+            new this.OrderableDataBuilder().build(),
+            new this.OrderableDataBuilder().build()
         ];
 
         this.facilityTypeApprovedProducts = [
-            new FacilityTypeApprovedProductDataBuilder()
+            new this.FacilityTypeApprovedProductDataBuilder()
                 .withOrderable(this.orderables[0])
                 .build(),
-            new FacilityTypeApprovedProductDataBuilder()
+            new this.FacilityTypeApprovedProductDataBuilder()
                 .withOrderable(this.orderables[1])
                 .build(),
-            new FacilityTypeApprovedProductDataBuilder()
+            new this.FacilityTypeApprovedProductDataBuilder()
                 .withOrderable(this.orderables[0])
                 .build(),
-            new FacilityTypeApprovedProductDataBuilder()
+            new this.FacilityTypeApprovedProductDataBuilder()
                 .withOrderable(this.orderables[1])
                 .build(),
-            new FacilityTypeApprovedProductDataBuilder()
+            new this.FacilityTypeApprovedProductDataBuilder()
                 .withOrderable(angular.copy(this.orderables[1]))
                 .build()
         ];
 
-        this.facilitiesPage = new PageDataBuilder()
+        this.facilitiesPage = new this.PageDataBuilder()
             .withContent(this.facilities)
             .build();
 
-        this.supplyPartnerAssociationService = new SupplyPartnerAssociationService();
+        this.supplyPartnerAssociationService = new this.SupplyPartnerAssociationService();
 
         spyOn(this.SupervisoryNodeFacilityResource.prototype, 'query');
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'getAll');

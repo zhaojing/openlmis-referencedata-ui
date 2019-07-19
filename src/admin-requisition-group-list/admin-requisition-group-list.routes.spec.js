@@ -18,16 +18,12 @@ describe('openlmis.administration.requisitionGroupList', function() {
     beforeEach(function() {
         module('admin-requisition-group-list');
 
-        var ProgramDataBuilder, GeographicZoneDataBuilder, RequisitionGroupDataBuilder,
-            PageDataBuilder, ObjectMapper;
-
         inject(function($injector) {
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
-            RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-            ObjectMapper = $injector.get('ObjectMapper');
-
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.ObjectMapper = $injector.get('ObjectMapper');
             this.$q = $injector.get('$q');
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
@@ -41,22 +37,22 @@ describe('openlmis.administration.requisitionGroupList', function() {
         });
 
         this.programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
         this.geographicZones = [
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build()
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
         ];
 
         this.requisitionGroups = [
-            new RequisitionGroupDataBuilder()
+            new this.RequisitionGroupDataBuilder()
                 .buildJson(),
-            new RequisitionGroupDataBuilder()
+            new this.RequisitionGroupDataBuilder()
                 .withoutSupervisoryNodeFacility()
                 .buildJson(),
-            new RequisitionGroupDataBuilder()
+            new this.RequisitionGroupDataBuilder()
                 .withoutSupervisoryNode()
                 .buildJson()
         ];
@@ -65,19 +61,19 @@ describe('openlmis.administration.requisitionGroupList', function() {
             this.requisitionGroups[0].supervisoryNode.facility
         ];
 
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new this.ObjectMapper();
 
         spyOn(this.requisitionGroupService, 'search')
-            .andReturn(this.$q.resolve(new PageDataBuilder()
+            .andReturn(this.$q.resolve(new this.PageDataBuilder()
                 .withContent(this.requisitionGroups)
                 .build()));
         spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
         spyOn(this.geographicZoneService, 'getAll')
-            .andReturn(this.$q.resolve(new PageDataBuilder()
+            .andReturn(this.$q.resolve(new this.PageDataBuilder()
                 .withContent(this.geographicZones)
                 .build()));
         spyOn(this.FacilityResource.prototype, 'query').andReturn(this.$q.resolve(
-            new PageDataBuilder()
+            new this.PageDataBuilder()
                 .withContent(this.facilities)
                 .build()
         ));

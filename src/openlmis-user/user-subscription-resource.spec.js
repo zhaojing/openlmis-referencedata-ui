@@ -15,25 +15,24 @@
 
 describe('UserSubscriptionResource', function() {
 
-    var UserSubscriptionResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('openlmis-user', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('openlmis-user', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            UserSubscriptionResource = $injector.get('UserSubscriptionResource');
+            this.UserSubscriptionResource = $injector.get('UserSubscriptionResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new UserSubscriptionResource();
+        new this.UserSubscriptionResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/users/:userId/subscriptions');
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/users/:userId/subscriptions');
     });
 });

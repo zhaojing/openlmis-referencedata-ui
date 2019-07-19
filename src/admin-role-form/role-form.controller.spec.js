@@ -14,18 +14,38 @@
  */
 describe('RoleFormController', function() {
 
-    var vm, referencedataRoleService, role, type, rights;
-
     beforeEach(function() {
         module('admin-role-form');
 
-        role = {
+        inject(function($injector) {
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$state = $injector.get('$state');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.notificationService = $injector.get('notificationService');
+            this.confirmService = $injector.get('confirmService');
+            this.referencedataRoleService = $injector.get('referencedataRoleService');
+            this.$controller = $injector.get('$controller');
+        });
+
+        this.deferred = this.$q.defer();
+        this.confirmDeferred = this.$q.defer();
+
+        spyOn(this.referencedataRoleService, 'update').andReturn(this.deferred.promise);
+        spyOn(this.referencedataRoleService, 'create').andReturn(this.deferred.promise);
+        spyOn(this.confirmService, 'confirm').andReturn(this.confirmDeferred.promise);
+        spyOn(this.loadingModalService, 'open').andReturn(this.$q.when());
+        spyOn(this.notificationService, 'success');
+        spyOn(this.loadingModalService, 'close');
+        spyOn(this.$state, 'go');
+
+        this.role = {
             name: 'Some role'
         };
 
-        type = 'SOME_ROLE_TYPE';
+        this.type = 'SOME_ROLE_TYPE';
 
-        rights = [{
+        this.rights = [{
             name: 'Some right one',
             checked: false
         }, {
@@ -33,178 +53,139 @@ describe('RoleFormController', function() {
             checked: false
         }];
 
-        inject(function($injector) {
-            referencedataRoleService = $injector.get('referencedataRoleService');
-            vm = $injector.get('$controller')('RoleFormController', {
-                role: role,
-                type: type,
-                rights: rights
-            });
+        this.vm = this.$controller('RoleFormController', {
+            role: this.role,
+            type: this.type,
+            rights: this.rights
         });
+        this.vm.$onInit();
     });
 
     describe('$onInit', function() {
 
         it('should expose role', function() {
-            vm.$onInit();
-
-            expect(vm.role).toBe(role);
+            expect(this.vm.role).toBe(this.role);
         });
 
         it('should expose type', function() {
-            vm.$onInit();
-
-            expect(vm.type).toBe(type);
+            expect(this.vm.type).toBe(this.type);
         });
 
         it('should expose rights', function() {
-            vm.$onInit();
-
-            expect(vm.rights).toBe(rights);
+            expect(this.vm.rights).toBe(this.rights);
         });
 
     });
 
     describe('saveRole', function() {
 
-        var $q, $rootScope, $state, deferred, loadingModalService, notificationService,
-            confirmService, confirmDeferred;
-
-        beforeEach(function() {
-            inject(function($injector) {
-                $q = $injector.get('$q');
-                $rootScope = $injector.get('$rootScope');
-                $state = $injector.get('$state');
-                loadingModalService = $injector.get('loadingModalService');
-                notificationService = $injector.get('notificationService');
-                confirmService = $injector.get('confirmService');
-            });
-
-            deferred = $q.defer();
-            confirmDeferred = $q.defer();
-
-            spyOn(referencedataRoleService, 'update').andReturn(deferred.promise);
-            spyOn(referencedataRoleService, 'create').andReturn(deferred.promise);
-            spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
-            spyOn(loadingModalService, 'open').andReturn($q.when());
-            spyOn(notificationService, 'success');
-            spyOn(loadingModalService, 'close');
-            spyOn($state, 'go');
-
-            vm.$onInit();
-        });
-
         it('should update the role if it has id', function() {
-            role.id = 'some-id';
+            this.role.id = 'some-id';
 
-            vm.saveRole();
-            confirmDeferred.resolve();
-            $rootScope.$apply();
+            this.vm.saveRole();
+            this.confirmDeferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(referencedataRoleService.update).toHaveBeenCalledWith(role);
-            expect(referencedataRoleService.create).not.toHaveBeenCalled();
+            expect(this.referencedataRoleService.update).toHaveBeenCalledWith(this.role);
+            expect(this.referencedataRoleService.create).not.toHaveBeenCalled();
         });
 
         it('should create the role if it does not have an id', function() {
-            vm.saveRole();
+            this.vm.saveRole();
 
-            expect(referencedataRoleService.create).toHaveBeenCalledWith(role);
-            expect(referencedataRoleService.update).not.toHaveBeenCalled();
+            expect(this.referencedataRoleService.create).toHaveBeenCalledWith(this.role);
+            expect(this.referencedataRoleService.update).not.toHaveBeenCalled();
         });
 
         it('should open loading modal', function() {
-            vm.saveRole();
+            this.vm.saveRole();
 
-            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should show a notification if creation was successful', function() {
-            vm.saveRole();
-            deferred.resolve();
-            $rootScope.$apply();
+            this.vm.saveRole();
+            this.deferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleCreatedSuccessfully');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleCreatedSuccessfully');
         });
 
         it('should close loading modal if creation was unsuccessful', function() {
-            vm.saveRole();
-            deferred.reject();
-            $rootScope.$apply();
+            this.vm.saveRole();
+            this.deferred.reject();
+            this.$rootScope.$apply();
 
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should close loading modal if update was unsuccessful', function() {
-            role.id = 'some-id';
+            this.role.id = 'some-id';
 
-            vm.saveRole();
-            confirmDeferred.resolve();
-            deferred.reject();
-            $rootScope.$apply();
+            this.vm.saveRole();
+            this.confirmDeferred.resolve();
+            this.deferred.reject();
+            this.$rootScope.$apply();
 
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should show a notification if update was successful', function() {
-            role.id = 'some-id';
+            this.role.id = 'some-id';
 
-            vm.saveRole();
-            confirmDeferred.resolve();
-            deferred.resolve();
-            $rootScope.$apply();
+            this.vm.saveRole();
+            this.confirmDeferred.resolve();
+            this.deferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleUpdatedSuccessfully');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminRoleForm.roleUpdatedSuccessfully');
         });
 
         it('should redirect to role list after success', function() {
-            vm.saveRole();
-            confirmDeferred.resolve();
-            deferred.resolve();
-            $rootScope.$apply();
+            this.vm.saveRole();
+            this.confirmDeferred.resolve();
+            this.deferred.resolve();
+            this.$rootScope.$apply();
 
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
         });
 
         it('should prompt for confirmation if updating', function() {
-            role.id = 'some-id';
+            this.role.id = 'some-id';
 
-            vm.saveRole();
+            this.vm.saveRole();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith('adminRoleForm.confirm');
+            expect(this.confirmService.confirm).toHaveBeenCalledWith('adminRoleForm.confirm');
         });
 
         it('should not update if confirmation was not successful', function() {
-            role.id = 'some-id';
+            this.role.id = 'some-id';
 
-            vm.saveRole();
+            this.vm.saveRole();
 
-            confirmDeferred.reject();
-            $rootScope.$apply();
+            this.confirmDeferred.reject();
+            this.$rootScope.$apply();
 
-            expect(referencedataRoleService.create).not.toHaveBeenCalled();
-            expect(referencedataRoleService.update).not.toHaveBeenCalled();
+            expect(this.referencedataRoleService.create).not.toHaveBeenCalled();
+            expect(this.referencedataRoleService.update).not.toHaveBeenCalled();
         });
 
     });
 
     describe('isNoneSelected', function() {
 
-        beforeEach(function() {
-            vm.$onInit();
-        });
-
         it('should return true if no right is selected', function() {
-            var result = vm.isNoneSelected();
+            var result = this.vm.isNoneSelected();
 
             expect(result).toBe(true);
         });
 
         it('should return false if at least one right is selected', function() {
-            vm.rights[1].checked = true;
+            this.vm.rights[1].checked = true;
 
-            var result = vm.isNoneSelected();
+            var result = this.vm.isNoneSelected();
 
             expect(result).toBe(false);
         });

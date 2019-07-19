@@ -18,19 +18,18 @@ describe('viewItemsModalService', function() {
     beforeEach(function() {
         module('admin-supply-partner-edit');
 
-        var FacilityDataBuilder;
         inject(function($injector) {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
             this.viewItemsModalService = $injector.get('viewItemsModalService');
             this.openlmisModalService = $injector.get('openlmisModalService');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
         this.testTitleLabel = 'label.test';
         this.testItems = [
-            new FacilityDataBuilder().buildJson(),
-            new FacilityDataBuilder().buildJson()
+            new this.FacilityDataBuilder().buildJson(),
+            new this.FacilityDataBuilder().buildJson()
         ];
         this.config = {
             titleLabel: this.testTitleLabel,

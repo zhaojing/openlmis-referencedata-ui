@@ -26,6 +26,7 @@
     function MinimalFacilityDataBuilder(Facility) {
 
         MinimalFacilityDataBuilder.prototype.build = build;
+        MinimalFacilityDataBuilder.prototype.buildJson = buildJson;
         MinimalFacilityDataBuilder.prototype.withName = withName;
         MinimalFacilityDataBuilder.prototype.withId = withId;
 
@@ -49,10 +50,14 @@
         }
 
         function build() {
-            return new Facility({
+            return new Facility(this.buildJson());
+        }
+
+        function buildJson() {
+            return {
                 id: this.id,
                 name: this.name
-            });
+            };
         }
     }
 })();

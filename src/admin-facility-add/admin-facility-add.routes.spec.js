@@ -17,128 +17,113 @@ describe('openlmis.administration.facilities.facility.add state', function() {
 
     'use strict';
 
-    var $state, $location, $rootScope, $q, geographicZoneService, facilityService, geographicZones,
-        $templateCache, facilityOperatorService,
-        facilityTypeService, facilityTypes, facilityOperators;
+    beforeEach(function() {
+        module('admin-facility-add');
 
-    beforeEach(prepareSuite);
+        inject(function($injector) {
+            this.$q = $injector.get('$q');
+            this.$state = $injector.get('$state');
+            this.$location = $injector.get('$location');
+            this.$rootScope = $injector.get('$rootScope');
+            this.facilityService = $injector.get('facilityService');
+            this.$templateCache = $injector.get('$templateCache');
+            this.facilityTypeService = $injector.get('facilityTypeService');
+            this.geographicZoneService = $injector.get('geographicZoneService');
+            this.facilityOperatorService = $injector.get('facilityOperatorService');
+
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+        });
+
+        this.facilityTypes = new this.PageDataBuilder()
+            .withContent([
+                new this.FacilityTypeDataBuilder().build(),
+                new this.FacilityTypeDataBuilder().build()
+            ])
+            .build();
+
+        this.geographicZones = [
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
+        ];
+
+        this.facilityOperators = [
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build()
+        ];
+
+        spyOn(this.geographicZoneService, 'getAll').andReturn(this.$q.when({
+            content: []
+        }));
+        spyOn(this.facilityService, 'search').andReturn(this.$q.when({
+            content: []
+        }));
+        spyOn(this.facilityTypeService, 'query').andReturn(this.$q.when([]));
+        spyOn(this.facilityOperatorService, 'getAll').andReturn(this.$q.when([]));
+
+        this.$state.go('openlmis.administration.facilities');
+        this.$rootScope.$apply();
+
+        this.goToUrl = function(url) {
+            this.$location.url(url);
+            this.$rootScope.$apply();
+        };
+
+        this.getResolvedValue = function(name) {
+            return this.$state.$current.locals.globals[name];
+        };
+    });
 
     it('should be available under \'administration/facilities/new/details\'', function() {
-        expect($state.current.name).not.toEqual('openlmis.administration.facilities.facility.add');
+        expect(this.$state.current.name).not.toEqual('openlmis.administration.facilities.facility.add');
 
-        goToUrl('/administration/facilities/new/details');
+        this.goToUrl('/administration/facilities/new/details');
 
-        expect($state.current.name).toEqual('openlmis.administration.facilities.facility.add');
+        expect(this.$state.current.name).toEqual('openlmis.administration.facilities.facility.add');
     });
 
     it('should resolve facility types', function() {
-        facilityTypeService.query.andReturn($q.when(facilityTypes));
+        this.facilityTypeService.query.andReturn(this.$q.when(this.facilityTypes));
 
-        goToUrl('/administration/facilities/new/details');
+        this.goToUrl('/administration/facilities/new/details');
 
-        expect(getResolvedValue('facilityTypes')).toEqual(facilityTypes.content);
-        expect(facilityTypeService.query).toHaveBeenCalledWith({
+        expect(this.getResolvedValue('facilityTypes')).toEqual(this.facilityTypes.content);
+        expect(this.facilityTypeService.query).toHaveBeenCalledWith({
             active: true
         });
     });
 
     it('should resolve geographicZones', function() {
-        geographicZoneService.getAll.andReturn($q.when({
-            content: geographicZones
+        this.geographicZoneService.getAll.andReturn(this.$q.when({
+            content: this.geographicZones
         }));
 
-        goToUrl('/administration/facilities/new/details');
+        this.goToUrl('/administration/facilities/new/details');
 
-        expect(getResolvedValue('geographicZones')).toEqual(geographicZones);
+        expect(this.getResolvedValue('geographicZones')).toEqual(this.geographicZones);
     });
 
     it('should resolve facility operators', function() {
-        facilityOperatorService.getAll.andReturn($q.when(facilityOperators));
+        this.facilityOperatorService.getAll.andReturn(this.$q.when(this.facilityOperators));
 
-        goToUrl('/administration/facilities/new/details');
+        this.goToUrl('/administration/facilities/new/details');
 
-        expect(getResolvedValue('facilityOperators')).toEqual(facilityOperators);
+        expect(this.getResolvedValue('facilityOperators')).toEqual(this.facilityOperators);
     });
 
     it('should resolve facility', function() {
-        goToUrl('/administration/facilities/new/details');
+        this.goToUrl('/administration/facilities/new/details');
 
-        expect(getResolvedValue('facility')).toEqual({});
+        expect(this.getResolvedValue('facility')).toEqual({});
     });
 
     it('should use template', function() {
-        spyOn($templateCache, 'get').andCallThrough();
+        spyOn(this.$templateCache, 'get').andCallThrough();
 
-        goToUrl('/administration/facilities/new/details');
+        this.goToUrl('/administration/facilities/new/details');
 
-        expect($templateCache.get).toHaveBeenCalledWith('admin-facility-add/facility-add.html');
+        expect(this.$templateCache.get).toHaveBeenCalledWith('admin-facility-add/facility-add.html');
     });
-
-    function prepareSuite() {
-        module('admin-facility-add');
-        inject(services);
-        prepareTestData();
-        prepareSpies();
-
-        $state.go('openlmis.administration.facilities');
-        $rootScope.$apply();
-    }
-
-    function services($injector) {
-        $q = $injector.get('$q');
-        $state = $injector.get('$state');
-        $location = $injector.get('$location');
-        $rootScope = $injector.get('$rootScope');
-        facilityService = $injector.get('facilityService');
-        $templateCache = $injector.get('$templateCache');
-        facilityTypeService = $injector.get('facilityTypeService');
-        geographicZoneService = $injector.get('geographicZoneService');
-        facilityOperatorService = $injector.get('facilityOperatorService');
-    }
-
-    function prepareTestData() {
-        facilityTypes = {
-            content: [
-                createObjectWithId('facility-type-one'),
-                createObjectWithId('facility-type-two')
-            ]
-        };
-
-        geographicZones = [
-            createObjectWithId('geographic-zone-one'),
-            createObjectWithId('geographic-zone-two')
-        ];
-
-        facilityOperators = [
-            createObjectWithId('facility-operator-one'),
-            createObjectWithId('facility-operator-two')
-        ];
-    }
-
-    function prepareSpies() {
-        spyOn(geographicZoneService, 'getAll').andReturn($q.when({
-            content: []
-        }));
-        spyOn(facilityService, 'search').andReturn($q.when({
-            content: []
-        }));
-        spyOn(facilityTypeService, 'query').andReturn($q.when([]));
-        spyOn(facilityOperatorService, 'getAll').andReturn($q.when([]));
-    }
-
-    function goToUrl(url) {
-        $location.url(url);
-        $rootScope.$apply();
-    }
-
-    function getResolvedValue(name) {
-        return $state.$current.locals.globals[name];
-    }
-
-    function createObjectWithId(id) {
-        return {
-            id: id
-        };
-    }
 
 });

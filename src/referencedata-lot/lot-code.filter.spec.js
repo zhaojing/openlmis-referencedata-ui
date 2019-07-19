@@ -15,32 +15,31 @@
 
 describe('lotCode filter', function() {
 
-    var NO_LOT_DEFINED = 'No Lot Defined';
-
-    var $filter, messageService, LotDataBuilder;
-
     beforeEach(function() {
         module('referencedata-lot');
 
         inject(function($injector) {
-            $filter = $injector.get('$filter');
-            messageService = $injector.get('messageService');
-            LotDataBuilder = $injector.get('LotDataBuilder');
+            this.$filter = $injector.get('$filter');
+            this.messageService = $injector.get('messageService');
+            this.LotDataBuilder = $injector.get('LotDataBuilder');
         });
 
-        spyOn(messageService, 'get').andReturn(NO_LOT_DEFINED);
+        this.noLotDefined = 'No Lot Defined';
+        this.lotCodeFilter = this.$filter('lotCode');
+
+        spyOn(this.messageService, 'get').andReturn(this.noLotDefined);
     });
 
     it('should return lot code if lot was given', function() {
-        var lot = new LotDataBuilder().build();
+        var lot = new this.LotDataBuilder().build();
 
-        var result = $filter('lotCode')(lot);
+        var result = this.$filter('lotCode')(lot);
 
         expect(result).toBe(lot.lotCode);
     });
 
     it('should return No Lot Defined if undefined was passed', function() {
-        expect($filter('lotCode')(undefined)).toEqual(NO_LOT_DEFINED);
+        expect(this.$filter('lotCode')(undefined)).toEqual(this.noLotDefined);
     });
 
 });

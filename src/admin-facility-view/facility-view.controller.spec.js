@@ -18,8 +18,6 @@ describe('FacilityViewController', function() {
     beforeEach(function() {
         module('admin-facility-view');
 
-        var FacilityTypeDataBuilder, GeographicZoneDataBuilder, FacilityOperatorDataBuilder, ProgramDataBuilder,
-            FacilityDataBuilder;
         inject(function($injector) {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
@@ -28,12 +26,11 @@ describe('FacilityViewController', function() {
             this.notificationService = $injector.get('notificationService');
             this.loadingModalService = $injector.get('loadingModalService');
             this.FacilityRepository = $injector.get('FacilityRepository');
-
-            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
-            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
-            FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.FacilityOperatorDataBuilder = $injector.get('FacilityOperatorDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
         spyOn(this.FacilityRepository.prototype, 'update').andReturn(this.$q.when());
@@ -47,26 +44,26 @@ describe('FacilityViewController', function() {
         spyOn(this.$state, 'go').andCallFake(loadingModalPromise.resolve);
 
         this.facilityTypes = [
-            new FacilityTypeDataBuilder().build(),
-            new FacilityTypeDataBuilder().build()
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build()
         ];
 
         this.geographicZones = [
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build()
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
         ];
 
         this.facilityOperators = [
-            new FacilityOperatorDataBuilder().build(),
-            new FacilityOperatorDataBuilder().build()
+            new this.FacilityOperatorDataBuilder().build(),
+            new this.FacilityOperatorDataBuilder().build()
         ];
 
         this.programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
-        this.facility = new FacilityDataBuilder().withFacilityType(this.facilityTypes[0])
+        this.facility = new this.FacilityDataBuilder().withFacilityType(this.facilityTypes[0])
             .build();
 
         this.vm = this.$controller('FacilityViewController', {

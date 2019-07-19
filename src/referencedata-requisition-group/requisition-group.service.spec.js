@@ -15,147 +15,103 @@
 
 describe('requisitionGroupService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, requisitionGroupService, requisitionGroups;
-
     beforeEach(function() {
         module('referencedata-requisition-group');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            requisitionGroupService = $injector.get('requisitionGroupService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.requisitionGroupService = $injector.get('requisitionGroupService');
+            this.RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        requisitionGroups = [
-            {
-                id: '1',
-                code: 'RG1'
-            },
-            {
-                id: '2',
-                code: 'RG2'
-            }
+        this.requisitionGroups = [
+            new this.RequisitionGroupDataBuilder().buildJson(),
+            new this.RequisitionGroupDataBuilder().buildJson()
         ];
+
+        this.requisitionGroupsPage = new this.PageDataBuilder()
+            .withContent(this.requisitionGroups)
+            .build();
     });
 
     describe('get', function() {
 
-        beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/requisitionGroups/' + requisitionGroups[0].id))
-                .respond(200, requisitionGroups[0]);
-        });
-
-        it('should return promise', function() {
-            var result = requisitionGroupService.get(requisitionGroups[0].id);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to requisition group', function() {
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/requisitionGroups/' + this.requisitionGroups[0].id))
+                .respond(200, this.requisitionGroups[0]);
+
             var result;
+            this.requisitionGroupService
+                .get(this.requisitionGroups[0].id)
+                .then(function(data) {
+                    result = data;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            requisitionGroupService.get(requisitionGroups[0].id).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(requisitionGroups[0]));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(referencedataUrlFactory('/api/requisitionGroups/' + requisitionGroups[0].id));
-
-            requisitionGroupService.get(requisitionGroups[0].id);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.requisitionGroups[0]));
         });
     });
 
     describe('getAll', function() {
 
-        beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/requisitionGroups')).respond(200, requisitionGroups);
-        });
-
-        it('should return promise', function() {
-            var result = requisitionGroupService.getAll(requisitionGroups[0].id);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to requisition groups', function() {
-            var result;
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/requisitionGroups'))
+                .respond(200, this.requisitionGroups);
 
-            requisitionGroupService.getAll().then(function(data) {
+            var result;
+            this.requisitionGroupService.getAll().then(function(data) {
                 result = data;
             });
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(requisitionGroups));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(referencedataUrlFactory('/api/requisitionGroups'));
-
-            requisitionGroupService.getAll(requisitionGroups[0].id);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.requisitionGroups));
         });
     });
 
     describe('search', function() {
 
-        var searchParams,
-            paginationParams;
-
         beforeEach(function() {
-            searchParams = {
+            this.searchParams = {
                 code: 'some-code',
                 name: 'some-name'
             };
-            paginationParams = {
+            this.paginationParams = {
                 page: 0,
                 size: 10
             };
-            $httpBackend.when('POST', referencedataUrlFactory('/api/requisitionGroups/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size)).respond(200, {
-                content: requisitionGroups
-            });
-        });
-
-        it('should return promise', function() {
-            var result = requisitionGroupService.search(paginationParams, searchParams);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
         });
 
         it('should resolve to requisition groups', function() {
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory(
+                    '/api/requisitionGroups/search' +
+                    '?page=' + this.paginationParams.page +
+                    '&size=' + this.paginationParams.size
+                ))
+                .respond(200, this.requisitionGroupsPage);
+
             var result;
+            this.requisitionGroupService
+                .search(this.paginationParams, this.searchParams)
+                .then(function(data) {
+                    result = data;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            requisitionGroupService.search(paginationParams, searchParams).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result.content)).toEqual(angular.toJson(requisitionGroups));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/requisitionGroups/search?page=' +
-                paginationParams.page + '&size=' + paginationParams.size));
-
-            requisitionGroupService.search(paginationParams, searchParams);
-            $httpBackend.flush();
+            expect(angular.toJson(result.content)).toEqual(angular.toJson(this.requisitionGroups));
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingRequest();
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 });

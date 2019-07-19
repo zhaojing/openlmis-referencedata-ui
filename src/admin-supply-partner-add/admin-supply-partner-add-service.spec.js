@@ -16,28 +16,22 @@
 describe('AdminSupplyPartnerAddService', function() {
 
     beforeEach(function() {
-
         module('admin-supply-partner-add');
 
-        var AdminSupplyPartnerAddService, SupplyPartnerDataBuilder;
-
         inject(function($injector) {
-            AdminSupplyPartnerAddService = $injector.get('AdminSupplyPartnerAddService');
-            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
-
+            this.AdminSupplyPartnerAddService = $injector.get('AdminSupplyPartnerAddService');
+            this.SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
             this.SupplyPartner = $injector.get('SupplyPartner');
-
             this.$rootScope = $injector.get('$rootScope');
             this.$q = $injector.get('$q');
             this.$state = $injector.get('$state');
-
             this.loadingModalService = $injector.get('loadingModalService');
             this.notificationService = $injector.get('notificationService');
             this.confirmService = $injector.get('confirmService');
         });
 
-        this.supplyPartner = new SupplyPartnerDataBuilder().buildWithAssociations();
-        this.adminSupplyPartnerAddService = new AdminSupplyPartnerAddService();
+        this.supplyPartner = new this.SupplyPartnerDataBuilder().buildWithAssociations();
+        this.adminSupplyPartnerAddService = new this.AdminSupplyPartnerAddService();
 
         spyOn(this.SupplyPartner.prototype, 'create').andReturn(this.$q.when(this.supplyPartner));
         spyOn(this.loadingModalService, 'open');

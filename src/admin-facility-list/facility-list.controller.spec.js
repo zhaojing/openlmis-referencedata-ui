@@ -15,93 +15,87 @@
 
 describe('FacilityListController', function() {
 
-    var $state, $controller,
-        vm, geographicZones, facilities, stateParams;
-
     beforeEach(function() {
         module('admin-facility-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
         });
 
-        facilities = [
-            {
-                id: 1,
-                name: 'facility-1'
-            },
-            {
-                id: 2,
-                name: 'facility-2'
-            }
+        this.facilities = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
-        stateParams = {
+
+        this.stateParams = {
             page: 0,
             size: 10,
             zoneId: 'zone-id',
             name: '1'
         };
 
-        vm = $controller('FacilityListController', {
-            facilities: facilities,
-            geographicZones: geographicZones,
-            $stateParams: stateParams
+        this.vm = this.$controller('FacilityListController', {
+            facilities: this.facilities,
+            geographicZones: this.geographicZones,
+            $stateParams: this.stateParams
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
         it('should expose search method', function() {
-            expect(angular.isFunction(vm.search)).toBe(true);
+            expect(angular.isFunction(this.vm.search)).toBe(true);
         });
 
         it('should expose facilities array', function() {
-            expect(vm.facilities).toEqual(facilities);
+            expect(this.vm.facilities).toEqual(this.facilities);
         });
 
         it('should expose geographic zones array', function() {
-            expect(vm.geographicZones).toEqual(geographicZones);
+            expect(this.vm.geographicZones).toEqual(this.geographicZones);
         });
 
         it('should expose facility name', function() {
-            expect(vm.facilityName).toEqual(stateParams.name);
+            expect(this.vm.facilityName).toEqual(this.stateParams.name);
         });
 
         it('should expose geographic zone id', function() {
-            expect(vm.geographicZone).toEqual(stateParams.zoneId);
+            expect(this.vm.geographicZone).toEqual(this.stateParams.zoneId);
         });
     });
 
     describe('search', function() {
 
         it('should set lastName param', function() {
-            vm.facilityName = 'lastName';
+            this.vm.facilityName = 'lastName';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {
-                page: stateParams.page,
-                size: stateParams.size,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
                 name: 'lastName',
-                zoneId: stateParams.zoneId
+                zoneId: this.stateParams.zoneId
             }, {
                 reload: true
             });
         });
 
         it('should set firstName param', function() {
-            vm.geographicZone = 'some-id';
+            this.vm.geographicZone = 'some-id';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {
-                page: stateParams.page,
-                size: stateParams.size,
-                name: stateParams.name,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.facilities', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
+                name: this.stateParams.name,
                 zoneId: 'some-id'
             }, {
                 reload: true
@@ -109,9 +103,9 @@ describe('FacilityListController', function() {
         });
 
         it('should call state go method', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });

@@ -15,24 +15,22 @@
 
 describe('camel case filter', function() {
 
-    var camelCaseFilter, $filter;
-
     beforeEach(function() {
         module('admin-role-form');
 
         inject(function($injector) {
-            $filter = $injector.get('$filter');
+            this.$filter = $injector.get('$filter');
         });
 
-        camelCaseFilter = $filter('camelCase');
+        this.camelCaseFilter = this.$filter('camelCase');
     });
 
     it('should return undefined for undefined', function() {
-        expect(camelCaseFilter()).toBeUndefined();
+        expect(this.camelCaseFilter()).toBeUndefined();
     });
 
     it('should return translated message for ', function() {
-        expect(camelCaseFilter('SOME_REALLY_LONG_NAME')).toEqual('someReallyLongName');
+        expect(this.camelCaseFilter('SOME_REALLY_LONG_NAME')).toEqual('someReallyLongName');
     });
 
 });

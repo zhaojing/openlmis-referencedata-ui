@@ -15,30 +15,24 @@
 
 describe('RequisitionGroupViewController', function() {
 
-    var $state, $controller,
-        vm, requisitionGroup, memberFacilities, stateParams;
-
     beforeEach(function() {
         module('admin-requisition-group-view');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
+            this.RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
         });
 
-        requisitionGroup = {
-            id: 'group-id',
-            name: 'group-name'
-        };
-        memberFacilities = [
-            {
-                id: 'facility-1'
-            },
-            {
-                id: 'facility-2'
-            }
+        this.requisitionGroup = new this.RequisitionGroupDataBuilder().buildJson();
+
+        this.memberFacilities = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
-        stateParams = {
+
+        this.stateParams = {
             page: 0,
             size: 10,
             id: 'group-id',
@@ -46,50 +40,50 @@ describe('RequisitionGroupViewController', function() {
             facilityName: 'facility'
         };
 
-        vm = $controller('RequisitionGroupViewController', {
-            requisitionGroup: requisitionGroup,
-            memberFacilities: memberFacilities,
-            $stateParams: stateParams
+        this.vm = this.$controller('RequisitionGroupViewController', {
+            requisitionGroup: this.requisitionGroup,
+            memberFacilities: this.memberFacilities,
+            $stateParams: this.stateParams
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
         it('should expose requisition group', function() {
-            expect(vm.requisitionGroup).toEqual(requisitionGroup);
+            expect(this.vm.requisitionGroup).toEqual(this.requisitionGroup);
         });
 
         it('should expose member facilities', function() {
-            expect(vm.memberFacilities).toEqual(memberFacilities);
+            expect(this.vm.memberFacilities).toEqual(this.memberFacilities);
         });
 
         it('should expose facility name', function() {
-            expect(vm.facilityName).toEqual(stateParams.facilityName);
+            expect(this.vm.facilityName).toEqual(this.stateParams.facilityName);
         });
 
         it('should expose selected tab', function() {
-            expect(vm.selectedTab).toEqual(stateParams.tab);
+            expect(this.vm.selectedTab).toEqual(this.stateParams.tab);
         });
 
         it('should expose search for facilities method', function() {
-            expect(angular.isFunction(vm.searchForFacilities)).toBe(true);
+            expect(angular.isFunction(this.vm.searchForFacilities)).toBe(true);
         });
     });
 
     describe('searchForFacilities', function() {
 
         it('should set facility name param', function() {
-            vm.facilityName = 'some-name';
+            this.vm.facilityName = 'some-name';
 
-            vm.searchForFacilities();
+            this.vm.searchForFacilities();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroupView', {
-                page: stateParams.page,
-                size: stateParams.size,
-                id: stateParams.id,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.requisitionGroupView', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
+                id: this.stateParams.id,
                 tab: 1,
                 facilityName: 'some-name'
             }, {
@@ -98,9 +92,9 @@ describe('RequisitionGroupViewController', function() {
         });
 
         it('should call state go method', function() {
-            vm.searchForFacilities();
+            this.vm.searchForFacilities();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });

@@ -15,80 +15,71 @@
 
 describe('GeographicZoneListController', function() {
 
-    var $state, $controller,
-        vm, geographicZones, stateParams;
-
     beforeEach(function() {
         module('admin-geographic-zone-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
         });
 
-        geographicZones = [
-            {
-                id: 'zone-1',
-                code: 'zone-1-code',
-                name: 'geographic-zone-1'
-            },
-            {
-                id: 'zone-2',
-                code: 'zone-2-code',
-                name: 'geographic-zone-2'
-            }
+        this.geographicZones = [
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
         ];
-        stateParams = {
+
+        this.stateParams = {
             page: 0,
             size: 10,
-            parent: geographicZones[0].code,
+            parent: this.geographicZones[0].code,
             name: 'geographic-zone-1'
         };
 
-        vm = $controller('GeographicZoneListController', {
-            filteredGeographicZones: [geographicZones[0]],
-            geographicZones: geographicZones,
-            $stateParams: stateParams
+        this.vm = this.$controller('GeographicZoneListController', {
+            filteredGeographicZones: [this.geographicZones[0]],
+            geographicZones: this.geographicZones,
+            $stateParams: this.stateParams
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
         it('should expose search method', function() {
-            expect(angular.isFunction(vm.search)).toBe(true);
+            expect(angular.isFunction(this.vm.search)).toBe(true);
         });
 
         it('should expose filtered geographic zones array', function() {
-            expect(vm.filteredGeographicZones).toEqual([geographicZones[0]]);
+            expect(this.vm.filteredGeographicZones).toEqual([this.geographicZones[0]]);
         });
 
         it('should expose geographic zones array', function() {
-            expect(vm.geographicZones).toEqual(geographicZones);
+            expect(this.vm.geographicZones).toEqual(this.geographicZones);
         });
 
         it('should expose name', function() {
-            expect(vm.name).toEqual(stateParams.name);
+            expect(this.vm.name).toEqual(this.stateParams.name);
         });
 
         it('should expose parent', function() {
-            expect(vm.parent).toEqual(stateParams.parent);
+            expect(this.vm.parent).toEqual(this.stateParams.parent);
         });
     });
 
     describe('search', function() {
 
         it('should set all params', function() {
-            vm.parent = 'some-zone';
-            vm.name = 'some-name';
+            this.vm.parent = 'some-zone';
+            this.vm.name = 'some-name';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.geographicZones', {
-                page: stateParams.page,
-                size: stateParams.size,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.geographicZones', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
                 parent: 'some-zone',
                 name: 'some-name'
             }, {
@@ -97,9 +88,9 @@ describe('GeographicZoneListController', function() {
         });
 
         it('should call state go method', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });

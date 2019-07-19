@@ -15,79 +15,69 @@
 
 describe('facilityFactory', function() {
 
-    var $rootScope, $q, permissionService, facilityService, authorizationService, facilityFactory, CCE_RIGHTS,
-        MinimalFacilityDataBuilder, PermissionDataBuilder, minimalFacilities, permissions;
-
     beforeEach(function() {
         module('referencedata-facilities-permissions');
         module('openlmis-rights');
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
-            permissionService = $injector.get('permissionService');
-            facilityService = $injector.get('facilityService');
-            authorizationService = $injector.get('authorizationService');
-            facilityFactory = $injector.get('facilityFactory');
-            CCE_RIGHTS = $injector.get('CCE_RIGHTS');
-
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-            PermissionDataBuilder = $injector.get('PermissionDataBuilder');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.permissionService = $injector.get('permissionService');
+            this.facilityService = $injector.get('facilityService');
+            this.authorizationService = $injector.get('authorizationService');
+            this.facilityFactory = $injector.get('facilityFactory');
+            this.CCE_RIGHTS = $injector.get('CCE_RIGHTS');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.PermissionDataBuilder = $injector.get('PermissionDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        minimalFacilities = [
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build()
+        this.minimalFacilities = [
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build()
         ];
 
-        permissions = [
-            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_VIEW)
-                .withFacilityId(minimalFacilities[0].id)
+        this.permissions = [
+            new this.PermissionDataBuilder().withRight(this.CCE_RIGHTS.CCE_INVENTORY_VIEW)
+                .withFacilityId(this.minimalFacilities[0].id)
                 .build(),
-            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_VIEW)
-                .withFacilityId(minimalFacilities[1].id)
+            new this.PermissionDataBuilder().withRight(this.CCE_RIGHTS.CCE_INVENTORY_VIEW)
+                .withFacilityId(this.minimalFacilities[1].id)
                 .build(),
-            new PermissionDataBuilder().withRight(CCE_RIGHTS.CCE_INVENTORY_EDIT)
-                .withFacilityId(minimalFacilities[2].id)
+            new this.PermissionDataBuilder().withRight(this.CCE_RIGHTS.CCE_INVENTORY_EDIT)
+                .withFacilityId(this.minimalFacilities[2].id)
                 .build()
         ];
+
+        spyOn(this.authorizationService, 'getUser').andReturn(new this.UserDataBuilder().buildAuthUserJson());
+        spyOn(this.permissionService, 'load').andReturn(this.$q.resolve(this.permissions));
+        spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.minimalFacilities));
     });
 
     describe('getSupervisedFacilitiesBasedOnRights', function() {
 
-        beforeEach(function() {
-            spyOn(authorizationService, 'getUser').andReturn({
-                //eslint-disable-next-line camelcase
-                user_id: 'user-id'
-            });
-
-            spyOn(permissionService, 'load').andReturn($q.resolve(permissions));
-
-            spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve(minimalFacilities));
-        });
-
         it('should filter facilities', function() {
             var result;
 
-            facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_VIEW])
+            this.facilityFactory.getSupervisedFacilitiesBasedOnRights([this.CCE_RIGHTS.CCE_INVENTORY_VIEW])
                 .then(function(facilities) {
                     result = facilities;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.length).toBe(2);
-            expect(result.indexOf(minimalFacilities[0])).toBeGreaterThan(-1);
-            expect(result.indexOf(minimalFacilities[1])).toBeGreaterThan(-1);
+            expect(result.indexOf(this.minimalFacilities[0])).toBeGreaterThan(-1);
+            expect(result.indexOf(this.minimalFacilities[1])).toBeGreaterThan(-1);
 
-            facilityFactory.getSupervisedFacilitiesBasedOnRights([CCE_RIGHTS.CCE_INVENTORY_EDIT])
+            this.facilityFactory.getSupervisedFacilitiesBasedOnRights([this.CCE_RIGHTS.CCE_INVENTORY_EDIT])
                 .then(function(facilities) {
                     result = facilities;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.length).toBe(1);
-            expect(result.indexOf(minimalFacilities[2])).toBeGreaterThan(-1);
+            expect(result.indexOf(this.minimalFacilities[2])).toBeGreaterThan(-1);
         });
     });
 });

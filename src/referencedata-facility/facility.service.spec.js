@@ -15,328 +15,285 @@
 
 describe('facilityService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, facilityService, offlineService, facilitiesStorage,
-        facilityOne, facilityTwo;
-
     beforeEach(function() {
+        this.offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
+        this.facilitiesStorage = jasmine.createSpyObj('facilitiesStorage', ['getBy', 'getAll', 'put', 'search']);
+
+        var offlineService = this.offlineService,
+            facilitiesStorage = this.facilitiesStorage;
         module('referencedata-facility', function($provide) {
-
-            facilitiesStorage = jasmine.createSpyObj('facilitiesStorage', ['getBy', 'getAll', 'put', 'search']);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function() {
-                return facilitiesStorage;
-            });
             $provide.service('localStorageFactory', function() {
-                return localStorageFactorySpy;
-            });
-
-            offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
-            // Mocking out run call
-            offlineService.checkConnection.andCallFake(function() {
-                return {
-                    finally: function() {}
-                };
+                return jasmine.createSpy('localStorageFactory').andReturn(facilitiesStorage);
             });
 
             $provide.service('offlineService', function() {
                 return offlineService;
             });
-
         });
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            facilityService = $injector.get('facilityService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.facilityService = $injector.get('facilityService');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.PermissionDataBuilder = $injector.get('PermissionDataBuilder');
+            this.permissionService = $injector.get('permissionService');
+            this.$q = $injector.get('$q');
         });
 
-        facilityOne = {
-            id: '1',
-            name: 'facilityOne'
-        };
-        facilityTwo = {
-            id: '2',
-            name: 'facilityTwo'
+        this.offlineService.isOffline.andReturn(false);
+
+        this.facilityOne = new this.FacilityDataBuilder().buildJson();
+        this.facilityTwo = new this.FacilityDataBuilder().buildJson();
+
+        this.minimalFacilityOne = new this.MinimalFacilityDataBuilder().buildJson();
+        this.minimalFacilityTwo = new this.MinimalFacilityDataBuilder().buildJson();
+
+        this.facilities = [
+            this.facilityOne,
+            this.facilityTwo
+        ];
+
+        this.minimalFacilities = [
+            this.minimalFacilityOne,
+            this.minimalFacilityTwo
+        ];
+
+        this.facilitiesPage = new this.PageDataBuilder()
+            .withContent(this.facilities)
+            .build();
+
+        this.minimalFacilitiesPage = new this.PageDataBuilder()
+            .withContent(this.minimalFacilities)
+            .build();
+
+        this.page = 0;
+        this.size = 2;
+
+        this.params = {
+            page: this.page,
+            size: this.size
         };
     });
 
     describe('get', function() {
 
         it('should get facility by id from storage while offline', function() {
-            var data;
+            this.facilitiesStorage.getBy.andReturn(this.facilityTwo);
+            this.offlineService.isOffline.andReturn(true);
 
-            facilitiesStorage.getBy.andReturn(facilityTwo);
-
-            offlineService.isOffline.andReturn(true);
-
-            facilityService.get(facilityTwo.id).then(function(response) {
-                data = response;
+            var result;
+            this.facilityService.get(this.facilityTwo.id).then(function(facility) {
+                result = facility;
             });
+            this.$rootScope.$apply();
 
-            $rootScope.$apply();
-
-            expect(data.id).toBe(facilityTwo.id);
+            expect(angular.toJson(result)).toBe(angular.toJson(this.facilityTwo));
         });
 
         it('should get facility by id and save it to storage', function() {
-            var data,
-                spy = jasmine.createSpy();
+            this.$httpBackend
+                .whenGET(this.referencedataUrlFactory('/api/facilities/' + this.facilityOne.id))
+                .respond(200, this.facilityOne);
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities/' + facilityOne.id))
-                .respond(200, facilityOne);
-            facilitiesStorage.put.andCallFake(spy);
+            var result;
+            this.facilityService.get(this.facilityOne.id)
+                .then(function(facility) {
+                    result = facility;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            offlineService.isOffline.andReturn(false);
-
-            facilityService.get(facilityOne.id).then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.id).toBe(facilityOne.id);
-            expect(spy).toHaveBeenCalled();
+            expect(angular.toJson(result)).toBe(angular.toJson(this.facilityOne));
+            expect(this.facilitiesStorage.put).toHaveBeenCalled();
         });
     });
 
     describe('getAll', function() {
-        var result,
-            page = 0,
-            size = 2;
 
         it('should get all facilities from storage while offline', function() {
-            facilitiesStorage.getAll.andReturn([facilityOne, facilityTwo]);
+            this.facilitiesStorage.getAll.andReturn(this.facilities);
+            this.offlineService.isOffline.andReturn(true);
 
-            offlineService.isOffline.andReturn(true);
+            var result;
+            this.facilityService
+                .query(this.params, {})
+                .then(function(facilities) {
+                    result = facilities;
+                });
+            this.$rootScope.$apply();
 
-            facilityService.query({
-                page: page,
-                size: size
-            }, {}).then(function(paginatedObject) {
-                result = paginatedObject;
-            });
-
-            $rootScope.$apply();
-
-            expect(result[0].id).toBe(facilityOne.id);
-            expect(result[1].id).toBe(facilityTwo.id);
+            expect(result).toEqual(this.facilities);
         });
 
         it('should get all facilities and save them to storage', function() {
-            var spy = jasmine.createSpy();
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/facilities?page=' + this.page + '&size=' + this.size))
+                .respond(200, this.facilitiesPage);
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilities?page=' + page + '&size=' + size))
-                .respond(200, {
-                    content: [facilityOne, facilityTwo]
+            var result;
+            this.facilityService
+                .query(this.params, {})
+                .then(function(paginatedObject) {
+                    result = paginatedObject;
                 });
-            facilitiesStorage.put.andCallFake(spy);
 
-            offlineService.isOffline.andReturn(false);
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            facilityService.query({
-                page: page,
-                size: size
-            }, {}).then(function(paginatedObject) {
-                result = paginatedObject;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.content.length).toEqual(2);
-            expect(result.content).toEqual([facilityOne, facilityTwo]);
-            expect(spy.callCount).toEqual(2);
+            expect(result.content).toEqual(this.facilities);
+            expect(this.facilitiesStorage.put.callCount).toEqual(2);
         });
 
         it('should get all facilities by id and save them to storage', function() {
-            var spy = jasmine.createSpy(),
-                idOne = 'id-one',
-                idTwo = 'id-two';
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory(
+                    '/api/facilities' +
+                    '?id=' + this.facilityOne.id +
+                    '&id=' + this.facilityTwo.id +
+                    '&page=' + this.page +
+                    '&size=' + this.size
+                ))
+                .respond(200, this.facilitiesPage);
 
-            $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities?.*')))
-                .respond(200, {
-                    content: [facilityOne, facilityTwo]
+            var result;
+            this.facilityService
+                .query(this.params, {
+                    id: [this.facilityOne.id, this.facilityTwo.id]
+                })
+                .then(function(facilitiesPage) {
+                    result = facilitiesPage;
                 });
 
-            facilitiesStorage.put.andCallFake(spy);
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            offlineService.isOffline.andReturn(false);
-
-            facilityService.query({
-                page: page,
-                size: size
-            }, {
-                id: [idOne, idTwo]
-            }).then(function(paginatedObject) {
-                result = paginatedObject;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.content.length).toEqual(2);
-            expect(result.content).toEqual([facilityOne, facilityTwo]);
-            expect(spy.callCount).toEqual(2);
+            expect(result.content).toEqual(this.facilities);
+            expect(this.facilitiesStorage.put.callCount).toEqual(2);
         });
     });
 
     describe('getAllMinimal', function() {
 
         it('should get all facilities with minimal representation', function() {
-            var data;
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/facilities/minimal?sort=name'))
+                .respond(200, this.minimalFacilitiesPage);
 
-            $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities/minimal.*')))
-                .respond(200, {
-                    content: [facilityOne, facilityTwo]
+            var result;
+            this.facilityService.getAllMinimal()
+                .then(function(response) {
+                    result = response;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            facilityService.getAllMinimal().then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data[0].id).toBe(facilityOne.id);
-            expect(data[1].id).toBe(facilityTwo.id);
-        });
-
-        it('should add sort=name pagination parameter if none provided', function() {
-            $httpBackend.whenGET(new RegExp(referencedataUrlFactory('/api/facilities/minimal.*')))
-                .respond(200, {
-                    content: [facilityOne, facilityTwo]
-                });
-
-            $httpBackend.expectGET(referencedataUrlFactory('/api/facilities/minimal?sort=name'));
-
-            facilityService.getAllMinimal();
-
-            $httpBackend.flush();
+            expect(result).toEqual(this.minimalFacilities);
         });
     });
 
     describe('getFulfillmentFacilities', function() {
 
-        var userId, url;
-
-        beforeEach(function() {
-            userId = 'user-id';
-            url = referencedataUrlFactory('/api/users/' + userId + '/fulfillmentFacilities');
-
-            $httpBackend.when('GET', url).respond(200, [facilityOne]);
-        });
-
-        it('should make correct request', function() {
-            $httpBackend.expectGET(url);
-
-            facilityService.getFulfillmentFacilities({
-                userId: userId
-            });
-            $httpBackend.flush();
-        });
-
         it('should resolve to facility list', function() {
+            this.userId = 'user-id';
+
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/users/' + this.userId + '/fulfillmentFacilities'))
+                .respond(200, [this.facilityOne]);
+
             var result;
+            this.facilityService
+                .getFulfillmentFacilities({
+                    userId: this.userId
+                })
+                .then(function(facilities) {
+                    result = facilities;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            facilityService.getFulfillmentFacilities({
-                userId: userId
-            }).then(function(facilities) {
-                result = facilities;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.length).toEqual(1);
-            expect(result[0].id).toEqual(facilityOne.id);
-            expect(result[0].name).toEqual(facilityOne.name);
+            expect(angular.toJson(result)).toEqual(angular.toJson([this.facilityOne]));
         });
 
     });
 
     describe('search', function() {
 
-        var page, size, name, url;
-
         beforeEach(function() {
-            page = 0;
-            size = 2;
-            name = 'facility';
-            url = referencedataUrlFactory('/api/facilities/search?page=' + page + '&size=' + size);
+            this.page = 0;
+            this.size = 2;
+            this.name = 'facility';
+            this.url = this.referencedataUrlFactory('/api/facilities/search?page=' + this.page + '&size=' + this.size);
 
-            $httpBackend.when('POST', url)
-                .respond(200, {
-                    content: [facilityOne, facilityTwo]
-                });
-        });
-
-        it('should make correct request', function() {
-            $httpBackend.expectPOST(url);
-
-            facilityService.search({
-                page: page,
-                size: size
-            }, {
-                name: name
-            });
-            $httpBackend.flush();
+            this.$httpBackend
+                .whenPOST(this.url)
+                .respond(200, this.facilitiesPage);
         });
 
         it('should resolve to facility list', function() {
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory(
+                    '/api/facilities/search?page=' + this.page + '&size=' + this.size
+                ))
+                .respond(200, this.facilitiesPage);
+
             var result;
+            this.facilityService
+                .search(this.params, {
+                    name: name
+                })
+                .then(function(facilitiesPage) {
+                    result = facilitiesPage;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            facilityService.search({
-                page: page,
-                size: size
-            }, {
-                name: name
-            }).then(function(paginatedObject) {
-                result = paginatedObject;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.content.length).toEqual(2);
-            expect(result.content).toEqual([facilityOne, facilityTwo]);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.facilitiesPage));
         });
     });
 
     describe('getUserFacilitiesForRight', function() {
 
-        beforeEach(inject(function(permissionService, $q) {
-            var permissions = [{
-                right: 'example',
-                facilityId: '1',
-                programId: 'program-1'
-            }, {
-                right: 'example',
-                facilityId: '1',
-                programId: 'program-2'
-            }, {
-                right: 'example',
-                facilityId: '2',
-                programId: 'program-1'
-            }, {
-                right: 'test',
-                facilityId: '2'
-            }];
+        beforeEach(function() {
+            this.programOne = 'program-1';
+            this.programTwo = 'program-2';
 
-            var facilities = [
-                facilityOne,
-                facilityTwo
+            var permissions = [
+                new this.PermissionDataBuilder()
+                    .withRight('example')
+                    .withFacilityId(this.facilityOne.id)
+                    .withProgramId(this.programOne)
+                    .build(),
+                new this.PermissionDataBuilder()
+                    .withRight('example')
+                    .withFacilityId(this.facilityOne.id)
+                    .withProgramId(this.programTwo)
+                    .build(),
+                new this.PermissionDataBuilder()
+                    .withRight('example')
+                    .withFacilityId(this.facilityTwo.id)
+                    .withProgramId(this.programOne)
+                    .build(),
+                new this.PermissionDataBuilder()
+                    .withRight('test')
+                    .withFacilityId(this.facilityTwo.id)
+                    .build()
             ];
 
-            spyOn(permissionService, 'load').andReturn($q.resolve(permissions));
-            spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve(facilities));
-        }));
+            spyOn(this.permissionService, 'load').andReturn(this.$q.resolve(permissions));
+            spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.minimalFacilities));
+        });
 
         it('should reject if a userId is not specified', function() {
             var resultSpy = jasmine.createSpy('spy');
 
-            facilityService.getUserFacilitiesForRight()
+            this.facilityService.getUserFacilitiesForRight()
                 .catch(resultSpy);
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(resultSpy).toHaveBeenCalled();
         });
@@ -344,18 +301,18 @@ describe('facilityService', function() {
         it('should reject if a right is not specified', function() {
             var resultSpy = jasmine.createSpy('spy');
 
-            facilityService.getUserFacilitiesForRight('userId')
+            this.facilityService.getUserFacilitiesForRight('userId')
                 .catch(resultSpy);
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(resultSpy).toHaveBeenCalled();
         });
 
         it('should get permissions for user', inject(function(permissionService) {
-            facilityService.getUserFacilitiesForRight('userId', 'right');
+            this.facilityService.getUserFacilitiesForRight('userId', 'right');
 
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(permissionService.load).toHaveBeenCalledWith('userId');
         }));
@@ -363,35 +320,35 @@ describe('facilityService', function() {
         it('will only return facilities that are associated with the right', function() {
             var results;
 
-            facilityService.getUserFacilitiesForRight('userId', 'example')
+            this.facilityService.getUserFacilitiesForRight('userId', 'example')
                 .then(function(facilities) {
                     results = facilities;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(results.length).toBe(2);
-            expect(results[0].id).toBe('1');
+            expect(results[0].id).toBe(this.facilityOne.id);
 
             results = undefined;
-            facilityService.getUserFacilitiesForRight('userId', 'test')
+            this.facilityService.getUserFacilitiesForRight('userId', 'test')
                 .then(function(facilities) {
                     results = facilities;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(results.length).toBe(1);
-            expect(results[0].id).toBe('2');
+            expect(results[0].id).toBe(this.facilityTwo.id);
         });
 
-        it('will sort the returned facilities alphebetically by name', function() {
+        it('will sort the returned facilities alphabetically by name', function() {
             var results;
 
             // This name should make facility 2 first
-            facilityTwo.name = 'Another Facility';
-            facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
+            this.minimalFacilityOne.name = 'Another Facility';
+            this.facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
                 results = facilities;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(results.length).toBe(2);
             expect(results[0].name).toBe('Another Facility');
@@ -400,21 +357,21 @@ describe('facilityService', function() {
         it('will add program ids into facility.supportedPrograms array', function() {
             var results;
 
-            facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
+            this.facilityService.getUserFacilitiesForRight('userId', 'example').then(function(facilities) {
                 results = facilities;
             });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(results[0].id).toBe('1');
+            expect(results[0].id).toBe(this.minimalFacilityOne.id);
             expect(Array.isArray(results[0].supportedPrograms)).toBe(true);
             expect(results[0].supportedPrograms.length).toBe(2);
-            expect(results[0].supportedPrograms[0].id).toBe('program-1');
+            expect(results[0].supportedPrograms[0].id).toBe(this.programOne);
         });
 
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 });

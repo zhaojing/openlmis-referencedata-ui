@@ -17,40 +17,86 @@ describe('openlmis.administration.facilities state', function() {
 
     'use strict';
 
-    var $state, $location, $rootScope, $q, geographicZoneService, facilityService, geographicZones, facilities,
-        $templateCache;
+    beforeEach(function() {
+        module('admin-facility-list');
 
-    beforeEach(prepareSuite);
+        inject(function($injector) {
+            this.$state = $injector.get('$state');
+            this.$location = $injector.get('$location');
+            this.$rootScope = $injector.get('$rootScope');
+            this.geographicZoneService = $injector.get('geographicZoneService');
+            this.facilityService = $injector.get('facilityService');
+            this.$q = $injector.get('$q');
+            this.$templateCache = $injector.get('$templateCache');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+        });
+
+        this.geographicZones = [
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
+        ];
+
+        this.facilities = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
+        ];
+
+        spyOn(this.geographicZoneService, 'getAll').andReturn(this.$q.when(
+            new this.PageDataBuilder()
+                .withContent(this.geographicZones)
+                .build()
+        ));
+
+        spyOn(this.facilityService, 'search').andReturn(this.$q.when(
+            new this.PageDataBuilder()
+                .withContent(this.facilities)
+                .build()
+        ));
+
+        this.$state.go('openlmis');
+        this.$rootScope.$apply();
+
+        this.goToUrl = function(url) {
+            this.$location.url(url);
+            this.$rootScope.$apply();
+        };
+
+        this.getResolvedValue = function(name) {
+            return this.$state.$current.locals.globals[name];
+        };
+    });
 
     it('should be available under /administration/facilities URL', function() {
-        expect($state.current.name).not.toEqual('openlmis.administration.facilities');
+        expect(this.$state.current.name).not.toEqual('openlmis.administration.facilities');
 
-        goTo('/administration/facilities');
+        this.goToUrl('/administration/facilities');
 
-        expect($state.current.name).toEqual('openlmis.administration.facilities');
+        expect(this.$state.current.name).toEqual('openlmis.administration.facilities');
     });
 
     it('should resolve geographicZones', function() {
-        geographicZoneService.getAll.andReturn($q.when({
-            content: geographicZones
+        this.geographicZoneService.getAll.andReturn(this.$q.when({
+            content: this.geographicZones
         }));
 
-        goTo('/administration/facilities');
+        this.goToUrl('/administration/facilities');
 
-        expect($state.current.name).toEqual('openlmis.administration.facilities');
-        expect(getResolvedValue('geographicZones')).toEqual(geographicZones);
+        expect(this.$state.current.name).toEqual('openlmis.administration.facilities');
+        expect(this.getResolvedValue('geographicZones')).toEqual(this.geographicZones);
     });
 
     it('should resolve facilities', function() {
-        facilityService.search.andReturn($q.when({
-            content: facilities
+        this.facilityService.search.andReturn(this.$q.when({
+            content: this.facilities
         }));
 
-        goTo('/administration/facilities?name=Facility&page=1&size=2&zoneId=zone-one&sort=name,asc');
+        this.goToUrl('/administration/facilities?name=Facility&page=1&size=2&zoneId=zone-one&sort=name,asc');
 
-        expect($state.current.name).toEqual('openlmis.administration.facilities');
-        expect(getResolvedValue('facilities')).toEqual(facilities);
-        expect(facilityService.search).toHaveBeenCalledWith({
+        expect(this.$state.current.name).toEqual('openlmis.administration.facilities');
+        expect(this.getResolvedValue('facilities')).toEqual(this.facilities);
+        expect(this.facilityService.search).toHaveBeenCalledWith({
             page: '1',
             size: '2',
             sort: 'name,asc'
@@ -61,65 +107,11 @@ describe('openlmis.administration.facilities state', function() {
     });
 
     it('should use template', function() {
-        spyOn($templateCache, 'get').andCallThrough();
+        spyOn(this.$templateCache, 'get').andCallThrough();
 
-        goTo('/administration/facilities');
+        this.goToUrl('/administration/facilities');
 
-        expect($templateCache.get).toHaveBeenCalledWith('admin-facility-list/facility-list.html');
+        expect(this.$templateCache.get).toHaveBeenCalledWith('admin-facility-list/facility-list.html');
     });
-
-    function prepareSuite() {
-        module('admin-facility-list');
-        inject(services);
-        prepareTestData();
-        prepareSpies();
-
-        $state.go('openlmis');
-        $rootScope.$apply();
-    }
-
-    function services($injector) {
-        $state = $injector.get('$state');
-        $location = $injector.get('$location');
-        $rootScope = $injector.get('$rootScope');
-        geographicZoneService = $injector.get('geographicZoneService');
-        facilityService = $injector.get('facilityService');
-        $q = $injector.get('$q');
-        $templateCache = $injector.get('$templateCache');
-    }
-
-    function prepareTestData() {
-        geographicZones = [{
-            id: 'zone-one'
-        }, {
-            id: 'zone-two'
-        }];
-
-        facilities = [{
-            name: 'Facility One',
-            id: 'facility-one'
-        }, {
-            name: 'Facility Two',
-            id: 'facility-two'
-        }];
-    }
-
-    function prepareSpies() {
-        spyOn(geographicZoneService, 'getAll').andReturn($q.when({
-            content: []
-        }));
-        spyOn(facilityService, 'search').andReturn($q.when({
-            content: []
-        }));
-    }
-
-    function goTo(url) {
-        $location.url(url);
-        $rootScope.$apply();
-    }
-
-    function getResolvedValue(name) {
-        return $state.$current.locals.globals[name];
-    }
 
 });

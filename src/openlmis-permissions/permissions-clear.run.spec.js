@@ -14,14 +14,22 @@
  */
 
 describe('permissionsClearRun', function() {
-    beforeEach(module('openlmis-permissions'));
 
-    it('on openlmis-auth.logout permissionService is emptied', inject(function($rootScope, permissionService) {
-        spyOn(permissionService, 'empty');
+    beforeEach(function() {
+        module('openlmis-permissions');
 
-        $rootScope.$emit('openlmis-auth.logout');
+        inject(function($injector) {
+            this.$rootScope = $injector.get('$rootScope');
+            this.permissionService = $injector.get('permissionService');
+        });
+    });
 
-        expect(permissionService.empty).toHaveBeenCalled();
-    }));
+    it('on openlmis-auth.logout permissionService is emptied', function() {
+        spyOn(this.permissionService, 'empty');
+
+        this.$rootScope.$emit('openlmis-auth.logout');
+
+        expect(this.permissionService.empty).toHaveBeenCalled();
+    });
 
 });

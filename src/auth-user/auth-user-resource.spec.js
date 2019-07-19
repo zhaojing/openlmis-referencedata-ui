@@ -15,25 +15,24 @@
 
 describe('AuthUserResource', function() {
 
-    var AuthUserResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('auth-user', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('auth-user', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            AuthUserResource = $injector.get('AuthUserResource');
+            this.AuthUserResource = $injector.get('AuthUserResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new AuthUserResource();
+        new this.AuthUserResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/users/auth');
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/users/auth');
     });
 });

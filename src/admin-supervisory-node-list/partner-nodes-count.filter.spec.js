@@ -18,17 +18,15 @@ describe('partnerNodesCount', function() {
     beforeEach(function() {
         module('admin-supervisory-node-list');
 
-        var SupervisoryNodeDataBuilder;
         inject(function($injector) {
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             this.messageService = $injector.get('messageService');
             this.$filter = $injector.get('$filter');
         });
 
         this.partnerNodes = [
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build()
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().build()
         ];
 
         spyOn(this.messageService, 'get');

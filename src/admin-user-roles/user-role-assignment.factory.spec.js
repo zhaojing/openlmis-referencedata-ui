@@ -15,59 +15,54 @@
 
 describe('userRoleAssignmentFactory', function() {
 
-    var $q, $rootScope, userRoleAssignmentFactory, UserDataBuilder, RoleDataBuilder, ProgramDataBuilder,
-        FacilityDataBuilder, SupervisoryNodeDataBuilder, roles, programs, supervisoryNodes, warehouses, user,
-        UserRepository;
-
     beforeEach(function() {
         module('admin-user-roles');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            UserRepository = $injector.get('UserRepository');
-            userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
-
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            RoleDataBuilder = $injector.get('RoleDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.UserRepository = $injector.get('UserRepository');
+            this.userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
         });
 
-        supervisoryNodes = [
-            new SupervisoryNodeDataBuilder()
+        this.supervisoryNodes = [
+            new this.SupervisoryNodeDataBuilder()
                 .withName('Supervisory Node')
                 .withFacility(
-                    new FacilityDataBuilder()
+                    new this.FacilityDataBuilder()
                         .withName('Facility')
                         .build()
                 )
                 .build(),
-            new SupervisoryNodeDataBuilder().build()
+            new this.SupervisoryNodeDataBuilder().build()
         ];
-        warehouses = [
-            new FacilityDataBuilder().build(),
-            new FacilityDataBuilder().build()
+        this.warehouses = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
-        programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
-        roles = [
-            new RoleDataBuilder()
+        this.roles = [
+            new this.RoleDataBuilder()
                 .withSupervisionType()
                 .withRight({
                     type: 'type-1'
                 })
                 .build(),
-            new RoleDataBuilder()
+            new this.RoleDataBuilder()
                 .withGeneralAdminType()
                 .withRight({
                     type: 'type-2'
                 })
                 .build(),
-            new RoleDataBuilder()
+            new this.RoleDataBuilder()
                 .withOrderFulfillmentType()
                 .withRight({
                     type: 'type-3'
@@ -75,13 +70,13 @@ describe('userRoleAssignmentFactory', function() {
                 .build()
         ];
 
-        user = new UserDataBuilder()
-            .withSupervisionRoleAssignment(roles[0].id, supervisoryNodes[0].id, programs[0].id)
-            .withGeneralAdminRoleAssignment(roles[1].id)
-            .withOrderFulfillmentRoleAssignment(roles[2].id, warehouses[0].id)
+        this.user = new this.UserDataBuilder()
+            .withSupervisionRoleAssignment(this.roles[0].id, this.supervisoryNodes[0].id, this.programs[0].id)
+            .withGeneralAdminRoleAssignment(this.roles[1].id)
+            .withOrderFulfillmentRoleAssignment(this.roles[2].id, this.warehouses[0].id)
             .build();
 
-        spyOn(UserRepository.prototype, 'get');
+        spyOn(this.UserRepository.prototype, 'get');
     });
 
     describe('getUser', function() {
@@ -89,36 +84,37 @@ describe('userRoleAssignmentFactory', function() {
         var resultUser;
 
         beforeEach(function() {
-            UserRepository.prototype.get.andReturn($q.resolve(user));
-            userRoleAssignmentFactory.getUser(user.id, roles, programs, supervisoryNodes, warehouses)
+            this.UserRepository.prototype.get.andReturn(this.$q.resolve(this.user));
+            this.userRoleAssignmentFactory
+                .getUser(this.user.id, this.roles, this.programs, this.supervisoryNodes, this.warehouses)
                 .then(function(response) {
                     resultUser = response;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
         });
 
         it('should expose addInfoToRoleAssignments method', function() {
-            expect(angular.isFunction(userRoleAssignmentFactory.getUser)).toBe(true);
+            expect(angular.isFunction(this.userRoleAssignmentFactory.getUser)).toBe(true);
         });
 
         it('should call referencedataUserService', function() {
-            expect(UserRepository.prototype.get).toHaveBeenCalledWith(user.id);
+            expect(this.UserRepository.prototype.get).toHaveBeenCalledWith(this.user.id);
         });
 
         it('should set type properties for all assignments', function() {
-            expect(resultUser.roleAssignments[0].type).toEqual(roles[0].rights[0].type);
-            expect(resultUser.roleAssignments[1].type).toEqual(roles[1].rights[0].type);
-            expect(resultUser.roleAssignments[2].type).toEqual(roles[2].rights[0].type);
+            expect(resultUser.roleAssignments[0].type).toEqual(this.roles[0].rights[0].type);
+            expect(resultUser.roleAssignments[1].type).toEqual(this.roles[1].rights[0].type);
+            expect(resultUser.roleAssignments[2].type).toEqual(this.roles[2].rights[0].type);
         });
 
         it('should set role name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[0].roleName).toEqual(roles[0].name);
-            expect(resultUser.roleAssignments[1].roleName).toEqual(roles[1].name);
-            expect(resultUser.roleAssignments[2].roleName).toEqual(roles[2].name);
+            expect(resultUser.roleAssignments[0].roleName).toEqual(this.roles[0].name);
+            expect(resultUser.roleAssignments[1].roleName).toEqual(this.roles[1].name);
+            expect(resultUser.roleAssignments[2].roleName).toEqual(this.roles[2].name);
         });
 
         it('should set program name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[0].programName).toEqual(programs[0].name);
+            expect(resultUser.roleAssignments[0].programName).toEqual(this.programs[0].name);
         });
 
         it('should set supervisory node name properties for all assignments', function() {
@@ -126,7 +122,7 @@ describe('userRoleAssignmentFactory', function() {
         });
 
         it('should set warehouse name properties for all assignments', function() {
-            expect(resultUser.roleAssignments[2].warehouseName).toEqual(warehouses[0].name);
+            expect(resultUser.roleAssignments[2].warehouseName).toEqual(this.warehouses[0].name);
         });
     });
 });

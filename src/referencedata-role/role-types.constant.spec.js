@@ -15,37 +15,26 @@
 
 describe('ROLE_TYPES', function() {
 
-    var ROLE_TYPES;
-
     beforeEach(function() {
         module('referencedata-role');
 
         inject(function($injector) {
-            ROLE_TYPES = $injector.get('ROLE_TYPES');
+            this.ROLE_TYPES = $injector.get('ROLE_TYPES');
         });
     });
 
     describe('getLabel', function() {
 
         it('should return label for valid role type', function() {
-            expect(
-                ROLE_TYPES.getLabel('SUPERVISION')
-            ).toEqual('referencedataRoles.supervision');
-
-            expect(
-                ROLE_TYPES.getLabel('ORDER_FULFILLMENT')
-            ).toEqual('referencedataRoles.fulfillment');
-
-            expect(
-                ROLE_TYPES.getLabel('REPORTS')
-            ).toEqual('referencedataRoles.reports');
-
-            expect(
-                ROLE_TYPES.getLabel('GENERAL_ADMIN')
-            ).toEqual('referencedataRoles.administration');
+            expect(this.ROLE_TYPES.getLabel('SUPERVISION')).toEqual('referencedataRoles.supervision');
+            expect(this.ROLE_TYPES.getLabel('ORDER_FULFILLMENT')).toEqual('referencedataRoles.fulfillment');
+            expect(this.ROLE_TYPES.getLabel('REPORTS')).toEqual('referencedataRoles.reports');
+            expect(this.ROLE_TYPES.getLabel('GENERAL_ADMIN')).toEqual('referencedataRoles.administration');
         });
 
         it('should throw exception for invalid role type', function() {
+            var ROLE_TYPES = this.ROLE_TYPES;
+
             expect(function() {
                 ROLE_TYPES.getLabel('NON_EXISTENT_ROLE');
             }).toThrow('"NON_EXISTENT_ROLE" is not a valid role type');
@@ -68,7 +57,7 @@ describe('ROLE_TYPES', function() {
     describe('ROLE_TYPES', function() {
 
         it('should return a list of role types', function() {
-            expect(ROLE_TYPES.getRoleTypes()).toEqual([
+            expect(this.ROLE_TYPES.getRoleTypes()).toEqual([
                 'SUPERVISION',
                 'ORDER_FULFILLMENT',
                 'REPORTS',

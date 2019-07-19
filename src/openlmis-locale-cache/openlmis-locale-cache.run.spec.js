@@ -15,29 +15,29 @@
 
 describe('openlmis-locale-cache run', function() {
 
-    var loginServiceSpy, localeServiceSpy, postLoginAction, $q, $rootScope;
-
     beforeEach(function() {
-        module('openlmis-locale-cache', function($provide) {
-            loginServiceSpy = jasmine.createSpyObj('loginService', ['registerPostLoginAction']);
-            $provide.value('loginService', loginServiceSpy);
+        this.loginServiceSpy = jasmine.createSpyObj('loginService', ['registerPostLoginAction']);
+        this.localeServiceSpy = jasmine.createSpyObj('localeService', ['getLocaleSettings']);
 
-            localeServiceSpy = jasmine.createSpyObj('localeService', ['getLocaleSettings']);
+        var loginServiceSpy = this.loginServiceSpy,
+            localeServiceSpy = this.localeServiceSpy;
+        module('openlmis-locale-cache', function($provide) {
+            $provide.value('loginService', loginServiceSpy);
             $provide.value('localeService', localeServiceSpy);
         });
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
         });
 
-        postLoginAction = loginServiceSpy.registerPostLoginAction.calls[0].args[0];
+        this.postLoginAction = loginServiceSpy.registerPostLoginAction.calls[0].args[0];
     });
 
     describe('run block', function() {
 
         it('should register post login action', function() {
-            expect(loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
         });
 
     });
@@ -45,17 +45,17 @@ describe('openlmis-locale-cache run', function() {
     describe('post login action', function() {
 
         it('should try to fetch locale settings from the server', function() {
-            localeServiceSpy.getLocaleSettings.andReturn($q.resolve());
+            this.localeServiceSpy.getLocaleSettings.andReturn(this.$q.resolve());
 
             var success;
-            postLoginAction()
+            this.postLoginAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(localeServiceSpy.getLocaleSettings).toHaveBeenCalled();
+            expect(this.localeServiceSpy.getLocaleSettings).toHaveBeenCalled();
         });
     });
 

@@ -15,76 +15,56 @@
 
 describe('serviceAccountFactory', function() {
 
-    var $q, $rootScope, serviceAccountService, serviceAccountFactory, apiKeysService, ServiceAccountBuilder,
-        ApiKeyBuilder, serviceAccount, apiKey;
-
     beforeEach(function() {
         module('referencedata-service-account');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            serviceAccountFactory = $injector.get('serviceAccountFactory');
-            apiKeysService = $injector.get('apiKeysService');
-            serviceAccountService = $injector.get('serviceAccountService');
-            $rootScope = $injector.get('$rootScope');
-            ServiceAccountBuilder = $injector.get('ServiceAccountBuilder');
-            ApiKeyBuilder = $injector.get('ApiKeyBuilder');
+            this.$q = $injector.get('$q');
+            this.serviceAccountFactory = $injector.get('serviceAccountFactory');
+            this.apiKeysService = $injector.get('apiKeysService');
+            this.serviceAccountService = $injector.get('serviceAccountService');
+            this.$rootScope = $injector.get('$rootScope');
+            this.ServiceAccountBuilder = $injector.get('ServiceAccountBuilder');
+            this.ApiKeyBuilder = $injector.get('ApiKeyBuilder');
         });
 
-        apiKey = new ApiKeyBuilder().build();
-        serviceAccount = new ServiceAccountBuilder().withToken(apiKey.token)
+        this.apiKey = new this.ApiKeyBuilder().build();
+        this.serviceAccount = new this.ServiceAccountBuilder()
+            .withToken(this.apiKey.token)
             .build();
     });
 
     describe('create', function() {
 
-        beforeEach(function() {
-            spyOn(serviceAccountService, 'create').andReturn($q.resolve(serviceAccount));
-            spyOn(apiKeysService, 'create').andReturn($q.resolve(apiKey));
-        });
-
-        it('should return promise', function() {
-            var result = serviceAccountFactory.create();
-            $rootScope.$apply();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should create service account', function() {
+            spyOn(this.serviceAccountService, 'create').andReturn(this.$q.resolve(this.serviceAccount));
+            spyOn(this.apiKeysService, 'create').andReturn(this.$q.resolve(this.apiKey));
+
             var result;
+            this.serviceAccountFactory
+                .create()
+                .then(function(data) {
+                    result = data;
+                });
+            this.$rootScope.$apply();
 
-            serviceAccountFactory.create().then(function(data) {
-                result = data;
-            });
-            $rootScope.$apply();
-
-            expect(result.token).toEqual(serviceAccount.token);
-            expect(serviceAccountService.create).toHaveBeenCalledWith(apiKey.token);
-            expect(apiKeysService.create).toHaveBeenCalled();
+            expect(result.token).toEqual(this.serviceAccount.token);
+            expect(this.serviceAccountService.create).toHaveBeenCalledWith(this.apiKey.token);
+            expect(this.apiKeysService.create).toHaveBeenCalled();
         });
     });
 
     describe('remove', function() {
 
-        var token = 'key';
-
-        beforeEach(function() {
-            spyOn(serviceAccountService, 'remove').andReturn($q.resolve());
-            spyOn(apiKeysService, 'remove').andReturn($q.resolve());
-        });
-
-        it('should return promise', function() {
-            var result = serviceAccountService.remove(token);
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should remove service account', function() {
-            serviceAccountFactory.remove(serviceAccount.token);
-            $rootScope.$apply();
+            spyOn(this.serviceAccountService, 'remove').andReturn(this.$q.resolve());
+            spyOn(this.apiKeysService, 'remove').andReturn(this.$q.resolve());
 
-            expect(serviceAccountService.remove).toHaveBeenCalledWith(serviceAccount.token);
-            expect(apiKeysService.remove).toHaveBeenCalledWith(serviceAccount.token);
+            this.serviceAccountFactory.remove(this.serviceAccount.token);
+            this.$rootScope.$apply();
+
+            expect(this.serviceAccountService.remove).toHaveBeenCalledWith(this.serviceAccount.token);
+            expect(this.apiKeysService.remove).toHaveBeenCalledWith(this.serviceAccount.token);
         });
     });
 });

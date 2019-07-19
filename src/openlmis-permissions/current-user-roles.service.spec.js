@@ -18,11 +18,9 @@ describe('currentUserRolesService', function() {
     beforeEach(function() {
         module('openlmis-permissions');
 
-        var RoleDataBuilder, UserDataBuilder;
         inject(function($injector) {
-            RoleDataBuilder = $injector.get('RoleDataBuilder');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
             this.currentUserRolesService = $injector.get('currentUserRolesService');
             this.currentUserService = $injector.get('currentUserService');
             this.RoleResource = $injector.get('RoleResource');
@@ -34,14 +32,14 @@ describe('currentUserRolesService', function() {
         this.localStorageKey = 'currentUserRoles';
 
         this.roles = [
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build()
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build()
         ];
 
-        this.user = new UserDataBuilder()
+        this.user = new this.UserDataBuilder()
             .withSupervisionRoleAssignment(this.roles[0].id, 'supervisoryNodeId', 'program-id')
             .withOrderFulfillmentRoleAssignment(this.roles[2].id, 'warehouse-id')
             .withGeneralAdminRoleAssignment(this.roles[4].id)

@@ -14,121 +14,75 @@
  */
 describe('referencedataRightService', function() {
 
-    var referencedataRightService, $httpBackend, $rootScope, rights, openlmisUrlFactory;
-
     beforeEach(function() {
         module('referencedata-right');
 
-        rights = [{
-            id: 'id-one',
-            name: 'RIGHT_ONE',
-            type: 'TYPE_ONE'
-        }, {
-            id: 'id-two',
-            name: 'RIGHT_TWO',
-            type: 'TYPE_TWO'
-        }, {
-            id: 'id-three',
-            name: 'RIGHT_THREE',
-            type: 'TYPE_ONE'
-        }];
-
         inject(function($injector) {
-            referencedataRightService = $injector.get('referencedataRightService');
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.referencedataRightService = $injector.get('referencedataRightService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.ReferenceDataRightDataBuilder = $injector.get('ReferenceDataRightDataBuilder');
         });
+
+        this.right = new this.ReferenceDataRightDataBuilder().build();
+
+        this.rights = [
+            this.right,
+            new this.ReferenceDataRightDataBuilder().build(),
+            new this.ReferenceDataRightDataBuilder().build()
+        ];
     });
 
     describe('search', function() {
 
-        var name, type, url;
-
-        beforeEach(function() {
-            name = 'RIGHT';
-            type = 'TYPE_ONE';
-
-            url = '/api/rights/search?name=' + name + '&type=' + type;
-
-            $httpBackend.whenGET(openlmisUrlFactory(url)).respond(200, [
-                rights[0],
-                rights[2]
-            ]);
-        });
-
-        it('should return promise', function() {
-            var result = referencedataRightService.search(name, type);
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to a list of rights', function() {
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory(
+                    '/api/rights/search' +
+                    '?name=' + this.right.name +
+                    '&type=' + this.right.type
+                ))
+                .respond(200, [this.right]);
+
             var result;
+            this.referencedataRightService
+                .search(this.right.name, this.right.type)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            referencedataRightService.search(name, type).then(function(response) {
-                result = response;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson([
-                rights[0],
-                rights[2]
-            ]));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(openlmisUrlFactory(url));
-
-            referencedataRightService.search(name, type);
-            $httpBackend.flush();
-            $rootScope.$apply();
+            expect(angular.toJson(result)).toEqual(angular.toJson([this.right]));
         });
 
     });
 
     describe('getAll', function() {
 
-        beforeEach(function() {
-            $httpBackend.whenGET(openlmisUrlFactory('/api/rights')).respond(200, rights);
-        });
-
-        it('should return promise', function() {
-            var result = referencedataRightService.getAll();
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to a list of rights', function() {
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/rights'))
+                .respond(200, this.rights);
+
             var result;
+            this.referencedataRightService
+                .getAll()
+                .then(function(response) {
+                    result = response;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            referencedataRightService.getAll().then(function(response) {
-                result = response;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(rights));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(openlmisUrlFactory('/api/rights'));
-
-            referencedataRightService.getAll();
-            $httpBackend.flush();
-            $rootScope.$apply();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.rights));
         });
 
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingRequest();
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
 });

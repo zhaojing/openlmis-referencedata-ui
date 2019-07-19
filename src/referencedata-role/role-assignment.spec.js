@@ -15,41 +15,38 @@
 
 describe('RoleAssignment', function() {
 
-    'use strict';
-
-    var user, assignment, RoleAssignment, UserDataBuilder, ROLE_TYPES;
-
     beforeEach(function() {
         module('referencedata-role');
+
         inject(function($injector) {
-            RoleAssignment = $injector.get('RoleAssignment');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            ROLE_TYPES = $injector.get('ROLE_TYPES');
+            this.RoleAssignment = $injector.get('RoleAssignment');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.ROLE_TYPES = $injector.get('ROLE_TYPES');
         });
 
-        user = new UserDataBuilder().build();
+        this.user = new this.UserDataBuilder().build();
     });
 
     describe('constructor', function() {
 
         it('should validate role assignment', function() {
-            assignment = new RoleAssignment(
-                user, null, null, 'supervisory-node-id', null,
-                null, ROLE_TYPES.SUPERVISION, null, null, null
+            this.assignment = new this.RoleAssignment(
+                this.user, null, null, 'supervisory-node-id', null,
+                null, this.ROLE_TYPES.SUPERVISION, null, null, null
             );
 
-            expect(assignment.errors).toEqual([]);
+            expect(this.assignment.errors).toEqual([]);
         });
 
         it('should add error if home facility role is invalid', function() {
-            delete user.homeFacilityId;
+            delete this.user.homeFacilityId;
 
-            assignment = new RoleAssignment(
-                user, null, null, null, null,
-                null, ROLE_TYPES.SUPERVISION, null, null, null
+            this.assignment = new this.RoleAssignment(
+                this.user, null, null, null, null,
+                null, this.ROLE_TYPES.SUPERVISION, null, null, null
             );
 
-            expect(assignment.errors).toEqual(['referencedataRoles.homeFacilityRoleInvalid']);
+            expect(this.assignment.errors).toEqual(['referencedataRoles.homeFacilityRoleInvalid']);
         });
 
     });

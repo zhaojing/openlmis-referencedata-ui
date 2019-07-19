@@ -15,141 +15,125 @@
 
 describe('ProductListController', function() {
 
-    var $state, $controller,
-        vm, products, programs, stateParams;
-
     beforeEach(function() {
+        module('referencedata-program');
         module('admin-product-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
-        programs = [
-            {
-                id: 'program-id-1',
-                name: 'program-1'
-            },
-            {
-                id: 'program-id-2',
-                name: 'program-2'
-            }
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
-        products = [
-            {
-                id: 'product-id-1',
-                name: 'product-1',
-                code: 'code-1',
-                programs: [
-                    {
-                        id: programs[0].id
-                    },
-                    {
-                        id: programs[1].id
-                    }
-                ]
-            },
-            {
-                id: 'product-id-2',
-                name: 'product-2',
-                code: 'code-2',
-                programs: [
-                    {
-                        id: programs[0].id
-                    }
-                ]
-            }
+
+        this.products = [
+            new this.OrderableDataBuilder()
+                .withPrograms([
+                    this.programs[0],
+                    this.programs[1]
+                ])
+                .build(),
+            new this.OrderableDataBuilder()
+                .withPrograms([
+                    this.programs[0]
+                ])
+                .build()
         ];
-        stateParams = {
+
+        this.stateParams = {
             page: 0,
             size: 10,
             code: 'code',
             name: 'product',
-            program: programs[0].id
+            program: this.programs[0].id
         };
 
-        vm = $controller('ProductListController', {
-            products: products,
-            programs: programs,
-            $stateParams: stateParams
+        this.vm = this.$controller('ProductListController', {
+            products: this.products,
+            programs: this.programs,
+            $stateParams: this.stateParams
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
         it('should expose search method', function() {
-            expect(angular.isFunction(vm.search)).toBe(true);
+            expect(angular.isFunction(this.vm.search)).toBe(true);
         });
 
         it('should expose products array', function() {
-            expect(vm.products).toEqual(products);
+            expect(this.vm.products).toEqual(this.products);
         });
 
         it('should expose programs array', function() {
-            expect(vm.programs).toEqual(programs);
+            expect(this.vm.programs).toEqual(this.programs);
         });
 
         it('should expose code', function() {
-            expect(vm.code).toEqual(stateParams.code);
+            expect(this.vm.code).toEqual(this.stateParams.code);
         });
 
         it('should expose name', function() {
-            expect(vm.name).toEqual(stateParams.name);
+            expect(this.vm.name).toEqual(this.stateParams.name);
         });
 
         it('should expose program', function() {
-            expect(vm.program).toEqual(stateParams.program);
+            expect(this.vm.program).toEqual(this.stateParams.program);
         });
     });
 
     describe('search', function() {
 
         it('should set code param', function() {
-            vm.code = 'some-code';
+            this.vm.code = 'some-code';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.products', {
-                page: stateParams.page,
-                size: stateParams.size,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.products', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
                 code: 'some-code',
-                name: stateParams.name,
-                program: stateParams.program
+                name: this.stateParams.name,
+                program: this.stateParams.program
             }, {
                 reload: true
             });
         });
 
         it('should set name param', function() {
-            vm.name = 'some-name';
+            this.vm.name = 'some-name';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.products', {
-                page: stateParams.page,
-                size: stateParams.size,
-                code: stateParams.code,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.products', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
+                code: this.stateParams.code,
                 name: 'some-name',
-                program: stateParams.program
+                program: this.stateParams.program
             }, {
                 reload: true
             });
         });
 
         it('should set name description', function() {
-            vm.program = 'some-program';
+            this.vm.program = 'some-program';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.products', {
-                page: stateParams.page,
-                size: stateParams.size,
-                code: stateParams.code,
-                name: stateParams.name,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.products', {
+                page: this.stateParams.page,
+                size: this.stateParams.size,
+                code: this.stateParams.code,
+                name: this.stateParams.name,
                 program: 'some-program'
             }, {
                 reload: true
@@ -157,9 +141,9 @@ describe('ProductListController', function() {
         });
 
         it('should call state go method', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });

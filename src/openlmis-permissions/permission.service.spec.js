@@ -18,12 +18,10 @@ describe('openlmis-permissions.this.permissionService', function() {
     beforeEach(function() {
         module('openlmis-permissions');
 
-        var UserDataBuilder, RoleDataBuilder, RightDataBuilder;
         inject(function($injector) {
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            RoleDataBuilder = $injector.get('RoleDataBuilder');
-            RightDataBuilder = $injector.get('RightDataBuilder');
-
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.RightDataBuilder = $injector.get('RightDataBuilder');
             this.$rootScope = $injector.get('$rootScope');
             this.permissionService = $injector.get('permissionService');
             this.localStorageService = $injector.get('localStorageService');
@@ -42,42 +40,42 @@ describe('openlmis-permissions.this.permissionService', function() {
         this.supervisoryNodeId = 'supervisory-node-id';
         this.programId = 'program-id';
 
-        this.possessedRight = new RightDataBuilder()
+        this.possessedRight = new this.RightDataBuilder()
             .withName(this.possessedRightName)
             .build();
 
-        this.otherPossessedRight = new RightDataBuilder()
+        this.otherPossessedRight = new this.RightDataBuilder()
             .withName(this.otherPossessedRightName)
             .build();
 
-        this.anotherPossessedRight = new RightDataBuilder()
+        this.anotherPossessedRight = new this.RightDataBuilder()
             .withName(this.anotherPossessedRightName)
             .build();
 
-        this.nonPossessedRight = new RightDataBuilder()
+        this.nonPossessedRight = new this.RightDataBuilder()
             .withName(this.nonPossessedRightName)
             .build();
 
         this.roles = [
-            new RoleDataBuilder()
+            new this.RoleDataBuilder()
                 .withSupervisionType()
                 .withRight(this.possessedRight)
                 .build(),
-            new RoleDataBuilder()
+            new this.RoleDataBuilder()
                 .withSupervisionType()
                 .withRight(this.otherPossessedRight)
                 .build(),
-            new RoleDataBuilder()
+            new this.RoleDataBuilder()
                 .withSupervisionType()
                 .withRight(this.anotherPossessedRight)
                 .build(),
-            new RoleDataBuilder()
+            new this.RoleDataBuilder()
                 .withSupervisionType()
                 .withRight(this.nonPossessedRight)
                 .build()
         ];
 
-        this.user = new UserDataBuilder()
+        this.user = new this.UserDataBuilder()
             .withSupervisionRoleAssignment(this.roles[0].id, this.supervisoryNodeId, this.programId)
             .withSupervisionRoleAssignment(this.roles[1].id, this.supervisoryNodeId, 'program-id-2')
             .withSupervisionRoleAssignment(this.roles[2].id, 'supervisory-node-id-2', this.programId)

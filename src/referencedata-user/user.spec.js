@@ -15,22 +15,19 @@
 
 describe('User', function() {
 
-    var User, user, json, UserDataBuilder, ROLE_TYPES, supervisionRoleAssignments, orderFulfillmentRoleAssignment,
-        generalAdminRoleAssignment, UserRepository, userRepository;
-
     beforeEach(function() {
         module('referencedata-user');
 
         inject(function($injector) {
-            User = $injector.get('User');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            ROLE_TYPES = $injector.get('ROLE_TYPES');
-            UserRepository = $injector.get('UserRepository');
+            this.User = $injector.get('User');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.ROLE_TYPES = $injector.get('ROLE_TYPES');
+            this.UserRepository = $injector.get('UserRepository');
         });
 
-        userRepository = new UserRepository();
+        this.userRepository = new this.UserRepository();
 
-        json = new UserDataBuilder()
+        this.json = new this.UserDataBuilder()
             .withSupervisionRoleAssignment('1', '1', '1')
             .withSupervisionRoleAssignment('2', '2', '1')
             .withSupervisionRoleAssignment('3', '1', '2')
@@ -38,40 +35,45 @@ describe('User', function() {
             .withGeneralAdminRoleAssignment('3')
             .buildJson();
 
-        supervisionRoleAssignments = [json.roleAssignments[0], json.roleAssignments[1], json.roleAssignments[2]];
-        orderFulfillmentRoleAssignment = json.roleAssignments[3];
-        generalAdminRoleAssignment = json.roleAssignments[4];
+        this.supervisionRoleAssignments = [
+            this.json.roleAssignments[0],
+            this.json.roleAssignments[1],
+            this.json.roleAssignments[2]
+        ];
 
-        user = new User(json, userRepository);
+        this.orderFulfillmentRoleAssignment = this.json.roleAssignments[3];
+        this.generalAdminRoleAssignment = this.json.roleAssignments[4];
 
-        spyOn(userRepository, 'create');
-        spyOn(userRepository, 'update');
+        this.user = new this.User(this.json, this.userRepository);
+
+        spyOn(this.userRepository, 'create');
+        spyOn(this.userRepository, 'update');
     });
 
     describe('constructor', function() {
 
         it('should set all properties', function() {
-            expect(user.id).toEqual(json.id);
-            expect(user.username).toEqual(json.username);
-            expect(user.firstName).toEqual(json.firstName);
-            expect(user.lastName).toEqual(json.lastName);
-            expect(user.timezone).toEqual(json.timezone);
-            expect(user.email).toEqual(json.email);
-            expect(user.homeFacilityId).toEqual(json.homeFacilityId);
-            expect(user.verified).toEqual(json.verified);
-            expect(user.active).toEqual(json.active);
-            expect(user.allowNotify).toEqual(json.allowNotify);
-            expect(user.extraData).toEqual(json.extraData);
-            expect(user.enabled).toEqual(json.enabled);
-            expect(user.roleAssignments).toEqual(json.roleAssignments);
-            expect(user.repository).toEqual(userRepository);
-            expect(user.isNewUser).toEqual(false);
+            expect(this.user.id).toEqual(this.json.id);
+            expect(this.user.username).toEqual(this.json.username);
+            expect(this.user.firstName).toEqual(this.json.firstName);
+            expect(this.user.lastName).toEqual(this.json.lastName);
+            expect(this.user.timezone).toEqual(this.json.timezone);
+            expect(this.user.email).toEqual(this.json.email);
+            expect(this.user.homeFacilityId).toEqual(this.json.homeFacilityId);
+            expect(this.user.verified).toEqual(this.json.verified);
+            expect(this.user.active).toEqual(this.json.active);
+            expect(this.user.allowNotify).toEqual(this.json.allowNotify);
+            expect(this.user.extraData).toEqual(this.json.extraData);
+            expect(this.user.enabled).toEqual(this.json.enabled);
+            expect(this.user.roleAssignments).toEqual(this.json.roleAssignments);
+            expect(this.user.repository).toEqual(this.userRepository);
+            expect(this.user.isNewUser).toEqual(false);
         });
 
         it('should return true if user has no id', function() {
-            user = new User();
+            this.user = new this.User();
 
-            expect(user.isNewUser).toEqual(true);
+            expect(this.user.isNewUser).toEqual(true);
         });
 
     });
@@ -79,7 +81,7 @@ describe('User', function() {
     describe('fromJson', function() {
 
         it('should serialize the user to JSON', function() {
-            expect(user.toJson()).toEqual(angular.toJson(user));
+            expect(this.user.toJson()).toEqual(angular.toJson(this.user));
         });
 
     });
@@ -87,26 +89,32 @@ describe('User', function() {
     describe('getRoleAssignments', function() {
 
         it('should get all role assignments if type is not provided', function() {
-            expect(user.getRoleAssignments()).toEqual(json.roleAssignments);
+            expect(this.user.getRoleAssignments()).toEqual(this.json.roleAssignments);
         });
 
         it('should get zero role assignments if type is incorrect', function() {
-            expect(user.getRoleAssignments('abc')).toEqual([]);
+            expect(this.user.getRoleAssignments('abc')).toEqual([]);
         });
 
         it('should get role assignments by type', function() {
-            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION)).toEqual(supervisionRoleAssignments);
-            expect(user.getRoleAssignments(ROLE_TYPES.ORDER_FULFILLMENT)).toEqual([orderFulfillmentRoleAssignment]);
-            expect(user.getRoleAssignments(ROLE_TYPES.GENERAL_ADMIN)).toEqual([generalAdminRoleAssignment]);
+            expect(this.user.getRoleAssignments(this.ROLE_TYPES.SUPERVISION))
+                .toEqual(this.supervisionRoleAssignments);
+
+            expect(this.user.getRoleAssignments(this.ROLE_TYPES.ORDER_FULFILLMENT))
+                .toEqual([this.orderFulfillmentRoleAssignment]);
+
+            expect(this.user.getRoleAssignments(this.ROLE_TYPES.GENERAL_ADMIN))
+                .toEqual([this.generalAdminRoleAssignment]);
         });
 
         it('should get supervision role assignments by supervisoryNodeId', function() {
-            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION, '1')).
-                toEqual([supervisionRoleAssignments[0], supervisionRoleAssignments[2]]);
+            expect(this.user.getRoleAssignments(this.ROLE_TYPES.SUPERVISION, '1')).
+                toEqual([this.supervisionRoleAssignments[0], this.supervisionRoleAssignments[2]]);
         });
 
         it('should get supervision role assignments by supervisoryNodeId and programId', function() {
-            expect(user.getRoleAssignments(ROLE_TYPES.SUPERVISION, '1', '1')).toEqual([supervisionRoleAssignments[0]]);
+            expect(this.user.getRoleAssignments(this.ROLE_TYPES.SUPERVISION, '1', '1'))
+                .toEqual([this.supervisionRoleAssignments[0]]);
         });
 
     });
@@ -114,28 +122,28 @@ describe('User', function() {
     describe('save', function() {
 
         it('should update the user if it exists', function() {
-            user.save();
+            this.user.save();
 
-            expect(userRepository.update).toHaveBeenCalledWith(user);
-            expect(userRepository.create).not.toHaveBeenCalled();
+            expect(this.userRepository.update).toHaveBeenCalledWith(this.user);
+            expect(this.userRepository.create).not.toHaveBeenCalled();
         });
 
         it('should create new user if it does not exist', function() {
-            user.id = undefined;
+            this.user.id = undefined;
 
-            user.save();
+            this.user.save();
 
-            expect(userRepository.create).toHaveBeenCalledWith(user);
-            expect(userRepository.update).not.toHaveBeenCalled();
+            expect(this.userRepository.create).toHaveBeenCalledWith(this.user);
+            expect(this.userRepository.update).not.toHaveBeenCalled();
         });
 
         it('should set active flag before sending a request', function() {
-            user.enabled = false;
-            user.active = true;
+            this.user.enabled = false;
+            this.user.active = true;
 
-            user.save();
+            this.user.save();
 
-            expect(user.active).toEqual(user.enabled);
+            expect(this.user.active).toEqual(this.user.enabled);
         });
 
     });
@@ -143,17 +151,17 @@ describe('User', function() {
     describe('getBasicInformation', function() {
 
         it('should return basic information about the user', function() {
-            expect(user.getBasicInformation()).toEqual({
-                id: user.id,
-                username: user.username,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                jobTitle: user.jobTitle,
-                timezone: user.timezone,
-                homeFacilityId: user.homeFacilityId,
-                active: user.active,
-                extraData: user.extraData,
-                roleAssignments: user.roleAssignments
+            expect(this.user.getBasicInformation()).toEqual({
+                id: this.user.id,
+                username: this.user.username,
+                firstName: this.user.firstName,
+                lastName: this.user.lastName,
+                jobTitle: this.user.jobTitle,
+                timezone: this.user.timezone,
+                homeFacilityId: this.user.homeFacilityId,
+                active: this.user.active,
+                extraData: this.user.extraData,
+                roleAssignments: this.user.roleAssignments
             });
         });
 
@@ -162,13 +170,13 @@ describe('User', function() {
     describe('getContactDetails', function() {
 
         it('should return user contact details', function() {
-            expect(user.getContactDetails()).toEqual({
-                referenceDataUserId: user.id,
-                phoneNumber: user.phoneNumber,
-                allowNotify: user.allowNotify,
+            expect(this.user.getContactDetails()).toEqual({
+                referenceDataUserId: this.user.id,
+                phoneNumber: this.user.phoneNumber,
+                allowNotify: this.user.allowNotify,
                 emailDetails: {
-                    emailVerified: user.verified,
-                    email: user.email
+                    emailVerified: this.user.verified,
+                    email: this.user.email
                 }
             });
         });
@@ -178,10 +186,10 @@ describe('User', function() {
     describe('getAuthDetails', function() {
 
         it('should return user authentication details', function() {
-            expect(user.getAuthDetails()).toEqual({
-                id: user.id,
-                username: user.username,
-                enabled: user.enabled
+            expect(this.user.getAuthDetails()).toEqual({
+                id: this.user.id,
+                username: this.user.username,
+                enabled: this.user.enabled
             });
         });
 
@@ -190,15 +198,15 @@ describe('User', function() {
     describe('removeHomeFacilityRights', function() {
 
         it('should remove rights with program id and without supervisory node id', function() {
-            supervisionRoleAssignments[0].supervisoryNodeId = undefined;
-            supervisionRoleAssignments[1].supervisoryNodeId = undefined;
-            supervisionRoleAssignments[2].supervisoryNodeId = undefined;
+            this.supervisionRoleAssignments[0].supervisoryNodeId = undefined;
+            this.supervisionRoleAssignments[1].supervisoryNodeId = undefined;
+            this.supervisionRoleAssignments[2].supervisoryNodeId = undefined;
 
-            user.removeHomeFacilityRights();
+            this.user.removeHomeFacilityRights();
 
-            expect(user.roleAssignments).toEqual([
-                orderFulfillmentRoleAssignment,
-                generalAdminRoleAssignment
+            expect(this.user.roleAssignments).toEqual([
+                this.orderFulfillmentRoleAssignment,
+                this.generalAdminRoleAssignment
             ]);
         });
 

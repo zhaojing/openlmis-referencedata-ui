@@ -15,155 +15,118 @@
 
 describe('geographicZoneService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, geographicZones, geographicZoneService;
-
     beforeEach(function() {
         module('referencedata-geographic-zone');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            geographicZoneService = $injector.get('geographicZoneService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.geographicZoneService = $injector.get('geographicZoneService');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        geographicZones = [
-            {
-                id: '1',
-                name: 'zone-1'
-            },
-            {
-                id: '2',
-                name: 'zone-1'
-            }
+        this.geographicZone = new this.GeographicZoneDataBuilder().build();
+
+        this.geographicZones = [
+            this.geographicZone,
+            new this.GeographicZoneDataBuilder().build()
         ];
+
+        this.page = 0;
+        this.size = 2;
+        this.params = {
+            page: this.page,
+            size: this.size
+        };
+
+        this.geographicZonesPage = new this.PageDataBuilder()
+            .withContent(this.geographicZones)
+            .build();
     });
 
     describe('getAll', function() {
 
-        var data,
-            paginationParams = {
-                page: 0,
-                size: 2
-            };
-
-        beforeEach(function() {
-            $httpBackend.when(
-                'GET',
-                referencedataUrlFactory(
-                    '/api/geographicZones?page=' + paginationParams.page + '&size=' + paginationParams.size
-                )
-            )
-                .respond(200, {
-                    content: geographicZones
-                });
-        });
-
         it('should get all geographic zones', function() {
-            geographicZoneService.getAll(paginationParams).then(function(response) {
-                data = response;
-            });
+            this.$httpBackend
+                .expectGET(
+                    this.referencedataUrlFactory(
+                        '/api/geographicZones' +
+                        '?page=' + this.params.page +
+                        '&size=' + this.params.size
+                    )
+                )
+                .respond(200, this.geographicZonesPage);
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            var result;
+            this.geographicZoneService
+                .getAll(this.params)
+                .then(function(geographicZonesPage) {
+                    result = geographicZonesPage;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(angular.toJson(data)).toEqual(angular.toJson({
-                content: geographicZones
-            }));
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.geographicZonesPage));
         });
     });
 
     describe('get', function() {
 
-        beforeEach(function() {
-            $httpBackend.when('GET', referencedataUrlFactory('/api/geographicZones/' + geographicZones[0].id))
-                .respond(200, geographicZones[0]);
-        });
-
-        it('should return promise', function() {
-            var result = geographicZoneService.get(geographicZones[0].id);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to geographic zones', function() {
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/geographicZones/' + this.geographicZone.id))
+                .respond(200, this.geographicZone);
+
             var result;
 
-            geographicZoneService.get(geographicZones[0].id).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.geographicZoneService
+                .get(this.geographicZone.id)
+                .then(function(data) {
+                    result = data;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(result).not.toBeUndefined();
-            expect(result.id).toBe(geographicZones[0].id);
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(referencedataUrlFactory('/api/geographicZones/' + geographicZones[0].id));
-
-            geographicZoneService.get(geographicZones[0].id);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.geographicZone));
         });
 
     });
 
     describe('search', function() {
 
-        var params;
-
         beforeEach(function() {
-            params = {
-                code: 'some-code',
-                name: 'some-name',
-                sort: 'name',
-                page: 0,
-                size: 10
-            };
-            $httpBackend.when('POST', referencedataUrlFactory('/api/geographicZones/search?page=' +
-                params.page + '&size=' + params.size + '&sort=' + params.sort)).respond(function(method, url, body) {
-                var parsedBody = JSON.parse(body);
-                if (parsedBody.code === params.code && parsedBody.name === params.name) {
-                    return [200, {
-                        content: geographicZones
-                    }];
-                }
-                return [400];
-
-            });
-        });
-
-        it('should return promise', function() {
-            var result = geographicZoneService.search(params);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
+            this.params.code = 'some-code';
+            this.params.name = 'some-name';
+            this.params.sort = 'name';
         });
 
         it('should resolve to geographic zones', function() {
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory(
+                    '/api/geographicZones/search' +
+                        '?page=' + this.params.page +
+                        '&size=' + this.params.size +
+                        '&sort=' + this.params.sort
+                ))
+                .respond(200, this.geographicZonesPage);
+
             var result;
+            this.geographicZoneService
+                .search(this.params)
+                .then(function(geographicZonesPage) {
+                    result = geographicZonesPage;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            geographicZoneService.search(params).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result.content).toEqual(geographicZones);
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/geographicZones/search?page=' +
-                params.page + '&size=' + params.size + '&sort=' + params.sort));
-
-            geographicZoneService.search(params);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.geographicZonesPage));
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingRequest();
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 });

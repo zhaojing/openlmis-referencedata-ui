@@ -18,18 +18,15 @@ describe('openlmis.profile', function() {
     beforeEach(function() {
         module('openlmis-user');
 
-        var RoleDataBuilder, ProgramDataBuilder, SupervisoryNodeDataBuilder, MinimalFacilityDataBuilder,
-            UserDataBuilder, PageDataBuilder, ObjectMapper, DigestConfigurationDataBuilder, UserSubscriptionDataBuilder;
         inject(function($injector) {
-            RoleDataBuilder = $injector.get('RoleDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-            DigestConfigurationDataBuilder = $injector.get('DigestConfigurationDataBuilder');
-            UserSubscriptionDataBuilder = $injector.get('UserSubscriptionDataBuilder');
-
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.DigestConfigurationDataBuilder = $injector.get('DigestConfigurationDataBuilder');
+            this.UserSubscriptionDataBuilder = $injector.get('UserSubscriptionDataBuilder');
             this.$q = $injector.get('$q');
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
@@ -46,50 +43,50 @@ describe('openlmis.profile', function() {
             this.authUserService = $injector.get('authUserService');
             this.DigestConfigurationResource = $injector.get('DigestConfigurationResource');
             this.UserSubscriptionResource = $injector.get('UserSubscriptionResource');
-            ObjectMapper = $injector.get('ObjectMapper');
+            this.ObjectMapper = $injector.get('ObjectMapper');
         });
 
         this.roles = [
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build(),
-            new RoleDataBuilder().build()
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build()
         ];
 
         this.programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
         this.supervisoryNodes = [
-            new SupervisoryNodeDataBuilder().build(),
-            new SupervisoryNodeDataBuilder().build()
+            new this.SupervisoryNodeDataBuilder().build(),
+            new this.SupervisoryNodeDataBuilder().build()
         ];
 
         this.warehouses = [
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build()
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build()
         ];
 
         this.digestConfigurations = [
-            new DigestConfigurationDataBuilder().buildJson(),
-            new DigestConfigurationDataBuilder().buildJson()
+            new this.DigestConfigurationDataBuilder().buildJson(),
+            new this.DigestConfigurationDataBuilder().buildJson()
         ];
 
         this.userSubscriptions = [
-            new UserSubscriptionDataBuilder().buildJson(),
-            new UserSubscriptionDataBuilder().buildJson()
+            new this.UserSubscriptionDataBuilder().buildJson(),
+            new this.UserSubscriptionDataBuilder().buildJson()
         ];
 
-        this.digestConfigurationsPage = new PageDataBuilder()
+        this.digestConfigurationsPage = new this.PageDataBuilder()
             .withContent(this.digestConfigurations)
             .build();
 
-        this.homeFacility = new MinimalFacilityDataBuilder().build();
+        this.homeFacility = new this.MinimalFacilityDataBuilder().build();
 
-        this.user = new UserDataBuilder()
+        this.user = new this.UserDataBuilder()
             .withHomeFacilityId(this.homeFacility.id)
             .withSupervisionRoleAssignment(this.roles[0].id, this.supervisoryNodes[0].id, this.programs[0].id)
             .withSupervisionRoleAssignment(this.roles[1].id, this.supervisoryNodes[1].id, this.programs[1].id)
@@ -103,10 +100,10 @@ describe('openlmis.profile', function() {
             email: 'example@test.org'
         };
 
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new this.ObjectMapper();
 
         spyOn(this.AdminUserRolesSupervisoryNodeResource.prototype, 'query')
-            .andReturn(this.$q.resolve(new PageDataBuilder()
+            .andReturn(this.$q.resolve(new this.PageDataBuilder()
                 .withContent(this.supervisoryNodes)
                 .build()));
         spyOn(this.referencedataRoleFactory, 'getAllWithType').andReturn(this.$q.resolve(this.roles));
@@ -122,8 +119,14 @@ describe('openlmis.profile', function() {
         spyOn(this.DigestConfigurationResource.prototype, 'query')
             .andReturn(this.$q.resolve(this.digestConfigurationsPage));
 
-        this.goToUrl = goToUrl;
-        this.getResolvedValue = getResolvedValue;
+        this.goToUrl = function(url) {
+            this.$location.url(url);
+            this.$rootScope.$apply();
+        };
+
+        this.getResolvedValue = function(name) {
+            return this.$state.$current.locals.globals[name];
+        };
     });
 
     describe('state', function() {
@@ -425,14 +428,5 @@ describe('openlmis.profile', function() {
         });
 
     });
-
-    function goToUrl(url) {
-        this.$location.url(url);
-        this.$rootScope.$apply();
-    }
-
-    function getResolvedValue(name) {
-        return this.$state.$current.locals.globals[name];
-    }
 
 });

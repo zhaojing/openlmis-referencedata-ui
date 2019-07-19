@@ -15,167 +15,163 @@
 
 describe('UserFormController', function() {
 
-    var $state, $controller, $q, $rootScope, loadingModalService, notificationService, authUserService, confirmService,
-        vm, user, facilities, pendingVerificationEmail, VerificationEmailDataBuilder, UserDataBuilder,
-        FacilityDataBuilder;
-
     beforeEach(function() {
         module('admin-user-form');
 
         inject(function($injector) {
-            $state = $injector.get('$state');
-            $controller = $injector.get('$controller');
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            loadingModalService = $injector.get('loadingModalService');
-            notificationService = $injector.get('notificationService');
-            VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            authUserService = $injector.get('authUserService');
-            confirmService = $injector.get('confirmService');
+            this.$state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.notificationService = $injector.get('notificationService');
+            this.VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.authUserService = $injector.get('authUserService');
+            this.confirmService = $injector.get('confirmService');
         });
 
-        facilities = [
-            new FacilityDataBuilder().build(),
-            new FacilityDataBuilder().build()
+        this.facilities = [
+            new this.FacilityDataBuilder().build(),
+            new this.FacilityDataBuilder().build()
         ];
 
-        user = new UserDataBuilder()
+        this.user = new this.UserDataBuilder()
             .withUsername('random-user')
-            .withHomeFacilityId(facilities[0].id)
+            .withHomeFacilityId(this.facilities[0].id)
             .build();
 
-        pendingVerificationEmail = new VerificationEmailDataBuilder().build();
+        this.pendingVerificationEmail = new this.VerificationEmailDataBuilder().build();
 
-        spyOn($state, 'go');
-        spyOn(loadingModalService, 'open').andReturn($q.when(true));
-        spyOn(loadingModalService, 'close').andReturn();
-        spyOn(notificationService, 'success').andReturn();
-        spyOn(user, 'removeHomeFacilityRights');
-        spyOn(user, 'save').andReturn();
-        spyOn(authUserService, 'sendVerificationEmail').andReturn();
-        spyOn(confirmService, 'confirmDestroy').andReturn();
+        spyOn(this.$state, 'go');
+        spyOn(this.loadingModalService, 'open').andReturn(this.$q.when(true));
+        spyOn(this.loadingModalService, 'close').andReturn();
+        spyOn(this.notificationService, 'success').andReturn();
+        spyOn(this.user, 'removeHomeFacilityRights');
+        spyOn(this.user, 'save').andReturn();
+        spyOn(this.authUserService, 'sendVerificationEmail').andReturn();
+        spyOn(this.confirmService, 'confirmDestroy').andReturn();
 
-        vm = $controller('UserFormController', {
-            user: user,
-            facilities: facilities,
-            pendingVerificationEmail: pendingVerificationEmail
+        this.vm = this.$controller('UserFormController', {
+            user: this.user,
+            facilities: this.facilities,
+            pendingVerificationEmail: this.pendingVerificationEmail
         });
     });
 
     describe('init', function() {
 
         it('should expose saveUser method', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(angular.isFunction(vm.saveUser)).toBe(true);
+            expect(angular.isFunction(this.vm.saveUser)).toBe(true);
         });
 
         it('should set user', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.user).toBe(user);
+            expect(this.vm.user).toBe(this.user);
         });
 
         it('should set updateMode', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.updateMode).toBe(true);
+            expect(this.vm.updateMode).toBe(true);
         });
 
         it('should set initialUsername', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.initialUsername).toBe('random-user');
+            expect(this.vm.initialUsername).toBe('random-user');
         });
 
         it('should set not set updateMode if creating new user', function() {
-            user.id = undefined;
+            this.user.id = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.updateMode).toBe(false);
+            expect(this.vm.updateMode).toBe(false);
         });
 
         it('should set pendingVerificationEmail', function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.pendingVerificationEmail).toBe(pendingVerificationEmail);
+            expect(this.vm.pendingVerificationEmail).toBe(this.pendingVerificationEmail);
         });
 
         it('should not set home facility if user does not have one', function() {
-            user.homeFacilityId = undefined;
+            this.user.homeFacilityId = undefined;
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.homeFacility).toBeUndefined();
+            expect(this.vm.homeFacility).toBeUndefined();
         });
     });
 
     describe('saveUser', function() {
 
         beforeEach(function() {
-            vm.$onInit();
+            this.vm.$onInit();
 
-            confirmService.confirmDestroy.andReturn($q.resolve());
+            this.confirmService.confirmDestroy.andReturn(this.$q.resolve());
         });
 
         it('should update homeFacilityId', function() {
-            vm.homeFacility = facilities[1];
+            this.vm.homeFacility = this.facilities[1];
 
-            vm.saveUser();
+            this.vm.saveUser();
 
-            expect(user.homeFacilityId).toEqual(vm.homeFacility.id);
+            expect(this.user.homeFacilityId).toEqual(this.vm.homeFacility.id);
         });
 
         it('should clear homeFacilityId', function() {
-            vm.homeFacility = undefined;
+            this.vm.homeFacility = undefined;
 
-            vm.saveUser();
+            this.vm.saveUser();
 
-            expect(user.homeFacilityId).toBeUndefined();
+            expect(this.user.homeFacilityId).toBeUndefined();
         });
 
         it('should not ask to clear home facility rights if facility has not changed', function() {
-            vm.saveUser();
+            this.vm.saveUser();
 
-            expect(confirmService.confirmDestroy).not.toHaveBeenCalled();
+            expect(this.confirmService.confirmDestroy).not.toHaveBeenCalled();
         });
 
         it('should save user', function() {
-            vm.saveUser();
+            this.vm.saveUser();
 
-            expect(user.save).toHaveBeenCalled();
+            expect(this.user.save).toHaveBeenCalled();
         });
 
         it('should ask to remove home facility rights if home facility changed', function() {
-            vm.homeFacility = facilities[1];
+            this.vm.homeFacility = this.facilities[1];
 
-            vm.saveUser();
+            this.vm.saveUser();
 
-            expect(confirmService.confirmDestroy).toHaveBeenCalled();
+            expect(this.confirmService.confirmDestroy).toHaveBeenCalled();
         });
 
         it('should save user with home facility rights after dismissing confirmation modal', function() {
-            confirmService.confirmDestroy.andReturn($q.reject());
-            vm.homeFacility = facilities[1];
+            this.confirmService.confirmDestroy.andReturn(this.$q.reject());
+            this.vm.homeFacility = this.facilities[1];
 
-            vm.saveUser();
-            $rootScope.$apply();
+            this.vm.saveUser();
+            this.$rootScope.$apply();
 
-            expect(user.save).toHaveBeenCalled();
-            expect(user.removeHomeFacilityRights).not.toHaveBeenCalled();
+            expect(this.user.save).toHaveBeenCalled();
+            expect(this.user.removeHomeFacilityRights).not.toHaveBeenCalled();
         });
 
         it('should remove home facility right after confirmation', function() {
-            vm.homeFacility = facilities[1];
+            this.vm.homeFacility = this.facilities[1];
 
-            vm.saveUser();
-            $rootScope.$apply();
+            this.vm.saveUser();
+            this.$rootScope.$apply();
 
-            expect(user.save).toHaveBeenCalled();
-            expect(user.removeHomeFacilityRights).toHaveBeenCalled();
+            expect(this.user.save).toHaveBeenCalled();
+            expect(this.user.removeHomeFacilityRights).toHaveBeenCalled();
         });
 
     });
@@ -183,16 +179,17 @@ describe('UserFormController', function() {
     describe('sendVerificationEmail', function() {
 
         beforeEach(function() {
-            vm.$onInit();
+            this.vm.$onInit();
         });
 
         it('should send verification email', function() {
-            authUserService.sendVerificationEmail.andReturn($q.when(true));
-            vm.sendVerificationEmail();
-            $rootScope.$apply();
+            this.authUserService.sendVerificationEmail.andReturn(this.$q.when(true));
+            this.vm.sendVerificationEmail();
+            this.$rootScope.$apply();
 
-            expect(authUserService.sendVerificationEmail).toHaveBeenCalledWith(vm.user.id);
-            expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.sendVerificationEmail.success');
+            expect(this.authUserService.sendVerificationEmail).toHaveBeenCalledWith(this.vm.user.id);
+            expect(this.notificationService.success)
+                .toHaveBeenCalledWith('adminUserForm.sendVerificationEmail.success');
         });
 
     });

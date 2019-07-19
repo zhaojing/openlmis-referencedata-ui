@@ -15,86 +15,84 @@
 
 describe('UserListController', function() {
 
-    var vm, $state, $q, $controller, $rootScope, confirmSpy, usersList, userPasswordModalFactoryMock,
-        stateParams, UserDataBuilder;
-
     beforeEach(function() {
-        module('admin-user-list', function($provide) {
-            confirmSpy = jasmine.createSpyObj('confirmService', ['confirm']);
-            userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['resetPassword']);
+        this.confirmSpy = jasmine.createSpyObj('confirmService', ['confirm']);
+        this.userPasswordModalFactoryMock = jasmine.createSpyObj('userPasswordModalFactoryMock', ['resetPassword']);
 
+        var context = this;
+        module('admin-user-list', function($provide) {
             $provide.service('confirmService', function() {
-                return confirmSpy;
+                return context.confirmSpy;
             });
 
             $provide.service('userPasswordModalFactory', function() {
-                return userPasswordModalFactoryMock;
+                return context.userPasswordModalFactoryMock;
             });
         });
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $rootScope = $injector.get('$rootScope');
-            $state = $injector.get('$state');
-            $q = $injector.get('$q');
-            UserDataBuilder = $injector.get('UserDataBuilder');
+            this.$controller = $injector.get('$controller');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$state = $injector.get('$state');
+            this.$q = $injector.get('$q');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        usersList = [
-            new UserDataBuilder().withUsername('administrator')
+        this.usersList = [
+            new this.UserDataBuilder().withUsername('administrator')
                 .build(),
-            new UserDataBuilder().withUsername('user')
+            new this.UserDataBuilder().withUsername('user')
                 .build()
         ];
 
-        vm = $controller('UserListController', {
-            users: usersList
+        this.vm = this.$controller('UserListController', {
+            users: this.usersList
         });
 
-        spyOn($state, 'reload').andReturn();
-        spyOn($state, 'go').andReturn();
+        spyOn(this.$state, 'reload').andReturn();
+        spyOn(this.$state, 'go').andReturn();
     });
 
     describe('onInit', function() {
 
         beforeEach(function() {
-            stateParams = {
-                firstName: usersList[0].firstName,
-                lastName: usersList[0].lastName,
-                username: usersList[0].username,
-                email: usersList[0].email
+            this.stateParams = {
+                firstName: this.usersList[0].firstName,
+                lastName: this.usersList[0].lastName,
+                username: this.usersList[0].username,
+                email: this.usersList[0].email
             };
 
-            vm = $controller('UserListController', {
-                users: usersList,
-                $stateParams: stateParams
+            this.vm = this.$controller('UserListController', {
+                users: this.usersList,
+                $stateParams: this.stateParams
             });
-            vm.$onInit();
+            this.vm.$onInit();
         });
 
         it('should expose users', function() {
-            expect(vm.users).toEqual(usersList);
+            expect(this.vm.users).toEqual(this.usersList);
         });
 
         it('should expose firstName', function() {
-            expect(vm.firstName).toEqual(usersList[0].firstName);
+            expect(this.vm.firstName).toEqual(this.usersList[0].firstName);
         });
 
         it('should expose lastName', function() {
-            expect(vm.lastName).toEqual(usersList[0].lastName);
+            expect(this.vm.lastName).toEqual(this.usersList[0].lastName);
         });
 
         it('should expose email', function() {
-            expect(vm.email).toEqual(usersList[0].email);
+            expect(this.vm.email).toEqual(this.usersList[0].email);
         });
 
         it('should expose username', function() {
-            expect(vm.username).toEqual(usersList[0].username);
+            expect(this.vm.username).toEqual(this.usersList[0].username);
         });
     });
 
     it('should expose sort options', function() {
-        expect(vm.options).toEqual({
+        expect(this.vm.options).toEqual({
             'adminUserList.firstName': ['firstName'],
             'adminUserList.lastName': ['lastName'],
             'adminUserList.username': ['username']
@@ -103,45 +101,43 @@ describe('UserListController', function() {
 
     describe('resetUserPassword', function() {
 
-        var modalDeferred;
-
         beforeEach(function() {
-            modalDeferred = $q.defer();
-            userPasswordModalFactoryMock.resetPassword.andReturn(modalDeferred.promise);
+            this.modalDeferred = this.$q.defer();
+            this.userPasswordModalFactoryMock.resetPassword.andReturn(this.modalDeferred.promise);
         });
 
         it('should open user password modal', function() {
-            vm.resetUserPassword(usersList[0]);
+            this.vm.resetUserPassword(this.usersList[0]);
 
-            expect(userPasswordModalFactoryMock.resetPassword).toHaveBeenCalledWith(usersList[0]);
+            expect(this.userPasswordModalFactoryMock.resetPassword).toHaveBeenCalledWith(this.usersList[0]);
         });
 
         it('should reload state after password change was successful', function() {
-            vm.resetUserPassword(usersList[0]);
-            modalDeferred.resolve();
-            $rootScope.$apply();
+            this.vm.resetUserPassword(this.usersList[0]);
+            this.modalDeferred.resolve();
+            this.$rootScope.$apply();
 
-            expect($state.reload).toHaveBeenCalled();
+            expect(this.$state.reload).toHaveBeenCalled();
         });
 
         it('should not reload state if password change was unsuccessful', function() {
-            vm.resetUserPassword(usersList[0]);
-            modalDeferred.reject();
-            $rootScope.$apply();
+            this.vm.resetUserPassword(this.usersList[0]);
+            this.modalDeferred.reject();
+            this.$rootScope.$apply();
 
-            expect($state.reload).not.toHaveBeenCalled();
+            expect(this.$state.reload).not.toHaveBeenCalled();
         });
     });
 
     describe('search', function() {
 
         it('should set lastName param', function() {
-            vm.lastName = 'lastName';
+            this.vm.lastName = 'lastName';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
-                lastName: vm.lastName,
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.users', {
+                lastName: this.vm.lastName,
                 firstName: undefined,
                 email: undefined,
                 username: undefined
@@ -151,13 +147,13 @@ describe('UserListController', function() {
         });
 
         it('should set firstName param', function() {
-            vm.firstName = 'firstName';
+            this.vm.firstName = 'firstName';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: undefined,
-                firstName: vm.firstName,
+                firstName: this.vm.firstName,
                 email: undefined,
                 username: undefined
             }, {
@@ -166,14 +162,14 @@ describe('UserListController', function() {
         });
 
         it('should set email param', function() {
-            vm.email = 'email';
+            this.vm.email = 'email';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: undefined,
                 firstName: undefined,
-                email: vm.email,
+                email: this.vm.email,
                 username: undefined
             }, {
                 reload: true
@@ -181,24 +177,24 @@ describe('UserListController', function() {
         });
 
         it('should set username param', function() {
-            vm.username = 'username';
+            this.vm.username = 'username';
 
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalledWith('openlmis.administration.users', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.users', {
                 lastName: undefined,
                 firstName: undefined,
                 email: undefined,
-                username: vm.username
+                username: this.vm.username
             }, {
                 reload: true
             });
         });
 
         it('should call state go method', function() {
-            vm.search();
+            this.vm.search();
 
-            expect($state.go).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
     });
 });

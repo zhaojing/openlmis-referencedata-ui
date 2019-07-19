@@ -14,15 +14,11 @@
  */
 
 describe('systemNotificationService', function() {
-
-    var systemNotifications, $q;
-
     beforeEach(function() {
-
         module('referencedata-system-notification');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
+            this.$q = $injector.get('$q');
             this.systemNotificationService = $injector.get('systemNotificationService');
             this.SystemNotificationResource = $injector.get('SystemNotificationResource');
             this.$rootScope = $injector.get('$rootScope');
@@ -30,66 +26,22 @@ describe('systemNotificationService', function() {
             this.UserDataBuilder = $injector.get('UserDataBuilder');
             this.SystemNotificationDataBuilder = $injector.get('SystemNotificationDataBuilder');
             this.ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
         this.localStorageKey = 'systemNotifications';
 
-        var currentDay = new Date().getDate();
-        this.farPastDate = new Date(new Date().setDate(currentDay - 3)).toISOString();
-        this.pastDate = new Date(new Date().setDate(currentDay - 2)).toISOString();
-        this.futureDate = new Date(new Date().setDate(currentDay + 2)).toISOString();
-        this.farFutureDate = new Date(new Date().setDate(currentDay + 3)).toISOString();
-
-        this.ongoingSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.pastDate)
-            .withExpiryDate(this.futureDate)
-            .build();
-
-        this.systemNotificationWithoutExpiryDate = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.pastDate)
-            .withoutExpiryDate()
-            .build();
-
-        this.pastSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.farPastDate)
-            .withExpiryDate(this.pastDate)
-            .build();
-
-        this.futureSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.futureDate)
-            .withExpiryDate(this.farFutureDate)
-            .build();
-
-        this.inactiveSystemNotification = new this.SystemNotificationDataBuilder()
-            .withStartDate(this.pastDate)
-            .withExpiryDate(this.futureDate)
-            .inactive()
-            .build();
-
-        systemNotifications = [
-            this.ongoingSystemNotification,
-            this.systemNotificationWithoutExpiryDate,
-            this.pastSystemNotification,
-            this.futureSystemNotification,
-            this.inactiveSystemNotification
+        this.systemNotifications = [
+            new this.SystemNotificationDataBuilder().build(),
+            new this.SystemNotificationDataBuilder().build()
         ];
 
-        spyOn(this.SystemNotificationResource.prototype, 'query')
-            .andCallFake(function(param) {
-                var result;
-                if (param.isDisplayed) {
-                    result = [
-                        systemNotifications[0],
-                        systemNotifications[1]
-                    ];
-                } else {
-                    result = systemNotifications;
-                }
+        this.systemNotificationsPage = new this.PageDataBuilder()
+            .withContent(this.systemNotifications)
+            .build();
 
-                return $q.resolve({
-                    content: result
-                });
-            });
+        spyOn(this.SystemNotificationResource.prototype, 'query')
+            .andReturn(this.$q.resolve(this.systemNotificationsPage));
 
         spyOn(this.localStorageService, 'get');
         spyOn(this.localStorageService, 'remove');
@@ -100,27 +52,19 @@ describe('systemNotificationService', function() {
 
         it('should return list of active system notifications', function() {
             var result;
-
             this.systemNotificationService.getSystemNotifications()
                 .then(function(notifications) {
                     result = notifications;
                 });
             this.$rootScope.$apply();
 
-            expect(result).toEqual([
-                systemNotifications[0],
-                systemNotifications[1]
-            ]);
+            expect(result).toEqual(this.systemNotifications);
         });
 
         it('should return cached data if available', function() {
-            this.localStorageService.get.andReturn(angular.toJson([
-                systemNotifications[0],
-                systemNotifications[1]
-            ]));
+            this.localStorageService.get.andReturn(angular.toJson(this.systemNotifications));
 
             var result;
-
             this.systemNotificationService.getSystemNotifications()
                 .then(function(notifications) {
                     result = notifications;
@@ -128,11 +72,8 @@ describe('systemNotificationService', function() {
             this.$rootScope.$apply();
 
             expect(this.localStorageService.get).toHaveBeenCalledWith(this.localStorageKey);
-            expect(this.SystemNotificationResource.prototype.query.callCount).toEqual(0);
-            expect(result).toEqual([
-                systemNotifications[0],
-                systemNotifications[1]
-            ]);
+            expect(this.SystemNotificationResource.prototype.query).not.toHaveBeenCalled();
+            expect(result).toEqual(this.systemNotifications);
         });
 
         it('should fetch system notifications with correct params', function() {
@@ -146,7 +87,7 @@ describe('systemNotificationService', function() {
         });
 
         it('should reject if fetching system notifications fails', function() {
-            this.SystemNotificationResource.prototype.query.andReturn($q.reject());
+            this.SystemNotificationResource.prototype.query.andReturn(this.$q.reject());
 
             var rejected;
             this.systemNotificationService.getSystemNotifications()
@@ -176,10 +117,5 @@ describe('systemNotificationService', function() {
             expect(this.SystemNotificationResource.prototype.query.callCount).toEqual(2);
         });
 
-    });
-
-    afterEach(function() {
-        systemNotifications = null;
-        $q = null;
     });
 });

@@ -15,120 +15,93 @@
 
 describe('orderableService', function() {
 
-    var $rootScope, $httpBackend, openlmisUrlFactory, orderableService, orderables;
-
     beforeEach(function() {
+        module('openlmis-pagination');
         module('referencedata-orderable');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
-            orderableService = $injector.get('orderableService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.orderableService = $injector.get('orderableService');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        orderables = [
-            {
-                id: '1',
-                code: 'P1'
-            },
-            {
-                id: '2',
-                code: 'P2'
-            }
+        this.orderable = new this.OrderableDataBuilder().build();
+
+        this.orderables = [
+            this.orderable,
+            new this.OrderableDataBuilder().build()
         ];
+
+        this.orderablesPage = new this.PageDataBuilder()
+            .withContent(this.orderables)
+            .build();
     });
 
     describe('get', function() {
 
-        beforeEach(function() {
-            $httpBackend.when('GET', openlmisUrlFactory('/api/orderables/' + orderables[0].id))
-                .respond(200, orderables[0]);
-        });
-
-        it('should return promise', function() {
-            var result = orderableService.get(orderables[0].id);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to orderable', function() {
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/orderables/' + this.orderable.id))
+                .respond(200, this.orderable);
+
             var result;
+            this.orderableService
+                .get(this.orderable.id)
+                .then(function(orderable) {
+                    result = orderable;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            orderableService.get(orderables[0].id).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(orderables[0]));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(openlmisUrlFactory('/api/orderables/' + orderables[0].id));
-
-            orderableService.get(orderables[0].id);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.orderable));
         });
     });
 
     describe('search', function() {
 
-        var searchParams,
-            paginationParams;
-
         beforeEach(function() {
-            searchParams = {
+            this.searchParams = {
                 code: 'some-code',
                 name: 'some-name',
                 program: 'some-program-id'
             };
-            paginationParams = {
+
+            this.paginationParams = {
                 page: 0,
                 size: 10
             };
-            $httpBackend.whenGET(openlmisUrlFactory('/api/orderables?' +
-                'page=' + paginationParams.page + '&size=' + paginationParams.size +
-                '&code=' + searchParams.code + '&name=' + searchParams.name +
-                '&program=' + searchParams.program))
-                .respond(200, {
-                    content: orderables
-                });
-        });
-
-        it('should return promise', function() {
-            var result = orderableService.search(paginationParams, searchParams);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
         });
 
         it('should resolve to orderable', function() {
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory(
+                    '/api/orderables' +
+                    '?page=' + this.paginationParams.page +
+                    '&size=' + this.paginationParams.size +
+                    '&code=' + this.searchParams.code +
+                    '&name=' + this.searchParams.name +
+                    '&program=' + this.searchParams.program
+                ))
+                .respond(200, this.orderablesPage);
+
             var result;
+            this.orderableService
+                .search(this.paginationParams, this.searchParams)
+                .then(function(orderablesPage) {
+                    result = orderablesPage;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            orderableService.search(paginationParams, searchParams).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result.content)).toEqual(angular.toJson(orderables));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(openlmisUrlFactory('/api/orderables?' +
-                'page=' + paginationParams.page + '&size=' + paginationParams.size +
-                '&code=' + searchParams.code + '&name=' + searchParams.name +
-                '&program=' + searchParams.program));
-
-            orderableService.search(paginationParams, searchParams);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.orderablesPage));
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingRequest();
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 });

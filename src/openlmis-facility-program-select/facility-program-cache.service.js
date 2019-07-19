@@ -163,6 +163,8 @@
         function loadData(moduleName) {
             var userId = authorizationService.getUser().user_id;
 
+            facilityService.query();
+
             return $q.all([
                 facilityService.getAllMinimal(),
                 programService.getUserPrograms(userId),

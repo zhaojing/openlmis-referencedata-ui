@@ -15,75 +15,94 @@
 
 describe('userRightsFactory', function() {
 
-    var $rootScope, $q, rights, userRightsFactory, permissionService;
-
-    beforeEach(module('openlmis-permissions'));
-
-    beforeEach(inject(function($injector) {
-        $rootScope = $injector.get('$rootScope');
-        $q = $injector.get('$q');
-
-        permissionService = $injector.get('permissionService');
-        spyOn(permissionService, 'load').andReturn($q.resolve(makePermissions()));
-
-        userRightsFactory = $injector.get('userRightsFactory');
-    }));
-
     beforeEach(function() {
-        userRightsFactory.buildRights('userId')
-            .then(function(builtRights) {
-                rights = builtRights;
-            });
+        module('openlmis-permissions');
 
-        $rootScope.$apply();
+        inject(function($injector) {
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.permissionService = $injector.get('permissionService');
+            this.userRightsFactory = $injector.get('userRightsFactory');
+            this.PermissionDataBuilder = $injector.get('PermissionDataBuilder');
+        });
+
+        this.programIds = [
+            'program-1',
+            'program-2'
+        ];
+
+        this.facilityIds = [
+            'facility-1',
+            'facility-2',
+            'facility-3'
+        ];
+
+        this.exampleRightName = 'example';
+        this.otherExampleRightName = 'otherExample';
+        this.directRightName = 'directRight';
+
+        var permissions = [
+            new this.PermissionDataBuilder()
+                .withRight(this.exampleRightName)
+                .withFacilityId(this.facilityIds[0])
+                .withProgramId(this.programIds[0])
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight(this.exampleRightName)
+                .withFacilityId(this.facilityIds[1])
+                .withProgramId(this.programIds[0])
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight(this.exampleRightName)
+                .withFacilityId(this.facilityIds[2])
+                .withProgramId(this.programIds[1])
+                .build(),
+
+            new this.PermissionDataBuilder()
+                .withRight(this.otherExampleRightName)
+                .withFacilityId(this.facilityIds[0])
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight(this.otherExampleRightName)
+                .withFacilityId(this.facilityIds[1])
+                .build(),
+            new this.PermissionDataBuilder()
+                .withRight(this.directRightName)
+                .build()
+        ];
+
+        spyOn(this.permissionService, 'load').andReturn(this.$q.resolve(permissions));
+
+        var context = this;
+        this.userRightsFactory.buildRights('userId')
+            .then(function(rights) {
+                context.rights = rights;
+            });
+        this.$rootScope.$apply();
     });
 
     it('should get permissions for userId', function() {
-        expect(permissionService.load).toHaveBeenCalledWith('userId');
+        expect(this.permissionService.load).toHaveBeenCalledWith('userId');
     });
 
     it('should not duplicate rights', function() {
-        expect(rights.length).toBe(3);
+        expect(this.rights.length).toBe(3);
     });
 
     it('should group programs', function() {
-        expect(rights[0].programIds.length).toBe(2);
-        expect(rights[0].programIds[0]).toBe('program1');
-        expect(rights[0].programIds[1]).toBe('program2');
+        expect(this.rights[0].programIds.length).toBe(2);
+        expect(this.rights[0].programIds[0]).toBe(this.programIds[0]);
+        expect(this.rights[0].programIds[1]).toBe(this.programIds[1]);
     });
 
     it('should group facilities', function() {
-        expect(rights[1].facilityIds.length).toBe(2);
-        expect(rights[1].facilityIds[0]).toBe('facility-1');
-        expect(rights[1].facilityIds[1]).toBe('facility-2');
+        expect(this.rights[1].facilityIds.length).toBe(2);
+        expect(this.rights[1].facilityIds[0]).toBe(this.facilityIds[0]);
+        expect(this.rights[1].facilityIds[1]).toBe(this.facilityIds[1]);
     });
 
     it('should mark right as direct if no program or facility id is associated with permission', function() {
-        expect(rights[2].isDirect).toBe(true);
-        expect(rights[1].isDirect).toBe(false);
+        expect(this.rights[2].isDirect).toBe(true);
+        expect(this.rights[1].isDirect).toBe(false);
     });
-
-    function makePermissions() {
-        return [{
-            right: 'example',
-            facilityId: 'facility-1',
-            programId: 'program1'
-        }, {
-            right: 'example',
-            facilityId: 'facility-2',
-            programId: 'program1'
-        }, {
-            right: 'example',
-            facilityId: 'facility-3',
-            programId: 'program2'
-        }, {
-            right: 'otherExample',
-            facilityId: 'facility-1'
-        }, {
-            right: 'otherExample',
-            facilityId: 'facility-2'
-        }, {
-            right: 'DIRECT_RIGHT'
-        }];
-    }
 });

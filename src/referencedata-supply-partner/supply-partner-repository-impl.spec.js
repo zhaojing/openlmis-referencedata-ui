@@ -15,120 +15,106 @@
 
 describe('SupplyPartnerRepositoryImpl', function() {
 
-    var supplyPartnerResourceMock, programServiceMock, supervisoryNodeResourceMock, facilityResourceMock,
-        orderableResourceMock;
-
     beforeEach(function() {
-        module('referencedata-supply-partner', function($provide) {
-            supplyPartnerResourceMock = jasmine.createSpyObj('supplyPartnerResource', [
-                'create', 'update', 'get', 'query'
-            ]);
-            $provide.factory('SupplyPartnerResource', function() {
-                return function() {
-                    return supplyPartnerResourceMock;
-                };
-            });
-            supervisoryNodeResourceMock = jasmine.createSpyObj('supervisoryNodeResource', [
-                'query'
-            ]);
-            $provide.factory('SupervisoryNodeResource', function() {
-                return function() {
-                    return supervisoryNodeResourceMock;
-                };
-            });
-            facilityResourceMock = jasmine.createSpyObj('facilityResource', [
-                'query'
-            ]);
-            $provide.factory('FacilityResource', function() {
-                return function() {
-                    return facilityResourceMock;
-                };
-            });
-            orderableResourceMock = jasmine.createSpyObj('orderableResource', [
-                'query'
-            ]);
-            $provide.factory('OrderableResource', function() {
-                return function() {
-                    return orderableResourceMock;
-                };
-            });
-        });
+        module('referencedata-supply-partner');
 
-        var SupplyPartnerRepositoryImpl, ProgramDataBuilder, SupervisoryNodeDataBuilder, FacilityDataBuilder,
-            OrderableDataBuilder, SupplyPartnerDataBuilder, SupplyPartnerAssociationDataBuilder,
-            ObjectReferenceDataBuilder;
         inject(function($injector) {
-            SupplyPartnerRepositoryImpl = $injector.get('SupplyPartnerRepositoryImpl');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-            FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
-            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
-            SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
-            ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
+            this.SupplyPartnerRepositoryImpl = $injector.get('SupplyPartnerRepositoryImpl');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
+            this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
+            this.SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
+            this.SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
+            this.SupplyPartnerResource = $injector.get('SupplyPartnerResource');
+            this.ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
-            programServiceMock = $injector.get('programService');
-            spyOn(programServiceMock, 'getAll');
+            this.programService = $injector.get('programService');
+            this.SupervisoryNodeResource = $injector.get('SupervisoryNodeResource');
+            this.FacilityResource = $injector.get('FacilityResource');
+            this.OrderableResource = $injector.get('OrderableResource');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        this.supplyPartnerRepositoryImpl = new SupplyPartnerRepositoryImpl();
+        this.supplyPartnerRepositoryImpl = new this.SupplyPartnerRepositoryImpl();
 
         this.programId = 'spri-program-id-1';
         this.supervisoryNodeId = 'spri-node-id-1';
         this.facilityId = 'spri-facility-id-1';
         this.orderableId = 'spri-orderable-id-1';
+
         this.programs = [
-            new ProgramDataBuilder()
+            new this.ProgramDataBuilder()
                 .withId(this.programId)
                 .build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build()
         ];
         this.supervisoryNodes = [
-            new SupervisoryNodeDataBuilder()
+            new this.SupervisoryNodeDataBuilder()
                 .withId(this.supervisoryNodeId)
                 .build(),
-            new SupervisoryNodeDataBuilder().build()
+            new this.SupervisoryNodeDataBuilder().build()
         ];
         this.facilities = [
-            new FacilityDataBuilder()
+            new this.FacilityDataBuilder()
                 .withId(this.facilityId)
                 .build(),
-            new FacilityDataBuilder().build()
+            new this.FacilityDataBuilder().build()
         ];
         this.orderables = [
-            new OrderableDataBuilder()
+            new this.OrderableDataBuilder()
                 .withId(this.orderableId)
                 .build(),
-            new OrderableDataBuilder().build()
+            new this.OrderableDataBuilder().build()
         ];
 
-        this.supplyPartner = new SupplyPartnerDataBuilder()
-            .addAssociation(new SupplyPartnerAssociationDataBuilder()
-                .withProgram(new ObjectReferenceDataBuilder()
+        this.supplyPartner = new this.SupplyPartnerDataBuilder()
+            .addAssociation(new this.SupplyPartnerAssociationDataBuilder()
+                .withProgram(new this.ObjectReferenceDataBuilder()
                     .withId(this.programId)
                     .withResource('program')
                     .build())
-                .withSupervisoryNode(new ObjectReferenceDataBuilder()
+                .withSupervisoryNode(new this.ObjectReferenceDataBuilder()
                     .withId(this.supervisoryNodeId)
                     .withResource('supervisoryNode')
                     .build())
-                .addFacility(new ObjectReferenceDataBuilder()
+                .addFacility(new this.ObjectReferenceDataBuilder()
                     .withId(this.facilityId)
                     .withResource('facility')
                     .build())
-                .addOrderable(new ObjectReferenceDataBuilder()
+                .addOrderable(new this.ObjectReferenceDataBuilder()
                     .withId(this.orderableId)
                     .withResource('orderable')
                     .build())
                 .build())
             .build();
+
+        this.supervisoryNodesPage = new this.PageDataBuilder()
+            .withContent(this.supervisoryNodes)
+            .build();
+
+        this.facilitiesPage = new this.PageDataBuilder()
+            .withContent(this.facilities)
+            .build();
+
+        this.orderablesPage = new this.PageDataBuilder()
+            .withContent(this.orderables)
+            .build();
+
+        spyOn(this.SupplyPartnerResource.prototype, 'get').andReturn(this.$q.resolve(this.supplyPartner));
+        spyOn(this.SupplyPartnerResource.prototype, 'create').andReturn(this.$q.resolve(this.supplyPartner));
+        spyOn(this.SupplyPartnerResource.prototype, 'update').andReturn(this.$q.resolve(this.supplyPartner));
+        spyOn(this.SupervisoryNodeResource.prototype, 'query').andReturn(this.$q.resolve(this.supervisoryNodesPage));
+        spyOn(this.FacilityResource.prototype, 'query').andReturn(this.$q.resolve(this.facilitiesPage));
+        spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(this.orderablesPage));
+        spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
     });
 
     describe('create', function() {
 
         it('should reject if unsuccessful', function() {
-            supplyPartnerResourceMock.create.andReturn(this.$q.reject());
+            this.SupplyPartnerResource.prototype.create.andReturn(this.$q.reject());
 
             var rejected;
             this.supplyPartnerRepositoryImpl.create(this.supplyPartner)
@@ -138,12 +124,10 @@ describe('SupplyPartnerRepositoryImpl', function() {
             this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(supplyPartnerResourceMock.create).toHaveBeenCalledWith(this.supplyPartner);
+            expect(this.SupplyPartnerResource.prototype.create).toHaveBeenCalledWith(this.supplyPartner);
         });
 
         it('should resolve and return object if successful', function() {
-            supplyPartnerResourceMock.create.andReturn(this.$q.resolve(this.supplyPartner));
-
             var result;
             this.supplyPartnerRepositoryImpl.create(this.supplyPartner)
                 .then(function(response) {
@@ -152,7 +136,7 @@ describe('SupplyPartnerRepositoryImpl', function() {
             this.$rootScope.$apply();
 
             expect(result).toEqual(this.supplyPartner);
-            expect(supplyPartnerResourceMock.create).toHaveBeenCalledWith(this.supplyPartner);
+            expect(this.SupplyPartnerResource.prototype.create).toHaveBeenCalledWith(this.supplyPartner);
         });
 
     });
@@ -160,7 +144,7 @@ describe('SupplyPartnerRepositoryImpl', function() {
     describe('update', function() {
 
         it('should reject if unsuccessful', function() {
-            supplyPartnerResourceMock.update.andReturn(this.$q.reject());
+            this.SupplyPartnerResource.prototype.update.andReturn(this.$q.reject());
 
             var rejected;
             this.supplyPartnerRepositoryImpl.update(this.supplyPartner)
@@ -170,12 +154,10 @@ describe('SupplyPartnerRepositoryImpl', function() {
             this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(supplyPartnerResourceMock.update).toHaveBeenCalledWith(this.supplyPartner);
+            expect(this.SupplyPartnerResource.prototype.update).toHaveBeenCalledWith(this.supplyPartner);
         });
 
         it('should resolve if successful', function() {
-            supplyPartnerResourceMock.update.andReturn(this.$q.resolve(this.supplyPartner));
-
             var result;
             this.supplyPartnerRepositoryImpl.update(this.supplyPartner)
                 .then(function(response) {
@@ -184,7 +166,7 @@ describe('SupplyPartnerRepositoryImpl', function() {
             this.$rootScope.$apply();
 
             expect(result).toEqual(this.supplyPartner);
-            expect(supplyPartnerResourceMock.update).toHaveBeenCalledWith(this.supplyPartner);
+            expect(this.SupplyPartnerResource.prototype.update).toHaveBeenCalledWith(this.supplyPartner);
         });
 
     });
@@ -192,7 +174,7 @@ describe('SupplyPartnerRepositoryImpl', function() {
     describe('get', function() {
 
         it('should reject if get supply partner unsuccessful', function() {
-            supplyPartnerResourceMock.get.andReturn(this.$q.reject());
+            this.SupplyPartnerResource.prototype.get.andReturn(this.$q.reject());
 
             var rejected;
             this.supplyPartnerRepositoryImpl.get(this.supplyPartner.id)
@@ -202,22 +184,10 @@ describe('SupplyPartnerRepositoryImpl', function() {
             this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(supplyPartnerResourceMock.get).toHaveBeenCalledWith(this.supplyPartner.id);
+            expect(this.SupplyPartnerResource.prototype.get).toHaveBeenCalledWith(this.supplyPartner.id);
         });
 
         it('should resolve and return object with all expanded if all successful', function() {
-            supplyPartnerResourceMock.get.andReturn(this.$q.resolve(this.supplyPartner));
-            programServiceMock.getAll.andReturn(this.$q.resolve(this.programs));
-            supervisoryNodeResourceMock.query.andReturn(this.$q.resolve({
-                content: this.supervisoryNodes
-            }));
-            facilityResourceMock.query.andReturn(this.$q.resolve({
-                content: this.facilities
-            }));
-            orderableResourceMock.query.andReturn(this.$q.resolve({
-                content: this.orderables
-            }));
-
             var result;
             this.supplyPartnerRepositoryImpl.get(this.supplyPartner.id)
                 .then(function(response) {
@@ -228,17 +198,18 @@ describe('SupplyPartnerRepositoryImpl', function() {
             expect(result.code).toEqual(this.supplyPartner.code);
             expect(result.associations[0].program.code).toEqual(this.programs[0].code);
             expect(result.associations[0].supervisoryNode.code).toEqual(this.supervisoryNodes[0].code);
-            expect(supplyPartnerResourceMock.get).toHaveBeenCalledWith(this.supplyPartner.id);
-            expect(programServiceMock.getAll).toHaveBeenCalled();
-            expect(supervisoryNodeResourceMock.query).toHaveBeenCalledWith({
+
+            expect(this.programService.getAll).toHaveBeenCalled();
+            expect(this.SupplyPartnerResource.prototype.get).toHaveBeenCalledWith(this.supplyPartner.id);
+            expect(this.SupervisoryNodeResource.prototype.query).toHaveBeenCalledWith({
                 id: [this.supervisoryNodeId]
             });
 
-            expect(facilityResourceMock.query).toHaveBeenCalledWith({
+            expect(this.FacilityResource.prototype.query).toHaveBeenCalledWith({
                 id: [this.facilityId]
             });
 
-            expect(orderableResourceMock.query).toHaveBeenCalledWith({
+            expect(this.OrderableResource.prototype.query).toHaveBeenCalledWith({
                 id: [this.orderableId]
             });
         });

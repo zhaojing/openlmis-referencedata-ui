@@ -15,30 +15,28 @@
 
 describe('right filter', function() {
 
-    var rightFilter, $filter, messageService;
-
     beforeEach(function() {
         module('admin-role-form');
 
         inject(function($injector) {
-            $filter = $injector.get('$filter');
-            messageService = $injector.get('messageService');
+            this.$filter = $injector.get('$filter');
+            this.messageService = $injector.get('messageService');
         });
 
-        rightFilter = $filter('right');
+        this.rightFilter = this.$filter('right');
 
-        spyOn(messageService, 'get');
+        spyOn(this.messageService, 'get');
     });
 
     it('should return undefined for undefined', function() {
-        expect(rightFilter()).toBeUndefined();
+        expect(this.rightFilter()).toBeUndefined();
     });
 
     it('should return translated message for ', function() {
-        messageService.get.andReturn('Right Name');
+        this.messageService.get.andReturn('Right Name');
 
-        expect(rightFilter('RIGHT_NAME')).toEqual('Right Name');
-        expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.rightName');
+        expect(this.rightFilter('RIGHT_NAME')).toEqual('Right Name');
+        expect(this.messageService.get).toHaveBeenCalledWith('adminRoleForm.rightName');
     });
 
 });

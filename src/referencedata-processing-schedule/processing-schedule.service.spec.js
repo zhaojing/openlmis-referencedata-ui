@@ -15,91 +15,96 @@
 
 describe('processingScheduleService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, processingScheduleService, ProcessingScheduleDataBuilder,
-        processingSchedules;
-
     beforeEach(function() {
         module('referencedata-processing-schedule');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            processingScheduleService = $injector.get('processingScheduleService');
-            ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.processingScheduleService = $injector.get('processingScheduleService');
+            this.ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        processingSchedules = [
-            new ProcessingScheduleDataBuilder().build(),
-            new ProcessingScheduleDataBuilder().build()
+        this.processingSchedule = new this.ProcessingScheduleDataBuilder().build();
+
+        this.processingSchedules = [
+            this.processingSchedule,
+            new this.ProcessingScheduleDataBuilder().build()
         ];
+
+        this.processingSchedulesPage = new this.PageDataBuilder()
+            .withContent(this.processingSchedules)
+            .build();
     });
 
     describe('get', function() {
 
         it('should get processing schedule by id', function() {
-            var data;
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/processingSchedules/' + this.processingSchedule.id))
+                .respond(200, this.processingSchedule);
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/processingSchedules/' + processingSchedules[0].id))
-                .respond(200, processingSchedules[0]);
+            var result;
+            this.processingScheduleService
+                .get(this.processingSchedule.id)
+                .then(function(processingSchedule) {
+                    result = processingSchedule;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            processingScheduleService.get(processingSchedules[0].id).then(function(response) {
-                data = response;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.id).toBe(processingSchedules[0].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.processingSchedule));
         });
     });
 
     describe('query', function() {
 
         it('should get all processing periods', function() {
-            var data,
-                parameters = {
-                    param: 'value'
-                };
+            var parameters = {
+                param: 'value'
+            };
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/processingSchedules?param=' + parameters.param))
-                .respond(200, {
-                    content: processingSchedules
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/processingSchedules?param=' + parameters.param))
+                .respond(200, this.processingSchedulesPage);
+
+            var result;
+            this.processingScheduleService
+                .query(parameters)
+                .then(function(processingSchedulesPage) {
+                    result = processingSchedulesPage;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            processingScheduleService.query(parameters).then(function(response) {
-                data = response.content;
-            });
-
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.length).toEqual(2);
-            expect(data[0].id).toBe(processingSchedules[0].id);
-            expect(data[1].id).toBe(processingSchedules[1].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.processingSchedulesPage));
         });
     });
 
     describe('create', function() {
 
         it('should create new processing period', function() {
-            var data;
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory('/api/processingSchedules'), this.processingSchedule)
+                .respond(200, this.processingSchedule);
 
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/processingSchedules'), processingSchedules[0])
-                .respond(200, processingSchedules[0]);
+            var result;
+            this.processingScheduleService
+                .create(this.processingSchedule)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            processingScheduleService.create(processingSchedules[0]).then(function(response) {
-                data = response;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.name).toEqual(processingSchedules[0].name);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.processingSchedule));
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 });

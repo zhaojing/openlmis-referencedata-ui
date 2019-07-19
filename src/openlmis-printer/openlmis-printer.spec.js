@@ -15,95 +15,92 @@
 
 describe('OpenlmisPrinter', function() {
 
-    var printer, OpenlmisPrinter, accessTokenFactory, openlmisUrlFactory, messageService, $window, loadingMessageKey,
-        loadingMessage, documentSpy, tabSpy, accessTokenSuffix;
-
     beforeEach(function() {
         module('openlmis-printer');
 
         inject(function($injector) {
-            OpenlmisPrinter = $injector.get('OpenlmisPrinter');
-            accessTokenFactory = $injector.get('accessTokenFactory');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
-            messageService = $injector.get('messageService');
-            $window = $injector.get('$window');
+            this.OpenlmisPrinter = $injector.get('OpenlmisPrinter');
+            this.accessTokenFactory = $injector.get('accessTokenFactory');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.messageService = $injector.get('messageService');
+            this.$window = $injector.get('$window');
         });
 
-        loadingMessage = 'Loading message...';
-        loadingMessageKey = 'loading.message.key';
-        tabSpy = jasmine.createSpyObj('tab', ['close']);
-        accessTokenSuffix = '&access_token="some-access-token';
-        tabSpy.location = {};
-        documentSpy = jasmine.createSpyObj('document', ['write']);
-        tabSpy.document = documentSpy;
+        this.loadingMessage = 'Loading message...';
+        this.loadingMessageKey = 'loading.message.key';
+        this.tabSpy = jasmine.createSpyObj('tab', ['close']);
+        this.accessTokenSuffix = '&access_token="some-access-token';
+        this.tabSpy.location = {};
+        this.documentSpy = jasmine.createSpyObj('document', ['write']);
+        this.tabSpy.document = this.documentSpy;
 
-        spyOn(accessTokenFactory, 'addAccessToken');
-        spyOn(messageService, 'get').andReturn(loadingMessage);
-        spyOn($window, 'open').andReturn(tabSpy);
+        spyOn(this.accessTokenFactory, 'addAccessToken');
+        spyOn(this.messageService, 'get').andReturn(this.loadingMessage);
+        spyOn(this.$window, 'open').andReturn(this.tabSpy);
     });
 
     describe('constructor', function() {
 
         beforeEach(function() {
-            printer = new OpenlmisPrinter({
-                loadingMessage: loadingMessageKey,
+            this.printer = new this.OpenlmisPrinter({
+                loadingMessage: this.loadingMessageKey,
                 resourceUri: '/api/resource',
                 id: '1'
             });
         });
 
         it('should set loadingMessage', function() {
-            expect(printer.loadingMessage).toEqual(loadingMessageKey);
+            expect(this.printer.loadingMessage).toEqual(this.loadingMessageKey);
         });
 
         it('should set resource uri', function() {
-            expect(printer.resourceUri).toEqual('/api/resource');
+            expect(this.printer.resourceUri).toEqual('/api/resource');
         });
 
         it('should set id', function() {
-            expect(printer.id).toEqual('1');
+            expect(this.printer.id).toEqual('1');
         });
 
         it('should remove trailing slash from resource uri', function() {
-            printer = new OpenlmisPrinter({
+            this.printer = new this.OpenlmisPrinter({
                 resourceUri: '/api/resource/'
             });
 
-            expect(printer.resourceUri).toEqual('/api/resource');
+            expect(this.printer.resourceUri).toEqual('/api/resource');
         });
 
         it('should default loading message to \'Loading...\'', function() {
-            printer = new OpenlmisPrinter({});
+            this.printer = new this.OpenlmisPrinter({});
 
-            expect(printer.loadingMessage).toEqual('openlmisPrinter.loading');
+            expect(this.printer.loadingMessage).toEqual('openlmisPrinter.loading');
         });
 
         it('should accept undefined', function() {
-            printer = new OpenlmisPrinter();
+            this.printer = new this.OpenlmisPrinter();
 
-            expect(printer.loadingMessage).toEqual('openlmisPrinter.loading');
-            expect(printer.resourceUri).toBeUndefined();
-            expect(printer.id).toBeUndefined();
+            expect(this.printer.loadingMessage).toEqual('openlmisPrinter.loading');
+            expect(this.printer.resourceUri).toBeUndefined();
+            expect(this.printer.id).toBeUndefined();
         });
     });
 
     describe('openTab', function() {
 
         beforeEach(function() {
-            printer = new OpenlmisPrinter({
-                loadingMessage: loadingMessageKey
+            this.printer = new this.OpenlmisPrinter({
+                loadingMessage: this.loadingMessageKey
             });
 
-            printer.openTab();
+            this.printer.openTab();
         });
 
         it('should open tab', function() {
-            expect($window.open).toHaveBeenCalledWith('', '_blank');
+            expect(this.$window.open).toHaveBeenCalledWith('', '_blank');
         });
 
         it('should set a loading message', function() {
-            expect(documentSpy.write).toHaveBeenCalledWith(loadingMessage);
-            expect(messageService.get).toHaveBeenCalledWith(loadingMessageKey);
+            expect(this.documentSpy.write).toHaveBeenCalledWith(this.loadingMessage);
+            expect(this.messageService.get).toHaveBeenCalledWith(this.loadingMessageKey);
         });
 
     });
@@ -111,22 +108,23 @@ describe('OpenlmisPrinter', function() {
     describe('print', function() {
 
         beforeEach(function() {
-            printer = new OpenlmisPrinter({
+            this.printer = new this.OpenlmisPrinter({
                 resourceUri: '/api/resource',
                 id: '2'
             });
-            printer.openTab();
+            this.printer.openTab();
 
-            accessTokenFactory.addAccessToken.andCallFake(function(url) {
+            var accessTokenSuffix = this.accessTokenSuffix;
+            this.accessTokenFactory.addAccessToken.andCallFake(function(url) {
                 return url + accessTokenSuffix;
             });
         });
 
         it('should update tab url', function() {
-            printer.print();
+            this.printer.print();
 
-            expect(tabSpy.location.href).
-                toEqual(openlmisUrlFactory('/api/resource/2/print?format=pdf') + accessTokenSuffix);
+            expect(this.tabSpy.location.href).
+                toEqual(this.openlmisUrlFactory('/api/resource/2/print?format=pdf') + this.accessTokenSuffix);
         });
 
     });
@@ -134,14 +132,14 @@ describe('OpenlmisPrinter', function() {
     describe('closeTab', function() {
 
         beforeEach(function() {
-            printer = new OpenlmisPrinter();
-            printer.openTab();
+            this.printer = new this.OpenlmisPrinter();
+            this.printer.openTab();
         });
 
         it('it should close tab', function() {
-            printer.closeTab();
+            this.printer.closeTab();
 
-            expect(tabSpy.close).toHaveBeenCalled();
+            expect(this.tabSpy.close).toHaveBeenCalled();
         });
 
     });
@@ -149,15 +147,15 @@ describe('OpenlmisPrinter', function() {
     describe('setId', function() {
 
         beforeEach(function() {
-            printer = new OpenlmisPrinter();
+            this.printer = new this.OpenlmisPrinter();
         });
 
         it('should set id', function() {
-            expect(printer.id).toBeUndefined();
+            expect(this.printer.id).toBeUndefined();
 
-            printer.setId('1');
+            this.printer.setId('1');
 
-            expect(printer.id).toEqual('1');
+            expect(this.printer.id).toEqual('1');
         });
 
     });

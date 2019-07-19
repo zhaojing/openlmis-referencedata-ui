@@ -15,32 +15,29 @@
 
 describe('FacilityTypeListController', function() {
 
-    var $controller, FacilityTypeDataBuilder,
-        vm, facilityTypes;
-
     beforeEach(function() {
         module('admin-facility-type-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.$controller = $injector.get('$controller');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
         });
 
-        facilityTypes = [
-            new FacilityTypeDataBuilder().build(),
-            new FacilityTypeDataBuilder().build()
+        this.facilityTypes = [
+            new this.FacilityTypeDataBuilder().build(),
+            new this.FacilityTypeDataBuilder().build()
         ];
 
-        vm = $controller('FacilityTypeListController', {
-            facilityTypes: facilityTypes
+        this.vm = this.$controller('FacilityTypeListController', {
+            facilityTypes: this.facilityTypes
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose facility types', function() {
-            expect(vm.facilityTypes).toBe(facilityTypes);
+            expect(this.vm.facilityTypes).toBe(this.facilityTypes);
         });
     });
 });

@@ -15,72 +15,71 @@
 
 describe('UserPasswordModalController', function() {
 
-    var $controller, $q, $rootScope, authUserService, loadingModalService, notificationService,
-        vm, user, modalDeferred;
-
     beforeEach(function() {
+        this.authUserService = jasmine.createSpyObj('authUserService', ['resetPassword', 'sendResetEmail']);
+
+        var authUserService = this.authUserService;
         module('admin-user-form', function($provide) {
-            authUserService = jasmine.createSpyObj('authUserService', ['resetPassword', 'sendResetEmail']);
             $provide.service('authUserService', function() {
                 return authUserService;
             });
         });
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            loadingModalService = $injector.get('loadingModalService');
-            notificationService = $injector.get('notificationService');
+            this.$controller = $injector.get('$controller');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.notificationService = $injector.get('notificationService');
         });
 
-        spyOn(loadingModalService, 'open').andReturn($q.when(true));
-        spyOn(loadingModalService, 'close').andReturn();
-        spyOn(notificationService, 'success').andReturn();
+        spyOn(this.loadingModalService, 'open').andReturn(this.$q.when(true));
+        spyOn(this.loadingModalService, 'close').andReturn();
+        spyOn(this.notificationService, 'success').andReturn();
 
-        user = {
+        this.user = {
             username: 'random-user',
             newPassword: 'new-password',
             email: 'random-email'
         };
-        modalDeferred = $q.defer();
+        this.modalDeferred = this.$q.defer();
 
-        vm = $controller('UserPasswordModalController', {
-            user: user,
-            modalDeferred: modalDeferred,
+        this.vm = this.$controller('UserPasswordModalController', {
+            user: this.user,
+            modalDeferred: this.modalDeferred,
             title: 'adminUserForm.createPassword',
             hideCancel: false
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose updatePassword method', function() {
-            expect(angular.isFunction(vm.updatePassword)).toBe(true);
+            expect(angular.isFunction(this.vm.updatePassword)).toBe(true);
         });
 
         it('should set user', function() {
-            expect(vm.user).toBe(user);
+            expect(this.vm.user).toBe(this.user);
         });
 
         it('should set title', function() {
-            expect(vm.title).toBe('adminUserForm.createPassword');
+            expect(this.vm.title).toBe('adminUserForm.createPassword');
         });
 
         it('should set hideCancel', function() {
-            expect(vm.hideCancel).toBe(false);
+            expect(this.vm.hideCancel).toBe(false);
         });
 
         it('should set isEmailResetSelected as true if user has email', function() {
-            expect(vm.isEmailResetSelected).toBe(true);
+            expect(this.vm.isEmailResetSelected).toBe(true);
         });
 
         it('should set isEmailResetSelected as false if user has no email', function() {
-            delete user.email;
-            vm.$onInit();
+            delete this.user.email;
+            this.vm.$onInit();
 
-            expect(vm.isEmailResetSelected).toBe(false);
+            expect(this.vm.isEmailResetSelected).toBe(false);
         });
 
     });
@@ -90,36 +89,37 @@ describe('UserPasswordModalController', function() {
         describe('resetPassword', function() {
 
             beforeEach(function() {
-                authUserService.resetPassword.andReturn($q.when(true));
-                vm.isEmailResetSelected = false;
-                vm.updatePassword();
-                $rootScope.$apply();
+                this.authUserService.resetPassword.andReturn(this.$q.when(true));
+                this.vm.isEmailResetSelected = false;
+                this.vm.updatePassword();
+                this.$rootScope.$apply();
             });
 
             it('should open loading modal', function() {
-                expect(loadingModalService.open).toHaveBeenCalled();
+                expect(this.loadingModalService.open).toHaveBeenCalled();
             });
 
             it('should call authUserService', function() {
-                expect(authUserService.resetPassword).toHaveBeenCalledWith(user.username, user.newPassword);
+                expect(this.authUserService.resetPassword)
+                    .toHaveBeenCalledWith(this.user.username, this.user.newPassword);
             });
 
             it('should change email if it is empty string', function() {
-                expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.passwordSetSuccessfully');
+                expect(this.notificationService.success).toHaveBeenCalledWith('adminUserForm.passwordSetSuccessfully');
             });
 
             it('should close loading modal if reset password request fails', function() {
-                expect(notificationService.success.callCount).toBe(1);
+                expect(this.notificationService.success.callCount).toBe(1);
 
-                var deferred = $q.defer();
+                var deferred = this.$q.defer();
 
-                authUserService.resetPassword.andReturn(deferred.promise);
-                vm.updatePassword();
+                this.authUserService.resetPassword.andReturn(deferred.promise);
+                this.vm.updatePassword();
                 deferred.reject();
-                $rootScope.$apply();
+                this.$rootScope.$apply();
 
-                expect(loadingModalService.close).toHaveBeenCalled();
-                expect(notificationService.success.callCount).toBe(1);
+                expect(this.loadingModalService.close).toHaveBeenCalled();
+                expect(this.notificationService.success.callCount).toBe(1);
             });
 
         });
@@ -127,36 +127,37 @@ describe('UserPasswordModalController', function() {
         describe('sendResetEmail', function() {
 
             beforeEach(function() {
-                authUserService.sendResetEmail.andReturn($q.when(true));
-                vm.isEmailResetSelected = true;
-                vm.updatePassword();
-                $rootScope.$apply();
+                this.authUserService.sendResetEmail.andReturn(this.$q.when(true));
+                this.vm.isEmailResetSelected = true;
+                this.vm.updatePassword();
+                this.$rootScope.$apply();
             });
 
             it('should open loading modal', function() {
-                expect(loadingModalService.open).toHaveBeenCalled();
+                expect(this.loadingModalService.open).toHaveBeenCalled();
             });
 
             it('should call authUserService', function() {
-                expect(authUserService.sendResetEmail).toHaveBeenCalledWith(user.email);
+                expect(this.authUserService.sendResetEmail).toHaveBeenCalledWith(this.user.email);
             });
 
             it('should sent reset email', function() {
-                expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.passwordResetSuccessfully');
+                expect(this.notificationService.success)
+                    .toHaveBeenCalledWith('adminUserForm.passwordResetSuccessfully');
             });
 
             it('should close loading modal if sent reset email request fails', function() {
-                expect(notificationService.success.callCount).toBe(1);
+                expect(this.notificationService.success.callCount).toBe(1);
 
-                var deferred = $q.defer();
+                var deferred = this.$q.defer();
 
-                authUserService.sendResetEmail.andReturn(deferred.promise);
-                vm.updatePassword();
+                this.authUserService.sendResetEmail.andReturn(deferred.promise);
+                this.vm.updatePassword();
                 deferred.reject();
-                $rootScope.$apply();
+                this.$rootScope.$apply();
 
-                expect(loadingModalService.close).toHaveBeenCalled();
-                expect(notificationService.success.callCount).toBe(1);
+                expect(this.loadingModalService.close).toHaveBeenCalled();
+                expect(this.notificationService.success.callCount).toBe(1);
             });
         });
 

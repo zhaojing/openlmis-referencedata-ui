@@ -15,154 +15,150 @@
 
 describe('ProcessingScheduleEditController', function() {
 
-    var $controller, $rootScope, $q, $state, confirmService, stateTrackerService, periodService, loadingModalService,
-        notificationService, messageService, ProcessingScheduleDataBuilder, PeriodDataBuilder, vm, processingSchedule,
-        processingPeriods, newStartDate, confirmDeferred, saveDeferred, loadingDeferred;
-
     beforeEach(function() {
         module('admin-processing-schedule-edit');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $rootScope = $injector.get('$rootScope');
-            confirmService = $injector.get('confirmService');
-            $q = $injector.get('$q');
-            periodService = $injector.get('periodService');
-            stateTrackerService = $injector.get('stateTrackerService');
-            $state = $injector.get('$state');
-            loadingModalService = $injector.get('loadingModalService');
-            notificationService = $injector.get('notificationService');
-            messageService = $injector.get('messageService');
-            ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
-            PeriodDataBuilder = $injector.get('PeriodDataBuilder');
+            this.$controller = $injector.get('$controller');
+            this.$rootScope = $injector.get('$rootScope');
+            this.confirmService = $injector.get('confirmService');
+            this.$q = $injector.get('$q');
+            this.periodService = $injector.get('periodService');
+            this.stateTrackerService = $injector.get('stateTrackerService');
+            this.$state = $injector.get('$state');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.notificationService = $injector.get('notificationService');
+            this.messageService = $injector.get('messageService');
+            this.ProcessingScheduleDataBuilder = $injector.get('ProcessingScheduleDataBuilder');
+            this.PeriodDataBuilder = $injector.get('PeriodDataBuilder');
         });
 
-        processingSchedule = new ProcessingScheduleDataBuilder().build();
-        processingPeriods = [
-            new PeriodDataBuilder().build(),
-            new PeriodDataBuilder().build()
+        this.processingSchedule = new this.ProcessingScheduleDataBuilder().build();
+        this.processingPeriods = [
+            new this.PeriodDataBuilder().build(),
+            new this.PeriodDataBuilder().build()
         ];
-        newStartDate = processingPeriods[1].endDate;
+        this.newStartDate = this.processingPeriods[1].endDate;
 
-        confirmDeferred = $q.defer();
-        saveDeferred = $q.defer();
-        loadingDeferred = $q.defer();
+        this.confirmDeferred = this.$q.defer();
+        this.saveDeferred = this.$q.defer();
+        this.loadingDeferred = this.$q.defer();
 
-        spyOn(confirmService, 'confirm').andReturn(confirmDeferred.promise);
-        spyOn(stateTrackerService, 'goToPreviousState').andCallFake(loadingDeferred.resolve);
-        spyOn(periodService, 'create').andReturn(saveDeferred.promise);
-        spyOn($state, 'reload');
-        spyOn($state, 'go');
-        spyOn(loadingModalService, 'open').andReturn(loadingDeferred.promise);
-        spyOn(loadingModalService, 'close').andCallFake(loadingDeferred.resolve);
-        spyOn(notificationService, 'success');
-        spyOn(notificationService, 'error');
-        spyOn(messageService, 'get').andCallFake(function(key, param) {
+        spyOn(this.confirmService, 'confirm').andReturn(this.confirmDeferred.promise);
+        spyOn(this.stateTrackerService, 'goToPreviousState').andCallFake(this.loadingDeferred.resolve);
+        spyOn(this.periodService, 'create').andReturn(this.saveDeferred.promise);
+        spyOn(this.$state, 'reload');
+        spyOn(this.$state, 'go');
+        spyOn(this.loadingModalService, 'open').andReturn(this.loadingDeferred.promise);
+        spyOn(this.loadingModalService, 'close').andCallFake(this.loadingDeferred.resolve);
+        spyOn(this.notificationService, 'success');
+        spyOn(this.notificationService, 'error');
+        spyOn(this.messageService, 'get').andCallFake(function(key, param) {
             if (key === 'adminProcessingScheduleEdit.add.question') {
                 return 'Do you want to add Processing Period ' + param.period + '?';
             }
         });
 
-        vm = $controller('ProcessingScheduleEditController', {
-            processingSchedule: processingSchedule,
-            processingPeriods: processingPeriods,
-            newStartDate: newStartDate
+        this.vm = this.$controller('ProcessingScheduleEditController', {
+            processingSchedule: this.processingSchedule,
+            processingPeriods: this.processingPeriods,
+            newStartDate: this.newStartDate
         });
     });
 
     describe('$onInit', function() {
 
         it('should expose resolved fields', function() {
-            var newStartDate = angular.copy(processingPeriods[processingPeriods.length - 1].endDate);
+            var newStartDate = angular.copy(this.processingPeriods[this.processingPeriods.length - 1].endDate);
 
-            vm.$onInit();
+            this.vm.$onInit();
 
-            expect(vm.processingSchedule).toEqual(processingSchedule);
-            expect(vm.newPeriod).toEqual({
-                processingSchedule: processingSchedule,
+            expect(this.vm.processingSchedule).toEqual(this.processingSchedule);
+            expect(this.vm.newPeriod).toEqual({
+                processingSchedule: this.processingSchedule,
                 startDate: newStartDate
             });
 
-            expect(vm.processingPeriods).toEqual(processingPeriods);
+            expect(this.vm.processingPeriods).toEqual(this.processingPeriods);
         });
     });
 
     describe('add', function() {
 
         beforeEach(function() {
-            vm.$onInit();
-            vm.newPeriod = processingPeriods[0];
-            vm.newPeriod.processingSchedule = processingSchedule;
+            this.vm.$onInit();
+            this.vm.newPeriod = this.processingPeriods[0];
+            this.vm.newPeriod.processingSchedule = this.processingSchedule;
         });
 
         it('should prompt user to add period', function() {
-            vm.add();
+            this.vm.add();
 
-            expect(confirmService.confirm).toHaveBeenCalledWith(
-                'Do you want to add Processing Period ' + processingPeriods[0].name + '?',
+            expect(this.confirmService.confirm).toHaveBeenCalledWith(
+                'Do you want to add Processing Period ' + this.processingPeriods[0].name + '?',
                 'adminProcessingScheduleEdit.add'
             );
         });
 
         it('should not add period if user does not confirm it', function() {
-            vm.add();
+            this.vm.add();
 
-            confirmDeferred.reject();
-            $rootScope.$apply();
+            this.confirmDeferred.reject();
+            this.$rootScope.$apply();
 
-            expect(periodService.create).not.toHaveBeenCalled();
+            expect(this.periodService.create).not.toHaveBeenCalled();
         });
 
         it('should add period and open loading modal after confirm', function() {
-            vm.add();
+            this.vm.add();
 
-            confirmDeferred.resolve();
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(vm.newPeriod.processingSchedule).toEqual(processingSchedule);
-            expect(periodService.create).toHaveBeenCalledWith(vm.newPeriod);
-            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(this.vm.newPeriod.processingSchedule).toEqual(this.processingSchedule);
+            expect(this.periodService.create).toHaveBeenCalledWith(this.vm.newPeriod);
+            expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should show notification if period was added successfully', function() {
-            vm.add();
+            this.vm.add();
 
-            confirmDeferred.resolve();
-            saveDeferred.resolve(processingPeriods[0]);
-            loadingDeferred.resolve();
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.saveDeferred.resolve(this.processingPeriods[0]);
+            this.loadingDeferred.resolve();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminProcessingScheduleEdit.add.success');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminProcessingScheduleEdit.add.success');
         });
 
         it('should show notification if period save has failed', function() {
-            vm.add();
+            this.vm.add();
 
-            confirmDeferred.resolve();
-            saveDeferred.reject();
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.saveDeferred.reject();
+            this.$rootScope.$apply();
 
-            expect(notificationService.error).toHaveBeenCalledWith('adminProcessingScheduleEdit.add.fail');
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(this.notificationService.error).toHaveBeenCalledWith('adminProcessingScheduleEdit.add.fail');
+            expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
         it('should reload state after successful add', function() {
-            vm.add();
+            this.vm.add();
 
-            confirmDeferred.resolve();
-            saveDeferred.resolve(processingSchedule);
-            $rootScope.$apply();
+            this.confirmDeferred.resolve();
+            this.saveDeferred.resolve(this.processingSchedule);
+            this.$rootScope.$apply();
 
-            expect($state.reload).toHaveBeenCalled();
+            expect(this.$state.reload).toHaveBeenCalled();
         });
     });
 
     describe('goToPreviousState', function() {
 
         it('should redirect to Processing Period screen', function() {
-            vm.goToPreviousState();
+            this.vm.goToPreviousState();
 
-            expect(stateTrackerService.goToPreviousState).toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).toHaveBeenCalled();
         });
     });
 });

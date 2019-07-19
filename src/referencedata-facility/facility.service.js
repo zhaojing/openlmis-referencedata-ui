@@ -118,7 +118,7 @@
             if (offlineService.isOffline()) {
                 return $q.resolve(facilitiesOffline.getAll());
             }
-            return resource.query(paginationParams, queryParams).$promise
+            return resource.query(_.extend({}, queryParams, paginationParams)).$promise
                 .then(function(page) {
                     page.content.forEach(function(facility) {
                         facilitiesOffline.put(facility);

@@ -15,39 +15,31 @@
 
 describe('RoleListController', function() {
 
-    var vm, $controller, rolesList;
-
     beforeEach(function() {
         module('admin-role-list');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            rolesList = [
-                {
-                    id: 1,
-                    name: 'Storeroom Manager',
-                    description: 'Manages storeroom'
-                },
-                {
-                    id: 2,
-                    name: 'Admin',
-                    description: 'System administrator'
-                }
-            ];
+            this.$controller = $injector.get('$controller');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+        });
 
-            vm = $controller('RoleListController', {
-                roles: rolesList
-            });
+        this.rolesList = [
+            new this.RoleDataBuilder().build(),
+            new this.RoleDataBuilder().build()
+        ];
+
+        this.vm = this.$controller('RoleListController', {
+            roles: this.rolesList
         });
     });
 
     describe('init', function() {
         it('should expose roles property', function() {
-            expect(vm.roles).toBe(rolesList);
+            expect(this.vm.roles).toBe(this.rolesList);
         });
 
         it('should set roles page as undefined', function() {
-            expect(vm.rolesPage).toBe(undefined);
+            expect(this.vm.rolesPage).toBe(undefined);
         });
 
     });

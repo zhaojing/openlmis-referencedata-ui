@@ -27,7 +27,8 @@
         'ngResource',
         'openlmis-urls',
         'openlmis-repository',
-        'openlmis-class-extender'
+        'openlmis-class-extender',
+        'referencedata-program'
     ]);
 
 })();

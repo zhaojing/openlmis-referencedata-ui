@@ -18,33 +18,29 @@ describe('RequisitionGroupListController', function() {
     beforeEach(function() {
         module('admin-requisition-group-list');
 
-        var RequisitionGroupDataBuilder, GeographicZoneDataBuilder, ProgramDataBuilder, ObjectMapper;
-
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
             this.$state = $injector.get('$state');
-
-            ObjectMapper = $injector.get('ObjectMapper');
-
-            RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
-            GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.ObjectMapper = $injector.get('ObjectMapper');
+            this.RequisitionGroupDataBuilder = $injector.get('RequisitionGroupDataBuilder');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
 
         });
 
         this.programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
         this.geographicZones = [
-            new GeographicZoneDataBuilder().build(),
-            new GeographicZoneDataBuilder().build()
+            new this.GeographicZoneDataBuilder().build(),
+            new this.GeographicZoneDataBuilder().build()
         ];
         this.requisitionGroups = [
-            new RequisitionGroupDataBuilder().buildJson(),
-            new RequisitionGroupDataBuilder().buildJson()
+            new this.RequisitionGroupDataBuilder().buildJson(),
+            new this.RequisitionGroupDataBuilder().buildJson()
         ];
-        this.facilitiesMap = new ObjectMapper().map(this.requisitionGroups.map(function(group) {
+        this.facilitiesMap = new this.ObjectMapper().map(this.requisitionGroups.map(function(group) {
             return group.supervisoryNode.facility;
         }));
         this.stateParams = {

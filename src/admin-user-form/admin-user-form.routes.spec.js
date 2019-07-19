@@ -15,109 +15,117 @@
 
 describe('openlmis.administration.users.form', function() {
 
-    var $location, $rootScope, $state, $q, MinimalFacilityDataBuilder, facilityService, UserDataBuilder, $templateCache,
-        verificationEmail, authUserService, users, facilities, PageDataBuilder, VerificationEmailDataBuilder,
-        UserRepository, UserService;
-
     beforeEach(function() {
         module('openlmis-main-state');
         module('admin-user-form');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $location = $injector.get('$location');
-            $rootScope = $injector.get('$rootScope');
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
-            facilityService = $injector.get('facilityService');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            $state = $injector.get('$state');
-            $templateCache = $injector.get('$templateCache');
-            authUserService = $injector.get('authUserService');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-            VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
-            UserService = $injector.get('UserService');
-            UserRepository = $injector.get('UserRepository');
+            this.$q = $injector.get('$q');
+            this.$location = $injector.get('$location');
+            this.$rootScope = $injector.get('$rootScope');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.facilityService = $injector.get('facilityService');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.$state = $injector.get('$state');
+            this.$templateCache = $injector.get('$templateCache');
+            this.authUserService = $injector.get('authUserService');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.VerificationEmailDataBuilder = $injector.get('VerificationEmailDataBuilder');
+            this.UserService = $injector.get('UserService');
+            this.UserRepository = $injector.get('UserRepository');
         });
 
-        facilities = [
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build()
+        this.facilities = [
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build()
         ];
 
-        users = new PageDataBuilder()
+        this.users = new this.PageDataBuilder()
             .withContent([
-                new UserDataBuilder().build(),
-                new UserDataBuilder().build(),
-                new UserDataBuilder().build()
+                new this.UserDataBuilder().build(),
+                new this.UserDataBuilder().build(),
+                new this.UserDataBuilder().build()
             ])
             .build();
 
-        verificationEmail = new VerificationEmailDataBuilder().build();
+        this.verificationEmail = new this.VerificationEmailDataBuilder().build();
 
-        spyOn(facilityService, 'getAllMinimal').andReturn($q.resolve(facilities));
-        spyOn(UserRepository.prototype, 'query').andReturn($q.resolve(users));
-        spyOn(UserService.prototype, 'get').andReturn($q.resolve(users.content[0]));
-        spyOn(authUserService, 'getVerificationEmail').andReturn($q.resolve(verificationEmail));
-        spyOn($templateCache, 'get').andCallThrough();
+        spyOn(this.facilityService, 'getAllMinimal').andReturn(this.$q.resolve(this.facilities));
+        spyOn(this.UserRepository.prototype, 'query').andReturn(this.$q.resolve(this.users));
+        spyOn(this.UserService.prototype, 'get').andReturn(this.$q.resolve(this.users.content[0]));
+        spyOn(this.authUserService, 'getVerificationEmail').andReturn(this.$q.resolve(this.verificationEmail));
+        spyOn(this.$templateCache, 'get').andCallThrough();
+
+        this.goToUrl = function(url) {
+            this.$location.url(url);
+            this.$rootScope.$apply();
+        };
+
+        this.getResolvedValue = function(name) {
+            return this.$state.$current.locals.globals[name];
+        };
     });
 
     describe('state', function() {
 
         it('should be available under "/profile" URI', function() {
-            expect($state.current.name).not.toEqual('openlmis.administration.users.form');
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.users.form');
 
-            goToUrl('/administration/users/form/' + users.content[0].id + '?usersPage=0&usersSize=10&sort=username');
+            this.goToUrl(
+                '/administration/users/form/' + this.users.content[0].id + '?usersPage=0&usersSize=10&sort=username'
+            );
 
-            expect($state.current.name).toEqual('openlmis.administration.users.form');
+            expect(this.$state.current.name).toEqual('openlmis.administration.users.form');
         });
 
         it('should use template', function() {
-            goToUrl('/administration/users/form/' + users.content[0].id + '?usersPage=0&usersSize=10&sort=username');
+            this.goToUrl(
+                '/administration/users/form/' + this.users.content[0].id + '?usersPage=0&usersSize=10&sort=username'
+            );
 
-            expect($templateCache.get).toHaveBeenCalledWith('admin-user-form/user-form.html');
+            expect(this.$templateCache.get).toHaveBeenCalledWith('admin-user-form/user-form.html');
         });
 
         it('should resolve facilities', function() {
-            goToUrl('/administration/users/form/' + users.content[0].id + '?usersPage=0&usersSize=10&sort=username');
+            this.goToUrl(
+                '/administration/users/form/' + this.users.content[0].id + '?usersPage=0&usersSize=10&sort=username'
+            );
 
-            expect(getResolvedValue('facilities')).toEqual(facilities);
+            expect(this.getResolvedValue('facilities')).toEqual(this.facilities);
         });
 
         it('should resolve user', function() {
-            goToUrl('/administration/users/form/' + users.content[0].id + '?usersPage=0&usersSize=10&sort=username');
+            this.goToUrl(
+                '/administration/users/form/' + this.users.content[0].id + '?usersPage=0&usersSize=10&sort=username'
+            );
 
-            expect(getResolvedValue('user')).toEqual(users.content[0]);
-            expect(UserService.prototype.get).toHaveBeenCalledWith(users.content[0].id);
+            expect(this.getResolvedValue('user')).toEqual(this.users.content[0]);
+            expect(this.UserService.prototype.get).toHaveBeenCalledWith(this.users.content[0].id);
         });
 
         it('should resolve pending email verification', function() {
-            goToUrl('/administration/users/form/' + users.content[0].id + '?usersPage=0&usersSize=10&sort=username');
+            this.goToUrl(
+                '/administration/users/form/' + this.users.content[0].id + '?usersPage=0&usersSize=10&sort=username'
+            );
 
-            expect(getResolvedValue('pendingVerificationEmail')).toEqual(verificationEmail);
+            expect(this.getResolvedValue('pendingVerificationEmail')).toEqual(this.verificationEmail);
         });
 
         it('should resolve pending verification email to undefined if creating new user', function() {
-            var user = new UserDataBuilder()
+            var user = new this.UserDataBuilder()
                 .asNew()
                 .build();
 
-            UserService.prototype.get.andReturn($q.resolve(user));
+            this.UserService.prototype.get.andReturn(this.$q.resolve(user));
 
-            goToUrl('/administration/users/form/' + users.content[0].id + '?usersPage=0&usersSize=10&sort=username');
+            this.goToUrl(
+                '/administration/users/form/' + this.users.content[0].id + '?usersPage=0&usersSize=10&sort=username'
+            );
 
-            expect(getResolvedValue('pendingVerificationEmail')).toBeUndefined();
+            expect(this.getResolvedValue('pendingVerificationEmail')).toBeUndefined();
         });
 
     });
-
-    function goToUrl(url) {
-        $location.url(url);
-        $rootScope.$apply();
-    }
-
-    function getResolvedValue(name) {
-        return $state.$current.locals.globals[name];
-    }
 
 });

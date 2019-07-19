@@ -15,356 +15,69 @@
 
 describe('ReferenceDataUserResource', function() {
 
-    var referenceDataUserResource, ReferenceDataUserResource, $httpBackend, $rootScope, PageDataBuilder, page,
-        parameterSplitterMock, openlmisUrlFactory;
-
     beforeEach(function() {
-        module('openlmis-pagination');
-        module('referencedata-user', function($provide) {
-            $provide.factory('ParameterSplitter', function() {
-                return function() {
-                    parameterSplitterMock = jasmine.createSpyObj('ParameterSplitter', ['split']);
-                    return parameterSplitterMock;
-                };
-            });
-        });
+        module('referencedata-user');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            ReferenceDataUserResource = $injector.get('ReferenceDataUserResource');
-            PageDataBuilder = $injector.get('PageDataBuilder');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.ReferenceDataUserResource = $injector.get('ReferenceDataUserResource');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.ParameterSplitter = $injector.get('ParameterSplitter');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
         });
 
-        referenceDataUserResource = new ReferenceDataUserResource();
+        spyOn(this.ParameterSplitter.prototype, 'split');
 
-        page = new PageDataBuilder().build();
-    });
+        var userDataBuilder = new this.UserDataBuilder();
 
-    describe('query', function() {
+        this.user = userDataBuilder.buildReferenceDataUserJson();
+        this.updatedUser = userDataBuilder
+            .withFirstName('Update name')
+            .buildReferenceDataUserJson();
 
-        var params, pageTwo;
-
-        beforeEach(function() {
-            referenceDataUserResource = new ReferenceDataUserResource();
-
-            parameterSplitterMock.split.andReturn([{
-                some: ['paramOne']
-            }, {
-                some: ['paramTwo']
-            }]);
-
-            page = PageDataBuilder.buildWithContent([{
-                id: 'obj-one'
-            }, {
-                id: 'obj-two'
-            }]);
-
-            pageTwo = PageDataBuilder.buildWithContent([{
-                id: 'obj-three'
-            }, {
-                id: 'obj-four'
-            }]);
-        });
-
-        it('should return page if only one request was sent', function() {
-            var params = {
-                some: 'param'
-            };
-
-            parameterSplitterMock.split.andReturn([params]);
-
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users?some=param'))
-                .respond(200, page);
-
-            var result;
-            referenceDataUserResource.query(params)
-                .then(function(response) {
-                    result = response;
-                });
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(page));
-        });
-
-        it('should reject if any of the requests fails', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users?some=paramOne'))
-                .respond(200, page);
-
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users?some=paramTwo'))
-                .respond(500);
-
-            var rejected;
-            referenceDataUserResource.query(params)
-                .catch(function() {
-                    rejected = true;
-                });
-            $httpBackend.flush();
-
-            expect(rejected).toEqual(true);
-        });
-
-        it('should return merged page if multiple requests were sent', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users?some=paramOne'))
-                .respond(200, page);
-
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users?some=paramTwo'))
-                .respond(200, pageTwo);
-
-            var result;
-            referenceDataUserResource.query(params)
-                .then(function(response) {
-                    result = response;
-                });
-            $httpBackend.flush();
-
-            expect(result.content).toEqual([page.content[0], page.content[1], pageTwo.content[0], pageTwo.content[1]]);
-            expect(result.numberOfElements).toEqual(4);
-            expect(result.totalElements).toEqual(4);
-            expect(result.size).toEqual(page.size);
-        });
-
-        it('should return response if params are not defined', function() {
-            parameterSplitterMock.split.andReturn([undefined]);
-
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users'))
-                .respond(200, page);
-
-            var result;
-            referenceDataUserResource.query()
-                .then(function(response) {
-                    result = response;
-                });
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(page));
-        });
-
-    });
-
-    describe('get', function() {
-
-        var response;
-
-        beforeEach(function() {
-            response = {
-                id: 'some-id',
-                some: 'test-object'
-            };
-        });
-
-        it('should resolve to server response on successful request', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users/' + response.id))
-                .respond(200, response);
-
-            var result;
-            referenceDataUserResource.get(response.id)
-                .then(function(response) {
-                    result = response;
-                });
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
-        });
-
-        it('should reject on failed request', function() {
-            $httpBackend
-                .expectGET(openlmisUrlFactory('/api/users/' + response.id))
-                .respond(400);
-
-            var rejected;
-            referenceDataUserResource.get(response.id)
-                .catch(function() {
-                    rejected = true;
-                });
-            $httpBackend.flush();
-
-            expect(rejected).toEqual(true);
-        });
-
-        it('should reject if null was given', function() {
-            var rejected;
-            referenceDataUserResource.get()
-                .catch(function() {
-                    rejected = true;
-                });
-            $rootScope.$apply();
-
-            expect(rejected).toBe(true);
-        });
-
-    });
-
-    describe('create', function() {
-
-        var response, object;
-
-        beforeEach(function() {
-            response = {
-                id: 'some-id',
-                some: 'test-response'
-            };
-
-            object = {
-                some: 'test-response'
-            };
-        });
-
-        it('should resolve to server response on successful request', function() {
-            $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/users'), object)
-                .respond(200, response);
-
-            var result;
-            referenceDataUserResource.create(object)
-                .then(function(response) {
-                    result = response;
-                });
-            $httpBackend.flush();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(response));
-        });
-
-        it('should reject on failed request', function() {
-            $httpBackend
-                .expectPOST(openlmisUrlFactory('/api/users'), object)
-                .respond(400);
-
-            var rejected;
-            referenceDataUserResource.create(object)
-                .catch(function() {
-                    rejected = true;
-                });
-            $httpBackend.flush();
-
-            expect(rejected).toEqual(true);
-        });
-
-        it('should reject if null was given', function() {
-            var rejected;
-            referenceDataUserResource.create()
-                .catch(function() {
-                    rejected = true;
-                });
-            $rootScope.$apply();
-
-            expect(rejected).toBe(true);
-        });
-
+        this.referenceDataUserResource = new this.ReferenceDataUserResource();
     });
 
     describe('update', function() {
 
-        var object;
-
-        beforeEach(function() {
-            object = {
-                id: 'some-id',
-                some: 'test-response',
-                customId: 'custom-id-value'
-            };
-        });
-
         it('should resolve to server response on successful request', function() {
-            $httpBackend
-                .expectPUT(openlmisUrlFactory('/api/users'), object)
-                .respond(200, object);
+            this.$httpBackend
+                .expectPUT(this.openlmisUrlFactory('/api/users'), this.user)
+                .respond(200, this.updatedUser);
 
             var result;
-            referenceDataUserResource.update(object)
-                .then(function(object) {
-                    result = object;
+            this.referenceDataUserResource.update(this.user)
+                .then(function(user) {
+                    result = user;
                 });
-            $httpBackend.flush();
+            this.$httpBackend.flush();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(object));
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.updatedUser));
         });
 
         it('should reject on failed request', function() {
-            $httpBackend
-                .expectPUT(openlmisUrlFactory('/api/users'), object)
+            this.$httpBackend
+                .expectPUT(this.openlmisUrlFactory('/api/users'), this.user)
                 .respond(400);
 
             var rejected;
-            referenceDataUserResource.update(object)
+            this.referenceDataUserResource.update(this.user)
                 .catch(function() {
                     rejected = true;
                 });
-            $httpBackend.flush();
+            this.$httpBackend.flush();
 
             expect(rejected).toEqual(true);
         });
 
         it('should reject if null was given', function() {
             var rejected;
-            referenceDataUserResource.update()
+            this.referenceDataUserResource.update()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
-
-            expect(rejected).toBe(true);
-        });
-
-    });
-
-    describe('delete', function() {
-
-        var object;
-
-        beforeEach(function() {
-            object = {
-                id: 'some-id',
-                some: 'test-object',
-                customId: 'custom-id-value'
-            };
-        });
-
-        it('should resolve on successful request', function() {
-            $httpBackend
-                .expectDELETE(openlmisUrlFactory('/api/users/' + object.id))
-                .respond(200);
-
-            var resolved;
-            referenceDataUserResource.delete(object)
-                .then(function() {
-                    resolved = true;
-                });
-            $httpBackend.flush();
-
-            expect(resolved).toEqual(true);
-        });
-
-        it('should reject on failed request', function() {
-            $httpBackend
-                .expectDELETE(openlmisUrlFactory('/api/users/' + object.id))
-                .respond(400);
-
-            var rejected;
-            referenceDataUserResource.delete(object)
-                .catch(function() {
-                    rejected = true;
-                });
-            $httpBackend.flush();
-
-            expect(rejected).toEqual(true);
-        });
-
-        it('should reject if null was given', function() {
-            var rejected;
-            referenceDataUserResource.delete()
-                .catch(function() {
-                    rejected = true;
-                });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
         });
@@ -372,8 +85,8 @@ describe('ReferenceDataUserResource', function() {
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingRequest();
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
 });

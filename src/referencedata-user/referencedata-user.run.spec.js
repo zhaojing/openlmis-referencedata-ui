@@ -15,40 +15,38 @@
 
 describe('referencedata-user run', function() {
 
-    var loginServiceSpy, currentUserServiceSpy, postLoginAction, postLogoutAction,  $q, $rootScope;
-
     beforeEach(function() {
-        module('referencedata-user', function($provide) {
-            loginServiceSpy = jasmine.createSpyObj('loginService', [
-                'registerPostLoginAction', 'registerPostLogoutAction'
-            ]);
-            $provide.value('loginService', loginServiceSpy);
+        this.loginServiceSpy = jasmine.createSpyObj('loginService', [
+            'registerPostLoginAction', 'registerPostLogoutAction'
+        ]);
 
-            currentUserServiceSpy = jasmine.createSpyObj('currentUserService', ['getUserInfo', 'clearCache']);
-            $provide.value('currentUserService', currentUserServiceSpy);
+        this.currentUserServiceSpy = jasmine.createSpyObj('currentUserService', ['getUserInfo', 'clearCache']);
+
+        var suite = this;
+        module('referencedata-user', function($provide) {
+            $provide.value('loginService', suite.loginServiceSpy);
+            $provide.value('currentUserService', suite.currentUserServiceSpy);
         });
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
         });
 
-        postLoginAction = loginServiceSpy.registerPostLoginAction.calls[0].args[0];
-        postLogoutAction = loginServiceSpy.registerPostLogoutAction.calls[0].args[0];
+        this.postLoginAction = this.loginServiceSpy.registerPostLoginAction.calls[0].args[0];
+        this.postLogoutAction = this.loginServiceSpy.registerPostLogoutAction.calls[0].args[0];
+
+        inject();
     });
 
     describe('run block', function() {
 
-        beforeEach(function() {
-            inject();
-        });
-
         it('should register post login action', function() {
-            expect(loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
         });
 
         it('should register post logout action', function() {
-            expect(loginServiceSpy.registerPostLogoutAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLogoutAction).toHaveBeenCalled();
         });
 
     });
@@ -56,17 +54,17 @@ describe('referencedata-user run', function() {
     describe('post login action', function() {
 
         it('should try to fetch current user information', function() {
-            currentUserServiceSpy.getUserInfo.andReturn($q.resolve());
+            this.currentUserServiceSpy.getUserInfo.andReturn(this.$q.resolve());
 
             var success;
-            postLoginAction()
+            this.postLoginAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(currentUserServiceSpy.getUserInfo).toHaveBeenCalled();
+            expect(this.currentUserServiceSpy.getUserInfo).toHaveBeenCalled();
         });
 
     });
@@ -74,17 +72,17 @@ describe('referencedata-user run', function() {
     describe('post logout action', function() {
 
         it('should clear current user cache', function() {
-            currentUserServiceSpy.clearCache.andReturn($q.resolve());
+            this.currentUserServiceSpy.clearCache.andReturn(this.$q.resolve());
 
             var success;
-            postLogoutAction()
+            this.postLogoutAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(currentUserServiceSpy.clearCache).toHaveBeenCalled();
+            expect(this.currentUserServiceSpy.clearCache).toHaveBeenCalled();
         });
 
     });

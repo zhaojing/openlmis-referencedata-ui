@@ -15,26 +15,25 @@
 
 describe('UserContactDetailsResource', function() {
 
-    var UserContactDetailsResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('auth-user', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('auth-user', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            UserContactDetailsResource = $injector.get('UserContactDetailsResource');
+            this.UserContactDetailsResource = $injector.get('UserContactDetailsResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new UserContactDetailsResource();
+        new this.UserContactDetailsResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith(
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith(
             '/api/userContactDetails',
             {
                 idParam: 'referenceDataUserId'

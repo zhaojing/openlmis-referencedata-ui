@@ -15,59 +15,43 @@
 
 describe('referencedataRoleService', function() {
 
-    var $q, $rootScope, roles, referencedataRoleService, referencedataRoleFactory;
-
     beforeEach(function() {
-        module('referencedata-role', function($provide) {
-            referencedataRoleService = jasmine.createSpyObj('referencedataRoleService', ['getAll']);
-            $provide.service('referencedataRoleService', function() {
-                return referencedataRoleService;
-            });
-        });
+        module('referencedata-role');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            referencedataRoleFactory = $injector.get('referencedataRoleFactory');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataRoleFactory = $injector.get('referencedataRoleFactory');
+            this.referencedataRoleService = $injector.get('referencedataRoleService');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
+            this.RightDataBuilder = $injector.get('RightDataBuilder');
         });
 
-        referencedataRoleService.getAll.andReturn($q.when(roles));
-
-        roles = [
-            {
-                id: '1',
-                name: 'Warehouse Clerk',
-                rights: [
-                    {
-                        type: 'type-1'
-                    }
-                ]
-            },
-            {
-                id: '2',
-                name: 'Storeroom Manager',
-                rights: [
-                    {
-                        type: 'type-2'
-                    }
-                ]
-            }
+        this.roles = [
+            new this.RoleDataBuilder()
+                .withRight(new this.RightDataBuilder().build())
+                .build(),
+            new this.RoleDataBuilder()
+                .withRight(new this.RightDataBuilder().build())
+                .build()
         ];
+
+        spyOn(this.referencedataRoleService, 'getAll').andReturn(this.$q.when(this.roles));
     });
 
     describe('getAllWithType', function() {
 
-        var data;
-
-        beforeEach(function() {
-            referencedataRoleFactory.getAllWithType().then(function(response) {
-                data = response;
-            });
-            $rootScope.$apply();
-        });
-
         it('should set types property for all roles', function() {
-            angular.forEach(data, function(role) {
+            var result;
+            this.referencedataRoleFactory
+                .getAllWithType()
+                .then(function(roles) {
+                    result = roles;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(this.roles);
+            angular.forEach(result, function(role) {
                 expect(role.type).toEqual(role.rights[0].type);
             });
         });

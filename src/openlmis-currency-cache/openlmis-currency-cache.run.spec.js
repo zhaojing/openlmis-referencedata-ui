@@ -15,31 +15,31 @@
 
 describe('openlmis-currency-cache run', function() {
 
-    var loginServiceSpy, currencyServiceSpy, postLoginAction, $q, $rootScope;
-
     beforeEach(function() {
-        module('openlmis-currency-cache', function($provide) {
-            loginServiceSpy = jasmine.createSpyObj('loginService', ['registerPostLoginAction']);
-            $provide.value('loginService', loginServiceSpy);
+        this.loginServiceSpy = jasmine.createSpyObj('loginService', ['registerPostLoginAction']);
+        this.currencyServiceSpy = jasmine.createSpyObj('currencyService', [
+            'getCurrencySettings', 'getCurrencySettingsFromConfig'
+        ]);
 
-            currencyServiceSpy = jasmine.createSpyObj('currencyService', [
-                'getCurrencySettings', 'getCurrencySettingsFromConfig'
-            ]);
+        var loginServiceSpy = this.loginServiceSpy,
+            currencyServiceSpy = this.currencyServiceSpy;
+        module('openlmis-currency-cache', function($provide) {
+            $provide.value('loginService', loginServiceSpy);
             $provide.value('currencyService', currencyServiceSpy);
         });
 
         inject(function($injector) {
-            $rootScope = $injector.get('$rootScope');
-            $q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
         });
 
-        postLoginAction = loginServiceSpy.registerPostLoginAction.calls[0].args[0];
+        this.postLoginAction = loginServiceSpy.registerPostLoginAction.calls[0].args[0];
     });
 
     describe('run block', function() {
 
         it('should register post login action', function() {
-            expect(loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
+            expect(this.loginServiceSpy.registerPostLoginAction).toHaveBeenCalled();
         });
 
     });
@@ -47,34 +47,34 @@ describe('openlmis-currency-cache run', function() {
     describe('post login action', function() {
 
         it('should try to fetch currency settings from the server', function() {
-            currencyServiceSpy.getCurrencySettings.andReturn($q.resolve());
+            this.currencyServiceSpy.getCurrencySettings.andReturn(this.$q.resolve());
 
             var success;
-            postLoginAction()
+            this.postLoginAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(currencyServiceSpy.getCurrencySettings).toHaveBeenCalled();
-            expect(currencyServiceSpy.getCurrencySettingsFromConfig).not.toHaveBeenCalled();
+            expect(this.currencyServiceSpy.getCurrencySettings).toHaveBeenCalled();
+            expect(this.currencyServiceSpy.getCurrencySettingsFromConfig).not.toHaveBeenCalled();
         });
 
         it('should fallback to the config settings if fetching settings from the server fails', function() {
-            currencyServiceSpy.getCurrencySettings.andReturn($q.reject());
-            currencyServiceSpy.getCurrencySettingsFromConfig.andReturn($q.resolve());
+            this.currencyServiceSpy.getCurrencySettings.andReturn(this.$q.reject());
+            this.currencyServiceSpy.getCurrencySettingsFromConfig.andReturn(this.$q.resolve());
 
             var success;
-            postLoginAction()
+            this.postLoginAction()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(success);
-            expect(currencyServiceSpy.getCurrencySettings).toHaveBeenCalled();
-            expect(currencyServiceSpy.getCurrencySettingsFromConfig).toHaveBeenCalled();
+            expect(this.currencyServiceSpy.getCurrencySettings).toHaveBeenCalled();
+            expect(this.currencyServiceSpy.getCurrencySettingsFromConfig).toHaveBeenCalled();
         });
 
     });

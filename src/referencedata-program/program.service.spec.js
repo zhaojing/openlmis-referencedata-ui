@@ -15,248 +15,254 @@
 
 describe('programService', function() {
 
-    var $rootScope, $httpBackend, openlmisUrlFactory, offlineService, programsStorage, programService, program1,
-        program2, ProgramDataBuilder;
-
     beforeEach(function() {
-        module('referencedata-program', function($provide) {
-            programsStorage = jasmine.createSpyObj('programsStorage', ['getBy', 'getAll', 'put', 'search']);
-            var localStorageFactorySpy = jasmine.createSpy('localStorageFactory').andCallFake(function() {
-                return programsStorage;
-            });
-            $provide.service('localStorageFactory', function() {
-                return localStorageFactorySpy;
-            });
+        this.programsStorage = jasmine.createSpyObj('programsStorage', ['getBy', 'getAll', 'put', 'search']);
+        this.offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
 
-            offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
-            offlineService.checkConnection.andReturn({
-                finally: function() {}
+        var programsStorage = this.programsStorage,
+            offlineService = this.offlineService;
+        module('referencedata-program', function($provide) {
+            $provide.service('localStorageFactory', function() {
+                return function() {
+                    return programsStorage;
+                };
             });
             $provide.service('offlineService', function() {
                 return offlineService;
             });
         });
 
-        inject(function(_$httpBackend_, _$rootScope_, _$q_, _openlmisUrlFactory_, _programService_, $injector) {
-            $httpBackend = _$httpBackend_;
-            $rootScope = _$rootScope_;
-            openlmisUrlFactory = _openlmisUrlFactory_;
-            programService = _programService_;
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+        inject(function($injector) {
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.$q = $injector.get('$q');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.programService = $injector.get('programService');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
         });
 
-        program1 = {
-            id: '1',
-            name: 'program1'
+        this.program1 = new this.ProgramDataBuilder().build();
+        this.program2 = new this.ProgramDataBuilder().build();
+
+        this.programs = [
+            this.program1,
+            this.program2
+        ];
+
+        this.userId = 'userId';
+        this.userIdOffline = {
+            userIdOffline: this.userId
         };
-        program2 = {
-            id: '2',
-            name: 'program2'
-        };
+
+        this.programsStorage.search.andReturn([]);
     });
 
     it('should get program by id', function() {
-        var data;
+        this.$httpBackend
+            .expectGET(this.openlmisUrlFactory('/api/programs/' + this.program1.id))
+            .respond(200, this.program1);
 
-        $httpBackend.when('GET', openlmisUrlFactory('/api/programs/' + program1.id))
-            .respond(200, program1);
+        var result;
+        this.programService
+            .get(this.program1.id)
+            .then(function(response) {
+                result = response;
+            });
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
-        programService.get(program1.id).then(function(response) {
-            data = response;
-        });
-
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(data.id).toEqual(program1.id);
-        expect(data.name).toEqual(program1.name);
+        expect(angular.toJson(result)).toEqual(angular.toJson(this.program1));
     });
 
     it('should get all programs', function() {
-        var data;
 
-        $httpBackend.when('GET', openlmisUrlFactory('/api/programs'))
-            .respond(200, [program1, program2]);
+        this.$httpBackend
+            .expectGET(this.openlmisUrlFactory('/api/programs'))
+            .respond(200, this.programs);
 
-        programService.getAll().then(function(response) {
-            data = response;
+        var result;
+        this.programService.getAll().then(function(response) {
+            result = response;
         });
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
-        expect(data[0].id).toEqual(program1.id);
-        expect(data[1].id).toEqual(program2.id);
+        expect(angular.toJson(result)).toEqual(angular.toJson(this.programs));
     });
 
     it('should get user programs from storage while offline', function() {
-        var data,
-            userId = '1',
+        this.programsStorage.search.andReturn([this.program1]);
+        this.offlineService.isOffline.andReturn(true);
+
+        var result,
             isForHomeFacility = '2';
+        this.programService
+            .getUserPrograms(this.userId, isForHomeFacility)
+            .then(function(response) {
+                result = response;
+            });
+        this.$rootScope.$apply();
 
-        programsStorage.search.andReturn([program1]);
-
-        offlineService.isOffline.andReturn(true);
-
-        programService.getUserPrograms(userId, isForHomeFacility).then(function(response) {
-            data = response;
-        });
-
-        $rootScope.$apply();
-
-        expect(data[0].id).toBe(program1.id);
+        expect(result).toEqual([this.program1]);
     });
 
     it('should get user programs and save them to storage', function() {
-        var data,
-            userId = '1';
+        this.offlineService.isOffline.andReturn(false);
 
-        $httpBackend.when('GET', openlmisUrlFactory('api/users/' + userId + '/programs'))
-            .respond(200, [program1, program2]);
+        this.$httpBackend
+            .expectGET(this.openlmisUrlFactory('api/users/' + this.userId + '/programs'))
+            .respond(200, this.programs);
 
-        offlineService.isOffline.andReturn(false);
+        var result;
+        this.programService
+            .getUserPrograms(this.userId)
+            .then(function(response) {
+                result = response;
+            });
 
-        programService.getUserPrograms(userId).then(function(response) {
-            data = response;
-        });
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
-        $httpBackend.flush();
-        $rootScope.$apply();
+        var expectedProgram1 = _.extend({}, this.program1, this.userIdOffline),
+            expectedProgram2 = _.extend({}, this.program2, this.userIdOffline);
 
-        expect(data[0].id).toBe(program1.id);
-        expect(data[1].id).toBe(program2.id);
-        expect(programsStorage.put.callCount).toEqual(2);
+        expect(angular.toJson(result)).toEqual(angular.toJson([
+            expectedProgram1,
+            expectedProgram2
+        ]));
+
+        expect(angular.toJson(this.programsStorage.put.calls[0].args[0])).toEqual(angular.toJson(expectedProgram1));
+        expect(angular.toJson(this.programsStorage.put.calls[1].args[0])).toEqual(angular.toJson(expectedProgram2));
     });
 
     it('should save program', function() {
-        var data;
 
-        $httpBackend.when('PUT', openlmisUrlFactory('/api/programs/' + program1.id))
-            .respond(200, program2);
+        this.$httpBackend
+            .expectPUT(this.openlmisUrlFactory('/api/programs/' + this.program1.id))
+            .respond(200, this.program2);
 
-        programService.update(program1).then(function(response) {
-            data = response;
+        var result;
+        this.programService.update(this.program1).then(function(response) {
+            result = response;
         });
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
 
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect(data.id).toEqual(program2.id);
+        expect(angular.toJson(result)).toEqual(angular.toJson(this.program2));
     });
 
     describe('getUserPrograms', function() {
-        var usersProgramResponse;
-
-        beforeEach(function() {
-            var programs = [{
-                id: 'test'
-            }];
-            usersProgramResponse = $httpBackend.when('GET', openlmisUrlFactory('api/users/userId/programs'))
-                .respond(200, programs);
-
-            programsStorage.search.andReturn([]);
-        });
 
         it('will get a list of all the users programs', function() {
-            var resultSpy = jasmine.createSpy('resultSpy');
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('api/users/' + this.userId + '/programs'))
+                .respond(200, [this.program1]);
 
-            programService.getUserPrograms('userId')
-                .then(resultSpy);
+            var result;
+            this.programService
+                .getUserPrograms(this.userId)
+                .then(function(programs) {
+                    result = programs;
+                });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(resultSpy).toHaveBeenCalled();
-            expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
-            expect(resultSpy.mostRecentCall.args[0].length).toBe(1);
-            expect(resultSpy.mostRecentCall.args[0][0].id).toBe('test');
+            expect(angular.toJson(result)).toEqual(angular.toJson([
+                _.extend({}, this.program1, this.userIdOffline)
+            ]));
         });
 
         it('will cache the first successful request', function() {
-            programService.getUserPrograms('userId');
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('api/users/' + this.userId + '/programs'))
+                .respond(200, this.programs);
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.programService.getUserPrograms(this.userId);
 
-            expect(programsStorage.put).toHaveBeenCalled();
-            expect(programsStorage.put.mostRecentCall.args[0].id).toBe('test');
-            expect(programsStorage.put.mostRecentCall.args[0].userIdOffline).toBe('userId');
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(angular.toJson(this.programsStorage.put.calls[0].args[0]))
+                .toEqual(angular.toJson(_.extend({}, this.program1, this.userIdOffline)));
         });
 
         it('will not cache an unsuccessful request', function() {
-            var resultSpy = jasmine.createSpy('resultSpy');
-            usersProgramResponse.respond(400);
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('api/users/' + this.userId + '/programs'))
+                .respond(400);
 
-            programService.getUserPrograms('userId')
-                .catch(resultSpy);
+            var rejected;
+            this.programService
+                .getUserPrograms(this.userId)
+                .catch(function() {
+                    rejected = true;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(resultSpy).toHaveBeenCalled();
-            expect(programsStorage.put).not.toHaveBeenCalled();
+            expect(rejected).toEqual(true);
+            expect(this.programsStorage.put).not.toHaveBeenCalled();
         });
 
         it('will return a cached response instead of making another request', function() {
-            var resultSpy = jasmine.createSpy('resultSpy');
+            var cachedPrograms = [new this.ProgramDataBuilder().build()];
 
-            programsStorage.search.andReturn([{
-                id: 'example'
-            }]);
+            this.programsStorage.search.andReturn(cachedPrograms);
 
-            programService.getUserPrograms('userId')
-                .then(resultSpy);
+            var result;
+            this.programService
+                .getUserPrograms(this.userId)
+                .then(function(programs) {
+                    result = programs;
+                });
+            this.$rootScope.$apply();
 
-            $rootScope.$apply();
-
-            expect(resultSpy).toHaveBeenCalled();
-            expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
-            expect(resultSpy.mostRecentCall.args[0][0].id).toBe('example');
-            $httpBackend.verifyNoOutstandingRequest();
+            expect(result).toEqual(cachedPrograms);
         });
     });
 
     describe('getSupportedUserPrograms', function() {
-        var usersProgramResponse;
-
-        beforeEach(function() {
-            var programs = [new ProgramDataBuilder().build()];
-            usersProgramResponse = $httpBackend
-                .when('GET', openlmisUrlFactory('api/users/userId/supportedPrograms'))
-                .respond(200, programs);
-        });
 
         it('should get a list of all the users programs', function() {
-            var resultSpy = jasmine.createSpy('resultSpy');
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('api/users/' + this.userId + '/supportedPrograms'))
+                .respond(200, this.programs);
 
-            programService.getUserSupportedPrograms('userId')
-                .then(resultSpy);
+            var result;
+            this.programService
+                .getUserSupportedPrograms(this.userId)
+                .then(function(programs) {
+                    result = programs;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(resultSpy).toHaveBeenCalled();
-            expect(Array.isArray(resultSpy.mostRecentCall.args[0])).toBe(true);
-            expect(resultSpy.mostRecentCall.args[0].length).toBe(1);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.programs));
         });
 
         it('should reject promise on unsuccessful request', function() {
-            var resultSpy = jasmine.createSpy('resultSpy');
-            usersProgramResponse.respond(400);
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('api/users/' + this.userId + '/supportedPrograms'))
+                .respond(400);
 
-            programService.getUserSupportedPrograms('userId')
-                .catch(resultSpy);
+            var rejected;
+            this.programService
+                .getUserSupportedPrograms(this.userId)
+                .catch(function() {
+                    rejected = true;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(resultSpy).toHaveBeenCalled();
-            expect(programsStorage.put).not.toHaveBeenCalled();
+            expect(rejected).toBe(true);
+            expect(this.programsStorage.put).not.toHaveBeenCalled();
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 });

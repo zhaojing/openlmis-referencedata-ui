@@ -15,31 +15,26 @@
 
 describe('GeographicZoneViewController', function() {
 
-    var $controller,
-        vm, geographicZone;
-
     beforeEach(function() {
         module('admin-geographic-zone-view');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
+            this.$controller = $injector.get('$controller');
+            this.GeographicZoneDataBuilder = $injector.get('GeographicZoneDataBuilder');
         });
 
-        geographicZone = {
-            id: 'zone-id',
-            name: 'zone-name'
-        };
+        this.geographicZone = new this.GeographicZoneDataBuilder().build();
 
-        vm = $controller('GeographicZoneViewController', {
-            geographicZone: geographicZone
+        this.vm = this.$controller('GeographicZoneViewController', {
+            geographicZone: this.geographicZone
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose geographic zone', function() {
-            expect(vm.geographicZone).toEqual(geographicZone);
+            expect(this.vm.geographicZone).toEqual(this.geographicZone);
         });
     });
 });

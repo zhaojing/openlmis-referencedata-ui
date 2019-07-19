@@ -15,93 +15,103 @@
 
 describe('periodService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, periodService, dateUtils, PeriodDataBuilder,
-        periods;
-
     beforeEach(function() {
         module('referencedata-period');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            dateUtils = $injector.get('dateUtils');
-            periodService = $injector.get('periodService');
-            PeriodDataBuilder = $injector.get('PeriodDataBuilder');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.dateUtils = $injector.get('dateUtils');
+            this.periodService = $injector.get('periodService');
+            this.PeriodDataBuilder = $injector.get('PeriodDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        periods = [
-            new PeriodDataBuilder().build(),
-            new PeriodDataBuilder().build()
+        this.period = new this.PeriodDataBuilder().build();
+
+        this.periods = [
+            this.period,
+            new this.PeriodDataBuilder().build()
         ];
+
+        this.periodsPage = new this.PageDataBuilder()
+            .withContent(this.periods)
+            .build();
     });
 
     describe('get', function() {
 
         it('should get processing schedule by id', function() {
-            var data;
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/processingPeriods/' + periods[0].id))
-                .respond(200, periods[0]);
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/processingPeriods/' + this.period.id))
+                .respond(200, this.period);
 
-            periodService.get(periods[0].id).then(function(response) {
-                data = response;
-            });
+            var result;
+            this.periodService
+                .get(this.period.id)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.id).toBe(periods[0].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.period));
         });
     });
 
     describe('create', function() {
 
         it('should create new processing period', function() {
-            var data,
-                periodCopy = angular.copy(periods[0]);
+            var periodCopy = angular.copy(this.period);
 
-            periodCopy.startDate = dateUtils.toStringDate(periodCopy.startDate);
-            periodCopy.endDate = dateUtils.toStringDate(periodCopy.endDate);
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/processingPeriods'), periodCopy)
-                .respond(200, periods[0]);
+            periodCopy.startDate = this.dateUtils.toStringDate(periodCopy.startDate);
+            periodCopy.endDate = this.dateUtils.toStringDate(periodCopy.endDate);
 
-            periodService.create(periods[0]).then(function(response) {
-                data = response;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory('/api/processingPeriods'), periodCopy)
+                .respond(200, this.period);
 
-            expect(data.name).toEqual(periods[0].name);
+            var result;
+            this.periodService
+                .create(this.period)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
+
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.period));
         });
     });
 
     describe('query', function() {
 
         it('should get all periods and save them to storage', function() {
-            var data,
-                params = {
-                    page: 0
-                };
+            var params = {
+                page: 0
+            };
 
-            $httpBackend.expectGET(referencedataUrlFactory('/api/processingPeriods?page=' + params.page)).respond(200, {
-                content: periods
-            });
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/processingPeriods?page=' + params.page))
+                .respond(200, this.periodsPage);
 
-            periodService.query(params).then(function(response) {
-                data = response.content;
-            });
+            var result;
+            this.periodService
+                .query(params)
+                .then(function(periodsPage) {
+                    result = periodsPage;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data[0].id).toBe(periods[0].id);
-            expect(data[1].id).toBe(periods[1].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.periodsPage));
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 });

@@ -15,69 +15,66 @@
 
 describe('UserService', function() {
 
-    var userService, UserService, User, user, $rootScope, UserDataBuilder, $q, loadingModalService, notificationService,
-        userPasswordModalFactory, $state, UserRepository;
-
     beforeEach(function() {
         module('admin-user-form');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            User = $injector.get('User');
-            $state = $injector.get('$state');
-            $rootScope = $injector.get('$rootScope');
-            UserService = $injector.get('UserService');
-            UserRepository = $injector.get('UserRepository');
-            UserDataBuilder = $injector.get('UserDataBuilder');
-            notificationService = $injector.get('notificationService');
-            loadingModalService = $injector.get('loadingModalService');
-            userPasswordModalFactory = $injector.get('userPasswordModalFactory');
+            this.$q = $injector.get('$q');
+            this.User = $injector.get('User');
+            this.$state = $injector.get('$state');
+            this.$rootScope = $injector.get('$rootScope');
+            this.UserService = $injector.get('UserService');
+            this.UserRepository = $injector.get('UserRepository');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.notificationService = $injector.get('notificationService');
+            this.loadingModalService = $injector.get('loadingModalService');
+            this.userPasswordModalFactory = $injector.get('userPasswordModalFactory');
         });
 
-        userService = new UserService();
-        user = new UserDataBuilder().build();
+        this.userService = new this.UserService();
+        this.user = new this.UserDataBuilder().build();
 
-        spyOn(UserRepository.prototype, 'get').andReturn($q.resolve(user));
+        spyOn(this.UserRepository.prototype, 'get').andReturn(this.$q.resolve(this.user));
 
-        spyOn(user, 'save');
-        spyOn($state, 'go');
-        spyOn(loadingModalService, 'open');
-        spyOn(loadingModalService, 'close');
-        spyOn(notificationService, 'error');
-        spyOn(notificationService, 'success');
-        spyOn(userPasswordModalFactory, 'createPassword');
+        spyOn(this.user, 'save');
+        spyOn(this.$state, 'go');
+        spyOn(this.loadingModalService, 'open');
+        spyOn(this.loadingModalService, 'close');
+        spyOn(this.notificationService, 'error');
+        spyOn(this.notificationService, 'success');
+        spyOn(this.userPasswordModalFactory, 'createPassword');
     });
 
     describe('get', function() {
 
         it('should return new user if ID is not given', function() {
             var result;
-            userService.get()
+            this.userService.get()
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result instanceof User).toBe(true);
-            expect(UserRepository.prototype.get).not.toHaveBeenCalled();
+            expect(result instanceof this.User).toBe(true);
+            expect(this.UserRepository.prototype.get).not.toHaveBeenCalled();
         });
 
         it('should fetch user', function() {
-            userService.get(user.id);
-            $rootScope.$apply();
+            this.userService.get(this.user.id);
+            this.$rootScope.$apply();
 
-            expect(UserRepository.prototype.get).toHaveBeenCalledWith(user.id);
+            expect(this.UserRepository.prototype.get).toHaveBeenCalledWith(this.user.id);
         });
 
         it('should decorate save', function() {
-            var originalSave = user.save;
+            var originalSave = this.user.save;
 
             var result;
-            userService.get()
+            this.userService.get()
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(result.save).not.toEqual(originalSave);
         });
@@ -89,119 +86,119 @@ describe('UserService', function() {
         var originalSave, decoratedUser;
 
         beforeEach(function() {
-            originalSave = user.save;
+            originalSave = this.user.save;
 
-            originalSave.andReturn($q.resolve(user));
+            originalSave.andReturn(this.$q.resolve(this.user));
 
-            userService.get(user.id)
+            this.userService.get(this.user.id)
                 .then(function(response) {
                     decoratedUser = response;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
         });
 
         it('should open loading modal', function() {
             decoratedUser.save();
 
-            expect(loadingModalService.open).toHaveBeenCalled();
+            expect(this.loadingModalService.open).toHaveBeenCalled();
         });
 
         it('should show notification after updating user', function() {
             decoratedUser.save();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.userUpdatedSuccessfully');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminUserForm.userUpdatedSuccessfully');
         });
 
         it('should show notification after creating user', function() {
             decoratedUser.isNewUser = true;
 
             decoratedUser.save();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(notificationService.success).toHaveBeenCalledWith('adminUserForm.userCreatedSuccessfully');
+            expect(this.notificationService.success).toHaveBeenCalledWith('adminUserForm.userCreatedSuccessfully');
         });
 
         it('should open password modal after creating new user', function() {
             decoratedUser.isNewUser = true;
 
             decoratedUser.save();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(userPasswordModalFactory.createPassword).toHaveBeenCalledWith(decoratedUser);
+            expect(this.userPasswordModalFactory.createPassword).toHaveBeenCalledWith(decoratedUser);
         });
 
         it('should resolve if user dismisses password creation', function() {
-            userPasswordModalFactory.createPassword.andReturn($q.reject());
+            this.userPasswordModalFactory.createPassword.andReturn(this.$q.reject());
 
             var result;
             decoratedUser.save()
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(user);
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect(result).toEqual(this.user);
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
         });
 
         it('should resolve if user creates password', function() {
-            userPasswordModalFactory.createPassword.andReturn($q.resolve());
+            this.userPasswordModalFactory.createPassword.andReturn(this.$q.resolve());
 
             var result;
             decoratedUser.save()
                 .then(function(user) {
                     result = user;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(user);
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect(result).toEqual(this.user);
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
         });
 
         it('should show notification if update fails', function() {
-            originalSave.andReturn($q.reject());
+            originalSave.andReturn(this.$q.reject());
 
             decoratedUser.save();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserForm.failedToUpdateUser');
+            expect(this.notificationService.error).toHaveBeenCalledWith('adminUserForm.failedToUpdateUser');
         });
 
         it('should show notification if creation fails', function() {
             decoratedUser.isNewUser = true;
-            originalSave.andReturn($q.reject());
+            originalSave.andReturn(this.$q.reject());
 
             decoratedUser.save();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(notificationService.error).toHaveBeenCalledWith('adminUserForm.failedToCreateUser');
+            expect(this.notificationService.error).toHaveBeenCalledWith('adminUserForm.failedToCreateUser');
         });
 
         it('should reject if original save rejects', function() {
-            originalSave.andReturn($q.reject());
+            originalSave.andReturn(this.$q.reject());
 
             var rejected;
             decoratedUser.save()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toEqual(true);
         });
 
         it('should close loading modal if save fails', function() {
-            originalSave.andReturn($q.reject());
+            originalSave.andReturn(this.$q.reject());
 
             decoratedUser.save();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(loadingModalService.close).toHaveBeenCalled();
+            expect(this.loadingModalService.close).toHaveBeenCalled();
         });
 
     });

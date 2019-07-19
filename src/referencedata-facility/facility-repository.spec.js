@@ -15,16 +15,17 @@
 
 describe('FacilityRepository', function() {
 
-    var FacilityRepository, OpenlmisRepositoryMock, facilityResourceMock, Facility;
-
     beforeEach(function() {
+        this.OpenlmisRepositoryMock = jasmine.createSpy('OpenlmisRepository');
+        this.facilityResourceMock = jasmine.createSpy('FacilityResource');
+
+        var OpenlmisRepositoryMock = this.OpenlmisRepositoryMock,
+            facilityResourceMock = this.facilityResourceMock;
         module('referencedata-facility', function($provide) {
-            OpenlmisRepositoryMock = jasmine.createSpy('OpenlmisRepository');
             $provide.factory('OpenlmisRepository', function() {
                 return OpenlmisRepositoryMock;
             });
 
-            facilityResourceMock = jasmine.createSpy('FacilityResource');
             $provide.factory('FacilityResource', function() {
                 return function() {
                     return facilityResourceMock;
@@ -33,25 +34,25 @@ describe('FacilityRepository', function() {
         });
 
         inject(function($injector) {
-            FacilityRepository = $injector.get('FacilityRepository');
-            Facility = $injector.get('Facility');
+            this.FacilityRepository = $injector.get('FacilityRepository');
+            this.Facility = $injector.get('Facility');
         });
     });
 
     describe('constructor', function() {
 
         it('should extend OpenlmisRepository', function() {
-            new FacilityRepository();
+            new this.FacilityRepository();
 
-            expect(OpenlmisRepositoryMock).toHaveBeenCalledWith(Facility, facilityResourceMock);
+            expect(this.OpenlmisRepositoryMock).toHaveBeenCalledWith(this.Facility, this.facilityResourceMock);
         });
 
         it('should pass the given implementation', function() {
             var implMock = jasmine.createSpyObj('impl', ['create']);
 
-            new FacilityRepository(implMock);
+            new this.FacilityRepository(implMock);
 
-            expect(OpenlmisRepositoryMock).toHaveBeenCalledWith(Facility, implMock);
+            expect(this.OpenlmisRepositoryMock).toHaveBeenCalledWith(this.Facility, implMock);
         });
 
     });

@@ -14,33 +14,31 @@
  */
 describe('TypeFormController', function() {
 
-    var vm, $state, types;
-
     beforeEach(function() {
         module('admin-role-form');
 
-        types = [
+        this.types = [
             'TYPE_ONE',
             'TYPE_TWO',
             'TYPE_THREE'
         ];
 
         inject(function($injector) {
-            $state = $injector.get('$state');
+            this.$state = $injector.get('$state');
 
-            vm = $injector.get('$controller')('TypeFormController', {
-                types: types
+            this.vm = $injector.get('$controller')('TypeFormController', {
+                types: this.types
             });
         });
 
-        spyOn($state, 'go');
+        spyOn(this.$state, 'go');
     });
 
     it('selectType should redirect to the role creation screen', function() {
-        vm.selectType(types[1]);
+        this.vm.selectType(this.types[1]);
 
-        expect($state.go).toHaveBeenCalledWith('openlmis.administration.roles.createUpdate', {
-            type: types[1]
+        expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.roles.createUpdate', {
+            type: this.types[1]
         });
     });
 

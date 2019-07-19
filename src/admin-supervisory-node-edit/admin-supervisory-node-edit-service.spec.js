@@ -18,11 +18,9 @@ describe('AdminSupervisoryNodeEditService', function() {
     beforeEach(function() {
         module('admin-supervisory-node-edit');
 
-        var AdminSupervisoryNodeEditService, SupervisoryNodeDataBuilder;
         inject(function($injector) {
-            AdminSupervisoryNodeEditService = $injector.get('AdminSupervisoryNodeEditService');
-            SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
-
+            this.AdminSupervisoryNodeEditService = $injector.get('AdminSupervisoryNodeEditService');
+            this.SupervisoryNodeDataBuilder = $injector.get('SupervisoryNodeDataBuilder');
             this.SupervisoryNodeRepository = $injector.get('SupervisoryNodeRepository');
             this.SupervisoryNode = $injector.get('SupervisoryNode');
             this.$rootScope = $injector.get('$rootScope');
@@ -33,12 +31,12 @@ describe('AdminSupervisoryNodeEditService', function() {
             this.$state = $injector.get('$state');
         });
 
-        this.supervisoryNode = new SupervisoryNodeDataBuilder()
+        this.supervisoryNode = new this.SupervisoryNodeDataBuilder()
             .withChildNodes()
             .withPartnerNodes()
             .build();
         this.supervisoryNodeId = this.supervisoryNode.id;
-        this.adminSupervisoryNodeEditService = new AdminSupervisoryNodeEditService();
+        this.adminSupervisoryNodeEditService = new this.AdminSupervisoryNodeEditService();
 
         spyOn(this.SupervisoryNodeRepository.prototype, 'get').andReturn();
         spyOn(this.SupervisoryNode.prototype, 'save');

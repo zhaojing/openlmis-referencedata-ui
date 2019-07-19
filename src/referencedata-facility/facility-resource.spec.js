@@ -15,26 +15,25 @@
 
 describe('FacilityResource', function() {
 
-    var FacilityResource, OpenlmisResourceMock;
-
     beforeEach(function() {
-        module('referencedata-facility', function($provide) {
-            OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('referencedata-facility', function($provide) {
             $provide.factory('OpenlmisResource', function() {
                 return OpenlmisResourceMock;
             });
         });
 
         inject(function($injector) {
-            FacilityResource = $injector.get('FacilityResource');
+            this.FacilityResource = $injector.get('FacilityResource');
         });
     });
 
     it('should extend OpenlmisResource', function() {
-        new FacilityResource();
+        new this.FacilityResource();
 
-        expect(OpenlmisResourceMock).toHaveBeenCalledWith('/api/facilities', {
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/facilities', {
             paginated: true
         });
     });

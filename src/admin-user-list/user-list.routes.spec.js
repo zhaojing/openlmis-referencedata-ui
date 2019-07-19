@@ -15,94 +15,56 @@
 
 describe('openlmis.administration.users state', function() {
 
-    var $state, $q, UserRepository, paginationService, ADMINISTRATION_RIGHTS, userRepositoryMock, state, users, params,
-        usersPage, $rootScope;
-
     beforeEach(function() {
-        module('openlmis-main-state');
-        module('openlmis-admin');
-        module('admin-user-list', function($provide) {
-            userRepositoryMock = jasmine.createSpyObj('userRepository', ['query']);
-            $provide.factory('UserRepository', function() {
-                return function() {
-                    return userRepositoryMock;
-                };
-            });
-        });
+        module('admin-user-list');
 
         inject(function($injector) {
-            $state = $injector.get('$state');
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            ADMINISTRATION_RIGHTS = $injector.get('ADMINISTRATION_RIGHTS');
-            UserRepository = $injector.get('UserRepository');
-            paginationService = $injector.get('paginationService');
+            this.$state = $injector.get('$state');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.ADMINISTRATION_RIGHTS = $injector.get('ADMINISTRATION_RIGHTS');
+            this.UserRepository = $injector.get('UserRepository');
+            this.paginationService = $injector.get('paginationService');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.$location = $injector.get('$location');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        params = {
-            param: 'param',
-            page: 0,
-            size: 10,
-            sort: 'username'
-        };
-
-        users = [
-            {
-                username: 'admin'
-            }, {
-                username: 'user'
-            }
+        this.users = [
+            new this.UserDataBuilder().buildReferenceDataUserJson(),
+            new this.UserDataBuilder().buildReferenceDataUserJson()
         ];
 
-        usersPage = {
-            content: users,
-            last: true,
-            totalElements: 2,
-            totalPages: 1,
-            sort: ['username'],
-            first: true,
-            numberOfElements: 2,
-            size: 10,
-            number: 0
+        this.usersPage = new this.PageDataBuilder()
+            .withContent(this.users)
+            .build();
+
+        spyOn(this.UserRepository.prototype, 'query').andReturn(this.$q.when(this.usersPage));
+
+        this.goToUrl = function(url) {
+            this.$location.url(url);
+            this.$rootScope.$apply();
         };
 
-        userRepositoryMock.query.andReturn($q.when({
-            content: users,
-            last: true,
-            totalElements: 2,
-            totalPages: 1,
-            sort: ['username'],
-            first: true,
-            numberOfElements: 2,
-            size: 10,
-            number: 0
-        }));
-
-        state = $state.get('openlmis.administration.users');
+        this.getResolvedValue = function(name) {
+            return this.$state.$current.locals.globals[name];
+        };
     });
 
     it('should fetch a list of users', function() {
-        var result;
+        this.goToUrl('/administration/users?usersPage=0&usersSize=10&sort=username');
 
-        spyOn(paginationService, 'registerUrl').andCallFake(function(givenParams, method) {
-            if (givenParams === params && angular.isFunction(method)) {
-                return method(givenParams);
-            }
+        expect(this.getResolvedValue('users')).toEqual(this.users);
+        expect(this.UserRepository.prototype.query).toHaveBeenCalledWith({
+            sort: 'username',
+            page: '0',
+            size: '10'
         });
-
-        state.resolve.users(paginationService, UserRepository, params).then(function(userList) {
-            result = userList;
-        });
-        $rootScope.$apply();
-
-        expect(result).toEqual(usersPage);
-        expect(result.content).toEqual(users);
-        expect(userRepositoryMock.query).toHaveBeenCalledWith(params);
-        expect(paginationService.registerUrl).toHaveBeenCalled();
     });
 
     it('should require USERS_MANAGE right to enter', function() {
-        expect(state.accessRights).toEqual([ADMINISTRATION_RIGHTS.USERS_MANAGE]);
+        expect(this.$state.get('openlmis.administration.users').accessRights)
+            .toEqual([this.ADMINISTRATION_RIGHTS.USERS_MANAGE]);
     });
 
 });

@@ -15,23 +15,21 @@
 
 describe('user programs cache run', function() {
 
-    var programService, $rootScope;
-
     beforeEach(function() {
         module('referencedata-user-programs-cache');
 
         inject(function($injector) {
-            programService = $injector.get('programService');
-            $rootScope = $injector.get('$rootScope');
+            this.programService = $injector.get('programService');
+            this.$rootScope = $injector.get('$rootScope');
         });
     });
 
     it('should clear user programs cache on logout', function() {
-        spyOn(programService, 'clearUserProgramsCache');
+        spyOn(this.programService, 'clearUserProgramsCache');
 
-        $rootScope.$emit('openlmis-auth.logout');
-        $rootScope.$apply();
+        this.$rootScope.$emit('openlmis-auth.logout');
+        this.$rootScope.$apply();
 
-        expect(programService.clearUserProgramsCache).toHaveBeenCalled();
+        expect(this.programService.clearUserProgramsCache).toHaveBeenCalled();
     });
 });

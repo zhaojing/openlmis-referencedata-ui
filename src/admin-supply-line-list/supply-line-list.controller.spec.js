@@ -18,13 +18,11 @@ describe('SupplyLineListController', function() {
     beforeEach(function() {
         module('admin-supply-line-list');
 
-        var SupplyLineDataBuilder, ProgramDataBuilder, $controller;
         inject(function($injector) {
             this.FacilityDataBuilder = $injector.get('FacilityDataBuilder');
-            SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
-            ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            $controller = $injector.get('$controller');
-
+            this.SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
+            this.$controller = $injector.get('$controller');
             this.$state = $injector.get('$state');
         });
 
@@ -33,12 +31,12 @@ describe('SupplyLineListController', function() {
             new this.FacilityDataBuilder().build()
         ];
         this.supplyLines = [
-            new SupplyLineDataBuilder().buildJson(),
-            new SupplyLineDataBuilder().buildJson()
+            new this.SupplyLineDataBuilder().buildJson(),
+            new this.SupplyLineDataBuilder().buildJson()
         ];
         this.programs = [
-            new ProgramDataBuilder().build(),
-            new ProgramDataBuilder().build()
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
         this.stateParams = {
@@ -50,7 +48,7 @@ describe('SupplyLineListController', function() {
 
         this.supplyLineExpandEnabled = false;
 
-        this.vm = $controller('SupplyLineListController', {
+        this.vm = this.$controller('SupplyLineListController', {
             supplyLines: this.supplyLines,
             supplyingFacilities: this.supplyingFacilities,
             programs: this.programs,

@@ -15,181 +15,108 @@
 
 describe('referencedataRoleService', function() {
 
-    var $rootScope, $httpBackend, openlmisUrlFactory, roles, referencedataRoleService;
-
     beforeEach(function() {
         module('referencedata-role');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            openlmisUrlFactory = $injector.get('openlmisUrlFactory');
-            referencedataRoleService = $injector.get('referencedataRoleService');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.openlmisUrlFactory = $injector.get('openlmisUrlFactory');
+            this.referencedataRoleService = $injector.get('referencedataRoleService');
+            this.RoleDataBuilder = $injector.get('RoleDataBuilder');
         });
 
-        roles = [
-            {
-                id: '1',
-                name: 'Warehouse Clerk'
-            },
-            {
-                id: '2',
-                name: 'Storeroom Manager'
-            }
+        this.role = new this.RoleDataBuilder().build();
+
+        this.roles = [
+            this.role,
+            new this.RoleDataBuilder().build()
         ];
     });
 
-    describe('get all', function() {
-
-        var data;
-
-        beforeEach(function() {
-            $httpBackend.when('GET', openlmisUrlFactory('/api/roles'))
-                .respond(200, roles);
-        });
+    describe('getAll', function() {
 
         it('should get all roles', function() {
-            referencedataRoleService.getAll().then(function(response) {
-                data = response;
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/roles'))
+                .respond(200, this.roles);
+
+            var result;
+            this.referencedataRoleService.getAll().then(function(response) {
+                result = response;
             });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(data)).toEqual(angular.toJson(roles));
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.roles));
         });
     });
 
     describe('get', function() {
 
-        var roleId, role;
-
-        beforeEach(function() {
-            roleId = 'some-role-id';
-
-            role = {
-                id: roleId,
-                name: 'Some role'
-            };
-
-            $httpBackend.when('GET', openlmisUrlFactory('/api/roles/' + roleId)).respond(200, role);
-        });
-
-        it('should return promise', function() {
-            var result = referencedataRoleService.get(roleId);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to role', function() {
+            this.$httpBackend
+                .expectGET(this.openlmisUrlFactory('/api/roles/' + this.role.id))
+                .respond(200, this.role);
+
             var result;
+            this.referencedataRoleService
+                .get(this.role.id)
+                .then(function(role) {
+                    result = role;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            referencedataRoleService.get(roleId).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result).not.toBeUndefined();
-            expect(result.id).toBe(roleId);
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectGET(openlmisUrlFactory('/api/roles/' + roleId));
-
-            referencedataRoleService.get(roleId);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.role));
         });
 
     });
 
     describe('create', function() {
 
-        var role;
-
-        beforeEach(function() {
-
-            role = {
-                name: 'Some role'
-            };
-
-            $httpBackend.whenPOST(openlmisUrlFactory('/api/roles')).respond(200, role);
-        });
-
-        it('should return promise', function() {
-            var result = referencedataRoleService.create(role);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to role', function() {
+            this.$httpBackend
+                .expectPOST(this.openlmisUrlFactory('/api/roles'), this.role)
+                .respond(200, this.role);
+
             var result;
+            this.referencedataRoleService
+                .create(this.role)
+                .then(function(data) {
+                    result = data;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            referencedataRoleService.create(role).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(role));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectPOST(openlmisUrlFactory('/api/roles'), role);
-
-            referencedataRoleService.create(role);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.role));
         });
 
     });
 
     describe('update', function() {
 
-        var roleId, role;
-
-        beforeEach(function() {
-            roleId = 'some-role-id';
-
-            role = {
-                id: roleId,
-                name: 'Some role'
-            };
-
-            $httpBackend.whenPUT(openlmisUrlFactory('/api/roles/' + roleId)).respond(200, role);
-        });
-
-        it('should return promise', function() {
-            var result = referencedataRoleService.update(role);
-            $httpBackend.flush();
-
-            expect(result.then).not.toBeUndefined();
-        });
-
         it('should resolve to role', function() {
+            this.$httpBackend
+                .expectPUT(this.openlmisUrlFactory('/api/roles/' + this.role.id), this.role)
+                .respond(200, this.role);
+
             var result;
+            this.referencedataRoleService
+                .update(this.role)
+                .then(function(data) {
+                    result = data;
+                });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            referencedataRoleService.update(role).then(function(data) {
-                result = data;
-            });
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(role));
-        });
-
-        it('should make a proper request', function() {
-            $httpBackend.expectPUT(openlmisUrlFactory('/api/roles/' + roleId), role);
-
-            referencedataRoleService.update(role);
-            $httpBackend.flush();
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.role));
         });
 
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingRequest();
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 });

@@ -15,100 +15,102 @@
 
 describe('periodFactory', function() {
 
-    var $q, $rootScope, periodService, periodFactory, PeriodDataBuilder,
-        periods;
-
     beforeEach(function() {
         module('referencedata-period');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            periodService = $injector.get('periodService');
-            periodFactory = $injector.get('periodFactory');
-            PeriodDataBuilder = $injector.get('PeriodDataBuilder');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.periodService = $injector.get('periodService');
+            this.periodFactory = $injector.get('periodFactory');
+            this.PeriodDataBuilder = $injector.get('PeriodDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        periods = [
-            new PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-12-12'), new Date('2017-12-12')),
-            new PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-11-12'), new Date('2017-11-12')),
-            new PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-10-12'), new Date('2017-10-12'))
+        this.periods = [
+            new this.PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-12-12'), new Date('2017-12-12')),
+            new this.PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-11-12'), new Date('2017-11-12')),
+            new this.PeriodDataBuilder().buildWithIsoStringsRandomDates(new Date('2017-10-12'), new Date('2017-10-12'))
         ];
 
-        spyOn(periodService, 'query').andReturn($q.resolve({
-            content: periods
-        }));
+        this.periodsPage = new this.PageDataBuilder()
+            .withContent(this.periods)
+            .build();
+
+        this.scheduleId = 'schedule-id';
+
+        this.params = {
+            page: 1,
+            size: 10
+        };
+
+        spyOn(this.periodService, 'query').andReturn(this.$q.resolve(this.periodsPage));
     });
 
     describe('getSortedPeriodsForSchedule', function() {
 
-        var data,
-            scheduleId = 'schedule-id',
-            params = {
-                page: 1,
-                size: 10
-            };
-
         it('should get sorted periods for schedule', function() {
-            periodFactory.getSortedPeriodsForSchedule(params, scheduleId)
+            var result;
+            this.periodFactory.getSortedPeriodsForSchedule(this.params, this.scheduleId)
                 .then(function(response) {
-                    data = response;
+                    result = response;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(periodService.query).toHaveBeenCalledWith({
+            expect(this.periodService.query).toHaveBeenCalledWith({
                 page: 1,
                 size: 10,
-                processingScheduleId: scheduleId
+                processingScheduleId: this.scheduleId
             });
-            data.content.forEach(function(period) {
-                expect(period.startDate instanceof Date).toBe(true);
-                expect(period.endDate instanceof Date).toBe(true);
-            });
+
+            expect(result.content[0].startDate instanceof Date).toBe(true);
+            expect(result.content[1].startDate instanceof Date).toBe(true);
+            expect(result.content[2].startDate instanceof Date).toBe(true);
+
+            expect(result.content[0].endDate instanceof Date).toBe(true);
+            expect(result.content[1].endDate instanceof Date).toBe(true);
+            expect(result.content[2].endDate instanceof Date).toBe(true);
         });
     });
 
     describe('getNewStartDateForSchedule', function() {
 
-        var data,
-            scheduleId = 'schedule-id';
-
         it('should get new start date for period', function() {
-            periodFactory.getNewStartDateForSchedule(scheduleId)
-                .then(function(response) {
-                    data = response;
+            var result;
+            this.periodFactory.getNewStartDateForSchedule(this.scheduleId)
+                .then(function(newStartDate) {
+                    result = newStartDate;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(periodService.query).toHaveBeenCalledWith({
+            expect(this.periodService.query).toHaveBeenCalledWith({
                 page: 0,
                 size: 1,
-                processingScheduleId: scheduleId,
+                processingScheduleId: this.scheduleId,
                 sort: 'startDate,desc'
             });
 
-            expect(data).toEqual(new Date('2017-12-13'));
+            expect(result).toEqual(new Date('2017-12-13'));
         });
 
         it('should resolve to undefined if there is no period', function() {
-            periodService.query.andReturn($q.resolve({
-                content: []
-            }));
+            this.periodService.query.andReturn(this.$q.resolve(new this.PageDataBuilder().build()));
 
-            periodFactory.getNewStartDateForSchedule(scheduleId)
-                .then(function(response) {
-                    data = response;
+            var result;
+            this.periodFactory.getNewStartDateForSchedule(this.scheduleId)
+                .then(function(newStartDate) {
+                    result = newStartDate;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(periodService.query).toHaveBeenCalledWith({
+            expect(this.periodService.query).toHaveBeenCalledWith({
                 page: 0,
                 size: 1,
-                processingScheduleId: scheduleId,
+                processingScheduleId: this.scheduleId,
                 sort: 'startDate,desc'
             });
 
-            expect(data).toBe(undefined);
+            expect(result).toBe(undefined);
         });
     });
 });

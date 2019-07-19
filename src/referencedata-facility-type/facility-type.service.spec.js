@@ -15,181 +15,187 @@
 
 describe('facilityTypeService', function() {
 
-    var $rootScope, $httpBackend, referencedataUrlFactory, facilityTypeService, FacilityTypeDataBuilder,
-        PageDataBuilder, facilityTypeOne, facilityTypeTwo;
-
     beforeEach(function() {
         module('referencedata-facility-type');
 
         inject(function($injector) {
-            $httpBackend = $injector.get('$httpBackend');
-            $rootScope = $injector.get('$rootScope');
-            referencedataUrlFactory = $injector.get('referencedataUrlFactory');
-            facilityTypeService = $injector.get('facilityTypeService');
-            FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
-            PageDataBuilder = $injector.get('PageDataBuilder');
+            this.$httpBackend = $injector.get('$httpBackend');
+            this.$rootScope = $injector.get('$rootScope');
+            this.referencedataUrlFactory = $injector.get('referencedataUrlFactory');
+            this.facilityTypeService = $injector.get('facilityTypeService');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.PageDataBuilder = $injector.get('PageDataBuilder');
         });
 
-        facilityTypeOne = new FacilityTypeDataBuilder().build();
-        facilityTypeTwo = new FacilityTypeDataBuilder().build();
+        this.facilityTypeOne = new this.FacilityTypeDataBuilder().build();
+        this.facilityTypeTwo = new this.FacilityTypeDataBuilder().build();
+
+        this.facilityTypes = [
+            this.facilityTypeOne,
+            this.facilityTypeTwo
+        ];
+
+        this.facilityTypesPage = new this.PageDataBuilder()
+            .withContent(this.facilityTypes)
+            .build();
     });
 
     describe('get', function() {
 
         it('should get facility type by id', function() {
-            var data;
+            this.$httpBackend
+                .whenGET(this.referencedataUrlFactory('/api/facilityTypes/' + this.facilityTypeOne.id))
+                .respond(200, this.facilityTypeOne);
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id))
-                .respond(200, facilityTypeOne);
-
-            facilityTypeService.get(facilityTypeOne.id)
+            var result;
+            this.facilityTypeService
+                .get(this.facilityTypeOne.id)
                 .then(function(response) {
-                    data = response;
+                    result = response;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.id).toBe(facilityTypeOne.id);
-            expect(data.name).toBe(facilityTypeOne.name);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.facilityTypeOne));
         });
     });
 
     describe('query', function() {
 
-        var page;
-
-        beforeEach(function() {
-            page = new PageDataBuilder().withContent([facilityTypeOne, facilityTypeTwo]);
-        });
-
         it('should get all facility types', function() {
-            var data;
+            this.$httpBackend
+                .whenGET(this.referencedataUrlFactory('/api/facilityTypes'))
+                .respond(200, this.facilityTypesPage);
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes'))
-                .respond(200, page);
-
-            facilityTypeService.query()
-                .then(function(response) {
-                    data = response;
+            var result;
+            this.facilityTypeService
+                .query()
+                .then(function(facilityTypesPage) {
+                    result = facilityTypesPage;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.content[0].id).toBe(page.content[0].id);
-            expect(data.content[1].id).toBe(page.content[1].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.facilityTypesPage));
         });
 
         it('should get all facility types by ids', function() {
-            var data,
-                idOne = 'id-one',
+            var idOne = 'id-one',
                 idTwo = 'id-two';
 
-            $httpBackend.when('GET', referencedataUrlFactory('/api/facilityTypes?id=' + idOne + '&id=' + idTwo))
-                .respond(200, page);
+            this.$httpBackend
+                .expectGET(this.referencedataUrlFactory('/api/facilityTypes?id=' + idOne + '&id=' + idTwo))
+                .respond(200, this.facilityTypesPage);
 
-            facilityTypeService.query({
-                id: [idOne, idTwo]
-            })
+            var result;
+            this.facilityTypeService.
+                query({
+                    id: [idOne, idTwo]
+                })
                 .then(function(response) {
-                    data = response;
+                    result = response;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(data.content[0].id).toBe(page.content[0].id);
-            expect(data.content[1].id).toBe(page.content[1].id);
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.facilityTypesPage));
         });
     });
 
     describe('create', function() {
 
-        var result;
-
         it('should create facility type if id is not given', function() {
-            facilityTypeOne = new FacilityTypeDataBuilder().withoutId()
+            var facilityTypeDataBuilder = new this.FacilityTypeDataBuilder();
+
+            this.facilityTypeOne = facilityTypeDataBuilder.build();
+
+            this.facilityTypeOneWithoutId = facilityTypeDataBuilder
+                .withoutId()
                 .build();
 
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
-                .respond(200, facilityTypeOne);
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory('/api/facilityTypes'), this.facilityTypeOneWithoutId)
+                .respond(200, this.facilityTypeOne);
 
-            facilityTypeService.create(facilityTypeOne)
+            var result;
+            this.facilityTypeService
+                .create(this.facilityTypeOneWithoutId)
                 .then(function(response) {
                     result = response;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(angular.toJson(result)).toEqual(angular.toJson(facilityTypeOne));
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.facilityTypeOne));
         });
 
         it('should not resolve promise if request fails', function() {
-            facilityTypeOne = new FacilityTypeDataBuilder().withoutId()
+            this.facilityTypeOne = new this.FacilityTypeDataBuilder().withoutId()
                 .build();
 
-            $httpBackend.expectPOST(referencedataUrlFactory('/api/facilityTypes'), facilityTypeOne)
+            this.$httpBackend
+                .expectPOST(this.referencedataUrlFactory('/api/facilityTypes'), this.facilityTypeOne)
                 .respond(400);
 
-            facilityTypeService.create(facilityTypeOne)
+            var rejected;
+            this.facilityTypeService
+                .create(this.facilityTypeOne)
                 .catch(function() {
-                    result = 'fail';
+                    rejected = true;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result).toEqual('fail');
+            expect(rejected).toEqual(true);
         });
     });
 
     describe('update', function() {
 
-        var result;
-
         it('should update facility type', function() {
-            $httpBackend.expect(
-                'PUT',
-                referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id),
-                facilityTypeOne
-            )
-                .respond(200, facilityTypeOne);
+            this.$httpBackend
+                .expectPUT(
+                    this.referencedataUrlFactory('/api/facilityTypes/' + this.facilityTypeOne.id),
+                    this.facilityTypeOne
+                )
+                .respond(200, this.facilityTypeOne);
 
-            facilityTypeService.update(facilityTypeOne)
+            var result;
+            this.facilityTypeService
+                .update(this.facilityTypeOne)
                 .then(function(response) {
                     result = response;
                 });
 
-            $httpBackend.flush();
-            $rootScope.$apply();
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            expect(angular.toJson(result)).toEqual(angular.toJson(facilityTypeOne));
+            expect(angular.toJson(result)).toEqual(angular.toJson(this.facilityTypeOne));
         });
 
         it('should not resolve promise if request fails', function() {
-            $httpBackend.expect(
-                'PUT',
-                referencedataUrlFactory('/api/facilityTypes/' + facilityTypeOne.id),
-                facilityTypeOne
-            )
+            this.$httpBackend
+                .expectPUT(
+                    this.referencedataUrlFactory('/api/facilityTypes/' + this.facilityTypeOne.id),
+                    this.facilityTypeOne
+                )
                 .respond(400);
 
-            facilityTypeService.update(facilityTypeOne)
+            var rejected;
+            this.facilityTypeService
+                .update(this.facilityTypeOne)
                 .catch(function() {
-                    result = 'fail';
+                    rejected = true;
                 });
+            this.$httpBackend.flush();
+            this.$rootScope.$apply();
 
-            $httpBackend.flush();
-            $rootScope.$apply();
-
-            expect(result).toEqual('fail');
+            expect(rejected).toEqual(true);
         });
     });
 
     afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
+        this.$httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingRequest();
     });
 });

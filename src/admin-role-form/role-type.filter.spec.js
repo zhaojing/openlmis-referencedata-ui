@@ -15,39 +15,39 @@
 
 describe('role type filter', function() {
 
-    var roleTypeFilter, $filter, messageService;
-
     beforeEach(function() {
         module('admin-role-form');
 
         inject(function($injector) {
-            $filter = $injector.get('$filter');
-            messageService = $injector.get('messageService');
+            this.$filter = $injector.get('$filter');
+            this.messageService = $injector.get('messageService');
         });
 
-        roleTypeFilter = $filter('roleType');
+        this.roleTypeFilter = this.$filter('roleType');
 
-        spyOn(messageService, 'get');
+        spyOn(this.messageService, 'get');
     });
 
     it('should throw exception for undefined', function() {
+        var roleTypeFilter = this.roleTypeFilter;
+
         expect(function() {
             roleTypeFilter();
         }).toThrow('"undefined" is not a valid role type');
     });
 
     it('should return translated role name', function() {
-        messageService.get.andReturn('Administration');
+        this.messageService.get.andReturn('Administration');
 
-        expect(roleTypeFilter('GENERAL_ADMIN')).toEqual('Administration');
-        expect(messageService.get).toHaveBeenCalledWith('referencedataRoles.administration');
+        expect(this.roleTypeFilter('GENERAL_ADMIN')).toEqual('Administration');
+        expect(this.messageService.get).toHaveBeenCalledWith('referencedataRoles.administration');
     });
 
     it('should return translated role description if flag is set', function() {
-        messageService.get.andReturn('Role Type Description');
+        this.messageService.get.andReturn('Role Type Description');
 
-        expect(roleTypeFilter('GENERAL_ADMIN', true)).toEqual('Role Type Description');
-        expect(messageService.get).toHaveBeenCalledWith('adminRoleForm.generalAdminDescription');
+        expect(this.roleTypeFilter('GENERAL_ADMIN', true)).toEqual('Role Type Description');
+        expect(this.messageService.get).toHaveBeenCalledWith('adminRoleForm.generalAdminDescription');
     });
 
 });

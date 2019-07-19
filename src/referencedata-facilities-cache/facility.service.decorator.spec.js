@@ -15,14 +15,13 @@
 
 describe('Facility service minimal decorator', function() {
 
-    var facilityService, $rootScope, originalGetAllMinimalSpy, LocalDatabase, MinimalFacilityDataBuilder,
-        minimalFacilities, $q;
-
     beforeEach(function() {
+        this.originalGetAllMinimalSpy = jasmine.createSpy('originalGetAllMinimal');
+
+        var originalGetAllMinimalSpy = this.originalGetAllMinimalSpy;
         angular.module('test-utils', ['referencedata-facility'])
             .config(function($provide) {
                 $provide.decorator('facilityService', function($delegate) {
-                    originalGetAllMinimalSpy = jasmine.createSpy('originalGetAllMinimal');
                     $delegate.getAllMinimal = originalGetAllMinimalSpy;
                     return $delegate;
                 });
@@ -32,23 +31,23 @@ describe('Facility service minimal decorator', function() {
         module('referencedata-facilities-cache');
 
         inject(function($injector) {
-            $q = $injector.get('$q');
-            $rootScope = $injector.get('$rootScope');
-            facilityService = $injector.get('facilityService');
-            LocalDatabase = $injector.get('LocalDatabase');
-            MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
+            this.$q = $injector.get('$q');
+            this.$rootScope = $injector.get('$rootScope');
+            this.facilityService = $injector.get('facilityService');
+            this.LocalDatabase = $injector.get('LocalDatabase');
+            this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
         });
 
-        minimalFacilities = [
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build(),
-            new MinimalFacilityDataBuilder().build()
+        this.minimalFacilities = [
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build(),
+            new this.MinimalFacilityDataBuilder().build()
         ];
 
-        spyOn(LocalDatabase.prototype, 'putAll');
-        spyOn(LocalDatabase.prototype, 'getAll');
-        spyOn(LocalDatabase.prototype, 'get');
-        spyOn(LocalDatabase.prototype, 'removeAll');
+        spyOn(this.LocalDatabase.prototype, 'putAll');
+        spyOn(this.LocalDatabase.prototype, 'getAll');
+        spyOn(this.LocalDatabase.prototype, 'get');
+        spyOn(this.LocalDatabase.prototype, 'removeAll');
     });
 
     describe('cacheAllMinimal', function() {
@@ -56,160 +55,160 @@ describe('Facility service minimal decorator', function() {
         var fetchDeferred, removeDeferred, putDeferred;
 
         beforeEach(function() {
-            originalGetAllMinimalSpy.andReturn($q.resolve(minimalFacilities));
-            LocalDatabase.prototype.removeAll.andReturn($q.resolve());
-            LocalDatabase.prototype.putAll.andReturn($q.resolve());
+            this.originalGetAllMinimalSpy.andReturn(this.$q.resolve(this.minimalFacilities));
+            this.LocalDatabase.prototype.removeAll.andReturn(this.$q.resolve());
+            this.LocalDatabase.prototype.putAll.andReturn(this.$q.resolve());
         });
 
         it('should cache on the first call', function() {
             //the calls order is important thus using deferred instead of $q.resolve and $q.reject
-            fetchDeferred = $q.defer();
-            removeDeferred = $q.defer();
-            putDeferred = $q.defer();
+            fetchDeferred = this.$q.defer();
+            removeDeferred = this.$q.defer();
+            putDeferred = this.$q.defer();
 
-            LocalDatabase.prototype.putAll.andReturn(putDeferred.promise);
-            LocalDatabase.prototype.removeAll.andReturn(removeDeferred.promise);
+            this.LocalDatabase.prototype.putAll.andReturn(putDeferred.promise);
+            this.LocalDatabase.prototype.removeAll.andReturn(removeDeferred.promise);
 
-            originalGetAllMinimalSpy.andReturn(fetchDeferred.promise);
+            this.originalGetAllMinimalSpy.andReturn(fetchDeferred.promise);
 
             var success;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(originalGetAllMinimalSpy).toHaveBeenCalled();
-            expect(LocalDatabase.prototype.removeAll).not.toHaveBeenCalled();
-            expect(LocalDatabase.prototype.putAll).not.toHaveBeenCalled();
+            expect(this.originalGetAllMinimalSpy).toHaveBeenCalled();
+            expect(this.LocalDatabase.prototype.removeAll).not.toHaveBeenCalled();
+            expect(this.LocalDatabase.prototype.putAll).not.toHaveBeenCalled();
 
-            fetchDeferred.resolve(minimalFacilities);
-            $rootScope.$apply();
+            fetchDeferred.resolve(this.minimalFacilities);
+            this.$rootScope.$apply();
 
-            expect(LocalDatabase.prototype.removeAll).toHaveBeenCalled();
-            expect(LocalDatabase.prototype.putAll).not.toHaveBeenCalled();
+            expect(this.LocalDatabase.prototype.removeAll).toHaveBeenCalled();
+            expect(this.LocalDatabase.prototype.putAll).not.toHaveBeenCalled();
 
             removeDeferred.resolve();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(LocalDatabase.prototype.putAll).toHaveBeenCalledWith(minimalFacilities);
+            expect(this.LocalDatabase.prototype.putAll).toHaveBeenCalledWith(this.minimalFacilities);
 
             expect(success).toBeUndefined();
 
             putDeferred.resolve();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
         });
 
         it('should reject if fetching fails', function() {
-            originalGetAllMinimalSpy.andReturn($q.reject());
+            this.originalGetAllMinimalSpy.andReturn(this.$q.reject());
 
             var rejected;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
         });
 
         it('should reject if database fails to clear', function() {
-            LocalDatabase.prototype.removeAll.andReturn($q.reject());
+            this.LocalDatabase.prototype.removeAll.andReturn(this.$q.reject());
 
             var rejected;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
         });
 
         it('should reject if database fails to save', function() {
-            LocalDatabase.prototype.putAll.andReturn($q.reject());
+            this.LocalDatabase.prototype.putAll.andReturn(this.$q.reject());
 
             var rejected;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
         });
 
         it('should attempt to fetch the facilities if the first attempt fails', function() {
-            LocalDatabase.prototype.putAll.andReturn($q.reject());
+            this.LocalDatabase.prototype.putAll.andReturn(this.$q.reject());
 
-            facilityService.cacheAllMinimal();
-            $rootScope.$apply();
+            this.facilityService.cacheAllMinimal();
+            this.$rootScope.$apply();
 
-            LocalDatabase.prototype.putAll.andReturn($q.resolve());
+            this.LocalDatabase.prototype.putAll.andReturn(this.$q.resolve());
 
             var success;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
         });
 
         it('should not fetch data twice for following requests', function() {
-            facilityService.cacheAllMinimal();
+            this.facilityService.cacheAllMinimal();
 
-            originalGetAllMinimalSpy.reset();
+            this.originalGetAllMinimalSpy.reset();
 
             var success;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(originalGetAllMinimalSpy).not.toHaveBeenCalled();
+            expect(this.originalGetAllMinimalSpy).not.toHaveBeenCalled();
         });
 
         it('should not fetch data if it already is cached', function() {
-            facilityService.cacheAllMinimal();
-            $rootScope.$apply();
+            this.facilityService.cacheAllMinimal();
+            this.$rootScope.$apply();
 
-            originalGetAllMinimalSpy.reset();
+            this.originalGetAllMinimalSpy.reset();
 
             var success;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(originalGetAllMinimalSpy).not.toHaveBeenCalled();
+            expect(this.originalGetAllMinimalSpy).not.toHaveBeenCalled();
         });
 
         it('should re-fetch the data after re-logging', function() {
-            facilityService.cacheAllMinimal();
-            $rootScope.$apply();
+            this.facilityService.cacheAllMinimal();
+            this.$rootScope.$apply();
 
-            originalGetAllMinimalSpy.reset();
+            this.originalGetAllMinimalSpy.reset();
 
-            facilityService.clearMinimalFacilitiesCache();
-            $rootScope.$apply();
+            this.facilityService.clearMinimalFacilitiesCache();
+            this.$rootScope.$apply();
 
             var success;
-            facilityService.cacheAllMinimal()
+            this.facilityService.cacheAllMinimal()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
-            expect(originalGetAllMinimalSpy).toHaveBeenCalled();
+            expect(this.originalGetAllMinimalSpy).toHaveBeenCalled();
         });
 
     });
@@ -217,33 +216,33 @@ describe('Facility service minimal decorator', function() {
     describe('getAllMinimal', function() {
 
         beforeEach(function() {
-            spyOn(facilityService, 'cacheAllMinimal').andReturn($q.resolve());
-            LocalDatabase.prototype.getAll.andReturn($q.resolve(minimalFacilities));
+            spyOn(this.facilityService, 'cacheAllMinimal').andReturn(this.$q.resolve());
+            this.LocalDatabase.prototype.getAll.andReturn(this.$q.resolve(this.minimalFacilities));
         });
 
         it('should return cached facilities', function() {
             var result;
-            facilityService.getAllMinimal()
+            this.facilityService.getAllMinimal()
                 .then(function(minimalFacilities) {
                     result = minimalFacilities;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(minimalFacilities);
+            expect(result).toEqual(this.minimalFacilities);
         });
 
         it('should reject if caching fails', function() {
-            facilityService.cacheAllMinimal.andReturn($q.reject());
+            this.facilityService.cacheAllMinimal.andReturn(this.$q.reject());
 
             var rejected;
-            facilityService.getAllMinimal()
+            this.facilityService.getAllMinimal()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(facilityService.cacheAllMinimal).toHaveBeenCalled();
+            expect(this.facilityService.cacheAllMinimal).toHaveBeenCalled();
         });
 
     });
@@ -251,33 +250,33 @@ describe('Facility service minimal decorator', function() {
     describe('getMinimal', function() {
 
         beforeEach(function() {
-            spyOn(facilityService, 'cacheAllMinimal').andReturn($q.resolve());
-            LocalDatabase.prototype.get.andReturn($q.resolve(minimalFacilities[0]));
+            spyOn(this.facilityService, 'cacheAllMinimal').andReturn(this.$q.resolve());
+            this.LocalDatabase.prototype.get.andReturn(this.$q.resolve(this.minimalFacilities[0]));
         });
 
         it('should return cached facilities', function() {
             var result;
-            facilityService.getMinimal()
+            this.facilityService.getMinimal()
                 .then(function(minimalFacility) {
                     result = minimalFacility;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
-            expect(result).toEqual(minimalFacilities[0]);
+            expect(result).toEqual(this.minimalFacilities[0]);
         });
 
         it('should reject if caching fails', function() {
-            facilityService.cacheAllMinimal.andReturn($q.reject());
+            this.facilityService.cacheAllMinimal.andReturn(this.$q.reject());
 
             var rejected;
-            facilityService.getMinimal()
+            this.facilityService.getMinimal()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
-            expect(facilityService.cacheAllMinimal).toHaveBeenCalled();
+            expect(this.facilityService.cacheAllMinimal).toHaveBeenCalled();
         });
 
     });
@@ -285,41 +284,41 @@ describe('Facility service minimal decorator', function() {
     describe('clearMinimalFacilitiesCache', function() {
 
         it('should clear the database', function() {
-            LocalDatabase.prototype.removeAll.andReturn($q.resolve());
+            this.LocalDatabase.prototype.removeAll.andReturn(this.$q.resolve());
 
-            facilityService.clearMinimalFacilitiesCache();
+            this.facilityService.clearMinimalFacilitiesCache();
 
-            expect(LocalDatabase.prototype.removeAll).toHaveBeenCalled();
+            expect(this.LocalDatabase.prototype.removeAll).toHaveBeenCalled();
         });
 
         it('should resolve once the database is cleared', function() {
-            var deferred = $q.defer();
-            LocalDatabase.prototype.removeAll.andReturn(deferred.promise);
+            var deferred = this.$q.defer();
+            this.LocalDatabase.prototype.removeAll.andReturn(deferred.promise);
 
             var success;
-            facilityService.clearMinimalFacilitiesCache()
+            this.facilityService.clearMinimalFacilitiesCache()
                 .then(function() {
                     success = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBeFalsy();
 
             deferred.resolve();
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(success).toBe(true);
         });
 
         it('should reject if database fail to clear', function() {
-            LocalDatabase.prototype.removeAll.andReturn($q.reject());
+            this.LocalDatabase.prototype.removeAll.andReturn(this.$q.reject());
 
             var rejected;
-            facilityService.clearMinimalFacilitiesCache()
+            this.facilityService.clearMinimalFacilitiesCache()
                 .catch(function() {
                     rejected = true;
                 });
-            $rootScope.$apply();
+            this.$rootScope.$apply();
 
             expect(rejected).toBe(true);
         });

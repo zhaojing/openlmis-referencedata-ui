@@ -15,41 +15,39 @@
 
 describe('SupplyPartnerEditController', function() {
 
-    var $state, $controller,
-        vm, facility, orderable, supplyPartner, association, associations;
-
     beforeEach(function() {
         module('admin-supply-partner-edit');
 
-        var ObjectReferenceDataBuilder, SupplyPartnerDataBuilder, SupplyPartnerAssociationDataBuilder;
         inject(function($injector) {
-            $controller = $injector.get('$controller');
-            $state = $injector.get('$state');
+            this.$controller = $injector.get('$controller');
+            this.$state = $injector.get('$state');
             this.$q = $injector.get('$q');
-            ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
-            SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
-            SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
+            this.ObjectReferenceDataBuilder = $injector.get('ObjectReferenceDataBuilder');
+            this.SupplyPartnerDataBuilder = $injector.get('SupplyPartnerDataBuilder');
+            this.SupplyPartnerAssociationDataBuilder = $injector.get('SupplyPartnerAssociationDataBuilder');
             this.viewItemsModalService = $injector.get('viewItemsModalService');
         });
 
-        facility = new ObjectReferenceDataBuilder().withResource('facility')
+        this.facility = new this.ObjectReferenceDataBuilder()
+            .withResource('facility')
             .build();
-        orderable = new ObjectReferenceDataBuilder().withResource('orderable')
+        this.orderable = new this.ObjectReferenceDataBuilder()
+            .withResource('orderable')
             .build();
-        association = new SupplyPartnerAssociationDataBuilder()
-            .addFacility(facility)
-            .addOrderable(orderable)
+        this.association = new this.SupplyPartnerAssociationDataBuilder()
+            .addFacility(this.facility)
+            .addOrderable(this.orderable)
             .build();
-        associations = [association];
-        supplyPartner = new SupplyPartnerDataBuilder()
-            .addAssociation(association)
+        this.associations = [this.association];
+        this.supplyPartner = new this.SupplyPartnerDataBuilder()
+            .addAssociation(this.association)
             .build();
 
-        vm = $controller('SupplyPartnerEditController', {
-            supplyPartner: supplyPartner,
-            associations: associations
+        this.vm = this.$controller('SupplyPartnerEditController', {
+            supplyPartner: this.supplyPartner,
+            associations: this.associations
         });
-        vm.$onInit();
+        this.vm.$onInit();
 
         spyOn(this.viewItemsModalService, 'show');
     });
@@ -57,27 +55,27 @@ describe('SupplyPartnerEditController', function() {
     describe('onInit', function() {
 
         it('should expose goToSupplyPartnerList method', function() {
-            expect(angular.isFunction(vm.goToSupplyPartnerList)).toBe(true);
+            expect(angular.isFunction(this.vm.goToSupplyPartnerList)).toBe(true);
         });
 
         it('should expose supplyPartner', function() {
-            expect(vm.supplyPartner).toEqual(supplyPartner);
+            expect(this.vm.supplyPartner).toEqual(this.supplyPartner);
         });
 
         it('should expose associations', function() {
-            expect(vm.associations).toEqual(associations);
+            expect(this.vm.associations).toEqual(this.associations);
         });
     });
 
     describe('goToSupplyPartnerList', function() {
 
         beforeEach(function() {
-            spyOn($state, 'go').andReturn();
-            vm.goToSupplyPartnerList();
+            spyOn(this.$state, 'go').andReturn();
+            this.vm.goToSupplyPartnerList();
         });
 
         it('should call state go with correct params', function() {
-            expect($state.go).toHaveBeenCalledWith('^', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
                 reload: true
             });
         });
@@ -90,11 +88,11 @@ describe('SupplyPartnerEditController', function() {
         });
 
         it('should open modal', function() {
-            vm.viewFacilities(0);
+            this.vm.viewFacilities(0);
 
             expect(this.viewItemsModalService.show).toHaveBeenCalledWith({
                 titleLabel: 'adminSupplyPartnerEdit.associatedFacilities',
-                items: [facility]
+                items: [this.facility]
             });
         });
     });
@@ -106,11 +104,11 @@ describe('SupplyPartnerEditController', function() {
         });
 
         it('should open modal', function() {
-            vm.viewOrderables(0);
+            this.vm.viewOrderables(0);
 
             expect(this.viewItemsModalService.show).toHaveBeenCalledWith({
                 titleLabel: 'adminSupplyPartnerEdit.associatedProducts',
-                items: [orderable]
+                items: [this.orderable]
             });
         });
     });

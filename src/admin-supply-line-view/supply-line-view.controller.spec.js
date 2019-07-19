@@ -15,31 +15,26 @@
 
 describe('SupplyLineViewController', function() {
 
-    var $controller,
-        vm, supplyLine;
-
     beforeEach(function() {
         module('admin-supply-line-view');
 
         inject(function($injector) {
-            $controller = $injector.get('$controller');
+            this.$controller = $injector.get('$controller');
+            this.SupplyLineDataBuilder = $injector.get('SupplyLineDataBuilder');
         });
 
-        supplyLine = {
-            id: 'line-id',
-            name: 'line-name'
-        };
+        this.supplyLine = new this.SupplyLineDataBuilder().buildJson();
 
-        vm = $controller('SupplyLineViewController', {
-            supplyLine: supplyLine
+        this.vm = this.$controller('SupplyLineViewController', {
+            supplyLine: this.supplyLine
         });
-        vm.$onInit();
+        this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
         it('should expose supply line', function() {
-            expect(vm.supplyLine).toEqual(supplyLine);
+            expect(this.vm.supplyLine).toEqual(this.supplyLine);
         });
     });
 });
