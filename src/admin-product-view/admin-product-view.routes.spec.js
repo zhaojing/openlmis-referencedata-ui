@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis.administration.product.view.route', function() {
+describe('openlmis.administration.orderables.view.route', function() {
 
     beforeEach(function() {
         module('admin-product-view', function($provide) {
@@ -82,7 +82,7 @@ describe('openlmis.administration.product.view.route', function() {
         ));
         spyOn(this.$templateCache, 'get').andCallThrough();
 
-        this.state = this.$state.get('openlmis.administration.products.view');
+        this.state = this.$state.get('openlmis.administration.orderables.view');
     });
 
     describe('state', function() {

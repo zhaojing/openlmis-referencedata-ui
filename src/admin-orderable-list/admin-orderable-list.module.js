@@ -18,12 +18,12 @@
     'use strict';
 
     /**
-     * @module admin-product-list
+     * @module admin-orderable-list
      *
      * @description
-     * Provides base admin-product state and controller for retrieving list of products from the OpenLMIS server.
+     * Provides base admin-orderable state and controller for retrieving list of orderables from the OpenLMIS server.
      */
-    angular.module('admin-product-list', [
+    angular.module('admin-orderable-list', [
         'openlmis-pagination',
         'openlmis-rights',
         'referencedata-orderable',

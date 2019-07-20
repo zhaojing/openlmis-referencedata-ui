@@ -13,11 +13,11 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProductListController', function() {
+describe('OrderableListController', function() {
 
     beforeEach(function() {
         module('referencedata-program');
-        module('admin-product-list');
+        module('admin-orderable-list');
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
@@ -31,7 +31,7 @@ describe('ProductListController', function() {
             new this.ProgramDataBuilder().build()
         ];
 
-        this.products = [
+        this.orderables = [
             new this.OrderableDataBuilder()
                 .withPrograms([
                     this.programs[0],
@@ -53,8 +53,8 @@ describe('ProductListController', function() {
             program: this.programs[0].id
         };
 
-        this.vm = this.$controller('ProductListController', {
-            products: this.products,
+        this.vm = this.$controller('OrderableListController', {
+            orderables: this.orderables,
             programs: this.programs,
             $stateParams: this.stateParams
         });
@@ -69,8 +69,8 @@ describe('ProductListController', function() {
             expect(angular.isFunction(this.vm.search)).toBe(true);
         });
 
-        it('should expose products array', function() {
-            expect(this.vm.products).toEqual(this.products);
+        it('should expose orderables array', function() {
+            expect(this.vm.orderables).toEqual(this.orderables);
         });
 
         it('should expose programs array', function() {
@@ -97,7 +97,7 @@ describe('ProductListController', function() {
 
             this.vm.search();
 
-            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.products', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.orderables', {
                 page: this.stateParams.page,
                 size: this.stateParams.size,
                 code: 'some-code',
@@ -113,7 +113,7 @@ describe('ProductListController', function() {
 
             this.vm.search();
 
-            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.products', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.orderables', {
                 page: this.stateParams.page,
                 size: this.stateParams.size,
                 code: this.stateParams.code,
@@ -129,7 +129,7 @@ describe('ProductListController', function() {
 
             this.vm.search();
 
-            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.products', {
+            expect(this.$state.go).toHaveBeenCalledWith('openlmis.administration.orderables', {
                 page: this.stateParams.page,
                 size: this.stateParams.size,
                 code: this.stateParams.code,

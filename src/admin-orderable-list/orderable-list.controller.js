@@ -19,18 +19,18 @@
 
     /**
      * @ngdoc controller
-     * @name admin-product-list.controller:ProductListController
+     * @name admin-orderable-list.controller:OrderableListController
      *
      * @description
-     * Controller for managing product list screen.
+     * Controller for managing orderables list screen.
      */
     angular
-        .module('admin-product-list')
-        .controller('ProductListController', controller);
+        .module('admin-orderable-list')
+        .controller('OrderableListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'products', 'programs'];
+    controller.$inject = ['$state', '$stateParams', 'orderables', 'programs'];
 
-    function controller($state, $stateParams, products, programs) {
+    function controller($state, $stateParams, orderables, programs) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -38,18 +38,18 @@
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-list.controller:ProductListController
-         * @name products
+         * @propertyOf admin-orderable-list.controller:OrderableListController
+         * @name orderables
          * @type {Array}
          *
          * @description
-         * Contains filtered products.
+         * Contains filtered orderables.
          */
-        vm.products = undefined;
+        vm.orderables = undefined;
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-list.controller:ProductListController
+         * @propertyOf admin-orderable-list.controller:OrderableListController
          * @name programs
          * @type {Array}
          *
@@ -60,47 +60,47 @@
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-list.controller:ProductListController
+         * @propertyOf admin-orderable-list.controller:OrderableListController
          * @name code
          * @type {String}
          *
          * @description
-         * Contains code param for searching products.
+         * Contains code param for searching orderables.
          */
         vm.code = undefined;
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-list.controller:ProductListController
+         * @propertyOf admin-orderable-list.controller:OrderableListController
          * @name name
          * @type {String}
          *
          * @description
-         * Contains name param for searching products.
+         * Contains name param for searching orderables.
          */
         vm.name = undefined;
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-list.controller:ProductListController
+         * @propertyOf admin-orderable-list.controller:OrderableListController
          * @name program
          * @type {String}
          *
          * @description
-         * Contains program code param for searching products.
+         * Contains program code param for searching orderables.
          */
         vm.program = undefined;
 
         /**
          * @ngdoc method
-         * @methodOf admin-product-list.controller:ProductListController
+         * @methodOf admin-orderable-list.controller:OrderableListController
          * @name $onInit
          *
          * @description
-         * Method that is executed on initiating ProductListController.
+         * Method that is executed on initiating OrderableListController.
          */
         function onInit() {
-            vm.products = products;
+            vm.orderables = orderables;
             vm.programs = programs;
             vm.code = $stateParams.code;
             vm.name = $stateParams.name;
@@ -109,7 +109,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-product-list.controller:ProductListController
+         * @methodOf admin-orderable-list.controller:OrderableListController
          * @name search
          *
          * @description
@@ -122,7 +122,7 @@
             stateParams.name = vm.name;
             stateParams.program = vm.program;
 
-            $state.go('openlmis.administration.products', stateParams, {
+            $state.go('openlmis.administration.orderables', stateParams, {
                 reload: true
             });
         }

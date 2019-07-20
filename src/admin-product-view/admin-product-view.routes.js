@@ -23,7 +23,7 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.products.view', {
+        $stateProvider.state('openlmis.administration.orderables.view', {
             label: 'adminProductView.orderableDetails',
             url: '/products/:id',
             accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],

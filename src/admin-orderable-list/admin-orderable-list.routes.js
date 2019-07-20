@@ -17,25 +17,25 @@
 
     'use strict';
 
-    angular.module('admin-product-list').config(routes);
+    angular.module('admin-orderable-list').config(routes);
 
     routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.products', {
+        $stateProvider.state('openlmis.administration.orderables', {
             showInNavigation: true,
-            label: 'adminProductList.products',
-            url: '/products?code&name&description&program&page&size',
-            controller: 'ProductListController',
-            templateUrl: 'admin-product-list/product-list.html',
+            label: 'adminOrderableList.orderables',
+            url: '/orderables?code&name&description&program&page&size',
+            controller: 'OrderableListController',
+            templateUrl: 'admin-orderable-list/orderable-list.html',
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
             resolve: {
                 programs: function(programService) {
                     return programService.getAll();
                 },
-                products: function(paginationService, orderableService, $stateParams) {
+                orderables: function(paginationService, orderableService, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = angular.copy(stateParams),
                             page = stateParams.page,
