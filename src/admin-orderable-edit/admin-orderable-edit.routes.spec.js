@@ -13,10 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis.administration.orderables.view.route', function() {
+describe('openlmis.administration.orderables.edit.route', function() {
 
     beforeEach(function() {
-        module('admin-product-view', function($provide) {
+        module('admin-orderable-edit', function($provide) {
             var programService = jasmine.createSpyObj('orderableService', ['getAll']);
             $provide.service('programService', function() {
                 return programService;
@@ -62,7 +62,7 @@ describe('openlmis.administration.orderables.view.route', function() {
                 .buildJson()
         ];
 
-        this.product = new this.OrderableDataBuilder()
+        this.orderable = new this.OrderableDataBuilder()
             .withId('product_1_id')
             .withFullProductName('p1')
             .withChildren(productChildren)
@@ -74,7 +74,7 @@ describe('openlmis.administration.orderables.view.route', function() {
             .buildJson();
 
         spyOn(this.orderableFactory, 'getOrderableWithProgramData')
-            .andReturn(this.$q.resolve(this.product));
+            .andReturn(this.$q.resolve(this.orderable));
         spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(
             new this.PageDataBuilder()
                 .withContent(this.kitConstituents)
@@ -82,27 +82,27 @@ describe('openlmis.administration.orderables.view.route', function() {
         ));
         spyOn(this.$templateCache, 'get').andCallThrough();
 
-        this.state = this.$state.get('openlmis.administration.orderables.view');
+        this.state = this.$state.get('openlmis.administration.orderables.edit');
     });
 
     describe('state', function() {
 
-        it('should resolve product', function() {
+        it('should resolve orderable', function() {
             var result;
 
-            this.state.resolve.product(this.orderableFactory, this.$state).then(function(product) {
-                result = product;
+            this.state.resolve.orderable(this.orderableFactory, this.$state).then(function(orderable) {
+                result = orderable;
             });
 
             this.$rootScope.$apply();
 
-            expect(result).toEqual(this.product);
+            expect(result).toEqual(this.orderable);
         });
 
         it('should resolve kitConstituents', function() {
             var result;
 
-            this.state.resolve.kitConstituents(this.$state, this.product, this.OrderableResource,
+            this.state.resolve.kitConstituents(this.$state, this.orderable, this.OrderableResource,
                 this.paginationService)
                 .then(function(kitsConstituents) {
                     result = kitsConstituents;
@@ -113,7 +113,7 @@ describe('openlmis.administration.orderables.view.route', function() {
             expect(result).toEqual(this.kitConstituents);
         });
 
-        it('should resolve kitConstituents to emptry Array if product does not have children', function() {
+        it('should resolve kitConstituents to emptry Array if orderable does not have children', function() {
             var result;
 
             this.state.resolve.kitConstituents(this.$state, this.productWithNoChildren, this.OrderableResource,

@@ -13,10 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('ProductViewController', function() {
+describe('OrderableEditController', function() {
 
     beforeEach(function() {
-        module('admin-product-view');
+        module('admin-orderable-edit');
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
@@ -33,37 +33,37 @@ describe('ProductViewController', function() {
             this.$rootScope = $injector.get('$rootScope');
         });
 
-        var productChildren = [
-            new this.OrderableChildrenDataBuilder().withId('child_product_1_id')
+        var orderableChildren = [
+            new this.OrderableChildrenDataBuilder().withId('child_orderable_1_id')
                 .withQuantity(30)
                 .buildJson(),
-            new this.OrderableChildrenDataBuilder().withId('child_product_2_id')
+            new this.OrderableChildrenDataBuilder().withId('child_orderable_2_id')
                 .withQuantity(40)
                 .buildJson()
         ];
 
-        this.product = new this.OrderableDataBuilder().withId('product1_id')
-            .withChildren(productChildren)
+        this.orderable = new this.OrderableDataBuilder().withId('orderable1_id')
+            .withChildren(orderableChildren)
             .buildJson();
 
         this.kitConstituents = [
             new this.OrderableDataBuilder()
-                .withId('child_product_1_id')
+                .withId('child_orderable_1_id')
                 .withFullProductName('p1')
                 .buildJson(),
             new this.OrderableDataBuilder()
-                .withId('child_product_2_id')
+                .withId('child_orderable_2_id')
                 .withFullProductName('p2')
                 .buildJson()
         ];
 
-        this.productsToSelect = [
+        this.orderablesToSelect = [
             new this.OrderableDataBuilder()
-                .withId('child_product_3_id')
+                .withId('child_orderable_3_id')
                 .withFullProductName('p3')
                 .buildJson(),
             new this.OrderableDataBuilder()
-                .withId('child_product_4_id')
+                .withId('child_orderable_4_id')
                 .withFullProductName('p4')
                 .buildJson()
         ];
@@ -81,10 +81,10 @@ describe('ProductViewController', function() {
         spyOn(this.notificationService, 'error');
         spyOn(this.alertService, 'error').andCallFake();
 
-        this.vm = this.$controller('ProductViewController', {
-            product: this.product,
+        this.vm = this.$controller('OrderableEditController', {
+            orderable: this.orderable,
             kitConstituents: this.kitConstituents,
-            products: this.productsToSelect
+            orderables: this.orderablesToSelect
         });
         this.vm.$onInit();
     });
@@ -95,8 +95,8 @@ describe('ProductViewController', function() {
             expect(angular.isFunction(this.vm.goToProductList)).toBe(true);
         });
 
-        it('should expose product', function() {
-            expect(this.vm.product).toEqual(this.product);
+        it('should expose orderable', function() {
+            expect(this.vm.orderable).toEqual(this.orderable);
         });
 
         it('should update or normalize children properties from kitConstituents reference', function() {
@@ -120,31 +120,31 @@ describe('ProductViewController', function() {
 
     describe('AddKitContituents', function() {
         beforeEach(function() {
-            this.selectProductsModalService.show.andReturn(this.$q.resolve(this.productsToSelect));
+            this.selectProductsModalService.show.andReturn(this.$q.resolve(this.orderablesToSelect));
         });
 
-        it('should open select products modal', function() {
+        it('should open select orderables modal', function() {
             this.vm.addKitContituents();
 
             expect(this.selectProductsModalService.show).toHaveBeenCalled();
         });
 
-        it('should add all products to the list', function() {
+        it('should add all orderables to the list', function() {
             this.vm.addKitContituents();
             this.$rootScope.$apply();
 
-            expect(this.vm.constituents.pop()).toEqual(this.productsToSelect[1]);
-            expect(this.vm.constituents.pop()).toEqual(this.productsToSelect[0]);
+            expect(this.vm.constituents.pop()).toEqual(this.orderablesToSelect[1]);
+            expect(this.vm.constituents.pop()).toEqual(this.orderablesToSelect[0]);
         });
 
         it('should exclude selected/children ordereables from the modal', function() {
-            this.vm.constituents.push(this.productsToSelect[0]);
+            this.vm.constituents.push(this.orderablesToSelect[0]);
             this.vm.addKitContituents();
 
-            expect(this.selectProductsModalService.show).toHaveBeenCalledWith([this.productsToSelect[1]]);
+            expect(this.selectProductsModalService.show).toHaveBeenCalledWith([this.orderablesToSelect[1]]);
         });
 
-        it('should do nothing if user closes the select products modal', function() {
+        it('should do nothing if user closes the select orderables modal', function() {
             this.selectProductsModalService.show.andReturn(this.$q.reject());
 
             var originalCount = this.vm.constituents.length;
@@ -157,7 +157,7 @@ describe('ProductViewController', function() {
     });
 
     describe('RemoveKitContituent', function() {
-        it('should remove kit constituent (child) from a product', function() {
+        it('should remove kit constituent (child) from a orderable', function() {
             this.vm.removeKitContituent(this.kitConstituents[0]);
             this.$rootScope.$apply();
 
@@ -165,7 +165,7 @@ describe('ProductViewController', function() {
             expect(this.vm.constituents.pop()).toEqual(this.kitConstituents[1]);
         });
 
-        it('should should not remove invalid kit constituent from a product', function() {
+        it('should should not remove invalid kit constituent from a orderable', function() {
             var nonExistantProduct = new this.OrderableDataBuilder().build();
             this.vm.removeKitContituent(nonExistantProduct);
             this.$rootScope.$apply();
@@ -179,11 +179,11 @@ describe('ProductViewController', function() {
             this.vm.save();
             this.$rootScope.$apply();
 
-            expect(this.confirmService.confirm).toHaveBeenCalledWith('adminProductView.confirm');
+            expect(this.confirmService.confirm).toHaveBeenCalledWith('adminOrderableEdit.confirm');
         });
 
-        it('should save kit product constituents', function() {
-            this.OrderableResource.prototype.update.andReturn(this.$q.when(this.product));
+        it('should save kit orderable constituents', function() {
+            this.OrderableResource.prototype.update.andReturn(this.$q.when(this.orderable));
             spyOn(this.$state, 'go').andReturn();
 
             this.vm.save();
@@ -198,12 +198,12 @@ describe('ProductViewController', function() {
             });
 
             expect(this.notificationService.success).toHaveBeenCalledWith(
-                'adminProductView.productSavedSuccessfully'
+                'adminOrderableEdit.orderableSavedSuccessfully'
             );
 
         });
 
-        it('should show error alert wen product save fails', function() {
+        it('should show error alert wen orderable save fails', function() {
             this.vm.save();
 
             this.confirmDeferred.resolve();
@@ -211,7 +211,7 @@ describe('ProductViewController', function() {
             this.$rootScope.$apply();
 
             expect(this.loadingModalService.close).toHaveBeenCalled();
-            expect(this.alertService.error).toHaveBeenCalledWith('adminProductView.failedToSaveProduct');
+            expect(this.alertService.error).toHaveBeenCalledWith('adminOrderableEdit.failedToSaveProduct');
         });
     });
 });

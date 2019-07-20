@@ -19,21 +19,21 @@
 
     /**
      * @ngdoc controller
-     * @name admin-product-view.controller:ProductViewController
+     * @name admin-orderable-edit.controller:OrderableEditController
      *
      * @description
-     * Controller for managing product  view screen.
+     * Controller for managing orderable view screen.
      */
     angular
-        .module('admin-product-view')
-        .controller('ProductViewController', controller);
+        .module('admin-orderable-edit')
+        .controller('OrderableEditController', controller);
 
     controller.$inject = ['confirmService', 'loadingModalService', 'notificationService', '$state',
-        '$q', 'alertService', 'selectProductsModalService', 'product', 'kitConstituents',
-        'products', 'OrderableResource'];
+        '$q', 'alertService', 'selectProductsModalService', 'orderable', 'kitConstituents',
+        'orderables', 'OrderableResource'];
 
     function controller(confirmService, loadingModalService, notificationService, $state, $q, alertService,
-                        selectProductsModalService, product, kitConstituents, products,
+                        selectProductsModalService, orderable, kitConstituents, orderables,
                         OrderableResource) {
 
         var vm = this;
@@ -46,46 +46,46 @@
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-view.controller:ProductViewController
-         * @name product
+         * @propertyOf admin-orderable-edit.controller:OrderableEditController
+         * @name orderable
          * @type {Object}
          *
          * @description
-         * Contains product object. 
+         * Contains orderable object. 
          */
-        vm.product = undefined;
+        vm.orderable = undefined;
 
         /**
          * @ngdoc property
-         * @propertyOf admin-product-view.controller:ProductViewController
+         * @propertyOf admin-orderable-edit.controller:OrderableEditController
          * @name constituents
          * @type {Object}
          *
          * @description
-         * Contains product's normalized children object. 
+         * Contains orderable's normalized children object. 
          */
         vm.constituents = undefined;
 
         /**
          * @ngdoc method
-         * @propertyOf admin-product-view.controller:ProductViewController
+         * @propertyOf admin-orderable-edit.controller:OrderableEditController
          * @name $onInit
          *
          * @description
-         * Method that is executed on initiating ProductViewController.
+         * Method that is executed on initiating OrderableEditController.
          */
         function onInit() {
-            vm.product = product;
+            vm.orderable = orderable;
             vm.constituents = normalizeChildren();
         }
 
         /**
          * @ngdoc method
-         * @propertyOf admin-product-view.controller:ProductViewController
+         * @propertyOf admin-orderable-edit.controller:OrderableEditController
          * @name addKitContituents
          *
          * @description
-         * Method that displays a modal for selecting and adding a product to the UI
+         * Method that displays a modal for selecting and adding a orderable to the UI
          */
         function addKitContituents() {
             selectProducts(excludeSelectedOrderables()).
@@ -100,39 +100,39 @@
 
         /**
          * @ngdoc method
-         * @propertyOf admin-product-view.controller:ProductViewController
+         * @propertyOf admin-orderable-edit.controller:OrderableEditController
          * @name removeKitContituent
          *
          * @description
-         * Method that removes kit constituest from the kit product
+         * Method that removes kit constituest from the kit orderable
          *
          * @param {Object} a single child or kit constituent to be removed
          */
-        function removeKitContituent(productKit) {
-            if (vm.constituents.indexOf(productKit) > -1) {
-                vm.constituents.splice(vm.constituents.indexOf(productKit), 1);
+        function removeKitContituent(orderableKit) {
+            if (vm.constituents.indexOf(orderableKit) > -1) {
+                vm.constituents.splice(vm.constituents.indexOf(orderableKit), 1);
             }
         }
 
         /**
          * @ngdoc method
-         * @propertyOf admin-product-view.controller:ProductViewController
+         * @propertyOf admin-orderable-edit.controller:OrderableEditController
          * @name save
          *
          * @description
          * Method that will save a list of kit constituent parts.
          */
         function save() {
-            confirmService.confirm('adminProductView.confirm').then(confirmSave);
+            confirmService.confirm('adminOrderableEdit.confirm').then(confirmSave);
         }
 
         /**
          * @ngdoc method
-         * @methodOf admin-product-view.controller:ProductViewController
+         * @methodOf admin-orderable-edit.controller:OrderableEditController
          * @name goToProductList
          *
          * @description
-         * Redirects to product list screen.
+         * Redirects to orderable list screen.
          */
         function goToProductList() {
             $state.go('^', {}, {
@@ -142,25 +142,25 @@
 
         function confirmSave() {
             var loadingPromise = loadingModalService.open();
-            var productToSave = angular.copy(vm.product);
-            productToSave.children = transformChildren();
-            new OrderableResource().update(productToSave)
+            var orderableToSave = angular.copy(vm.orderable);
+            orderableToSave.children = transformChildren();
+            new OrderableResource().update(orderableToSave)
                 .then(function() {
                     loadingPromise.then(function() {
-                        notificationService.success('adminProductView.productSavedSuccessfully');
+                        notificationService.success('adminOrderableEdit.orderableSavedSuccessfully');
                     });
                     goToProductList();
                 }, function() {
                     loadingModalService.close();
-                    alertService.error('adminProductView.failedToSaveProduct');
+                    alertService.error('adminOrderableEdit.failedToSaveProduct');
                 });
         }
 
         function selectProducts(availableProducts) {
             if (!availableProducts.length) {
                 alertService.error(
-                    'adminProductView.noProductsToAdd.label',
-                    'adminProductView.noProductsToAdd.message'
+                    'adminOrderableEdit.noProductsToAdd.label',
+                    'adminOrderableEdit.noProductsToAdd.message'
                 );
                 return $q.reject();
             }
@@ -169,13 +169,13 @@
         }
 
         function excludeSelectedOrderables() {
-            return products.filter(function(i) {
+            return orderables.filter(function(i) {
                 return _.pluck(vm.constituents, 'id').indexOf(i.id) < 0;
             });
         }
 
         function transformChildren() {
-            /*  convert product childern objects to the format the API expects */
+            /*  convert orderable childern objects to the format the API expects */
             return vm.constituents.map(function(child) {
                 return {
                     orderable: {
@@ -188,8 +188,8 @@
 
         function normalizeChildren() {
             return kitConstituents.map(function(constituent) {
-                var foundConstituent = _.find(vm.product.children, function(product) {
-                    return constituent.id === product.orderable.id;
+                var foundConstituent = _.find(vm.orderable.children, function(orderable) {
+                    return constituent.id === orderable.orderable.id;
                 });
                 constituent.quantity = foundConstituent.quantity;
                 return constituent;

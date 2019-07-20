@@ -18,12 +18,12 @@
     'use strict';
 
     /**
-     * @module admin-product-view
+     * @module admin-orderable-edit
      *
      * @description
-     * Provides admin product view state and controller.
+     * Provides admin orderable edit view and controller.
      */
-    angular.module('admin-product-view', [
+    angular.module('admin-orderable-edit', [
         'openlmis-admin',
         'openlmis-rights',
         'referencedata-orderable',

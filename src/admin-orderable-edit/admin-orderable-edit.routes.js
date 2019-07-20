@@ -17,31 +17,31 @@
 
     'use strict';
 
-    angular.module('admin-product-view').config(routes);
+    angular.module('admin-orderable-edit').config(routes);
 
     routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.orderables.view', {
-            label: 'adminProductView.orderableDetails',
-            url: '/products/:id',
+        $stateProvider.state('openlmis.administration.orderables.edit', {
+            label: 'adminOrderableEdit.orderableDetails',
+            url: '/:id',
             accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
             views: {
                 '@openlmis': {
-                    controller: 'ProductViewController',
-                    templateUrl: 'admin-product-view/product-view.html',
+                    controller: 'OrderableEditController',
+                    templateUrl: 'admin-orderable-edit/orderable-edit.html',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
-                product: function(orderableFactory, $stateParams) {
+                orderable: function(orderableFactory, $stateParams) {
                     return orderableFactory.getOrderableWithProgramData($stateParams.id);
                 },
-                kitConstituents: function($stateParams, product, OrderableResource, paginationService) {
+                kitConstituents: function($stateParams, orderable, OrderableResource, paginationService) {
                     return paginationService.registerList(null, $stateParams, function() {
-                        var ids = product.children.map(function(product) {
-                            return product.orderable.id;
+                        var ids = orderable.children.map(function(orderable) {
+                            return orderable.orderable.id;
                         });
 
                         if (ids.length) {
@@ -52,20 +52,20 @@
                                     return response.content;
                                 });
                         }
-                        return product.children;
+                        return orderable.children;
                     }, {
                         customPageParamName: 'kitConstituentPage',
                         customSizeParamName: 'kitConstituentSize'
                     });
                 },
-                products: function(OrderableResource) {
+                orderables: function(OrderableResource) {
                     return new OrderableResource().query(
                         {
                             sort: 'fullProductName,asc'
                         }
                     )
-                        .then(function(products) {
-                            return products.content;
+                        .then(function(orderables) {
+                            return orderables.content;
                         });
                 }
             }
