@@ -1,0 +1,40 @@
+<h3>{{'adminOrderableEdit.associatedPrograms' | message}}</h3>
+<section class="openlmis-table-container">
+    <table>
+        <caption ng-if="!vm.orderable.programs || vm.orderable.programs.length === 0">
+            {{'adminOrderableEdit.noAssociatedPrograms' | message}}
+        </caption>
+        <thead>
+            <tr>
+                <th>{{'adminOrderableEdit.programName' | message}}</th>
+                <th>{{'adminOrderableEdit.productCode' | message}}</th>
+                <th>{{'adminOrderableEdit.active' | message}}</th>
+                <th>{{'adminOrderableEdit.displayOrder' | message}}</th>
+                <th>{{'adminOrderableEdit.dosesPerPatient' | message}}</th>
+                <th>{{'adminOrderableEdit.fullSupply' | message}}</th>
+                <th>{{'adminOrderableEdit.pricePerPack' | message}}</th>
+                <th>{{'adminOrderableEdit.orderableCategoryDisplayName' | message}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="program in vm.orderable.programs">
+                <td>{{vm.programsMap[program.programId].name}}</td>
+                <td>{{vm.orderable.productCode}}</td>
+                <td>
+                    <i ng-class="{'icon-ok': program.active, 'icon-remove': !program.active}"></i>
+                </td>
+                <td>{{program.displayOrder}}</td>
+                <td>{{program.dosesPerPatient}}</td>
+                <td>
+                    <i ng-class="{'icon-ok': program.fullSupply, 'icon-remove': !program.fullSupply}"></i>
+                </td>
+                <td>{{program.pricePerPack}}</td>
+                <td>{{program.orderableCategoryDisplayName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<div class="openlmis-toolbar">
+    <button ng-click="vm.goToOrderableList()">{{'adminOrderableEdit.cancel' | message}}</button>
+</div>

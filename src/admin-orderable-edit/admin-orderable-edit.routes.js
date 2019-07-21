@@ -23,52 +23,98 @@
 
     function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
-        $stateProvider.state('openlmis.administration.orderables.edit', {
-            label: 'adminOrderableEdit.orderableDetails',
-            url: '/:id',
-            accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
-            views: {
-                '@openlmis': {
-                    controller: 'OrderableEditController',
-                    templateUrl: 'admin-orderable-edit/orderable-edit.html',
-                    controllerAs: 'vm'
-                }
-            },
-            resolve: {
-                orderable: function(orderableFactory, $stateParams) {
-                    return orderableFactory.getOrderableWithProgramData($stateParams.id);
+        $stateProvider
+            .state('openlmis.administration.orderables.edit', {
+                abstract: true,
+                label: 'adminOrderableEdit.editOrderable',
+                url: '/:id',
+                accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
+                views: {
+                    '@openlmis': {
+                        controller: 'OrderableEditController',
+                        templateUrl: 'admin-orderable-edit/orderable-edit.html',
+                        controllerAs: 'vm'
+                    }
                 },
-                kitConstituents: function($stateParams, orderable, OrderableResource, paginationService) {
-                    return paginationService.registerList(null, $stateParams, function() {
-                        var ids = orderable.children.map(function(orderable) {
-                            return orderable.orderable.id;
+                resolve: {
+                    orderable: function($stateParams, OrderableResource, orderables) {
+                        var orderable = _.findWhere(orderables, {
+                            id: $stateParams.id
                         });
 
-                        if (ids.length) {
-                            return new OrderableResource().query({
-                                id: ids
-                            })
-                                .then(function(response) {
-                                    return response.content;
-                                });
-                        }
-                        return orderable.children;
-                    }, {
-                        customPageParamName: 'kitConstituentPage',
-                        customSizeParamName: 'kitConstituentSize'
-                    });
-                },
-                orderables: function(OrderableResource) {
-                    return new OrderableResource().query(
-                        {
-                            sort: 'fullProductName,asc'
-                        }
-                    )
-                        .then(function(orderables) {
-                            return orderables.content;
-                        });
+                        return orderable ?
+                            angular.copy(orderable) :
+                            new OrderableResource().get($stateParams.id);
+                    }
                 }
-            }
-        });
+            });
+
+        $stateProvider
+            .state('openlmis.administration.orderables.edit.general', {
+                url: '/general',
+                controller: 'OrderableEditGeneralController',
+                templateUrl: 'admin-orderable-edit/orderable-edit-general.html',
+                controllerAs: 'vm',
+                resolve: {
+                    orderable: resolveOrderable
+                }
+            });
+
+        $stateProvider
+            .state('openlmis.administration.orderables.edit.programs', {
+                label: 'adminOrderableEdit.programs',
+                url: '/programs',
+                controller: 'OrderableEditProgramsController',
+                templateUrl: 'admin-orderable-edit/orderable-edit-programs.html',
+                controllerAs: 'vm',
+                resolve: {
+                    orderable: resolveOrderable,
+                    programsMap: function(programs) {
+                        return programs.reduce(function(programsMap, program) {
+                            programsMap[program.id] = program;
+                            return programsMap;
+                        }, {});
+                    }
+                }
+            });
+
+        $stateProvider
+            .state('openlmis.administration.orderables.edit.kitUnpackList', {
+                label: 'adminOrderableEdit.kitUnpackList',
+                url: '/kitUnpackList?kitConstituentPage&kitConstituentSize',
+                controller: 'OrderableEditKitUnpackListController',
+                templateUrl: 'admin-orderable-edit/orderable-edit-kit-unpack-list.html',
+                controllerAs: 'vm',
+                resolve: {
+                    orderable: resolveOrderable,
+                    children: function($stateParams, orderable, paginationService) {
+                        return paginationService.registerList(null, $stateParams, function() {
+                            return orderable.children;
+                        }, {
+                            customPageParamName: 'kitConstituentPage',
+                            customSizeParamName: 'kitConstituentSize'
+                        });
+                    },
+                    orderables: function(OrderableResource) {
+                        return new OrderableResource()
+                            .query({
+                                sort: 'fullProductName,asc'
+                            })
+                            .then(function(orderables) {
+                                return orderables.content;
+                            });
+                    },
+                    orderablesMap: function(orderables) {
+                        return orderables.reduce(function(orderablesMap, orderable) {
+                            orderablesMap[orderable.id] = orderable;
+                            return orderablesMap;
+                        }, {});
+                    }
+                }
+            });
+
+        function resolveOrderable(orderable) {
+            return angular.copy(orderable);
+        }
     }
 })();

@@ -36,7 +36,7 @@
                 <td>{{orderable.fullProductName}}</td>
                 <td>{{orderable.description}}</td>
                 <td>
-                    <a ui-sref=".edit({id: orderable.id})">{{'adminOrderableList.view' | message}}</a>
+                    <button class="primary" ui-sref=".edit.general({id: orderable.id})">{{'adminOrderableList.edit' | message}}</button>
                 </td>
             </tr>
         </tbody>

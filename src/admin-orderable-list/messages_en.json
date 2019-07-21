@@ -7,5 +7,5 @@
     "adminOrderableList.search": "Search",
     "adminOrderableList.orderables.error": "No orderables found",
     "adminOrderableList.actions": "Actions",
-    "adminOrderableList.view": "View"
+    "adminOrderableList.edit": "Edit"
 }

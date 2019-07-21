@@ -1,0 +1,31 @@
+<form id="saveKitUnpackList" ng-submit="vm.saveOrderable()">
+    <label for="productCode">{{'adminOrderableEdit.productCode' | message}}</label>
+    <input id="productCode" type="text" ng-model="vm.orderable.productCode" required/>
+    <label for="fullProductName">{{'adminOrderableEdit.name' | message}}</label>
+    <input id="fullProductName" type="text" ng-model="vm.orderable.fullProductName" required />
+    <label for="description">{{'adminOrderableEdit.description' | message}}</label>
+    <input id="description" type="text" ng-model="vm.orderable.description" required />
+    <h3>{{'adminOrderableEdit.packSizeInformation' | message}}</h3>
+    <label for="dispensingUnit">{{'adminOrderableEdit.dispensingUnit' | message}}</label>
+    <input id="dispensingUnit" type="text" ng-model="vm.orderable.dispensable.displayUnit" required />
+    <p class="note">
+        {{ 'adminOrderableEdit.dispensingUnit.info' | message}}
+    </p>
+    <label for="netContent">{{'adminOrderableEdit.netContent' | message}}</label>
+    <input id="netContent" type="number" ng-model="vm.orderable.netContent" required />
+    <label for="packRoundingThreshold">{{'adminOrderableEdit.packRoundingThreshold' | message}}</label>
+    <input id="packRoundingThreshold" type="number" ng-model="vm.orderable.packRoundingThreshold" required/>
+    <fieldset class="form-group">
+        <label>
+            <input type="checkbox" ng-model="vm.orderable.roundToZero" />
+            {{'adminOrderableEdit.roundToZero' | message}}
+        </label>
+    </fieldset>
+</form>
+
+<div class="openlmis-toolbar">
+    <button ng-click="vm.goToOrderableList()">{{'adminOrderableEdit.cancel' | message}}</button>
+    <div class="button-group primary">
+        <button class="primary" type="submit" form="saveKitUnpackList">{{'adminOrderableEdit.saveOrderable' | message}}</button>
+    </div>
+</div>

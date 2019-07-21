@@ -32,22 +32,12 @@
             controllerAs: 'vm',
             accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
             resolve: {
-                programs: function(programService) {
-                    return programService.getAll();
+                programs: function(ProgramResource) {
+                    return new ProgramResource().query();
                 },
-                orderables: function(paginationService, orderableService, $stateParams) {
+                orderables: function(paginationService, OrderableResource, $stateParams) {
                     return paginationService.registerUrl($stateParams, function(stateParams) {
-                        var params = angular.copy(stateParams),
-                            page = stateParams.page,
-                            size = stateParams.size;
-
-                        delete params.page;
-                        delete params.size;
-
-                        return orderableService.search({
-                            page: page,
-                            size: size
-                        }, params);
+                        return new OrderableResource().query(stateParams);
                     });
                 }
             }

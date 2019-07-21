@@ -24,6 +24,7 @@
      * Provides base admin-orderable state and controller for retrieving list of orderables from the OpenLMIS server.
      */
     angular.module('admin-orderable-list', [
+        'openlmis-admin',
         'openlmis-pagination',
         'openlmis-rights',
         'referencedata-orderable',

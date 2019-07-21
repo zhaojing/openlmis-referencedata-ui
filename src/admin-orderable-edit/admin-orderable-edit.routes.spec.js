@@ -13,15 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('openlmis.administration.orderables.edit.route', function() {
+describe('openlmis.administration.orderables.edit route', function() {
 
     beforeEach(function() {
-        module('admin-orderable-edit', function($provide) {
-            var programService = jasmine.createSpyObj('orderableService', ['getAll']);
-            $provide.service('programService', function() {
-                return programService;
-            });
-        });
+        module('admin-orderable-edit');
 
         inject(function($injector) {
             this.$q = $injector.get('$q');
@@ -29,107 +24,159 @@ describe('openlmis.administration.orderables.edit.route', function() {
             this.$location = $injector.get('$location');
             this.$rootScope = $injector.get('$rootScope');
             this.$templateCache = $injector.get('$templateCache');
-            this.orderableFactory = $injector.get('orderableFactory');
             this.OrderableResource = $injector.get('OrderableResource');
+            this.ProgramResource = $injector.get('ProgramResource');
+            this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.PageDataBuilder = $injector.get('PageDataBuilder');
-            this.paginationService = $injector.get('paginationService');
+            this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
             this.OrderableChildrenDataBuilder = $injector.get('OrderableChildrenDataBuilder');
-            this.ADMINISTRATION_RIGHTS = $injector.get('ADMINISTRATION_RIGHTS');
         });
 
-        var productChildren = [
-            new this.OrderableChildrenDataBuilder().withId('child_product_1_id')
-                .withQuantity(30)
-                .buildJson(),
-            new this.OrderableChildrenDataBuilder().withId('child_product_2_id')
-                .withQuantity(40)
-                .buildJson()
+        this.programs = [
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build(),
+            new this.ProgramDataBuilder().build()
         ];
 
-        this.kitConstituents = [
-            new this.OrderableDataBuilder()
-                .withId('child_product_1_id')
-                .withFullProductName('p1')
-                .buildJson(),
-            new this.OrderableDataBuilder()
-                .withId('child_product_2_id')
-                .withFullProductName('p2')
-                .buildJson(),
-            new this.OrderableDataBuilder()
-                .withId('child_product_3_id')
-                .withFullProductName('p3')
-                .buildJson()
+        this.orderableChildren = [
+            new this.OrderableChildrenDataBuilder().buildJson(),
+            new this.OrderableChildrenDataBuilder().buildJson()
         ];
 
         this.orderable = new this.OrderableDataBuilder()
-            .withId('product_1_id')
-            .withFullProductName('p1')
-            .withChildren(productChildren)
-            .buildJson();
+            .withPrograms([
+                new this.ProgramOrderableDataBuilder()
+                    .withProgramId(this.programs[0].id)
+                    .buildJson(),
+                new this.ProgramOrderableDataBuilder()
+                    .withProgramId(this.programs[2].id)
+                    .buildJson()
+            ])
+            .withChildren(this.orderableChildren)
+            .build();
 
-        this.productWithNoChildren = new this.OrderableDataBuilder()
-            .withId('product_1_id')
-            .withFullProductName('p1')
-            .buildJson();
+        this.orderables = [
+            this.orderable,
+            new this.OrderableDataBuilder().build(),
+            new this.OrderableDataBuilder().build()
+        ];
 
-        spyOn(this.orderableFactory, 'getOrderableWithProgramData')
-            .andReturn(this.$q.resolve(this.orderable));
-        spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(
-            new this.PageDataBuilder()
-                .withContent(this.kitConstituents)
-                .build()
-        ));
+        this.orderablesPage = new this.PageDataBuilder()
+            .withContent(this.orderables)
+            .build();
+
+        spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(this.orderablesPage));
+        spyOn(this.ProgramResource.prototype, 'query').andReturn(this.$q.resolve(this.programs));
         spyOn(this.$templateCache, 'get').andCallThrough();
 
-        this.state = this.$state.get('openlmis.administration.orderables.edit');
+        this.goToState = function(subState) {
+            this.$location.url('/administration/orderables/' + this.orderable.id + subState);
+            this.$rootScope.$apply();
+        };
+
+        this.getResolvedValue = function(name) {
+            return this.$state.$current.locals.globals[name];
+        };
+
     });
 
-    describe('state', function() {
+    describe('.general state', function() {
 
         it('should resolve orderable', function() {
-            var result;
+            this.goToState('/general');
 
-            this.state.resolve.orderable(this.orderableFactory, this.$state).then(function(orderable) {
-                result = orderable;
-            });
-
-            this.$rootScope.$apply();
-
-            expect(result).toEqual(this.orderable);
+            expect(this.getResolvedValue('orderable')).toEqual(this.orderable);
+            expect(this.getResolvedValue('orderable')).not.toBe(this.orderable);
         });
 
-        it('should resolve kitConstituents', function() {
-            var result;
+        it('should not change state if fetching orderable fails', function() {
+            this.OrderableResource.prototype.query.andReturn(this.$q.reject());
 
-            this.state.resolve.kitConstituents(this.$state, this.orderable, this.OrderableResource,
-                this.paginationService)
-                .then(function(kitsConstituents) {
-                    result = kitsConstituents;
-                });
+            this.goToState('/general');
 
-            this.$rootScope.$apply();
-
-            expect(result).toEqual(this.kitConstituents);
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.orderables.edit.general');
         });
 
-        it('should resolve kitConstituents to emptry Array if orderable does not have children', function() {
-            var result;
+    });
 
-            this.state.resolve.kitConstituents(this.$state, this.productWithNoChildren, this.OrderableResource,
-                this.paginationService)
+    describe('.programs state', function() {
 
-                .then(function(kitsConstituents) {
-                    result = kitsConstituents;
-                });
+        it('should resolve orderable', function() {
+            this.goToState('/programs');
 
-            this.$rootScope.$apply();
-
-            expect(result).toEqual([]);
+            expect(this.getResolvedValue('orderable')).toEqual(this.orderable);
+            expect(this.getResolvedValue('orderable')).not.toBe(this.orderable);
         });
 
-        it('should expose controller as vm', function() {
-            expect(this.state.accessRights).toEqual([this.ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE]);
+        it('should not change state if fetching orderable fails', function() {
+            this.OrderableResource.prototype.query.andReturn(this.$q.reject());
+
+            this.goToState('/programs');
+
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.orderables.edit.general');
         });
+
+        it('should resolve programs map', function() {
+            this.goToState('/programs');
+
+            var expected = {};
+            expected[this.programs[0].id] = this.programs[0];
+            expected[this.programs[1].id] = this.programs[1];
+            expected[this.programs[2].id] = this.programs[2];
+
+            expect(this.getResolvedValue('programsMap')).toEqual(expected);
+        });
+
+        it('should not change state if fetching programs fails', function() {
+            this.ProgramResource.prototype.query.andReturn(this.$q.reject());
+
+            this.goToState('/programs');
+
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.orderables.edit.programs');
+        });
+
+    });
+
+    describe('.kitUnpackList state', function() {
+
+        it('should resolve orderable', function() {
+            this.goToState('/kitUnpackList');
+
+            expect(this.getResolvedValue('orderable')).toEqual(this.orderable);
+            expect(this.getResolvedValue('orderable')).not.toBe(this.orderable);
+        });
+
+        it('should not change state if fetching orderable fails', function() {
+            this.OrderableResource.prototype.query.andReturn(this.$q.reject());
+
+            this.goToState('/kitUnpackList');
+
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.orderables.edit.kitUnpackList');
+        });
+
+        it('should resolve children page', function() {
+            this.goToState('/kitUnpackList');
+
+            expect(this.getResolvedValue('children')).toEqual(this.orderable.children);
+        });
+
+        it('should resolve orderables', function() {
+            this.goToState('/kitUnpackList');
+
+            expect(this.getResolvedValue('orderables')).toEqual(this.orderables);
+        });
+
+        it('should resolve orderables map', function() {
+            this.goToState('/kitUnpackList');
+
+            var expected = {};
+            expected[this.orderables[0].id] = this.orderables[0];
+            expected[this.orderables[1].id] = this.orderables[1];
+            expected[this.orderables[2].id] = this.orderables[2];
+
+            expect(this.getResolvedValue('orderablesMap')).toEqual(expected);
+        });
+
     });
 });

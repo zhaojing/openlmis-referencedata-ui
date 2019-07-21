@@ -18,22 +18,28 @@
     'use strict';
 
     /**
-     * @module admin-orderable-edit
+     * @ngdoc service
+     * @name referencedata-program.ProgramResource
      *
      * @description
-     * Provides admin orderable edit view and controller.
+     * Communicates with the /api/programs endpoint of the OpenLMIS server.
      */
-    angular.module('admin-orderable-edit', [
-        'openlmis-admin',
-        'openlmis-rights',
-        'referencedata-orderable',
-        'ui.router',
-        'openlmis-i18n',
-        'openlmis-modal',
-        'select-products-modal',
-        'admin-orderable-list',
-        'openlmis-pagination',
-        'openlmis-function-decorator'
-    ]);
+    angular
+        .module('referencedata-program')
+        .factory('ProgramResource', ProgramResource);
 
+    ProgramResource.$inject = ['OpenlmisResource', 'classExtender'];
+
+    function ProgramResource(OpenlmisResource, classExtender) {
+
+        classExtender.extend(ProgramResource, OpenlmisResource);
+
+        return ProgramResource;
+
+        function ProgramResource() {
+            this.super('/api/programs', {
+                paginated: false
+            });
+        }
+    }
 })();
