@@ -123,7 +123,7 @@
         }
 
         function build() {
-            return this.buildJson();
+            return new Orderable(this.buildJson());
         }
 
         function buildJson() {

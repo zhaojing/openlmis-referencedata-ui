@@ -13,22 +13,28 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('ProgramResource', function() {
 
-    'use strict';
+    beforeEach(function() {
+        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
-    /**
-     * @module referencedata-program
-     *
-     * @description
-     * Responsible for providing program info to other modules.
-     */
-    angular.module('referencedata-program', [
-        'ngResource',
-        'openlmis-local-storage',
-        'openlmis-urls',
-        'openlmis-offline',
-        'openlmis-class-extender'
-    ]);
+        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        module('referencedata-program', function($provide) {
+            $provide.factory('OpenlmisResource', function() {
+                return OpenlmisResourceMock;
+            });
+        });
 
-})();
+        inject(function($injector) {
+            this.ProgramResource = $injector.get('ProgramResource');
+        });
+    });
+
+    it('should extend OpenlmisResource', function() {
+        new this.ProgramResource();
+
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith('/api/programs', {
+            paginated: false
+        });
+    });
+});

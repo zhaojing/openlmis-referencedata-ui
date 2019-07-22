@@ -56,6 +56,7 @@
             this.netContent = json.netContent;
             this.packRoundingThreshold = json.packRoundingThreshold;
             this.meta = json.meta;
+            this.children = json.children;
         }
 
     }

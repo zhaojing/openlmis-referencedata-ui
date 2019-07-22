@@ -68,6 +68,7 @@ describe('openlmis.administration.orderables.edit route', function() {
 
         spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(this.orderablesPage));
         spyOn(this.ProgramResource.prototype, 'query').andReturn(this.$q.resolve(this.programs));
+        spyOn(this.OrderableResource.prototype, 'get').andReturn(this.$q.resolve(this.orderable));
         spyOn(this.$templateCache, 'get').andCallThrough();
 
         this.goToState = function(subState) {
@@ -84,6 +85,15 @@ describe('openlmis.administration.orderables.edit route', function() {
     describe('.general state', function() {
 
         it('should resolve orderable', function() {
+            this.goToState('/general');
+
+            expect(this.getResolvedValue('orderable')).toEqual(this.orderable);
+            expect(this.getResolvedValue('orderable')).not.toBe(this.orderable);
+        });
+
+        it('should fetch orderable if it is not present on the orderable list', function() {
+            this.OrderableResource.prototype.query.andReturn(this.$q.resolve(new this.PageDataBuilder().build()));
+
             this.goToState('/general');
 
             expect(this.getResolvedValue('orderable')).toEqual(this.orderable);
