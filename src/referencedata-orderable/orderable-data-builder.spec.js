@@ -28,7 +28,7 @@
         OrderableDataBuilder.prototype.withFullProductName = withFullProductName;
         OrderableDataBuilder.prototype.withProductCode = withProductCode;
         OrderableDataBuilder.prototype.withId = withId;
-        OrderableDataBuilder.prototype.withVersionId = withVersionId;
+        OrderableDataBuilder.prototype.withVersionNumber = withVersionNumber;
         OrderableDataBuilder.prototype.withPrograms = withPrograms;
         OrderableDataBuilder.prototype.withExtraData = withExtraData;
         OrderableDataBuilder.prototype.withIdentifiers = withIdentifiers;
@@ -68,7 +68,7 @@
             ];
 
             this.meta = {
-                versionId: '1'
+                versionNumber: '1'
             };
         }
 
@@ -82,8 +82,8 @@
             return this;
         }
 
-        function withVersionId(versionId) {
-            this.meta.versionId = versionId;
+        function withVersionNumber(versionNumber) {
+            this.meta.versionNumber = versionNumber;
             return this;
         }
 
