@@ -109,7 +109,7 @@
 
         /**
          * @ngdoc method
-         * @methodOf admin-orderable-edit.controller:OrderableEditGeneralController
+         * @methodOf admin-orderable-edit.controller:OrderableEditKitUnpackListController
          * @name saveOrderable
          *
          * @description

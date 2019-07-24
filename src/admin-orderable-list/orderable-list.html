@@ -1,5 +1,6 @@
-<h2>{{'adminOrderableList.orderables' | message}}</h2>
+<h2>{{'adminOrderableList.products' | message}}</h2>
 <section class="openlmis-table-container">
+    <button class="add" ui-sref='.add'>{{'adminOrderableList.addProduct' | message}}</button>
     <form ng-submit="vm.search()">
         <fieldset class="form-group">
             <label for="code">{{'adminOrderableList.code' | message}}</label>
@@ -20,7 +21,7 @@
     </form>
     <table>
         <caption ng-if="!vm.orderables || vm.orderables.length === 0">
-            {{'adminOrderableList.orderables.error' | message}}
+            {{'adminOrderableList.products.error' | message}}
         </caption>
         <thead>
             <tr>

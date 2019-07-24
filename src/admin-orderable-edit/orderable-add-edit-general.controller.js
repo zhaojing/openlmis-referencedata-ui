@@ -19,59 +19,65 @@
 
     /**
      * @ngdoc controller
-     * @name admin-orderable-edit.controller:OrderableEditGeneralController
+     * @name admin-orderable-edit.controller:OrderableAddEditGeneralController
      *
      * @description
      * Controller for managing orderable view screen.
      */
     angular
         .module('admin-orderable-edit')
-        .controller('OrderableEditGeneralController', controller);
+        .controller('OrderableAddEditGeneralController', controller);
 
-    controller.$inject = ['orderable', '$state', 'OrderableResource', 'FunctionDecorator'];
+    controller.$inject = [
+        'orderable', '$state', 'OrderableResource', 'FunctionDecorator', 'successNotificationKey',
+        'errorNotificationKey', 'orderableListRelativePath'
+    ];
 
-    function controller(orderable, $state, OrderableResource, FunctionDecorator) {
+    function controller(orderable, $state, OrderableResource, FunctionDecorator, successNotificationKey,
+                        errorNotificationKey, orderableListRelativePath) {
 
-        var vm = this;
+        var vm = this,
+            isNew;
 
         vm.$onInit = onInit;
         vm.goToOrderableList  = goToOrderableList;
         vm.saveOrderable = new FunctionDecorator()
             .decorateFunction(saveOrderable)
-            .withSuccessNotification('adminOrderableEdit.orderableSavedSuccessfully')
-            .withErrorNotification('adminOrderableEdit.failedToSaveOrderable')
+            .withSuccessNotification(successNotificationKey)
+            .withErrorNotification(errorNotificationKey)
             .withLoading(true)
             .getDecoratedFunction();
 
         /**
          * @ngdoc method
-         * @propertyOf admin-orderable-edit.controller:OrderableEditGeneralController
+         * @propertyOf admin-orderable-edit.controller:OrderableAddEditGeneralController
          * @name $onInit
          *
          * @description
-         * Method that is executed on initiating OrderableEditGeneralController.
+         * Method that is executed on initiating OrderableAddEditGeneralController.
          */
         function onInit() {
             vm.orderable = orderable;
+            isNew = !orderable.id;
         }
 
         /**
          * @ngdoc method
-         * @methodOf admin-orderable-edit.controller:OrderableEditGeneralController
+         * @methodOf admin-orderable-edit.controller:OrderableAddEditGeneralController
          * @name goToOrderableList
          *
          * @description
          * Redirects to orderable list screen.
          */
         function goToOrderableList() {
-            $state.go('^.^', {}, {
+            $state.go(orderableListRelativePath, {}, {
                 reload: true
             });
         }
 
         /**
          * @ngdoc method
-         * @methodOf admin-orderable-edit.controller:OrderableEditGeneralController
+         * @methodOf admin-orderable-edit.controller:OrderableAddEditGeneralController
          * @name saveOrderable
          *
          * @description
@@ -80,7 +86,15 @@
         function saveOrderable() {
             return new OrderableResource()
                 .update(vm.orderable)
-                .then(goToOrderableList);
+                .then(function(orderable) {
+                    if (isNew) {
+                        $state.go('^.edit.general', {
+                            id: orderable.id
+                        });
+                    } else {
+                        goToOrderableList();
+                    }
+                });
         }
 
     }

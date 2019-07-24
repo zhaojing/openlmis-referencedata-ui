@@ -17,30 +17,37 @@
 
     'use strict';
 
-    angular.module('admin-orderable-list').config(routes);
+    angular
+        .module('admin-orderable-add')
+        .config(adminOrderableAddRoutes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
+    adminOrderableAddRoutes.$inject = ['modalStateProvider'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
+    function adminOrderableAddRoutes(modalStateProvider) {
 
-        $stateProvider.state('openlmis.administration.orderables', {
-            showInNavigation: true,
-            label: 'adminOrderableList.products',
-            url: '/orderables?code&name&description&program&page&size',
-            controller: 'OrderableListController',
-            templateUrl: 'admin-orderable-list/orderable-list.html',
+        modalStateProvider.state('openlmis.administration.orderables.add', {
+            controller: 'OrderableAddEditGeneralController',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
+            templateUrl: 'admin-orderable-add/orderable-add.html',
+            url: '/add',
             resolve: {
-                programs: function(ProgramResource) {
-                    return new ProgramResource().query();
+                successNotificationKey: function() {
+                    return 'adminOrderableAdd.productHasBeenCreatedSuccessfully';
                 },
-                orderables: function(paginationService, OrderableResource, $stateParams) {
-                    return paginationService.registerUrl($stateParams, function(stateParams) {
-                        return new OrderableResource().query(stateParams);
-                    });
+                errorNotificationKey: function() {
+                    return 'adminOrderableAdd.failedToCreateProduct';
+                },
+                orderableListRelativePath: function() {
+                    return '^';
+                },
+                orderable: function() {
+                    return {
+                        roundToZero: false
+                    };
                 }
             }
         });
+
     }
+
 })();

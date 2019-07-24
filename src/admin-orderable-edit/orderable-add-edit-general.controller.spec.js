@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('OrderableEditGeneralController', function() {
+describe('OrderableAddEditGeneralController', function() {
 
     beforeEach(function() {
         module('admin-orderable-edit', function($provide) {
@@ -30,15 +30,24 @@ describe('OrderableEditGeneralController', function() {
             this.OrderableResource = $injector.get('OrderableResource');
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
+            this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
         this.orderable = new this.OrderableDataBuilder().buildJson();
+        this.successNotificationKey = 'successMessage.key';
+        this.errorNotificationKey = 'errorMessage.key';
+        this.orderableListRelativePath = 'orderable.list.relative.path';
 
         spyOn(this.$state, 'go');
         spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.orderable));
+        spyOn(this.FunctionDecorator.prototype, 'withSuccessNotification').andCallThrough();
+        spyOn(this.FunctionDecorator.prototype, 'withErrorNotification').andCallThrough();
 
-        this.vm = this.$controller('OrderableEditGeneralController', {
-            orderable: this.orderable
+        this.vm = this.$controller('OrderableAddEditGeneralController', {
+            orderable: this.orderable,
+            successNotificationKey: this.successNotificationKey,
+            errorNotificationKey: this.errorNotificationKey,
+            orderableListRelativePath: this.orderableListRelativePath
         });
         this.vm.$onInit();
     });
@@ -48,6 +57,17 @@ describe('OrderableEditGeneralController', function() {
         it('should expose orderable', function() {
             expect(this.vm.orderable).toEqual(this.orderable);
         });
+
+        it('should decorate with correct success message', function() {
+            expect(this.FunctionDecorator.prototype.withSuccessNotification)
+                .toHaveBeenCalledWith(this.successNotificationKey);
+        });
+
+        it('should decorate with correct error message', function() {
+            expect(this.FunctionDecorator.prototype.withErrorNotification)
+                .toHaveBeenCalledWith(this.errorNotificationKey);
+        });
+
     });
 
     describe('goToOrderableList', function() {
@@ -55,7 +75,7 @@ describe('OrderableEditGeneralController', function() {
         it('should call state go with correct params', function() {
             this.vm.goToOrderableList();
 
-            expect(this.$state.go).toHaveBeenCalledWith('^.^', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith(this.orderableListRelativePath, {}, {
                 reload: true
             });
         });
@@ -73,7 +93,7 @@ describe('OrderableEditGeneralController', function() {
             this.vm.saveOrderable();
             this.$rootScope.$apply();
 
-            expect(this.$state.go).toHaveBeenCalledWith('^.^', {}, {
+            expect(this.$state.go).toHaveBeenCalledWith(this.orderableListRelativePath, {}, {
                 reload: true
             });
         });
@@ -85,6 +105,21 @@ describe('OrderableEditGeneralController', function() {
             this.$rootScope.$apply();
 
             expect(this.$state.go).not.toHaveBeenCalled();
+        });
+
+        it('should redirect to the edit screen if creating a new orderable', function() {
+            var createdOrderable = new this.OrderableDataBuilder().build();
+
+            this.OrderableResource.prototype.update.andReturn(this.$q.resolve(createdOrderable));
+            this.orderable.id = undefined;
+            this.vm.$onInit();
+
+            this.vm.saveOrderable();
+            this.$rootScope.$apply();
+
+            expect(this.$state.go).toHaveBeenCalledWith('^.edit.general', {
+                id: createdOrderable.id
+            });
         });
 
     });

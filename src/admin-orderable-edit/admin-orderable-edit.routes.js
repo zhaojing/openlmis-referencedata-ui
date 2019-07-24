@@ -26,7 +26,7 @@
         $stateProvider
             .state('openlmis.administration.orderables.edit', {
                 abstract: true,
-                label: 'adminOrderableEdit.editOrderable',
+                label: 'adminOrderableEdit.editProduct',
                 url: '/:id',
                 accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
                 views: {
@@ -52,10 +52,19 @@
         $stateProvider
             .state('openlmis.administration.orderables.edit.general', {
                 url: '/general',
-                controller: 'OrderableEditGeneralController',
+                controller: 'OrderableAddEditGeneralController',
                 templateUrl: 'admin-orderable-edit/orderable-edit-general.html',
                 controllerAs: 'vm',
                 resolve: {
+                    successNotificationKey: function() {
+                        return 'adminOrderableEdit.productHasBeenUpdatedSuccessfully';
+                    },
+                    errorNotificationKey: function() {
+                        return 'adminOrderableEdit.failedToUpdateProduct';
+                    },
+                    orderableListRelativePath: function() {
+                        return '^.^';
+                    },
                     orderable: resolveOrderable
                 }
             });
