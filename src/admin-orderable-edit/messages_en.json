@@ -38,5 +38,18 @@
     "adminOrderableEdit.saveKitUnpackList": "Save Kit Unpack List",
     "adminOrderableEdit.kitUnpackListSavedSuccessfully": "The kit unpack list was updated successfully",
     "adminOrderableEdit.failedToSaveKitUnpackList": "Failed to update the kit unpack list",
-    "adminOrderableEdit.noKitProductsFound": "No kit products found."
+    "adminOrderableEdit.noKitProductsFound": "No kit products found.",
+    "adminOrderableEdit.associatedFtaps": "Associated Facility Types",
+    "adminOrderableEdit.noAssociatedFtaps": "No associated facility type approved products found.",
+    "adminOrderableEdit.ftaps": "Facility Types",
+    "adminOrderableEdit.addFtap": "Add Facility Type Approved Product",
+    "adminOrderableEdit.facilityType": "Facility Type",
+    "adminOrderableEdit.emergencyOrderPoint": "Emergency Order Point",
+    "adminOrderableEdit.minPeriodsOfStock": "Min Periods of Stock",
+    "adminOrderableEdit.maxPeriodsOfStock": "Max Periods of Stock",
+    "adminOrderableEdit.program": "Program",
+    "adminOrderableEdit.confirmFtapDeactivation": "Are you sure you want to remove the facility type approved product?",
+    "adminOrderableEdit.failedToRemovedFtap": "Failed to remove facility type approved product",
+    "adminOrderableEdit.ftapHasBeenRemovedSuccessfully": "The facility type has been removed successfully",
+    "adminOrderableEdit.view": "View"
 }
