@@ -30,6 +30,8 @@
 
     function FacilityTypeApprovedProduct() {
 
+        FacilityTypeApprovedProduct.prototype.deactivate = deactivate;
+
         return FacilityTypeApprovedProduct;
 
         /**
@@ -50,6 +52,22 @@
             this.maxPeriodsOfStock = json.maxPeriodsOfStock;
             this.minPeriodsOfStock = json.minPeriodsOfStock;
             this.emergencyOrderPoint = json.emergencyOrderPoint;
+            this.active = json.active;
+            this.meta = json.meta;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facility-type-approved-product.FacilityTypeApprovedProduct
+         * @name deactivate
+         *
+         * @description
+         * Marks the given FacilityTypeApprovedProduct as inactive.
+         *
+         * @param {Object} ftap  the ftap to deactivate
+         */
+        function deactivate() {
+            this.active = false;
         }
     }
 })();

@@ -17,27 +17,11 @@
 
     'use strict';
 
-    /**
-     * @module admin-orderable-edit
-     *
-     * @description
-     * Provides admin orderable edit view and controller.
-     */
-    angular.module('admin-orderable-edit', [
-        'openlmis-admin',
-        'openlmis-rights',
-        'referencedata-orderable',
-        'referencedata-facility-type-approved-product',
+    angular.module('admin-orderable-ftap-edit', [
         'ui.router',
-        'openlmis-i18n',
-        'openlmis-modal',
-        'select-products-modal',
-        'admin-orderable-list',
-        'openlmis-pagination',
-        'openlmis-function-decorator',
-        'openlmis-auth',
-        'openlmis-permissions',
-        'openlmis-state-tracker'
+        'openlmis-modal-state',
+        'admin-orderable-edit',
+        'referencedata-facility-type'
     ]);
 
 })();

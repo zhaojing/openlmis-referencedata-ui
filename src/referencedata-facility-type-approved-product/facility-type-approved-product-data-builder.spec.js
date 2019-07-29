@@ -28,6 +28,8 @@
                                                     ProgramDataBuilder, FacilityTypeDataBuilder) {
 
         FacilityTypeApprovedProductDataBuilder.prototype.withOrderable = withOrderable;
+        FacilityTypeApprovedProductDataBuilder.prototype.withFacilityType = withFacilityType;
+        FacilityTypeApprovedProductDataBuilder.prototype.withProgram = withProgram;
         FacilityTypeApprovedProductDataBuilder.prototype.build = build;
         FacilityTypeApprovedProductDataBuilder.prototype.buildJson = buildJson;
 
@@ -48,6 +50,16 @@
 
         function withOrderable(orderable) {
             this.orderable = orderable;
+            return this;
+        }
+
+        function withFacilityType(facilityType) {
+            this.facilityType = facilityType;
+            return this;
+        }
+
+        function withProgram(program) {
+            this.program = program;
             return this;
         }
 

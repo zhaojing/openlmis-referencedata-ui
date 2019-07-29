@@ -31,6 +31,13 @@ describe('openlmis.administration.orderables.edit route', function() {
             this.PageDataBuilder = $injector.get('PageDataBuilder');
             this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
             this.OrderableChildrenDataBuilder = $injector.get('OrderableChildrenDataBuilder');
+            this.UserDataBuilder = $injector.get('UserDataBuilder');
+            this.FacilityTypeApprovedProductDataBuilder = $injector.get('FacilityTypeApprovedProductDataBuilder');
+            this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
+            this.FacilityTypeApprovedProductResource = $injector.get('FacilityTypeApprovedProductResource');
+            this.permissionService = $injector.get('permissionService');
+            this.authorizationService = $injector.get('authorizationService');
+            this.ADMINISTRATION_RIGHTS = $injector.get('ADMINISTRATION_RIGHTS');
         });
 
         this.programs = [
@@ -66,10 +73,36 @@ describe('openlmis.administration.orderables.edit route', function() {
             .withContent(this.orderables)
             .build();
 
+        this.facilityType = new this.FacilityTypeDataBuilder().build();
+
+        this.ftaps = [
+            new this.FacilityTypeApprovedProductDataBuilder().build(),
+            new this.FacilityTypeApprovedProductDataBuilder().build(),
+            new this.FacilityTypeApprovedProductDataBuilder()
+                .withFacilityType(this.facilityType)
+                .withProgram(this.programs[0])
+                .build(),
+            new this.FacilityTypeApprovedProductDataBuilder()
+                .withFacilityType(this.facilityType)
+                .withProgram(this.programs[1])
+                .build()
+        ];
+
+        this.ftapsPage = new this.PageDataBuilder()
+            .withContent(this.ftaps)
+            .build();
+
         spyOn(this.OrderableResource.prototype, 'query').andReturn(this.$q.resolve(this.orderablesPage));
         spyOn(this.ProgramResource.prototype, 'query').andReturn(this.$q.resolve(this.programs));
         spyOn(this.OrderableResource.prototype, 'get').andReturn(this.$q.resolve(this.orderable));
+        spyOn(this.FacilityTypeApprovedProductResource.prototype, 'query').andReturn(this.$q.resolve(this.ftapsPage));
         spyOn(this.$templateCache, 'get').andCallThrough();
+        spyOn(this.authorizationService, 'getUser').andReturn(this.$q.resolve(new this.UserDataBuilder().build()));
+
+        var context = this;
+        spyOn(this.permissionService, 'hasPermissionWithAnyProgramAndAnyFacility').andCallFake(function() {
+            return context.$q.resolve();
+        });
 
         this.goToState = function(subState) {
             this.$location.url('/administration/orderables/' + this.orderable.id + subState);
@@ -144,6 +177,64 @@ describe('openlmis.administration.orderables.edit route', function() {
             this.goToState('/programs');
 
             expect(this.$state.current.name).not.toEqual('openlmis.administration.orderables.edit.programs');
+        });
+
+    });
+
+    describe('.ftaps state', function() {
+
+        it('should resolve ftaps', function() {
+            this.goToState('/facilityTypeApprovedProducts');
+
+            expect(this.getResolvedValue('ftaps')).toEqual(this.ftaps);
+            expect(this.getResolvedValue('ftaps')).not.toBe(this.ftaps);
+        });
+
+        it('should not change state if fetching orderable fails', function() {
+            this.FacilityTypeApprovedProductResource.prototype.query.andReturn(this.$q.reject());
+
+            this.goToState('/facilityTypeApprovedPrducts');
+
+            expect(this.$state.current.name).not.toEqual('openlmis.administration.orderables.edit.general');
+        });
+
+        it('should resolve ftaps map', function() {
+            this.goToState('/facilityTypeApprovedProducts');
+
+            var expected = {};
+            expected[this.ftaps[0].facilityType.id] = [this.ftaps[0]];
+            expected[this.ftaps[1].facilityType.id] = [this.ftaps[1]];
+            expected[this.ftaps[2].facilityType.id] = [this.ftaps[2], this.ftaps[3]];
+
+            expect(this.getResolvedValue('ftapsMap')).toEqual(expected);
+        });
+
+        it('should resolve facility types map', function() {
+            this.goToState('/facilityTypeApprovedProducts');
+
+            var expected = {};
+            expected[this.ftaps[0].facilityType.id] = this.ftaps[0].facilityType.name;
+            expected[this.ftaps[1].facilityType.id] = this.ftaps[1].facilityType.name;
+            expected[this.ftaps[2].facilityType.id] = this.ftaps[2].facilityType.name;
+
+            expect(this.getResolvedValue('facilityTypesMap')).toEqual(expected);
+        });
+
+        it('should resolve canEdit as true if user has right to edit ftaps', function() {
+            this.goToState('/facilityTypeApprovedProducts');
+
+            expect(this.getResolvedValue('canEdit')).toBeTruthy();
+        });
+
+        it('should resolve canEdit as false if user does not have right to edit ftaps', function() {
+            var context = this;
+            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andCallFake(function() {
+                return context.$q.reject();
+            });
+
+            this.goToState('/facilityTypeApprovedProducts');
+
+            expect(this.getResolvedValue('canEdit')).toBeFalsy();
         });
 
     });
