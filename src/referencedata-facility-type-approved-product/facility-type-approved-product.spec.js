@@ -63,6 +63,12 @@ describe('FacilityTypeApprovedProduct', function() {
             expect(this.facilityTypeApprovedProduct.emergencyOrderPoint)
                 .toBe(this.facilityTypeApprovedProductJson.emergencyOrderPoint);
         });
+
+        it('should deactivate', function() {
+            this.facilityTypeApprovedProduct.deactivate();
+
+            expect(this.facilityTypeApprovedProduct.active).toBe(false);
+        });
     });
 
 });

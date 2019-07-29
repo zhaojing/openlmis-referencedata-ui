@@ -21,7 +21,7 @@
     "adminOrderableEdit.saveProduct": "Save Product",
     "adminOrderableEdit.quantity":"Quantity",
     "adminOrderableEdit.kitUnpackList":"Kit Unpack List",
-    "adminOrderableEdit.action":"Action",
+    "adminOrderableEdit.actions":"Actions",
     "adminOrderableEdit.remove":"Remove",
     "adminOrderableEdit.addProduct":"Add Product",
     "adminOrderableEdit.productHasBeenUpdatedSuccessfully":"The product has been updated successfully",

@@ -18,26 +18,26 @@
     'use strict';
 
     /**
-     * @module admin-orderable-edit
+     * @ngdoc service
+     * @name referencedata-facility-type.FacilityTypeResource
      *
      * @description
-     * Provides admin orderable edit view and controller.
+     * Communicates with the RESTful facility type endpoint of the OpenLMIS server.
      */
-    angular.module('admin-orderable-edit', [
-        'openlmis-admin',
-        'openlmis-rights',
-        'referencedata-orderable',
-        'referencedata-facility-type-approved-product',
-        'ui.router',
-        'openlmis-i18n',
-        'openlmis-modal',
-        'select-products-modal',
-        'admin-orderable-list',
-        'openlmis-pagination',
-        'openlmis-function-decorator',
-        'openlmis-auth',
-        'openlmis-permissions',
-        'openlmis-state-tracker'
-    ]);
+    angular
+        .module('referencedata-facility-type')
+        .factory('FacilityTypeResource', FacilityTypeResource);
 
+    FacilityTypeResource.$inject = ['OpenlmisResource', 'classExtender'];
+
+    function FacilityTypeResource(OpenlmisResource, classExtender) {
+
+        classExtender.extend(FacilityTypeResource, OpenlmisResource);
+
+        return FacilityTypeResource;
+
+        function FacilityTypeResource() {
+            this.super('/api/facilityTypes');
+        }
+    }
 })();

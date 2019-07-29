@@ -44,6 +44,9 @@
                 state: 'openlmis.administration.orderables.edit.programs',
                 name: 'adminOrderableEdit.programs'
             }, {
+                state: 'openlmis.administration.orderables.edit.ftaps',
+                name: 'adminOrderableEdit.ftaps'
+            }, {
                 state: 'openlmis.administration.orderables.edit.kitUnpackList',
                 name: 'adminOrderableEdit.kitUnpackList'
             }];

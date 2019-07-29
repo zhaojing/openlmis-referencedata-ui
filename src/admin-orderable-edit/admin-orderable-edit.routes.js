@@ -28,7 +28,11 @@
                 abstract: true,
                 label: 'adminOrderableEdit.editProduct',
                 url: '/:id',
-                accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
+                accessRights: [
+                    ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE,
+                    ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
+                ],
+                areAllRightsRequired: false,
                 views: {
                     '@openlmis': {
                         controller: 'OrderableEditController',
@@ -83,6 +87,60 @@
                             programsMap[program.id] = program;
                             return programsMap;
                         }, {});
+                    }
+                }
+            });
+
+        $stateProvider
+            .state('openlmis.administration.orderables.edit.ftaps', {
+                label: 'adminOrderableEdit.ftaps',
+                url: '/facilityTypeApprovedProducts',
+                controller: 'OrderableEditFtapsListController',
+                templateUrl: 'admin-orderable-edit/orderable-edit-ftaps-list.html',
+                controllerAs: 'vm',
+                resolve: {
+                    orderable: resolveOrderable,
+                    successNotificationKey: function() {
+                        return 'adminOrderableEdit.ftapHasBeenRemovedSuccessfully';
+                    },
+                    errorNotificationKey: function() {
+                        return 'adminOrderableEdit.failedToRemovedFtap';
+                    },
+                    ftaps: function(FacilityTypeApprovedProductRepository, orderable) {
+                        return new FacilityTypeApprovedProductRepository().query({
+                            orderableId: orderable.id
+                        })
+                            .then(function(ftaps) {
+                                return ftaps.content;
+                            });
+                    },
+                    facilityTypesMap: function(ftaps) {
+                        return ftaps.reduce(function(facilityTypesMap, ftap) {
+                            facilityTypesMap[ftap.facilityType.id] = ftap.facilityType.name;
+                            return facilityTypesMap;
+                        }, {});
+                    },
+                    ftapsMap: function(ftaps) {
+                        return ftaps.reduce(function(ftapsMap, ftap) {
+                            if (!ftapsMap[ftap.facilityType.id]) {
+                                ftapsMap[ftap.facilityType.id] = [];
+                            }
+                            ftapsMap[ftap.facilityType.id].push(ftap);
+                            return ftapsMap;
+                        }, {});
+                    },
+                    canEdit: function(authorizationService, permissionService, ADMINISTRATION_RIGHTS) {
+                        var user = authorizationService.getUser();
+                        return permissionService
+                            .hasPermissionWithAnyProgramAndAnyFacility(user.user_id, {
+                                right: ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
+                            })
+                            .then(function() {
+                                return true;
+                            })
+                            .catch(function() {
+                                return false;
+                            });
                     }
                 }
             });
