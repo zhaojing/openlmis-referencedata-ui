@@ -65,7 +65,7 @@ describe('OrderableAddEditFtapsController', function() {
 
         this.vm = this.$controller('OrderableAddEditFtapsController', {
             facilityTypeApprovedProduct: this.ftap,
-            programs: this.programs,
+            programOrderables: this.programs,
             facilityTypes: this.facilityTypes,
             canEdit: true,
             successNotificationKey: this.successNotificationKey,

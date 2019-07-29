@@ -30,12 +30,12 @@
 
     controller.$inject = [
         'facilityTypeApprovedProduct', 'FacilityTypeApprovedProductResource', 'FunctionDecorator',
-        'successNotificationKey', 'errorNotificationKey', 'programs', 'facilityTypes', 'canEdit',
+        'successNotificationKey', 'errorNotificationKey', 'programOrderables', 'facilityTypes', 'canEdit',
         'stateTrackerService'
     ];
 
     function controller(facilityTypeApprovedProduct, FacilityTypeApprovedProductResource, FunctionDecorator,
-                        successNotificationKey, errorNotificationKey, programs, facilityTypes, canEdit,
+                        successNotificationKey, errorNotificationKey, programOrderables, facilityTypes, canEdit,
                         stateTrackerService) {
 
         var vm = this;
@@ -59,7 +59,7 @@
          */
         function onInit() {
             vm.facilityTypeApprovedProduct = facilityTypeApprovedProduct;
-            vm.programs = programs;
+            vm.programs = programOrderables;
             vm.facilityTypes = facilityTypes;
             vm.canEdit = canEdit;
         }

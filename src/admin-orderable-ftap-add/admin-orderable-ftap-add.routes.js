@@ -18,7 +18,7 @@
     'use strict';
 
     angular
-        .module('admin-orderable-add')
+        .module('admin-orderable-ftap-add')
         .config(adminOrderableFtapAddRoutes);
 
     adminOrderableFtapAddRoutes.$inject = ['modalStateProvider', 'ADMINISTRATION_RIGHTS'];
@@ -54,6 +54,16 @@
                         .then(function(facilityTypes) {
                             return facilityTypes.content;
                         });
+                },
+                programOrderables: function(programs, orderable) {
+                    return programs.reduce(function(programOrderables, program) {
+                        orderable.programs.forEach(function(programOrderable) {
+                            if (programOrderable.programId === program.id) {
+                                programOrderables.push(program);
+                            }
+                        });
+                        return programOrderables;
+                    }, []);
                 }
             }
         });
