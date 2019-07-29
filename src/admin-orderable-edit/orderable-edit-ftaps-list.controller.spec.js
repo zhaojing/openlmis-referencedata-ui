@@ -35,7 +35,6 @@ describe('OrderableEditFtapsListController', function() {
             this.FacilityTypeApprovedProductResource = $injector.get('FacilityTypeApprovedProductResource');
             this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
             this.PageDataBuilder = $injector.get('PageDataBuilder');
-            this.confirmService = $injector.get('confirmService');
         });
 
         this.orderable = new this.OrderableDataBuilder().build();
