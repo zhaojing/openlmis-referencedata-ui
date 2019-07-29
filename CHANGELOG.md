@@ -10,6 +10,7 @@ New functionality:
 * [OLMIS-6399](https://openlmis.atlassian.net/browse/OLMIS-6399): Adjusted UI after renaming openlmis.administration.systemNotification state to openlmis.administration.systemNotifications.
 * [OLMIS-6443](https://openlmis.atlassian.net/browse/OLMIS-6443): Reworked orderable view to allow editing.
 * [OLMIS-6442](https://openlmis.atlassian.net/browse/OLMIS-6442): Added UI for managing facility type approved products.
+* [OLMIS-6471](https://openlmis.atlassian.net/browse/OLMIS-6471): Added new LOTS_MANAGE right. 
 
 Improvements:
 * [OLMIS-6389](https://openlmis.atlassian.net/browse/OLMIS-6389): Added caching of system notifications on Home page and in header indicator.
