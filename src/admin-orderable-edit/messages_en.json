@@ -51,5 +51,9 @@
     "adminOrderableEdit.confirmFtapDeactivation": "Are you sure you want to remove the facility type approved product?",
     "adminOrderableEdit.failedToRemovedFtap": "Failed to remove facility type approved product",
     "adminOrderableEdit.ftapHasBeenRemovedSuccessfully": "The facility type has been removed successfully",
-    "adminOrderableEdit.view": "View"
+    "adminOrderableEdit.view": "View",
+    "adminOrderableEdit.addProgram":"Add Program",
+    "adminOrderableEdit.orderableProgramRemovedSuccessfully": "Orderable program removed successfully",
+    "adminOrderableEdit.failedToRemoveOrderableProgram": "Failed to remove orderable program",
+    "adminOrderableEdit.confirmToRemoveOrderableProgram": "Are you sure you want to remove the orderable program?"
 }

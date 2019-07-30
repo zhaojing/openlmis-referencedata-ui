@@ -13,10 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-describe('OrderableEditProgramsController', function() {
+describe('OrderableProgramEditController', function() {
 
     beforeEach(function() {
-        module('admin-orderable-edit', function($provide) {
+        module('admin-orderable-program-edit', function($provide) {
             $provide.service('notificationService', function() {
                 return jasmine.createSpyObj('notificationService', ['success', 'error']);
             });
@@ -25,21 +25,26 @@ describe('OrderableEditProgramsController', function() {
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
             this.confirmService = $injector.get('confirmService');
-            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
-            this.OrderableResource = $injector.get('OrderableResource');
             this.$q = $injector.get('$q');
             this.$state = $injector.get('$state');
-            this.$rootScope = $injector.get('$rootScope');
             this.ProgramDataBuilder = $injector.get('ProgramDataBuilder');
-            this.FunctionDecorator = $injector.get('FunctionDecorator');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.ProgramOrderableDataBuilder = $injector.get('ProgramOrderableDataBuilder');
+            this.OrderableDisplayCategoryDataBuilder = $injector.get('OrderableDisplayCategoryDataBuilder');
+            this.OrderableResource = $injector.get('OrderableResource');
+            this.$rootScope = $injector.get('$rootScope');
+            this.stateTrackerService = $injector.get('stateTrackerService');
+            this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
         this.programs = [
             new this.ProgramDataBuilder().build(),
-            new this.ProgramDataBuilder().build(),
             new this.ProgramDataBuilder().build()
         ];
+
+        this.programsMap = {};
+        this.programsMap[this.programs[0].id] = this.programs[0];
+        this.programsMap[this.programs[1].id] = this.programs[1];
 
         this.orderable = new this.OrderableDataBuilder()
             .withPrograms([
@@ -52,49 +57,65 @@ describe('OrderableEditProgramsController', function() {
             ])
             .build();
 
-        this.programsOrderable = this.orderable.programs;
+        this.orderableDisplayCategories = [
+            new this.OrderableDisplayCategoryDataBuilder().build(),
+            new this.OrderableDisplayCategoryDataBuilder().build(),
+            new this.OrderableDisplayCategoryDataBuilder().build()
+        ];
 
-        this.programsMap = {};
-        this.programsMap[this.programs[0].id] = this.programs[0];
-        this.programsMap[this.programs[1].id] = this.programs[1];
-        this.programsMap[this.programs[2].id] = this.programs[2];
-
+        this.programOrderable = this.orderable.programs[0];
         this.successNotificationKey = 'successMessage.key';
         this.errorNotificationKey = 'errorMessage.key';
+        this.editMode = true;
 
-        spyOn(this.$state, 'reload').andReturn(true);
-        spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.programs[0]));
+        var loadingDeferred = this.$q.defer();
+
+        spyOn(this.$state, 'go');
+        spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.orderable));
+        spyOn(this.stateTrackerService, 'goToPreviousState').andCallFake(loadingDeferred.resolve);
         spyOn(this.FunctionDecorator.prototype, 'withSuccessNotification').andCallThrough();
         spyOn(this.FunctionDecorator.prototype, 'withErrorNotification').andCallThrough();
-        spyOn(this.confirmService, 'confirm').andReturn(this.$q.resolve());
 
-        this.vm = this.$controller('OrderableEditProgramsController', {
-            programsOrderable: this.programsOrderable,
-            programsMap: this.programsMap,
-            canEdit: this.canEdit,
+        this.vm = this.$controller('OrderableProgramEditController', {
             orderable: this.orderable,
+            programOrderable: this.programOrderable,
+            programs: this.programs,
+            canEdit: this.canEdit,
+            orderableDisplayCategories: this.orderableDisplayCategories,
+            editMode: this.editMode,
             successNotificationKey: this.successNotificationKey,
-            errorNotificationKey: this.errorNotificationKey
+            errorNotificationKey: this.errorNotificationKey,
+            programsMap: this.programsMap
         });
         this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
-        it('should expose programs Orderable', function() {
-            expect(this.vm.programsOrderable).toEqual(this.programsOrderable);
+        it('should expose orderable', function() {
+            expect(this.vm.orderable).toEqual(this.orderable);
+        });
+
+        it('should expose program orderable', function() {
+            expect(this.vm.programOrderable).toEqual(this.orderable.programs[0]);
+        });
+
+        it('should expose programs', function() {
+            expect(this.vm.programs).toEqual(this.programs);
         });
 
         it('should expose programs map', function() {
             expect(this.vm.programsMap).toEqual(this.programsMap);
         });
 
-        it('should expose can edit', function() {
-            expect(this.vm.canEdit).toEqual(this.canEdit);
+        it('should expose orderable display categories', function() {
+            expect(this.vm.orderableDisplayCategories).toEqual(this.orderableDisplayCategories);
         });
 
-        it('should expose orderable', function() {
-            expect(this.vm.orderable).toEqual(this.orderable);
+        it('should expose this.stateTrackerService.goToPreviousState method', function() {
+            this.vm.$onInit();
+
+            expect(this.vm.goToPreviousState).toBe(this.stateTrackerService.goToPreviousState);
         });
 
         it('should decorate with correct success message', function() {
@@ -106,31 +127,33 @@ describe('OrderableEditProgramsController', function() {
             expect(this.FunctionDecorator.prototype.withErrorNotification)
                 .toHaveBeenCalledWith(this.errorNotificationKey);
         });
+
     });
 
-    describe('removeProgramOrderable', function() {
+    describe('saveProgramOrderable', function() {
 
-        it('should remove program orderable', function() {
-            this.vm.removeProgramOrderable(this.programsOrderable[0]);
+        it('should save program orderable', function() {
+            this.vm.saveProgramOrderable();
             this.$rootScope.$apply();
 
             expect(this.OrderableResource.prototype.update).toHaveBeenCalledWith(this.orderable);
         });
 
-        it('should redirect to the list view on success', function() {
-            this.vm.removeProgramOrderable(this.programsOrderable[0]);
+        it('should redirect to the previous state on success', function() {
+            this.vm.saveProgramOrderable();
             this.$rootScope.$apply();
 
-            expect(this.$state.reload).toHaveBeenCalled();
+            expect(this.vm.goToPreviousState).toHaveBeenCalled();
         });
 
-        it('should not redirect to the list view on failure', function() {
+        it('should not redirect to the previous state on failure', function() {
             this.OrderableResource.prototype.update.andReturn(this.$q.reject());
 
-            this.vm.removeProgramOrderable(this.orderable.programs[0]);
+            this.vm.saveProgramOrderable();
             this.$rootScope.$apply();
 
-            expect(this.$state.reload).not.toHaveBeenCalled();
+            expect(this.vm.goToPreviousState).not.toHaveBeenCalled();
         });
+
     });
 });

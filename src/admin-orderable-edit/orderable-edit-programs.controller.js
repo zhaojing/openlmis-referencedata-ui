@@ -28,25 +28,55 @@
         .module('admin-orderable-edit')
         .controller('OrderableEditProgramsController', controller);
 
-    controller.$inject = ['orderable', 'programsMap', '$state'];
+    controller.$inject = ['programsOrderable', 'programsMap', 'canEdit', 'orderable', 'FunctionDecorator',
+        'OrderableResource', '$state', 'confirmService', 'successNotificationKey', 'errorNotificationKey'];
 
-    function controller(orderable, programsMap, $state) {
+    function controller(programsOrderable, programsMap, canEdit, orderable, FunctionDecorator, OrderableResource,
+                        $state, confirmService, successNotificationKey, errorNotificationKey) {
 
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.goToOrderableList = goToOrderableList;
+        vm.removeProgramOrderable =
+            new FunctionDecorator()
+                .decorateFunction(removeProgramOrderable)
+                .withSuccessNotification(successNotificationKey)
+                .withErrorNotification(errorNotificationKey)
+                .withLoading(true)
+                .getDecoratedFunction();
 
         /**
          * @ngdoc property
          * @propertyOf admin-orderable-edit.controller:OrderableEditProgramsController
-         * @name orderable
+         * @name programsOrderable
          * @type {Object}
          *
          * @description
-         * Contains orderable object. 
+         * Contains programsOrderable object. 
          */
-        vm.orderable = undefined;
+        vm.programsOrderable = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-orderable-edit.controller:OrderableEditProgramsController
+         * @name programsMap
+         * @type {Object}
+         *
+         * @description
+         * Contains programsMap object. 
+         */
+        vm.programsMap = undefined;
+
+        /**
+         * @ngdoc property
+         * @propertyOf admin-orderable-edit.controller:OrderableEditProgramsController
+         * @name canEdit
+         * @type {Object}
+         *
+         * @description
+         * Contains canEdit object. 
+         */
+        vm.canEdit = undefined;
 
         /**
          * @ngdoc method
@@ -57,23 +87,29 @@
          * Method that is executed on initiating OrderableEditProgramsController.
          */
         function onInit() {
-            vm.orderable = orderable;
+            vm.programsOrderable = programsOrderable;
             vm.programsMap = programsMap;
+            vm.canEdit = canEdit;
+            vm.orderable = orderable;
         }
 
         /**
          * @ngdoc method
-         * @methodOf admin-orderable-edit.controller:OrderableEditProgramsController
-         * @name goToOrderableList
+         * @methodOf admin-orderable-program-edit.controller:OrderableProgramEditController
+         * @name removeProgramOrderable
          *
          * @description
-         * Redirects to orderable list screen.
+         * Remove the Orderable Program.
          */
-        function goToOrderableList() {
-            $state.go('^.^', {}, {
-                reload: true
+        function removeProgramOrderable(programOrderable) {
+            return confirmService.confirm('adminOrderableEdit.confirmToRemoveOrderableProgram').then(function() {
+                vm.orderable.programs.splice(vm.programsOrderable.indexOf(programOrderable.program), 1);
+                return new OrderableResource()
+                    .update(vm.orderable)
+                    .then(function() {
+                        $state.reload();
+                    });
             });
         }
-
     }
 })();

@@ -75,18 +75,43 @@
 
         $stateProvider
             .state('openlmis.administration.orderables.edit.programs', {
-                label: 'adminOrderableEdit.programs',
                 url: '/programs',
                 controller: 'OrderableEditProgramsController',
                 templateUrl: 'admin-orderable-edit/orderable-edit-programs.html',
                 controllerAs: 'vm',
+                accessRights: [
+                    ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE,
+                    ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
+                ],
+                areAllRightsRequired: false,
                 resolve: {
-                    orderable: resolveOrderable,
                     programsMap: function(programs) {
                         return programs.reduce(function(programsMap, program) {
                             programsMap[program.id] = program;
                             return programsMap;
                         }, {});
+                    },
+                    programsOrderable: function(orderable) {
+                        return orderable.programs;
+                    },
+                    canEdit: function(authorizationService, permissionService, ADMINISTRATION_RIGHTS) {
+                        var user = authorizationService.getUser();
+                        return permissionService
+                            .hasPermissionWithAnyProgramAndAnyFacility(user.user_id, {
+                                right: ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
+                            })
+                            .then(function() {
+                                return true;
+                            })
+                            .catch(function() {
+                                return false;
+                            });
+                    },
+                    successNotificationKey: function() {
+                        return 'adminOrderableEdit.orderableProgramRemovedSuccessfully';
+                    },
+                    errorNotificationKey: function() {
+                        return 'adminOrderableEdit.failedToRemoveOrderableProgram';
                     }
                 }
             });
