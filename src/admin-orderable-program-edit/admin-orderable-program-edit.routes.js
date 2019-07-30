@@ -34,8 +34,8 @@
             ],
             areAllRightsRequired: false,
             resolve: {
-                orderableDisplayCategories: function(OrderableDisplayCategoriesResource) {
-                    return new OrderableDisplayCategoriesResource().query();
+                orderableDisplayCategories: function(OrderableDisplayCategoryResource) {
+                    return new OrderableDisplayCategoryResource().query();
                 },
                 programOrderable: function($stateParams, programsOrderable) {
                     var program = _.findWhere(programsOrderable, {
@@ -54,6 +54,14 @@
                         return 'adminOrderableProgram.save.failure';
                     }
                     return 'adminOrderableProgram.create.failure';
+                },
+                filteredPrograms: function(programs, programsOrderable) {
+                    var programIds = programsOrderable.map(function(programOrderable) {
+                        return programOrderable.programId;
+                    });
+                    return programs.filter(function(program) {
+                        return programIds.indexOf(program.id) === -1;
+                    });
                 }
             },
             parentResolves: ['orderable', 'programsOrderable', 'canEdit', 'programs', 'programsMap']

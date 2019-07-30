@@ -11,7 +11,7 @@
                     <fieldset ng-disabled="!vm.canEdit">
                         <label for="program" ng-show="!vm.editMode">{{'adminOrderableProgram.program' | message}}</label>
                         <select id="program" ng-model="vm.programOrderable.programId" ng-show="!vm.editMode"
-                        ng-options="item.id as item.name for item in vm.programs" required></select>    
+                        ng-options="item.id as item.name for item in vm.filteredPrograms" required></select>    
                         <label>
                             <input type="checkbox" ng-model="vm.programOrderable.fullSupply"/>
                             {{'adminOrderableProgram.fullSupply' | message}}
@@ -37,7 +37,7 @@
                 </div>
                 <div class="button-group primary"></div>
                     <button class="primary" type="submit" 
-                        orm="edit-program-orderable-form" ng-show="vm.canEdit && vm.editMode">{{'adminOrderableProgram.update' | message}}</button>
+                        form="edit-program-orderable-form" ng-show="vm.canEdit && vm.editMode">{{'adminOrderableProgram.update' | message}}</button>
                 </div>
             </div>
         </div>

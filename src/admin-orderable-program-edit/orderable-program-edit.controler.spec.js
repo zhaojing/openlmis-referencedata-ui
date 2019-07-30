@@ -37,22 +37,22 @@ describe('OrderableProgramEditController', function() {
             this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
-        this.programs = [
+        this.filteredPrograms = [
             new this.ProgramDataBuilder().build(),
             new this.ProgramDataBuilder().build()
         ];
 
         this.programsMap = {};
-        this.programsMap[this.programs[0].id] = this.programs[0];
-        this.programsMap[this.programs[1].id] = this.programs[1];
+        this.programsMap[this.filteredPrograms[0].id] = this.filteredPrograms[0];
+        this.programsMap[this.filteredPrograms[1].id] = this.filteredPrograms[1];
 
         this.orderable = new this.OrderableDataBuilder()
             .withPrograms([
                 new this.ProgramOrderableDataBuilder()
-                    .withProgramId(this.programs[0].id)
+                    .withProgramId(this.filteredPrograms[0].id)
                     .buildJson(),
                 new this.ProgramOrderableDataBuilder()
-                    .withProgramId(this.programs[1].id)
+                    .withProgramId(this.filteredPrograms[1].id)
                     .buildJson()
             ])
             .build();
@@ -79,7 +79,7 @@ describe('OrderableProgramEditController', function() {
         this.vm = this.$controller('OrderableProgramEditController', {
             orderable: this.orderable,
             programOrderable: this.programOrderable,
-            programs: this.programs,
+            filteredPrograms: this.filteredPrograms,
             canEdit: this.canEdit,
             orderableDisplayCategories: this.orderableDisplayCategories,
             editMode: this.editMode,
@@ -100,8 +100,8 @@ describe('OrderableProgramEditController', function() {
             expect(this.vm.programOrderable).toEqual(this.orderable.programs[0]);
         });
 
-        it('should expose programs', function() {
-            expect(this.vm.programs).toEqual(this.programs);
+        it('should expose filteredPrograms', function() {
+            expect(this.vm.filteredPrograms).toEqual(this.filteredPrograms);
         });
 
         it('should expose programs map', function() {

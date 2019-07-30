@@ -30,12 +30,12 @@
 
     controller.$inject = [
         'stateTrackerService', 'programOrderable', 'orderableDisplayCategories', 'orderable',
-        'canEdit', 'OrderableResource', 'programs', 'FunctionDecorator', 'successNotificationKey',
+        'canEdit', 'OrderableResource', 'filteredPrograms', 'FunctionDecorator', 'successNotificationKey',
         'errorNotificationKey', 'programsMap'
     ];
 
     function controller(stateTrackerService, programOrderable, orderableDisplayCategories, orderable,
-                        canEdit, OrderableResource, programs, FunctionDecorator, successNotificationKey,
+                        canEdit, OrderableResource, filteredPrograms, FunctionDecorator, successNotificationKey,
                         errorNotificationKey, programsMap) {
 
         var vm = this;
@@ -62,13 +62,13 @@
         /**
          * @ngdoc property
          * @propertyOf admin-orderable-program-edit.controller:OrderableProgramEditController
-         * @name programs
+         * @name filteredPrograms
          * @type {Array}
          *
          * @description
-         * Contains list of all programs.
+         * Contains list of all filtered Programs.
          */
-        vm.programs = undefined;
+        vm.filteredPrograms = undefined;
 
         /**
          * @ngdoc property
@@ -123,7 +123,7 @@
          * Method that is executed on initiating OrderableProgramEditController.
          */
         function onInit() {
-            vm.programs = programs;
+            vm.filteredPrograms = filteredPrograms;
             vm.programOrderable = programOrderable;
             vm.orderableDisplayCategories = orderableDisplayCategories;
             vm.canEdit = canEdit;
