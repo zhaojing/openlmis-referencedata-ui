@@ -1,6 +1,8 @@
 {
     "adminOrderableFtapEdit.updateFtap": "Update Facility Type Approve Product",
+    "adminOrderableFtapEdit.previewFtap": "Preview Facility Type Approve Product",
     "adminOrderableFtapEdit.cancel": "Cancel",
+    "adminOrderableFtapEdit.ok": "OK",
     "adminOrderableFtapEdit.ftapHasBeenCreatedSuccessfully": "Facility type approved product has been updated successfully",
     "adminOrderableFtapEdit.failedToCreateFtap": "Failed to update facility type approved product"
 }

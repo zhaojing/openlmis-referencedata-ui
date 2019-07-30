@@ -1,6 +1,6 @@
 <h3>{{'adminOrderableEdit.associatedFtaps' | message}}</h3>
 <section class="openlmis-table-container">
-    <button id="add-facility-type-approved-product" class="add" ui-sref=".add">
+    <button ng-if="vm.canEdit" id="add-facility-type-approved-product" class="add" ui-sref=".add">
         {{'adminOrderableEdit.addFtap' | message}}
     </button>
     <table>
@@ -40,5 +40,5 @@
 </section>
 
 <div class="openlmis-toolbar">
-    <button ng-click="vm.goToOrderableList()">{{'adminOrderableEdit.cancel' | message}}</button>
+    <button ui-sref="^.^">{{'adminOrderableEdit.cancel' | message}}</button>
 </div>

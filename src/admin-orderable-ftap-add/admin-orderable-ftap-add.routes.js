@@ -31,8 +31,7 @@
             templateUrl: 'admin-orderable-ftap-add/orderable-ftap-add.html',
             url: '/add',
             accessRights: [
-                ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE,
-                ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
+                ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
             ],
             areAllRightsRequired: false,
             parentResolves: ['programs', 'canEdit'],
