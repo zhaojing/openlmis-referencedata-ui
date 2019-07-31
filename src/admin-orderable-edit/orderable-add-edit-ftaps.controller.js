@@ -31,12 +31,12 @@
     controller.$inject = [
         'facilityTypeApprovedProduct', 'FacilityTypeApprovedProductResource', 'FunctionDecorator',
         'successNotificationKey', 'errorNotificationKey', 'programOrderables', 'facilityTypes', 'canEdit',
-        'stateTrackerService'
+        '$state'
     ];
 
     function controller(facilityTypeApprovedProduct, FacilityTypeApprovedProductResource, FunctionDecorator,
                         successNotificationKey, errorNotificationKey, programOrderables, facilityTypes, canEdit,
-                        stateTrackerService) {
+                        $state) {
 
         var vm = this;
 
@@ -73,7 +73,9 @@
          * Redirects to FTAP list screen.
          */
         function goToFtapsList() {
-            stateTrackerService.goToPreviousState();
+            $state.go('^', {}, {
+                reload: true
+            });
         }
 
         /**

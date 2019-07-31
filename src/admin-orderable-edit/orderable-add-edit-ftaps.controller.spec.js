@@ -27,7 +27,7 @@ describe('OrderableAddEditFtapsController', function() {
             this.confirmService = $injector.get('confirmService');
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
-            this.stateTrackerService = $injector.get('stateTrackerService');
+            this.$state = $injector.get('$state');
             this.FacilityTypeApprovedProductDataBuilder = $injector.get('FacilityTypeApprovedProductDataBuilder');
             this.FacilityTypeDataBuilder = $injector.get('FacilityTypeDataBuilder');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
@@ -58,7 +58,7 @@ describe('OrderableAddEditFtapsController', function() {
         this.successNotificationKey = 'successMessage.key';
         this.errorNotificationKey = 'errorMessage.key';
 
-        spyOn(this.stateTrackerService, 'goToPreviousState').andReturn(true);
+        spyOn(this.$state, 'go').andReturn(true);
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'query').andReturn(this.$q.resolve(this.ftapsPage));
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'update').andReturn(this.$q.resolve(this.ftap));
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'create').andReturn(this.$q.resolve(this.ftap));
@@ -96,10 +96,12 @@ describe('OrderableAddEditFtapsController', function() {
 
     describe('goToFtapsList', function() {
 
-        it('should call stateTrackerService goToPreviousState', function() {
+        it('should call state go', function() {
             this.vm.goToFtapsList();
 
-            expect(this.stateTrackerService.goToPreviousState).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
+                reload: true
+            });
         });
     });
 
@@ -155,7 +157,9 @@ describe('OrderableAddEditFtapsController', function() {
             this.vm.saveFacilityTypeApprovedProduct();
             this.$rootScope.$apply();
 
-            expect(this.stateTrackerService.goToPreviousState).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalledWith('^', {}, {
+                reload: true
+            });
         });
 
         it('should not redirect to the list view on failure', function() {
@@ -165,7 +169,7 @@ describe('OrderableAddEditFtapsController', function() {
             this.vm.saveFacilityTypeApprovedProduct();
             this.$rootScope.$apply();
 
-            expect(this.stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
+            expect(this.$state.go).not.toHaveBeenCalled();
         });
 
     });

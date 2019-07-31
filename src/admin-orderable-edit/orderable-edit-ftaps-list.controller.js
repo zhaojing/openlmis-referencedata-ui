@@ -63,7 +63,7 @@
          * @type {Array}
          *
          * @description
-         * Contains ftap list. 
+         * Contains FTAP list. 
          */
         vm.facilityTypeApprovedProducts = undefined;
 
