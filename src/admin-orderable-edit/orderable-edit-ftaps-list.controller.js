@@ -29,11 +29,9 @@
         .controller('OrderableEditFtapsListController', controller);
 
     controller.$inject = ['orderable', 'ftapsMap', 'facilityTypesMap', 'ftaps', '$state',
-        'successNotificationKey', 'errorNotificationKey', 'FunctionDecorator', 'confirmService',
-        'FacilityTypeApprovedProductResource', 'canEdit'];
+        'FunctionDecorator', 'FacilityTypeApprovedProductResource', 'canEdit'];
 
-    function controller(orderable, ftapsMap, facilityTypesMap, ftaps, $state, successNotificationKey,
-                        errorNotificationKey, FunctionDecorator, confirmService,
+    function controller(orderable, ftapsMap, facilityTypesMap, ftaps, $state, FunctionDecorator,
                         FacilityTypeApprovedProductResource, canEdit) {
 
         var vm = this;
@@ -41,8 +39,9 @@
         vm.$onInit = onInit;
         vm.deactivateFacilityTypeApproveProduct = new FunctionDecorator()
             .decorateFunction(deactivateFacilityTypeApproveProduct)
-            .withSuccessNotification(successNotificationKey)
-            .withErrorNotification(errorNotificationKey)
+            .withSuccessNotification('adminOrderableEdit.ftapHasBeenRemovedSuccessfully')
+            .withErrorNotification('adminOrderableEdit.failedToRemovedFtap')
+            .withConfirm('adminOrderableEdit.confirmFtapDeactivation')
             .withLoading(true)
             .getDecoratedFunction();
 
@@ -97,14 +96,11 @@
         function deactivateFacilityTypeApproveProduct(ftap) {
             ftap.deactivate();
 
-            return confirmService.confirm('adminOrderableEdit.confirmFtapDeactivation').then(function() {
-                return new FacilityTypeApprovedProductResource()
-                    .update(ftap)
-                    .then(function() {
-                        $state.reload();
-                    });
-            });
+            return new FacilityTypeApprovedProductResource()
+                .update(ftap)
+                .then(function() {
+                    $state.reload();
+                });
         }
-
     }
 })();

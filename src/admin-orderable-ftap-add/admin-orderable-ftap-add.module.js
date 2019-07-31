@@ -17,6 +17,12 @@
 
     'use strict';
 
+    /**
+     * @module admin-orderable-ftap-add
+     *
+     * @description
+     * Provides view for adding orderable FTAPs.
+     */
     angular.module('admin-orderable-ftap-add', [
         'ui.router',
         'openlmis-modal-state',

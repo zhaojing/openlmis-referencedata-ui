@@ -30,7 +30,11 @@
             controller: 'OrderableListController',
             templateUrl: 'admin-orderable-list/orderable-list.html',
             controllerAs: 'vm',
-            accessRights: [ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE],
+            accessRights: [
+                ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE,
+                ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
+            ],
+            areAllRightsRequired: false,
             resolve: {
                 programs: function(ProgramResource) {
                     return new ProgramResource().query();

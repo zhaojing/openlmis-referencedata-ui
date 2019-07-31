@@ -13,21 +13,26 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-(function() {
+describe('FacilityTypeResource', function() {
 
-    'use strict';
+    beforeEach(function() {
+        var test = this;
+        module('referencedata-facility-type', function($provide) {
+            test.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
 
-    /**
-     * @module admin-orderable-ftap-edit
-     *
-     * @description
-     * Provides view for editing orderable FTAPs.
-     */
-    angular.module('admin-orderable-ftap-edit', [
-        'ui.router',
-        'openlmis-modal-state',
-        'admin-orderable-edit',
-        'referencedata-facility-type'
-    ]);
+            $provide.factory('OpenlmisResource', function() {
+                return test.OpenlmisResourceMock;
+            });
+        });
 
-})();
+        inject(function($injector) {
+            this.FacilityTypeResource = $injector.get('FacilityTypeResource');
+        });
+    });
+
+    it('should extend OpenlmisResource', function() {
+        new this.FacilityTypeResource();
+
+        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith(('/api/facilityTypes'));
+    });
+});

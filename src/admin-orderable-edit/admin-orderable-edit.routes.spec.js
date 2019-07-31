@@ -99,10 +99,7 @@ describe('openlmis.administration.orderables.edit route', function() {
         spyOn(this.$templateCache, 'get').andCallThrough();
         spyOn(this.authorizationService, 'getUser').andReturn(this.$q.resolve(new this.UserDataBuilder().build()));
 
-        var context = this;
-        spyOn(this.permissionService, 'hasPermissionWithAnyProgramAndAnyFacility').andCallFake(function() {
-            return context.$q.resolve();
-        });
+        spyOn(this.permissionService, 'hasPermissionWithAnyProgramAndAnyFacility').andReturn(this.$q.resolve());
 
         this.goToState = function(subState) {
             this.$location.url('/administration/orderables/' + this.orderable.id + subState);
@@ -257,10 +254,7 @@ describe('openlmis.administration.orderables.edit route', function() {
         });
 
         it('should resolve canEdit as false if user does not have right to edit ftaps', function() {
-            var context = this;
-            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andCallFake(function() {
-                return context.$q.reject();
-            });
+            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andReturn(this.$q.reject());
 
             this.goToState('/facilityTypeApprovedProducts');
 

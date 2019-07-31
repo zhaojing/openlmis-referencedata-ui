@@ -33,7 +33,6 @@
             accessRights: [
                 ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
             ],
-            areAllRightsRequired: false,
             parentResolves: ['programs', 'canEdit'],
             resolve: {
                 successNotificationKey: function() {

@@ -70,7 +70,7 @@
          * @name goToFtapsList
          *
          * @description
-         * Redirects to ftaps list screen.
+         * Redirects to FTAP list screen.
          */
         function goToFtapsList() {
             stateTrackerService.goToPreviousState();
@@ -88,7 +88,7 @@
          */
         function saveFacilityTypeApprovedProduct() {
             if (vm.facilityTypeApprovedProduct.id) {
-                return save();
+                return save(vm.facilityTypeApprovedProduct);
             }
             return new FacilityTypeApprovedProductResource().query({
                 orderableId: vm.facilityTypeApprovedProduct.orderable.id,
@@ -98,26 +98,23 @@
             })
                 .then(function(result) {
                     if (result.content.length > 0) {
-                        vm.facilityTypeApprovedProduct.id = result.content[0].id;
-                        vm.facilityTypeApprovedProduct.meta = result.content[0].meta;
-                        vm.facilityTypeApprovedProduct.orderable = result.content[0].orderable;
-                        vm.facilityTypeApprovedProduct.maxPeriodsOfStock = result.content[0].maxPeriodsOfStock;
+                        var ftap = _.extend({}, result.content[0], vm.facilityTypeApprovedProduct);
 
-                        return save();
+                        return save(ftap);
                     }
                     return new FacilityTypeApprovedProductResource()
                         .create(vm.facilityTypeApprovedProduct)
                         .then(function() {
-                            stateTrackerService.goToPreviousState();
+                            goToFtapsList();
                         });
                 });
         }
 
-        function save() {
+        function save(ftap) {
             return new FacilityTypeApprovedProductResource()
-                .update(vm.facilityTypeApprovedProduct)
+                .update(ftap)
                 .then(function() {
-                    stateTrackerService.goToPreviousState();
+                    goToFtapsList();
                 });
         }
     }

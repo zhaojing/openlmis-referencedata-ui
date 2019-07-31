@@ -24,7 +24,6 @@ describe('OrderableEditFtapsListController', function() {
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
-            this.confirmService = $injector.get('confirmService');
             this.$state = $injector.get('$state');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.OrderableResource = $injector.get('OrderableResource');
@@ -71,23 +70,28 @@ describe('OrderableEditFtapsListController', function() {
         this.facilityTypesMap[this.ftaps[1].facilityType.id] = this.ftaps[1].facilityType.name;
         this.facilityTypesMap[this.ftaps[2].facilityType.id] = this.ftaps[2].facilityType.name;
 
-        this.successNotificationKey = 'successMessage.key';
-        this.errorNotificationKey = 'errorMessage.key';
-
         spyOn(this.$state, 'reload');
         spyOn(this.FacilityTypeApprovedProductResource.prototype, 'update').andReturn(this.$q.resolve(this.ftaps[0]));
         spyOn(this.FunctionDecorator.prototype, 'withSuccessNotification').andCallThrough();
         spyOn(this.FunctionDecorator.prototype, 'withErrorNotification').andCallThrough();
-        spyOn(this.confirmService, 'confirm').andReturn(this.$q.resolve());
+        spyOn(this.FunctionDecorator.prototype, 'withConfirm').andCallThrough();
+
+        var context = this;
+        spyOn(this.FunctionDecorator.prototype, 'decorateFunction').andCallFake(function(fn) {
+            context.fn = fn;
+            return this;
+        });
+
+        spyOn(this.FunctionDecorator.prototype, 'getDecoratedFunction').andCallFake(function() {
+            return context.fn;
+        });
 
         this.vm = this.$controller('OrderableEditFtapsListController', {
             orderable: this.orderable,
             ftaps: this.ftaps,
             ftapsMap: this.ftapsMap,
             facilityTypesMap: this.facilityTypesMap,
-            canEdit: this.canEdit,
-            successNotificationKey: this.successNotificationKey,
-            errorNotificationKey: this.errorNotificationKey
+            canEdit: this.canEdit
         });
         this.vm.$onInit();
     });
@@ -112,12 +116,17 @@ describe('OrderableEditFtapsListController', function() {
 
         it('should decorate with correct success message', function() {
             expect(this.FunctionDecorator.prototype.withSuccessNotification)
-                .toHaveBeenCalledWith(this.successNotificationKey);
+                .toHaveBeenCalledWith('adminOrderableEdit.ftapHasBeenRemovedSuccessfully');
         });
 
         it('should decorate with correct error message', function() {
             expect(this.FunctionDecorator.prototype.withErrorNotification)
-                .toHaveBeenCalledWith(this.errorNotificationKey);
+                .toHaveBeenCalledWith('adminOrderableEdit.failedToRemovedFtap');
+        });
+
+        it('should decorate with correct confirm message', function() {
+            expect(this.FunctionDecorator.prototype.withConfirm)
+                .toHaveBeenCalledWith('adminOrderableEdit.confirmFtapDeactivation');
         });
 
     });

@@ -125,12 +125,6 @@
                 controllerAs: 'vm',
                 resolve: {
                     orderable: resolveOrderable,
-                    successNotificationKey: function() {
-                        return 'adminOrderableEdit.ftapHasBeenRemovedSuccessfully';
-                    },
-                    errorNotificationKey: function() {
-                        return 'adminOrderableEdit.failedToRemovedFtap';
-                    },
                     ftaps: function(FacilityTypeApprovedProductRepository, orderable) {
                         return new FacilityTypeApprovedProductRepository().query({
                             orderableId: orderable.id
