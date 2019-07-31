@@ -20,11 +20,13 @@ describe('OrderableEditProgramsController', function() {
             $provide.service('notificationService', function() {
                 return jasmine.createSpyObj('notificationService', ['success', 'error']);
             });
+            $provide.service('confirmService', function() {
+                return jasmine.createSpyObj('confirmService', ['confirm']);
+            });
         });
 
         inject(function($injector) {
             this.$controller = $injector.get('$controller');
-            this.confirmService = $injector.get('confirmService');
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.OrderableResource = $injector.get('OrderableResource');
             this.$q = $injector.get('$q');
@@ -52,37 +54,45 @@ describe('OrderableEditProgramsController', function() {
             ])
             .build();
 
-        this.programsOrderable = this.orderable.programs;
+        this.programOrderables = this.orderable.programs;
 
         this.programsMap = {};
         this.programsMap[this.programs[0].id] = this.programs[0];
         this.programsMap[this.programs[1].id] = this.programs[1];
         this.programsMap[this.programs[2].id] = this.programs[2];
 
-        this.successNotificationKey = 'successMessage.key';
-        this.errorNotificationKey = 'errorMessage.key';
+        this.successNotificationKey = 'adminOrderableEdit.orderableProgramRemovedSuccessfully';
+        this.errorNotificationKey = 'adminOrderableEdit.failedToRemoveOrderableProgram';
+        this.confirmNotificationKey = 'adminOrderableEdit.confirmToRemoveOrderableProgram';
 
         spyOn(this.$state, 'reload').andReturn(true);
         spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.programs[0]));
         spyOn(this.FunctionDecorator.prototype, 'withSuccessNotification').andCallThrough();
         spyOn(this.FunctionDecorator.prototype, 'withErrorNotification').andCallThrough();
-        spyOn(this.confirmService, 'confirm').andReturn(this.$q.resolve());
+        spyOn(this.FunctionDecorator.prototype, 'withConfirm').andCallThrough();
+        var context = this;
+        spyOn(this.FunctionDecorator.prototype, 'decorateFunction').andCallFake(function(fn) {
+            context.fn = fn;
+            return this;
+        });
+
+        spyOn(this.FunctionDecorator.prototype, 'getDecoratedFunction').andCallFake(function() {
+            return context.fn;
+        });
 
         this.vm = this.$controller('OrderableEditProgramsController', {
-            programsOrderable: this.programsOrderable,
+            programOrderables: this.programOrderables,
             programsMap: this.programsMap,
             canEdit: this.canEdit,
-            orderable: this.orderable,
-            successNotificationKey: this.successNotificationKey,
-            errorNotificationKey: this.errorNotificationKey
+            orderable: this.orderable
         });
         this.vm.$onInit();
     });
 
     describe('onInit', function() {
 
-        it('should expose programs Orderable', function() {
-            expect(this.vm.programsOrderable).toEqual(this.programsOrderable);
+        it('should expose program Orderables', function() {
+            expect(this.vm.programOrderables).toEqual(this.programOrderables);
         });
 
         it('should expose programs map', function() {
@@ -95,6 +105,11 @@ describe('OrderableEditProgramsController', function() {
 
         it('should expose orderable', function() {
             expect(this.vm.orderable).toEqual(this.orderable);
+        });
+
+        it('should decorate with confirm message', function() {
+            expect(this.FunctionDecorator.prototype.withConfirm)
+                .toHaveBeenCalledWith(this.confirmNotificationKey);
         });
 
         it('should decorate with correct success message', function() {
@@ -111,14 +126,14 @@ describe('OrderableEditProgramsController', function() {
     describe('removeProgramOrderable', function() {
 
         it('should remove program orderable', function() {
-            this.vm.removeProgramOrderable(this.programsOrderable[0]);
+            this.vm.removeProgramOrderable(this.programOrderables[0]);
             this.$rootScope.$apply();
 
             expect(this.OrderableResource.prototype.update).toHaveBeenCalledWith(this.orderable);
         });
 
         it('should redirect to the list view on success', function() {
-            this.vm.removeProgramOrderable(this.programsOrderable[0]);
+            this.vm.removeProgramOrderable(this.programOrderables[0]);
             this.$rootScope.$apply();
 
             expect(this.$state.reload).toHaveBeenCalled();

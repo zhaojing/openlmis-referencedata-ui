@@ -4,7 +4,7 @@
         {{'adminOrderableEdit.addProgram' | message}}
     </button>
     <table>
-        <caption ng-if="!vm.programsOrderable || vm.programsOrderable.length === 0">
+        <caption ng-if="!vm.programOrderables || vm.programOrderables.length === 0">
             {{'adminOrderableEdit.noAssociatedPrograms' | message}}
         </caption>
         <thead>
@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="program in vm.programsOrderable">
+            <tr ng-repeat="program in vm.programOrderables">
                 <td>{{vm.programsMap[program.programId].name}}</td>
                 <td>
                     <button ng-show="!vm.canEdit" ui-sref="openlmis.administration.orderables.edit.programs.edit({programId: program.programId})">{{'adminOrderableEdit.view' | message}}</button>

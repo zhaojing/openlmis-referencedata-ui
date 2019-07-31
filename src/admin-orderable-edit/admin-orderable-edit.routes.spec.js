@@ -145,11 +145,11 @@ describe('openlmis.administration.orderables.edit route', function() {
         it('should resolve programs orderable', function() {
             this.goToState('/programs');
 
-            expect(this.getResolvedValue('programsOrderable')).toEqual(this.orderable.programs);
-            expect(this.getResolvedValue('programsOrderable')).not.toBe(this.orderable.programs);
+            expect(this.getResolvedValue('programOrderables')).toEqual(this.orderable.programs);
+            expect(this.getResolvedValue('programOrderables')).not.toBe(this.orderable.programs);
         });
 
-        it('should not change state if fetching programsOrderable fails', function() {
+        it('should not change state if fetching programOrderables fails', function() {
             this.OrderableResource.prototype.query.andReturn(this.$q.reject());
 
             this.goToState('/programs');
@@ -177,25 +177,24 @@ describe('openlmis.administration.orderables.edit route', function() {
         });
 
         it('should resolve canEdit as false if user does not have right to edit program orderable', function() {
-            var context = this;
-            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andCallFake(function() {
-                return context.$q.reject();
-            });
+            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andReturn(this.$q.reject());
+
             this.goToState('/programs');
 
             expect(this.getResolvedValue('canEdit')).toBeFalsy();
         });
 
         it('should resolve canEdit as true if user have right to edit program orderable', function() {
-            var context = this;
-            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andCallFake(function(userId, params) {
-                return params.right === context.ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
-                    ? context.$q.resolve() : context.$q.reject();
-            });
+            this.permissionService.hasPermissionWithAnyProgramAndAnyFacility.andReturn(this.$q.resolve());
+
             this.goToState('/programs');
 
             expect(this.getResolvedValue('canEdit')).toBeTruthy();
-
+            expect(this.permissionService.hasPermissionWithAnyProgramAndAnyFacility).toHaveBeenCalledWith(
+                this.userId, {
+                    right: this.ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
+                }
+            );
         });
 
         it('should not change state if fetching programs fails', function() {

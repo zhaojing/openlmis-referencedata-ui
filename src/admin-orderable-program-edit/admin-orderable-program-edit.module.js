@@ -35,6 +35,8 @@
         'openlmis-function-decorator',
         'referencedata-orderable-display-category',
         'openlmis-admin',
+        'ui.router',
+        'openlmis-auth',
         'openlmis-i18n'
     ]);
 

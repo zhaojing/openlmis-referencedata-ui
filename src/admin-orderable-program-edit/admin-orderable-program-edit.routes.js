@@ -37,26 +37,26 @@
                 orderableDisplayCategories: function(OrderableDisplayCategoryResource) {
                     return new OrderableDisplayCategoryResource().query();
                 },
-                programOrderable: function($stateParams, programsOrderable) {
-                    var program = _.findWhere(programsOrderable, {
+                programOrderable: function($stateParams, programOrderables) {
+                    var program = _.findWhere(programOrderables, {
                         programId: $stateParams.programId
                     });
                     return program;
                 },
-                successNotificationKey: function() {
-                    if (typeof programOrderable !== 'undefined') {
-                        return  'adminOrderableProgram.save.success';
+                successNotificationKey: function(programOrderable) {
+                    if (programOrderable) {
+                        return 'adminOrderableProgram.save.success';
                     }
                     return 'adminOrderableProgram.create.success';
                 },
-                errorNotificationKey: function() {
-                    if (typeof programOrderable !== 'undefined') {
+                errorNotificationKey: function(programOrderable) {
+                    if (programOrderable) {
                         return 'adminOrderableProgram.save.failure';
                     }
                     return 'adminOrderableProgram.create.failure';
                 },
-                filteredPrograms: function(programs, programsOrderable) {
-                    var programIds = programsOrderable.map(function(programOrderable) {
+                filteredPrograms: function(programs, programOrderables) {
+                    var programIds = programOrderables.map(function(programOrderable) {
                         return programOrderable.programId;
                     });
                     return programs.filter(function(program) {
@@ -64,7 +64,7 @@
                     });
                 }
             },
-            parentResolves: ['orderable', 'programsOrderable', 'canEdit', 'programs', 'programsMap']
+            parentResolves: ['orderable', 'programOrderables', 'canEdit', 'programs', 'programsMap']
         });
     }
 })();

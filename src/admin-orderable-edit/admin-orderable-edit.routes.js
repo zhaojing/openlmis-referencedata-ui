@@ -91,7 +91,7 @@
                             return programsMap;
                         }, {});
                     },
-                    programsOrderable: function(orderable) {
+                    programOrderables: function(orderable) {
                         return orderable.programs;
                     },
                     canEdit: function(authorizationService, permissionService, ADMINISTRATION_RIGHTS) {
@@ -106,12 +106,6 @@
                             .catch(function() {
                                 return false;
                             });
-                    },
-                    successNotificationKey: function() {
-                        return 'adminOrderableEdit.orderableProgramRemovedSuccessfully';
-                    },
-                    errorNotificationKey: function() {
-                        return 'adminOrderableEdit.failedToRemoveOrderableProgram';
                     }
                 }
             });

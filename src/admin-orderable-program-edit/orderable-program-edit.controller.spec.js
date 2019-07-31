@@ -33,7 +33,6 @@ describe('OrderableProgramEditController', function() {
             this.OrderableDisplayCategoryDataBuilder = $injector.get('OrderableDisplayCategoryDataBuilder');
             this.OrderableResource = $injector.get('OrderableResource');
             this.$rootScope = $injector.get('$rootScope');
-            this.stateTrackerService = $injector.get('stateTrackerService');
             this.FunctionDecorator = $injector.get('FunctionDecorator');
         });
 
@@ -68,11 +67,8 @@ describe('OrderableProgramEditController', function() {
         this.errorNotificationKey = 'errorMessage.key';
         this.editMode = true;
 
-        var loadingDeferred = this.$q.defer();
-
         spyOn(this.$state, 'go');
         spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.orderable));
-        spyOn(this.stateTrackerService, 'goToPreviousState').andCallFake(loadingDeferred.resolve);
         spyOn(this.FunctionDecorator.prototype, 'withSuccessNotification').andCallThrough();
         spyOn(this.FunctionDecorator.prototype, 'withErrorNotification').andCallThrough();
 
@@ -112,12 +108,6 @@ describe('OrderableProgramEditController', function() {
             expect(this.vm.orderableDisplayCategories).toEqual(this.orderableDisplayCategories);
         });
 
-        it('should expose this.stateTrackerService.goToPreviousState method', function() {
-            this.vm.$onInit();
-
-            expect(this.vm.goToPreviousState).toBe(this.stateTrackerService.goToPreviousState);
-        });
-
         it('should decorate with correct success message', function() {
             expect(this.FunctionDecorator.prototype.withSuccessNotification)
                 .toHaveBeenCalledWith(this.successNotificationKey);
@@ -143,7 +133,7 @@ describe('OrderableProgramEditController', function() {
             this.vm.saveProgramOrderable();
             this.$rootScope.$apply();
 
-            expect(this.vm.goToPreviousState).toHaveBeenCalled();
+            expect(this.$state.go).toHaveBeenCalled();
         });
 
         it('should not redirect to the previous state on failure', function() {
@@ -152,7 +142,7 @@ describe('OrderableProgramEditController', function() {
             this.vm.saveProgramOrderable();
             this.$rootScope.$apply();
 
-            expect(this.vm.goToPreviousState).not.toHaveBeenCalled();
+            expect(this.$state.go).not.toHaveBeenCalled();
         });
 
     });

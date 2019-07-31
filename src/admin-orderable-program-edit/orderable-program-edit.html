@@ -29,8 +29,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="primary" ng-click="vm.goToPreviousState()" ng-show="!vm.canEdit">{{'adminOrderableProgram.ok' | message}}</button>
-                <button ng-click="vm.goToPreviousState()" ng-show="vm.canEdit">{{'adminOrderableProgram.cancel' | message}}</button>
+                <button class="primary" ng-click="vm.goToProgramOrderablePage()" ng-show="!vm.canEdit">{{'adminOrderableProgram.ok' | message}}</button>
+                <button ng-click="vm.goToProgramOrderablePage()" ng-show="vm.canEdit">{{'adminOrderableProgram.cancel' | message}}</button>
                 <div class="button-group primary">
                     <button class="primary" type="submit" 
                         form="edit-program-orderable-form" ng-show="vm.canEdit && !vm.editMode">{{'adminOrderableProgram.add' | message}}</button>

@@ -29,18 +29,17 @@
         .controller('OrderableProgramEditController', controller);
 
     controller.$inject = [
-        'stateTrackerService', 'programOrderable', 'orderableDisplayCategories', 'orderable',
+        '$state', 'programOrderable', 'orderableDisplayCategories', 'orderable',
         'canEdit', 'OrderableResource', 'filteredPrograms', 'FunctionDecorator', 'successNotificationKey',
         'errorNotificationKey', 'programsMap'
     ];
 
-    function controller(stateTrackerService, programOrderable, orderableDisplayCategories, orderable,
+    function controller($state, programOrderable, orderableDisplayCategories, orderable,
                         canEdit, OrderableResource, filteredPrograms, FunctionDecorator, successNotificationKey,
                         errorNotificationKey, programsMap) {
 
         var vm = this;
         vm.$onInit = onInit;
-        vm.goToPreviousState = stateTrackerService.goToPreviousState;
         vm.saveProgramOrderable = new FunctionDecorator()
             .decorateFunction(saveProgramOrderable)
             .withSuccessNotification(successNotificationKey)
@@ -130,6 +129,7 @@
             vm.orderable = orderable;
             vm.editMode = !!programOrderable;
             vm.programsMap = programsMap;
+            vm.goToProgramOrderablePage = goToProgramOrderablePage;
         }
 
         /**
@@ -147,7 +147,21 @@
             }
             return new OrderableResource()
                 .update(vm.orderable)
-                .then(vm.goToPreviousState);
+                .then(function() {
+                    goToProgramOrderablePage();
+                });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-orderable-program-edit.controller:OrderableProgramEditController
+         * @name goToAddFacilityPage
+         *
+         * @description
+         * Takes the user to the add program orderables page.
+         */
+        function goToProgramOrderablePage() {
+            $state.go('openlmis.administration.orderables.edit.programs');
         }
     }
 })();
