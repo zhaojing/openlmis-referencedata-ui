@@ -56,7 +56,8 @@ describe('OrderableListController', function() {
         this.vm = this.$controller('OrderableListController', {
             orderables: this.orderables,
             programs: this.programs,
-            $stateParams: this.stateParams
+            $stateParams: this.stateParams,
+            canAdd: true
         });
         this.vm.$onInit();
 

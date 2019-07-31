@@ -28,9 +28,9 @@
         .module('admin-orderable-list')
         .controller('OrderableListController', controller);
 
-    controller.$inject = ['$state', '$stateParams', 'orderables', 'programs'];
+    controller.$inject = ['$state', '$stateParams', 'orderables', 'programs', 'canAdd'];
 
-    function controller($state, $stateParams, orderables, programs) {
+    function controller($state, $stateParams, orderables, programs, canAdd) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -105,6 +105,7 @@
             vm.code = $stateParams.code;
             vm.name = $stateParams.name;
             vm.program = $stateParams.program;
+            vm.canAdd = canAdd;
         }
 
         /**

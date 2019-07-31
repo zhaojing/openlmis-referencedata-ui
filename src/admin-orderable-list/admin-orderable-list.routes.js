@@ -43,6 +43,19 @@
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         return new OrderableResource().query(stateParams);
                     });
+                },
+                canAdd: function(authorizationService, permissionService, ADMINISTRATION_RIGHTS) {
+                    var user = authorizationService.getUser();
+                    return permissionService
+                        .hasPermissionWithAnyProgramAndAnyFacility(user.user_id, {
+                            right: ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
+                        })
+                        .then(function() {
+                            return true;
+                        })
+                        .catch(function() {
+                            return false;
+                        });
                 }
             }
         });

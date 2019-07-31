@@ -1,6 +1,6 @@
 <h2>{{'adminOrderableList.products' | message}}</h2>
 <section class="openlmis-table-container">
-    <button class="add" ui-sref='.add'>{{'adminOrderableList.addProduct' | message}}</button>
+    <button ng-if="vm.canAdd" class="add" ui-sref='.add'>{{'adminOrderableList.addProduct' | message}}</button>
     <form ng-submit="vm.search()">
         <fieldset class="form-group">
             <label for="code">{{'adminOrderableList.code' | message}}</label>
