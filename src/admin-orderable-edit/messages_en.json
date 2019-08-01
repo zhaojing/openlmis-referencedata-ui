@@ -53,7 +53,7 @@
     "adminOrderableEdit.ftapHasBeenRemovedSuccessfully": "The facility type has been removed successfully",
     "adminOrderableEdit.view": "View",
     "adminOrderableEdit.addProgram":"Add Program",
-    "adminOrderableEdit.orderableProgramRemovedSuccessfully": "Orderable program removed successfully",
-    "adminOrderableEdit.failedToRemoveOrderableProgram": "Failed to remove orderable program",
-    "adminOrderableEdit.confirmToRemoveOrderableProgram": "Are you sure you want to remove the orderable program?"
+    "adminOrderableEdit.programOrderableRemovedSuccessfully": "Program orderable removed successfully",
+    "adminOrderableEdit.failedToRemoveProgramOrderable": "Failed to remove program orderable",
+    "adminOrderableEdit.confirmToRemoveProgramOrderable": "Are you sure you want to remove the program orderable?"
 }

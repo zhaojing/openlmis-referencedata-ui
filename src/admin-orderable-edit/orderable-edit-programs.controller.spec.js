@@ -61,9 +61,9 @@ describe('OrderableEditProgramsController', function() {
         this.programsMap[this.programs[1].id] = this.programs[1];
         this.programsMap[this.programs[2].id] = this.programs[2];
 
-        this.successNotificationKey = 'adminOrderableEdit.orderableProgramRemovedSuccessfully';
-        this.errorNotificationKey = 'adminOrderableEdit.failedToRemoveOrderableProgram';
-        this.confirmNotificationKey = 'adminOrderableEdit.confirmToRemoveOrderableProgram';
+        this.successNotificationKey = 'adminOrderableEdit.programOrderableRemovedSuccessfully';
+        this.errorNotificationKey = 'adminOrderableEdit.failedToRemoveProgramOrderable';
+        this.confirmNotificationKey = 'adminOrderableEdit.confirmToRemoveProgramOrderable';
 
         spyOn(this.$state, 'reload').andReturn(true);
         spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.programs[0]));

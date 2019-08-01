@@ -40,9 +40,9 @@
         vm.removeProgramOrderable =
             new FunctionDecorator()
                 .decorateFunction(removeProgramOrderable)
-                .withConfirm('adminOrderableEdit.confirmToRemoveOrderableProgram')
-                .withSuccessNotification('adminOrderableEdit.orderableProgramRemovedSuccessfully')
-                .withErrorNotification('adminOrderableEdit.failedToRemoveOrderableProgram')
+                .withConfirm('adminOrderableEdit.confirmToRemoveProgramOrderable')
+                .withSuccessNotification('adminOrderableEdit.programOrderableRemovedSuccessfully')
+                .withErrorNotification('adminOrderableEdit.failedToRemoveProgramOrderable')
                 .withLoading(true)
                 .getDecoratedFunction();
 

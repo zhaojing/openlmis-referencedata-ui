@@ -10,21 +10,21 @@
                 <form id="edit-program-orderable-form" ng-submit="vm.saveProgramOrderable()">
                     <fieldset ng-disabled="!vm.canEdit">
                         <label for="program" ng-show="!vm.editMode">{{'adminOrderableProgram.program' | message}}</label>
-                        <select id="program" ng-model="vm.programOrderable.programId" ng-show="!vm.editMode"
-                        ng-options="item.id as item.name for item in vm.filteredPrograms" required></select>    
+                        <select id="program" ng-model="vm.programOrderable.programId" ng-if="!vm.editMode"
+                        ng-options="item.id as item.name for item in vm.filteredPrograms" required></select>
                         <label>
                             <input type="checkbox" ng-model="vm.programOrderable.fullSupply"/>
                             {{'adminOrderableProgram.fullSupply' | message}}
                         </label>
                         <label for="dosesPerPatient">{{'adminOrderableProgram.dosesPerPatient' | message}}</label>
-                        <input type="text" id="dosesPerPatient" ng-model="vm.programOrderable.dosesPerPatient" required></input>
+                        <input type="text" id="dosesPerPatient" ng-model="vm.programOrderable.dosesPerPatient"></input>
                         <label for="orderableDisplayCategory">{{'adminOrderableProgram.orderableDisplayCategory' | message}}</label>
                         <select id="orderableDisplayCategory" ng-model="vm.programOrderable.orderableDisplayCategoryId"
                         ng-options="item.id as item.displayName for item in vm.orderableDisplayCategories" required></select>
                         <label for="displayOrder">{{'adminOrderableProgram.displayOrder' | message}}</label>
-                        <input type="text" id="displayOrder" ng-model="vm.programOrderable.displayOrder" required></input>
+                        <input type="text" id="displayOrder" ng-model="vm.programOrderable.displayOrder"></input>
                         <label for="pricePerPack">{{'adminOrderableProgram.pricePerPack' | message}}</label>
-                        <input type="text" id="pricePerPack" ng-model="vm.programOrderable.pricePerPack" required></input>
+                        <input type="text" id="pricePerPack" ng-model="vm.programOrderable.pricePerPack"></input>
                     </fieldset>
                 </form>
             </div>

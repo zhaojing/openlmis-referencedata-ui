@@ -12,8 +12,8 @@
     "adminOrderableProgram.orderableDisplayCategory": "Orderable Display Category",
     "adminOrderableProgram.displayOrder": "Display Order",
     "adminOrderableProgram.pricePerPack": "Price per Pack",
-    "adminOrderableProgram.save.success": "Orderable program saved successfully",
-    "adminOrderableProgram.save.failure": "Failed to save orderable program",
-    "adminOrderableProgram.create.success": "Orderable program created successfully",
-    "adminOrderableProgram.create.failure": "Failed to create orderable program"
+    "adminOrderableProgram.save.success": "Program orderable saved successfully",
+    "adminOrderableProgram.save.failure": "Failed to save program orderable",
+    "adminOrderableProgram.create.success": "Program orderable created successfully",
+    "adminOrderableProgram.create.failure": "Failed to create program orderable"
 }
