@@ -142,7 +142,7 @@ describe('openlmis.administration.orderables.edit route', function() {
 
     describe('.programs state', function() {
 
-        it('should resolve programs orderable', function() {
+        it('should resolve program orderables', function() {
             this.goToState('/programs');
 
             expect(this.getResolvedValue('programOrderables')).toEqual(this.orderable.programs);
