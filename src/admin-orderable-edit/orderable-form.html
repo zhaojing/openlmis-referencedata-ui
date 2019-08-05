@@ -12,9 +12,9 @@
         {{ 'adminOrderableEdit.dispensingUnit.info' | message}}
     </p>
     <label for="netContent">{{'adminOrderableEdit.netContent' | message}}</label>
-    <input id="netContent" type="number" ng-model="vm.orderable.netContent" required />
+    <input positive-integer id="netContent" type="text" ng-model="vm.orderable.netContent" required />
     <label for="packRoundingThreshold">{{'adminOrderableEdit.packRoundingThreshold' | message}}</label>
-    <input id="packRoundingThreshold" type="number" ng-model="vm.orderable.packRoundingThreshold" required />
+    <input positive-integer id="packRoundingThreshold" type="text" ng-model="vm.orderable.packRoundingThreshold" required />
     <fieldset class="form-group">
         <label>
             <input type="checkbox" ng-model="vm.orderable.roundToZero" />
