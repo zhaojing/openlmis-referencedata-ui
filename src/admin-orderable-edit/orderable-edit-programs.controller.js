@@ -37,14 +37,13 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.removeProgramOrderable =
-            new FunctionDecorator()
-                .decorateFunction(removeProgramOrderable)
-                .withConfirm('adminOrderableEdit.confirmToRemoveProgramOrderable')
-                .withSuccessNotification('adminOrderableEdit.programOrderableRemovedSuccessfully')
-                .withErrorNotification('adminOrderableEdit.failedToRemoveProgramOrderable')
-                .withLoading(true)
-                .getDecoratedFunction();
+        vm.removeProgramOrderable = new FunctionDecorator()
+            .decorateFunction(removeProgramOrderable)
+            .withSuccessNotification('adminOrderableEdit.programOrderableRemovedSuccessfully')
+            .withErrorNotification('adminOrderableEdit.failedToRemoveProgramOrderable')
+            .withConfirm('adminOrderableEdit.confirmToRemoveProgramOrderable')
+            .withLoading(true)
+            .getDecoratedFunction();
 
         /**
          * @ngdoc property
