@@ -2,12 +2,12 @@
     <label for="productCode">{{'adminOrderableEdit.productCode' | message}}</label>
     <input id="productCode" type="text" ng-model="vm.orderable.productCode" required />
     <label for="fullProductName">{{'adminOrderableEdit.name' | message}}</label>
-    <input id="fullProductName" type="text" ng-model="vm.orderable.fullProductName" required />
+    <input id="fullProductName" type="text" ng-model="vm.orderable.fullProductName" />
     <label for="description">{{'adminOrderableEdit.description' | message}}</label>
-    <input id="description" type="text" ng-model="vm.orderable.description" required />
+    <input id="description" type="text" ng-model="vm.orderable.description" />
     <h3>{{'adminOrderableEdit.packSizeInformation' | message}}</h3>
     <label for="dispensingUnit">{{'adminOrderableEdit.dispensingUnit' | message}}</label>
-    <input id="dispensingUnit" type="text" ng-model="vm.orderable.dispensable.dispensingUnit" required />
+    <input id="dispensingUnit" type="text" ng-model="vm.orderable.dispensable.dispensingUnit" />
     <p class="note">
         {{ 'adminOrderableEdit.dispensingUnit.info' | message}}
     </p>
