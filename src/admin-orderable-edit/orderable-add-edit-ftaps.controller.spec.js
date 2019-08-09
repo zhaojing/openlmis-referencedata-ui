@@ -117,6 +117,9 @@ describe('OrderableAddEditFtapsController', function() {
 
         it('should update existing inactive ftap', function() {
             this.vm.facilityTypeApprovedProduct.id = undefined;
+            this.vm.facilityTypeApprovedProduct.emergencyOrderPoint = undefined;
+            this.vm.facilityTypeApprovedProduct.minPeriodsOfStock = undefined;
+            this.vm.facilityTypeApprovedProduct.maxPeriodsOfStock = 10;
 
             this.vm.saveFacilityTypeApprovedProduct();
             this.$rootScope.$apply();
@@ -128,8 +131,13 @@ describe('OrderableAddEditFtapsController', function() {
                 active: false
             });
 
+            var expectedFtap = this.ftap;
+            expectedFtap.emergencyOrderPoint = undefined;
+            expectedFtap.minPeriodsOfStock = undefined;
+            expectedFtap.maxPeriodsOfStock = 10;
+
             expect(this.FacilityTypeApprovedProductResource.prototype.update)
-                .toHaveBeenCalledWith(this.ftap);
+                .toHaveBeenCalledWith(expectedFtap);
         });
 
         it('should create new ftap if it never existed', function() {

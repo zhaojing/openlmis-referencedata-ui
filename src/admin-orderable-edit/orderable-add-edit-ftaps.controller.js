@@ -101,6 +101,8 @@
                 .then(function(result) {
                     if (result.content.length > 0) {
                         var ftap = _.extend({}, result.content[0], vm.facilityTypeApprovedProduct);
+                        ftap.emergencyOrderPoint = vm.facilityTypeApprovedProduct.emergencyOrderPoint;
+                        ftap.minPeriodsOfStock = vm.facilityTypeApprovedProduct.minPeriodsOfStock;
 
                         return save(ftap);
                     }

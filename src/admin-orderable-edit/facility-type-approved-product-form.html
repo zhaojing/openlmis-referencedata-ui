@@ -9,8 +9,7 @@
             ng-options="program as program.name for program in vm.programs track by program.id" required>
         </select>
         <label for="maxPeriodsOfStock">{{'adminOrderableEdit.maxPeriodsOfStock' | message}}</label>
-        <input positive-decimal id="maxPeriodsOfStock" ng-disabled="vm.facilityTypeApprovedProduct.id" type="text"
-            ng-model="vm.facilityTypeApprovedProduct.maxPeriodsOfStock" required/>
+        <input positive-decimal id="maxPeriodsOfStock" type="text" ng-model="vm.facilityTypeApprovedProduct.maxPeriodsOfStock" required/>
         <label for="emergencyOrderPoint">{{'adminOrderableEdit.emergencyOrderPoint' | message}}</label>
         <input positive-decimal id="emergencyOrderPoint" type="text" ng-model="vm.facilityTypeApprovedProduct.emergencyOrderPoint"/>
         <label for="minPeriodsOfStock">{{'adminOrderableEdit.minPeriodsOfStock' | message}}</label>
