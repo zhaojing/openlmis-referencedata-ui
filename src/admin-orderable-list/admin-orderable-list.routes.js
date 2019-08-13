@@ -26,7 +26,10 @@
         $stateProvider.state('openlmis.administration.orderables', {
             showInNavigation: true,
             label: 'adminOrderableList.products',
-            url: '/orderables?code&name&description&program&page&size',
+            url: '/orderables?code&name&description&program&page&size&sort',
+            params: {
+                sort: ['fullProductName']
+            },
             controller: 'OrderableListController',
             templateUrl: 'admin-orderable-list/orderable-list.html',
             controllerAs: 'vm',

@@ -12,6 +12,7 @@ New functionality:
 * [OLMIS-6442](https://openlmis.atlassian.net/browse/OLMIS-6442): Added UI for managing facility type approved products.
 * [OLMIS-6471](https://openlmis.atlassian.net/browse/OLMIS-6471): Added new LOTS_MANAGE right. 
 * [OLMIS-6441](https://openlmis.atlassian.net/browse/OLMIS-6441): Added UI for managing program orderables.
+* [OLMIS-6476](https://openlmis.atlassian.net/browse/OLMIS-6476): Added sorting of orderables by product name.
 
 Improvements:
 * [OLMIS-6389](https://openlmis.atlassian.net/browse/OLMIS-6389): Added caching of system notifications on Home page and in header indicator.
