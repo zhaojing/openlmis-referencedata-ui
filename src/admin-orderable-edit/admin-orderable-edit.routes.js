@@ -19,9 +19,9 @@
 
     angular.module('admin-orderable-edit').config(routes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS', 'selectProductsModalStateProvider'];
+    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS, selectProductsModalStateProvider) {
+    function routes($stateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider
             .state('openlmis.administration.orderables.edit', {
@@ -41,13 +41,15 @@
                     }
                 },
                 resolve: {
-                    originalOrderable: function(orderables, $stateParams, OrderableResource) {
+                    orderable: function($stateParams, OrderableResource, orderables) {
                         var orderable = _.findWhere(orderables, {
                             id: $stateParams.id
                         });
-                        return orderable ? orderable : new OrderableResource().get($stateParams.id);
-                    },
-                    orderable: resolveOrderable
+
+                        return orderable ?
+                            angular.copy(orderable) :
+                            new OrderableResource().get($stateParams.id);
+                    }
                 }
             });
 
@@ -156,44 +158,27 @@
                 }
             });
 
-        // This abstract states stores the list of children (also newly added) between the .edit state refreshes.
         $stateProvider
             .state('openlmis.administration.orderables.edit.kitUnpackList', {
-                abstract: true,
-                template: '<div ui-view></div>',
-                resolve: {
-                    children: function(orderable) {
-                        return angular.copy(orderable.children);
-                    }
-                }
-            });
-
-        selectProductsModalStateProvider
-            .stateWithAddOrderablesChildState('openlmis.administration.orderables.edit.kitUnpackList.edit', {
                 label: 'adminOrderableEdit.kitUnpackList',
-                url: '/kitUnpackList?kitUnpackListPage&kitUnpackListSize',
+                url: '/kitUnpackList?kitConstituentPage&kitConstituentSize',
                 controller: 'OrderableEditKitUnpackListController',
                 templateUrl: 'admin-orderable-edit/orderable-edit-kit-unpack-list.html',
                 controllerAs: 'vm',
-                parentResolves: ['children'],
                 resolve: {
-                    children: function($stateParams, children, paginationService) {
+                    orderable: resolveOrderable,
+                    children: function($stateParams, orderable, paginationService) {
                         return paginationService.registerList(null, $stateParams, function() {
-                            return children;
+                            return orderable.children;
                         }, {
-                            paginationId: 'kitUnpackList'
+                            customPageParamName: 'kitConstituentPage',
+                            customSizeParamName: 'kitConstituentSize'
                         });
                     },
-                    orderables: function(OrderableResource, children) {
-                        var orderables = _.pluck(children, 'orderable'),
-                            childrenIds = _.pluck(orderables, 'id');
-
-                        if (!childrenIds.length) {
-                            return [];
-                        }
+                    orderables: function(OrderableResource) {
                         return new OrderableResource()
                             .query({
-                                id: childrenIds
+                                sort: 'fullProductName,asc'
                             })
                             .then(function(orderables) {
                                 return orderables.content;
@@ -208,8 +193,8 @@
                 }
             });
 
-        function resolveOrderable(originalOrderable) {
-            return angular.copy(originalOrderable);
+        function resolveOrderable(orderable) {
+            return angular.copy(orderable);
         }
     }
 })();

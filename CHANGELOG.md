@@ -17,7 +17,6 @@ New functionality:
 Improvements:
 * [OLMIS-6389](https://openlmis.atlassian.net/browse/OLMIS-6389): Added caching of system notifications on Home page and in header indicator.
 * [OLMIS-6402](https://openlmis.atlassian.net/browse/OLMIS-6402): Renamed versionId field to versionNumber.
-* [OLMIS-6222](https://openlmis.atlassian.net/browse/OLMIS-6222): Updated some pagination usages after changes in openlmis-pagination component.
 
 Bug fixes:
 * [OLMIS-6330](https://openlmis.atlassian.net/browse/OLMIS-6330): fixed trigerring reference-ui build.

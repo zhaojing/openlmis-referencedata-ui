@@ -29,12 +29,12 @@
         .controller('OrderableEditKitUnpackListController', controller);
 
     controller.$inject = [
-        'selectProductsModalService', 'orderable', 'children', 'OrderableResource', 'orderablesMap',
-        'FunctionDecorator', '$state'
+        'selectProductsModalService', 'orderable', 'children', 'orderables', 'OrderableResource', 'orderablesMap',
+        'FunctionDecorator', '$state', 'alertService', '$q'
     ];
 
-    function controller(selectProductsModalService, orderable, children, OrderableResource, orderablesMap,
-                        FunctionDecorator, $state) {
+    function controller(selectProductsModalService, orderable, children, orderables, OrderableResource, orderablesMap,
+                        FunctionDecorator, $state, alertService, $q) {
 
         var vm = this;
 
@@ -72,11 +72,9 @@
          * Method that displays a modal for selecting and adding a orderable to the UI
          */
         function addChild() {
-            selectProducts({
-                selections: vm.orderablesMap
-            })
-                .then(addToOrderablesMap)
-                .then(updateChildrenList);
+            selectProducts(excludeSelectedOrderables())
+                .then(mapToChildren)
+                .then(addToChildrenList);
         }
 
         /**
@@ -85,7 +83,7 @@
          * @name removeChild
          *
          * @description
-         * Method that removes kit constituent from the kit orderable
+         * Method that removes kit constituest from the kit orderable
          *
          * @param {Object} a single child or kit constituent to be removed
          */
@@ -124,7 +122,29 @@
         }
 
         function selectProducts(availableProducts) {
+            if (!availableProducts.length) {
+                alertService.error(
+                    'adminOrderableEdit.noProductsToAdd.label',
+                    'adminOrderableEdit.noProductsToAdd.message'
+                );
+                return $q.reject();
+            }
+
             return selectProductsModalService.show(availableProducts);
+        }
+
+        function excludeSelectedOrderables() {
+            var childOrderableIds = vm.children.map(function(child) {
+                return child.orderable.id;
+            });
+
+            return orderables.filter(function(i) {
+                return childOrderableIds.indexOf(i.id) < 0;
+            });
+        }
+
+        function mapToChildren(orderables) {
+            return orderables.map(mapToChild);
         }
 
         function mapToChild(orderable) {
@@ -136,32 +156,8 @@
             };
         }
 
-        function updateChildrenList(selectedOrderables) {
-            var childrenMap = vm.children.reduce(function(childrenMap, child) {
-                childrenMap[child.orderable.id] = child;
-                return childrenMap;
-            }, {});
-
-            clearChildrenList();
-
-            selectedOrderables.forEach(function(orderable) {
-                vm.children.push(childrenMap[orderable.id] ? childrenMap[orderable.id] : mapToChild(orderable));
-            });
-        }
-
-        function addToOrderablesMap(orderables) {
-            orderables.reduce(function(orderablesMap, orderable) {
-                orderablesMap[orderable.id] = orderable;
-                return orderablesMap;
-            }, vm.orderablesMap);
-
-            return orderables;
-        }
-
-        function clearChildrenList() {
-            while (children.length) {
-                children.pop();
-            }
+        function addToChildrenList(selectedProducts) {
+            vm.children.push.apply(vm.children, selectedProducts);
         }
 
     }

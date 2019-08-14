@@ -16,210 +16,209 @@
 describe('SelectProductsModalController', function() {
 
     beforeEach(function() {
+        module('referencedata-orderable');
         module('select-products-modal');
 
+        //Polyfill snippet as our version of PhantomJS doesn't support startsWith yet
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
+        if (!String.prototype.startsWith) {
+            String.prototype.startsWith = function(search, pos) {
+                return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+            };
+        }
+
+        var OrderableDataBuilder;
         inject(function($injector) {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
             this.$controller = $injector.get('$controller');
             this.alertService = $injector.get('alertService');
-            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
-            this.selectProductsModalService = $injector.get('selectProductsModalService');
-            this.$state = $injector.get('$state');
+            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
-        this.external = false;
+        this.modalDeferred = this.$q.defer();
 
-        this.orderables = [
-            new this.OrderableDataBuilder()
+        this.products = [
+            new OrderableDataBuilder()
                 .withFullProductName('Product One')
                 .withProductCode('PC1')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Product Two pc2')
                 .withProductCode('PS1')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Product Three')
                 .withProductCode('XB1')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Product Four')
                 .withProductCode('N64')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('undefined')
                 .withProductCode('undefined')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Counter Something')
                 .withProductCode('Co1')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Another product')
                 .withProductCode('Code Name')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Some Product')
                 .withProductCode('CD1')
                 .build(),
-            new this.OrderableDataBuilder()
+            new OrderableDataBuilder()
                 .withFullProductName('Same Product to displayed')
                 .withoutProductCode()
                 .build()
         ];
 
-        this.selections = {};
-        this.selections[this.orderables[0].id] = this.orderables[0];
-        this.$stateParams = {};
+        spyOn(this.alertService, 'error');
 
-        spyOn(this.$state, 'go');
-        spyOn(this.selectProductsModalService, 'getSelections').andReturn(this.selections);
+        this.vm = this.$controller('SelectProductsModalController', {
+            modalDeferred: this.modalDeferred,
+            products: this.products
+        });
 
-        this.initController = function() {
-            this.vm = this.$controller('SelectProductsModalController', {
-                modalDeferred: this.modalDeferred,
-                orderables: this.orderables,
-                external: this.external,
-                $stateParams: this.$stateParams
-            });
-            this.vm.$onInit();
-        };
+        this.vm.$onInit();
     });
 
     describe('$onInit', function() {
 
-        it('should expose orderables', function() {
-            this.initController();
-
-            expect(this.vm.orderables).toEqual(this.orderables);
+        it('should expose requisitionLineItems', function() {
+            expect(this.vm.products).toEqual(this.products);
         });
 
-        it('should expose filteredOrderables', function() {
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
-        });
-
-        it('should expose this.selectProductsModalService.reject method', function() {
-            this.initController();
-
-            expect(this.vm.close).toBe(this.selectProductsModalService.reject);
-        });
-
-        it('should expose this.selectProductsModalService.resolve method', function() {
-            this.initController();
-
-            expect(this.vm.selectProducts).toBe(this.selectProductsModalService.resolve);
+        it('should expose this.modalDeferred.reject method', function() {
+            expect(this.vm.close).toBe(this.modalDeferred.reject);
         });
 
         it('should initialize selection object', function() {
-            this.initController();
+            expect(this.vm.selections).toEqual({});
+        });
+    });
 
-            expect(this.vm.selections).toEqual(this.selections);
+    describe('selectProducts', function() {
+
+        it('should resolve to selected this.products', function() {
+            this.vm.selections[this.products[0].id] = true;
+            this.vm.selections[this.products[2].id] = true;
+
+            var result;
+            this.modalDeferred.promise
+                .then(function(response) {
+                    result = response;
+                });
+
+            this.vm.selectProducts();
+            this.$rootScope.$apply();
+
+            expect(result).toEqual([
+                this.products[0],
+                this.products[2]
+            ]);
         });
 
-        it('should show all for empty filter', function() {
-            this.$stateParams.search = '';
+        it('should show error modal if no products were selected', function() {
+            this.vm.selectProducts();
+            this.$rootScope.$apply();
 
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
+            expect(this.alertService.error).toHaveBeenCalledWith('selectProductsModal.addProducts.emptyList');
         });
-
-        it('should show all for undefined', function() {
-            this.$stateParams.search = undefined;
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
-        });
-
-        it('should show all for null', function() {
-            this.$stateParams.search = null;
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
-        });
-
-        it('should only return codes starting with the search text', function() {
-            this.$stateParams.search = 'Ps';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([this.orderables[1]]);
-
-            this.$stateParams.search = '1';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([]);
-        });
-
-        it('should only return defined full product name', function() {
-            this.$stateParams.search = 'mC1';
-
-            this.initController();
-
-            expect(this.orderables[4].withFullProductName).toBeUndefined();
-        });
-
-        it('should only return defined product codes', function() {
-            this.$stateParams.search = 'mC1';
-
-            this.initController();
-
-            expect(this.orderables[4].withProductCode).toBeUndefined();
-        });
-
-        it('should return result for search text of both product codes and full product name', function() {
-            this.$stateParams.search = 'co';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([this.orderables[5], this.orderables[6]]);
-
-        });
-
-        it('should return empty list if no matches found', function() {
-            this.$stateParams.search = 'po';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([]);
-
-        });
-
-        it('should return result with either product code or full product name', function() {
-            this.$stateParams.search = 'ame';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([this.orderables[8]]);
-
-            this.$stateParams.search = 'disp';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables[0].fullProductName).toBeDefined();
-            expect(this.vm.filteredOrderables[0].productCode).toBeUndefined();
-        });
-
     });
 
     describe('search', function() {
 
-        it('should reload the state', function() {
-            this.initController();
-
-            this.vm.searchText = 'new search';
+        it('should show all for empty filter', function() {
+            this.vm.searchText = '';
 
             this.vm.search();
 
-            expect(this.$state.go).toHaveBeenCalledWith('.', {
-                search: 'new search'
-            });
+            expect(this.vm.filteredProducts).toEqual(this.products);
+        });
+
+        it('should show all for undefined', function() {
+            this.vm.searchText = undefined;
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual(this.products);
+        });
+
+        it('should show all for null', function() {
+            this.vm.searchText = null;
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual(this.products);
+        });
+
+        it('should only return codes starting with the search text', function() {
+            this.vm.searchText = 'Ps';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([this.products[1]]);
+
+            this.vm.searchText = '1';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([]);
+        });
+
+        it('should only return defined full product name', function() {
+            this.vm.searchText = 'mC1';
+
+            this.vm.search();
+
+            expect(this.products[4].withFullProductName).toBeUndefined();
+        });
+
+        it('should only return defined product codes', function() {
+            this.vm.searchText = 'mC1';
+
+            this.vm.search();
+
+            expect(this.products[4].withProductCode).toBeUndefined();
+        });
+
+        it('should return result for search text of both product codes and full product name', function() {
+            this.vm.searchText = 'co';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([this.products[5], this.products[6]]);
+
+        });
+
+        it('should return empty list if no matches found', function() {
+            this.vm.searchText = 'po';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([]);
+
+        });
+
+        it('should return result with either product code or full product name', function() {
+            this.vm.searchText = 'ame';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts).toEqual([this.products[8]]);
+
+            this.vm.searchText = 'disp';
+
+            this.vm.search();
+
+            expect(this.vm.filteredProducts[0].fullProductName).toBeDefined();
+            expect(this.vm.filteredProducts[0].productCode).toBeUndefined();
+
         });
 
     });

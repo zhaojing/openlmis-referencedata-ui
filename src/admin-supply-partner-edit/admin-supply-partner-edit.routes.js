@@ -19,9 +19,9 @@
 
     angular.module('admin-supply-partner-edit').config(routes);
 
-    routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS', 'selectProductsModalStateProvider'];
+    routes.$inject = ['$stateProvider', 'modalStateProvider', 'ADMINISTRATION_RIGHTS'];
 
-    function routes($stateProvider, ADMINISTRATION_RIGHTS, selectProductsModalStateProvider) {
+    function routes($stateProvider, modalStateProvider, ADMINISTRATION_RIGHTS) {
 
         $stateProvider.state('openlmis.administration.supplyPartners.edit', {
             label: 'adminSupplyPartnerEdit.editSupplyPartner',
@@ -46,34 +46,32 @@
             }
         });
 
-        selectProductsModalStateProvider
-            .stateWithAddOrderablesChildState('openlmis.administration.supplyPartners.edit.association', {
-                display: 'modal',
-                url: '/association?programId&supervisoryNodeId',
-                templateUrl: 'admin-supply-partner-edit/association-modal.html',
-                controller: 'AssociationModalController',
-                controllerAs: 'vm',
-                parentResolves: ['supplyPartner'],
-                resolve: {
-                    supplyPartnerAssociationService: function(SupplyPartnerAssociationService) {
-                        return new SupplyPartnerAssociationService();
-                    },
-                    originalAssociation: function(supplyPartnerAssociationService, $stateParams, supplyPartner) {
-                        return supplyPartnerAssociationService.getAssociation(supplyPartner, $stateParams);
-                    },
-                    programs: function(programService) {
-                        return programService.getAll();
-                    },
-                    facilities: function(originalAssociation, supervisoryNodes, supplyPartnerAssociationService) {
-                        return supplyPartnerAssociationService.getFacilities(originalAssociation, supervisoryNodes);
-                    },
-                    supervisoryNodes: function(SupervisoryNodeResource) {
-                        return new SupervisoryNodeResource().getAll();
-                    },
-                    orderables: function(supplyPartnerAssociationService, facilities, originalAssociation, programs) {
-                        return supplyPartnerAssociationService.getOrderables(originalAssociation, facilities, programs);
-                    }
+        modalStateProvider.state('openlmis.administration.supplyPartners.edit.association', {
+            url: '/association?programId&supervisoryNodeId',
+            templateUrl: 'admin-supply-partner-edit/association-modal.html',
+            controller: 'AssociationModalController',
+            controllerAs: 'vm',
+            parentResolves: ['supplyPartner'],
+            resolve: {
+                supplyPartnerAssociationService: function(SupplyPartnerAssociationService) {
+                    return new SupplyPartnerAssociationService();
+                },
+                originalAssociation: function(supplyPartnerAssociationService, $stateParams, supplyPartner) {
+                    return supplyPartnerAssociationService.getAssociation(supplyPartner, $stateParams);
+                },
+                programs: function(programService) {
+                    return programService.getAll();
+                },
+                facilities: function(originalAssociation, supervisoryNodes, supplyPartnerAssociationService) {
+                    return supplyPartnerAssociationService.getFacilities(originalAssociation, supervisoryNodes);
+                },
+                supervisoryNodes: function(SupervisoryNodeResource) {
+                    return new SupervisoryNodeResource().getAll();
+                },
+                orderables: function(supplyPartnerAssociationService, facilities, originalAssociation, programs) {
+                    return supplyPartnerAssociationService.getOrderables(originalAssociation, facilities, programs);
                 }
-            });
+            }
+        });
     }
 })();
