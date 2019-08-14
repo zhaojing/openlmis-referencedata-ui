@@ -28,48 +28,15 @@
         .module('select-products-modal')
         .controller('SelectProductsModalController', controller);
 
-    controller.$inject = ['modalDeferred', 'products', 'alertService'];
+    controller.$inject = ['orderables', '$state', 'selectProductsModalService', 'external', '$stateParams'];
 
-    function controller(modalDeferred, products, alertService) {
+    function controller(orderables, $state, selectProductsModalService, external, $stateParams) {
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.selectProducts = selectProducts;
-        vm.close = modalDeferred.reject;
+        vm.selectProducts = selectProductsModalService.resolve;
+        vm.close = selectProductsModalService.reject;
         vm.search = search;
-
-        /**
-         * @ngdoc property
-         * @propertyOf select-products-modal.controller:SelectProductsModalController
-         * @name products
-         * @type {Array}
-         *
-         * @description
-         * Holds a list of available products.
-         */
-        vm.products = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf select-products-modal.controller:SelectProductsModalController
-         * @name searchText
-         * @type {String}
-         *
-         * @description
-         * Holds text entered in product search box.
-         */
-        vm.searchText = undefined;
-
-        /**
-         * @ngdoc property
-         * @propertyOf select-products-modal.controller:SelectProductsModalController
-         * @type {Object}
-         * @name selections
-         *
-         * @description
-         * The maps storing information about selected products.
-         */
-        vm.selections = undefined;
 
         /**
          * @ngdoc method
@@ -80,30 +47,11 @@
          * Initialization method of the SelectProductsModalController.
          */
         function onInit() {
-            vm.products = products;
-            vm.searchText = '';
-            vm.selections = {};
-            vm.search();
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf select-products-modal.controller:SelectProductsModalController
-         * @name selectProducts
-         *
-         * @description
-         * Resolves promise with products selected in the modal.
-         */
-        function selectProducts() {
-            var selectedProducts = vm.products.filter(function(orderable) {
-                return vm.selections[orderable.id];
-            });
-
-            if (selectedProducts.length < 1) {
-                alertService.error('selectProductsModal.addProducts.emptyList');
-            } else {
-                modalDeferred.resolve(selectedProducts);
-            }
+            vm.orderables = orderables;
+            vm.selections = selectProductsModalService.getSelections();
+            vm.external = external;
+            vm.searchText = $stateParams.search;
+            vm.filteredOrderables = filterOrderables(orderables, $stateParams.search);
         }
 
         /**
@@ -115,27 +63,34 @@
          * Refreshes the product list so the add product dialog box shows only relevant products.
          */
         function search() {
-            if (vm.searchText) {
-                vm.filteredProducts = vm.products.filter(searchByCodeAndName);
-            } else {
-                vm.filteredProducts = vm.products;
-            }
+            $state.go('.', _.extend({}, $stateParams, {
+                search: vm.searchText
+            }));
         }
 
-        function searchByCodeAndName(product) {
+        function filterOrderables(orderables, searchText) {
+            if (searchText) {
+                return orderables.filter(searchByCodeAndName);
+            }
+            return orderables;
+
+        }
+
+        function searchByCodeAndName(orderable) {
             var searchText = vm.searchText.toLowerCase();
             var foundInFullProductName;
             var foundInProductCode;
 
-            if (product.productCode !== undefined) {
-                foundInProductCode = product.productCode.toLowerCase().startsWith(searchText);
+            if (orderable.productCode !== undefined) {
+                foundInProductCode = orderable.productCode.toLowerCase().startsWith(searchText);
             }
 
-            if (product.fullProductName !== undefined) {
-                foundInFullProductName = product.fullProductName.toLowerCase().contains(searchText);
+            if (orderable.fullProductName !== undefined) {
+                foundInFullProductName = orderable.fullProductName.toLowerCase().contains(searchText);
             }
             return foundInFullProductName || foundInProductCode;
         }
+
     }
 
 })();

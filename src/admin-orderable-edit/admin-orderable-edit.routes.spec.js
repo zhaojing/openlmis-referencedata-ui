@@ -262,7 +262,7 @@ describe('openlmis.administration.orderables.edit route', function() {
 
     });
 
-    describe('.kitUnpackList state', function() {
+    describe('.kitUnpackList.edit state', function() {
 
         it('should resolve orderable', function() {
             this.goToState('/kitUnpackList');
@@ -289,6 +289,15 @@ describe('openlmis.administration.orderables.edit route', function() {
             this.goToState('/kitUnpackList');
 
             expect(this.getResolvedValue('orderables')).toEqual(this.orderables);
+        });
+
+        it('should resolve children page to empty page if orderable has no children', function() {
+            this.orderable.children = [];
+
+            this.goToState('/kitUnpackList');
+
+            expect(this.getResolvedValue('children')).toEqual([]);
+            expect(this.OrderableResource.prototype.query.callCount).toBe(1);
         });
 
         it('should resolve orderables map', function() {

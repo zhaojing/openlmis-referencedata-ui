@@ -28,12 +28,18 @@
         .module('select-products-modal')
         .service('selectProductsModalService', service);
 
-    service.$inject = ['openlmisModalService', 'paginationService', '$stateParams'];
+    service.$inject = ['$q', '$state'];
 
-    function service(openlmisModalService, paginationService, $stateParams) {
-        var dialog;
+    function service($q, $state) {
+        var deferred,
+            selections,
+            products;
 
         this.show = show;
+        this.getSelections = getSelections;
+        this.getOrderables = getOrderables;
+        this.resolve = resolve;
+        this.reject = reject;
 
         /**
          * @ngdoc method
@@ -46,34 +52,74 @@
          * @param  {Array}   products the list of available products
          * @return {promise}          the promise resolving to a list of selected products
          */
-        function show(products) {
-            if (dialog) {
-                return dialog.promise;
-            }
+        function show(config) {
+            deferred = $q.defer();
 
-            dialog = openlmisModalService.createDialog({
-                controller: 'SelectProductsModalController',
-                controllerAs: 'vm',
-                templateUrl: 'select-products-modal/select-products-modal.html',
-                show: true,
-                resolve: {
-                    products: function() {
-                        return paginationService.registerList(null, $stateParams,
-                            function() {
-                                return products;
-                            }, {
-                                customPageParamName: 'pPage',
-                                customSizeParamName: 'pSize'
-                            });
-                    }
-                }
-            });
+            products = config ? config.products : undefined;
+            selections = config && config.selections ? angular.copy(config.selections) : {};
 
-            dialog.promise.finally(function() {
-                dialog = undefined;
-            });
+            $state.go('.addOrderables');
 
-            return dialog.promise;
+            return deferred.promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf select-products-modal.selectProductsModalService
+         * @name getSelections
+         *
+         * @description
+         * Returns a list of selected products.
+         *
+         * @return {promise}          the promise resolving to a list of selected products
+         */
+        function getSelections() {
+            return selections;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf select-products-modal.selectProductsModalService
+         * @name getOrderables
+         *
+         * @description
+         * Returns all products.
+         *
+         * @return {promise}          the promise resolving to a list of all products
+         */
+        function getOrderables() {
+            return products;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf select-products-modal.selectProductsModalService
+         * @name resolve
+         *
+         * @description
+         * Resolves selected products.
+         *
+         * @param  {Array}   products the list of available products
+         * @return {promise}          the promise resolving to a list of selected products
+         */
+        function resolve() {
+            $state.go('^');
+            deferred.resolve(_.values(selections).filter(function(selection) {
+                return selection;
+            }));
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf select-products-modal.selectProductsModalService
+         * @name reject
+         *
+         * @description
+         * Rejects changes.
+         */
+        function reject() {
+            $state.go('^');
+            deferred.reject();
         }
     }
 

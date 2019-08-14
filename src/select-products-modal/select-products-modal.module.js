@@ -28,7 +28,9 @@
         'openlmis-form',
         'openlmis-pagination',
         'openlmis-templates',
-        'openlmis-modal'
+        'openlmis-modal',
+        'openlmis-modal-state',
+        'referencedata-orderable'
     ]);
 
 })();
