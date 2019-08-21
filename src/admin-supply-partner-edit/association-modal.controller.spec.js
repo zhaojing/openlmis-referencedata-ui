@@ -151,7 +151,29 @@ describe('AssociationModalController', function() {
         spyOn(this.$state, 'go');
         spyOn(this.alertService, 'error');
 
-        initControllerWithEditedAssociation(this);
+        this.initControllerWithEditedAssociation = function() {
+            this.initControllerWith(this.originalAssociation);
+        };
+
+        this.initControllerWithNewAssociation = function() {
+            this.initControllerWith(this.newOriginalAssociation);
+        };
+
+        this.initControllerWith = function(association) {
+            this.vm = this.$controller('AssociationModalController', {
+                originalAssociation: association,
+                programs: this.programs,
+                supervisoryNodes: this.supervisoryNodes,
+                facilities: this.facilities,
+                orderables: this.orderables,
+                supplyPartner: this.supplyPartner,
+                supplyPartnerAssociationService: this.supplyPartnerAssociationService
+            });
+
+            this.vm.$onInit();
+        };
+
+        this.initControllerWithEditedAssociation();
     });
 
     describe('$onInit', function() {
@@ -183,7 +205,7 @@ describe('AssociationModalController', function() {
         });
 
         it('should set isNew flag for new association', function() {
-            initControllerWithNewAssociation(this);
+            this.initControllerWithNewAssociation();
 
             expect(this.vm.isNew).toBe(true);
         });
@@ -230,7 +252,7 @@ describe('AssociationModalController', function() {
         });
 
         it('should return matching programs if creating a new association', function() {
-            initControllerWithNewAssociation(this);
+            this.initControllerWithNewAssociation();
             this.vm.association.program = this.programs[0];
 
             var result = this.vm.getAvailablePrograms();
@@ -239,7 +261,7 @@ describe('AssociationModalController', function() {
         });
 
         it('should return matching programs if creating a new association and program is not selected', function() {
-            initControllerWithNewAssociation(this);
+            this.initControllerWithNewAssociation();
             this.vm.association.supervisoryNode = this.supervisoryNodes[2];
 
             var result = this.vm.getAvailablePrograms();
@@ -300,7 +322,7 @@ describe('AssociationModalController', function() {
         });
 
         it('should return matching supervisory nodes if creating a new association', function() {
-            initControllerWithNewAssociation(this);
+            this.initControllerWithNewAssociation();
             this.vm.association.supervisoryNode = this.supervisoryNodes[2];
 
             var result = this.vm.getAvailableSupervisoryNodes();
@@ -314,7 +336,7 @@ describe('AssociationModalController', function() {
 
         it('should return matching programs if creating a new association and supervisory node is not selected',
             function() {
-                initControllerWithNewAssociation(this);
+                this.initControllerWithNewAssociation();
                 this.vm.association.program = this.programs[0];
 
                 var result = this.vm.getAvailableSupervisoryNodes();
@@ -364,15 +386,21 @@ describe('AssociationModalController', function() {
         it('should open select products modal', function() {
             this.vm.addProducts();
 
-            expect(this.selectProductsModalService.show).toHaveBeenCalled();
+            var expectedSelections = {};
+            expectedSelections[this.vm.orderables[2].id] = this.vm.orderables[2];
+            expectedSelections[this.vm.orderables[3].id] = this.vm.orderables[3];
+
+            expect(this.selectProductsModalService.show).toHaveBeenCalledWith({
+                selections: expectedSelections,
+                products: this.orderables
+            });
         });
 
         it('should add all products to the list', function() {
             this.vm.addProducts();
             this.$rootScope.$apply();
 
-            expect(this.vm.association.orderables.pop()).toEqual(this.selectedProducts[1]);
-            expect(this.vm.association.orderables.pop()).toEqual(this.selectedProducts[0]);
+            expect(this.vm.association.orderables).toEqual(this.selectedProducts);
         });
 
         it('should do nothing if user closes the select products modal', function() {
@@ -384,18 +412,6 @@ describe('AssociationModalController', function() {
             this.$rootScope.$apply();
 
             expect(this.vm.association.orderables.length).toEqual(originalCount);
-        });
-
-        it('should only show non-associated products', function() {
-            this.vm.addProducts();
-            this.$rootScope.$apply();
-
-            expect(this.selectProductsModalService.show).toHaveBeenCalledWith([
-                this.orderables[0],
-                this.orderables[1],
-                this.orderables[4],
-                this.orderables[5]
-            ]);
         });
 
     });
@@ -601,7 +617,7 @@ describe('AssociationModalController', function() {
                 this.orderables[1]
             ]));
 
-            initControllerWithNewAssociation(this);
+            this.initControllerWithNewAssociation();
         });
 
         it('should clear the associated facilities', function() {
@@ -757,27 +773,5 @@ describe('AssociationModalController', function() {
             expect(this.alertService.error).toHaveBeenCalledWith('adminSupplyPartnerEdit.associationEmptyOrderables');
         });
     });
-
-    function initControllerWithEditedAssociation(context) {
-        initControllerWith(context, context.originalAssociation);
-    }
-
-    function initControllerWithNewAssociation(context) {
-        initControllerWith(context, context.newOriginalAssociation);
-    }
-
-    function initControllerWith(context, association) {
-        context.vm = context.$controller('AssociationModalController', {
-            originalAssociation: association,
-            programs: context.programs,
-            supervisoryNodes: context.supervisoryNodes,
-            facilities: context.facilities,
-            orderables: context.orderables,
-            supplyPartner: context.supplyPartner,
-            supplyPartnerAssociationService: context.supplyPartnerAssociationService
-        });
-
-        context.vm.$onInit();
-    }
 
 });

@@ -194,17 +194,19 @@
          * association.
          */
         function addProducts() {
-            var associatedProductIds = vm.association.orderables.map(function(orderable) {
-                return orderable.id;
-            });
+            var orderablesMap = vm.association.orderables.reduce(function(orderablesMap, orderable) {
+                orderablesMap[orderable.id] = _.findWhere(vm.orderables, {
+                    id: orderable.id
+                });
+                return orderablesMap;
+            }, {});
 
-            var nonAssociatedProducts = vm.orderables.filter(filterOutByIds(associatedProductIds));
-
-            return selectProductsModalService.show(nonAssociatedProducts)
+            return selectProductsModalService.show({
+                products: vm.orderables,
+                selections: orderablesMap
+            })
                 .then(function(orderables) {
-                    orderables.forEach(function(orderable) {
-                        vm.association.orderables.push(orderable);
-                    });
+                    vm.association.orderables = orderables;
                 });
         }
 

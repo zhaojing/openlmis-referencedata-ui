@@ -106,7 +106,7 @@ describe('OrderableEditKitUnpackListController', function() {
             this.vm.addChild();
             this.$rootScope.$apply();
 
-            expect(this.orderable.children.length).toEqual(4);
+            expect(this.orderable.children.length).toEqual(2);
         });
 
         it('should not add children if orderable selection rejects', function() {
@@ -118,19 +118,29 @@ describe('OrderableEditKitUnpackListController', function() {
             expect(this.orderable.children.length).toEqual(2);
         });
 
-        it('should show an alert if there is no more orderables to add', function() {
+        it('should not clear quantities of existing children', function() {
             this.selectProductsModalService.show.andReturn(this.$q.resolve([
                 this.orderables[2],
-                this.orderables[3],
-                this.orderables[4]
+                this.orderables[3]
             ]));
 
             this.vm.addChild();
             this.$rootScope.$apply();
 
-            this.vm.addChild();
+            this.vm.orderable.children[0].quantity = 150;
+            this.vm.orderable.children[1].quantity = 300;
 
-            expect(this.alertService.error).toHaveBeenCalled();
+            this.selectProductsModalService.show.andReturn(this.$q.resolve([
+                this.orderables[1],
+                this.orderables[2],
+                this.orderables[3]
+            ]));
+
+            this.vm.addChild();
+            this.$rootScope.$apply();
+
+            expect(this.vm.orderable.children[1].quantity).toEqual(150);
+            expect(this.vm.orderable.children[2].quantity).toEqual(300);
         });
 
     });

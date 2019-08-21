@@ -16,61 +16,90 @@
 describe('selectProductsModalService', function() {
 
     beforeEach(function() {
-        module('referencedata-orderable');
         module('select-products-modal');
 
-        var OrderableDataBuilder;
         inject(function($injector) {
             this.$q = $injector.get('$q');
             this.$rootScope = $injector.get('$rootScope');
+            this.$state = $injector.get('$state');
             this.selectProductsModalService = $injector.get('selectProductsModalService');
-            this.openlmisModalService = $injector.get('openlmisModalService');
-            OrderableDataBuilder = $injector.get('OrderableDataBuilder');
+            this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
         });
 
-        this.products = [
-            new OrderableDataBuilder().buildJson(),
-            new OrderableDataBuilder().buildJson()
+        this.orderables = [
+            new this.OrderableDataBuilder().buildJson(),
+            new this.OrderableDataBuilder().buildJson(),
+            new this.OrderableDataBuilder().buildJson(),
+            new this.OrderableDataBuilder().buildJson(),
+            new this.OrderableDataBuilder().buildJson()
         ];
-        this.dialogDeferred = this.$q.defer();
-        this.dialog = {
-            promise: this.dialogDeferred.promise
-        };
 
-        spyOn(this.openlmisModalService, 'createDialog').andReturn(this.dialog);
+        this.config = {};
+        this.config.products = this.orderables;
+
+        spyOn(this.$state, 'go');
     });
 
     describe('show', function() {
 
-        it('it should not open second dialog if the first one is still open', function() {
-            this.selectProductsModalService.show(this.products);
-            this.selectProductsModalService.show(this.products);
+        it('it should redirect to .addOrderables state', function() {
+            this.selectProductsModalService.show(this.config);
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+            expect(this.$state.go).toHaveBeenCalledWith('.addOrderables');
         });
 
-        it('should close modal if adding product succeeds', function() {
-            this.selectProductsModalService.show(this.products);
-            this.dialogDeferred.resolve();
-            this.$rootScope.$apply();
+        it('it should return selections if any product is selected', function() {
+            this.config.selections = [this.orderables[0], this.orderables[2], this.orderables[4]];
+            this.selectProductsModalService.show(this.config);
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
-
-            this.selectProductsModalService.show(this.products);
-
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(2);
+            expect(this.selectProductsModalService.getSelections()).toEqual(this.config.selections);
         });
 
-        it('should close modal if adding product fails', function() {
-            this.selectProductsModalService.show(this.products);
-            this.dialogDeferred.reject();
+        it('it should return empty object if none of the products is selected', function() {
+            this.selectProductsModalService.show(this.config);
+
+            expect(this.selectProductsModalService.getSelections()).toEqual({});
+        });
+
+        it('it should return products if any product is selected', function() {
+            this.selectProductsModalService.show(this.config);
+
+            expect(this.selectProductsModalService.getOrderables()).toEqual(this.config.products);
+        });
+
+        it('it should return undefined if none of the products is selected', function() {
+            this.config.products = undefined;
+            this.selectProductsModalService.show(this.config);
+
+            expect(this.selectProductsModalService.getOrderables()).toBeUndefined();
+        });
+
+    });
+
+    describe('resolve', function() {
+
+        it('it should resolve selected products', function() {
+            this.config.selections = [this.orderables[0], this.orderables[2], this.orderables[4]];
+            this.selectProductsModalService.show(this.config);
+
+            this.selectProductsModalService.resolve();
             this.$rootScope.$apply();
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(1);
+            expect(this.$state.go).toHaveBeenCalledWith('^');
+        });
 
-            this.selectProductsModalService.show(this.products);
+    });
 
-            expect(this.openlmisModalService.createDialog.calls.length).toBe(2);
+    describe('reject', function() {
+
+        it('it should reject selected products', function() {
+            this.config.selections = [this.orderables[0], this.orderables[2], this.orderables[4]];
+            this.selectProductsModalService.show(this.config);
+
+            this.selectProductsModalService.reject();
+            this.$rootScope.$apply();
+
+            expect(this.$state.go).toHaveBeenCalledWith('^');
         });
 
     });
