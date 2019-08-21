@@ -167,8 +167,8 @@ describe('selectProductsModalStateProvider', function() {
         it('should resolve orderables', function() {
             this.searchText = 'some search text';
             this.$state.params = {
-                page: 1,
-                size: 20,
+                page: 0,
+                size: 10,
                 search: this.searchText
             };
 
@@ -181,8 +181,8 @@ describe('selectProductsModalStateProvider', function() {
 
             expect(this.OrderableResource.prototype.query).toHaveBeenCalledWith({
                 sort: 'fullProductName,asc',
-                page: 1,
-                size: 20,
+                page: 0,
+                size: 10,
                 search: this.searchText
             });
         });
