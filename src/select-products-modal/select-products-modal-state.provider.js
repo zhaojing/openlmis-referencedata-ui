@@ -67,6 +67,7 @@
                     controllerAs: 'vm',
                     templateUrl: 'select-products-modal/select-products-modal.html',
                     label: 'adminOrderableEdit.kitUnpackList',
+                    nonTrackable: true,
                     params: {
                         addOrderablesPage: undefined,
                         addOrderablesSize: undefined,

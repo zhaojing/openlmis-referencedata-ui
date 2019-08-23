@@ -131,6 +131,10 @@ describe('selectProductsModalStateProvider', function() {
             expect(this.config.label).toBe('adminOrderableEdit.kitUnpackList');
         });
 
+        it('should set nonTrackable', function() {
+            expect(this.config.nonTrackable).toBeTruthy();
+        });
+
         it('should set params', function() {
             expect(this.config.params.addOrderablesPage).toBeUndefined();
             expect(this.config.params.addOrderablesSize).toBeUndefined();
