@@ -21,16 +21,18 @@
         .module('referencedata-orderable')
         .factory('OrderableResource', OrderableResource);
 
-    OrderableResource.inject = ['OpenlmisResource', 'classExtender'];
+    OrderableResource.inject = ['OpenlmisCachedResource', 'classExtender'];
 
-    function OrderableResource(OpenlmisResource, classExtender) {
+    function OrderableResource(OpenlmisCachedResource, classExtender) {
 
-        classExtender.extend(OrderableResource, OpenlmisResource);
+        classExtender.extend(OrderableResource, OpenlmisCachedResource);
 
         return OrderableResource;
 
         function OrderableResource() {
-            this.super('/api/orderables');
+            this.super('/api/orderables', 'orderables', {
+                versioned: true
+            });
         }
 
     }

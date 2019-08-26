@@ -17,20 +17,18 @@
 
     'use strict';
 
-    /**
-     * @module referencedata-orderable
-     *
-     * @description
-     * Responsible for providing orderable info to other modules.
-     */
-    angular.module('referencedata-orderable', [
-        'ngResource',
-        'referencedata',
-        'openlmis-urls',
-        'openlmis-repository',
-        'openlmis-class-extender',
-        'referencedata-program',
-        'openlmis-cached-repository'
-    ]);
+    angular
+        .module('referencedata-orderable')
+        .run(routes);
+
+    routes.$inject = ['loginService', 'OrderableResource'];
+
+    function routes(loginService, OrderableResource) {
+
+        loginService.registerPostLoginAction(function() {
+            return new OrderableResource().getAll();
+        });
+
+    }
 
 })();

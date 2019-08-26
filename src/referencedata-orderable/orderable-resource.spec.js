@@ -16,12 +16,12 @@
 describe('OrderableResource', function() {
 
     beforeEach(function() {
-        this.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+        this.OpenlmisCachedResourceMock = jasmine.createSpy('OpenlmisCachedResource');
 
-        var OpenlmisResourceMock = this.OpenlmisResourceMock;
+        var OpenlmisCachedResourceMock = this.OpenlmisCachedResourceMock;
         module('referencedata-orderable', function($provide) {
-            $provide.factory('OpenlmisResource', function() {
-                return OpenlmisResourceMock;
+            $provide.factory('OpenlmisCachedResource', function() {
+                return OpenlmisCachedResourceMock;
             });
         });
 
@@ -33,6 +33,8 @@ describe('OrderableResource', function() {
     it('should extend OpenlmisResource', function() {
         new this.OrderableResource();
 
-        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith(('/api/orderables'));
+        expect(this.OpenlmisCachedResourceMock).toHaveBeenCalledWith('/api/orderables', 'orderables', {
+            versioned: true
+        });
     });
 });
