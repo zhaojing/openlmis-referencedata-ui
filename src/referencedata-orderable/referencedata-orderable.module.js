@@ -25,7 +25,7 @@
      */
     angular.module('referencedata-orderable', [
         'ngResource',
-        'referencedata',
+        'openlmis-login',
         'openlmis-urls',
         'openlmis-repository',
         'openlmis-class-extender',
