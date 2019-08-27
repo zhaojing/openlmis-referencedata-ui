@@ -34,6 +34,7 @@
                 ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
             ],
             parentResolves: ['programs', 'canEdit'],
+            nonTrackable: true,
             resolve: {
                 successNotificationKey: function() {
                     return 'adminOrderableFtapAdd.ftapHasBeenCreatedSuccessfully';

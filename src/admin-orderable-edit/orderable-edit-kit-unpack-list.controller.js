@@ -30,11 +30,11 @@
 
     controller.$inject = [
         'selectProductsModalService', 'orderable', 'children', 'OrderableResource', 'orderablesMap',
-        'FunctionDecorator', '$state'
+        'FunctionDecorator', 'stateTrackerService'
     ];
 
     function controller(selectProductsModalService, orderable, children, OrderableResource, orderablesMap,
-                        FunctionDecorator, $state) {
+                        FunctionDecorator, stateTrackerService) {
 
         var vm = this;
 
@@ -93,6 +93,12 @@
             if (vm.children.indexOf(child) > -1) {
                 vm.children.splice(vm.children.indexOf(child), 1);
             }
+
+            Object.keys(vm.orderablesMap).forEach(function(key) {
+                if (key === child.orderable.id) {
+                    delete vm.orderablesMap[child.orderable.id];
+                }
+            });
         }
 
         /**
@@ -104,9 +110,7 @@
          * Redirects to orderable list screen.
          */
         function goToOrderableList() {
-            $state.go('^.^', {}, {
-                reload: true
-            });
+            stateTrackerService.goToPreviousState('openlmis.administration.orderables');
         }
 
         /**
@@ -147,13 +151,15 @@
             selectedOrderables.forEach(function(orderable) {
                 vm.children.push(childrenMap[orderable.id] ? childrenMap[orderable.id] : mapToChild(orderable));
             });
+
+            vm.orderable.children = vm.children;
         }
 
         function addToOrderablesMap(orderables) {
-            orderables.reduce(function(orderablesMap, orderable) {
+            vm.orderablesMap = orderables.reduce(function(orderablesMap, orderable) {
                 orderablesMap[orderable.id] = orderable;
                 return orderablesMap;
-            }, vm.orderablesMap);
+            }, {});
 
             return orderables;
         }

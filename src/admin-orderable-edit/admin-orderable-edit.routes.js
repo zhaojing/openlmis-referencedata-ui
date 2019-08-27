@@ -57,6 +57,7 @@
                 controller: 'OrderableAddEditGeneralController',
                 templateUrl: 'admin-orderable-edit/orderable-edit-general.html',
                 controllerAs: 'vm',
+                nonTrackable: true,
                 resolve: {
                     successNotificationKey: function() {
                         return 'adminOrderableEdit.productHasBeenUpdatedSuccessfully';
@@ -82,6 +83,7 @@
                     ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
                 ],
                 areAllRightsRequired: false,
+                nonTrackable: true,
                 resolve: {
                     programsMap: function(programs) {
                         return programs.reduce(function(programsMap, program) {
@@ -115,6 +117,7 @@
                 controller: 'OrderableEditFtapsListController',
                 templateUrl: 'admin-orderable-edit/orderable-edit-ftaps-list.html',
                 controllerAs: 'vm',
+                nonTrackable: true,
                 resolve: {
                     orderable: resolveOrderable,
                     ftaps: function(FacilityTypeApprovedProductRepository, orderable) {
@@ -175,6 +178,7 @@
                 controller: 'OrderableEditKitUnpackListController',
                 templateUrl: 'admin-orderable-edit/orderable-edit-kit-unpack-list.html',
                 controllerAs: 'vm',
+                nonTrackable: true,
                 parentResolves: ['children'],
                 resolve: {
                     children: function($stateParams, children, paginationService) {

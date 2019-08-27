@@ -33,6 +33,7 @@
                 ADMINISTRATION_RIGHTS.FACILITY_APPROVED_ORDERABLES_MANAGE
             ],
             areAllRightsRequired: false,
+            nonTrackable: true,
             resolve: {
                 orderableDisplayCategories: function(OrderableDisplayCategoryResource) {
                     return new OrderableDisplayCategoryResource().query();

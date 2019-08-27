@@ -35,6 +35,7 @@
                 ADMINISTRATION_RIGHTS.ORDERABLES_MANAGE
             ],
             areAllRightsRequired: false,
+            nonTrackable: true,
             parentResolves: ['programs', 'canEdit'],
             resolve: {
                 successNotificationKey: function() {

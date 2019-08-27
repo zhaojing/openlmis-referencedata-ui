@@ -35,6 +35,7 @@ describe('OrderableEditKitUnpackListController', function() {
             this.OrderableDataBuilder = $injector.get('OrderableDataBuilder');
             this.OrderableChildrenDataBuilder = $injector.get('OrderableChildrenDataBuilder');
             this.$rootScope = $injector.get('$rootScope');
+            this.stateTrackerService = $injector.get('stateTrackerService');
         });
 
         this.orderables = [
@@ -69,7 +70,7 @@ describe('OrderableEditKitUnpackListController', function() {
         spyOn(this.selectProductsModalService, 'show');
         spyOn(this.OrderableResource.prototype, 'update').andReturn(this.$q.resolve(this.orderable));
         spyOn(this.alertService, 'error').andReturn();
-        spyOn(this.$state, 'go').andReturn();
+        spyOn(this.stateTrackerService, 'goToPreviousState').andReturn(true);
 
         this.vm = this.$controller('OrderableEditKitUnpackListController', {
             orderable: this.orderable,
@@ -99,6 +100,8 @@ describe('OrderableEditKitUnpackListController', function() {
 
         it('should add children', function() {
             this.selectProductsModalService.show.andReturn(this.$q.resolve([
+                this.orderables[0],
+                this.orderables[1],
                 this.orderables[2],
                 this.orderables[3]
             ]));
@@ -106,7 +109,23 @@ describe('OrderableEditKitUnpackListController', function() {
             this.vm.addChild();
             this.$rootScope.$apply();
 
-            expect(this.orderable.children.length).toEqual(2);
+            expect(this.orderable.children.length).toEqual(4);
+        });
+
+        it('should remove unselected children', function() {
+            this.selectProductsModalService.show.andReturn(this.$q.resolve([
+                this.orderables[0]
+            ]));
+
+            this.vm.addChild();
+            this.$rootScope.$apply();
+
+            var expectedMap = {};
+            expectedMap[this.orderables[0].id] = this.orderables[0];
+
+            expect(this.orderable.children.length).toEqual(1);
+            expect(this.orderable.children[0].orderable.id).toEqual(this.orderables[0].id);
+            expect(this.vm.orderablesMap).toEqual(expectedMap);
         });
 
         it('should not add children if orderable selection rejects', function() {
@@ -169,9 +188,9 @@ describe('OrderableEditKitUnpackListController', function() {
         it('should call state go with correct params', function() {
             this.vm.goToOrderableList();
 
-            expect(this.$state.go).toHaveBeenCalledWith('^.^', {}, {
-                reload: true
-            });
+            expect(this.stateTrackerService.goToPreviousState).toHaveBeenCalledWith(
+                'openlmis.administration.orderables'
+            );
         });
     });
 
@@ -187,9 +206,9 @@ describe('OrderableEditKitUnpackListController', function() {
             this.vm.saveOrderable();
             this.$rootScope.$apply();
 
-            expect(this.$state.go).toHaveBeenCalledWith('^.^', {}, {
-                reload: true
-            });
+            expect(this.stateTrackerService.goToPreviousState).toHaveBeenCalledWith(
+                'openlmis.administration.orderables'
+            );
         });
 
         it('should not redirect to the list view on failure', function() {
@@ -198,7 +217,7 @@ describe('OrderableEditKitUnpackListController', function() {
             this.vm.saveOrderable();
             this.$rootScope.$apply();
 
-            expect(this.$state.go).not.toHaveBeenCalled();
+            expect(this.stateTrackerService.goToPreviousState).not.toHaveBeenCalled();
         });
 
     });
