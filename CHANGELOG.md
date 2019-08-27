@@ -13,7 +13,7 @@ New functionality:
 * [OLMIS-6471](https://openlmis.atlassian.net/browse/OLMIS-6471): Added new LOTS_MANAGE right. 
 * [OLMIS-6441](https://openlmis.atlassian.net/browse/OLMIS-6441): Added UI for managing program orderables.
 * [OLMIS-6476](https://openlmis.atlassian.net/browse/OLMIS-6476): Added sorting of orderables by product name.
-* [OLMIS-6488](https://openlmis.atlassian.net/browse/OLMIS-6488): Added orderables caching on login action.
+* [OLMIS-6488](https://openlmis.atlassian.net/browse/OLMIS-6488): Added orderables caching.
 * [OLMIS-6419](https://openlmis.atlassian.net/browse/OLMIS-6419): Added FTAP caching.
 
 Improvements:
