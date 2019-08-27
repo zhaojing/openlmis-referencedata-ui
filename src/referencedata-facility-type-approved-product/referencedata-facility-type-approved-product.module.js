@@ -26,7 +26,9 @@
     angular.module('referencedata-facility-type-approved-product', [
         'ngResource',
         'referencedata',
-        'referencedata-orderable'
+        'referencedata-orderable',
+        'openlmis-cached-repository',
+        'openlmis-login'
     ]);
 
 })();

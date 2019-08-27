@@ -18,10 +18,10 @@ describe('FacilityTypeApprovedProductResource', function() {
     beforeEach(function() {
         var test = this;
         module('referencedata-facility-type-approved-product', function($provide) {
-            test.OpenlmisResourceMock = jasmine.createSpy('OpenlmisResource');
+            test.OpenlmisCachedResourceMock = jasmine.createSpy('OpenlmisCachedResource');
 
-            $provide.factory('OpenlmisResource', function() {
-                return test.OpenlmisResourceMock;
+            $provide.factory('OpenlmisCachedResource', function() {
+                return test.OpenlmisCachedResourceMock;
             });
         });
 
@@ -30,9 +30,11 @@ describe('FacilityTypeApprovedProductResource', function() {
         });
     });
 
-    it('should extend OpenlmisResource', function() {
+    it('should extend OpenlmisCachedResource', function() {
         new this.FacilityTypeApprovedProductResource();
 
-        expect(this.OpenlmisResourceMock).toHaveBeenCalledWith(('/api/facilityTypeApprovedProducts'));
+        expect(this.OpenlmisCachedResourceMock).toHaveBeenCalledWith('/api/facilityTypeApprovedProducts', 'FTAP', {
+            versioned: true
+        });
     });
 });

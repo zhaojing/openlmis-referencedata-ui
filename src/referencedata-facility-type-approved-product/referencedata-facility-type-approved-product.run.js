@@ -18,21 +18,17 @@
     'use strict';
 
     angular
-        .module('referencedata-facilities-cache')
+        .module('referencedata-facility-type-approved-product')
         .run(routes);
 
-    routes.$inject = ['loginService', 'facilityService'];
+    routes.$inject = ['loginService', 'FacilityTypeApprovedProductResource'];
 
-    function routes(loginService, facilityService) {
+    function routes(loginService, FacilityTypeApprovedProductResource) {
 
         loginService.registerPostLoginAction(function() {
-            return facilityService.cacheAllMinimal();
+            return new FacilityTypeApprovedProductResource().getAll();
         });
 
-        loginService.registerPostLogoutAction(function() {
-            return facilityService.clearMinimalFacilitiesCache();
-        });
     }
 
 })();
-

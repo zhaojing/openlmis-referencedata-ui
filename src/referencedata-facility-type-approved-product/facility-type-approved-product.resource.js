@@ -28,16 +28,18 @@
         .module('referencedata-facility-type-approved-product')
         .factory('FacilityTypeApprovedProductResource', FacilityTypeApprovedProductResource);
 
-    FacilityTypeApprovedProductResource.$inject = ['OpenlmisResource', 'classExtender'];
+    FacilityTypeApprovedProductResource.$inject = ['OpenlmisCachedResource', 'classExtender'];
 
-    function FacilityTypeApprovedProductResource(OpenlmisResource, classExtender) {
+    function FacilityTypeApprovedProductResource(OpenlmisCachedResource, classExtender) {
 
-        classExtender.extend(FacilityTypeApprovedProductResource, OpenlmisResource);
+        classExtender.extend(FacilityTypeApprovedProductResource, OpenlmisCachedResource);
 
         return FacilityTypeApprovedProductResource;
 
         function FacilityTypeApprovedProductResource() {
-            this.super('/api/facilityTypeApprovedProducts');
+            this.super('/api/facilityTypeApprovedProducts', 'FTAP', {
+                versioned: true
+            });
         }
     }
 })();
