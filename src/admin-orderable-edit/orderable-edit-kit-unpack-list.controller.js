@@ -94,6 +94,8 @@
                 vm.children.splice(vm.children.indexOf(child), 1);
             }
 
+            vm.orderable.children = vm.children;
+
             Object.keys(vm.orderablesMap).forEach(function(key) {
                 if (key === child.orderable.id) {
                     delete vm.orderablesMap[child.orderable.id];
