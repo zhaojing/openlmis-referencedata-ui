@@ -71,7 +71,8 @@
                     params: {
                         addOrderablesPage: undefined,
                         addOrderablesSize: undefined,
-                        search: undefined
+                        name: undefined,
+                        code: undefined
                     },
                     resolve: {
                         external: function(selectProductsModalService) {
@@ -93,7 +94,8 @@
                                     sort: 'fullProductName,asc',
                                     page: stateParams.page,
                                     size: stateParams.size,
-                                    search: stateParams.search
+                                    code: stateParams.code,
+                                    name: stateParams.name
                                 });
                             }, {
                                 paginationId: 'addOrderables'

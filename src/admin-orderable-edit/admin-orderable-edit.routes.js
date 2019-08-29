@@ -182,7 +182,11 @@
                 parentResolves: ['children'],
                 resolve: {
                     children: function($stateParams, children, paginationService) {
-                        return paginationService.registerList(null, $stateParams, function() {
+                        var stateParams = angular.copy($stateParams);
+                        stateParams.name = undefined;
+                        stateParams.code = undefined;
+
+                        return paginationService.registerList(null, stateParams, function() {
                             return children;
                         }, {
                             paginationId: 'kitUnpackList'

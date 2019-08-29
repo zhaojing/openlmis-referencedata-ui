@@ -58,7 +58,12 @@
             products = config ? config.products : undefined;
             selections = config && config.selections ? angular.copy(config.selections) : {};
 
-            $state.go('.addOrderables');
+            var stateParams = {};
+            stateParams.name = undefined;
+            stateParams.code = undefined;
+            $state.go('.addOrderables', stateParams, {
+                notify: false
+            });
 
             return deferred.promise;
         }
@@ -103,7 +108,9 @@
          * @return {promise}          the promise resolving to a list of selected products
          */
         function resolve() {
-            $state.go('^');
+            $state.go('^', {}, {
+                notify: false
+            });
             deferred.resolve(_.values(selections).filter(function(selection) {
                 return selection;
             }));
@@ -118,7 +125,9 @@
          * Rejects changes.
          */
         function reject() {
-            $state.go('^');
+            $state.go('^', {}, {
+                notify: false
+            });
             deferred.reject();
         }
     }

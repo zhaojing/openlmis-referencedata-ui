@@ -45,7 +45,12 @@ describe('selectProductsModalService', function() {
         it('it should redirect to .addOrderables state', function() {
             this.selectProductsModalService.show(this.config);
 
-            expect(this.$state.go).toHaveBeenCalledWith('.addOrderables');
+            expect(this.$state.go).toHaveBeenCalledWith('.addOrderables', {
+                code: undefined,
+                name: undefined
+            }, {
+                notify: false
+            });
         });
 
         it('it should return selections if any product is selected', function() {
@@ -85,7 +90,12 @@ describe('selectProductsModalService', function() {
             this.selectProductsModalService.resolve();
             this.$rootScope.$apply();
 
-            expect(this.$state.go).toHaveBeenCalledWith('^');
+            expect(this.$state.go).toHaveBeenCalledWith('^', {
+                code: undefined,
+                name: undefined
+            }, {
+                notify: false
+            });
         });
 
     });
@@ -99,7 +109,12 @@ describe('selectProductsModalService', function() {
             this.selectProductsModalService.reject();
             this.$rootScope.$apply();
 
-            expect(this.$state.go).toHaveBeenCalledWith('^');
+            expect(this.$state.go).toHaveBeenCalledWith('^', {
+                code: undefined,
+                name: undefined
+            }, {
+                notify: false
+            });
         });
 
     });

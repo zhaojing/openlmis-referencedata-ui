@@ -138,7 +138,8 @@ describe('selectProductsModalStateProvider', function() {
         it('should set params', function() {
             expect(this.config.params.addOrderablesPage).toBeUndefined();
             expect(this.config.params.addOrderablesSize).toBeUndefined();
-            expect(this.config.params.search).toBeUndefined();
+            expect(this.config.params.name).toBeUndefined();
+            expect(this.config.params.code).toBeUndefined();
         });
 
         it('should resolve external as false if no orderables provided', function() {
@@ -169,11 +170,13 @@ describe('selectProductsModalStateProvider', function() {
         });
 
         it('should resolve orderables', function() {
-            this.searchText = 'some search text';
+            this.nameParam = 'Product';
+            this.codeParam = 'C100';
             this.$state.params = {
                 page: 0,
                 size: 10,
-                search: this.searchText
+                name: this.nameParam,
+                code: this.codeParam
             };
 
             this.selectProductsModalService.getOrderables.andReturn();
@@ -187,7 +190,8 @@ describe('selectProductsModalStateProvider', function() {
                 sort: 'fullProductName,asc',
                 page: 0,
                 size: 10,
-                search: this.searchText
+                name: this.nameParam,
+                code: this.codeParam
             });
         });
 

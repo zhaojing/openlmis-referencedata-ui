@@ -50,8 +50,8 @@
             vm.orderables = orderables;
             vm.selections = selectProductsModalService.getSelections();
             vm.external = external;
-            vm.searchText = $stateParams.search;
-            vm.filteredOrderables = filterOrderables(orderables, $stateParams.search);
+            vm.code = $stateParams.code;
+            vm.name = $stateParams.name;
         }
 
         /**
@@ -63,32 +63,13 @@
          * Refreshes the product list so the add product dialog box shows only relevant products.
          */
         function search() {
-            $state.go('.', _.extend({}, $stateParams, {
-                search: vm.searchText
-            }));
-        }
-
-        function filterOrderables(orderables, searchText) {
-            if (searchText) {
-                return orderables.filter(searchByCodeAndName);
-            }
-            return orderables;
-
-        }
-
-        function searchByCodeAndName(orderable) {
-            var searchText = vm.searchText.toLowerCase();
-            var foundInFullProductName;
-            var foundInProductCode;
-
-            if (orderable.productCode !== undefined) {
-                foundInProductCode = orderable.productCode.toLowerCase().startsWith(searchText);
-            }
-
-            if (orderable.fullProductName !== undefined) {
-                foundInFullProductName = orderable.fullProductName.toLowerCase().contains(searchText);
-            }
-            return foundInFullProductName || foundInProductCode;
+            var stateParams = angular.copy($stateParams);
+            stateParams.code = vm.code;
+            stateParams.name = vm.name;
+            $state.go('.', stateParams, {
+                reload: $state.$current.name,
+                notify: false
+            });
         }
 
     }

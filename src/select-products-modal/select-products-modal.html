@@ -7,13 +7,16 @@
             <div class="modal-body">
                 <form id="productForm" ng-submit="vm.selectProducts()">
                     <fieldset class="form-group">
-                        <label for="search">
-                            {{'selectProductsModal.searchProduct' | message}}
+                        <label for="searchByName">
+                            {{'selectProductsModal.productName' | message}}
                         </label>
-                        <input type="text" id="search" name="search" ng-model="vm.searchText"
-                               ng-change="vm.search()"/>
-                        <p class="note">{{'selectProductsModal.searchByCodeInfo' | message}}</p>                               
+                        <input type="text" id="searchByName" name="searchByName" ng-model="vm.name"/>
+                        <label for="searchByCode">
+                            {{'selectProductsModal.productCode' | message}}
+                        </label>
+                        <input type="text" id="searchByCode" name="searchByCode" ng-model="vm.code"/>
                     </fieldset>
+                    <input id="search" type="button" ng-click="vm.search()" value="{{'selectProductsModal.searchProduct' | message}}"/>
                     <br/>
                     <div class="openlmis-table-container">
                         <table>
@@ -35,7 +38,7 @@
                             </tbody>
                         </table>
                         <openlmis-pagination pagination-id="'addOrderables'" ng-if="vm.external"/>
-                        <openlmis-pagination pagination-id="'addOrderables'" ng-if="!vm.external" list="vm.filteredOrderables" paged-list="vm.orderablesPage"/>
+                        <openlmis-pagination pagination-id="'addOrderables'" ng-if="!vm.external" list="vm.orderables" paged-list="vm.orderablesPage"/>
                     </div>
                 </form>
             </div>

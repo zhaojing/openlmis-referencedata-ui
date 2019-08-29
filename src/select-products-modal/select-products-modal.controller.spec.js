@@ -95,10 +95,18 @@ describe('SelectProductsModalController', function() {
             expect(this.vm.orderables).toEqual(this.orderables);
         });
 
-        it('should expose filteredOrderables', function() {
+        it('should expose code', function() {
+            this.$stateParams.code = 'C100';
             this.initController();
 
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
+            expect(this.vm.code).toEqual(this.$stateParams.code);
+        });
+
+        it('should expose name', function() {
+            this.$stateParams.name = 'Product';
+            this.initController();
+
+            expect(this.vm.name).toEqual(this.$stateParams.name);
         });
 
         it('should expose this.selectProductsModalService.reject method', function() {
@@ -119,93 +127,6 @@ describe('SelectProductsModalController', function() {
             expect(this.vm.selections).toEqual(this.selections);
         });
 
-        it('should show all for empty filter', function() {
-            this.$stateParams.search = '';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
-        });
-
-        it('should show all for undefined', function() {
-            this.$stateParams.search = undefined;
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
-        });
-
-        it('should show all for null', function() {
-            this.$stateParams.search = null;
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual(this.orderables);
-        });
-
-        it('should only return codes starting with the search text', function() {
-            this.$stateParams.search = 'Ps';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([this.orderables[1]]);
-
-            this.$stateParams.search = '1';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([]);
-        });
-
-        it('should only return defined full product name', function() {
-            this.$stateParams.search = 'mC1';
-
-            this.initController();
-
-            expect(this.orderables[4].withFullProductName).toBeUndefined();
-        });
-
-        it('should only return defined product codes', function() {
-            this.$stateParams.search = 'mC1';
-
-            this.initController();
-
-            expect(this.orderables[4].withProductCode).toBeUndefined();
-        });
-
-        it('should return result for search text of both product codes and full product name', function() {
-            this.$stateParams.search = 'co';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([this.orderables[5], this.orderables[6]]);
-
-        });
-
-        it('should return empty list if no matches found', function() {
-            this.$stateParams.search = 'po';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([]);
-
-        });
-
-        it('should return result with either product code or full product name', function() {
-            this.$stateParams.search = 'ame';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables).toEqual([this.orderables[8]]);
-
-            this.$stateParams.search = 'disp';
-
-            this.initController();
-
-            expect(this.vm.filteredOrderables[0].fullProductName).toBeDefined();
-            expect(this.vm.filteredOrderables[0].productCode).toBeUndefined();
-        });
-
     });
 
     describe('search', function() {
@@ -213,12 +134,17 @@ describe('SelectProductsModalController', function() {
         it('should reload the state', function() {
             this.initController();
 
-            this.vm.searchText = 'new search';
+            this.vm.code = 'C100';
+            this.vm.name = 'Levora';
 
             this.vm.search();
 
             expect(this.$state.go).toHaveBeenCalledWith('.', {
-                search: 'new search'
+                code: 'C100',
+                name: 'Levora'
+            }, {
+                reload: '',
+                notify: false
             });
         });
 
