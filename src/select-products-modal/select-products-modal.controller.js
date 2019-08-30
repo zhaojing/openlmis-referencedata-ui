@@ -50,8 +50,8 @@
             vm.orderables = orderables;
             vm.selections = selectProductsModalService.getSelections();
             vm.external = external;
-            vm.code = $stateParams.code;
-            vm.name = $stateParams.name;
+            vm.code = $stateParams.productCode;
+            vm.name = $stateParams.productName;
         }
 
         /**
@@ -65,8 +65,8 @@
          */
         function search() {
             var stateParams = angular.copy($stateParams);
-            stateParams.code = vm.code;
-            stateParams.name = vm.name;
+            stateParams.productCode = vm.code;
+            stateParams.productName = vm.name;
             $state.go('.', stateParams, {
                 reload: $state.$current.name,
                 notify: false

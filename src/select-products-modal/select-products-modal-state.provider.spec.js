@@ -138,8 +138,8 @@ describe('selectProductsModalStateProvider', function() {
         it('should set params', function() {
             expect(this.config.params.addOrderablesPage).toBeUndefined();
             expect(this.config.params.addOrderablesSize).toBeUndefined();
-            expect(this.config.params.name).toBeUndefined();
-            expect(this.config.params.code).toBeUndefined();
+            expect(this.config.params.productName).toBeUndefined();
+            expect(this.config.params.productCode).toBeUndefined();
         });
 
         it('should resolve external as false if no orderables provided', function() {
@@ -175,8 +175,8 @@ describe('selectProductsModalStateProvider', function() {
             this.$state.params = {
                 page: 0,
                 size: 10,
-                name: this.nameParam,
-                code: this.codeParam
+                productName: this.nameParam,
+                productCode: this.codeParam
             };
 
             this.selectProductsModalService.getOrderables.andReturn();

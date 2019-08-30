@@ -183,6 +183,8 @@
                 resolve: {
                     children: function($stateParams, children, paginationService) {
                         var stateParams = angular.copy($stateParams);
+                        stateParams.productName = undefined;
+                        stateParams.productCode = undefined;
                         stateParams.name = undefined;
                         stateParams.code = undefined;
 

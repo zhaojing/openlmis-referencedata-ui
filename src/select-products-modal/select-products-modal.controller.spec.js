@@ -96,17 +96,17 @@ describe('SelectProductsModalController', function() {
         });
 
         it('should expose code', function() {
-            this.$stateParams.code = 'C100';
+            this.$stateParams.productCode = 'C100';
             this.initController();
 
-            expect(this.vm.code).toEqual(this.$stateParams.code);
+            expect(this.vm.code).toEqual(this.$stateParams.productCode);
         });
 
         it('should expose name', function() {
-            this.$stateParams.name = 'Product';
+            this.$stateParams.productName = 'Product';
             this.initController();
 
-            expect(this.vm.name).toEqual(this.$stateParams.name);
+            expect(this.vm.name).toEqual(this.$stateParams.productName);
         });
 
         it('should expose this.selectProductsModalService.reject method', function() {
@@ -140,8 +140,8 @@ describe('SelectProductsModalController', function() {
             this.vm.search();
 
             expect(this.$state.go).toHaveBeenCalledWith('.', {
-                code: 'C100',
-                name: 'Levora'
+                productCode: 'C100',
+                productName: 'Levora'
             }, {
                 reload: '',
                 notify: false

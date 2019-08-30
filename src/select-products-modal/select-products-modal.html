@@ -5,46 +5,45 @@
                 <h4>{{'selectProductsModal.addProducts' | message}}</h4>
             </div>
             <div class="modal-body">
-                <form id="productForm" ng-submit="vm.selectProducts()">
-                    <fieldset class="form-group">
-                        <label for="searchByName">
-                            {{'selectProductsModal.productName' | message}}
-                        </label>
-                        <input type="text" id="searchByName" name="searchByName" ng-model="vm.name"/>
-                        <label for="searchByCode">
-                            {{'selectProductsModal.productCode' | message}}
-                        </label>
-                        <input type="text" id="searchByCode" name="searchByCode" ng-model="vm.code"/>
-                    </fieldset>
-                    <input id="search" type="button" ng-click="vm.search()" value="{{'selectProductsModal.searchProduct' | message}}"/>
-                    <br/>
-                    <div class="openlmis-table-container">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>{{'selectProductsModal.select' | message}}</th>
-                                <th>{{'selectProductsModal.code' | message}}</th>
-                                <th>{{'selectProductsModal.product' | message}}</th>
-                                <th>{{'selectProductsModal.uoi' | message}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="orderable in (vm.external ? vm.orderables : vm.orderablesPage)">
-                                <td><input type="checkbox" ng-model="vm.selections[orderable.id]" ng-true-value="{{orderable}}"/></td>
-                                <td>{{orderable.productCode}}</td>
-                                <td>{{orderable.fullProductName}}</td>
-                                <td>{{orderable.dispensable.displayUnit}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <openlmis-pagination pagination-id="'addOrderables'" ng-if="vm.external"/>
-                        <openlmis-pagination pagination-id="'addOrderables'" ng-if="!vm.external" list="vm.orderables" paged-list="vm.orderablesPage"/>
-                    </div>
-                </form>
+                <div class="openlmis-table-container">
+                    <form ng-submit="vm.search()">
+                        <fieldset class="form-group">
+                            <label for="searchByName">
+                                {{'selectProductsModal.productName' | message}}
+                            </label>
+                            <input type="text" id="searchByName" name="searchByName" ng-model="vm.name"/>
+                            <label for="searchByCode">
+                                {{'selectProductsModal.productCode' | message}}
+                            </label>
+                            <input type="text" id="searchByCode" name="searchByCode" ng-model="vm.code"/>
+                        </fieldset>
+                        <input type="submit" value="{{'selectProductsModal.search' | message}}"/>
+                    </form>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>{{'selectProductsModal.select' | message}}</th>
+                            <th>{{'selectProductsModal.code' | message}}</th>
+                            <th>{{'selectProductsModal.product' | message}}</th>
+                            <th>{{'selectProductsModal.uoi' | message}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="orderable in (vm.external ? vm.orderables : vm.orderablesPage)">
+                            <td><input type="checkbox" ng-model="vm.selections[orderable.id]" ng-true-value="{{orderable}}"/></td>
+                            <td>{{orderable.productCode}}</td>
+                            <td>{{orderable.fullProductName}}</td>
+                            <td>{{orderable.dispensable.displayUnit}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <openlmis-pagination pagination-id="'addOrderables'" ng-if="vm.external"/>
+                    <openlmis-pagination pagination-id="'addOrderables'" ng-if="!vm.external" list="vm.orderables" paged-list="vm.orderablesPage"/>
+                </div>
             </div>
             <div class="modal-footer">
                     <button id="cancel" ng-click="vm.close()">{{'selectProductsModal.cancel' | message}}</button>
-                    <button class="primary" type="submit" form="productForm">{{'selectProductsModal.addProducts' | message}}</button>
+                    <button class="primary" ng-click="vm.selectProducts()">{{'selectProductsModal.addProducts' | message}}</button>
             </div>
         </div>
     </div>

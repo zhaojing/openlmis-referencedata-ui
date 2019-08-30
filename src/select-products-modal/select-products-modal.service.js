@@ -59,8 +59,8 @@
             selections = config && config.selections ? angular.copy(config.selections) : {};
 
             var stateParams = {};
-            stateParams.name = undefined;
-            stateParams.code = undefined;
+            stateParams.productName = undefined;
+            stateParams.productCode = undefined;
             $state.go('.addOrderables', stateParams, {
                 notify: false
             });
