@@ -60,7 +60,8 @@
          * @name search
          *
          * @description
-         * Refreshes the product list so the add product dialog box shows only relevant products.
+         * Refreshes the product list so the add product dialog box shows only relevant products
+         * without reloading parent state.
          */
         function search() {
             var stateParams = angular.copy($stateParams);

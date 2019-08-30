@@ -47,7 +47,7 @@
          * @name show
          *
          * @description
-         * Opens a modal responsible for selecting products.
+         * Opens a modal responsible for selecting products and cleans out searching.
          *
          * @param  {Array}   products the list of available products
          * @return {promise}          the promise resolving to a list of selected products
@@ -102,7 +102,7 @@
          * @name resolve
          *
          * @description
-         * Resolves selected products.
+         * Resolves selected products. Returns to the parent state without reloading it.
          *
          * @param  {Array}   products the list of available products
          * @return {promise}          the promise resolving to a list of selected products
@@ -122,7 +122,7 @@
          * @name reject
          *
          * @description
-         * Rejects changes.
+         * Rejects changes. Returns to the parent state without reloading it.
          */
         function reject() {
             $state.go('^', {}, {
