@@ -63,10 +63,6 @@ describe('openlmis.administration.requisitionGroupList', function() {
 
         this.objectMapper = new this.ObjectMapper();
 
-        spyOn(this.requisitionGroupService, 'search')
-            .andReturn(this.$q.resolve(new this.PageDataBuilder()
-                .withContent(this.requisitionGroups)
-                .build()));
         spyOn(this.programService, 'getAll').andReturn(this.$q.resolve(this.programs));
         spyOn(this.geographicZoneService, 'getAll')
             .andReturn(this.$q.resolve(new this.PageDataBuilder()
@@ -86,6 +82,11 @@ describe('openlmis.administration.requisitionGroupList', function() {
     describe('state', function() {
 
         it('should be available under "/administration/requisitionGroups" URI', function() {
+            spyOn(this.requisitionGroupService, 'search')
+                .andReturn(this.$q.resolve(new this.PageDataBuilder()
+                    .withContent(this.requisitionGroups)
+                    .build()));
+
             expect(this.$state.current.name).not.toEqual('openlmis.administration.requisitionGroupList');
 
             this.goToUrl('/administration/requisitionGroups');
@@ -94,6 +95,11 @@ describe('openlmis.administration.requisitionGroupList', function() {
         });
 
         it('should use template', function() {
+            spyOn(this.requisitionGroupService, 'search')
+                .andReturn(this.$q.resolve(new this.PageDataBuilder()
+                    .withContent(this.requisitionGroups)
+                    .build()));
+
             this.goToUrl('/administration/requisitionGroups');
 
             expect(this.$templateCache.get)
@@ -101,6 +107,11 @@ describe('openlmis.administration.requisitionGroupList', function() {
         });
 
         it('should resolve geographicZones', function() {
+            spyOn(this.requisitionGroupService, 'search')
+                .andReturn(this.$q.resolve(new this.PageDataBuilder()
+                    .withContent(this.requisitionGroups)
+                    .build()));
+
             this.goToUrl('/administration/requisitionGroups');
 
             expect(this.getResolvedValue('geographicZones')).toEqual(this.geographicZones);
@@ -108,6 +119,11 @@ describe('openlmis.administration.requisitionGroupList', function() {
         });
 
         it('should resolve programs', function() {
+            spyOn(this.requisitionGroupService, 'search')
+                .andReturn(this.$q.resolve(new this.PageDataBuilder()
+                    .withContent(this.requisitionGroups)
+                    .build()));
+
             this.goToUrl('/administration/requisitionGroups');
 
             expect(this.getResolvedValue('programs')).toEqual(this.programs);
@@ -115,6 +131,11 @@ describe('openlmis.administration.requisitionGroupList', function() {
         });
 
         it('should resolve facilitiesMap', function() {
+            spyOn(this.requisitionGroupService, 'search')
+                .andReturn(this.$q.resolve(new this.PageDataBuilder()
+                    .withContent(this.requisitionGroups)
+                    .build()));
+
             var facilitiesMap = this.objectMapper.map(this.facilities);
 
             this.goToUrl('/administration/requisitionGroups');
@@ -126,6 +147,19 @@ describe('openlmis.administration.requisitionGroupList', function() {
                 size: 1
             });
         });
+
+        it('should not resolve facilitiesMap if requisition groups is empty', function() {
+            spyOn(this.requisitionGroupService, 'search')
+                .andReturn(this.$q.resolve(new this.PageDataBuilder()
+                    .withContent([])
+                    .build()));
+
+            this.goToUrl('/administration/requisitionGroups');
+
+            expect(this.getResolvedValue('facilitiesMap')).toEqual([]);
+            expect(this.FacilityResource.prototype.query).not.toHaveBeenCalled();
+        });
+
     });
 
     function goToUrl(url) {
