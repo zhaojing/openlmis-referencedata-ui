@@ -58,9 +58,6 @@
                 },
                 facilitiesMap: function(requisitionGroups, FacilityResource, ObjectMapper,
                     OpenlmisArrayDecorator) {
-                    if (requisitionGroups.length === 0) {
-                        return [];
-                    }
 
                     var facilityIds = requisitionGroups.map(function(group) {
                         if (group.supervisoryNode && group.supervisoryNode.facility) {
@@ -73,6 +70,9 @@
                     });
 
                     var uniqueFacilities =  new OpenlmisArrayDecorator(facilityIds).getUnique();
+                    if (uniqueFacilities.length === 0) {
+                        return [];
+                    }
 
                     return new FacilityResource()
                         .query({
