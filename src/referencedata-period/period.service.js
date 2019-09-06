@@ -28,16 +28,20 @@
         .module('referencedata-period')
         .service('periodService', service);
 
-    service.$inject = ['$resource', 'referencedataUrlFactory', 'dateUtils'];
+    service.$inject = ['$q', '$resource', 'referencedataUrlFactory', 'dateUtils', 'offlineService',
+        'localStorageFactory', 'ProcessingPeriodResource'];
 
-    function service($resource, referencedataUrlFactory, dateUtils) {
+    function service($q, $resource, referencedataUrlFactory, dateUtils, offlineService,
+                     localStorageFactory, ProcessingPeriodResource) {
 
-        var resource = $resource(referencedataUrlFactory('/api/processingPeriods/:id'), {}, {
-            query: {
-                method: 'GET',
-                isArray: false
-            }
-        });
+        var periodsOffline = localStorageFactory('processingPeriods'),
+            periodsPromise,
+            resource = $resource(referencedataUrlFactory('/api/processingPeriods/:id'), {}, {
+                query: {
+                    method: 'GET',
+                    isArray: false
+                }
+            });
 
         this.get = get;
         this.query = query;
@@ -55,9 +59,23 @@
          * @return {Promise}          Period
          */
         function get(periodId) {
-            return resource.get({
-                id: periodId
-            }).$promise;
+            if (periodsPromise) {
+                return periodsPromise;
+            }
+
+            var cachedPeriod = periodsOffline.getBy('id', periodId);
+
+            if (cachedPeriod) {
+                periodsPromise = $q.resolve(angular.fromJson(cachedPeriod));
+            } else {
+                periodsPromise = new ProcessingPeriodResource().get(periodId)
+                    .then(function(period) {
+                        periodsOffline.put(period);
+                        return $q.resolve(period);
+                    });
+            }
+
+            return periodsPromise;
         }
 
         /**

@@ -16,7 +16,20 @@
 describe('periodService', function() {
 
     beforeEach(function() {
-        module('referencedata-period');
+        this.offlineService = jasmine.createSpyObj('offlineService', ['isOffline', 'checkConnection']);
+        this.periodsStorage = jasmine.createSpyObj('periodsStorage', ['getBy', 'getAll', 'put', 'search']);
+
+        var offlineService = this.offlineService,
+            periodsStorage = this.periodsStorage;
+        module('referencedata-period', function($provide) {
+            $provide.service('localStorageFactory', function() {
+                return jasmine.createSpy('localStorageFactory').andReturn(periodsStorage);
+            });
+
+            $provide.service('offlineService', function() {
+                return offlineService;
+            });
+        });
 
         inject(function($injector) {
             this.$httpBackend = $injector.get('$httpBackend');
@@ -26,7 +39,10 @@ describe('periodService', function() {
             this.periodService = $injector.get('periodService');
             this.PeriodDataBuilder = $injector.get('PeriodDataBuilder');
             this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.$q = $injector.get('$q');
         });
+
+        this.offlineService.isOffline.andReturn(false);
 
         this.period = new this.PeriodDataBuilder().build();
 
@@ -42,7 +58,20 @@ describe('periodService', function() {
 
     describe('get', function() {
 
-        it('should get processing schedule by id', function() {
+        it('should get processing period by id from storage while offline', function() {
+            this.periodsStorage.getBy.andReturn(this.period);
+            this.offlineService.isOffline.andReturn(true);
+
+            var result;
+            this.periodService.get(this.period.id).then(function(period) {
+                result = period;
+            });
+            this.$rootScope.$apply();
+
+            expect(angular.toJson(result)).toBe(angular.toJson(this.period));
+        });
+
+        it('should get processing period by id and save it to storage', function() {
 
             this.$httpBackend
                 .expectGET(this.referencedataUrlFactory('/api/processingPeriods/' + this.period.id))
@@ -58,6 +87,7 @@ describe('periodService', function() {
             this.$rootScope.$apply();
 
             expect(angular.toJson(result)).toEqual(angular.toJson(this.period));
+            expect(this.periodsStorage.put).toHaveBeenCalled();
         });
     });
 

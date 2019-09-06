@@ -100,10 +100,9 @@ describe('facilityService', function() {
                 .respond(200, this.facilityOne);
 
             var result;
-            this.facilityService.get(this.facilityOne.id)
-                .then(function(facility) {
-                    result = facility;
-                });
+            this.facilityService.get(this.facilityOne.id).then(function(facility) {
+                result = facility;
+            });
             this.$httpBackend.flush();
             this.$rootScope.$apply();
 

@@ -30,13 +30,14 @@
 
     service.$inject = [
         '$q', '$resource', 'referencedataUrlFactory', 'offlineService',
-        'localStorageFactory', 'permissionService'
+        'localStorageFactory', 'permissionService', 'FacilityResource'
     ];
 
     function service($q, $resource, referencedataUrlFactory, offlineService,
-                     localStorageFactory, permissionService) {
+                     localStorageFactory, permissionService, FacilityResource) {
 
         var facilitiesOffline = localStorageFactory('facilities'),
+            facilitiesPromise,
             resource = $resource(referencedataUrlFactory('/api/facilities/:id'), {}, {
                 query: {
                     url: referencedataUrlFactory('/api/facilities/'),
@@ -68,36 +69,35 @@
         this.search = search;
 
         /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name get
-             *
-             * @description
-             * Retrieves facility by id. When user is offline it gets facility from offline storage.
-             * If user is online it stores facility into offline storage.
-             *
-             * @param  {String}  facilityId Facility UUID
-             * @return {Promise}            facility promise
-             */
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name get
+         *
+         * @description
+         * Retrieves facility by id. When user is offline it gets facility from offline storage.
+         * If user is online it stores facility into offline storage.
+         *
+         * @param  {String}  facilityId Facility UUID
+         * @return {Promise}            facility promise
+         */
         function get(facilityId) {
-            var facility,
-                deferred = $q.defer();
-
-            if (offlineService.isOffline()) {
-                facility = facilitiesOffline.getBy('id', facilityId);
-                facility ? deferred.resolve(facility) : deferred.reject();
-            } else {
-                resource.get({
-                    id: facilityId
-                }, function(data) {
-                    facilitiesOffline.put(data);
-                    deferred.resolve(data);
-                }, function() {
-                    deferred.reject();
-                });
+            if (facilitiesPromise) {
+                return facilitiesPromise;
             }
 
-            return deferred.promise;
+            var cachedFacility = facilitiesOffline.getBy('id', facilityId);
+
+            if (cachedFacility) {
+                facilitiesPromise = $q.resolve(angular.fromJson(cachedFacility));
+            } else {
+                facilitiesPromise = new FacilityResource().get(facilityId)
+                    .then(function(facility) {
+                        facilitiesOffline.put(facility);
+                        return $q.resolve(facility);
+                    });
+            }
+
+            return facilitiesPromise;
         }
 
         /**
@@ -128,49 +128,49 @@
         }
 
         /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name search
-             *
-             * @description
-             * Searches facilities using given parameters.
-             *
-             * @param  {Object}  paginationParams the pagination parameters
-             * @param  {Object}  queryParams      the search parameters
-             * @return {Promise}                  the requested page of filtered facilities.
-             */
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name search
+         *
+         * @description
+         * Searches facilities using given parameters.
+         *
+         * @param  {Object}  paginationParams the pagination parameters
+         * @param  {Object}  queryParams      the search parameters
+         * @return {Promise}                  the requested page of filtered facilities.
+         */
         function search(paginationParams, queryParams) {
             return resource.search(paginationParams, queryParams).$promise;
         }
 
         /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name getFulfillmentFacilities
-             *
-             * @description
-             * Returns user fulfillment facilities.
-             *
-             * @param  {Object}  params the request params with userId and right id
-             * @return {Promise}        fulfillment facilities for given user and right
-             */
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name getFulfillmentFacilities
+         *
+         * @description
+         * Returns user fulfillment facilities.
+         *
+         * @param  {Object}  params the request params with userId and right id
+         * @return {Promise}        fulfillment facilities for given user and right
+         */
         function getFulfillmentFacilities(params) {
             return resource.getFulfillmentFacilities(params).$promise;
         }
 
         /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name getUserFacilitiesForRight
-             *
-             * @description
-             * Returns all facilities that a user has a permission with the given
-             * right for.
-             *
-             * @param  {String}  userId The user's id that we are checking
-             * @param  {String}  right  The right name that we are checking
-             * @return {Promise}        An array of matching facilities.
-             */
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name getUserFacilitiesForRight
+         *
+         * @description
+         * Returns all facilities that a user has a permission with the given
+         * right for.
+         *
+         * @param  {String}  userId The user's id that we are checking
+         * @param  {String}  right  The right name that we are checking
+         * @return {Promise}        An array of matching facilities.
+         */
         function getUserFacilitiesForRight(userId, right) {
             if (!userId || !right) {
                 return $q.reject();
@@ -219,16 +219,16 @@
         }
 
         /**
-             * @ngdoc method
-             * @methodOf referencedata-facility.facilityService
-             * @name getAllMinimal
-             *
-             * @description
-             * Retrieves all facilities with id and name fields.
-             *
-             * @param  {Object}  paginationParams the pagination params: page, size, sort
-             * @return {Promise} Array of facilities with minimal representation
-             */
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name getAllMinimal
+         *
+         * @description
+         * Retrieves all facilities with id and name fields.
+         *
+         * @param  {Object}  paginationParams the pagination params: page, size, sort
+         * @return {Promise} Array of facilities with minimal representation
+         */
         function getAllMinimal(paginationParams) {
             var params = (paginationParams) ? paginationParams : {};
             if (!params.hasOwnProperty('sort')) {
