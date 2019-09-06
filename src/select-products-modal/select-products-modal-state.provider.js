@@ -72,15 +72,21 @@
                         addOrderablesPage: undefined,
                         addOrderablesSize: undefined,
                         productName: undefined,
-                        productCode: undefined
+                        productCode: undefined,
+                        search: undefined
                     },
                     resolve: {
                         external: function(selectProductsModalService) {
                             return !selectProductsModalService.getOrderables();
                         },
+                        isUnpackKitState: function($q, $state) {
+                            return $state.$current.name
+                                === 'openlmis.administration.orderables.edit.kitUnpackList.edit.addOrderables';
+                        },
                         orderables: function(OrderableResource, paginationService, $stateParams,
-                            selectProductsModalService) {
-                            var orderables = selectProductsModalService.getOrderables();
+                            selectProductsModalService, isUnpackKitState) {
+                            var orderables = selectProductsModalService.getOrderables(),
+                                params;
 
                             if (orderables) {
                                 return paginationService.registerList(undefined, $stateParams, function() {
@@ -89,14 +95,24 @@
                                     paginationId: 'addOrderables'
                                 });
                             }
-                            return paginationService.registerUrl($stateParams, function(stateParams) {
-                                return new OrderableResource().query({
+                            if (isUnpackKitState) {
+                                params = {
                                     sort: 'fullProductName,asc',
-                                    page: stateParams.page,
-                                    size: stateParams.size,
-                                    code: stateParams.productCode,
-                                    name: stateParams.productName
-                                });
+                                    page: $stateParams.page,
+                                    size: $stateParams.size,
+                                    code: $stateParams.productCode,
+                                    name: $stateParams.productName
+                                };
+                            } else {
+                                params = {
+                                    sort: 'fullProductName,asc',
+                                    page: $stateParams.page,
+                                    size: $stateParams.size,
+                                    search: $stateParams.search
+                                };
+                            }
+                            return paginationService.registerUrl($stateParams, function() {
+                                return new OrderableResource().query(params);
                             }, {
                                 paginationId: 'addOrderables'
                             });

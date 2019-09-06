@@ -81,7 +81,8 @@ describe('SelectProductsModalController', function() {
                 modalDeferred: this.modalDeferred,
                 orderables: this.orderables,
                 external: this.external,
-                $stateParams: this.$stateParams
+                $stateParams: this.$stateParams,
+                isUnpackKitState: false
             });
             this.vm.$onInit();
         };
@@ -109,6 +110,12 @@ describe('SelectProductsModalController', function() {
             expect(this.vm.name).toEqual(this.$stateParams.productName);
         });
 
+        it('should expose filteredOrderables', function() {
+            this.initController();
+
+            expect(this.vm.filteredOrderables).toEqual(this.orderables);
+        });
+
         it('should expose this.selectProductsModalService.reject method', function() {
             this.initController();
 
@@ -127,15 +134,121 @@ describe('SelectProductsModalController', function() {
             expect(this.vm.selections).toEqual(this.selections);
         });
 
+        it('should show all for empty filter', function() {
+            this.$stateParams.search = '';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual(this.orderables);
+        });
+
+        it('should show all for undefined', function() {
+            this.$stateParams.search = undefined;
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual(this.orderables);
+        });
+
+        it('should show all for null', function() {
+            this.$stateParams.search = null;
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual(this.orderables);
+        });
+
+        it('should only return codes starting with the search text', function() {
+            this.$stateParams.search = 'Ps';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual([this.orderables[1]]);
+
+            this.$stateParams.search = '1';
+
+            this.initController();
+
+            expect(this.vm.filteredOrderables).toEqual([]);
+        });
+
+        it('should only return defined full product name', function() {
+            this.$stateParams.search = 'mC1';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.orderables[4].withFullProductName).toBeUndefined();
+        });
+
+        it('should only return defined product codes', function() {
+            this.$stateParams.search = 'mC1';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.orderables[4].withProductCode).toBeUndefined();
+        });
+
+        it('should return result for search text of both product codes and full product name', function() {
+            this.$stateParams.search = 'co';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual([this.orderables[5], this.orderables[6]]);
+
+        });
+
+        it('should return empty list if no matches found', function() {
+            this.$stateParams.search = 'po';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual([]);
+
+        });
+
+        it('should return result with either product code or full product name', function() {
+            this.$stateParams.search = 'ame';
+
+            this.initController();
+
+            this.vm.isUnpackKitState = true;
+
+            expect(this.vm.filteredOrderables).toEqual([this.orderables[8]]);
+
+            this.$stateParams.search = 'disp';
+
+            this.initController();
+
+            expect(this.vm.filteredOrderables[0].fullProductName).toBeDefined();
+            expect(this.vm.filteredOrderables[0].productCode).toBeUndefined();
+        });
+
     });
 
     describe('search', function() {
 
-        it('should reload the state', function() {
+        it('should reload state without notifying on unpack kit screen', function() {
             this.initController();
 
             this.vm.code = 'C100';
             this.vm.name = 'Levora';
+            this.vm.isUnpackKitState = true;
 
             this.vm.search();
 
@@ -145,6 +258,18 @@ describe('SelectProductsModalController', function() {
             }, {
                 reload: '',
                 notify: false
+            });
+        });
+
+        it('should reload every other state than unpack kit with search param', function() {
+            this.initController();
+
+            this.vm.searchText = 'new search';
+
+            this.vm.search();
+
+            expect(this.$state.go).toHaveBeenCalledWith('.', {
+                search: 'new search'
             });
         });
 

@@ -28,9 +28,11 @@
         .module('select-products-modal')
         .controller('SelectProductsModalController', controller);
 
-    controller.$inject = ['orderables', '$state', 'selectProductsModalService', 'external', '$stateParams'];
+    controller.$inject = ['orderables', '$state', 'selectProductsModalService', 'external', '$stateParams',
+        'isUnpackKitState'];
 
-    function controller(orderables, $state, selectProductsModalService, external, $stateParams) {
+    function controller(orderables, $state, selectProductsModalService, external, $stateParams,
+                        isUnpackKitState) {
         var vm = this;
 
         vm.$onInit = onInit;
@@ -52,6 +54,9 @@
             vm.external = external;
             vm.code = $stateParams.productCode;
             vm.name = $stateParams.productName;
+            vm.searchText = $stateParams.search;
+            vm.filteredOrderables = filterOrderables(orderables, $stateParams.search);
+            vm.isUnpackKitState = isUnpackKitState;
         }
 
         /**
@@ -64,13 +69,41 @@
          * without reloading parent state.
          */
         function search() {
-            var stateParams = angular.copy($stateParams);
-            stateParams.productCode = vm.code;
-            stateParams.productName = vm.name;
-            $state.go('.', stateParams, {
-                reload: $state.$current.name,
-                notify: false
-            });
+            if (vm.isUnpackKitState) {
+                var stateParams = angular.copy($stateParams);
+                stateParams.productCode = vm.code;
+                stateParams.productName = vm.name;
+                $state.go('.', stateParams, {
+                    reload: $state.$current.name,
+                    notify: false
+                });
+            } else {
+                $state.go('.', _.extend({}, $stateParams, {
+                    search: vm.searchText
+                }));
+            }
+        }
+
+        function filterOrderables(orderables, searchText) {
+            if (searchText) {
+                return orderables.filter(searchByCodeAndName);
+            }
+            return orderables;
+        }
+
+        function searchByCodeAndName(orderable) {
+            var searchText = vm.searchText.toLowerCase();
+            var foundInFullProductName;
+            var foundInProductCode;
+
+            if (orderable.productCode !== undefined) {
+                foundInProductCode = orderable.productCode.toLowerCase().startsWith(searchText);
+            }
+
+            if (orderable.fullProductName !== undefined) {
+                foundInFullProductName = orderable.fullProductName.toLowerCase().contains(searchText);
+            }
+            return foundInFullProductName || foundInProductCode;
         }
 
     }

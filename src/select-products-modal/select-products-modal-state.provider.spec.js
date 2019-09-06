@@ -169,7 +169,7 @@ describe('selectProductsModalStateProvider', function() {
             expect(this.selectProductsModalService.getOrderables).toHaveBeenCalled();
         });
 
-        it('should resolve orderables', function() {
+        it('should resolve matching orderables on unpack kit screen', function() {
             this.nameParam = 'Product';
             this.codeParam = 'C100';
             this.$state.params = {
@@ -182,7 +182,7 @@ describe('selectProductsModalStateProvider', function() {
             this.selectProductsModalService.getOrderables.andReturn();
 
             this.config.resolve.orderables(this.OrderableResource, this.paginationService,
-                this.$state.params, this.selectProductsModalService);
+                this.$state.params, this.selectProductsModalService, true);
 
             expect(this.selectProductsModalService.getOrderables).toHaveBeenCalled();
 
@@ -192,6 +192,29 @@ describe('selectProductsModalStateProvider', function() {
                 size: 10,
                 name: this.nameParam,
                 code: this.codeParam
+            });
+        });
+
+        it('should resolve matching orderables on any screen except unpack kit', function() {
+            this.search = 'search text';
+            this.$state.params = {
+                page: 0,
+                size: 10,
+                search: this.search
+            };
+
+            this.selectProductsModalService.getOrderables.andReturn();
+
+            this.config.resolve.orderables(this.OrderableResource, this.paginationService,
+                this.$state.params, this.selectProductsModalService, false);
+
+            expect(this.selectProductsModalService.getOrderables).toHaveBeenCalled();
+
+            expect(this.OrderableResource.prototype.query).toHaveBeenCalledWith({
+                sort: 'fullProductName,asc',
+                page: 0,
+                size: 10,
+                search: this.search
             });
         });
 
