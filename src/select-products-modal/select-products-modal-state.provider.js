@@ -79,9 +79,8 @@
                         external: function(selectProductsModalService) {
                             return !selectProductsModalService.getOrderables();
                         },
-                        isUnpackKitState: function($q, $state) {
-                            return $state.$current.name
-                                === 'openlmis.administration.orderables.edit.kitUnpackList.edit.addOrderables';
+                        isUnpackKitState: function() {
+                            return stateName === 'openlmis.administration.orderables.edit.kitUnpackList.edit';
                         },
                         orderables: function(OrderableResource, paginationService, $stateParams,
                             selectProductsModalService, isUnpackKitState) {
