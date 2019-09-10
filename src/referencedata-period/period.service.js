@@ -28,10 +28,10 @@
         .module('referencedata-period')
         .service('periodService', service);
 
-    service.$inject = ['$q', '$resource', 'referencedataUrlFactory', 'dateUtils', 'offlineService',
+    service.$inject = ['$q', '$resource', 'referencedataUrlFactory', 'dateUtils', 'localStorageService',
         'localStorageFactory', 'ProcessingPeriodResource'];
 
-    function service($q, $resource, referencedataUrlFactory, dateUtils, offlineService,
+    function service($q, $resource, referencedataUrlFactory, dateUtils, localStorageService,
                      localStorageFactory, ProcessingPeriodResource) {
 
         var periodsOffline = localStorageFactory('processingPeriods'),
@@ -46,6 +46,7 @@
         this.get = get;
         this.query = query;
         this.create = create;
+        this.clearProcessingPeriodsCache = clearProcessingPeriodsCache;
 
         /**
          * @ngdoc method
@@ -108,6 +109,19 @@
             period.startDate = dateUtils.toStringDate(period.startDate);
             period.endDate = dateUtils.toStringDate(period.endDate);
             return resource.save(period).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-period.periodService
+         * @name clearProcessingPeriodsCache
+         *
+         * @description
+         * Deletes processing periods stored in the browser cache.
+         */
+        function clearProcessingPeriodsCache() {
+            periodsPromise = undefined;
+            localStorageService.remove('processingPeriods');
         }
     }
 })();

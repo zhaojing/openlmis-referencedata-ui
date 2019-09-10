@@ -30,11 +30,11 @@
 
     service.$inject = [
         '$q', '$resource', 'referencedataUrlFactory', 'offlineService',
-        'localStorageFactory', 'permissionService', 'FacilityResource'
+        'localStorageFactory', 'permissionService', 'FacilityResource', 'localStorageService'
     ];
 
     function service($q, $resource, referencedataUrlFactory, offlineService,
-                     localStorageFactory, permissionService, FacilityResource) {
+                     localStorageFactory, permissionService, FacilityResource, localStorageService) {
 
         var facilitiesOffline = localStorageFactory('facilities'),
             facilitiesPromise,
@@ -67,6 +67,7 @@
         this.getUserFacilitiesForRight = getUserFacilitiesForRight;
         this.getFulfillmentFacilities = getFulfillmentFacilities;
         this.search = search;
+        this.clearFacilitiesCache = clearFacilitiesCache;
 
         /**
          * @ngdoc method
@@ -237,6 +238,19 @@
             return resource.getAllMinimal(params).$promise.then(function(response) {
                 return response.content;
             });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-facility.facilityService
+         * @name clearFacilitiesCache
+         *
+         * @description
+         * Deletes facilities stored in the browser cache.
+         */
+        function clearFacilitiesCache() {
+            facilitiesPromise = undefined;
+            localStorageService.remove('facilities');
         }
     }
 })();
