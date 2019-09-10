@@ -60,10 +60,6 @@
          * @return {Promise}          Period
          */
         function get(periodId) {
-            if (periodsPromise) {
-                return periodsPromise;
-            }
-
             var cachedPeriod = periodsOffline.getBy('id', periodId);
 
             if (cachedPeriod) {

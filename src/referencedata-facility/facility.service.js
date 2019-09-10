@@ -82,10 +82,6 @@
          * @return {Promise}            facility promise
          */
         function get(facilityId) {
-            if (facilitiesPromise) {
-                return facilitiesPromise;
-            }
-
             var cachedFacility = facilitiesOffline.getBy('id', facilityId);
 
             if (cachedFacility) {
