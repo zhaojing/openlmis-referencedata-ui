@@ -84,8 +84,7 @@
                         },
                         orderables: function(OrderableResource, paginationService, $stateParams,
                             selectProductsModalService, isUnpackKitState) {
-                            var orderables = selectProductsModalService.getOrderables(),
-                                params;
+                            var orderables = selectProductsModalService.getOrderables();
 
                             if (orderables) {
                                 return paginationService.registerList(undefined, $stateParams, function() {
@@ -94,23 +93,24 @@
                                     paginationId: 'addOrderables'
                                 });
                             }
-                            if (isUnpackKitState) {
-                                params = {
-                                    sort: 'fullProductName,asc',
-                                    page: $stateParams.page,
-                                    size: $stateParams.size,
-                                    code: $stateParams.productCode,
-                                    name: $stateParams.productName
-                                };
-                            } else {
-                                params = {
-                                    sort: 'fullProductName,asc',
-                                    page: $stateParams.page,
-                                    size: $stateParams.size,
-                                    search: $stateParams.search
-                                };
-                            }
-                            return paginationService.registerUrl($stateParams, function() {
+                            return paginationService.registerUrl($stateParams, function(stateParams) {
+                                var params;
+                                if (isUnpackKitState) {
+                                    params = {
+                                        sort: 'fullProductName,asc',
+                                        page: stateParams.page,
+                                        size: stateParams.size,
+                                        code: stateParams.productCode,
+                                        name: stateParams.productName
+                                    };
+                                } else {
+                                    params = {
+                                        sort: 'fullProductName,asc',
+                                        page: stateParams.page,
+                                        size: stateParams.size,
+                                        search: stateParams.search
+                                    };
+                                }
                                 return new OrderableResource().query(params);
                             }, {
                                 paginationId: 'addOrderables'
