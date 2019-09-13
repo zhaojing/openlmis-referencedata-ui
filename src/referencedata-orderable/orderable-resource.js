@@ -31,7 +31,8 @@
 
         function OrderableResource() {
             this.super('/api/orderables', 'orderables', {
-                versioned: true
+                versioned: true,
+                offlineMessage: 'orderable.notCachedOfflineError'
             });
         }
 

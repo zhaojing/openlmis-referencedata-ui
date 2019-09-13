@@ -34,7 +34,8 @@ describe('FacilityTypeApprovedProductResource', function() {
         new this.FacilityTypeApprovedProductResource();
 
         expect(this.OpenlmisCachedResourceMock).toHaveBeenCalledWith('/api/facilityTypeApprovedProducts', 'FTAP', {
-            versioned: true
+            versioned: true,
+            offlineMessage: 'ftap.notCachedOfflineError'
         });
     });
 });

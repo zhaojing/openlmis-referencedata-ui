@@ -38,7 +38,8 @@
 
         function FacilityTypeApprovedProductResource() {
             this.super('/api/facilityTypeApprovedProducts', 'FTAP', {
-                versioned: true
+                versioned: true,
+                offlineMessage: 'ftap.notCachedOfflineError'
             });
         }
     }

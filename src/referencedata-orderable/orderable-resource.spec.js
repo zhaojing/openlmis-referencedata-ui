@@ -34,7 +34,8 @@ describe('OrderableResource', function() {
         new this.OrderableResource();
 
         expect(this.OpenlmisCachedResourceMock).toHaveBeenCalledWith('/api/orderables', 'orderables', {
-            versioned: true
+            versioned: true,
+            offlineMessage: 'orderable.notCachedOfflineError'
         });
     });
 });
