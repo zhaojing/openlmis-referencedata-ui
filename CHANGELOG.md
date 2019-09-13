@@ -21,6 +21,7 @@ Improvements:
 * [OLMIS-6402](https://openlmis.atlassian.net/browse/OLMIS-6402): Renamed versionId field to versionNumber.
 * [OLMIS-6222](https://openlmis.atlassian.net/browse/OLMIS-6222): Updated some pagination usages after changes in openlmis-pagination component.
 * [OLMIS-6416](https://openlmis.atlassian.net/browse/OLMIS-6416): Modified caching facilities and processing periods on get and added VersionObjectReferenceDataBuilder to adjust to v2 requisition endpoints.
+    * Added offline message property to orderable and ftap resources.
 
 Bug fixes:
 * [OLMIS-6330](https://openlmis.atlassian.net/browse/OLMIS-6330): fixed trigerring reference-ui build.
