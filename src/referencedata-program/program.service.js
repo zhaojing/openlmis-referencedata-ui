@@ -28,9 +28,9 @@
         .module('referencedata-program')
         .factory('programService', service);
 
-    service.$inject = ['openlmisUrlFactory', '$resource', '$q', 'offlineService', 'localStorageFactory'];
+    service.$inject = ['openlmisUrlFactory', '$resource', '$q', 'localStorageFactory', 'localStorageService'];
 
-    function service(openlmisUrlFactory, $resource, $q, offlineService, localStorageFactory) {
+    function service(openlmisUrlFactory, $resource, $q, localStorageFactory, localStorageService) {
 
         var resource = $resource(openlmisUrlFactory('/api/programs/:id'), {}, {
                 getAll: {
@@ -52,7 +52,8 @@
                     isArray: true
                 }
             }),
-            userProgramsCache = localStorageFactory('userPrograms');
+            userProgramsCache = localStorageFactory('userPrograms'),
+            programsCache = localStorageFactory('programs');
 
         return {
             get: get,
@@ -60,7 +61,8 @@
             getUserPrograms: getUserPrograms,
             getUserSupportedPrograms: getUserSupportedPrograms,
             update: update,
-            create: create
+            create: create,
+            clearProgramsCache: clearProgramsCache
         };
 
         /**
@@ -75,9 +77,23 @@
          * @return {Promise}    Program info
          */
         function get(id) {
+            var cachedProgram = programsCache.getBy('id', id);
+
+            if (cachedProgram) {
+                return $q.resolve(cachedProgram);
+            }
+
             return resource.get({
                 id: id
-            }).$promise;
+            })
+                .$promise
+                .then(function(program) {
+                    programsCache.put(program);
+                    return program;
+                })
+                .catch(function() {
+                    return $q.reject();
+                });
         }
 
         /**
@@ -178,6 +194,18 @@
             return resource.getUserSupportedPrograms({
                 userId: userId
             }).$promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf referencedata-program.programService
+         * @name clearProgramsCache
+         *
+         * @description
+         * Deletes programs stored in the browser cache.
+         */
+        function clearProgramsCache() {
+            localStorageService.remove('programs');
         }
     }
 })();

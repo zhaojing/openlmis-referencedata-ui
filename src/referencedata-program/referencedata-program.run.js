@@ -17,29 +17,18 @@
 
     'use strict';
 
-    /**
-     * @ngdoc service
-     * @name referencedata-period.ProcessingPeriodResource
-     *
-     * @description
-     * Communicates with the /api/processingPeriods endpoint of the OpenLMIS server.
-     */
     angular
-        .module('referencedata-period')
-        .factory('ProcessingPeriodResource', ProcessingPeriodResource);
+        .module('referencedata-program')
+        .run(run);
 
-    ProcessingPeriodResource.$inject = ['OpenlmisResource', 'classExtender'];
+    run.$inject = ['loginService', 'programService'];
 
-    function ProcessingPeriodResource(OpenlmisResource, classExtender) {
+    function run(loginService, programService) {
 
-        classExtender.extend(ProcessingPeriodResource, OpenlmisResource);
+        loginService.registerPostLogoutAction(function() {
+            return programService.clearProgramsCache();
+        });
 
-        return ProcessingPeriodResource;
-
-        function ProcessingPeriodResource() {
-            this.super('/api/processingPeriods', {
-                paginated: false
-            });
-        }
     }
+
 })();

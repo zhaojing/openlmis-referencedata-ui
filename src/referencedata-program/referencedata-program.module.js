@@ -28,7 +28,8 @@
         'openlmis-local-storage',
         'openlmis-urls',
         'openlmis-offline',
-        'openlmis-class-extender'
+        'openlmis-class-extender',
+        'openlmis-login'
     ]);
 
 })();
