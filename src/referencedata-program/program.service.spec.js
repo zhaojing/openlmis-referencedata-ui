@@ -150,7 +150,7 @@ describe('programService', function() {
         expect(angular.toJson(this.programsStorage.put.calls[1].args[0])).toEqual(angular.toJson(expectedProgram2));
     });
 
-    it('should save program', function() {
+    it('should update program and save it to storage', function() {
 
         this.$httpBackend
             .expectPUT(this.openlmisUrlFactory('/api/programs/' + this.program1.id))
@@ -164,6 +164,7 @@ describe('programService', function() {
         this.$rootScope.$apply();
 
         expect(angular.toJson(result)).toEqual(angular.toJson(this.program2));
+        expect(this.programsStorage.put).toHaveBeenCalled();
     });
 
     describe('getUserPrograms', function() {

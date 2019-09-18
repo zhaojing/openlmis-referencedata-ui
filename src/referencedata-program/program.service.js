@@ -124,7 +124,15 @@
         function update(program) {
             return resource.update({
                 id: program.id
-            }, program).$promise;
+            }, program)
+                .$promise
+                .then(function(program) {
+                    programsCache.put(program);
+                    return program;
+                })
+                .catch(function() {
+                    return $q.reject();
+                });
         }
 
         /**
