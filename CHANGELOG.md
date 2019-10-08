@@ -28,6 +28,7 @@ Bug fixes:
 * [OLMIS-6357](https://openlmis.atlassian.net/browse/OLMIS-6357): Fixed logging into the application on Firefox with cleared history.
 * [OLMIS-6438](https://openlmis.atlassian.net/browse/OLMIS-6438): Fixed searching for orderables on products modal.
 * [OLMIS-6526](https://openlmis.atlassian.net/browse/OLMIS-6526): Fixed searching for requisition groups list.
+* [OLMIS-6616](https://openlmis.atlassian.net/browse/OLMIS-6616): Fixed pagination bar for "Role Assignments".
 
 5.5.1 / 2019-05-27
 ==================
