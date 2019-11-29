@@ -66,6 +66,7 @@
         this.testPermission = testPermission;
         this.hasRoleWithRight = hasRoleWithRight;
         this.hasRoleWithRightForProgramAndSupervisoryNode = hasRoleWithRightForProgramAndSupervisoryNode;
+        this.hasRoleWithRightAndFacility = hasRoleWithRightAndFacility;
 
         /**
          * @ngdoc method
@@ -250,7 +251,7 @@
         /**
          * @ngdoc method
          * @methodOf openlmis-permissions.permissionService
-         * @name hasRoleWithRight
+         * @name hasRoleWithRightForProgramAndSupervisoryNode
          *
          * @description
          * Checks whether current user has a role with the given right name assigned for the given program and
@@ -283,6 +284,43 @@
                         .filter(hasRight(rightName))
                         .length > 0;
                 });
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-permissions.permissionService
+         * @name hasRoleWithRightAndFacility
+         *
+         * @description
+         * Checks whether current user has a role with the given right name assigned and also has a facility
+         * being his home facility or supervisory node.
+         *
+         * @param  {string}     rightName   the name of the right
+         * @return {Promise}                the promise resolving to a boolean, true if user has role with the given
+         *                                  right and a facility, false otherwise, the promise is rejected
+         *                                  if checking right fails
+         */
+        function hasRoleWithRightAndFacility(rightName) {
+            return $q.all([
+                currentUserService.getUserInfo(),
+                currentUserRolesService.getUserRoles(),
+                hasRoleWithRight(rightName)
+            ]).then(function(resolves) {
+                var user = resolves[0],
+                    roles = resolves[1],
+                    roleWithRight = resolves[2];
+
+                var matchingRoleIds = user.roleAssignments
+                    .filter(isNotNull('supervisoryNodeId'))
+                    .map(toRoleId);
+
+                var roleWithRightAndSupervisoryNode = roles
+                    .filter(hasMatchingIds(matchingRoleIds))
+                    .filter(hasRight(rightName))
+                    .length > 0;
+
+                return (roleWithRight && user.homeFacilityId) || roleWithRightAndSupervisoryNode;
+            });
         }
 
         function hasMatchingIds(matchingRoleIds) {
@@ -377,6 +415,13 @@
         function toRoleId(roleAssignment) {
             return roleAssignment.roleId;
         }
+
+        function isNotNull(propertyName) {
+            return function(roleAssignment) {
+                return !!roleAssignment[propertyName];
+            };
+        }
+
     }
 
 })();

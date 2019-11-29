@@ -36,6 +36,7 @@ describe('openlmis-permissions.this.permissionService', function() {
         this.possessedRightName = 'POSSESSED_RIGHT';
         this.otherPossessedRightName = 'OTHER_POSSESSED_RIGHT';
         this.anotherPossessedRightName = 'ANOTHER_POSSESSED_RIGHT';
+        this.newPossessedRightName = 'NEW_POSSESSED_RIGHT';
         this.nonPossessedRightName = 'NON_POSSESSED_RIGHT';
         this.supervisoryNodeId = 'supervisory-node-id';
         this.programId = 'program-id';
@@ -50,6 +51,10 @@ describe('openlmis-permissions.this.permissionService', function() {
 
         this.anotherPossessedRight = new this.RightDataBuilder()
             .withName(this.anotherPossessedRightName)
+            .build();
+
+        this.newPossessedRight = new this.RightDataBuilder()
+            .withName(this.newPossessedRightName)
             .build();
 
         this.nonPossessedRight = new this.RightDataBuilder()
@@ -71,6 +76,10 @@ describe('openlmis-permissions.this.permissionService', function() {
                 .build(),
             new this.RoleDataBuilder()
                 .withSupervisionType()
+                .withRight(this.newPossessedRight)
+                .build(),
+            new this.RoleDataBuilder()
+                .withSupervisionType()
                 .withRight(this.nonPossessedRight)
                 .build()
         ];
@@ -79,6 +88,7 @@ describe('openlmis-permissions.this.permissionService', function() {
             .withSupervisionRoleAssignment(this.roles[0].id, this.supervisoryNodeId, this.programId)
             .withSupervisionRoleAssignment(this.roles[1].id, this.supervisoryNodeId, 'program-id-2')
             .withSupervisionRoleAssignment(this.roles[2].id, 'supervisory-node-id-2', this.programId)
+            .withSupervisionRoleAssignment(this.roles[3].id, null, this.programId)
             .buildReferenceDataUserJson();
 
         var permissionStrings = [
@@ -98,7 +108,8 @@ describe('openlmis-permissions.this.permissionService', function() {
         spyOn(this.currentUserRolesService, 'getUserRoles').andReturn(this.$q.resolve([
             this.roles[0],
             this.roles[1],
-            this.roles[2]
+            this.roles[2],
+            this.roles[3]
         ]));
 
     });
@@ -470,4 +481,58 @@ describe('openlmis-permissions.this.permissionService', function() {
 
     });
 
+    describe('hasRoleWithRightAndFacility', function() {
+
+        it('should return false if user has no role with the given right', function() {
+            var result;
+            this.user.homeFacilityId = true;
+            this.permissionService
+                .hasRoleWithRightAndFacility(this.nonPossessedRightName)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(false);
+        });
+
+        it('should return false if user has role with the given right but has no facility', function() {
+            var result;
+            this.user.homeFacilityId = false;
+            this.permissionService
+                .hasRoleWithRightAndFacility(this.newPossessedRightName)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(false);
+        });
+
+        it('should return true if user has role with the given right and supervisory node', function() {
+            var result;
+            this.user.homeFacilityId = false;
+            this.permissionService
+                .hasRoleWithRightAndFacility(this.possessedRightName)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(true);
+        });
+
+        it('should return true if user has role with the given right and home facility', function() {
+            var result;
+            this.user.homeFacilityId = true;
+            this.permissionService
+                .hasRoleWithRightAndFacility(this.newPossessedRightName)
+                .then(function(response) {
+                    result = response;
+                });
+            this.$rootScope.$apply();
+
+            expect(result).toEqual(true);
+        });
+    });
 });
