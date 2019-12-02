@@ -1,6 +1,9 @@
 5.6.1 / WIP
 ==================
 
+New functionality:
+* [OLMIS-6662](https://openlmis.atlassian.net/browse/OLMIS-6662): Added possibility to assign Role Assignments based on another User's Assigned Roles.
+
 Bug fixes:
 * [OLMIS-6580](https://openlmis.atlassian.net/browse/OLMIS-6580): Fixed malformed table on the Supply Lines screen when Requisition Group is empty.
 * [OLMIS-6539](https://openlmis.atlassian.net/browse/OLMIS-6539): Refreshed state after save program orderable.

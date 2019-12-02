@@ -1,5 +1,8 @@
 <h2>{{'adminUserRoles.editUserRoles' | message}}</h2>
-<h3>{{'adminUserRoles.user' | message}}: {{vm.user.username}}</h3>
+<div class="overtab-header">
+    <h3>{{'adminUserRoles.user' | message}}: {{vm.user.username}}</h3>
+    <button type="submit" ui-sref=".SUPERVISION.importRoles">{{'adminUserRoles.importRoles' | message}}</button>
+</div>
 <ng-include src="'admin-user-roles/user-role-tabs.html'"></ng-include>
 <div ui-view=""></div>
 <div class="openlmis-toolbar">

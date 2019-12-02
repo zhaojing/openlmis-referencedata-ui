@@ -16,5 +16,6 @@
     "adminUserRoles.cancel": "Cancel",
     "adminUserRoles.user": "User",
     "adminUserRoles.assignedRights": "Assigned Rights",
-    "adminUserRoles.hoveringOverRolesWillRevealRightsAssignedToThen": "Hovering over roles will reveal rights assigned to them"
+    "adminUserRoles.hoveringOverRolesWillRevealRightsAssignedToThen": "Hovering over roles will reveal rights assigned to them",
+    "adminUserRoles.importRoles": "Import Roles"
 }

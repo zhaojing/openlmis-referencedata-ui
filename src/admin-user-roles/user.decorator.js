@@ -39,6 +39,7 @@
 
         $delegate.prototype.addRoleAssignment = addRoleAssignment;
         $delegate.prototype.removeRoleAssignment = removeRoleAssignment;
+        $delegate.prototype.addRoleAssignments = addRoleAssignments;
 
         return $delegate;
 
@@ -74,6 +75,26 @@
                 programName,
                 supervisoryNodeName,
                 warehouseName));
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf admin-user-roles.User
+         * @name addRoleAssignments
+         *
+         * @description
+         * Adds selected User's Role Assignments to the current User.
+         *
+         * @param {Array} originalUserRoleAssignments  the current User's Role Assignments
+         * @param {Array} roleAssignments              the Role Assignments which are to be imported
+         */
+        function addRoleAssignments(originalUserRoleAssignments, roleAssignments) {
+            roleAssignments.forEach(function(roleAssignment) {
+                if (!isRoleAlreadyAssigned(originalUserRoleAssignments, roleAssignment.roleId,
+                    roleAssignment.programId, roleAssignment.supervisoryNodeId, roleAssignment.warehouseId)) {
+                    originalUserRoleAssignments.push(roleAssignment);
+                }
+            });
         }
 
         /**
