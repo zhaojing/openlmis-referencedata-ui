@@ -29,6 +29,8 @@ describe('SelectUsersModalController', function() {
             this.MinimalFacilityDataBuilder = $injector.get('MinimalFacilityDataBuilder');
             this.UserDataBuilder = $injector.get('UserDataBuilder');
             this.PageDataBuilder = $injector.get('PageDataBuilder');
+            this.userRoleAssignmentFactory = $injector.get('userRoleAssignmentFactory');
+            this.loadingModalService = $injector.get('loadingModalService');
             this.$state = $injector.get('$state');
         });
 
@@ -93,6 +95,7 @@ describe('SelectUsersModalController', function() {
         this.selectDeferred = this.$q.defer();
 
         spyOn(this.$state, 'go');
+        spyOn(this.loadingModalService, 'open');
 
         this.initController = function() {
             this.vm = this.$controller('SelectUsersModalController', {
@@ -174,6 +177,56 @@ describe('SelectUsersModalController', function() {
             expect(this.$state.go).toHaveBeenCalledWith('.', {
                 rolesUsername: 'admin'
             });
+        });
+
+    });
+
+    describe('select user', function() {
+
+        beforeEach(function() {
+            this.initController();
+            this.vm.selectedUser = this.selectedUser;
+        });
+
+        it('should return promise', function() {
+            expect(angular.isFunction(this.vm.selectUser().then)).toBe(true);
+        });
+
+        it('should open loading modal', function() {
+            this.vm.selectUser();
+
+            expect(this.loadingModalService.open).toHaveBeenCalled();
+        });
+
+        it('should not import roles if roles are already assigned', function() {
+            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.vm.selectedUser));
+            var roleAssignmentsCount = this.vm.selectedUser.roleAssignments.length;
+            this.user.roleAssignments = this.vm.selectedUser.roleAssignments;
+
+            this.vm.selectUser();
+            this.$rootScope.$apply();
+
+            expect(this.user.roleAssignments.length).toEqual(roleAssignmentsCount);
+        });
+
+        it('should import roles successfully', function() {
+            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.vm.selectedUser));
+            this.vm.selectUser();
+
+            expect(this.user.roleAssignments[0]).toEqual(undefined);
+
+            this.$rootScope.$apply();
+
+            expect(this.user.roleAssignments[0]).toEqual(this.vm.selectedUser.roleAssignments[0]);
+        });
+
+        it('should not import roles if select has failed', function() {
+            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.reject(this.vm.selectedUser));
+            this.vm.selectUser();
+
+            this.$rootScope.$apply();
+
+            expect(this.user.roleAssignments[0]).toEqual(undefined);
         });
 
     });
