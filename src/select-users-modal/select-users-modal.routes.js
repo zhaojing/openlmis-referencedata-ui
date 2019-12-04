@@ -29,8 +29,8 @@
             controllerAs: 'vm',
             templateUrl: 'select-users-modal/select-users-modal.html',
             params: {
-                importRolesPage: undefined,
-                importRolesSize: undefined,
+                page: undefined,
+                size: undefined,
                 rolesUsername: undefined
             },
             url: '/import',
@@ -42,8 +42,6 @@
                             username: stateParams.rolesUsername
                         };
                         return new UserRepository().query(params);
-                    }, {
-                        paginationId: 'importRoles'
                     });
                 },
                 user: function(user) {
