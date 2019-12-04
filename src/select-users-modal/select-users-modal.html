@@ -11,7 +11,7 @@
                             {{'selectUsersModal.username' | message}}
                         </label>
                         <select id="user" ng-options="user.id as user.username for user in vm.filteredUsers"
-                            ng-model="vm.selectedUserId">
+                            ng-model="vm.selectedUserId" required>
                         </select>
                         <p class="note">{{'selectUsersModal.searchByUsernameInfo' | message}}</p>
                     </fieldset>
