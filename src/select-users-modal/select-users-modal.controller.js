@@ -39,7 +39,7 @@
         vm.$onInit = onInit;
         vm.close = reject;
         vm.search = search;
-        vm.selectedUser = undefined;
+        vm.selectedUserId = undefined;
         vm.selectUser = selectUser;
 
         /**
@@ -66,7 +66,7 @@
          */
         function selectUser() {
             loadingModalService.open();
-            return userRoleAssignmentFactory.getUser(vm.selectedUser.id, roles, programs,
+            return userRoleAssignmentFactory.getUser(vm.selectedUserId, roles, programs,
                 supervisoryNodes, warehouses)
                 .then(function(rolesToImport) {
                     try {

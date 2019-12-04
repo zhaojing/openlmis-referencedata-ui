@@ -185,7 +185,6 @@ describe('SelectUsersModalController', function() {
 
         beforeEach(function() {
             this.initController();
-            this.vm.selectedUser = this.selectedUser;
         });
 
         it('should return promise', function() {
@@ -199,9 +198,9 @@ describe('SelectUsersModalController', function() {
         });
 
         it('should not import roles if roles are already assigned', function() {
-            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.vm.selectedUser));
-            var roleAssignmentsCount = this.vm.selectedUser.roleAssignments.length;
-            this.user.roleAssignments = this.vm.selectedUser.roleAssignments;
+            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.selectedUser));
+            var roleAssignmentsCount = this.selectedUser.roleAssignments.length;
+            this.user.roleAssignments = this.selectedUser.roleAssignments;
 
             this.vm.selectUser();
             this.$rootScope.$apply();
@@ -210,18 +209,18 @@ describe('SelectUsersModalController', function() {
         });
 
         it('should import roles successfully', function() {
-            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.vm.selectedUser));
+            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.resolve(this.selectedUser));
             this.vm.selectUser();
 
             expect(this.user.roleAssignments[0]).toEqual(undefined);
 
             this.$rootScope.$apply();
 
-            expect(this.user.roleAssignments[0]).toEqual(this.vm.selectedUser.roleAssignments[0]);
+            expect(this.user.roleAssignments[0]).toEqual(this.selectedUser.roleAssignments[0]);
         });
 
         it('should not import roles if select has failed', function() {
-            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.reject(this.vm.selectedUser));
+            spyOn(this.userRoleAssignmentFactory, 'getUser').andReturn(this.$q.reject(this.selectedUser));
             this.vm.selectUser();
 
             this.$rootScope.$apply();

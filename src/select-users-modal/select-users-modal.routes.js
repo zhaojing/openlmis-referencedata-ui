@@ -39,8 +39,6 @@
                     return paginationService.registerUrl($stateParams, function(stateParams) {
                         var params = {
                             sort: 'username,asc',
-                            page: stateParams.page,
-                            size: stateParams.size,
                             username: stateParams.rolesUsername
                         };
                         return new UserRepository().query(params);
