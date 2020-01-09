@@ -56,7 +56,8 @@
     function service($q, $http, openlmisUrlFactory, localStorageService, Permission, currentUserRolesService,
                      currentUserService) {
         // Used in service.load
-        var savedUserId;
+        var savedUserId,
+            dataPromise;
 
         this.hasPermission = hasPermission;
         this.hasPermissionWithAnyProgram = hasPermissionWithAnyProgram;
@@ -150,6 +151,7 @@
          * - The user isn't authenticated
          */
         function load(userId) {
+
             if (!userId) {
                 savedUserId = undefined;
                 this.empty();
@@ -385,17 +387,17 @@
                 return $q.reject();
             }
 
-            var deferred = $q.defer();
+            if (dataPromise === null || dataPromise === undefined) {
+                dataPromise = $http.get(openlmisUrlFactory('/api/users/' + userId + '/permissionStrings'))
+                    .then(function(response) {
+                        return response.data;
+                    })
+                    .catch(function() {
+                        return $q.reject();
+                    });
 
-            $http.get(openlmisUrlFactory('/api/users/' + userId + '/permissionStrings'))
-                .then(function(response) {
-                    deferred.resolve(response.data);
-                })
-                .catch(function() {
-                    deferred.reject();
-                });
-
-            return deferred.promise;
+                return dataPromise;
+            }
         }
 
         function getCachedPermissions() {

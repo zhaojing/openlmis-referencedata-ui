@@ -40,6 +40,10 @@ describe('openlmis-permissions.this.permissionService', function() {
         this.nonPossessedRightName = 'NON_POSSESSED_RIGHT';
         this.supervisoryNodeId = 'supervisory-node-id';
         this.programId = 'program-id';
+        this.permissionString1 = 'permissionString1',
+        this.permissionString2 = 'permissionString2',
+        this.facilityId = 'facility-id',
+        this.someFacility = 'some-facility';
 
         this.possessedRight = new this.RightDataBuilder()
             .withName(this.possessedRightName)
@@ -91,14 +95,14 @@ describe('openlmis-permissions.this.permissionService', function() {
             .withSupervisionRoleAssignment(this.roles[3].id, null, this.programId)
             .buildReferenceDataUserJson();
 
-        var permissionStrings = [
-            'permissionString1|facility-id|program-id',
-            'permissionString2|some-facility'
+        this.permissionStrings = [
+            this.permissionString1 + '|' + this.facilityId + '|' + this.programId,
+            this.permissionString2 + '|' + this.someFacility
         ];
 
         this.$httpBackend
             .when('GET', this.openlmisUrlFactory('/api/users/userId/permissionStrings'))
-            .respond(permissionStrings);
+            .respond(this.permissionStrings);
 
         spyOn(this.localStorageService, 'get').andReturn(null);
         spyOn(this.localStorageService, 'add').andCallThrough();
@@ -188,6 +192,25 @@ describe('openlmis-permissions.this.permissionService', function() {
         expect(permissions.length).toBe(1);
         expect(permissions[0].right).toBe('example');
 
+        this.$httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('will call backend if no available cached permissions', function() {
+        this.localStorageService.get.andReturn(null);
+
+        this.permissionService.load('userId');
+        this.$httpBackend.flush();
+        this.$rootScope.$apply();
+
+        expect(this.localStorageService.add).toHaveBeenCalledWith('permissions',
+            '[{"right":"' + this.permissionString1 + '",' + '"facilityId":"' + this.facilityId
+            + '","programId":"' + this.programId + '"},{"right":"' + this.permissionString2
+            + '","facilityId":"' + this.someFacility + '"}]');
+
+        this.$httpBackend.verifyNoOutstandingRequest();
+
+        this.permissionService.load('userId');
+        this.$rootScope.$apply();
         this.$httpBackend.verifyNoOutstandingRequest();
     });
 

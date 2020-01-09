@@ -1,3 +1,9 @@
+5.6.2 / WIP
+================== 
+
+Bug fixes:
+* [OLMIS-6696](https://openlmis.atlassian.net/browse/OLMIS-6696): Fixed calling to permission strings twice upon login.
+
 5.6.1 / 2019-12-19
 ==================
 
