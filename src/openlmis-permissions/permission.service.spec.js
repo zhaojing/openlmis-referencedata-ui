@@ -198,14 +198,25 @@ describe('openlmis-permissions.this.permissionService', function() {
     it('will call backend if no available cached permissions', function() {
         this.localStorageService.get.andReturn(null);
 
-        this.permissionService.load('userId');
+        var permissions;
+        this.permissionService.load('userId')
+            .then(function(response) {
+                permissions = response;
+            });
         this.$httpBackend.flush();
         this.$rootScope.$apply();
 
-        expect(this.localStorageService.add).toHaveBeenCalledWith('permissions',
-            '[{"right":"' + this.permissionString1 + '",' + '"facilityId":"' + this.facilityId
-            + '","programId":"' + this.programId + '"},{"right":"' + this.permissionString2
-            + '","facilityId":"' + this.someFacility + '"}]');
+        expect(permissions.length).toBe(2);
+
+        expect(permissions[0].right).toBe(this.permissionString1);
+        expect(permissions[0].facilityId).toBe(this.facilityId);
+        expect(permissions[0].programId).toBe(this.programId);
+
+        expect(permissions[1].right).toBe(this.permissionString2);
+        expect(permissions[1].facilityId).toBe(this.someFacility);
+        expect(permissions[1].programId).toBeUndefined();
+
+        expect(this.localStorageService.add).toHaveBeenCalledWith('permissions', angular.toJson(permissions));
 
         this.$httpBackend.verifyNoOutstandingRequest();
 
