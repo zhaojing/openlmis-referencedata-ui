@@ -55,7 +55,7 @@
 
     function service($q, $http, openlmisUrlFactory, localStorageService, Permission, currentUserRolesService,
                      currentUserService) {
-        // Used in service.load
+        // Used in service.load and service.getPermissionStringsFromServer/service.empty respectively
         var savedUserId,
             dataPromise;
 
@@ -183,6 +183,7 @@
          */
         function empty() {
             localStorageService.remove('permissions');
+            dataPromise = null;
             return $q.resolve();
         }
 
@@ -395,9 +396,8 @@
                     .catch(function() {
                         return $q.reject();
                     });
-
-                return dataPromise;
             }
+            return dataPromise;
         }
 
         function getCachedPermissions() {
