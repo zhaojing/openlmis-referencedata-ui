@@ -1,15 +1,15 @@
 {
-    "adminUserList.users.label": "Users",
-    "adminUserList.firstName": "First name",
-    "adminUserList.lastName": "Last name",
-    "adminUserList.email": "Email",
-    "adminUserList.addUser": "Add User",
-    "adminUserList.edit": "Edit",
-    "adminUserList.resetPassword": "Reset Password",
-    "adminUserList.search": "Search",
-    "adminUserList.actions": "Actions",
-    "adminUserList.users.error": "There are no matches for user.",
-    "adminUserList.name": "Name",
-    "adminUserList.username": "Username",
-    "adminUserList.roles": "Roles"
+    "adminUserList.users.label": "用户",
+    "adminUserList.firstName": "名字",
+    "adminUserList.lastName": "姓氏",
+    "adminUserList.email": "邮箱",
+    "adminUserList.addUser": "添加用户",
+    "adminUserList.edit": "编辑",
+    "adminUserList.resetPassword": "重置密码",
+    "adminUserList.search": "搜索",
+    "adminUserList.actions": "操作",
+    "adminUserList.users.error": "未找到匹配的用户",
+    "adminUserList.name": "名称",
+    "adminUserList.username": "用户名",
+    "adminUserList.roles": "角色"
 }

@@ -1,15 +1,15 @@
 {
-    "adminServiceAccount.serviceAccounts": "Service Accounts",
-    "adminServiceAccount.add": "Add",
-    "adminServiceAccount.add.question": "Do you want to add new Service Account?",
-    "adminServiceAccount.add.success": "Service Account with key ${key} added successfully.",
-    "adminServiceAccount.add.failure": "Adding new Service Account failed.",
-    "adminServiceAccount.delete": "Delete",
-    "adminServiceAccount.delete.question": "Do you want to delete Service Account with key ${key}?",
-    "adminServiceAccount.delete.success": "Service Account with key ${key} removed successfully.",
-    "adminServiceAccount.delete.failure": "Removing Service Account with key ${token} failed.",
-    "adminServiceAccount.noServiceAccounts": "No Service Accounts found.",
-    "adminServiceAccount.date": "Date",
-    "adminServiceAccount.key": "Key",
-    "adminServiceAccount.actions": "Actions"
+    "adminServiceAccount.serviceAccounts": "服务帐户",
+    "adminServiceAccount.add": "添加",
+    "adminServiceAccount.add.question": "您要添加新的服务帐户吗？",
+    "adminServiceAccount.add.success": "已成功添加新的服务账户，密钥为：${key}",
+    "adminServiceAccount.add.failure": "添加新服务密钥失败",
+    "adminServiceAccount.delete": "删除",
+    "adminServiceAccount.delete.question": "您是否确认要删除该服务账户：${key}",
+    "adminServiceAccount.delete.success": "已成功移除密钥为${key}的服务账户。",
+    "adminServiceAccount.delete.failure": "删除密钥为${token}的帐户失败。",
+    "adminServiceAccount.noServiceAccounts": "无服务账户",
+    "adminServiceAccount.date": "日期",
+    "adminServiceAccount.key": "密钥",
+    "adminServiceAccount.actions": "操作"
 }

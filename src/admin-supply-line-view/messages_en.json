@@ -1,9 +1,9 @@
 {
-    "adminSupplyLineView.viewSupplyLine": "View Supply Line",
-    "adminSupplyLineView.program": "Program",
-    "adminSupplyLineView.supervisoryNode": "Supervisory Node",
-    "adminSupplyLineView.supplyingFacility": "Supplying Facility",
-    "adminSupplyLineView.description": "Description",
-    "adminSupplyLineView.catchmentPopulation": "Catchment Population",
-    "adminSupplyLineView.cancel": "Cancel"
+    "adminSupplyLineView.viewSupplyLine": "查看供应线",
+    "adminSupplyLineView.program": "方案",
+    "adminSupplyLineView.supervisoryNode": "监管节点",
+    "adminSupplyLineView.supplyingFacility": "供应站点",
+    "adminSupplyLineView.description": "描述",
+    "adminSupplyLineView.catchmentPopulation": "管辖区内人口",
+    "adminSupplyLineView.cancel": "取消"
 }

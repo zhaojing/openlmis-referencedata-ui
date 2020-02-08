@@ -1,11 +1,11 @@
 {
-    "adminSupplyLineList.supplyLines": "Supply Lines",
-    "adminSupplyLineList.supplyingFacility": "Supplying Facility",
-    "adminSupplyLineList.search": "Search",
-    "adminSupplyLineList.noSupplyLinesFound": "No supply lines found.",
-    "adminSupplyLineList.supervisoryNode": "Supervisory Node",
-    "adminSupplyLineList.program": "Program",
-    "adminSupplyLineList.view": "View",
-    "adminSupplyLineList.actions": "Action",
-    "adminSupplyLineList.servedFacilities": "Served Facilities"
+    "adminSupplyLineList.supplyLines": "供应线",
+    "adminSupplyLineList.supplyingFacility": "供应站点",
+    "adminSupplyLineList.search": "搜索",
+    "adminSupplyLineList.noSupplyLinesFound": "找不到供应线",
+    "adminSupplyLineList.supervisoryNode": "监管节点",
+    "adminSupplyLineList.program": "方案",
+    "adminSupplyLineList.view": "查看",
+    "adminSupplyLineList.actions": "操作",
+    "adminSupplyLineList.servedFacilities": "已服务站点"
 }

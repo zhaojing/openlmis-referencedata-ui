@@ -1,14 +1,14 @@
 {
-    "selectProductsModal.addProducts": "Add Products",
-    "selectProductsModal.searchProduct": "Search Product",
-    "selectProductsModal.search": "Search",
-    "selectProductsModal.select": "Select",
-    "selectProductsModal.code": "Code",
-    "selectProductsModal.product": "Product",
-    "selectProductsModal.uoi": "Unit of Issue",
-    "selectProductsModal.cancel": "Cancel",
-    "selectProductsModal.addProducts.emptyList": "You have not selected any products.",
-    "selectProductsModal.productCode": "Product Code",
-    "selectProductsModal.productName": "Product Name",
-    "selectProductsModal.searchByCodeInfo": "Please type in a part of the product name or the first few letters of the product code."
+    "selectProductsModal.addProducts": "添加物品",
+    "selectProductsModal.searchProduct": "搜索物品 ",
+    "selectProductsModal.search": "搜索",
+    "selectProductsModal.select": "选择",
+    "selectProductsModal.code": "代码",
+    "selectProductsModal.product": "物品",
+    "selectProductsModal.uoi": "发货单位",
+    "selectProductsModal.cancel": "取消",
+    "selectProductsModal.addProducts.emptyList": "您尚未选择任何物品。",
+    "selectProductsModal.productCode": "物品代码",
+    "selectProductsModal.productName": "物品名称",
+    "selectProductsModal.searchByCodeInfo": "请输入相关物品名称或物品代码前几位"
 }

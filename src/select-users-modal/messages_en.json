@@ -1,10 +1,10 @@
 {
-    "selectUsersModal.importRoles": "Import Roles",
-    "selectUsersModal.searchUser": "Search User",
-    "selectUsersModal.username": "Username",
-    "selectUsersModal.search": "Search",
-    "selectUsersModal.select": "Select",
-    "selectUsersModal.cancel": "Cancel",
-    "selectUsersModal.importRoles.emptyList": "You have not selected any user.",
-    "selectUsersModal.searchByUsernameInfo": "Select User whose Roles will be imported."
+    "selectUsersModal.importRoles": "倒入角色·",
+    "selectUsersModal.searchUser": "搜索用户",
+    "selectUsersModal.username": "用户名",
+    "selectUsersModal.search": "搜索",
+    "selectUsersModal.select": "选择",
+    "selectUsersModal.cancel": "取消",
+    "selectUsersModal.importRoles.emptyList": "您尚未选择任何用户。",
+    "selectUsersModal.searchByUsernameInfo": "选择要导入其角色的用户。"
 }

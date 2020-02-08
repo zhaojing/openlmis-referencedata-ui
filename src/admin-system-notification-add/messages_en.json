@@ -1,6 +1,6 @@
 {
-    "adminSystemNotificationAdd.addSystemNotification": "Add System Notification",
-    "adminSystemNotificationAdd.cancel": "Cancel",
-    "adminSystemNotificationAdd.systemNotificationHasBeenCreatedSuccessfully": "System Notification has been created successfully",
-    "adminSystemNotificationAdd.failedToCreateSystemNotification": "Failed to create System Notification"
+    "adminSystemNotificationAdd.addSystemNotification": "添加系统通知",
+    "adminSystemNotificationAdd.cancel": "取消",
+    "adminSystemNotificationAdd.systemNotificationHasBeenCreatedSuccessfully": "系统通知已成功创建",
+    "adminSystemNotificationAdd.failedToCreateSystemNotification": "创建系统通知失败"
 }

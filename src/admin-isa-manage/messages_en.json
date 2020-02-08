@@ -1,12 +1,12 @@
 {
-    "adminIsaManage.isa": "Ideal Stock Amounts",
-    "adminIsaManage.manageIsa": "Manage Ideal Stock Amounts",
-    "adminIsaManage.export": "Export",
-    "adminIsaManage.viewIsaAsCsv": "View current Ideal Stock Amounts as CSV",
-    "adminIsaManage.fileIsNotSelected": "File is not selected",
-    "adminIsaManage.uploadFailed": "Upload failed!",
-    "adminIsaManage.csvFile": "CSV File",
-    "adminIsaManage.upload": "Upload",
-    "adminIsaManage.uploadSuccess": "File uploaded successfully. Number of records processed: ${amount}",
-    "adminIsaManage.isaUploadDescription": "Steps to update the Ideal Stock Amounts values:\n\n1. Download the current values by clicking the Export button.\n2. Edit the .csv file and then save changes as a .csv file.\n3. Click Upload and select the saved .csv file to upload the new version into the system.\n4. The system will complete validation that the file is in the .csv format with the correct column headings.\nIf file upload is successful, the changes will be accepted into the system.\nIf file upload is unsuccessful, errors will be displayed on the page."
+    "adminIsaManage.isa": "目标库存量",
+    "adminIsaManage.manageIsa": "管理目标库存量",
+    "adminIsaManage.export": "导出",
+    "adminIsaManage.viewIsaAsCsv": "以CSV格式查看当前的目标库存量",
+    "adminIsaManage.fileIsNotSelected": "未选择文件",
+    "adminIsaManage.uploadFailed": "上传失败!",
+    "adminIsaManage.csvFile": "CSV 文件",
+    "adminIsaManage.upload": "上传",
+    "adminIsaManage.uploadSuccess": "文件上传成功。已处理的记录数量：${amount}",
+    "adminIsaManage.isaUploadDescription": "更新目标库存量的数值的步骤:\n\n1。点击导出按键下载当前数值.\n2.编辑.csv文件并另存为.csv file.\n3。点击上传并选择已保存的.csv 文件，将更新的版本上传至系统.\n4.。系统将验证该文件是否为.csv格式且带有正确的栏标题。.\nIf文件若上传成功，系统将完成修改。.\nIf文件若上传失败，页面将会显示错误信息。"
 }

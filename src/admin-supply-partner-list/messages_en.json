@@ -1,9 +1,9 @@
 {
-    "adminSupplyPartnerList.supplyPartners": "Supply Partners",
-    "adminSupplyPartnerList.noSupplyPartners": "No supply partners found.",
-    "adminSupplyPartnerList.name": "Name",
-    "adminSupplyPartnerList.code": "Code",
-    "adminSupplyPartnerList.actions": "Actions",
-    "adminSupplyPartnerList.edit": "Edit",
-    "adminSupplyPartnerList.addSupplyPartner": "Add Supply Partner"
+    "adminSupplyPartnerList.supplyPartners": "供应伙伴",
+    "adminSupplyPartnerList.noSupplyPartners": "找不到供应伙伴",
+    "adminSupplyPartnerList.name": "名称",
+    "adminSupplyPartnerList.code": "代码",
+    "adminSupplyPartnerList.actions": "操作",
+    "adminSupplyPartnerList.edit": "编辑",
+    "adminSupplyPartnerList.addSupplyPartner": "添加供应伙伴"
 }

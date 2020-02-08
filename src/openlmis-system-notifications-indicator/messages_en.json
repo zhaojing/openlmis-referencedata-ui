@@ -1,4 +1,4 @@
 {
-  "openlmisSystemNotificationsIndicator.systemNotifications": "System Notifications (${count})",
-  "openlmisSystemNotificationsIndicator.noSystemNotifications": "No System Notifications"
+  "openlmisSystemNotificationsIndicator.systemNotifications": "系统通知 (${count})",
+  "openlmisSystemNotificationsIndicator.noSystemNotifications": "没有系统通知"
 }

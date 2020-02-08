@@ -1,10 +1,10 @@
 {
-    "openlmisFacilityProgramSelect.facility": "Facility",
-    "openlmisFacilityProgramSelect.facilityType": "Facility Type",
-    "openlmisFacilityProgramSelect.myFacility": "My Facility",
-    "openlmisFacilityProgramSelect.program": "Program",
-    "openlmisFacilityProgramSelect.supervisedFacility": "Supervised Facility",
-    "openlmisFacilityProgramSelect.selectFacility": "Select Facility",
-    "openlmisFacilityProgramSelect.selectProgram": "Select Program",
-    "openlmisFacilityProgramSelect.type": "Type"
+    "openlmisFacilityProgramSelect.facility": "站点",
+    "openlmisFacilityProgramSelect.facilityType": "站点类型",
+    "openlmisFacilityProgramSelect.myFacility": "我的站点",
+    "openlmisFacilityProgramSelect.program": "方案",
+    "openlmisFacilityProgramSelect.supervisedFacility": "受监管的站点",
+    "openlmisFacilityProgramSelect.selectFacility": "选择站点",
+    "openlmisFacilityProgramSelect.selectProgram": "选择方案",
+    "openlmisFacilityProgramSelect.type": "类型"
 }

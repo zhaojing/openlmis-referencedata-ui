@@ -1,12 +1,12 @@
 {
-    "adminGeographicZoneView.viewGeographicZone": "View Geographic Zone",
-    "adminGeographicZoneView.geographicZoneName": "Geographic Zone Name",
-    "adminGeographicZoneView.geographicZoneCode": "Geographic Zone Code",
-    "adminGeographicZoneView.geographicLevel": "Geographic Level",
-    "adminGeographicZoneView.parent": "Parent",
-    "adminGeographicZoneView.catchmentPopulation": "Catchment Population",
-    "adminGeographicZoneView.longitude": "Longitude",
-    "adminGeographicZoneView.latitude": "Latitude",
-    "adminGeographicZoneView.actions": "Actions",
-    "adminGeographicZoneView.cancel": "Cancel"
+    "adminGeographicZoneView.viewGeographicZone": "查看地理区域",
+    "adminGeographicZoneView.geographicZoneName": "地区名称",
+    "adminGeographicZoneView.geographicZoneCode": "地区代码",
+    "adminGeographicZoneView.geographicLevel": "地理层级",
+    "adminGeographicZoneView.parent": "上一级",
+    "adminGeographicZoneView.catchmentPopulation": "管辖区内人口",
+    "adminGeographicZoneView.longitude": "经度",
+    "adminGeographicZoneView.latitude": "纬度",
+    "adminGeographicZoneView.actions": "操作",
+    "adminGeographicZoneView.cancel": "取消"
 }

@@ -1,15 +1,15 @@
 {
-    "adminFacilityPrograms.assignProgramsTo": "Assign Programs to ${facility}",
-    "adminFacilityPrograms.program": "Program",
-    "adminFacilityPrograms.startDate": "Start Date",
-    "adminFacilityPrograms.active": "Active",
-    "adminFacilityPrograms.cancel": "Cancel",
-    "adminFacilityPrograms.save": "Save",
-    "adminFacilityPrograms.facilityHasBeenSaved": "Facility has been saved!",
-    "adminFacilityPrograms.facilityAndProgramsHaveBeenSaved": "Facility and programs have been saved!",
-    "adminFacilityPrograms.failedToSaveFacility": "Failed to save facility!",
-    "adminFacilityPrograms.failedToSaveFacilityAndPrograms": "Failed to save facility and programs!",
-    "adminFacilityPrograms.add": "Add",
-    "adminFacilityPrograms.noProgramsAreAssociatedWith": "No programs are associated with ${facility}",
-    "adminFacilityPrograms.startDate.description": "The program start date determines the first date available for users to enter requisitions related to the program."
+    "adminFacilityPrograms.assignProgramsTo": "将方案分配给${facility}",
+    "adminFacilityPrograms.program": "方案",
+    "adminFacilityPrograms.startDate": "开始日期",
+    "adminFacilityPrograms.active": "激活",
+    "adminFacilityPrograms.cancel": "取消",
+    "adminFacilityPrograms.save": "保存",
+    "adminFacilityPrograms.facilityHasBeenSaved": "站点已保存!",
+    "adminFacilityPrograms.facilityAndProgramsHaveBeenSaved": "站点和方案保存成功!",
+    "adminFacilityPrograms.failedToSaveFacility": "站点保存失败!",
+    "adminFacilityPrograms.failedToSaveFacilityAndPrograms": "站点和方案保存失败!",
+    "adminFacilityPrograms.add": "添加",
+    "adminFacilityPrograms.noProgramsAreAssociatedWith": "${facility}无关联方案",
+    "adminFacilityPrograms.startDate.description": "方案开始日期即为用户对该计划添加物资申请的最早日期"
 }

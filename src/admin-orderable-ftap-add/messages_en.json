@@ -1,6 +1,6 @@
 {
-    "adminOrderableFtapAdd.addFtap": "Add Facility Type Approved Product",
-    "adminOrderableFtapAdd.cancel": "Cancel",
-    "adminOrderableFtapAdd.ftapHasBeenCreatedSuccessfully": "Facility type approved product has been created successfully",
-    "adminOrderableFtapAdd.failedToCreateFtap": "Failed to create facility type approved product"
+    "adminOrderableFtapAdd.addFtap": "添加站点类型批准的物品",
+    "adminOrderableFtapAdd.cancel": "取消",
+    "adminOrderableFtapAdd.ftapHasBeenCreatedSuccessfully": "站点类型批准的物品已成功创建",
+    "adminOrderableFtapAdd.failedToCreateFtap": "站点类型批准的物品创建失败"
 }

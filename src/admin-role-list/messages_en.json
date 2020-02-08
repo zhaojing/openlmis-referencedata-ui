@@ -1,10 +1,10 @@
 {
-    "adminRoleList.actions": "Actions",
-    "adminRoleList.createRole": "Create Role",
-    "adminRoleList.description": "Description",
-    "adminRoleList.role": "Role",
-    "adminRoleList.roles": "Roles",
-    "adminRoleList.edit": "Edit",
-    "adminRoleList.roleType": "Role Type",
-    "adminRoleList.numberOfUsers": "Number of Users"
+    "adminRoleList.actions": "操作",
+    "adminRoleList.createRole": "创建角色",
+    "adminRoleList.description": "描述",
+    "adminRoleList.role": "角色",
+    "adminRoleList.roles": "角色",
+    "adminRoleList.edit": "编辑",
+    "adminRoleList.roleType": "角色类型",
+    "adminRoleList.numberOfUsers": "用户数量"
 }

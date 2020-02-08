@@ -1,6 +1,6 @@
 {
-    "adminOrderableAdd.addProduct": "Add Product",
-    "adminOrderableAdd.cancel": "Cancel",
-    "adminOrderableAdd.productHasBeenCreatedSuccessfully": "Product has been created successfully",
-    "adminOrderableAdd.failedToCreateProduct": "Failed to create product"
+    "adminOrderableAdd.addProduct": "添加物品",
+    "adminOrderableAdd.cancel": "取消",
+    "adminOrderableAdd.productHasBeenCreatedSuccessfully": "物品已成功创建",
+    "adminOrderableAdd.failedToCreateProduct": "物品创建失败"
 }

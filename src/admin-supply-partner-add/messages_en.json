@@ -1,12 +1,12 @@
 {
-    "adminSupplyPartnerAdd.header.addSupplyPartner": "Add Supply Partner",
-    "adminSupplyPartnerAdd.supplyPartner.code": "Code",
-    "adminSupplyPartnerAdd.supplyPartner.name": "Name",
-    "adminSupplyPartnerAdd.button.cancel": "Cancel",
-    "adminSupplyPartnerAdd.button.addSupplyPartner": "Add Supply Partner",
-    "adminSupplyPartnerAdd.button.no": "No",
-    "adminSupplyPartnerAdd.button.yesAddAssociation": "Yes, add association",
-    "adminSupplyPartnerAdd.message.doYouWantToAddAssociations": "Supply partner created successfully. Would you like to add associations to it?",
-    "adminSupplyPartnerAdd.message.supplyPartnerHasBeenSaved": "Supply partner has been saved",
-    "adminSupplyPartnerAdd.message.failedToSaveSupplyPartner": "Failed to save supply partner"
+    "adminSupplyPartnerAdd.header.addSupplyPartner": "添加供应伙伴",
+    "adminSupplyPartnerAdd.supplyPartner.code": "代码",
+    "adminSupplyPartnerAdd.supplyPartner.name": "名称",
+    "adminSupplyPartnerAdd.button.cancel": "取消",
+    "adminSupplyPartnerAdd.button.addSupplyPartner": "添加供应伙伴",
+    "adminSupplyPartnerAdd.button.no": "否",
+    "adminSupplyPartnerAdd.button.yesAddAssociation": "是的，添加关联关系",
+    "adminSupplyPartnerAdd.message.doYouWantToAddAssociations": "供应伙伴已成功创建。您要添加关联关系吗？",
+    "adminSupplyPartnerAdd.message.supplyPartnerHasBeenSaved": "供应伙伴已保存",
+    "adminSupplyPartnerAdd.message.failedToSaveSupplyPartner": "供应伙伴保存失败"
 }

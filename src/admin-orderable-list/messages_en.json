@@ -1,12 +1,12 @@
 {
-    "adminOrderableList.products": "Products",
-    "adminOrderableList.code": "Code",
-    "adminOrderableList.name": "Name",
-    "adminOrderableList.description": "Description",
-    "adminOrderableList.program": "Program",
-    "adminOrderableList.search": "Search",
-    "adminOrderableList.products.error": "No products found",
-    "adminOrderableList.actions": "Actions",
-    "adminOrderableList.edit": "Edit",
-    "adminOrderableList.addProduct": "Add Product"
+    "adminOrderableList.products": "物品",
+    "adminOrderableList.code": "代码",
+    "adminOrderableList.name": "名称",
+    "adminOrderableList.description": "描述",
+    "adminOrderableList.program": "方案",
+    "adminOrderableList.search": "搜索",
+    "adminOrderableList.products.error": "找不到物品",
+    "adminOrderableList.actions": "操作",
+    "adminOrderableList.edit": "编辑",
+    "adminOrderableList.addProduct": "添加物品"
 }

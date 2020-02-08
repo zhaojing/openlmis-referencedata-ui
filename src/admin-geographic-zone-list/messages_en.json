@@ -1,11 +1,11 @@
 {
-    "adminGeographicZoneList.geographicZones": "Geographic Zones",
-    "adminGeographicZoneList.name": "Name",
-    "adminGeographicZoneList.parent": "Parent",
-    "adminGeographicZoneList.search": "Search",
-    "adminGeographicZoneList.noGeographicZones": "No geographic zones found.",
-    "adminGeographicZoneList.code": "Code",
-    "adminGeographicZoneList.level": "Level",
-    "adminGeographicZoneList.view": "View",
-    "adminGeographicZoneList.actions": "Actions"
+    "adminGeographicZoneList.geographicZones": "地区",
+    "adminGeographicZoneList.name": "名称",
+    "adminGeographicZoneList.parent": "上一级",
+    "adminGeographicZoneList.search": "搜索",
+    "adminGeographicZoneList.noGeographicZones": "找不到地理区域",
+    "adminGeographicZoneList.code": "代码",
+    "adminGeographicZoneList.level": "层级",
+    "adminGeographicZoneList.view": "查看",
+    "adminGeographicZoneList.actions": "操作"
 }

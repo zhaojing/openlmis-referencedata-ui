@@ -1,14 +1,14 @@
 {
-    "adminSystemNotificationEdit.editSystemNotification": "Edit System Notification",
-    "adminSystemNotificationEdit.author": "Author",
-    "adminSystemNotificationEdit.createdDate": "Created Date",
-    "adminSystemNotificationEdit.message": "Message",
-    "adminSystemNotificationEdit.startDate": "Start Date",
-    "adminSystemNotificationEdit.expiryDate": "Expiry Date",
-    "adminSystemNotificationEdit.title": "Title",
-    "adminSystemNotificationEdit.active": "Active",
-    "adminSystemNotificationEdit.cancel": "Cancel",
-    "adminSystemNotificationEdit.updateSystemNotification": "Update System Notification",
-    "adminSystemNotificationEdit.systemNotificationHasBeenUpdatedSuccessfully": "System Notification has been updated successfully",
-    "adminSystemNotificationEdit.failedToUpdateSystemNotification": "Failed to update System Notification"
+    "adminSystemNotificationEdit.editSystemNotification": "编辑系统通知",
+    "adminSystemNotificationEdit.author": "作者",
+    "adminSystemNotificationEdit.createdDate": "创建日期",
+    "adminSystemNotificationEdit.message": "信息",
+    "adminSystemNotificationEdit.startDate": "开始日期",
+    "adminSystemNotificationEdit.expiryDate": "过期日期",
+    "adminSystemNotificationEdit.title": "标题",
+    "adminSystemNotificationEdit.active": "有效的",
+    "adminSystemNotificationEdit.cancel": "取消",
+    "adminSystemNotificationEdit.updateSystemNotification": "更新系统通知",
+    "adminSystemNotificationEdit.systemNotificationHasBeenUpdatedSuccessfully": "系统通知已成功更新",
+    "adminSystemNotificationEdit.failedToUpdateSystemNotification": "系统通知更新失败"
 }

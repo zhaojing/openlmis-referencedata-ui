@@ -1,8 +1,8 @@
 {
-    "adminOrderableFtapEdit.updateFtap": "Update Facility Type Approved Product",
-    "adminOrderableFtapEdit.previewFtap": "Preview Facility Type Approved Product",
-    "adminOrderableFtapEdit.cancel": "Cancel",
-    "adminOrderableFtapEdit.ok": "OK",
-    "adminOrderableFtapEdit.ftapHasBeenUpdatedSuccessfully": "Facility type approved product has been updated successfully",
-    "adminOrderableFtapEdit.failedToUpdateFtap": "Failed to update facility type approved product"
+    "adminOrderableFtapEdit.updateFtap": "更新站点类型批准的物品",
+    "adminOrderableFtapEdit.previewFtap": "预览站点类型批准的物品",
+    "adminOrderableFtapEdit.cancel": "取消",
+    "adminOrderableFtapEdit.ok": "确定",
+    "adminOrderableFtapEdit.ftapHasBeenUpdatedSuccessfully": "站点类型批准的物品已成功更新",
+    "adminOrderableFtapEdit.failedToUpdateFtap": "站点类型批准的物品更新失败"
 }

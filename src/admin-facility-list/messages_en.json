@@ -1,14 +1,14 @@
 {
-    "adminFacilityList.facilities": "Facilities",
-    "adminFacilityList.geographicZone": "Geographic zone",
-    "adminFacilityList.noFacilities": "No facilities found.",
-    "adminFacilityList.name": "Facility name",
-    "adminFacilityList.code": "Code",
-    "adminFacilityList.type": "Type",
-    "adminFacilityList.active": "Active",
-    "adminFacilityList.enabled": "Enabled",
-    "adminFacilityList.actions": "Actions",
-    "adminFacilityList.search": "Search",
-    "adminFacilityList.addFacility": "Add Facility",
-    "adminFacilityList.edit": "Edit"
+    "adminFacilityList.facilities": "站点",
+    "adminFacilityList.geographicZone": "地区",
+    "adminFacilityList.noFacilities": "没有找到站点",
+    "adminFacilityList.name": "站点名称",
+    "adminFacilityList.code": "代码",
+    "adminFacilityList.type": "类型",
+    "adminFacilityList.active": "激活",
+    "adminFacilityList.enabled": "已启用",
+    "adminFacilityList.actions": "操作",
+    "adminFacilityList.search": "搜索",
+    "adminFacilityList.addFacility": "添加站点",
+    "adminFacilityList.edit": "编辑"
 }

@@ -1,11 +1,11 @@
 {
-    "adminProcessingScheduleAdd.addProcessingSchedule": "Add Processing Schedule",
-    "adminProcessingScheduleAdd.processingScheduleCode": "Processing Schedule Code",
-    "adminProcessingScheduleAdd.processingScheduleName": "Processing Schedule Name",
-    "adminProcessingScheduleAdd.description": "Description",
-    "adminProcessingScheduleAdd.cancel": "Cancel",
-    "adminProcessingScheduleAdd.save": "Save",
-    "adminProcessingScheduleAdd.save.question": "Do you want to save the Processing Schedule ${processingSchedule}?",
-    "adminProcessingScheduleAdd.save.success": "Processing Schedule has been saved",
-    "adminProcessingScheduleAdd.save.fail": "Failed to save Processing Schedule"
+    "adminProcessingScheduleAdd.addProcessingSchedule": "添加补给计划",
+    "adminProcessingScheduleAdd.processingScheduleCode": "补给计划代码",
+    "adminProcessingScheduleAdd.processingScheduleName": "补给计划名称",
+    "adminProcessingScheduleAdd.description": "描述",
+    "adminProcessingScheduleAdd.cancel": "取消",
+    "adminProcessingScheduleAdd.save": "保存",
+    "adminProcessingScheduleAdd.save.question": "您是否要保存该补给计划：${processingSchedule}?",
+    "adminProcessingScheduleAdd.save.success": "补给计划已保存",
+    "adminProcessingScheduleAdd.save.fail": "补给计划保存失败"
 }
